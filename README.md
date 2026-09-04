@@ -18,8 +18,16 @@ cd LiberOS
 npm start          # serves on a local port; open the printed URL
 ```
 
-or open `index.html` directly — `file://` works (no build step, no
-framework, no network).
+The printed URL opens the **presentation site** (`/presentation/`) — the
+thesis, the cast, the loop. The demo machine boots at `/index.html`
+(linked as "enter the machine" throughout), or open `index.html` directly —
+`file://` works (no build step, no framework, no network).
+
+## Presentation site
+
+`presentation/` is the outward-facing cover: DESIGN.md carries its token
+contract (derived from the app covenant). `serve.cjs` redirects `/` there;
+the demo stays at `/index.html`.
 
 ## Development
 

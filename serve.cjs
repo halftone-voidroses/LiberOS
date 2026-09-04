@@ -57,7 +57,12 @@ function notFound(res) {
 
 const server = http.createServer((req, res) => {
   let urlPath = decodeURIComponent(req.url.split('?')[0]);
-  if (urlPath === '/') urlPath = '/index.html';
+  // `/` is the presentation site (served as a directory so relative assets
+  // resolve); the demo boots at /index.html.
+  if (urlPath === '/' || urlPath === '/presentation') {
+    res.writeHead(302, { Location: '/presentation/' });
+    return res.end();
+  }
 
   const tryFile = (rel) => {
     const filePath = path.normalize(path.join(ROOT, rel));

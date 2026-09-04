@@ -9,8 +9,22 @@
 // -> state wiped, BIG ? restored, chat auto-opens again.
 
 import { chromium } from 'playwright'
+import { spawn } from 'node:child_process'
 
-const BASE = 'http://127.0.0.1:8030'
+// Spawn our own server so smoke always tests THIS folder's code — never a
+// stale server left running from another folder on a fixed port.
+const server = spawn('node', ['serve.cjs'], { stdio: 'pipe' })
+const PORT = await new Promise((resolve, reject) => {
+  let buf = ''
+  server.stdout.on('data', d => {
+    buf += d.toString()
+    const m = buf.match(/http:\/\/127\.0\.0\.1:(\d+)/)
+    if (m) resolve(Number(m[1]))
+  })
+  server.on('exit', () => reject(new Error('serve.cjs exited during boot')))
+  setTimeout(() => reject(new Error('server boot timeout')), 8000)
+})
+const BASE = `http://127.0.0.1:${PORT}`
 const browser = await chromium.launch()
 const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } })
 const page = await ctx.newPage()
@@ -27,7 +41,7 @@ async function shot(name) {
 }
 
 console.log('1. Boot screen renders')
-await page.goto(BASE + '/', { waitUntil: 'networkidle' })
+await page.goto(BASE + '/index.html', { waitUntil: 'networkidle' })
 await clearState()
 await page.reload({ waitUntil: 'networkidle' })
 await page.waitForTimeout(800)
@@ -261,8 +275,11 @@ console.assert(confirmClosed, 'confirm should close on cancel')
 if (errors.length) {
   console.log('\nErrors:')
   for (const e of errors) console.log('  -', e)
+  await browser.close()
+  server.kill()
   process.exit(1)
 }
 
 console.log('\nAll smoke tests passed.')
 await browser.close()
+server.kill()

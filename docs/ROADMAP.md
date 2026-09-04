@@ -24,6 +24,17 @@ Living document. Status as of 2026-09-04.
       `liber:prompt` events + the latest persisted prompt on boot.
 - [ ] Retire "sigil" from user-facing copy (D0001), keep runtime keys.
 
+## Phase 1.5 — Presentation site (done this session)
+
+- [x] `presentation/` — single-page site: thesis, three pillars, the loop
+      (with real prompt-engine outputs), the cast, twelve carvings (real
+      glyphs), the twelve apps, citations, safety + privacy notes.
+- [x] `serve.cjs`: `/` → presentation; demo remains at `/index.html`.
+- [x] `smoke.mjs` now spawns its own server (was hardcoding 8030 — a stale
+      server from the old folder was masking real regressions; caught one:
+      the inline-script half of the inert migration).
+- [x] Visual QA at 1280/768/375 via screenshots; nav chrome + nowrap fixes.
+
 ## Phase 2 — Pull (gamification)
 
 - [ ] Implement `docs/gamification.md` in order: session arc → return

@@ -212,8 +212,8 @@
       function openConfirm() {
         var c = document.getElementById('wanderlust-confirm');
         if (c) {
-          c.setAttribute('aria-hidden', 'false');
           c.classList.add('open');
+          c.removeAttribute('inert');
         }
       }
       if (preQ) preQ.addEventListener('click', function () {
@@ -227,7 +227,7 @@
     document.getElementById('wanderlust-confirm-no').addEventListener('click', function () {
       var c = document.getElementById('wanderlust-confirm');
       c.classList.remove('open');
-      c.setAttribute('aria-hidden', 'true');
+      c.setAttribute('inert', '');
     });
     document.getElementById('wanderlust-confirm-yes').addEventListener('click', function () {
       if (window.Liber && window.Liber.state) {
@@ -235,7 +235,7 @@
       }
       var c = document.getElementById('wanderlust-confirm');
       c.classList.remove('open');
-      c.setAttribute('aria-hidden', 'true');
+      c.setAttribute('inert', '');
       var stage = document.getElementById('desktop');
       if (stage) stage.classList.remove('tutorial-done');
       if (window.Wanderlust) window.Wanderlust.restart();
@@ -260,12 +260,13 @@
       }
       function forceClose() {
         modal.classList.remove('open');
-        modal.setAttribute('aria-hidden', 'true');
+        modal.setAttribute('inert', '');
       }
       function sync() {
         var open_ = location.hash === '#settings';
         modal.classList.toggle('open', open_);
-        modal.setAttribute('aria-hidden', open_ ? 'false' : 'true');
+        if (open_) modal.removeAttribute('inert');
+        else modal.setAttribute('inert', '');
         if (open_) renderSettingsState();
       }
 
