@@ -7,9 +7,13 @@
 //    the user picks. Reply buttons have two kinds: 'progress' (bright
 //    outlined) and 'branch' (italic muted "ok." style). Some lines carry
 //    effects (shake, flicker:<colours>) that fire when the line is shown.
+//    WS2: a reply may carry a response beat — the character answers YOUR
+//    specific pick (own speaker/effect), then a single continue button
+//    resumes the main path. One beat only; no nested branching.
 // 3. At the last script step the user gets the three-option final fork.
-//    Each fork resolves into one extra line that returns control to the
-//    "I arise the same but different" overlay + finish.
+//    Each fork resolves into one extra line; its reply plays a response
+//    beat, then control returns to the "I arise the same but different"
+//    overlay + finish.
 //
 // Restart: clicking the small post-tutorial ? asks "erase all progress?"
 // before running the whole sequence again.
@@ -102,7 +106,11 @@
       if (r.slice(-2) === '/x') { kind = 'branch'; r = r.slice(0, -2).trim(); }
       return { text: r, kind: kind };
     }
-    return { text: String(r.text || ''), kind: r.kind === 'branch' ? 'branch' : 'progress' };
+    return {
+      text: String(r.text || ''),
+      kind: r.kind === 'branch' ? 'branch' : 'progress',
+      response: r.response || null
+    };
   }
 
   // Routes a reply click to: next script step, final-fork overlay, or close.
@@ -121,7 +129,9 @@
     var btn = document.createElement('button');
     btn.className = 'wanderlust-reply kind-' + reply.kind;
     btn.type = 'button';
-    btn.textContent = reply.kind === 'branch' ? '· ' + reply.text + ' ·' : '> ' + reply.text;
+    if (reply.kind === 'continue') btn.textContent = '· … ·';
+    else if (reply.kind === 'branch') btn.textContent = '· ' + reply.text + ' ·';
+    else btn.textContent = '> ' + reply.text;
     btn.addEventListener('click', function () { onClick(reply); });
     return btn;
   }
@@ -142,6 +152,20 @@
     setTimeout(function () {
       if (line) { line.textContent = '> ' + text; line.style.opacity = 0.5; }
     }, 150);
+  }
+
+  // WS2: the picked reply gets ONE beat where the character answers it in
+  // their own voice, then `done` resumes the main path (or the fork/finish).
+  // Progress dots stay put for the beat; the continue button keeps pacing
+  // click-driven.
+  function renderResponseBeat(response, done) {
+    if (!response || !response.line) { done(); return; }
+    setSpeaker(response.speaker);
+    runEffect(response.effect);
+    showLine(response.line);
+    clearReplies();
+    if (!replies) return;
+    replies.appendChild(makeReplyButton({ text: '', kind: 'continue' }, done));
   }
 
   function setProgress(activeIdx) {
@@ -166,7 +190,9 @@
     entryReplies.forEach(function (reply) {
       replies.appendChild(makeReplyButton(reply, function (r) {
         showEcho(r.text);
-        setTimeout(function () { advance(r); }, 600);
+        setTimeout(function () {
+          renderResponseBeat(r.response, function () { advance(r); });
+        }, 600);
       }));
     });
   }
@@ -186,7 +212,9 @@
     fork.replies.map(normaliseReply).forEach(function (reply) {
       replies.appendChild(makeReplyButton(reply, function () {
         showEcho(reply.text);
-        setTimeout(function () { finishScript(); }, 600);
+        setTimeout(function () {
+          renderResponseBeat(reply.response, function () { finishScript(); });
+        }, 600);
       }));
     });
   }
@@ -225,8 +253,9 @@
         cb && cb();
         return;
       }
-      showSummonLine(summonLines[i++], null);
-      setTimeout(next, 1300);
+      // Audit minor 9: each line chains the next through its own completion
+      // (show + fade) instead of a fixed 1300ms coupling.
+      showSummonLine(summonLines[i++], next);
     }
     next();
   }

@@ -288,6 +288,23 @@
   letter-spacing: 0;
   font-style: normal;
 }
+/* WS2: single continue affordance shown during a response beat — one click
+   resumes the main path. Branch-kind muted dotted styling so it reads as a
+   beat, not a choice; centered dots, no text of its own. */
+.wanderlust-reply.kind-continue {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  letter-spacing: 0.3em;
+  color: #aa7080;
+  border: 1px dotted #4a1a2a;
+  background: transparent;
+  text-align: center;
+}
+.wanderlust-reply.kind-continue:hover {
+  color: #ffd0e0;
+  border-color: #ff69b4;
+  background: rgba(255, 105, 180, 0.06);
+}
 
 /* Screen shake — applied to .machine by triggerShake(). */
 @keyframes wanderlust-shake {
