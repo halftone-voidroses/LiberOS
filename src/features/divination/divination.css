@@ -340,6 +340,65 @@
 }
 .divination-save-prompt-body em { color: #f4e8d2; font-style: italic; }
 
+/* the draw, whole, inside the keep/discard window: face + reading */
+.divination-prompt-card {
+  display: flex;
+  gap: 14px;
+  align-items: stretch;
+}
+.divination-prompt-card-face {
+  flex: 0 0 116px;
+  min-height: 168px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: linear-gradient(180deg, #f4e8d2 0%, #e0d2b0 60%, #c8b894 100%);
+  border: 1px solid #6a0a14;
+  box-shadow: inset 0 0 0 3px rgba(106, 10, 20, 0.18), 0 0 14px rgba(0,0,0,0.5);
+  padding: 8px 6px;
+}
+.divination-prompt-card-num {
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  color: #8a6a50;
+  font-style: normal;
+}
+.divination-prompt-card-glyph {
+  font-size: 2.6rem;
+  line-height: 1;
+  color: #4a0810;
+  text-shadow: 0 0 6px rgba(106, 10, 20, 0.4);
+}
+.divination-prompt-card-name {
+  font-size: 1rem;
+  color: #4a0810;
+  text-align: center;
+  font-style: normal;
+}
+.divination-prompt-card-read {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  min-width: 0;
+}
+.divination-prompt-card-key {
+  font-size: 1.05rem;
+  color: #f4e8d2;
+  font-style: italic;
+  line-height: 1.4;
+  border-bottom: 1px dotted rgba(106, 10, 20, 0.6);
+  padding-bottom: 8px;
+}
+.divination-prompt-card-q {
+  font-size: 1rem;
+  color: #d8b89c;
+  line-height: 1.5;
+}
+
 .divination-save-prompt-actions {
   display: flex;
   gap: 8px;

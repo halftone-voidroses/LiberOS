@@ -18,6 +18,8 @@ const sandbox = {
   console,
   setTimeout,
   CustomEvent: class CustomEvent { constructor(type, opts) { this.type = type; this.detail = opts && opts.detail; } },
+  addEventListener() {},
+  removeEventListener() {},
   document: {
     dispatchEvent(e) { events.push(e); return true; },
     addEventListener() {},
@@ -92,7 +94,7 @@ const eventsAfter = events.filter(e => e.type === 'liber:prompt').length;
 check('liber:prompt CustomEvent fires for new prompts', eventsAfter > eventsBefore, `${eventsBefore} → ${eventsAfter}`);
 
 // (f) empty-data resilience: engine with no tarot/templates must not throw
-const sandbox2 = { console, setTimeout, CustomEvent: sandbox.CustomEvent, document: sandbox.document };
+const sandbox2 = { console, setTimeout, CustomEvent: sandbox.CustomEvent, document: sandbox.document, addEventListener() {}, removeEventListener() {} };
 sandbox2.window = sandbox2;
 sandbox2.globalThis = sandbox2;
 sandbox2.localStorage = sandbox.localStorage;

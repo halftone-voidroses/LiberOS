@@ -330,3 +330,163 @@
   background: #1a0a04;
   box-shadow: inset 0 0 60px rgba(0,0,0,0.5), 0 0 20px rgba(212, 175, 55, 0.2);
 }
+
+/* Persona skins (themes.js ids). corrupted is the base look — no override.
+   Each restyles the same four chrome surfaces; the screen stays dark so
+   app palettes and D0003 floors hold. */
+
+.machine.theme-wanderlust .bezel {
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 3px),
+    linear-gradient(180deg, #e8a8c8 0%, #a84a78 55%, #d8b850 100%);
+  border-color: #6a2a48;
+  box-shadow: 0 0 26px rgba(232, 168, 200, 0.35), inset 0 0 0 2px #f5d870;
+}
+.machine.theme-wanderlust .liber-plate { color: #4a1030; text-shadow: 0 0 4px #ffd8e8; }
+.machine.theme-wanderlust .corruption-scars { opacity: 0.35; }
+.machine.theme-wanderlust .screen {
+  background: #1c0714;
+  box-shadow: inset 0 0 60px rgba(0,0,0,0.5), 0 0 22px rgba(232, 168, 200, 0.25);
+}
+
+.machine.theme-raison .bezel {
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.06) 0px, rgba(0,0,0,0.06) 1px, transparent 1px, transparent 3px),
+    linear-gradient(180deg, #5a78aa 0%, #2a3a5a 100%);
+  border-color: #1a2438;
+  box-shadow: 0 0 24px rgba(138, 202, 255, 0.3), inset 0 0 0 2px #8acaff;
+}
+.machine.theme-raison .liber-plate { color: #d8e8f5; letter-spacing: 0.32em; }
+.machine.theme-raison .corruption-scars { opacity: 0.25; }
+.machine.theme-raison .screen {
+  background: #060a14;
+  box-shadow: inset 0 0 60px rgba(0,0,0,0.55), 0 0 20px rgba(90, 138, 170, 0.25);
+}
+
+.machine.theme-physius .bezel {
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.08) 0px, rgba(0,0,0,0.08) 1px, transparent 1px, transparent 3px),
+    linear-gradient(180deg, #3a3236 0%, #16120f 100%);
+  border-color: #0a0705;
+  box-shadow: 0 0 22px rgba(200, 120, 60, 0.3), inset 0 0 0 2px #8a5a30;
+}
+.machine.theme-physius .liber-plate { color: #d8a870; text-shadow: 0 0 4px rgba(200, 120, 60, 0.5); }
+.machine.theme-physius .corruption-scars { opacity: 0.5; }
+.machine.theme-physius .screen {
+  background: #0c0806;
+  box-shadow: inset 0 0 60px rgba(0,0,0,0.6), 0 0 18px rgba(200, 120, 60, 0.2);
+}
+
+.machine.theme-whimsy .bezel {
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 3px),
+    linear-gradient(180deg, #c83828 0%, #7a1810 100%);
+  border-color: #4a0c08;
+  box-shadow: 0 0 26px rgba(240, 190, 90, 0.35), inset 0 0 0 2px #f0e0c0;
+}
+.machine.theme-whimsy .liber-plate { color: #f5e8d0; text-shadow: 0 0 5px rgba(240, 190, 90, 0.7); }
+.machine.theme-whimsy .corruption-scars { opacity: 0.3; }
+.machine.theme-whimsy .screen {
+  background: #180604;
+  box-shadow: inset 0 0 60px rgba(0,0,0,0.5), 0 0 22px rgba(200, 56, 40, 0.3);
+}
+
+.machine.theme-vanir .bezel {
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.06) 0px, rgba(0,0,0,0.06) 1px, transparent 1px, transparent 3px),
+    linear-gradient(180deg, #2a4a58 0%, #10222c 60%, #1a5a4a 100%);
+  border-color: #081418;
+  box-shadow: 0 0 24px rgba(80, 200, 180, 0.28), inset 0 0 0 2px #2a8a8a;
+}
+.machine.theme-vanir .liber-plate { color: #b8e0d8; text-shadow: 0 0 5px rgba(80, 200, 180, 0.5); }
+.machine.theme-vanir .corruption-scars { opacity: 0.4; }
+.machine.theme-vanir .screen {
+  background: #04100e;
+  box-shadow: inset 0 0 60px rgba(0,0,0,0.55), 0 0 22px rgba(42, 138, 138, 0.25);
+}
+
+.machine.theme-entity404 .bezel {
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.3) 0px, rgba(0,0,0,0.3) 1px, transparent 1px, transparent 3px),
+    linear-gradient(180deg, #0a140a 0%, #020602 100%);
+  border-color: #01180b;
+  box-shadow: 0 0 24px rgba(0, 255, 102, 0.25), inset 0 0 0 2px #00ff66;
+}
+.machine.theme-entity404 .liber-plate { color: #00ff66; text-shadow: 0 0 6px rgba(0, 255, 102, 0.6); }
+.machine.theme-entity404 .vent-slits { opacity: 0.4; }
+.machine.theme-entity404 .corruption-scars { opacity: 0.5; }
+.machine.theme-entity404 .corruption-scars .scar { filter: hue-rotate(90deg) saturate(1.4); }
+.machine.theme-entity404 .screen {
+  background: #010801;
+  box-shadow: inset 0 0 60px rgba(0,0,0,0.6), 0 0 22px rgba(0, 255, 102, 0.18);
+}
+
+.machine.theme-arcana .bezel {
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 1px, transparent 1px, transparent 3px),
+    linear-gradient(180deg, #6a1018 0%, #2a060a 100%);
+  border-color: #1a0406;
+  box-shadow: 0 0 22px rgba(255, 255, 255, 0.14), inset 0 0 0 2px #e8dcc0;
+}
+.machine.theme-arcana .liber-plate { color: #f0ead8; text-shadow: 0 0 4px rgba(255, 255, 255, 0.4); }
+.machine.theme-arcana .corruption-scars { opacity: 0.35; }
+.machine.theme-arcana .screen {
+  background: #140305;
+  box-shadow: inset 0 0 60px rgba(0,0,0,0.55), 0 0 20px rgba(180, 30, 45, 0.3);
+}
+
+.machine.theme-librarian .bezel {
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 3px),
+    linear-gradient(180deg, #d8c8a8 0%, #8a6a48 100%);
+  border-color: #4a3418;
+  box-shadow: 0 0 22px rgba(218, 165, 32, 0.3), inset 0 0 0 2px #b89858;
+}
+.machine.theme-librarian .liber-plate { color: #2a1c08; text-shadow: 0 0 3px rgba(218, 165, 32, 0.5); }
+.machine.theme-librarian .corruption-scars { opacity: 0.25; }
+.machine.theme-librarian .screen {
+  background: #120c06;
+  box-shadow: inset 0 0 60px rgba(0,0,0,0.5), 0 0 20px rgba(150, 110, 60, 0.25);
+}
+
+.machine.theme-elizabeth .bezel {
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.12) 0px, rgba(0,0,0,0.12) 1px, transparent 1px, transparent 3px),
+    linear-gradient(180deg, #1c1518 0%, #0a0708 100%);
+  border-color: #050304;
+  box-shadow: 0 0 26px rgba(200, 168, 120, 0.3), inset 0 0 0 2px #aa8a3a;
+}
+.machine.theme-elizabeth .liber-plate { color: #d4af37; text-shadow: 0 0 5px rgba(212, 175, 55, 0.6); }
+.machine.theme-elizabeth .corruption-scars { opacity: 0.45; }
+.machine.theme-elizabeth .screen {
+  background: #0a0608;
+  box-shadow: inset 0 0 60px rgba(0,0,0,0.6), 0 0 22px rgba(138, 42, 32, 0.3);
+}
+
+.machine.theme-iris .bezel {
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 3px),
+    linear-gradient(180deg, #e0d4b4 0%, #a89868 100%);
+  border-color: #5a4c2a;
+  box-shadow: 0 0 22px rgba(240, 228, 190, 0.3), inset 0 0 0 2px #f0e4c0;
+}
+.machine.theme-iris .liber-plate { color: #2a2010; }
+.machine.theme-iris .corruption-scars { opacity: 0.2; }
+.machine.theme-iris .screen {
+  background: #141008;
+  box-shadow: inset 0 0 60px rgba(0,0,0,0.5), 0 0 20px rgba(220, 200, 150, 0.18);
+}
+
+.machine.theme-ravaging .bezel {
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.09) 0px, rgba(0,0,0,0.09) 1px, transparent 1px, transparent 3px),
+    linear-gradient(180deg, #4a3a28 0%, #241a10 100%);
+  border-color: #120c06;
+  box-shadow: 0 0 22px rgba(170, 90, 40, 0.3), inset 0 0 0 2px #6a4a28;
+}
+.machine.theme-ravaging .liber-plate { color: #d8b088; text-shadow: 0 0 4px rgba(170, 90, 40, 0.5); }
+.machine.theme-ravaging .corruption-scars { opacity: 0.55; }
+.machine.theme-ravaging .screen {
+  background: #0c0805;
+  box-shadow: inset 0 0 60px rgba(0,0,0,0.55), 0 0 20px rgba(160, 100, 40, 0.25);
+}

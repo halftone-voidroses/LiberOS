@@ -137,6 +137,17 @@
     emit('change', state);
   }
 
+  // WebKit's page cache (bfcache) restores a page with the JS snapshot it
+  // had when hidden — including this module's in-memory state. If another
+  // page wrote since, memory is stale and the next set() clobbers the
+  // newer disk state (reported: cast -> back -> the cast is gone). This
+  // resync looks redundant but is not; do not remove.
+  window.addEventListener('pageshow', function (e) {
+    if (!e.persisted) return;
+    state = load();
+    emit('change', state);
+  });
+
   global.Liber = global.Liber || {};
   global.Liber.state = { get, set, on, reset, addArtifact, bindRelation, unbindRelation, releaseArtifact, replaceSigil };
 })(window);

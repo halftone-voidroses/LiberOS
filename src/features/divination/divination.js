@@ -194,6 +194,21 @@
     return 'card: <em>' + cardText + '</em>. question: ' + qText + '.';
   }
 
+  // keep/discard window: the whole draw (face + reading) before choosing.
+  function renderPromptCard(card) {
+    return '<div class="divination-prompt-card">'
+      + '<div class="divination-prompt-card-face">'
+      + '<div class="divination-prompt-card-num">' + String(card.n).padStart(2, '0') + ' / 22</div>'
+      + '<div class="divination-prompt-card-glyph">' + card.g + '</div>'
+      + '<div class="divination-prompt-card-name">' + card.name + '</div>'
+      + '</div>'
+      + '<div class="divination-prompt-card-read">'
+      + '<div class="divination-prompt-card-key">' + card.key + '</div>'
+      + '<div class="divination-prompt-card-q">' + describeTarot(card) + '</div>'
+      + '</div>'
+      + '</div>';
+  }
+
   var pendingCard = null;
   function promptTarotDraw() {
     if (drawn.length >= DECK.length) return;
@@ -201,7 +216,7 @@
     var body = el('divination-save-prompt-body');
     if (!prompt) { drawTarotNow(); return; }
     pendingCard = pickCard();
-    if (body) body.innerHTML = describeTarot(pendingCard);
+    if (body) body.innerHTML = renderPromptCard(pendingCard);
     prompt.classList.add('open');
     prompt.removeAttribute('inert');
   }

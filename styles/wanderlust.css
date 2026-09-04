@@ -393,7 +393,48 @@
   outline-offset: 2px;
 }
 
+/* ── Raison crossing — cyan static-glitch when the speaker changes into
+   or out of him (wanderlust.js adds/removes the class on the window). ── */
+#wanderlust-window.raison-glitch {
+  animation: raison-glitch-sweep 0.62s steps(8) 1;
+}
+#wanderlust-window.raison-glitch::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(138, 202, 255, 0.12) 0px,
+    rgba(138, 202, 255, 0.12) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  animation: raison-glitch-band 0.62s steps(6) 1;
+}
+#wanderlust-window.raison-glitch .wanderlust-avatar {
+  box-shadow: 0 0 26px rgba(138, 202, 255, 0.9) !important;
+}
+@keyframes raison-glitch-sweep {
+  /* keep the window's own translate(-50%, -50%) centring under the jitter */
+  0%   { filter: brightness(1.6) saturate(0.5); transform: translate(calc(-50% - 2px), -50%); }
+  15%  { filter: brightness(1.2) saturate(1.1); transform: translate(calc(-50% + 2px), -50%); }
+  30%  { filter: brightness(1.5) saturate(0.6) hue-rotate(12deg); transform: translate(calc(-50% - 1px), -50%); }
+  45%  { filter: brightness(0.9) saturate(1.2); transform: translate(calc(-50% + 1px), -50%); }
+  60%  { filter: brightness(1.35) saturate(0.7); transform: translate(calc(-50% - 2px), -50%); }
+  80%  { filter: brightness(1.1) saturate(1); transform: translate(calc(-50% + 1px), -50%); }
+  100% { filter: none; transform: translate(-50%, -50%); }
+}
+@keyframes raison-glitch-band {
+  0%   { background-position-y: 0; opacity: 1; }
+  50%  { background-position-y: 7px; opacity: 0.55; }
+  100% { background-position-y: 13px; opacity: 0; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .wanderlust-avatar::after,
   .arise-text { animation: none; }
+  #wanderlust-window.raison-glitch,
+  #wanderlust-window.raison-glitch::before { animation: none; }
 }

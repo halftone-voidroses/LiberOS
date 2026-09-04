@@ -10,10 +10,11 @@
 //    WS2: a reply may carry a response beat — the character answers YOUR
 //    specific pick (own speaker/effect), then a single continue button
 //    resumes the main path. One beat only; no nested branching.
-// 3. At the last script step the user gets the three-option final fork.
-//    Each fork resolves into one extra line; its reply plays a response
-//    beat, then control returns to the "I arise the same but different"
-//    overlay + finish.
+//    Speaker changes into or out of Raison fire a brief cyan static-glitch
+//    on the window plus a short pacing hold before the new line reads.
+// 3. At the last script step the user picks one of the three closers
+//    ('I do' / 'tell me' / 'wanderlust…') and the tutorial goes straight
+//    to the "I arise the same but different" overlay + finish.
 //
 // Restart: clicking the small post-tutorial ? asks "erase all progress?"
 // before running the whole sequence again.
@@ -21,14 +22,11 @@
 (function () {
   var win = null, line = null, replies = null, name = null, avatar = null, progress = null;
   var script = window.WANDERLUST_SCRIPT || [];
-  var finalForks = window.WANDERLUST_FINAL_FORKS || [];
   var summonLines = window.WANDERLUST_SUMMON || [];
   var step = 0;
   var isOpen = false;
   var isSummoning = false;
-  // When >= 0, the next render after step >= script.length resolves the
-  // final-fork overlay for that index, then advances to close.
-  var pendingForkIdx = -1;
+  var currentSpeaker = null;
 
   function el(id) { return document.getElementById(id); }
 
@@ -87,8 +85,24 @@
     }
   }
 
+  // Cyan static-glitch in Raison's register — fires on the window when the
+  // speaker changes into or out of him. CSS carries the look and the
+  // prefers-reduced-motion gate; this only arms it.
+  function triggerRaisonGlitch() {
+    if (!win) return;
+    win.classList.remove('raison-glitch');
+    void win.offsetWidth;
+    win.classList.add('raison-glitch');
+    setTimeout(function () { win.classList.remove('raison-glitch'); }, 620);
+  }
+
+  // Returns true when the speaker change crossed Raison (into or out of).
   function setSpeaker(speaker) {
-    if (!avatar) return;
+    var crossedRaison = currentSpeaker !== null && speaker !== currentSpeaker &&
+      (speaker === 'raison' || currentSpeaker === 'raison');
+    currentSpeaker = speaker;
+    if (crossedRaison) triggerRaisonGlitch();
+    if (!avatar) return crossedRaison;
     if (speaker === 'wanderlust') {
       avatar.style.background = 'radial-gradient(circle, #ffd86a 0% 30%, #ff69b4 30% 60%, #aa3a6a 100%)';
       avatar.style.boxShadow = '0 0 18px rgba(255, 105, 180, 0.6)';
@@ -98,6 +112,7 @@
       avatar.style.boxShadow = '0 0 18px rgba(90, 138, 170, 0.6)';
       if (name) { name.textContent = 'raison'; name.style.color = '#8acaff'; }
     }
+    return crossedRaison;
   }
 
   function normaliseReply(r) {
@@ -113,14 +128,16 @@
     };
   }
 
-  // Routes a reply click to: next script step, final-fork overlay, or close.
+  // The three closers ('I do' / 'tell me' / 'wanderlust…') end the
+  // tutorial directly — no fork line, no response beat.
+  function isClosingPick(reply) {
+    if (reply.kind === 'branch') return false;
+    var t = (reply.text || '').toLowerCase().replace(/[.!?…]+$/, '').trim();
+    return t === 'i do' || t === 'tell me' || t === 'wanderlust';
+  }
+
+  // Routes a reply click to the next script step.
   function advance(reply) {
-    if (reply.kind !== 'branch') {
-      var t = (reply.text || '').toLowerCase().replace(/[.!?…]+$/, '').trim();
-      if (t === 'i do')         { pendingForkIdx = 0; step = script.length; render(); return; }
-      if (t === 'tell me')      { pendingForkIdx = 1; step = script.length; render(); return; }
-      if (t === 'wanderlust')   { pendingForkIdx = 2; step = script.length; render(); return; }
-    }
     step++;
     render();
   }
@@ -170,57 +187,40 @@
 
   function setProgress(activeIdx) {
     if (!progress) return;
-    var totalDots = script.length + 1; // include fork dot
+    var totalDots = script.length;
     var dots = '';
     for (var d = 0; d < totalDots; d++) dots += (d === activeIdx ? '◆' : '◇') + ' ';
     progress.textContent = dots;
   }
 
   function renderScriptStep() {
-    if (step >= script.length) { renderForkOrFinish(); return; }
     var entry = script[step];
-    setSpeaker(entry.speaker);
+    var crossedRaison = setSpeaker(entry.speaker);
     runEffect(entry.effect);
-    showLine(entry.line);
     setProgress(step);
 
     clearReplies();
-    if (!replies) return;
-    var entryReplies = entry.replies.map(normaliseReply);
-    entryReplies.forEach(function (reply) {
-      replies.appendChild(makeReplyButton(reply, function (r) {
-        showEcho(r.text);
-        setTimeout(function () {
-          renderResponseBeat(r.response, function () { advance(r); });
-        }, 600);
-      }));
-    });
-  }
-
-  function renderForkOrFinish() {
-    if (pendingForkIdx < 0 || pendingForkIdx >= finalForks.length) {
-      finishScript();
-      return;
-    }
-    var fork = finalForks[pendingForkIdx];
-    setSpeaker('wanderlust');
-    showLine(fork.line);
-    setProgress(script.length);
-
-    clearReplies();
-    if (!replies) return;
-    fork.replies.map(normaliseReply).forEach(function (reply) {
-      replies.appendChild(makeReplyButton(reply, function () {
-        showEcho(reply.text);
-        setTimeout(function () {
-          renderResponseBeat(reply.response, function () { finishScript(); });
-        }, 600);
-      }));
-    });
+    var paint = function () {
+      showLine(entry.line);
+      if (!replies) return;
+      var entryReplies = entry.replies.map(normaliseReply);
+      entryReplies.forEach(function (reply) {
+        replies.appendChild(makeReplyButton(reply, function (r) {
+          showEcho(r.text);
+          setTimeout(function () {
+            if (isClosingPick(r)) { finishScript(); return; }
+            renderResponseBeat(r.response, function () { advance(r); });
+          }, 600);
+        }));
+      });
+    };
+    // Pacing hold: let the cyan glitch breathe before the new line reads.
+    if (crossedRaison) setTimeout(paint, 350);
+    else paint();
   }
 
   function render() {
-    if (step >= script.length) { renderForkOrFinish(); return; }
+    if (step >= script.length) { finishScript(); return; }
     renderScriptStep();
   }
 
@@ -265,7 +265,7 @@
     if (!win) bind();
     if (!win) return;
     step = 0;
-    pendingForkIdx = -1;
+    currentSpeaker = null;
     isOpen = true;
     runSummon(function () {
       win.removeAttribute('inert');

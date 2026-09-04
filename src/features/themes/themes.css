@@ -19,6 +19,8 @@
 .themes-skin {
   width: 90%;
   max-width: 520px;
+  max-height: calc(100% - 24px);
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -26,6 +28,11 @@
   border: 1px solid #3a1a08;
   background: rgba(10, 5, 0, 0.4);
 }
+
+/* the picker must scroll within the screen — 12 tiles overflow the CRT */
+.themes-skin::-webkit-scrollbar { width: 8px; }
+.themes-skin::-webkit-scrollbar-track { background: rgba(0,0,0,0.4); }
+.themes-skin::-webkit-scrollbar-thumb { background: #3a1a08; border: 1px solid #5a2a10; }
 
 .themes-title {
   font-size: 1.1rem;

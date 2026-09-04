@@ -212,16 +212,4 @@
       ]
     }
   ];
-
-  // The "wanderlust…" fork is resolved by these three short replies, then
-  // control returns to the script's natural close (arise overlay + finish).
-  // WS2: each fork reply gets one response beat before the arise overlay.
-  window.WANDERLUST_FINAL_FORKS = [
-    { line: 'you will. you already do.', replies: [{ text: 'i arise.', kind: 'progress',
-      response: { speaker: 'wanderlust', line: 'Then GO. The room will hold whatever you leave in it. Say my name if the whims go quiet.' } }] },
-    { line: 'then ask. the void is patient.', replies: [{ text: 'i will.', kind: 'progress',
-      response: { speaker: 'wanderlust', line: 'GOOD. Ask loudly or ask softly — the void keeps ears for both registers. I will listen for yours.' } }] },
-    { line: '…', replies: [{ text: 'i arise.', kind: 'progress',
-      response: { speaker: 'wanderlust', line: '…yes. THAT is the whole of the lesson. No teaching survives it. GO WELL.' } }] }
-  ];
 })();
