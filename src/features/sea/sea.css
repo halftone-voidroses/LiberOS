@@ -36,12 +36,12 @@
   top: 12%;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 0.85rem;
+  font-size: 1rem;
   font-style: italic;
   letter-spacing: 0.05em;
-  color: #608090;
+  color: #7a9aac;
   text-align: center;
-  opacity: 0.7;
+  opacity: 0.85;
   max-width: 70%;
   line-height: 1.6;
 }
@@ -120,7 +120,7 @@
   position: absolute;
   left: 6px;
   top: 100%;
-  font-size: 0.5rem;
+  font-size: 0.875rem;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: #406070;
@@ -295,7 +295,7 @@
 }
 
 .sea-raison-name {
-  font-size: 0.7rem;
+  font-size: 0.875rem;
   color: #a0c8d8;
   text-transform: lowercase;
   letter-spacing: 0.25em;
@@ -322,7 +322,7 @@
 }
 
 .sea-raison-body {
-  font-size: 0.85rem;
+  font-size: 1rem;
   line-height: 1.55;
 }
 
@@ -331,7 +331,7 @@
   font-style: normal;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   font-weight: 700;
 }
 
@@ -339,7 +339,7 @@
   margin-top: 12px;
   padding-top: 8px;
   border-top: 1px solid rgba(120, 180, 200, 0.2);
-  font-size: 0.65rem;
+  font-size: 0.875rem;
   color: #406070;
   text-align: right;
   letter-spacing: 0.1em;
@@ -375,7 +375,7 @@
   color: #a0c8d8;
   font-family: 'Georgia', 'Times New Roman', serif;
   font-style: italic;
-  font-size: 0.85rem;
+  font-size: 1rem;
   letter-spacing: 0.04em;
   text-align: center;
   padding: 7px 10px;
@@ -385,7 +385,7 @@
 }
 
 .sea-input::placeholder {
-  color: rgba(90, 128, 144, 0.55);
+  color: rgba(143, 180, 196, 0.8);
 }
 
 .sea-input:focus {
@@ -422,7 +422,7 @@
   color: #608090;
   font-family: 'Georgia', 'Times New Roman', serif;
   font-style: italic;
-  font-size: 0.85rem;
+  font-size: 1rem;
   letter-spacing: 0.28em;
   text-transform: lowercase;
   cursor: pointer;
@@ -448,7 +448,7 @@
   max-width: 70%;
   text-align: center;
   font-style: italic;
-  font-size: 0.95rem;
+  font-size: 1rem;
   letter-spacing: 0.06em;
   color: #a8ccd8;
   opacity: 0;

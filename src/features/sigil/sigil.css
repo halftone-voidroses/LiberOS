@@ -79,14 +79,14 @@
 }
 
 .sigil-title {
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   color: #d8d8e0;
   font-weight: 900;
   text-shadow: 0 0 4px rgba(180, 180, 200, 0.3);
 }
 
 .sigil-subtitle {
-  font-size: 0.6rem;
+  font-size: 0.75rem;
   color: #8a8a92;
   font-style: italic;
   letter-spacing: 0.08em;
@@ -94,17 +94,18 @@
   flex: 1;
 }
 
+/* D0003: the ghost hint is a working instruction — 16px, ≥ 4.5:1 on the tablet. */
 .sigil-ghost-hint {
   display: none;
-  font-size: 0.5rem;
-  color: #8a8a92;
+  font-size: 1rem;
+  color: #a8a8b2;
   font-style: italic;
   text-align: center;
   letter-spacing: 0.15em;
   padding: 2px 6px 0;
   margin-bottom: -2px;
   text-transform: lowercase;
-  opacity: 0.7;
+  opacity: 0.85;
 }
 
 .sigil-ghost-hint.visible {
@@ -181,7 +182,7 @@
 }
 
 .sigil-label {
-  font-size: 0.55rem;
+  font-size: 0.875rem;
   color: #806040;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -191,7 +192,7 @@
 
 .sigil-input {
   min-height: 1.2em;
-  font-size: 0.85rem;
+  font-size: 1rem;
   font-style: italic;
   color: #c8b890;
   outline: none;
@@ -207,7 +208,7 @@
 
 .sigil-input:empty::before {
   content: attr(data-placeholder);
-  color: #5a4030;
+  color: #9a7a55;
   font-style: italic;
 }
 
@@ -314,7 +315,7 @@
 .sigil-save, .sigil-discard {
   flex: 1;
   font-family: 'Times New Roman', Times, serif;
-  font-size: 0.7rem;
+  font-size: 1rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   padding: 8px 12px;
@@ -481,7 +482,7 @@
 }
 
 .sigil-raison-name {
-  font-size: 0.7rem;
+  font-size: 0.875rem;
   color: #c89060;
   text-transform: lowercase;
   letter-spacing: 0.25em;
@@ -509,7 +510,7 @@
 }
 
 .sigil-raison-body {
-  font-size: 0.85rem;
+  font-size: 1rem;
   line-height: 1.55;
   color: #d8c8a0;
 }
@@ -519,14 +520,14 @@
   font-style: normal;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
 }
 
 .sigil-raison-foot {
   margin-top: 12px;
   padding-top: 8px;
   border-top: 1px dashed rgba(120, 80, 40, 0.5);
-  font-size: 0.65rem;
+  font-size: 0.875rem;
   color: #806040;
   text-align: right;
   letter-spacing: 0.1em;
@@ -578,7 +579,7 @@
 }
 
 .sigil-save-prompt-name {
-  font-size: 0.7rem;
+  font-size: 0.875rem;
   color: #c89060;
   text-transform: lowercase;
   letter-spacing: 0.25em;
@@ -606,7 +607,7 @@
 }
 
 .sigil-save-prompt-body {
-  font-size: 0.85rem;
+  font-size: 1rem;
   line-height: 1.55;
   color: #d8c8a0;
   margin: 8px 0 14px;
@@ -626,7 +627,7 @@
   border: 1px solid #5a3a20;
   color: #c8b890;
   font-family: 'Times New Roman', Times, serif;
-  font-size: 0.75rem;
+  font-size: 1rem;
   font-style: italic;
   letter-spacing: 0.18em;
   text-transform: lowercase;

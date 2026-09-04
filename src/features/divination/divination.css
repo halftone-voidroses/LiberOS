@@ -53,8 +53,9 @@
   text-shadow: 0 0 8px rgba(255, 200, 180, 0.18);
 }
 
+/* D0003: the sub is the working instruction — 16px floor. */
 .divination-sub {
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-style: italic;
   color: #d8b89c;
   margin-top: 4px;
@@ -141,7 +142,7 @@
   color: #f4e8d2;
   font-family: 'EB Garamond', 'Garamond', serif;
   font-style: italic;
-  font-size: 0.95rem;
+  font-size: 1rem;
   padding: 6px 12px;
   letter-spacing: 0.04em;
 }
@@ -161,7 +162,7 @@
   color: #f4e8d2;
   font-family: 'EB Garamond', 'Garamond', serif;
   font-variant: small-caps;
-  font-size: 0.95rem;
+  font-size: 1rem;
   letter-spacing: 0.25em;
   padding: 4px 18px;
   cursor: pointer;
@@ -223,7 +224,7 @@
 
 .divination-card-num {
   font-family: 'EB Garamond', serif;
-  font-size: 0.7rem;
+  font-size: 0.875rem;
   letter-spacing: 0.3em;
   color: #6a0a14;
   text-transform: uppercase;
@@ -246,7 +247,7 @@
 
 .divination-card-key {
   font-style: italic;
-  font-size: 0.7rem;
+  font-size: 0.875rem;
   color: #4a0810;
   line-height: 1.3;
   letter-spacing: 0.04em;
@@ -268,7 +269,7 @@
 /* ─── grief beat ────────────────────────────────────────────────────── */
 .divination-grief {
   font-style: italic;
-  font-size: 0.75rem;
+  font-size: 1rem;
   color: rgba(244, 232, 210, 0.45);
   text-align: center;
   margin-top: 10px;
@@ -332,7 +333,7 @@
 
 .divination-save-prompt-body {
   font-style: italic;
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: #d8b89c;
   margin-bottom: 12px;
   line-height: 1.5;
@@ -352,7 +353,7 @@
   color: #f4e8d2;
   font-family: 'EB Garamond', serif;
   font-variant: small-caps;
-  font-size: 0.85rem;
+  font-size: 1rem;
   letter-spacing: 0.2em;
   padding: 4px 16px;
   cursor: pointer;
@@ -428,7 +429,7 @@
 .divination-raison-close:hover { background: rgba(244, 232, 210, 0.1); color: #fff; }
 
 .divination-raison-body {
-  font-size: 0.9rem;
+  font-size: 1rem;
   line-height: 1.5;
   color: #d8b89c;
   font-style: italic;
@@ -439,7 +440,7 @@
   padding-top: 8px;
   border-top: 1px dotted rgba(244, 232, 210, 0.12);
   font-style: italic;
-  font-size: 0.7rem;
+  font-size: 0.875rem;
   letter-spacing: 0.18em;
   color: rgba(244, 232, 210, 0.4);
   text-transform: lowercase;

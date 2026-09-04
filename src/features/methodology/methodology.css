@@ -183,15 +183,16 @@
 
 .method-step:last-child { border-bottom: none; }
 
+/* D0003: step names + bodies are the method's working text — 16px floor. */
 .method-step-num {
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   font-style: italic;
   color: #6a4a20;
   letter-spacing: 0.1em;
 }
 
 .method-step-name {
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-variant: small-caps;
   letter-spacing: 0.1em;
   color: #2a1a08;
@@ -200,7 +201,7 @@
 }
 
 .method-step-body {
-  font-size: 0.85rem;
+  font-size: 1rem;
   font-style: italic;
   line-height: 1.5;
   color: #3a2010;
@@ -328,7 +329,7 @@
 }
 
 .methodology-raison-name {
-  font-size: 0.7rem;
+  font-size: 0.875rem;
   color: #6a2010;
   text-transform: lowercase;
   letter-spacing: 0.25em;
@@ -356,7 +357,7 @@
 }
 
 .methodology-raison-body {
-  font-size: 0.85rem;
+  font-size: 1rem;
   line-height: 1.55;
 }
 
@@ -365,7 +366,7 @@
   font-style: normal;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  font-size: 0.75rem;
+  font-size: 1rem;
   font-weight: 700;
 }
 
@@ -373,7 +374,7 @@
   margin-top: 12px;
   padding-top: 8px;
   border-top: 1px solid #6a4a20;
-  font-size: 0.65rem;
+  font-size: 0.875rem;
   color: #6a4a20;
   text-align: right;
   letter-spacing: 0.1em;

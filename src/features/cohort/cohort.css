@@ -122,11 +122,12 @@
   padding: 4px 0;
 }
 
+/* D0003: confessions, inputs, and buttons are the app's working text — 16px floor. */
 .cohort-empty {
   text-align: center;
   font-style: italic;
   color: #6a4a30;
-  font-size: 0.8rem;
+  font-size: 1rem;
   margin-top: 30px;
   line-height: 1.6;
 }
@@ -152,7 +153,7 @@
 }
 
 .cohort-person-confession {
-  font-size: 0.75rem;
+  font-size: 1rem;
   font-style: italic;
   color: #a88060;
   margin-top: 3px;
@@ -167,7 +168,7 @@
 }
 
 .cohort-confess-label {
-  font-size: 0.55rem;
+  font-size: 0.875rem;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: #8a4a30;
@@ -182,7 +183,7 @@
   color: #d8b890;
   font-family: inherit;
   font-style: italic;
-  font-size: 0.8rem;
+  font-size: 1rem;
   padding: 4px 8px;
   resize: vertical;
   outline: none;
@@ -205,7 +206,7 @@
   border: 1px solid #8a4a30;
   color: #d8a070;
   font-family: inherit;
-  font-size: 0.65rem;
+  font-size: 1rem;
   font-variant: small-caps;
   letter-spacing: 0.2em;
   padding: 5px 12px;
@@ -353,7 +354,7 @@
 }
 
 .cohort-raison-name {
-  font-size: 0.7rem;
+  font-size: 0.875rem;
   color: #d8a070;
   text-transform: lowercase;
   letter-spacing: 0.25em;
@@ -381,7 +382,7 @@
 }
 
 .cohort-raison-body {
-  font-size: 0.85rem;
+  font-size: 1rem;
   line-height: 1.55;
 }
 
@@ -390,7 +391,7 @@
   font-style: normal;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  font-size: 0.75rem;
+  font-size: 1rem;
   font-weight: 700;
 }
 
@@ -398,7 +399,7 @@
   margin-top: 12px;
   padding-top: 8px;
   border-top: 1px solid #6a2a18;
-  font-size: 0.65rem;
+  font-size: 0.875rem;
   color: #8a4a30;
   text-align: right;
   letter-spacing: 0.1em;
@@ -450,7 +451,7 @@
 }
 
 .cohort-save-prompt-name {
-  font-size: 0.7rem;
+  font-size: 0.875rem;
   color: #f0c890;
   text-transform: lowercase;
   letter-spacing: 0.25em;
@@ -478,7 +479,7 @@
 }
 
 .cohort-save-prompt-body {
-  font-size: 0.85rem;
+  font-size: 1rem;
   line-height: 1.55;
   color: #e8c8a0;
   margin: 8px 0 14px;
@@ -489,7 +490,7 @@
   font-style: normal;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  font-size: 0.75rem;
+  font-size: 1rem;
   font-weight: 700;
 }
 
@@ -507,7 +508,7 @@
   border: 1px solid #6a2a18;
   color: #d8b890;
   font-family: inherit;
-  font-size: 0.75rem;
+  font-size: 1rem;
   font-style: italic;
   letter-spacing: 0.18em;
   text-transform: lowercase;

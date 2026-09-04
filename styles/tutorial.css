@@ -43,7 +43,7 @@
 }
 
 .tutorial-window .who {
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   color: #886060;
   text-transform: uppercase;
   letter-spacing: 0.2em;
@@ -54,7 +54,7 @@
 .tutorial-window .who.raison     { color: #8acaff; }
 
 .tutorial-window .line {
-  font-size: 0.95rem;
+  font-size: 1rem;
   line-height: 1.5;
   margin: 0.6em 0;
   font-style: italic;
@@ -81,7 +81,7 @@
   color: #aa6a6a;
   padding: 0.4em 1em;
   font-family: inherit;
-  font-size: 0.85rem;
+  font-size: 1rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   cursor: pointer;

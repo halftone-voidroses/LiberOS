@@ -125,7 +125,7 @@
 }
 
 .satchel-sub {
-  font-size: 0.7rem;
+  font-size: 0.875rem;
   font-style: italic;
   color: #6a4a20;
   margin-top: 2px;
@@ -143,7 +143,7 @@
   margin: 4px 0;
   border-bottom: 1px dotted rgba(80, 50, 20, 0.3);
   cursor: pointer;
-  font-size: 0.85rem;
+  font-size: 1rem;
   font-style: italic;
   color: #3a1a08;
   transition: background 0.15s;
@@ -153,8 +153,9 @@
   background: rgba(120, 80, 40, 0.12);
 }
 
+/* D0003: artifact metadata + labels — 14px caption floor. */
 .satchel-list-item .meta {
-  font-size: 0.6rem;
+  font-size: 0.875rem;
   color: #6a4a20;
   font-style: normal;
   letter-spacing: 0.05em;
@@ -162,7 +163,7 @@
 }
 
 .satchel-empty {
-  font-size: 0.8rem;
+  font-size: 1rem;
   font-style: italic;
   color: #6a4a20;
   text-align: center;
@@ -192,7 +193,7 @@
 .satchel-element-tag {
   display: inline-block;
   align-self: flex-start;
-  font-size: 0.6rem;
+  font-size: 0.875rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: #6a3010;
@@ -209,7 +210,7 @@
 }
 
 .satchel-see-label {
-  font-size: 0.55rem;
+  font-size: 0.875rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: #6a4a20;
@@ -218,7 +219,7 @@
 }
 
 .satchel-see-list {
-  font-size: 0.75rem;
+  font-size: 1rem;
   color: #3a1a08;
   font-style: italic;
 }
@@ -226,7 +227,7 @@
 .satchel-annotation {
   margin-top: 10px;
   min-height: 1.2em;
-  font-size: 0.8rem;
+  font-size: 1rem;
   font-style: italic;
   color: #6a3010;
   border: none;
@@ -242,7 +243,7 @@
 
 .satchel-annotation:empty::before {
   content: attr(data-placeholder);
-  color: rgba(106, 48, 16, 0.5);
+  color: rgba(106, 48, 16, 0.8);
 }
 
 .satchel-footer {
@@ -252,7 +253,7 @@
   margin-top: 8px;
   padding-top: 6px;
   border-top: 1px dotted rgba(80, 50, 20, 0.3);
-  font-size: 0.7rem;
+  font-size: 0.875rem;
   color: #6a4a20;
   font-style: italic;
 }
@@ -412,7 +413,7 @@
 }
 
 .satchel-raison-name {
-  font-size: 0.7rem;
+  font-size: 0.875rem;
   color: #6a3010;
   text-transform: lowercase;
   letter-spacing: 0.25em;
@@ -440,7 +441,7 @@
 }
 
 .satchel-raison-body {
-  font-size: 0.85rem;
+  font-size: 1rem;
   line-height: 1.55;
 }
 
@@ -449,7 +450,7 @@
   font-style: normal;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   font-weight: 700;
 }
 
@@ -457,7 +458,7 @@
   margin-top: 12px;
   padding-top: 8px;
   border-top: 1px solid #6a4a20;
-  font-size: 0.65rem;
+  font-size: 0.875rem;
   color: #6a4a20;
   text-align: right;
   letter-spacing: 0.1em;

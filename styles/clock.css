@@ -19,7 +19,9 @@
   align-items: center;
   gap: 2px;
   font-family: 'VT323', 'Courier New', Courier, monospace;
-  color: rgba(200, 120, 120, 0.85);
+  /* D0003 WS1: shell red matched to the status line — the date below is
+     informational and must clear 4.5:1 on the screen maroon. */
+  color: rgba(214, 138, 138, 0.95);
   text-shadow: 0 0 4px rgba(200, 80, 80, 0.4);
 }
 
@@ -30,7 +32,7 @@
 }
 
 .radial-clock .date {
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   letter-spacing: 0.05em;
-  opacity: 0.8;
+  opacity: 1;
 }

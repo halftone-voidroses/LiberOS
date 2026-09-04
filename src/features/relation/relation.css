@@ -116,6 +116,7 @@
   display: block;
 }
 
+/* D0003: empty-state guidance + legend are functional — dim but ≥ 4.5:1. */
 .relation-empty {
   position: absolute;
   inset: 0;
@@ -124,7 +125,7 @@
   justify-content: center;
   flex-direction: column;
   font-style: italic;
-  color: rgba(232, 208, 152, 0.55);
+  color: rgba(232, 208, 152, 0.7);
   font-size: 1.05rem;
   line-height: 1.6;
   text-align: center;
@@ -132,8 +133,8 @@
 }
 
 .relation-empty em {
-  font-size: 0.8rem;
-  color: rgba(232, 208, 152, 0.4);
+  font-size: 0.875rem;
+  color: rgba(232, 208, 152, 0.6);
   margin-top: 8px;
   letter-spacing: 0.05em;
 }
@@ -142,7 +143,7 @@
   display: flex;
   align-items: center;
   gap: 18px;
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: rgba(232, 208, 152, 0.7);

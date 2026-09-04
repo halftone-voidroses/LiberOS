@@ -6,7 +6,7 @@ import { mkdir } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
 
 const BASE = 'http://127.0.0.1:8030'
-const OUT = '/Users/rosetudor/Desktop/LiberVacui1.0/screenshots'
+const OUT = '/Users/rosetudor/Desktop/LiberOS/screenshots'
 if (!existsSync(OUT)) await mkdir(OUT, { recursive: true })
 
 const browser = await chromium.launch()

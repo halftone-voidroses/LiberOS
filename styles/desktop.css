@@ -226,7 +226,7 @@
   font-family: 'EB Garamond', 'Garamond', serif;
   color: #c8b890;
   font-style: italic;
-  font-size: 0.85rem;
+  font-size: 1rem;
   line-height: 1.5;
   z-index: 10;
   box-shadow: 0 0 24px rgba(0, 0, 0, 0.8), inset 0 0 0 1px #2a1408;
@@ -240,7 +240,7 @@
 }
 
 .tutorial-title {
-  font-size: 0.7rem;
+  font-size: 0.875rem;
   letter-spacing: 0.2em;
   text-transform: lowercase;
   color: #aa7858;
@@ -264,7 +264,7 @@
   border: 1px solid #aa5020;
   color: #ffd0a0;
   font-family: inherit;
-  font-size: 0.8rem;
+  font-size: 1rem;
   font-style: italic;
   letter-spacing: 0.15em;
   padding: 6px 12px;
@@ -284,9 +284,10 @@
   width: 100%;
   background: none;
   border: 1px dotted #5a2a18;
-  color: #8a6a40;
+  color: #a8845a;
   font-family: inherit;
-  font-size: 0.7rem;
+  /* D0003: clickable control label — dialogue-reply floor applies. */
+  font-size: 1rem;
   font-style: italic;
   letter-spacing: 0.1em;
   padding: 4px 12px;
@@ -367,11 +368,11 @@
 }
 
 .artifact .artifact-label {
-  font-size: 0.5rem;
+  font-size: 0.875rem;
   position: absolute;
   bottom: -16px;
   white-space: nowrap;
-  color: rgba(220, 180, 180, 0.7);
+  color: rgba(220, 180, 180, 0.85);
   font-family: 'VT323', 'Courier New', Courier, monospace;
   text-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
 }
@@ -389,7 +390,10 @@
 .settings-cog {
   position: absolute;
   left: 28px;
-  bottom: calc(26% + 22px);
+  /* D0003 WS1: lifted clear of the status line below (was 26%+22px — the
+     gear's bottom teeth cut through the first characters of the status
+     text at 1280×800, reading as clipped). */
+  bottom: calc(26% + 40px);
   width: 60px;
   height: 60px;
   z-index: 12;
@@ -470,7 +474,7 @@
 }
 
 .settings-modal-title {
-  font-size: 0.9rem;
+  font-size: 1rem;
   letter-spacing: 0.4em;
   color: #c8b890;
   font-weight: 700;
@@ -480,7 +484,7 @@
 .settings-modal-close {
   background: none;
   border: 1px solid #4a2a18;
-  color: #8a6a40;
+  color: #a8845a;
   width: 22px;
   height: 22px;
   font-size: 1rem;
@@ -510,7 +514,7 @@
 }
 
 .settings-modal-section-title {
-  font-size: 0.65rem;
+  font-size: 0.875rem;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: #8a6a40;
@@ -523,7 +527,7 @@
   border: 1px solid #4a2a18;
   color: #c8b890;
   font-family: inherit;
-  font-size: 0.8rem;
+  font-size: 1rem;
   letter-spacing: 0.1em;
   padding: 5px 12px;
   cursor: pointer;
@@ -551,8 +555,8 @@
 }
 
 .settings-modal-hint {
-  font-size: 0.7rem;
-  color: #6a4a30;
+  font-size: 0.875rem;
+  color: #9a7a50;
   font-style: italic;
   margin-top: 4px;
   letter-spacing: 0.05em;
@@ -568,7 +572,7 @@
 }
 
 .settings-modal-state {
-  font-size: 0.7rem;
+  font-size: 0.875rem;
   color: #8a6a40;
   font-style: italic;
   background: rgba(0,0,0,0.3);
@@ -584,8 +588,8 @@
 .settings-modal-foot {
   border-top: 1px solid #4a2a18;
   padding: 6px 18px 10px;
-  font-size: 0.65rem;
-  color: #6a4a30;
+  font-size: 0.875rem;
+  color: #9a7a50;
   font-style: italic;
   text-align: center;
   letter-spacing: 0.1em;
@@ -601,7 +605,7 @@
   text-align: center;
   font-family: 'Georgia', 'Times New Roman', serif;
   font-style: italic;
-  font-size: 0.85rem;
+  font-size: 1rem;
   letter-spacing: 0.06em;
   line-height: 1.5;
   color: rgba(255, 200, 220, 0.78);

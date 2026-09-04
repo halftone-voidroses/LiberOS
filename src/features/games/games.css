@@ -105,8 +105,9 @@
   margin-top: 2px;
 }
 
+/* D0003: booth names/descriptions are what the user picks by — 16px floor. */
 .games-sub {
-  font-size: 0.7rem;
+  font-size: 0.875rem;
   font-style: italic;
   color: #f0d090;
   letter-spacing: 0.15em;
@@ -304,7 +305,7 @@
 }
 
 .games-booth-name {
-  font-size: 0.55rem;
+  font-size: 1rem;
   font-weight: 900;
   letter-spacing: 0.15em;
   color: #d4af37;
@@ -314,7 +315,7 @@
 }
 
 .games-booth-desc {
-  font-size: 0.5rem;
+  font-size: 1rem;
   font-style: italic;
   color: #f0d090;
   opacity: 0.7;
@@ -361,7 +362,7 @@
 }
 
 .games-stage-name {
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   font-weight: 900;
   letter-spacing: 0.2em;
   color: #d4af37;
@@ -403,7 +404,7 @@
 }
 
 .games-prompt {
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-style: italic;
   color: #f0d090;
   text-align: center;
@@ -416,7 +417,7 @@
   border: 1px solid #d4af37;
   color: #f0d090;
   font-family: 'VT323', 'Courier New', monospace;
-  font-size: 0.85rem;
+  font-size: 1rem;
   padding: 6px 10px;
   width: 80%;
   max-width: 320px;
@@ -442,7 +443,7 @@
   border: 1px solid #4a3010;
   color: #1a0008;
   font-family: 'VT323', 'Courier New', monospace;
-  font-size: 0.85rem;
+  font-size: 1rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   padding: 5px 14px;
@@ -458,7 +459,7 @@
 .games-result {
   font-style: italic;
   color: #d4af37;
-  font-size: 0.9rem;
+  font-size: 1rem;
   letter-spacing: 0.08em;
   text-align: center;
 }
@@ -638,7 +639,7 @@
 }
 
 .games-raison-name {
-  font-size: 0.7rem;
+  font-size: 0.875rem;
   color: #d4af37;
   text-transform: lowercase;
   letter-spacing: 0.25em;
@@ -666,7 +667,7 @@
 }
 
 .games-raison-body {
-  font-size: 0.85rem;
+  font-size: 1rem;
   line-height: 1.55;
 }
 
@@ -675,7 +676,7 @@
   font-style: normal;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  font-size: 0.75rem;
+  font-size: 1rem;
   font-weight: 900;
 }
 
@@ -683,7 +684,7 @@
   margin-top: 12px;
   padding-top: 8px;
   border-top: 1px solid #8a6a20;
-  font-size: 0.65rem;
+  font-size: 0.875rem;
   color: #8a6a20;
   text-align: right;
   letter-spacing: 0.1em;
@@ -737,7 +738,7 @@
 }
 
 .games-save-prompt-name {
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   color: #f5d870;
   text-transform: lowercase;
   letter-spacing: 0.25em;
@@ -765,7 +766,7 @@
 }
 
 .games-save-prompt-body {
-  font-size: 0.9rem;
+  font-size: 1rem;
   line-height: 1.55;
   color: #f0d090;
   margin: 8px 0 14px;
@@ -777,7 +778,7 @@
   font-style: normal;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  font-size: 0.8rem;
+  font-size: 1rem;
   font-weight: 700;
 }
 
@@ -795,7 +796,7 @@
   border: 1px solid #d4af37;
   color: #f0d090;
   font-family: 'VT323', 'Courier New', monospace;
-  font-size: 0.85rem;
+  font-size: 1rem;
   letter-spacing: 0.18em;
   text-transform: lowercase;
   padding: 6px 14px;

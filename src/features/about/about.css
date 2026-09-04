@@ -89,7 +89,7 @@
 }
 
 .about-section-title {
-  font-size: 0.6rem;
+  font-size: 0.875rem;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: #8aa0a8;
@@ -98,8 +98,9 @@
   font-variant: small-caps;
 }
 
+/* D0003: section bodies are the page's instructions — 16px floor. */
 .about-section-body {
-  font-size: 0.8rem;
+  font-size: 1rem;
   font-style: italic;
   color: #b8c8d0;
   line-height: 1.5;
@@ -129,7 +130,7 @@
 }
 
 .about-nav-link {
-  font-size: 0.65rem;
+  font-size: 1rem;
   color: #8aa0a8;
   text-decoration: none;
   letter-spacing: 0.1em;

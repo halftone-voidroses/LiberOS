@@ -5,22 +5,22 @@
    every 12 seconds. Lowercase. The user can read it but it's not in
    their face.
 
-   Position: ~6px above the very bottom of the screen, left-aligned with
-   a small indent.
+   Position: just above the dial band (dial owns the bottom 26%), so the
+   text never collides with the dial options (audit minor 3). Left-aligned
+   with a small indent.
    ============================================================================ */
 
 .status-line {
   position: absolute;
-  bottom: 6px;
+  bottom: calc(26% + 12px);
   left: 16px;
   z-index: 30;
   font-family: 'VT323', 'Courier New', Courier, monospace;
-  font-size: 0.85rem;
-  color: rgba(200, 120, 120, 0.7);
+  font-size: 0.875rem;
+  color: rgba(214, 138, 138, 0.95);
   text-shadow: 0 0 4px rgba(200, 80, 80, 0.4);
   pointer-events: none;
   letter-spacing: 0.05em;
-  opacity: 0.85;
 }
 
 .status-line .status-phrase {

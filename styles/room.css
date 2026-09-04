@@ -1,9 +1,8 @@
 /* ============================================================================
    room.css — the dark room
    The viewport IS the room. The CRT is a physical object in the middle of
-   the void. Dust particles drift like stars. CRT scanlines are barely
-   visible. Everything sits on a table implied by a soft shadow under the
-   monitor.
+   the void. Dust particles drift like stars. Everything sits on a table
+   implied by a soft shadow under the monitor.
    ============================================================================ */
 
 * {
@@ -13,8 +12,6 @@
 }
 
 :root {
-  --scan-alpha: 0.004;       /* essentially zero — a hairline breath, not visible as a pattern */
-  --scan-line-px: 1px;       /* height of each scanline + gap pair */
   --scan-vignette: 0.7;      /* corner darkening, 0..1 */
 }
 
@@ -76,23 +73,9 @@ html, body {
   mix-blend-mode: overlay;
 }
 
-/* CRT scanlines — body pseudo. Tone is controlled by --scan-alpha.
-   Barely visible (0.04) by default. */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 0) 0px,
-    rgba(0, 0, 0, 0) var(--scan-line-px),
-    rgba(0, 0, 0, 1) var(--scan-line-px),
-    rgba(0, 0, 0, 1) calc(var(--scan-line-px) + 1px)
-  );
-  pointer-events: none;
-  z-index: 100;
-  opacity: var(--scan-alpha);
-}
+/* CRT scanlines removed (plan 2026-09-04 D0002) — the old body::after
+   repeating-linear-gradient overlay is gone. The vignette below and the
+   static/dust canvases carry the CRT feel now. */
 
 /* Vignette — gently darken the corners of the room, so the eye is drawn
    to the monitor. */
@@ -116,8 +99,7 @@ body::before {
   filter: hue-rotate(-8deg) saturate(1.05);
 }
 
-/* The machine sits in the center of the room, above the dust, below the
-   scanlines. */
+/* The machine sits in the center of the room, above the dust. */
 .machine {
   position: relative;
   z-index: 10;
@@ -143,9 +125,8 @@ body::before {
   z-index: -1;
 }
 
-/* Respect reduced motion — kill dust + scanline animation, keep state
-   still. */
+/* Respect reduced motion — kill dust animation, keep state still. */
 @media (prefers-reduced-motion: reduce) {
-  body::after, body::before { animation: none !important; }
+  body::before { animation: none !important; }
   .dust-canvas, .static-canvas { display: none; }
 }

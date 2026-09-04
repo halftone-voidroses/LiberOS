@@ -65,10 +65,7 @@
   100% { opacity: 0.8; }
 }
 
-.shadow-on .screen::after {
-  filter: hue-rotate(-15deg) saturate(1.4);
-  opacity: 0.6;
-}
+/* (.shadow-on .screen::after removed with the scanlines — D0002.) */
 
 .shadow-on .screen-stage {
   animation: shadow-chroma 2.5s steps(4) infinite;
@@ -99,7 +96,7 @@
   border: 1px solid #aa3030;
   color: #f0a080;
   font-family: 'VT323', monospace;
-  font-size: 0.8rem;
+  font-size: 1rem;
   padding: 4px 10px;
   letter-spacing: 0.15em;
   z-index: 9999;
