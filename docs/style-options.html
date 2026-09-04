@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>the dial, three ways — style options</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Silkscreen:wght@400;700&family=Press+Start+2P&family=Share+Tech+Mono&family=DotGothic16&family=Jacquard+24&family=Pirata+One&family=Grenze+Gotisch:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #d6ba94;
+    --dim: rgba(214, 186, 148, 0.55);
+    --bg: #0a0605;
+    --panel: #140b08;
+    --rule: #3a2014;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); }
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    padding: 40px 20px 80px;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+  .head { text-align: center; margin-bottom: 28px; }
+  .head h1 {
+    font-family: 'Jacquard 24', Georgia, serif;
+    font-weight: 400;
+    font-size: 3rem;
+    color: #e8cfa0;
+    margin: 0 0 6px;
+    text-shadow: 0 0 18px rgba(232, 207, 160, 0.25);
+  }
+  .head p { color: var(--dim); margin: 0; font-style: italic; }
+  .howto {
+    border: 1px solid var(--rule);
+    background: var(--panel);
+    padding: 12px 18px;
+    margin: 0 auto 46px;
+    max-width: 760px;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--dim);
+    text-align: center;
+    border-radius: 3px;
+  }
+  .howto b { color: var(--ink); }
+
+  .direction { margin-bottom: 70px; }
+  .dir-head { display: flex; align-items: baseline; gap: 14px; border-bottom: 1px solid var(--rule); padding-bottom: 10px; margin-bottom: 8px; }
+  .dir-tag {
+    font-family: 'VT323', monospace;
+    font-size: 22px;
+    color: #0a0605;
+    background: var(--ink);
+    padding: 0 10px;
+    border-radius: 2px;
+  }
+  .dir-head h2 { font-size: 1.7rem; margin: 0; font-weight: 400; color: #e8cfa0; }
+  .dir-desc { color: var(--dim); font-style: italic; margin: 10px 0 22px; line-height: 1.55; max-width: 860px; }
+
+  .fonts-row { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 20px; }
+  .font-opt {
+    flex: 1 1 240px;
+    border: 1px solid var(--rule);
+    background: var(--panel);
+    border-radius: 3px;
+    padding: 14px 16px 12px;
+    position: relative;
+  }
+  .font-opt .f-tag {
+    position: absolute; top: -9px; left: 10px;
+    background: var(--bg);
+    font-family: 'VT323', monospace;
+    font-size: 15px;
+    color: var(--dim);
+    padding: 0 6px;
+  }
+  .font-opt .f-sample { font-size: 30px; color: #e8cfa0; margin: 4px 0 6px; }
+  .font-opt .f-name { font-family: 'VT323', monospace; font-size: 15px; color: var(--dim); }
+
+  /* a dark "screen" strip so button materials read against the machine */
+  .screen-strip {
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(120, 20, 20, 0.16) 0%, rgba(0,0,0,0) 62%),
+      linear-gradient(180deg, #1c0708 0%, #120404 100%);
+    border: 1px solid #2a1008;
+    border-radius: 4px;
+    padding: 26px 22px 22px;
+  }
+  .strip-label {
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    color: rgba(214, 186, 148, 0.4);
+    letter-spacing: 0.1em;
+    margin: 0 0 14px;
+  }
+  .trio { display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: center; margin-bottom: 18px; }
+  .trio .side { justify-self: end; }
+  .trio .side.r { justify-self: start; }
+  .full-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .full-row .d-btn { flex: 0 0 auto; }
+  .state-note { font-family: 'VT323', monospace; font-size: 14px; color: rgba(214,186,148,0.4); margin: 14px 0 6px; letter-spacing: 0.08em; }
+
+  /* ═══ A — retro plastic keycaps ═══ */
+  .d-a {
+    font-family: 'VT323', monospace;
+    font-size: 19px;
+    letter-spacing: 0.06em;
+    color: #3a2410;
+    background:
+      linear-gradient(180deg, #f2e6cc 0%, #e0d0aa 46%, #c4b088 100%);
+    border: 1px solid #8a744e;
+    border-radius: 4px;
+    padding: 7px 16px 6px;
+    box-shadow:
+      inset 0 2px 0 rgba(255, 252, 240, 0.85),
+      inset 0 -3px 0 rgba(90, 66, 30, 0.45),
+      0 3px 0 #4a3a20,
+      0 5px 6px rgba(0, 0, 0, 0.55);
+    text-shadow: 0 1px 0 rgba(255, 250, 235, 0.7);
+    cursor: pointer;
+    position: relative;
+  }
+  .d-a .acc { color: var(--acc, #aa5a18); font-weight: bold; }
+  .d-a.is-active {
+    background: linear-gradient(180deg, #f8ecd4 0%, #e8d8b4 46%, #ccb890 100%);
+    box-shadow:
+      inset 0 2px 0 rgba(255, 252, 240, 0.95),
+      inset 0 -3px 0 rgba(90, 66, 30, 0.5),
+      0 4px 0 #4a3a20,
+      0 7px 14px rgba(0, 0, 0, 0.6);
+    transform: translateY(-2px);
+  }
+  .d-a.is-hover { filter: brightness(1.05); }
+  .d-a.is-pressed {
+    transform: translateY(2px);
+    box-shadow:
+      inset 0 3px 6px rgba(60, 40, 12, 0.5),
+      0 1px 0 #4a3a20;
+  }
+  .d-a.silkscreen { font-family: 'Silkscreen', monospace; font-size: 12px; letter-spacing: 0.04em; }
+  .d-a.pressstart { font-family: 'Press Start 2P', monospace; font-size: 9px; }
+
+  /* ═══ B — analog CRT phosphor tiles ═══ */
+  .d-b {
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    letter-spacing: 0.1em;
+    color: var(--acc, #c8a878);
+    background:
+      radial-gradient(ellipse at 50% 22%, rgba(255, 255, 255, 0.09) 0%, rgba(0,0,0,0) 55%),
+      linear-gradient(180deg, #17090a 0%, #0c0404 100%);
+    border: 1px solid #3a1414;
+    border-radius: 6px;
+    padding: 7px 18px 6px;
+    box-shadow:
+      inset 0 0 14px rgba(0, 0, 0, 0.75),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      0 0 0 2px #0a0303,
+      0 0 11px var(--glow, rgba(200, 168, 120, 0.28));
+    text-shadow: 0 0 8px var(--glow, rgba(200, 168, 120, 0.6));
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .d-b::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(180deg, rgba(0,0,0,0.28) 0px, rgba(0,0,0,0.28) 1px, transparent 1px, transparent 3px);
+    pointer-events: none;
+  }
+  .d-b.is-active {
+    background:
+      radial-gradient(ellipse at 50% 18%, rgba(255, 255, 255, 0.14) 0%, rgba(0,0,0,0) 58%),
+      linear-gradient(180deg, #241010 0%, #140606 100%);
+    border-color: var(--acc, #c8a878);
+    box-shadow:
+      inset 0 0 18px rgba(0, 0, 0, 0.7),
+      0 0 0 2px #0a0303,
+      0 0 22px var(--glow, rgba(200, 168, 120, 0.5));
+    text-shadow: 0 0 12px var(--glow, rgba(200, 168, 120, 0.9));
+  }
+  .d-b.is-hover { filter: brightness(1.22); }
+  .d-b.is-pressed { filter: brightness(0.75); box-shadow: inset 0 0 22px rgba(0,0,0,0.9); }
+  .d-b.sharetech { font-family: 'Share Tech Mono', monospace; font-size: 16px; letter-spacing: 0.14em; }
+  .d-b.dotgothic { font-family: 'DotGothic16', monospace; font-size: 15px; letter-spacing: 0.12em; }
+
+  /* ═══ C — horror relic plaques ═══ */
+  .d-c {
+    font-family: 'Jacquard 24', Georgia, serif;
+    font-size: 22px;
+    color: #b8a088;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(120, 40, 24, 0.14) 0%, rgba(0,0,0,0) 60%),
+      linear-gradient(180deg, #17100e 0%, #0a0605 100%);
+    border: 1px solid #33241c;
+    border-radius: 7px 3px 8px 3px;
+    padding: 5px 16px 7px;
+    box-shadow:
+      inset 0 0 16px rgba(0, 0, 0, 0.8),
+      inset 0 1px 0 rgba(200, 168, 120, 0.09),
+      0 2px 8px rgba(0, 0, 0, 0.6);
+    text-shadow: 0 0 6px rgba(170, 48, 48, 0.35);
+    cursor: pointer;
+    position: relative;
+  }
+  .d-c .acc { color: #c89078; }
+  .d-c.is-active {
+    color: #e8cfa8;
+    border-color: #5a2a1a;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(180, 48, 30, 0.22) 0%, rgba(0,0,0,0) 62%),
+      linear-gradient(180deg, #1e0c08 0%, #0c0404 100%);
+    box-shadow:
+      inset 0 0 20px rgba(0, 0, 0, 0.8),
+      0 0 20px rgba(170, 48, 30, 0.4),
+      0 2px 10px rgba(0, 0, 0, 0.7);
+    text-shadow: 0 0 10px rgba(220, 90, 60, 0.55);
+  }
+  .d-c.is-hover { color: #d8bca0; box-shadow: inset 0 0 16px rgba(0,0,0,0.8), 0 0 14px rgba(170, 48, 30, 0.28); }
+  .d-c.is-pressed { filter: brightness(0.7); transform: translateY(1px); }
+  .d-c.pirata { font-family: 'Pirata One', Georgia, serif; font-size: 20px; }
+  .d-c.grenze { font-family: 'Grenze Gotisch', Georgia, serif; font-size: 18px; }
+
+  .foot {
+    margin-top: 60px;
+    text-align: center;
+    color: var(--dim);
+    font-style: italic;
+    font-size: 15px;
+  }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>the dial, three ways</h1>
+  <p>style options for the twelve buttons — same twelve names, three hands they could be made by.</p>
+</div>
+
+<div class="howto">
+  every strip below is <b>live</b>: hover the buttons, and one in each trio is
+  pinned as <b>active</b>, one shows <b>pressed</b>. pick a direction
+  (A / B / C) and a face (1 / 2 / 3) — tell me the pair, e.g.
+  <b>“B2”</b>, and the dial gets rebuilt in that hand.
+</div>
+
+<!-- ═══════════════════════ A — RETRO PLASTIC ═══════════════════════ -->
+<div class="direction">
+  <div class="dir-head"><span class="dir-tag">A</span><h2>retro — beige keycaps</h2></div>
+  <p class="dir-desc">the buttons are plastic keys moulded into the monitor's
+  own beige — thick bevels, a pressed state that physically sinks, legends
+  tinted per traveller like dye-stamped caps. the dial stops being a menu and
+  becomes part of the machine's body. reads instantly; zero mysticism.</p>
+
+  <div class="fonts-row">
+    <div class="font-opt"><span class="f-tag">A1</span>
+      <div class="f-sample" style="font-family:'VT323',monospace;">cohort</div>
+      <div class="f-name">VT323 — the terminal moulded in plastic</div>
+    </div>
+    <div class="font-opt"><span class="f-tag">A2</span>
+      <div class="f-sample" style="font-family:'Silkscreen',monospace;font-size:22px;">cohort</div>
+      <div class="f-name">Silkscreen — stencil arcade</div>
+    </div>
+    <div class="font-opt"><span class="f-tag">A3</span>
+      <div class="f-sample" style="font-family:'Press Start 2P',monospace;font-size:16px;">cohort</div>
+      <div class="f-name">Press Start 2P — heavy cartridge</div>
+    </div>
+  </div>
+
+  <div class="screen-strip">
+    <p class="strip-label">— the trio (prev · active · next), hover me —</p>
+    <div class="trio">
+      <div class="d-a side" style="--acc:#8a6840;">trash</div>
+      <div class="d-a is-active" style="--acc:#aa5a18;">cohort</div>
+      <div class="d-b side r" hidden></div>
+      <div class="d-a side r" style="--acc:#aa7838;">satchel</div>
+    </div>
+    <p class="state-note">hover → brightness · pressed → sunk (shown on the middle of the row below) · active → lifted + brighter plate</p>
+    <div class="full-row">
+      <div class="d-a" style="--acc:#aa5a18;">cohort</div>
+      <div class="d-a" style="--acc:#aa7838;">satchel</div>
+      <div class="d-a" style="--acc:#2a8a8a;">sea</div>
+      <div class="d-a" style="--acc:#8a2a20;">chat</div>
+      <div class="d-a" style="--acc:#00ff66;">abstract</div>
+      <div class="d-a is-pressed" style="--acc:#d4af37;">games</div>
+      <div class="d-a" style="--acc:#f4e8d2;">divination</div>
+      <div class="d-a" style="--acc:#aa3030;">learn</div>
+      <div class="d-a" style="--acc:#aa3030;">methodology</div>
+      <div class="d-a" style="--acc:#d4af37;">themes</div>
+      <div class="d-a" style="--acc:#aa8a3a;">relation</div>
+      <div class="d-a" style="--acc:#8a6840;">trash</div>
+    </div>
+    <p class="state-note">— A1 vt323 · same row in A2 silkscreen —</p>
+    <div class="full-row">
+      <div class="d-a silkscreen" style="--acc:#aa5a18;">cohort</div>
+      <div class="d-a silkscreen" style="--acc:#aa7838;">satchel</div>
+      <div class="d-a silkscreen" style="--acc:#2a8a8a;">sea</div>
+      <div class="d-a silkscreen" style="--acc:#8a2a20;">chat</div>
+      <div class="d-a silkscreen" style="--acc:#00ff66;">abstract</div>
+      <div class="d-a silkscreen" style="--acc:#d4af37;">games</div>
+      <div class="d-a silkscreen" style="--acc:#f4e8d2;">divination</div>
+      <div class="d-a silkscreen" style="--acc:#aa3030;">learn</div>
+      <div class="d-a silkscreen" style="--acc:#aa3030;">methodology</div>
+      <div class="d-a silkscreen" style="--acc:#d4af37;">themes</div>
+      <div class="d-a silkscreen" style="--acc:#aa8a3a;">relation</div>
+      <div class="d-a silkscreen" style="--acc:#8a6840;">trash</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ B — ANALOG CRT ═══════════════════════ -->
+<div class="direction">
+  <div class="dir-head"><span class="dir-tag">B</span><h2>analog — phosphor tiles</h2></div>
+  <p class="dir-desc">the buttons are glass tiles cut from the tube itself —
+  dark, slightly convex, scanlines running inside the glass, labels glowing
+  in each traveller's phosphor. the active tier is the channel currently on
+  the air. the machine glows back.</p>
+
+  <div class="fonts-row">
+    <div class="font-opt"><span class="f-tag">B1</span>
+      <div class="f-sample" style="font-family:'VT323',monospace;text-shadow:0 0 8px rgba(200,168,120,0.6);">cohort</div>
+      <div class="f-name">VT323 — phosphor terminal</div>
+    </div>
+    <div class="font-opt"><span class="f-tag">B2</span>
+      <div class="f-sample" style="font-family:'Share Tech Mono',monospace;text-shadow:0 0 8px rgba(200,168,120,0.6);">cohort</div>
+      <div class="f-name">Share Tech Mono — instrument panel</div>
+    </div>
+    <div class="font-opt"><span class="f-tag">B3</span>
+      <div class="f-sample" style="font-family:'DotGothic16',monospace;text-shadow:0 0 8px rgba(200,168,120,0.6);">cohort</div>
+      <div class="f-name">DotGothic16 — gothic dot matrix</div>
+    </div>
+  </div>
+
+  <div class="screen-strip">
+    <p class="strip-label">— the trio, hover me —</p>
+    <div class="trio">
+      <div class="d-b side" style="--acc:#8a6840;--glow:rgba(138,104,64,0.4);">trash</div>
+      <div class="d-b is-active" style="--acc:#f4e8d2;--glow:rgba(244,232,210,0.55);">cohort</div>
+      <div class="d-b side r" style="--acc:#aa7838;--glow:rgba(170,120,56,0.4);">satchel</div>
+    </div>
+    <p class="state-note">— B1 vt323 · full row, one pressed —</p>
+    <div class="full-row">
+      <div class="d-b" style="--acc:#aa5a18;--glow:rgba(170,90,24,0.45);">cohort</div>
+      <div class="d-b" style="--acc:#aa7838;--glow:rgba(170,120,56,0.45);">satchel</div>
+      <div class="d-b" style="--acc:#2a8a8a;--glow:rgba(42,138,138,0.45);">sea</div>
+      <div class="d-b" style="--acc:#c04a58;--glow:rgba(192,74,88,0.45);">chat</div>
+      <div class="d-b" style="--acc:#00ff66;--glow:rgba(0,255,102,0.4);">abstract</div>
+      <div class="d-b is-pressed" style="--acc:#d4af37;--glow:rgba(212,175,55,0.45);">games</div>
+      <div class="d-b" style="--acc:#f4e8d2;--glow:rgba(244,232,210,0.5);">divination</div>
+      <div class="d-b" style="--acc:#e05a5a;--glow:rgba(224,90,90,0.45);">learn</div>
+      <div class="d-b" style="--acc:#e05a5a;--glow:rgba(224,90,90,0.45);">methodology</div>
+      <div class="d-b" style="--acc:#d4af37;--glow:rgba(212,175,55,0.45);">themes</div>
+      <div class="d-b" style="--acc:#c8a04a;--glow:rgba(200,160,74,0.45);">relation</div>
+      <div class="d-b" style="--acc:#a88858;--glow:rgba(168,136,88,0.45);">trash</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ C — HORROR RELIC ═══════════════════════ -->
+<div class="direction">
+  <div class="dir-head"><span class="dir-tag">C</span><h2>horror — relic plaques</h2></div>
+  <p class="dir-desc">the buttons are plaques prised off coffins and reliquaries —
+  near-black iron and wax, edges cut uneven, each name etched like a grave
+  rubbing with a faint ember under it. the active tier is the relic currently
+  burning. haunted, not halloween: the horror is in the material, not the
+  dripping font.</p>
+
+  <div class="fonts-row">
+    <div class="font-opt"><span class="f-tag">C1</span>
+      <div class="f-sample" style="font-family:'Jacquard 24',Georgia,serif;">cohort</div>
+      <div class="f-name">Jacquard 24 — pixel blackletter (already yours)</div>
+    </div>
+    <div class="font-opt"><span class="f-tag">C2</span>
+      <div class="f-sample" style="font-family:'Pirata One',Georgia,serif;">cohort</div>
+      <div class="f-name">Pirata One — smooth blackletter</div>
+    </div>
+    <div class="font-opt"><span class="f-tag">C3</span>
+      <div class="f-sample" style="font-family:'Grenze Gotisch',Georgia,serif;font-weight:600;">cohort</div>
+      <div class="f-name">Grenze Gotisch — gothic serif, readable</div>
+    </div>
+  </div>
+
+  <div class="screen-strip">
+    <p class="strip-label">— the trio, hover me —</p>
+    <div class="trio">
+      <div class="d-c side">trash</div>
+      <div class="d-c is-active"><span class="acc">cohort</span></div>
+      <div class="d-c side r">satchel</div>
+    </div>
+    <p class="state-note">— C1 jacquard 24 · full row, one pressed —</p>
+    <div class="full-row">
+      <div class="d-c" style="--acc:#aa5a18;">cohort</div>
+      <div class="d-c" style="--acc:#aa7838;">satchel</div>
+      <div class="d-c" style="--acc:#2a8a8a;">sea</div>
+      <div class="d-c" style="--acc:#8a2a20;">chat</div>
+      <div class="d-c" style="--acc:#00ff66;"><span class="acc">abstract</span></div>
+      <div class="d-c is-pressed" style="--acc:#d4af37;">games</div>
+      <div class="d-c" style="--acc:#f4e8d2;">divination</div>
+      <div class="d-c" style="--acc:#aa3030;">learn</div>
+      <div class="d-c" style="--acc:#aa3030;">methodology</div>
+      <div class="d-c" style="--acc:#d4af37;">themes</div>
+      <div class="d-c" style="--acc:#aa8a3a;">relation</div>
+      <div class="d-c" style="--acc:#8a6840;">trash</div>
+    </div>
+    <p class="state-note">— C2 pirata one · same row —</p>
+    <div class="full-row">
+      <div class="d-c pirata" style="--acc:#aa5a18;">cohort</div>
+      <div class="d-c pirata" style="--acc:#aa7838;">satchel</div>
+      <div class="d-c pirata" style="--acc:#2a8a8a;">sea</div>
+      <div class="d-c pirata" style="--acc:#8a2a20;">chat</div>
+      <div class="d-c pirata" style="--acc:#00ff66;"><span class="acc">abstract</span></div>
+      <div class="d-c pirata" style="--acc:#d4af37;">games</div>
+      <div class="d-c pirata" style="--acc:#f4e8d2;">divination</div>
+      <div class="d-c pirata" style="--acc:#aa3030;">learn</div>
+      <div class="d-c pirata" style="--acc:#aa3030;">methodology</div>
+      <div class="d-c pirata" style="--acc:#d4af37;">themes</div>
+      <div class="d-c pirata" style="--acc:#aa8a3a;">relation</div>
+      <div class="d-c pirata" style="--acc:#8a6840;">trash</div>
+    </div>
+  </div>
+</div>
+
+<p class="foot">choose a pair — A1·A2·A3 · B1·B2·B3 · C1·C2·C3 — and the dial
+takes that hand. fonts get self-hosted into the machine either way; it stays
+offline.</p>
+
+</body>
+</html>
