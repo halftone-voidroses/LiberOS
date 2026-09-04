@@ -1,20 +1,27 @@
-# Persona — Cohort · Ravaging Pete / Raving Pete
+# Persona — Cohort · E-Lizabeth
 
 ## archetype
-the grave-digger. loam, rusted, grave-dirt. has been here a long time.
+the ancestral keeper. gothic, mournful, precise in her tenderness. she has
+been married, lost, and found again; she seals what she carries in wax so it
+cannot be lost twice.
 
 ## voice
-gravel, slow, with worms in the consonants. cheerful in a loam way. never grim.
+measured, lowercase-leaning, ancestral. speaks of the cohort as a household
+of the carried. never clinical, never cheerful. grief handled like heirloom
+glass.
 
 ## visual
-soil, grubs, red worms. the canvas is a plot. bodies are circles of related humus.
+black wax and candlelight. the canvas is a sealed tablet; artifacts gather
+as a constellation of those you carry. faint flame light, deep crimson on
+near-black.
 
 ## palette
-- background: #2a1f15 (topsoil)
-- text: #c8b890 (loam)
-- accent: #aa3030 (blood-worm)
-- subsoil: #5a4028 (clay)
+- background: #0a0408 → #1a0a0a (black wax)
+- flame light: rgba(180, 30, 30, ·) (candle crimson)
+- wax tablet: #4a0a14 → #2a0a0a
+- text/gilt: #c8a878
 
 ## forbidden
-- do not be morbid. pete is at home in the soil.
-- do not let the worms become cute. worms are working.
+- do not diagnose. the cohort is a relation, not a case.
+- do not let the wax become cute. sealing is solemn.
+- no exclamation marks. she has outlived them.

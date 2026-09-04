@@ -661,3 +661,64 @@
   color: rgba(244, 232, 210, 0.8);
   line-height: 1.5;
 }
+
+/* ─── window titlebar (WS3, plan 2026-09-04 §4.3) — the felt valance ─── */
+
+.divination-titlebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 36px;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 76px 0 14px;
+  overflow: hidden;
+  background:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.02) 0px, rgba(255, 255, 255, 0.02) 1px, transparent 1px, transparent 3px),
+    repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.08) 0px, rgba(0, 0, 0, 0.08) 1px, transparent 1px, transparent 3px),
+    linear-gradient(180deg, #5a0c14 0%, #400810 60%, #2c050a 100%);
+  border-bottom: 2px solid #1a0205;
+  box-shadow:
+    inset 0 1px 0 rgba(244, 232, 210, 0.2),
+    inset 0 -3px 4px -2px rgba(244, 232, 210, 0.18),
+    0 2px 6px rgba(0, 0, 0, 0.5);
+  font-family: 'EB Garamond', 'Garamond', 'Times New Roman', serif;
+  color: #f4e8d2;
+}
+
+.divination-titlebar-name {
+  flex-shrink: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.7);
+}
+
+.divination-titlebar-sub {
+  font-size: 1rem;
+  font-style: italic;
+  color: rgba(244, 232, 210, 0.75);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.6);
+}
+
+.divination-titlebar .divination-help,
+.divination-titlebar .divination-exit {
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+}
+.divination-titlebar .divination-help { right: 36px; }
+.divination-titlebar .divination-exit { right: 8px; }
+.divination-titlebar .divination-help:active,
+.divination-titlebar .divination-exit:active {
+  transform: translateY(calc(-50% + 1px));
+}
+
+/* open room for the valance (machine.css sets [data-state] inset: 0) */
+.divination-app { top: 36px; }

@@ -463,3 +463,63 @@
   text-align: right;
   letter-spacing: 0.1em;
 }
+
+/* ─── window titlebar (WS3, plan 2026-09-04 §4.3) — the librarian's ledger head ─── */
+
+.satchel-titlebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 36px;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 76px 0 14px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle 10px at 88% 30%, rgba(120, 70, 30, 0.15) 0%, rgba(120, 70, 30, 0) 70%),
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.02) 0px, rgba(0, 0, 0, 0.02) 1px, transparent 1px, transparent 3px),
+    linear-gradient(180deg, #e8d8b8 0%, #d4c4a0 60%, #c4b28a 100%);
+  border-bottom: 3px double #aa7838;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 250, 230, 0.8),
+    0 2px 6px rgba(0, 0, 0, 0.45);
+  font-family: 'EB Garamond', 'Garamond', 'Times New Roman', serif;
+  color: #3a2010;
+}
+
+.satchel-titlebar-name {
+  flex-shrink: 0;
+  font-size: 1.05rem;
+  font-variant: small-caps;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: #3a1a08;
+}
+
+.satchel-titlebar-sub {
+  font-size: 1rem;
+  font-style: italic;
+  color: #6a4a20;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.satchel-titlebar .satchel-help,
+.satchel-titlebar .satchel-exit {
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+}
+.satchel-titlebar .satchel-help { right: 36px; }
+.satchel-titlebar .satchel-exit { right: 8px; }
+.satchel-titlebar .satchel-help:active,
+.satchel-titlebar .satchel-exit:active {
+  transform: translateY(calc(-50% + 1px));
+}
+
+/* open room for the ledger head (machine.css sets [data-state] inset: 0) */
+.satchel-app { top: 36px; }

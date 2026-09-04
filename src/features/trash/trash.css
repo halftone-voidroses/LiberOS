@@ -477,3 +477,91 @@
   color: #f4e8c8;
   border-color: #c8a880;
 }
+
+/* ─── window titlebar (WS3, plan 2026-09-04 §4.3) — pete's die-cut lintel ─── */
+
+.trash-titlebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 76px 0 14px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle 2px at 10% 40%, #6a4c30 0px, #6a4c30 1.5px, rgba(0, 0, 0, 0) 2px),
+    radial-gradient(circle 2px at 30% 70%, #55402a 0px, #55402a 1.5px, rgba(0, 0, 0, 0) 2px),
+    radial-gradient(circle 2px at 55% 30%, #7a5a38 0px, #7a5a38 1.5px, rgba(0, 0, 0, 0) 2px),
+    radial-gradient(circle 2px at 75% 60%, #55402a 0px, #55402a 1.5px, rgba(0, 0, 0, 0) 2px),
+    radial-gradient(circle 2px at 90% 35%, #6a4c30 0px, #6a4c30 1.5px, rgba(0, 0, 0, 0) 2px),
+    linear-gradient(180deg, #3a2c1c 0%, #241a10 60%, #181008 100%);
+  border-bottom: 2px solid #0c0805;
+  box-shadow:
+    inset 0 1px 0 rgba(212, 196, 160, 0.2),
+    0 3px 8px rgba(0, 0, 0, 0.5);
+  font-family: 'EB Garamond', 'Garamond', 'Times New Roman', serif;
+  color: #d8c8a0;
+  /* Torn, die-cut lower edge — the lintel was dug out of the same rubble.
+     A torn-paper backing strip (::after) shows through the clip valleys so
+     the bite reads against the loam. Valleys stay shallow under the right
+     keycaps so the tear never bites them. */
+  clip-path: polygon(
+    0 0, 100% 0,
+    100% calc(100% - 4px), 97% calc(100% - 8px), 94% 100%, 90% calc(100% - 4px),
+    86% calc(100% - 9px), 81% 100%, 76% calc(100% - 5px), 70% calc(100% - 10px),
+    64% 100%, 58% calc(100% - 4px), 52% calc(100% - 9px), 46% 100%,
+    40% calc(100% - 6px), 34% calc(100% - 10px), 28% 100%, 22% calc(100% - 5px),
+    16% calc(100% - 9px), 10% 100%, 5% calc(100% - 4px), 0 calc(100% - 8px));
+}
+
+.trash-titlebar::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 12px;
+  background:
+    linear-gradient(-45deg, rgba(224, 208, 172, 0.95) 6px, transparent 6px) 0 0 / 16px 16px repeat-x,
+    linear-gradient(45deg, rgba(224, 208, 172, 0.95) 6px, transparent 6px) 8px 0 / 16px 16px repeat-x;
+  pointer-events: none;
+}
+
+.trash-titlebar-name {
+  flex-shrink: 0;
+  font-size: 1.05rem;
+  font-variant: small-caps;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.8);
+}
+
+.trash-titlebar-sub {
+  font-size: 1rem;
+  font-style: italic;
+  color: #a88858;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.7);
+}
+
+.trash-titlebar .trash-help,
+.trash-titlebar .trash-exit {
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+}
+.trash-titlebar .trash-help { right: 36px; }
+.trash-titlebar .trash-exit { right: 8px; }
+.trash-titlebar .trash-help:active,
+.trash-titlebar .trash-exit:active {
+  transform: translateY(calc(-50% + 1px));
+}
+
+/* open room for the lintel (machine.css sets [data-state] inset: 0) */
+.trash-app { top: 40px; }

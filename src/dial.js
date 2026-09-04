@@ -26,7 +26,23 @@
   ];
 
   let selectedIdx = 0;
-  let dialEl, leftArrow, rightArrow;
+  let dialEl, leftArrow, rightArrow, opinionEl;
+
+  // Persona register (plan 2026-09-04 §3): materials, opinions, cursors.
+  const PERSONAS = (window.LIBER_DATA && window.LIBER_DATA.personas) || {};
+
+  function showOpinion(id) {
+    if (!opinionEl) return;
+    var p = PERSONAS[id];
+    if (!p || !p.opinion) { opinionEl.hidden = true; return; }
+    opinionEl.innerHTML = '<span class="dial-opinion-name">' + p.name + '</span>' + p.opinion;
+    opinionEl.style.setProperty('--persona-accent', p.accent || '#c8a878');
+    opinionEl.hidden = false;
+  }
+
+  function hideOpinion() {
+    if (opinionEl) opinionEl.hidden = true;
+  }
 
   function isSigilLocked() {
     var s = (window.Liber && window.Liber.state && window.Liber.state.get()) || {};
@@ -38,6 +54,11 @@
     if (!dialEl) return;
     leftArrow = document.querySelector('.dial-arrow.left');
     rightArrow = document.querySelector('.dial-arrow.right');
+    opinionEl = document.createElement('div');
+    opinionEl.className = 'dial-opinion';
+    opinionEl.hidden = true;
+    opinionEl.setAttribute('aria-live', 'polite');
+    dialEl.parentNode.appendChild(opinionEl);
     render();
     if (leftArrow)  leftArrow.addEventListener('click', function () { cycle(-1); });
     if (rightArrow) rightArrow.addEventListener('click', function () { cycle(+1); });
@@ -104,6 +125,14 @@ function renderOption(v, pos, sigilLocked) {
     btn.id = 'dial-option-' + v.id;
     var icon = ICONS[v.id] || '';
     btn.innerHTML = '<span class="dial-icon">' + icon + '</span><span class="dial-label">' + v.name + '</span>';
+    var p = PERSONAS[v.id];
+    if (p && p.cursor && !(v.id === 'sigil' && sigilLocked)) {
+      btn.style.cursor = p.cursor;
+    }
+    btn.addEventListener('mouseenter', function () { showOpinion(v.id); });
+    btn.addEventListener('mouseleave', hideOpinion);
+    btn.addEventListener('focus', function () { showOpinion(v.id); });
+    btn.addEventListener('blur', hideOpinion);
     btn.addEventListener('click', function () {
       if (pos === 'active') {
         visit(v);

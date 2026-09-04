@@ -1,11 +1,13 @@
 // shoot.mjs — screenshot all four states of LiberVacui1.0
 // Usage: node shoot.mjs
+// LIBER_BASE overrides the target server (default :8030) — lets a fresh
+// serve.cjs on another free port be shot when a stale server squats on 8030.
 
 import { chromium } from 'playwright'
 import { mkdir } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
 
-const BASE = 'http://127.0.0.1:8030'
+const BASE = process.env.LIBER_BASE || 'http://127.0.0.1:8030'
 const OUT = '/Users/rosetudor/Desktop/LiberOS/screenshots'
 if (!existsSync(OUT)) await mkdir(OUT, { recursive: true })
 

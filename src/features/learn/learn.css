@@ -274,3 +274,62 @@
   color: #d8b890;
   font-style: italic;
 }
+
+/* ─── window titlebar (WS3, plan 2026-09-04 §4.3) — the workbook header card ─── */
+
+.learn-titlebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 36px;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 76px 0 14px;
+  overflow: hidden;
+  background:
+    linear-gradient(rgba(170, 48, 48, 0.6), rgba(170, 48, 48, 0.6)) 0 calc(100% - 5px) / 100% 2px no-repeat,
+    repeating-linear-gradient(180deg, transparent 0px, transparent 7px, rgba(120, 90, 50, 0.12) 7px, rgba(120, 90, 50, 0.12) 8px),
+    linear-gradient(180deg, #f0e2be 0%, #e0d0a4 60%, #d2c294 100%);
+  border-bottom: 2px solid #6a4818;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 248, 0.8),
+    0 2px 6px rgba(0, 0, 0, 0.45);
+  font-family: 'OpenDyslexic', 'Lexend', 'EB Garamond', 'Garamond', Georgia, serif;
+  color: #2a1808;
+}
+
+.learn-titlebar-name {
+  flex-shrink: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #2a1004;
+}
+
+.learn-titlebar-sub {
+  font-size: 1rem;
+  font-style: italic;
+  color: #6a4028;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.learn-titlebar .learn-help,
+.learn-titlebar .learn-exit {
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+}
+.learn-titlebar .learn-help { right: 36px; }
+.learn-titlebar .learn-exit { right: 8px; }
+.learn-titlebar .learn-help:active,
+.learn-titlebar .learn-exit:active {
+  transform: translateY(calc(-50% + 1px));
+}
+
+/* open room for the header card (machine.css sets [data-state] inset: 0) */
+.learn-app { top: 36px; }

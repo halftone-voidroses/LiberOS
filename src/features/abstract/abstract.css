@@ -440,3 +440,72 @@
   line-height: 1.5;
   color: #aaffcc;
 }
+
+/* ─── window titlebar (WS3, plan 2026-09-04 §4.3) — BBS prompt bar ─── */
+
+.abstract-titlebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 36px;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 76px 0 14px;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 140%, rgba(0, 255, 102, 0.12) 0%, rgba(0, 255, 102, 0) 60%),
+    linear-gradient(180deg, #03140a 0%, #010804 100%);
+  border-bottom: 2px solid #0a4018;
+  box-shadow:
+    inset 0 0 12px rgba(0, 255, 102, 0.1),
+    inset 0 1px 0 rgba(0, 255, 102, 0.2);
+  font-family: 'VT323', 'Courier New', monospace;
+  color: #00ff66;
+}
+
+.abstract-titlebar-name {
+  flex-shrink: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-shadow: 0 0 6px rgba(0, 255, 102, 0.5);
+}
+
+.abstract-titlebar-sub {
+  font-size: 1rem;
+  color: #1a8a3e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.abstract-titlebar-sub::after {
+  content: '\2588';
+  margin-left: 0.4em;
+  color: #00ff66;
+  animation: abstract-caret 1.2s steps(2) infinite;
+}
+
+@keyframes abstract-caret {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+
+.abstract-titlebar .abstract-help,
+.abstract-titlebar .abstract-exit {
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+}
+.abstract-titlebar .abstract-help { right: 36px; }
+.abstract-titlebar .abstract-exit { right: 8px; }
+.abstract-titlebar .abstract-help:active,
+.abstract-titlebar .abstract-exit:active {
+  transform: translateY(calc(-50% + 1px));
+}
+
+/* open room for the prompt bar (machine.css sets [data-state] inset: 0) */
+.abstract-app { top: 36px; }

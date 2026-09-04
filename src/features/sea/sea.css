@@ -472,3 +472,64 @@
   transition: opacity 1.6s ease;
   opacity: 0;
 }
+
+/* ─── window titlebar (WS3, plan 2026-09-04 §4.3) — the wet slate cap ─── */
+
+.sea-titlebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 36px;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 76px 0 14px;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(160, 200, 216, 0.22) 0%, rgba(160, 200, 216, 0) 45%),
+    linear-gradient(180deg, #2c4450 0%, #16262e 70%, #101a22 100%);
+  border-bottom: 2px solid #071018;
+  box-shadow:
+    inset 0 1px 0 rgba(210, 235, 245, 0.25),
+    inset 0 -4px 3px -3px rgba(160, 200, 216, 0.35),
+    0 2px 6px rgba(0, 0, 0, 0.5);
+  font-family: 'Georgia', 'Times New Roman', serif;
+  color: #d8ecf4;
+}
+
+.sea-titlebar-name {
+  flex-shrink: 0;
+  font-size: 1.05rem;
+  font-style: italic;
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.sea-titlebar-sub {
+  font-size: 1rem;
+  font-style: italic;
+  color: #a0c8d8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.sea-titlebar .sea-help,
+.sea-titlebar .sea-exit {
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+}
+.sea-titlebar .sea-help { right: 36px; }
+.sea-titlebar .sea-exit { right: 8px; }
+.sea-titlebar .sea-help:active,
+.sea-titlebar .sea-exit:active {
+  transform: translateY(calc(-50% + 1px));
+}
+
+/* open room for the slate cap (machine.css sets [data-state] inset: 0) */
+.sea-app { top: 36px; }

@@ -538,3 +538,63 @@
   color: #d8a070;
   border-color: #8a4a30;
 }
+
+/* ─── window titlebar (WS3, plan 2026-09-04 §4.3) — the wax-sealed frame ─── */
+
+.cohort-titlebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 36px;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 76px 0 14px;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 24% 0%, rgba(140, 40, 40, 0.22) 0%, rgba(140, 40, 40, 0) 55%),
+    linear-gradient(180deg, #1c0c10 0%, #0e0606 70%, #080303 100%);
+  border-bottom: 2px solid #4a0a14;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 220, 200, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.7),
+    0 2px 8px rgba(120, 20, 20, 0.3);
+  font-family: 'EB Garamond', 'Garamond', 'Times New Roman', serif;
+  color: #d8b088;
+}
+
+.cohort-titlebar-name {
+  flex-shrink: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.8);
+}
+
+.cohort-titlebar-sub {
+  font-size: 1rem;
+  font-style: italic;
+  color: #b08868;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.7);
+}
+
+.cohort-titlebar .cohort-help,
+.cohort-titlebar .cohort-exit {
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+}
+.cohort-titlebar .cohort-help { right: 36px; }
+.cohort-titlebar .cohort-exit { right: 8px; }
+.cohort-titlebar .cohort-help:active,
+.cohort-titlebar .cohort-exit:active {
+  transform: translateY(calc(-50% + 1px));
+}
+
+/* open room for the sealed frame (machine.css sets [data-state] inset: 0) */
+.cohort-app { top: 36px; }

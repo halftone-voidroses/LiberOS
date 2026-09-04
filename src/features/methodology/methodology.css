@@ -379,3 +379,63 @@
   text-align: right;
   letter-spacing: 0.1em;
 }
+
+/* ─── window titlebar (WS3, plan 2026-09-04 §4.3) — the folio running head ─── */
+
+.methodology-titlebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 36px;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 76px 0 18px;
+  overflow: hidden;
+  background:
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.02) 0px, rgba(0, 0, 0, 0.02) 1px, transparent 1px, transparent 4px),
+    linear-gradient(180deg, #efe0b2 0%, #e2d09c 60%, #d4c088 100%);
+  border-bottom: 2px solid #6a4a20;
+  box-shadow:
+    inset 4px 0 0 rgba(170, 48, 48, 0.75),
+    inset 0 1px 0 rgba(255, 250, 230, 0.75),
+    0 2px 6px rgba(0, 0, 0, 0.4);
+  font-family: 'EB Garamond', 'Garamond', 'Times New Roman', serif;
+  color: #2a1a08;
+}
+
+.methodology-titlebar-name {
+  flex-shrink: 0;
+  font-size: 1.05rem;
+  font-variant: small-caps;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: #2a1a08;
+}
+
+.methodology-titlebar-sub {
+  font-size: 1rem;
+  font-style: italic;
+  color: #6a4a20;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.methodology-titlebar .methodology-help,
+.methodology-titlebar .methodology-exit {
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+}
+.methodology-titlebar .methodology-help { right: 36px; }
+.methodology-titlebar .methodology-exit { right: 8px; }
+.methodology-titlebar .methodology-help:active,
+.methodology-titlebar .methodology-exit:active {
+  transform: translateY(calc(-50% + 1px));
+}
+
+/* open room for the running head (machine.css sets [data-state] inset: 0) */
+.methodology-app { top: 36px; }
