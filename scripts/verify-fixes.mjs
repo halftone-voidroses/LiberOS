@@ -124,7 +124,12 @@ while (clicks < 40) {
     const w = document.getElementById('wanderlust-window');
     return { reply: !!r, open: w && w.classList.contains('open') };
   });
-  if (!has.reply || !has.open) break;
+  if (!has.open) break;
+  if (!has.reply) {
+    // Raison crossings hold the paint ~950ms — wait for the next beat.
+    await page.waitForTimeout(500);
+    continue;
+  }
   await page.click('.wanderlust-reply');
   await page.waitForTimeout(900);
   clicks++;

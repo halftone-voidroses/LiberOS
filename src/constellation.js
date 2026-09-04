@@ -226,5 +226,11 @@
   // on the casting stone appears without a full reload.
   window.addEventListener('pageshow', function () { render(); });
 
+  // Redraw on any state change — reset ("start over") clears sigils in
+  // place, and without this the desktop kept showing the old star.
+  if (window.Liber && window.Liber.state && window.Liber.state.on) {
+    window.Liber.state.on('change', render);
+  }
+
   window.ConstellationRefresh = function () { render(); };
 })();

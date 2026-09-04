@@ -93,7 +93,7 @@
     win.classList.remove('raison-glitch');
     void win.offsetWidth;
     win.classList.add('raison-glitch');
-    setTimeout(function () { win.classList.remove('raison-glitch'); }, 620);
+    setTimeout(function () { win.classList.remove('raison-glitch'); }, 1700);
   }
 
   // Returns true when the speaker change crossed Raison (into or out of).
@@ -147,7 +147,6 @@
     btn.className = 'wanderlust-reply kind-' + reply.kind;
     btn.type = 'button';
     if (reply.kind === 'continue') btn.textContent = '· … ·';
-    else if (reply.kind === 'branch') btn.textContent = '· ' + reply.text + ' ·';
     else btn.textContent = '> ' + reply.text;
     btn.addEventListener('click', function () { onClick(reply); });
     return btn;
@@ -177,12 +176,16 @@
   // click-driven.
   function renderResponseBeat(response, done) {
     if (!response || !response.line) { done(); return; }
-    setSpeaker(response.speaker);
+    var crossed = setSpeaker(response.speaker);
     runEffect(response.effect);
-    showLine(response.line);
-    clearReplies();
-    if (!replies) return;
-    replies.appendChild(makeReplyButton({ text: '', kind: 'continue' }, done));
+    var paint = function () {
+      showLine(response.line);
+      clearReplies();
+      if (!replies) return;
+      replies.appendChild(makeReplyButton({ text: '', kind: 'continue' }, done));
+    };
+    if (crossed) setTimeout(paint, 950);
+    else paint();
   }
 
   function setProgress(activeIdx) {
@@ -214,8 +217,8 @@
         }));
       });
     };
-    // Pacing hold: let the cyan glitch breathe before the new line reads.
-    if (crossedRaison) setTimeout(paint, 350);
+    // Pacing hold: the drawn-out glitch breathes before the new line reads.
+    if (crossedRaison) setTimeout(paint, 950);
     else paint();
   }
 

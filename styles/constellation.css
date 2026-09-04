@@ -24,8 +24,8 @@
 .constellation-empty {
   position: absolute;
   left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  top: 118px; /* hugs the top of the monitor, under the twelve-works frieze — keeps the centre clear for the ? */
+  transform: translateX(-50%);
   text-align: center;
   font-family: Georgia, 'Times New Roman', serif;
   font-style: italic;

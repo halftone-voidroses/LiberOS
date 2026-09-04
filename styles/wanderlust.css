@@ -1,6 +1,14 @@
 /* wanderlust.css — the chat window + arise overlay
    No imports (covenant Q.1). */
 
+@font-face {
+  font-family: 'Jacquard 24';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/jacquard24-latin.woff2') format('woff2');
+}
+
 .wanderlust-window {
   position: absolute;
   left: 50%;
@@ -101,8 +109,9 @@
   background: transparent;
   border: 1px solid #4a1a2a;
   color: #d8a8a8;
-  font-family: 'VT323', 'Courier New', monospace;
-  font-size: 1rem;
+  font-family: 'Jacquard 24', Georgia, 'Times New Roman', serif;
+  font-size: 1.3rem;
+  line-height: 1.15;
   text-align: left;
   padding: 4px 10px;
   cursor: pointer;
@@ -260,34 +269,12 @@
 }
 
 /* ============================================================================
-   Phase 3 additions: shake / flicker / branch buttons / summoning overlay.
+   Phase 3 additions: shake / flicker / reply buttons / summoning overlay.
    ============================================================================ */
 
-/* Two reply kinds. .branch is the italic muted "ok." style; .progress
-   keeps the bright outlined look from the original. */
-.wanderlust-reply.kind-branch {
-  font-family: Georgia, 'Times New Roman', serif;
-  font-style: italic;
-  color: #aa7080;
-  border: 1px dotted #4a1a2a;
-  background: transparent;
-  letter-spacing: 0.04em;
-}
-.wanderlust-reply.kind-branch:hover {
-  color: #ffd0e0;
-  border-color: #ff69b4;
-  background: rgba(255, 105, 180, 0.06);
-}
-.wanderlust-reply.kind-progress {
-  /* identical to original .wanderlust-reply baseline */
-  background: transparent;
-  border: 1px solid #4a1a2a;
-  color: #d8a8a8;
-  font-family: 'VT323', 'Courier New', monospace;
-  font-size: 1rem;
-  letter-spacing: 0;
-  font-style: normal;
-}
+/* All dialogue options share ONE style (user request): the base
+   .wanderlust-reply carries it. Only the response-beat's continue
+   affordance keeps its own muted shape so it never reads as a choice. */
 /* WS2: single continue affordance shown during a response beat — one click
    resumes the main path. Branch-kind muted dotted styling so it reads as a
    beat, not a choice; centered dots, no text of its own. */
@@ -394,9 +381,10 @@
 }
 
 /* ── Raison crossing — cyan static-glitch when the speaker changes into
-   or out of him (wanderlust.js adds/removes the class on the window). ── */
+   or out of him (wanderlust.js adds/removes the class on the window).
+   Drawn out deliberately: burst, breath-hold dim, cascade, recovery. ── */
 #wanderlust-window.raison-glitch {
-  animation: raison-glitch-sweep 0.62s steps(8) 1;
+  animation: raison-glitch-sweep 1.7s steps(14) 1;
 }
 #wanderlust-window.raison-glitch::before {
   content: '';
@@ -411,25 +399,29 @@
     transparent 1px,
     transparent 3px
   );
-  animation: raison-glitch-band 0.62s steps(6) 1;
+  animation: raison-glitch-band 1.7s steps(12) 1;
 }
 #wanderlust-window.raison-glitch .wanderlust-avatar {
   box-shadow: 0 0 26px rgba(138, 202, 255, 0.9) !important;
 }
 @keyframes raison-glitch-sweep {
   /* keep the window's own translate(-50%, -50%) centring under the jitter */
-  0%   { filter: brightness(1.6) saturate(0.5); transform: translate(calc(-50% - 2px), -50%); }
-  15%  { filter: brightness(1.2) saturate(1.1); transform: translate(calc(-50% + 2px), -50%); }
-  30%  { filter: brightness(1.5) saturate(0.6) hue-rotate(12deg); transform: translate(calc(-50% - 1px), -50%); }
-  45%  { filter: brightness(0.9) saturate(1.2); transform: translate(calc(-50% + 1px), -50%); }
-  60%  { filter: brightness(1.35) saturate(0.7); transform: translate(calc(-50% - 2px), -50%); }
-  80%  { filter: brightness(1.1) saturate(1); transform: translate(calc(-50% + 1px), -50%); }
+  0%   { filter: brightness(1.8) saturate(0.3); transform: translate(calc(-50% - 3px), -50%); }
+  8%   { filter: brightness(0.55) saturate(1.3); transform: translate(calc(-50% + 3px), -50%); }
+  16%  { filter: brightness(1.4) saturate(0.5) hue-rotate(16deg); transform: translate(calc(-50% - 2px), -50%); }
+  26%  { filter: brightness(0.5) saturate(1.4) hue-rotate(-10deg); transform: translate(calc(-50% + 2px), -50%); }
+  38%  { filter: brightness(1.25) saturate(0.6) hue-rotate(10deg); transform: translate(calc(-50% - 1px), -50%); }
+  50%  { filter: brightness(0.65) saturate(1.25); transform: translate(calc(-50% + 1px), -50%); }
+  62%  { filter: brightness(1.3) saturate(0.65) hue-rotate(8deg); transform: translate(calc(-50% - 2px), -50%); }
+  74%  { filter: brightness(0.85) saturate(1.1); transform: translate(calc(-50% + 1px), -50%); }
+  86%  { filter: brightness(1.15) saturate(0.85) hue-rotate(4deg); transform: translate(calc(-50% - 1px), -50%); }
   100% { filter: none; transform: translate(-50%, -50%); }
 }
 @keyframes raison-glitch-band {
   0%   { background-position-y: 0; opacity: 1; }
-  50%  { background-position-y: 7px; opacity: 0.55; }
-  100% { background-position-y: 13px; opacity: 0; }
+  30%  { background-position-y: 9px; opacity: 0.8; }
+  60%  { background-position-y: 21px; opacity: 0.5; }
+  100% { background-position-y: 37px; opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {

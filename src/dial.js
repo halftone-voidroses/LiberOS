@@ -149,5 +149,11 @@ function renderOption(v, pos, sigilLocked) {
     init();
   }
 
+  // The crossed/unlocked state of the casting option is state-derived —
+  // redraw on change so "start over" un-crosses it without a reload.
+  if (window.Liber && window.Liber.state && window.Liber.state.on) {
+    window.Liber.state.on('change', render);
+  }
+
   window.DialRefresh = function () { render(); };
 })();

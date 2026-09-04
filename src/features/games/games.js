@@ -139,16 +139,15 @@
           '<button type="button" class="games-action" id="tip-breath">paced breath 4-4-6</button>' +
           '<button type="button" class="games-action" id="tip-relax">tense / release</button>' +
         '</div>' +
-        '<div class="games-tip-meter">heart rate · <span id="tip-hr">72</span> bpm · distress <span id="tip-distress">6</span>/10</div>' +
+        '<div class="games-tip-meter">distress <span id="tip-distress">6</span>/10</div>' +
         '<div class="games-tip-log" id="tip-log">begin.</div>' +
         '<div class="games-actions"><button type="button" class="games-action" id="tip-save">save what happened</button></div>';
-      var hr = 72, distress = 6;
+      var distress = 6;
       var log = document.getElementById('tip-log');
       function tipLog(s) { if (log) log.textContent = s; }
       var fill = document.getElementById('tip-fill');
       function setFill(pct) { if (fill) fill.style.width = pct + '%'; }
       function sync() {
-        var h = document.getElementById('tip-hr'); if (h) h.textContent = hr;
         var d = document.getElementById('tip-distress'); if (d) d.textContent = distress;
       }
       var ice = document.getElementById('tip-ice');
@@ -161,7 +160,7 @@
         iceTimer = setInterval(function () {
           iceT++;
           setFill((iceT / 30) * 100);
-          if (iceT >= 30) { clearInterval(iceTimer); iceTimer = null; hr = Math.max(60, hr - 8); distress = Math.max(0, distress - 2); sync(); tipLog('ice: 30s held. hr ' + hr + ', distress ' + distress + '.'); }
+          if (iceT >= 30) { clearInterval(iceTimer); iceTimer = null; distress = Math.max(0, distress - 2); sync(); tipLog('ice: 30s held. distress ' + distress + '.'); }
         }, 1000);
       });
       var breathPhases = ['in 4', 'hold 4', 'out 6', 'hold 4'];
@@ -172,7 +171,7 @@
         breathI = setInterval(function () {
           tipLog('breath: ' + breathPhases[breathT % 4]);
           breathT++;
-          if (breathT % 8 === 0) { hr = Math.max(58, hr - 1); distress = Math.max(0, distress - 1); sync(); }
+          if (breathT % 8 === 0) { distress = Math.max(0, distress - 1); sync(); }
         }, 2000);
       });
       var relaxI = null, relaxT = 0;
@@ -187,10 +186,10 @@
       });
       var s = document.getElementById('tip-save');
       if (s) s.addEventListener('click', function () {
-        promptSave(b, 'TIPP done. hr: ' + hr + '. distress: ' + distress + '/10.', function () {
-          var saved = saveToDesktopAndSatchel(b, { type: 'tip', hr: hr, distress: distress, ice: iceT });
+        promptSave(b, 'TIPP done. distress: ' + distress + '/10.', function () {
+          var saved = saveToDesktopAndSatchel(b, { type: 'tip', distress: distress, ice: iceT });
           var bestHtml = (saved.best && saved.best.newBest) ? whimsyLine(saved.best) : '';
-          body.innerHTML = '<div class="games-result">— saved · hr ' + hr + ' · distress ' + distress + '/10 —</div>' + bestHtml;
+          body.innerHTML = '<div class="games-result">— saved · distress ' + distress + '/10 —</div>' + bestHtml;
         }, function () {
           body.innerHTML = '<div class="games-result">— discarded —</div>';
         });

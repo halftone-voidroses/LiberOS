@@ -102,7 +102,17 @@ while (turns < 30) {
   })
   if (!winOpen) break
   const replies = await page.locator('.wanderlust-reply').count()
-  if (replies === 0) break
+  if (replies === 0) {
+    // Raison crossings hold the paint ~950ms — wait, only stop if the
+    // window itself closed (tutorial finished).
+    const stillOpen = await page.evaluate(() => {
+      const w = document.getElementById('wanderlust-window')
+      return w && w.classList.contains('open')
+    })
+    if (!stillOpen) break
+    await page.waitForTimeout(500)
+    continue
+  }
   await page.click('.wanderlust-reply')
   await page.waitForTimeout(700)
   turns++
