@@ -1,0 +1,23 @@
+{
+  "_source": "authored template grammar v1 for src/prompt-engine.js. Mirrored at runtime by data/prompt-templates.data.js (the .data.js file is what the browser loads; keep the two in sync).",
+  "_voice": "terse, haunted, lowercase. no exclamation marks. no therapeutic jargon. slots: {interpretation} {cohort} {artifact} {verb} {intention}.",
+  "_families": "verbs are free-form user input; 'verbs' lists the keyword family a template responds to (matched as substring of the lowercased verb). 'any' matches all verbs.",
+  "templates": [
+    { "id": "challenge-cohort", "verbs": ["protect", "guard", "shield", "defend"], "slots": ["interpretation", "cohort"], "text": "if {interpretation} were challenged, what would {cohort} do?" },
+    { "id": "protection-cost", "verbs": ["protect", "guard", "shield", "defend"], "slots": ["cohort", "verb"], "text": "{cohort} keeps this close because it {verb}. what has the keeping cost?" },
+    { "id": "noble-flip", "verbs": ["protect", "guard", "shield", "defend"], "slots": ["artifact", "cohort"], "text": "what was exiled along with {artifact} that {cohort} still wants back?" },
+    { "id": "threatens-aim", "verbs": ["threat", "harm", "attack", "hurt", "wound", "endanger"], "slots": ["artifact", "verb", "cohort"], "text": "{artifact} {verb} {cohort}. where does it aim, and who taught it to aim there?" },
+    { "id": "threatens-warning", "verbs": ["threat", "harm", "attack", "hurt", "wound", "endanger"], "slots": ["interpretation", "cohort"], "text": "if {interpretation} is a warning, what is {cohort} being warned of?" },
+    { "id": "mirror-look", "verbs": ["mirror", "reflect", "resemble"], "slots": ["artifact", "verb", "cohort"], "text": "{artifact} {verb} {cohort}. which one is looking?" },
+    { "id": "mirror-away", "verbs": ["mirror", "reflect", "resemble"], "slots": ["cohort", "interpretation"], "text": "if {cohort} looked away first, what would {interpretation} do?" },
+    { "id": "carries-weight", "verbs": ["carry", "hold", "bear", "keep"], "slots": ["cohort", "verb"], "text": "{cohort} {verb} this. where did the weight come from?" },
+    { "id": "carries-putdown", "verbs": ["carry", "hold", "bear", "keep"], "slots": ["cohort", "interpretation"], "text": "what would {cohort} put down if {interpretation} allowed it?" },
+    { "id": "refuses-door", "verbs": ["refuse", "deny", "reject", "block"], "slots": ["cohort", "verb"], "text": "{cohort} {verb} this. what door is it holding shut?" },
+    { "id": "refuses-speak", "verbs": ["refuse", "deny", "reject", "block"], "slots": ["interpretation", "cohort"], "text": "if {interpretation} were allowed to speak, what would it say to {cohort}?" },
+    { "id": "any-ask", "verbs": ["any"], "slots": ["artifact", "cohort"], "text": "{artifact} sits beside {cohort} now. ask them both why." },
+    { "id": "any-origin", "verbs": ["any"], "slots": ["cohort", "interpretation"], "text": "where was {cohort} the day {interpretation} first happened?" },
+    { "id": "any-letter", "verbs": ["any"], "slots": ["cohort", "interpretation"], "text": "write {cohort} a letter. let {interpretation} read it first." },
+    { "id": "any-draw", "verbs": ["any"], "slots": ["cohort", "interpretation"], "text": "draw {cohort} the moment before {interpretation}." },
+    { "id": "any-intention", "verbs": ["any"], "slots": ["cohort", "intention", "interpretation"], "text": "{cohort} remembers: {intention}. does {interpretation} change that?" }
+  ]
+}

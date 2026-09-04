@@ -10,15 +10,18 @@ Living document. Status as of 2026-09-04.
       `docs/audits/` holds the 2026-09-03 audit.
 - [x] Baseline committed.
 
-## Phase 1 — The core loop (in progress)
+## Phase 1 — The core loop (done this session)
 
 - [x] Decision 0001: cohort ontology (sigil → cohort rename strategy).
-- [ ] Audit fixes C1–C5, M1–M4 + favicon + theme-class bug (builder running).
-- [ ] Data banks extracted from LiberReference: tarot, hexagrams, exercises,
-      glossary, citations (builder running).
-- [ ] Prompt engine: deterministic, offline, verb-gated (builder running).
-- [ ] Prompt surface: render `liber:prompt` events on the desktop shell
-      (one-line emergent prompt element, styled per shell, not per persona).
+- [x] Audit fixes C1–C5, M1–M4 + favicon + theme-class bug
+      (`node scripts/verify-fixes.mjs` green; root cause found for M3:
+      `castEl.textContent` set on the function — missing call parens).
+- [x] Data banks extracted: tarot (22), hexagrams (64), exercises (19),
+      glossary (16), citations (21) — `node scripts/verify-data.mjs` green.
+- [x] Prompt engine: deterministic, offline, verb-family gated
+      (`node scripts/verify-prompt-engine.mjs` green, 9 checks).
+- [x] Prompt surface: `.prompt-line` on the desktop shell renders
+      `liber:prompt` events + the latest persisted prompt on boot.
 - [ ] Retire "sigil" from user-facing copy (D0001), keep runtime keys.
 
 ## Phase 2 — Pull (gamification)
@@ -26,7 +29,7 @@ Living document. Status as of 2026-09-04.
 - [ ] Implement `docs/gamification.md` in order: session arc → return
       rewards (patina) → competence visibility → "cohort becomes louder"
       diegetic levels → ambient variable prompts.
-- [ ] Sea ritual positioned as the session-ender (needs C1 fix landed).
+- [x] Sea ritual implemented (C1) — positioned as the session-ender.
 
 ## Phase 3 — Offline app wrapper
 
