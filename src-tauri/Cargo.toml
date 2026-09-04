@@ -1,0 +1,20 @@
+[package]
+name = "liberos"
+version = "1.0.0"
+description = "Liber.OS — a haunted CRT operating system in a dark room. Offline Tauri wrapper for the static web surface."
+edition = "2021"
+
+[lib]
+name = "liberos_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+
+[profile.release]
+strip = true
+lto = true
+codegen-units = 1

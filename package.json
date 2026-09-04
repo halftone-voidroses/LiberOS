@@ -7,7 +7,14 @@
     "start": "node serve.cjs",
     "dev": "node serve.cjs",
     "smoke": "node smoke.mjs",
-    "shoot": "node shoot.mjs"
+    "shoot": "node shoot.mjs",
+    "app:dist": "node scripts/app-dist.cjs",
+    "app:dev": "npm run app:dist && tauri dev",
+    "app:build": "npm run app:dist && tauri build"
   },
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.11.4",
+    "playwright": "1.62.1"
+  }
 }

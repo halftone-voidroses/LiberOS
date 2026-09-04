@@ -23,6 +23,56 @@ thesis, the cast, the loop. The demo machine boots at `/index.html`
 (linked as "enter the machine" throughout), or open `index.html` directly —
 `file://` works (no build step, no framework, no network).
 
+## The double-clickable app (Tauri wrapper)
+
+LiberOS also ships as a native macOS app built with Tauri: the system
+WebKit webview wrapping the exact same static surface — no visual rebuild,
+no bundler for the app itself. The bundle embeds the assets, so once built
+it runs fully offline: no server, no browser, double-click and the room
+boots.
+
+Build it:
+
+```bash
+# once — the Rust toolchain (~1 min) + macOS build tools
+curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal
+xcode-select --install          # if the Command Line Tools aren't there yet
+
+cd LiberOS
+npm run app:build
+```
+
+The finished app lands at:
+
+- `src-tauri/target/release/bundle/macos/LiberOS.app` — double-click to run
+- `src-tauri/target/release/bundle/dmg/LiberOS_1.0.0_aarch64.dmg` — for
+  dragging into Applications
+
+How it works:
+
+- `npm run app:build` first assembles `dist/` (`scripts/app-dist.cjs`): a
+  byte-identical, sha256-verified copy of the frozen surface (every root
+  page + `src/`, `styles/`, `data/`, `fonts/`) — then `tauri build` embeds
+  it verbatim. `presentation/` stays web-only. A direct reference to the
+  repo root is not used because Tauri embeds *everything* under its assets
+  directory (`node_modules`, `.git`, build output included).
+- The window is titled **Liber.OS**, 1280×860 (min 1100×700), centered,
+  normal window chrome — the room is the chrome. The icon is the bezel
+  with the deep-red boot rectangle (`src-tauri/icons/icon.svg`).
+- State is unchanged: `src/state.js` writes `localStorage` under
+  `tauri://localhost`, held in the WebKit persistent store for the app
+  (`os.liber.desktop`). Artifacts, relations, and tutorial completion
+  survive quit/relaunch — verified on this build.
+- The wrapper adds nothing to the surface: no IPC commands, no plugins,
+  no capability grants. `npm start` and `file://` behave exactly as
+  before; the wrapper is additive.
+- Live-reload development inside the wrapper: `npm run app:dev` (same
+  dist copy, debug build with devtools).
+
+The first build compiles the Rust side (~2 min on Apple silicon); later
+builds are incremental.
+
+
 ## Presentation site
 
 `presentation/` is the outward-facing cover: DESIGN.md carries its token

@@ -16,3 +16,8 @@ node_modules/
 
 # local state
 .claude/
+
+# tauri wrapper (WS8)
+src-tauri/target/
+/dist/
+!src-tauri/**/*.png

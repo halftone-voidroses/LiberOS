@@ -42,15 +42,22 @@ Living document. Status as of 2026-09-04.
       diegetic levels → ambient variable prompts.
 - [x] Sea ritual implemented (C1) — positioned as the session-ender.
 
-## Phase 3 — Offline app wrapper
+## Phase 3 — Offline app wrapper (done 2026-09-04, WS8)
 
-- [ ] Tauri scaffold (`src-tauri/`) wrapping the existing static files —
-      no visual rebuild, system webview, ~5MB binary.
-- [ ] App icon + window chrome matching the bezel aesthetic.
-- [ ] Verify `file://`-equivalent behavior under `tauri://` (state.js
-      localStorage semantics, `.data.js` loaders).
+- [x] Tauri scaffold (`src-tauri/`) wrapping the existing static files —
+      no visual rebuild, system webview, ~5MB binary (`npm run app:build`
+      → 5.0M `LiberOS.app` + 2.4M dmg; surface embedded from `dist/`,
+      sha256-verified byte-identical copy).
+- [x] App icon + window chrome matching the bezel aesthetic (bezel/boot-
+      rectangle SVG → icns + png set; window "Liber.OS" 1280×860,
+      min 1100×700, centered).
+- [x] Verify `file://`-equivalent behavior under `tauri://` (zero `fetch(`
+      in `src/` + `data/`; localStorage persisted across app restart —
+      tutorial completion read back after relaunch, no tutorial replay;
+      smoke suite 25 steps green on the web path).
 - [ ] Do NOT revive the Swift/EsotericSuite path (abandoned skeleton; a
-      native port means rebuilding the visual language).
+      native port means rebuilding the visual language). Stands — no
+      native port.
 
 ## Phase 4 — The citations traveller
 
