@@ -93,6 +93,11 @@
     }
     var hasOrbiting = boundIndices.length > 0;
 
+    // WS5 competence made visible: as the relation web grows, every edge
+    // draws itself thicker and surer (capped).
+    var edgeWidth = (1.6 + Math.min(relations.length, 8) * 0.45).toFixed(2);
+    var edgeOpacity = Math.min(0.5 + relations.length * 0.06, 0.9).toFixed(2);
+
     if (hasOrbiting) {
       html += '<g class="constellation-orbit" style="transform-origin: ' + cx + 'px ' + cy + 'px;">';
 
@@ -104,7 +109,7 @@
         var verb = (rel.verb || '').toString();
         var mx = (ap.x + sigilPos.x) / 2;
         var my = (ap.y + sigilPos.y) / 2;
-        html += '<line x1="' + ap.x + '" y1="' + ap.y + '" x2="' + sigilPos.x + '" y2="' + sigilPos.y + '" stroke="rgba(255,105,180,0.5)" stroke-width="1.6" stroke-dasharray="4 5"/>';
+        html += '<line x1="' + ap.x + '" y1="' + ap.y + '" x2="' + sigilPos.x + '" y2="' + sigilPos.y + '" stroke="rgba(255,105,180,' + edgeOpacity + ')" stroke-width="' + edgeWidth + '" stroke-dasharray="4 5"/>';
         if (verb && verb !== 'relates to') {
           html += '<text x="' + mx + '" y="' + (my - 4) + '" text-anchor="middle" fill="rgba(255,200,220,0.7)" font-size="6.5" font-style="italic" font-family="Georgia, serif" style="pointer-events: none;">' + verb + '</text>';
         }

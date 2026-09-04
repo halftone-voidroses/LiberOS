@@ -37,6 +37,14 @@
   filter: invert(1) hue-rotate(180deg) saturate(0.4);
 }
 
+/* WS5 — the cohort becomes louder: as artifacts+relations accumulate
+   (cohort-N classes on .machine, set in src/shadow.js), the faint overlay
+   gains resolution — a little brighter, a little larger. Decorative only
+   (D0003): it carries no information. Static steps; nothing animates. */
+.machine.cohort-1 .sigil-overlay img { opacity: 0.11; transform: scale(1.01); }
+.machine.cohort-2 .sigil-overlay img { opacity: 0.145; transform: scale(1.02); }
+.machine.cohort-3 .sigil-overlay img { opacity: 0.18; transform: scale(1.03); }
+
 /* The flaming question mark — large, centered, with CSS-animated
    pink/yellow flames around the edges. */
 .flaming-q {

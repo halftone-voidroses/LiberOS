@@ -42,6 +42,31 @@
     }
   }
 
+  // WS5 personal bests — per booth, local, private (no leaderboards, no
+  // comparisons). A booth earns a best only where a score exists. dir:
+  // 'high' = bigger is the record, 'low' = smaller is.
+  var BEST_OF = {
+    tip: { key: 'ice', label: 'ice held', dir: 'high' },
+  };
+
+  function recordBest(boothId, value) {
+    if (!window.Liber || !window.Liber.state) return null;
+    var metric = BEST_OF[boothId];
+    if (!metric || typeof value !== 'number' || isNaN(value) || value <= 0) return null;
+    var bests = Object.assign({}, window.Liber.state.get().bests || {});
+    var prev = typeof bests[boothId] === 'number' ? bests[boothId] : null;
+    var better = prev === null || (metric.dir === 'high' ? value > prev : value < prev);
+    if (!better) return { newBest: false, value: value, best: prev, label: metric.label };
+    bests[boothId] = value;
+    window.Liber.state.set({ bests: bests });
+    return { newBest: true, value: value, best: value, label: metric.label };
+  }
+
+  function whimsyLine(best) {
+    return '<div class="games-best">★ a new house record — ' + best.value + 's ' + best.label +
+      '! the bulbs flare for you. ★</div>';
+  }
+
   function closeStage() {
     if (!stage) return;
     stage.innerHTML = '';
@@ -50,7 +75,7 @@
   }
 
   function saveToDesktopAndSatchel(b, result) {
-    if (!window.Liber || !window.Liber.state) return;
+    if (!window.Liber || !window.Liber.state) return { best: null };
     if (window.Liber.state.addArtifact) {
       window.Liber.state.addArtifact('games', { kind: b.id, name: b.name, glyph: b.glyph, result: result, ts: Date.now() });
     }
@@ -58,6 +83,9 @@
       window.Liber.state.addArtifact('satchel', { kind: 'game', ref: b.id, name: b.name, result: result, ts: Date.now() });
     }
     if (window.Liber.sound) window.Liber.sound.play('chime');
+    var metric = BEST_OF[b.id];
+    var best = metric ? recordBest(b.id, result[metric.key]) : null;
+    return { best: best };
   }
 
   function promptSave(b, summary, doSave, doDiscard) {
@@ -160,8 +188,9 @@
       var s = document.getElementById('tip-save');
       if (s) s.addEventListener('click', function () {
         promptSave(b, 'TIPP done. hr: ' + hr + '. distress: ' + distress + '/10.', function () {
-          saveToDesktopAndSatchel(b, { type: 'tip', hr: hr, distress: distress, ice: iceT });
-          body.innerHTML = '<div class="games-result">— saved · hr ' + hr + ' · distress ' + distress + '/10 —</div>';
+          var saved = saveToDesktopAndSatchel(b, { type: 'tip', hr: hr, distress: distress, ice: iceT });
+          var bestHtml = (saved.best && saved.best.newBest) ? whimsyLine(saved.best) : '';
+          body.innerHTML = '<div class="games-result">— saved · hr ' + hr + ' · distress ' + distress + '/10 —</div>' + bestHtml;
         }, function () {
           body.innerHTML = '<div class="games-result">— discarded —</div>';
         });
@@ -541,4 +570,7 @@
     if (closeBtn) closeBtn.addEventListener('click', closePrompt);
     if (prompt) prompt.addEventListener('click', function (e) { if (e.target === prompt) closePrompt(); });
   });
+
+  window.Liber = window.Liber || {};
+  window.Liber.games = { recordBest: recordBest, bestOf: BEST_OF };
 })();

@@ -43,3 +43,10 @@
 .status-line .status-phrase.fading {
   opacity: 0;
 }
+
+/* WS5 — when the line speaks in the cohort's name (tier-gated rotation in
+   src/status-line.js), it shifts a step toward the cohort's crimson. */
+.status-line .status-phrase.cohort-voice {
+  color: rgba(255, 158, 168, 0.95);
+  text-shadow: 0 0 4px rgba(255, 90, 110, 0.45);
+}

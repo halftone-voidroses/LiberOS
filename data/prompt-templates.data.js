@@ -5,6 +5,7 @@ window.LIBER_DATA.promptTemplates = {
   "_source": "authored template grammar v1 for src/prompt-engine.js. Mirrored at runtime by data/prompt-templates.data.js (the .data.js file is what the browser loads; keep the two in sync).",
   "_voice": "terse, haunted, lowercase. no exclamation marks. no therapeutic jargon. slots: {interpretation} {cohort} {artifact} {verb} {intention}.",
   "_families": "verbs are free-form user input; 'verbs' lists the keyword family a template responds to (matched as substring of the lowercased verb). 'any' matches all verbs.",
+  "_gating": "'minCohort' (optional int): the template only joins the pool once artifacts+relations reach that tier (WS5 'the cohort becomes louder'). Templates without minCohort are always eligible.",
   "templates": [
     {
       "id": "challenge-cohort",
@@ -219,6 +220,41 @@ window.LIBER_DATA.promptTemplates = {
         "interpretation"
       ],
       "text": "{cohort} remembers: {intention}. does {interpretation} change that?"
+    },
+    {
+      "id": "any-intimate-name",
+      "verbs": [
+        "any"
+      ],
+      "minCohort": 2,
+      "slots": [
+        "cohort"
+      ],
+      "text": "you have said {cohort}'s name enough times that the room answers first. what does it answer?"
+    },
+    {
+      "id": "any-intimate-weight",
+      "verbs": [
+        "any"
+      ],
+      "minCohort": 2,
+      "slots": [
+        "cohort",
+        "interpretation"
+      ],
+      "text": "{cohort} has carried {interpretation} beside you for a while. what would it set down if you asked?"
+    },
+    {
+      "id": "any-intimate-witness",
+      "verbs": [
+        "any"
+      ],
+      "minCohort": 2,
+      "slots": [
+        "cohort",
+        "artifact"
+      ],
+      "text": "{cohort} watched you make {artifact}. ask it what it saw that you did not."
     }
   ]
 };

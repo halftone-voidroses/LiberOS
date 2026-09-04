@@ -69,6 +69,14 @@
   transform: scale(1.1);
 }
 
+/* WS5 patina — presence etches the carvings deeper (visits+artifacts,
+   classes set in src/shadow.js). Absence changes nothing: the tiers only
+   ever settle in. Static filters; nothing animates. `:not(.active)` keeps
+   the glow state the sole owner of the active carving's color/filter. */
+.machine.patina-1 .carving:not(.active) { color: rgba(72, 50, 20, 0.44); }
+.machine.patina-2 .carving:not(.active) { color: rgba(64, 44, 18, 0.58); filter: sepia(0.22); }
+.machine.patina-3 .carving:not(.active) { color: rgba(56, 37, 15, 0.72); filter: sepia(0.38) brightness(0.94); }
+
 /* Position the 12 carvings clockwise from top-center. */
 .carving[data-id="stone"]      { top: 14px; left: 50%; transform: translateX(-50%); }
 .carving[data-id="thread"]     { top: 14px; left: calc(50% + 60px); }

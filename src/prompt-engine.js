@@ -40,6 +40,25 @@
 
   var FAMILY_FALLBACK = 'any';
 
+  // WS5 "the cohort becomes louder": artifacts+relations drive a tier that
+  // gates the intimate template variants. Kept inline (self-contained — this
+  // file also runs in scripts/verify-prompt-engine.mjs without gamification.js).
+  // Thresholds mirror src/gamification.js presence().
+  var COHORT_TIERS = [2, 6, 12];
+  function cohortLevel(s) {
+    var kinds = ['divination', 'iching', 'games', 'sea', 'cohort', 'abstract', 'methodology', 'learn', 'council'];
+    var count = 0;
+    for (var i = 0; i < kinds.length; i++) {
+      if (Array.isArray(s && s[kinds[i]])) count += s[kinds[i]].length;
+    }
+    count += ((s && s.relations) || []).length;
+    var level = 0;
+    for (var j = 0; j < COHORT_TIERS.length; j++) {
+      if (count >= COHORT_TIERS[j]) level = j + 1;
+    }
+    return level;
+  }
+
   function verbFamily(verb) {
     var v = (verb || '').toLowerCase();
     if (!v) return FAMILY_FALLBACK;
@@ -51,11 +70,12 @@
     return FAMILY_FALLBACK;
   }
 
-  function templatesForFamily(family) {
+  function templatesForFamily(family, level) {
     var gated = [];
     var generic = [];
     for (var i = 0; i < TEMPLATES.length; i++) {
       var t = TEMPLATES[i];
+      if (t.minCohort && (level || 0) < t.minCohort) continue;
       var verbs = t.verbs || ['any'];
       if (verbs.indexOf('any') !== -1) generic.push(t);
       else if (verbs.indexOf(family) !== -1) gated.push(t);
@@ -120,13 +140,18 @@
     return /\{[a-z]+\}/.test(text) || /\{\}/.test(text);
   }
 
-  function compose(relation) {
+  // salt (optional): a second caller (src/gamification.js ambient prompts)
+  // composes the same relation with a different seed so the machine can
+  // speak first without repeating itself.
+  function compose(relation, salt) {
     var s = state() ? state().get() : {};
     var family = verbFamily(relation.verb);
-    var candidates = templatesForFamily(family);
+    var candidates = templatesForFamily(family, cohortLevel(s));
     if (!candidates.length) return null;
 
-    var rng = mulberry32(hashSeed((relation.from || '') + '|' + (relation.verb || '')));
+    var seedStr = (relation.from || '') + '|' + (relation.verb || '');
+    if (salt) seedStr += '|' + salt;
+    var rng = mulberry32(hashSeed(seedStr));
 
     var entry = artifactById(s, relation.from);
     var card = cardFor(entry);
@@ -146,7 +171,7 @@
     if (unresolvedTokens(text)) return null;
 
     return {
-      id: 'prompt-' + hashSeed((relation.from || '') + '|' + (relation.verb || '') + '|' + template.id).toString(36),
+      id: 'prompt-' + hashSeed(seedStr + '|' + template.id).toString(36),
       text: text,
       templateId: template.id,
       relationFrom: relation.from,

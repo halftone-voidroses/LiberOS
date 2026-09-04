@@ -2,6 +2,7 @@
   "_source": "authored template grammar v1 for src/prompt-engine.js. Mirrored at runtime by data/prompt-templates.data.js (the .data.js file is what the browser loads; keep the two in sync).",
   "_voice": "terse, haunted, lowercase. no exclamation marks. no therapeutic jargon. slots: {interpretation} {cohort} {artifact} {verb} {intention}.",
   "_families": "verbs are free-form user input; 'verbs' lists the keyword family a template responds to (matched as substring of the lowercased verb). 'any' matches all verbs.",
+  "_gating": "'minCohort' (optional int): the template only joins the pool once artifacts+relations reach that tier (WS5 'the cohort becomes louder'). Templates without minCohort are always eligible.",
   "templates": [
     { "id": "challenge-cohort", "verbs": ["protect", "guard", "shield", "defend"], "slots": ["interpretation", "cohort"], "text": "if {interpretation} were challenged, what would {cohort} do?" },
     { "id": "protection-cost", "verbs": ["protect", "guard", "shield", "defend"], "slots": ["cohort", "verb"], "text": "{cohort} keeps this close because it {verb}. what has the keeping cost?" },
@@ -18,6 +19,9 @@
     { "id": "any-origin", "verbs": ["any"], "slots": ["cohort", "interpretation"], "text": "where was {cohort} the day {interpretation} first happened?" },
     { "id": "any-letter", "verbs": ["any"], "slots": ["cohort", "interpretation"], "text": "write {cohort} a letter. let {interpretation} read it first." },
     { "id": "any-draw", "verbs": ["any"], "slots": ["cohort", "interpretation"], "text": "draw {cohort} the moment before {interpretation}." },
-    { "id": "any-intention", "verbs": ["any"], "slots": ["cohort", "intention", "interpretation"], "text": "{cohort} remembers: {intention}. does {interpretation} change that?" }
+    { "id": "any-intention", "verbs": ["any"], "slots": ["cohort", "intention", "interpretation"], "text": "{cohort} remembers: {intention}. does {interpretation} change that?" },
+    { "id": "any-intimate-name", "verbs": ["any"], "minCohort": 2, "slots": ["cohort"], "text": "you have said {cohort}'s name enough times that the room answers first. what does it answer?" },
+    { "id": "any-intimate-weight", "verbs": ["any"], "minCohort": 2, "slots": ["cohort", "interpretation"], "text": "{cohort} has carried {interpretation} beside you for a while. what would it set down if you asked?" },
+    { "id": "any-intimate-witness", "verbs": ["any"], "minCohort": 2, "slots": ["cohort", "artifact"], "text": "{cohort} watched you make {artifact}. ask it what it saw that you did not." }
   ]
 }

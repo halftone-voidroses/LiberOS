@@ -5,14 +5,37 @@
 (function () {
   'use strict';
 
-  const COUNT = 80;
+  const BASE_COUNT = 80;
+  // WS5 patina: density steps up with presence tiers (visits+artifacts,
+  // thresholds mirror src/shadow.js). Static per load — the loop itself is
+  // unchanged; absence never thins the room.
+  const PATINA_TIERS = [2, 6, 12];
+  const ARTIFACT_KINDS = ['divination', 'iching', 'games', 'sea', 'cohort', 'abstract', 'methodology', 'learn', 'council'];
   const particles = [];
-  let canvas, ctx, raf, last = 0;
+  let canvas, ctx, raf, count = BASE_COUNT, last = 0;
+
+  function patinaDensity() {
+    try {
+      const s = (window.Liber && window.Liber.state) ? window.Liber.state.get() : {};
+      let n = Object.keys(s.visited || {}).length;
+      for (let i = 0; i < ARTIFACT_KINDS.length; i++) {
+        if (Array.isArray(s[ARTIFACT_KINDS[i]])) n += s[ARTIFACT_KINDS[i]].length;
+      }
+      let level = 0;
+      for (let j = 0; j < PATINA_TIERS.length; j++) {
+        if (n >= PATINA_TIERS[j]) level = j + 1;
+      }
+      return level;
+    } catch (e) {
+      return 0;
+    }
+  }
 
   function init() {
     canvas = document.querySelector('.dust-canvas');
     if (!canvas) return;
     ctx = canvas.getContext('2d');
+    count = BASE_COUNT + patinaDensity() * 24;
     resize();
     spawn();
     window.addEventListener('resize', () => {
@@ -30,7 +53,7 @@
 
   function spawn() {
     particles.length = 0;
-    for (let i = 0; i < COUNT; i++) {
+    for (let i = 0; i < count; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,

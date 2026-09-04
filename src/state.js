@@ -26,6 +26,10 @@
     shadowOn: false,         // is shadow overdrive active
     sounds: true,            // synthesized UI sounds (WS4, src/sound.js)
     visited: {},             // visitor id -> last visited
+    sessionStart: 0,         // ts of the current visit's start (WS5 session arc)
+    arcShownFor: 0,          // sessionStart the sea-arc line was shown for (once per visit)
+    bests: {},               // per-booth personal bests { boothId: value } (WS5)
+    ambient: null,           // per-visit ambient prompt bookkeeping { seed, fired: [] }
   };
 
   function load() {
