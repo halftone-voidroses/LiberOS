@@ -6,22 +6,22 @@
   var CARDS = [
     {
       num: '01', title: 'Pataphysics',
-      body: 'pataphysics is the science of imaginary solutions. coined by alfred jarry (1873–1907), it treats the imaginary as if it were real. it is a science of exceptions, of the particular, of supplementary universes — the place where the rule breaks, and the breaking is the lesson. in this vacui it is the ground beneath everything else.',
+      body: 'pataphysics is the science of imaginary solutions. coined by alfred jarry (1873–1907)<button type="button" class="learn-fn" data-cite="jarry-1911" aria-label="citation">†</button>, it treats the imaginary as if it were real. it is a science of exceptions, of the particular, of supplementary universes — the place where the rule breaks, and the breaking is the lesson. in this vacui it is the ground beneath everything else.',
       key: 'science · imaginary solutions · exceptions'
     },
     {
       num: '02', title: 'Jungian Shadow',
-      body: 'the shadow is the part of the personality that has been pushed out of conscious light. it is not the dark self; it is the unlit self. jung described it as everything the conscious person refuses to acknowledge about themselves. it carries our unclaimed strengths as well as our rejected weaknesses — what he called the "noble shadow." meeting the shadow is the first act of becoming whole.',
+      body: 'the shadow is the part of the personality that has been pushed out of conscious light. it is not the dark self; it is the unlit self. jung described it as everything the conscious person refuses to acknowledge about themselves<button type="button" class="learn-fn" data-cite="jung-alchemy-1968" aria-label="citation">†</button>. it carries our unclaimed strengths as well as our rejected weaknesses — what he called the "noble shadow." meeting the shadow is the first act of becoming whole.',
       key: 'depth psychology · integration'
     },
     {
       num: '03', title: 'DBT',
-      body: 'dialectical behaviour therapy was developed by marsha linehan in the 1980s. its core skill is "wise mind" — what we intuitively know to be true under the blanket of emotions. dbt holds two truths at once: i am doing my best, and i can do better. its skills include mindfulness, distress tolerance (TIPP), emotion regulation, and interpersonal effectiveness (DEAR MAN).',
+      body: 'dialectical behaviour therapy was developed by marsha linehan in the 1980s<button type="button" class="learn-fn" data-cite="linehan-1993" aria-label="citation">†</button>. its core skill is "wise mind" — what we intuitively know to be true under the blanket of emotions. dbt holds two truths at once: i am doing my best, and i can do better. its skills include mindfulness, distress tolerance (TIPP), emotion regulation, and interpersonal effectiveness (DEAR MAN).',
       key: 'skills group · wise mind · linehan'
     },
     {
       num: '04', title: 'Shadow Work',
-      body: 'shadow work is the practice of sitting with what you would rather not. done with care, with a witness, with a cohort, never alone in the dark. it is the deliberate engagement with parts of self that have been projected onto others or exiled entirely. the work is not to destroy the shadow but to give it a seat at the table.',
+      body: 'shadow work is the practice of sitting with what you would rather not. done with care, with a witness, with a cohort, never alone in the dark<button type="button" class="learn-fn" data-cite="lukoff-1985" aria-label="citation">†</button>. it is the deliberate engagement with parts of self that have been projected onto others or exiled entirely<button type="button" class="learn-fn" data-cite="schwartz-1995" aria-label="citation">††</button>. the work is not to destroy the shadow but to give it a seat at the table.',
       key: 'practice · containment · cohort'
     },
     {
@@ -31,43 +31,78 @@
     },
     {
       num: '06', title: 'Sigil Amplification',
-      body: 'a sigil is a container for a part of you that does not yet have language. draw the contour of a feeling, not the likeness of a face. the looser the line, the more it will hold. once made and kept, the sigil accumulates charge. draw it again. look at it until you forget what it is. then look once more.',
+      body: 'a sigil is a container for a part of you that does not yet have language. draw the contour of a feeling, not the likeness of a face. the looser the line, the more it will hold. once made and kept, the sigil accumulates charge. draw it again. look at it until you forget what it is<button type="button" class="learn-fn" data-cite="csikszentmihalyi-1990" aria-label="citation">†</button>. then look once more.',
       key: 'drawing · embodiment · pataphor'
     },
     {
-      num: '07', title: 'Cohort Work',
-      body: 'the figures who circle the sigil are not invented — they are remembered. you name them, draw them, and they begin to speak back. over time the associations with each cohort member grow, and they form a supplementary universe in which the work happens. they are you, displaced sideways into figures that can talk back.',
+      num: '07', title: 'Cohort Work', thesis: true,
+      body: 'the figures who circle the sigil are not invented — they are remembered. you name them, draw them, and they begin to speak back<button type="button" class="learn-fn" data-cite="luhrmann-2015" aria-label="citation">†</button>. over time the associations with each cohort member grow, and they form a supplementary universe in which the work happens. they are you, displaced sideways into figures that can talk back<button type="button" class="learn-fn" data-cite="schwartz-1995" aria-label="citation">††</button>.',
       key: 'figures · memory · personification'
     },
     {
-      num: '08', title: 'Liber Vacui Method',
+      num: '08', title: 'Liber Vacui Method', thesis: true,
       body: 'name the question. name what is known. name what is unknown. choose one wall. return — the question will have changed. that change is the work. the method is not a checklist; it is a short cycle repeated as many times as the question requires.',
       key: 'method · named questions · return'
     },
     {
       num: '09', title: 'I Ching',
-      body: 'the i ching, or book of changes, is a 3,000-year-old chinese system of divination. it consists of 64 hexagrams built from six lines each, where each line is either yin (broken) or yang (solid). casting lines (traditionally by yarrow stalks or coins) produces a hexagram whose reading offers counsel rather than prediction.',
+      body: 'the i ching, or book of changes, is a 3,000-year-old chinese system of divination<button type="button" class="learn-fn" data-cite="i-ching" aria-label="citation">†</button>. it consists of 64 hexagrams built from six lines each, where each line is either yin (broken) or yang (solid). casting lines (traditionally by yarrow stalks or coins) produces a hexagram whose reading offers counsel rather than prediction.',
       key: 'eastern · hexagram · counsel'
     },
     {
       num: '10', title: 'Clinamen',
-      body: 'the clinamen is the unpredictable swerve of atoms — the smallest deviation that creates significant change. in pataphysics it is a principle applied not just to matter but to language and life itself: the small detours that make the work yours.',
+      body: 'the clinamen is the unpredictable swerve of atoms — the smallest deviation that creates significant change<button type="button" class="learn-fn" data-cite="hugill-2012" aria-label="citation">†</button>. in pataphysics it is a principle applied not just to matter but to language and life itself: the small detours that make the work yours.',
       key: 'pataphysics · deviation · small change'
     },
     {
       num: '11', title: 'Synchronicity',
-      body: 'synchronicity is jung\'s term for an acausal connecting principle — a meaningful coincidence that bridges inner and outer. it is the experience of two events lining up in a way that is statistically improbable but personally significant. not magic, not mere chance — meaningful pattern.',
+      body: 'synchronicity is jung\'s term for an acausal connecting principle — a meaningful coincidence that bridges inner and outer<button type="button" class="learn-fn" data-cite="i-ching" aria-label="citation">†</button>. it is the experience of two events lining up in a way that is statistically improbable but personally significant. not magic, not mere chance — meaningful pattern.',
       key: 'jung · meaning · coincidence'
     },
     {
       num: '12', title: 'Wise Mind',
-      body: 'wise mind is the integration of logic and emotion — the state of intuitive knowing dbt teaches. it is not the absence of emotion (that is "cold mind") and not the absence of reason (that is "emotion mind"). it is the third thing that holds both. linehan: "what we intuitively know to be the truth under the blanket of emotions."',
+      body: 'wise mind is the integration of logic and emotion — the state of intuitive knowing dbt teaches. it is not the absence of emotion (that is "cold mind") and not the absence of reason (that is "emotion mind"). it is the third thing that holds both. linehan: "what we intuitively know to be the truth under the blanket of emotions."<button type="button" class="learn-fn" data-cite="linehan-1993" aria-label="citation">†</button>',
       key: 'dbt · integration · intuition'
     }
   ];
 
   var drawersEl = null;
   var cardEl = null;
+  var citeEl = null;
+
+  // WS6 — citation facts come only from citations.data.js; scope lines are voice, not findings.
+  var CITES = (window.LIBER_DATA && window.LIBER_DATA.citations && window.LIBER_DATA.citations.citations) || [];
+  var CITE_BY_ID = {};
+  for (var ci = 0; ci < CITES.length; ci++) CITE_BY_ID[CITES[ci].id] = CITES[ci];
+  var CITE_SCOPES = {
+    'accessible-practical': 'kept for practice, not for proof — guidance from the clinic and the shelf, not a tested result for each use made of it here.',
+    'research-empirical': 'published research — it carries only as far as its own studies ran; beyond that, this is the author\'s reading, not the authors\' finding.',
+    'perennial-eastern': 'a contemplative frame — orientation, not a finding; nothing in it was tested, and it does not claim to be.',
+    'hermetic-esoteric': 'a lineage source — it lends the vocabulary and the ritual form; it is not clinical evidence.',
+    'philosophical-pataphysical': 'philosophy, filed as ancestry — argument and licence for the method\'s play, not a tested claim.'
+  };
+
+  function openCite(id) {
+    var c = CITE_BY_ID[id];
+    if (!c || !citeEl) return;
+    var claims = (c.claimedFor || []).join('; ');
+    var scope = CITE_SCOPES[c.category] || 'how far it proves the claim is not settled here.';
+    var note = c.note ? c.note.replace(/^the author's note:\s*/i, '') : '';
+    el('learn-cite-topic').textContent = 'filed — ' + c.topic;
+    el('learn-cite-body').innerHTML = ''
+      + '<div class="learn-cite-source">' + c.source + '</div>'
+      + '<div class="learn-cite-what">the workbook rests this on it for: ' + claims + '.</div>'
+      + '<div class="learn-cite-scope">' + scope + '</div>'
+      + (note ? '<div class="learn-cite-note">margin note: ' + note + '</div>' : '');
+    citeEl.classList.add('open');
+    citeEl.removeAttribute('inert');
+  }
+
+  function closeCite() {
+    if (!citeEl) return;
+    citeEl.classList.remove('open');
+    citeEl.setAttribute('inert', '');
+  }
 
   function el(id) { return document.getElementById(id); }
 
@@ -96,6 +131,10 @@
       + '<div class="learn-card-inner">'
       + '  <div class="learn-card-num">' + c.num + ' / ' + String(CARDS.length).padStart(2, '0') + '</div>'
       + '  <div class="learn-card-title">' + c.title + '</div>'
+      + (c.thesis
+          ? '  <div class="learn-thesis-row"><span class="learn-thesis">a traveller\'s thesis</span>'
+            + '<span class="learn-thesis-note">the scribe\'s own conjecture — filed apart from the research shelf.</span></div>'
+          : '')
       + '  <div class="learn-card-body">' + c.body + '</div>'
       + '  <div class="learn-card-key">' + c.key + '</div>'
       + '</div>';
@@ -111,8 +150,19 @@
   document.addEventListener('DOMContentLoaded', function () {
     drawersEl = el('learn-drawers');
     cardEl = el('learn-card');
+    citeEl = el('learn-cite');
     buildDrawers();
     if (drawersEl && drawersEl.firstChild) showCard(0);
+
+    // WS6 — footnote glyphs open the citation slip; ×, backdrop and Esc close it.
+    if (cardEl) cardEl.addEventListener('click', function (e) {
+      var t = e.target.closest ? e.target.closest('.learn-fn') : null;
+      if (t && t.dataset.cite) openCite(t.dataset.cite);
+    });
+    var citeClose = el('learn-cite-close');
+    if (citeClose) citeClose.addEventListener('click', closeCite);
+    if (citeEl) citeEl.addEventListener('click', function (e) { if (e.target === citeEl) closeCite(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeCite(); });
 
     var exit = el('learn-exit');
     if (exit) exit.addEventListener('click', function () {

@@ -392,3 +392,157 @@
 @media (prefers-reduced-motion: reduce) {
   .learn-margin-note { transition: none; }
 }
+
+/* ─── WS6: citations traveller — footnote daggers, thesis stamps and the
+   filed-citation slip. Research voice, rendered from data/citations.data.js;
+   visually an index-card slip, apart from the workbook's mythic register. ── */
+
+.learn-fn {
+  display: inline;
+  padding: 0 1px;
+  margin: 0 1px;
+  background: none;
+  border: none;
+  font-family: 'EB Garamond', 'Garamond', Georgia, serif;
+  font-size: 1.05rem;
+  line-height: 1;
+  font-weight: 700;
+  color: #aa3030;
+  vertical-align: baseline;
+  cursor: inherit;
+}
+.learn-fn:hover { text-shadow: 0 0 6px rgba(170, 48, 48, 0.75); }
+.learn-fn:focus-visible {
+  outline: 2px solid #aa3030;
+  outline-offset: 1px;
+  border-radius: 2px;
+}
+
+.learn-thesis-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.learn-thesis {
+  flex-shrink: 0;
+  display: inline-block;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 1rem;
+  letter-spacing: 0.14em;
+  color: #aa3030;
+  border: 2px solid #aa3030;
+  border-radius: 2px;
+  padding: 2px 10px;
+  transform: rotate(-1.5deg);
+  background: rgba(170, 48, 48, 0.07);
+}
+.learn-thesis-note {
+  font-size: 1rem;
+  font-style: italic;
+  color: #6a4028;
+}
+
+.learn-cite {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 12, 4, 0.85);
+  z-index: 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.learn-cite.open { opacity: 1; pointer-events: auto; }
+
+.learn-cite-inner {
+  width: 78%;
+  max-width: 520px;
+  max-height: 80%;
+  overflow-y: auto;
+  background: linear-gradient(180deg, #f4e4c4 0%, #e8d8a8 100%);
+  border: 1px solid #aa7838;
+  border-top: 6px solid #aa3030;
+  box-shadow:
+    inset 0 0 0 1px #2a1408,
+    inset 0 0 24px rgba(120, 80, 30, 0.15),
+    0 0 30px rgba(0, 0, 0, 0.6);
+  padding: 16px 20px 14px;
+  font-family: 'EB Garamond', 'Garamond', serif;
+  color: #2a1408;
+}
+
+.learn-cite-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dotted #6a4028;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.learn-cite-topic {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 1.05rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #aa3030;
+}
+
+.learn-cite-close {
+  background: none;
+  border: 1px solid #6a4028;
+  color: #6a4028;
+  font-family: inherit;
+  font-size: 1rem;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 2px;
+}
+.learn-cite-close:hover { background: rgba(106, 64, 40, 0.12); color: #4a2008; }
+
+.learn-cite-source {
+  font-size: 1.1rem;
+  line-height: 1.5;
+  font-weight: 700;
+  color: #4a2008;
+  margin-bottom: 10px;
+}
+
+.learn-cite-what {
+  font-size: 1rem;
+  line-height: 1.55;
+  margin-bottom: 8px;
+}
+
+.learn-cite-scope {
+  font-size: 1rem;
+  line-height: 1.55;
+  font-style: italic;
+  color: #6a2010;
+  border-left: 3px double #aa3030;
+  padding-left: 10px;
+}
+
+.learn-cite-note {
+  font-size: 1rem;
+  line-height: 1.5;
+  font-style: italic;
+  color: #6a4028;
+  border-top: 1px dotted #6a4028;
+  margin-top: 10px;
+  padding-top: 8px;
+}
+
+.learn-cite-close:focus-visible {
+  outline: 2px solid #aa3030;
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .learn-cite { transition: none; }
+}
