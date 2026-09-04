@@ -2,7 +2,9 @@
    Top: < SELECTED OPTION >   (active, large, bright)
    Left:  prev   Right: next
    Side options are NOT shown as a row; cycling moves through them.
-   No imports (covenant Q.1). */
+   Tiles are phosphor bitmap plaques (suite S2, docs/icon-suites.html):
+   dark glass, the app name as a phosphor label above a large pixel glyph,
+   each burning in its traveller's phosphor. No imports (covenant Q.1). */
 
 .dial {
   position: absolute;
@@ -39,8 +41,7 @@
   height: 100%;
   display: grid;
   /* 1fr auto 1fr: the ACTIVE option sits exactly centred in the monitor no
-     matter how wide the prev/next labels are (flex centring drifted when
-     the side labels were uneven). */
+     matter how wide the prev/next tiles are. */
   grid-template-columns: 1fr auto 1fr;
   align-items: end;
   gap: 4px;
@@ -48,35 +49,56 @@
   pointer-events: auto;
 }
 
+/* ── the phosphor tile ── */
 .dial-option {
-  background: linear-gradient(180deg, #c8a878 0%, #8a6a40 100%);
-  border: 2px solid #4a2818;
-  color: #1a0a05;
-  font-family: 'VT323', 'Courier New', monospace;
-  font-weight: 700;
-  text-transform: lowercase;
-  letter-spacing: 0.08em;
-  padding: 6px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 5px 9px 6px;
+  background:
+    radial-gradient(ellipse at 50% 22%, rgba(255, 255, 255, 0.07) 0%, rgba(0, 0, 0, 0) 55%),
+    linear-gradient(180deg, #17090a 0%, #0c0404 100%);
+  border: 1px solid #3a1414;
+  border-radius: 6px;
+  color: var(--acc, #c8a878);
   cursor: pointer;
   position: relative;
   box-shadow:
-    inset 0 1px 0 rgba(255, 230, 180, 0.5),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.4),
-    0 2px 0 #2a1408,
-    0 3px 4px rgba(0, 0, 0, 0.5);
-  transition: transform 0.12s, opacity 0.12s;
+    inset 0 0 12px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 2px 0 #0a0303,
+    0 0 9px var(--glow, rgba(200, 168, 120, 0.22));
+  transition: transform 0.12s, opacity 0.12s, box-shadow 0.2s, filter 0.12s;
   white-space: nowrap;
-  border-radius: 2px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
 }
 
-.dial-option .dial-icon { display: inline-flex; align-items: center; }
-.dial-option .dial-icon svg { display: block; }
+.phos-label {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 1rem;
+  line-height: 1;
+  letter-spacing: 0.1em;
+  text-transform: lowercase;
+  color: var(--acc, #c8a878);
+  text-shadow: 0 0 8px var(--glow, rgba(200, 168, 120, 0.55));
+  /* D0003: dial labels hold the 16px floor. */
+}
+
+.dial-glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dial-glyph svg {
+  width: 17px;
+  height: 17px;
+  color: var(--acc, #c8a878);
+  filter: drop-shadow(0 0 3px var(--glow, rgba(200, 168, 120, 0.45)));
+}
 
 .dial-option:hover {
-  filter: brightness(1.1);
+  filter: brightness(1.25);
 }
 
 .dial-option.crossed {
@@ -84,50 +106,47 @@
   cursor: default;
 }
 
-.dial-option.prev {
-  /* 1.4rem × scale(0.75) ≈ 16.8px rendered — holds the D0003 16px floor
-     under the side-option scale (WS3: larger dial labels). */
+.dial-option.prev,
+.dial-option.next {
   justify-self: end;
-  font-size: 1.4rem;
-  opacity: 0.85;
-  padding: 4px 10px;
-  transform: translateY(20%) scale(0.75);
-  filter: saturate(0.6);
+  opacity: 0.8;
+  transform: translateY(20%) scale(0.82);
+  filter: saturate(0.55) brightness(0.8);
 }
 
-.dial-option.next {
-  justify-self: start;
-  font-size: 1.4rem;
-  opacity: 0.85;
-  padding: 4px 10px;
-  transform: translateY(20%) scale(0.75);
-  filter: saturate(0.6);
-}
+.dial-option.next { justify-self: start; }
 
 .dial-option.prev:hover,
 .dial-option.next:hover {
   opacity: 0.95;
-  transform: translateY(8%) scale(0.85);
+  transform: translateY(10%) scale(0.92);
+  filter: saturate(0.8) brightness(1);
 }
 
 .dial-option.active {
-  background: linear-gradient(180deg, #f0d090 0%, #c89060 50%, #8a5028 100%);
-  border: 3px solid #4a2008;
-  color: #1a0500;
-  font-size: 2.2rem;
-  letter-spacing: 0.18em;
-  padding: 12px 36px;
-  text-transform: lowercase;
+  padding: 8px 16px 9px;
+  border-color: var(--acc, #c8a878);
+  background:
+    radial-gradient(ellipse at 50% 18%, rgba(255, 255, 255, 0.12) 0%, rgba(0, 0, 0, 0) 58%),
+    linear-gradient(180deg, #241010 0%, #140606 100%);
   box-shadow:
-    inset 0 2px 0 rgba(255, 240, 200, 0.7),
-    inset 0 -3px 0 rgba(0, 0, 0, 0.4),
-    0 0 16px rgba(255, 180, 100, 0.4),
-    0 4px 0 #2a1408,
-    0 6px 10px rgba(0, 0, 0, 0.6);
+    inset 0 0 18px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 2px 0 #0a0303,
+    0 0 26px var(--glow, rgba(200, 168, 120, 0.5));
   transform: translateY(-30%);
   z-index: 2;
-  border-radius: 3px;
-  position: relative;
+}
+
+.dial-option.active .phos-label {
+  font-size: 1.25rem;
+  text-shadow: 0 0 14px var(--glow, rgba(200, 168, 120, 0.9));
+}
+
+.dial-option.active .dial-glyph svg {
+  width: 36px;
+  height: 36px;
+  filter: drop-shadow(0 0 7px var(--glow, rgba(200, 168, 120, 0.8)));
 }
 
 .dial-option.active::before,
@@ -136,15 +155,75 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 1.4rem;
-  color: rgba(20, 5, 0, 0.6);
-  left: 8px;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 1.3rem;
+  color: var(--acc, #c8a878);
+  opacity: 0.55;
+  left: 5px;
 }
 
 .dial-option.active::after {
   content: '›';
   left: auto;
-  right: 8px;
+  right: 5px;
+}
+
+/* ── motes — thematic bits floating around the selected tile ── */
+.dial-motes {
+  position: absolute;
+  inset: -12px -16px;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 3;
+}
+
+.dial-option.active .dial-motes { opacity: 1; }
+
+.dial-motes i {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: var(--mote-color, #c8a878);
+  border-radius: var(--mote-round, 50%);
+  box-shadow:
+    0 0 4px rgba(255, 244, 220, 0.9),
+    0 0 11px var(--glow, rgba(200, 168, 120, 0.7));
+  opacity: 0;
+}
+
+.dial-motes i:nth-child(1) { left: 10%; bottom: 32%; }
+.dial-motes i:nth-child(2) { left: 26%; bottom: 12%; }
+.dial-motes i:nth-child(3) { left: 44%; bottom: 26%; }
+.dial-motes i:nth-child(4) { left: 62%; bottom: 10%; }
+.dial-motes i:nth-child(5) { left: 78%; bottom: 28%; }
+.dial-motes i:nth-child(6) { left: 92%; bottom: 40%; }
+
+.dial-option.active .dial-motes i { animation: mote-float 3.6s linear infinite; }
+.dial-option.active .dial-motes i:nth-child(2) { animation-delay: 0.6s; }
+.dial-option.active .dial-motes i:nth-child(3) { animation-delay: 1.2s; }
+.dial-option.active .dial-motes i:nth-child(4) { animation-delay: 1.8s; }
+.dial-option.active .dial-motes i:nth-child(5) { animation-delay: 2.4s; }
+.dial-option.active .dial-motes i:nth-child(6) { animation-delay: 3s; }
+.dial-option.active .dial-motes i:nth-child(even) { animation-name: mote-float-left; }
+
+@keyframes mote-float {
+  0%   { transform: translate(0, 0); opacity: 0; }
+  12%  { opacity: 1; }
+  70%  { opacity: 0.95; }
+  100% { transform: translate(8px, -34px); opacity: 0; }
+}
+@keyframes mote-float-left {
+  0%   { transform: translate(0, 0); opacity: 0; }
+  12%  { opacity: 1; }
+  70%  { opacity: 0.95; }
+  100% { transform: translate(-8px, -34px); opacity: 0; }
+}
+
+/* abstract's underscore blinks because it should */
+.phos-blink { animation: phos-blink 1.1s steps(1) infinite; }
+@keyframes phos-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
 }
 
 .dial-arrow {
@@ -184,13 +263,7 @@
   filter: drop-shadow(0 1px 0 #1a0a05) drop-shadow(0 2px 2px rgba(0, 0, 0, 0.5));
 }
 
-/* ============================================================================
-   WS3 (plan 2026-09-04 §3) — per-persona material dial + opinion line.
-   One material block per traveller, built from data/personas.data.js.
-   Pure CSS here; dial.css is shell CSS — no shared classes reach the apps.
-   ============================================================================ */
-
-/* The opinion line — rises above the dial on hover/focus (JS fills it). */
+/* ── the opinion line — rises above the dial on hover/focus (JS fills it) ── */
 .dial-opinion {
   position: absolute;
   left: 24px;
@@ -223,463 +296,17 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── sigil · mistress physius — grey chiseled stone, copper inlay ── */
-.dial-option[data-id='sigil'] {
-  background:
-    repeating-linear-gradient(48deg, rgba(0, 0, 0, 0.10) 0px, rgba(0, 0, 0, 0.10) 1px, rgba(255, 255, 255, 0.02) 1px, rgba(255, 255, 255, 0.02) 3px),
-    linear-gradient(180deg, #62626c 0%, #3c3c46 55%, #26262e 100%);
-  border-color: #17171d;
-  color: #e8d8b8;
-  font-family: 'Times New Roman', Times, serif;
-  letter-spacing: 0.22em;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.28),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.55),
-    0 2px 0 #101014,
-    0 3px 4px rgba(0, 0, 0, 0.55);
-}
-.dial-option[data-id='sigil']::before {
-  content: '';
-  position: absolute;
-  left: 6px;
-  top: 5px;
-  width: 26%;
-  height: 2px;
-  background: linear-gradient(90deg, #aa5a18, rgba(170, 90, 24, 0.15));
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.6);
-}
-.dial-option[data-id='sigil'].active {
-  box-shadow:
-    inset 0 2px 0 rgba(255, 240, 200, 0.5),
-    inset 0 -3px 0 rgba(0, 0, 0, 0.5),
-    0 0 18px rgba(170, 90, 24, 0.35),
-    0 4px 0 #101014,
-    0 6px 10px rgba(0, 0, 0, 0.6);
-}
-.dial-option[data-id='sigil']:focus-visible { outline: 2px solid #aa5a18; outline-offset: 2px; }
-
-/* ── satchel · the librarian — sepia vellum over brass clasps ── */
-.dial-option[data-id='satchel'] {
-  background:
-    radial-gradient(circle 8px at 82% 18%, rgba(120, 70, 30, 0.18) 0%, rgba(120, 70, 30, 0) 70%),
-    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.02) 0px, rgba(0, 0, 0, 0.02) 1px, transparent 1px, transparent 3px),
-    linear-gradient(180deg, #e8d8b8 0%, #d4c4a0 60%, #bca888 100%);
-  border-color: #6a4a20;
-  color: #3a2010;
-  font-family: 'EB Garamond', Garamond, 'Times New Roman', serif;
-  font-variant: small-caps;
-  letter-spacing: 0.14em;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 250, 230, 0.8),
-    inset 0 -2px 0 rgba(90, 60, 25, 0.35),
-    0 2px 0 #4a2e10,
-    0 3px 4px rgba(0, 0, 0, 0.5);
-}
-.dial-option[data-id='satchel']::before {
-  content: '';
-  position: absolute;
-  right: 6px;
-  bottom: 4px;
-  width: 8px;
-  height: 8px;
-  background: linear-gradient(135deg, #d8b060, #8a6222);
-  border: 1px solid #5a3a10;
-  border-radius: 1px;
-}
-.dial-option[data-id='satchel'].active {
-  box-shadow:
-    inset 0 2px 0 rgba(255, 252, 240, 0.9),
-    inset 0 -3px 0 rgba(90, 60, 25, 0.4),
-    0 0 18px rgba(212, 175, 55, 0.35),
-    0 4px 0 #4a2e10,
-    0 6px 10px rgba(0, 0, 0, 0.6);
-}
-.dial-option[data-id='satchel']:focus-visible { outline: 2px solid #aa7838; outline-offset: 2px; }
-
-/* ── sea · vanir — wet slate, waterline foam edge ── */
-.dial-option[data-id='sea'] {
-  background:
-    linear-gradient(180deg, rgba(160, 200, 216, 0.35) 0%, rgba(160, 200, 216, 0) 26%),
-    linear-gradient(180deg, #33505e 0%, #1c2f3a 55%, #0e1922 100%);
-  border-color: #071018;
-  color: #d8ecf4;
-  font-family: 'EB Garamond', Garamond, 'Times New Roman', serif;
-  font-style: italic;
-  letter-spacing: 0.16em;
-  box-shadow:
-    inset 0 1px 0 rgba(210, 235, 245, 0.35),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.55),
-    0 2px 0 #050b10,
-    0 3px 4px rgba(0, 0, 0, 0.55);
-}
-.dial-option[data-id='sea']::before {
-  content: '';
-  position: absolute;
-  left: 8%;
-  right: 8%;
-  top: 3px;
-  height: 2px;
-  background: repeating-linear-gradient(90deg, rgba(224, 244, 250, 0.8) 0px, rgba(224, 244, 250, 0.8) 6px, rgba(224, 244, 250, 0.1) 6px, rgba(224, 244, 250, 0.1) 10px);
-}
-.dial-option[data-id='sea'].active {
-  box-shadow:
-    inset 0 2px 0 rgba(210, 235, 245, 0.5),
-    inset 0 -3px 0 rgba(0, 0, 0, 0.55),
-    0 0 20px rgba(42, 138, 138, 0.4),
-    0 4px 0 #050b10,
-    0 6px 10px rgba(0, 0, 0, 0.6);
-}
-.dial-option[data-id='sea']:focus-visible { outline: 2px solid #2a8a8a; outline-offset: 2px; }
-
-/* ── cohort · e-lizabeth — black wax, sealed; faint flame flicker ── */
-.dial-option[data-id='cohort'] {
-  background:
-    radial-gradient(ellipse at 30% 20%, rgba(120, 40, 40, 0.25) 0%, rgba(120, 40, 40, 0) 60%),
-    linear-gradient(180deg, #241014 0%, #120808 60%, #080303 100%);
-  border-color: #3a0a10;
-  color: #d8b088;
-  font-family: 'EB Garamond', Garamond, 'Times New Roman', serif;
-  letter-spacing: 0.2em;
-  box-shadow:
-    inset 0 1px 0 rgba(216, 176, 136, 0.2),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.6),
-    0 2px 0 #060202,
-    0 3px 4px rgba(0, 0, 0, 0.55);
-}
-.dial-option[data-id='cohort']::before {
-  content: '';
-  position: absolute;
-  right: 7px;
-  top: 4px;
-  width: 9px;
-  height: 10px;
-  background: radial-gradient(circle at 35% 30%, #b04038, #5a0e14 70%);
-  border-radius: 50% 50% 46% 54% / 58% 58% 42% 42%;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.7);
-}
-.dial-option[data-id='cohort'].active {
-  animation: cohort-flame 2.6s ease-in-out infinite;
-  box-shadow:
-    inset 0 2px 0 rgba(216, 176, 136, 0.3),
-    inset 0 -3px 0 rgba(0, 0, 0, 0.6),
-    0 0 14px rgba(170, 48, 48, 0.4),
-    0 4px 0 #060202,
-    0 6px 10px rgba(0, 0, 0, 0.6);
-}
-@keyframes cohort-flame {
-  0%, 100% { box-shadow: inset 0 2px 0 rgba(216, 176, 136, 0.3), inset 0 -3px 0 rgba(0, 0, 0, 0.6), 0 0 12px rgba(170, 48, 48, 0.35), 0 4px 0 #060202, 0 6px 10px rgba(0, 0, 0, 0.6); }
-  50%      { box-shadow: inset 0 2px 0 rgba(216, 176, 136, 0.3), inset 0 -3px 0 rgba(0, 0, 0, 0.6), 0 0 22px rgba(220, 80, 60, 0.55), 0 4px 0 #060202, 0 6px 10px rgba(0, 0, 0, 0.6); }
-}
-.dial-option[data-id='cohort']:focus-visible { outline: 2px solid #8a2a20; outline-offset: 2px; }
-
-/* ── abstract · entity404 — phosphor glass, green bloom ── */
-.dial-option[data-id='abstract'] {
-  background:
-    radial-gradient(ellipse at 50% 120%, rgba(0, 255, 102, 0.18) 0%, rgba(0, 255, 102, 0) 60%),
-    linear-gradient(180deg, #04140a 0%, #010a04 100%);
-  border-color: #0a4018;
-  color: #00ff66;
-  font-family: 'Courier New', 'VT323', monospace;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  box-shadow:
-    inset 0 0 10px rgba(0, 255, 102, 0.12),
-    inset 0 1px 0 rgba(0, 255, 102, 0.2),
-    0 2px 0 #000,
-    0 3px 4px rgba(0, 0, 0, 0.6);
-}
-.dial-option[data-id='abstract']::before {
-  content: '';
-  position: absolute;
-  left: 6px;
-  top: 5px;
-  width: 6px;
-  height: 6px;
-  background: #00ff66;
-  box-shadow: 12px 0 0 rgba(0, 255, 102, 0.35);
-}
-.dial-option[data-id='abstract'].active {
-  box-shadow:
-    inset 0 0 14px rgba(0, 255, 102, 0.2),
-    inset 0 2px 0 rgba(0, 255, 102, 0.3),
-    0 0 18px rgba(0, 255, 102, 0.35),
-    0 4px 0 #000,
-    0 6px 10px rgba(0, 0, 0, 0.6);
-}
-.dial-option[data-id='abstract']:focus-visible { outline: 2px solid #00ff66; outline-offset: 2px; }
-
-/* ── games · whimsy wow — painted marquee wood, bulb studs ── */
-.dial-option[data-id='games'] {
-  background:
-    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.18) 0px, rgba(0, 0, 0, 0.18) 2px, transparent 2px, transparent 14px),
-    linear-gradient(180deg, #7a1420 0%, #57101a 55%, #3a0a12 100%);
-  border-color: #d4af37;
-  color: #f4e8d2;
-  font-family: 'Times New Roman', Times, serif;
-  font-weight: 900;
-  font-style: italic;
-  letter-spacing: 0.12em;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 230, 160, 0.35),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.5),
-    0 2px 0 #6a5616,
-    0 3px 4px rgba(0, 0, 0, 0.55);
-}
-.dial-option[data-id='games']::before {
-  content: '';
-  position: absolute;
-  left: 8px;
-  right: 8px;
-  top: 3px;
-  height: 4px;
-  background-image: radial-gradient(circle, #ffe9a8 0px, #ffe9a8 1.6px, rgba(255, 170, 40, 0.4) 1.6px, rgba(255, 170, 40, 0.4) 2.2px, transparent 2.2px);
-  background-size: 12px 4px;
-  background-repeat: repeat-x;
-  background-position: 4px center;
-}
-.dial-option[data-id='games'].active {
-  box-shadow:
-    inset 0 2px 0 rgba(255, 230, 160, 0.5),
-    inset 0 -3px 0 rgba(0, 0, 0, 0.5),
-    0 0 20px rgba(212, 175, 55, 0.45),
-    0 4px 0 #6a5616,
-    0 6px 10px rgba(0, 0, 0, 0.6);
-}
-.dial-option[data-id='games']:focus-visible { outline: 2px solid #d4af37; outline-offset: 2px; }
-
-/* ── divination · arcana — deep red felt, chalk-dusted rim ── */
-.dial-option[data-id='divination'] {
-  background:
-    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.02) 0px, rgba(255, 255, 255, 0.02) 1px, transparent 1px, transparent 3px),
-    repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.08) 0px, rgba(0, 0, 0, 0.08) 1px, transparent 1px, transparent 3px),
-    linear-gradient(180deg, #6a1018 0%, #4a0a10 55%, #32060a 100%);
-  border-color: #1a0205;
-  color: #f4e8d2;
-  font-family: 'EB Garamond', Garamond, 'Times New Roman', serif;
-  letter-spacing: 0.18em;
-  box-shadow:
-    inset 0 1px 0 rgba(244, 232, 210, 0.25),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.55),
-    0 2px 0 #14020a,
-    0 3px 4px rgba(0, 0, 0, 0.55);
-}
-.dial-option[data-id='divination']::before {
-  content: '';
-  position: absolute;
-  left: 6px;
-  right: 6px;
-  top: 2px;
-  height: 3px;
-  background: linear-gradient(90deg, rgba(244, 232, 210, 0) 0%, rgba(244, 232, 210, 0.45) 20%, rgba(244, 232, 210, 0.15) 55%, rgba(244, 232, 210, 0.5) 85%, rgba(244, 232, 210, 0) 100%);
-}
-.dial-option[data-id='divination'].active {
-  box-shadow:
-    inset 0 2px 0 rgba(244, 232, 210, 0.35),
-    inset 0 -3px 0 rgba(0, 0, 0, 0.55),
-    0 0 18px rgba(170, 30, 40, 0.5),
-    0 4px 0 #14020a,
-    0 6px 10px rgba(0, 0, 0, 0.6);
-}
-.dial-option[data-id='divination']:focus-visible { outline: 2px solid #f4e8d2; outline-offset: 2px; }
-
-/* ── learn · the mad scribe — index card, ink-stamped corner ── */
-.dial-option[data-id='learn'] {
-  background:
-    linear-gradient(rgba(170, 48, 48, 0.7), rgba(170, 48, 48, 0.7)) 5px 4px / calc(100% - 10px) 2px no-repeat,
-    repeating-linear-gradient(180deg, transparent 0px, transparent 7px, rgba(120, 90, 50, 0.16) 7px, rgba(120, 90, 50, 0.16) 8px),
-    linear-gradient(180deg, #f0e2be 0%, #e0d0a4 60%, #cbb98c 100%);
-  border-color: #6a4818;
-  color: #2a1808;
-  font-family: 'EB Garamond', Garamond, 'Times New Roman', serif;
-  letter-spacing: 0.12em;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 248, 0.8),
-    inset 0 -2px 0 rgba(90, 60, 20, 0.3),
-    0 2px 0 #4a2c0c,
-    0 3px 4px rgba(0, 0, 0, 0.5);
-}
-.dial-option[data-id='learn']::before {
-  content: '';
-  position: absolute;
-  right: 5px;
-  bottom: 4px;
-  width: 9px;
-  height: 9px;
-  border: 2px solid rgba(170, 48, 48, 0.8);
-  transform: rotate(-8deg);
-}
-.dial-option[data-id='learn'].active {
-  box-shadow:
-    inset 0 2px 0 rgba(255, 255, 248, 0.9),
-    inset 0 -3px 0 rgba(90, 60, 20, 0.35),
-    0 0 16px rgba(212, 184, 144, 0.5),
-    0 4px 0 #4a2c0c,
-    0 6px 10px rgba(0, 0, 0, 0.6);
-}
-.dial-option[data-id='learn']:focus-visible { outline: 2px solid #aa3030; outline-offset: 2px; }
-
-/* ── methodology · raison — folio broadsheet, wax seal ── */
-.dial-option[data-id='methodology'] {
-  background:
-    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.02) 0px, rgba(0, 0, 0, 0.02) 1px, transparent 1px, transparent 4px),
-    linear-gradient(180deg, #efe0b2 0%, #e2d09c 60%, #cdb884 100%);
-  border-color: #6a4a20;
-  border-left: 4px solid #aa3030;
-  color: #2a1a08;
-  font-family: 'EB Garamond', Garamond, 'Times New Roman', serif;
-  letter-spacing: 0.1em;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 250, 230, 0.75),
-    inset 0 -2px 0 rgba(90, 60, 20, 0.3),
-    0 2px 0 #4a2c0c,
-    0 3px 4px rgba(0, 0, 0, 0.5);
-}
-.dial-option[data-id='methodology']::before {
-  content: '';
-  position: absolute;
-  right: 5px;
-  bottom: 3px;
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #c04838, #701410 75%);
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
-}
-.dial-option[data-id='methodology'].active {
-  box-shadow:
-    inset 0 2px 0 rgba(255, 250, 230, 0.85),
-    inset 0 -3px 0 rgba(90, 60, 20, 0.35),
-    0 0 16px rgba(212, 190, 130, 0.5),
-    0 4px 0 #4a2c0c,
-    0 6px 10px rgba(0, 0, 0, 0.6);
-}
-.dial-option[data-id='methodology']:focus-visible { outline: 2px solid #aa3030; outline-offset: 2px; }
-
-/* ── themes · iris mappa — pigment tile mosaic ── */
-.dial-option[data-id='themes'] {
-  background:
-    linear-gradient(180deg, rgba(10, 6, 2, 0.5) 0%, rgba(10, 6, 2, 0.62) 100%),
-    repeating-linear-gradient(0deg, rgba(14, 9, 4, 0.95) 0px, rgba(14, 9, 4, 0.95) 1px, transparent 1px, transparent 9px),
-    repeating-linear-gradient(90deg, rgba(14, 9, 4, 0.95) 0px, rgba(14, 9, 4, 0.95) 1px, transparent 1px, transparent 9px),
-    conic-gradient(#a8481a 0deg 90deg, #c89a28 90deg 180deg, #20605c 180deg 270deg, #8a1a14 270deg 360deg);
-  background-size: auto, auto, auto, 18px 18px;
-  border-color: #0c0803;
-  color: #f0e4cc;
-  font-family: 'EB Garamond', Garamond, 'Times New Roman', serif;
-  letter-spacing: 0.18em;
-  box-shadow:
-    inset 0 1px 0 rgba(240, 228, 204, 0.25),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.6),
-    0 2px 0 #060402,
-    0 3px 4px rgba(0, 0, 0, 0.55);
-}
-.dial-option[data-id='themes']::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  border-style: solid;
-  border-width: 10px 10px 0 0;
-  border-color: #d4af37 transparent transparent transparent;
-}
-.dial-option[data-id='themes'].active {
-  box-shadow:
-    inset 0 2px 0 rgba(240, 228, 204, 0.35),
-    inset 0 -3px 0 rgba(0, 0, 0, 0.6),
-    0 0 18px rgba(212, 175, 55, 0.4),
-    0 4px 0 #060402,
-    0 6px 10px rgba(0, 0, 0, 0.6);
-}
-.dial-option[data-id='themes']:focus-visible { outline: 2px solid #d4af37; outline-offset: 2px; }
-
-/* ── relation · e-lizabeth — iron ring + chain links ── */
-.dial-option[data-id='relation'] {
-  background:
-    radial-gradient(ellipse at 20% 0%, rgba(170, 138, 58, 0.14) 0%, rgba(170, 138, 58, 0) 55%),
-    linear-gradient(180deg, #241428 0%, #140a18 60%, #0a0410 100%);
-  border-color: #4a4050;
-  color: #c8a878;
-  font-family: 'EB Garamond', Garamond, 'Times New Roman', serif;
-  letter-spacing: 0.22em;
-  box-shadow:
-    inset 0 1px 0 rgba(200, 168, 120, 0.25),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.6),
-    0 2px 0 #060310,
-    0 3px 4px rgba(0, 0, 0, 0.55);
-}
-.dial-option[data-id='relation']::before {
-  content: '';
-  position: absolute;
-  left: 7px;
-  top: 50%;
-  width: 9px;
-  height: 9px;
-  border: 2.5px solid #5a5060;
-  border-radius: 50%;
-  transform: translateY(-50%);
-  box-shadow: 12px 0 0 0 rgba(170, 138, 58, 0.7);
-}
-.dial-option[data-id='relation'].active {
-  box-shadow:
-    inset 0 2px 0 rgba(200, 168, 120, 0.35),
-    inset 0 -3px 0 rgba(0, 0, 0, 0.6),
-    0 0 18px rgba(170, 138, 58, 0.35),
-    0 4px 0 #060310,
-    0 6px 10px rgba(0, 0, 0, 0.6);
-}
-.dial-option[data-id='relation']:focus-visible { outline: 2px solid #aa8a3a; outline-offset: 2px; }
-
-/* ── trash · ravaging pete — die-cut rubble, gravel edge ── */
-.dial-option[data-id='trash'] {
-  background:
-    radial-gradient(circle 2px at 12% 30%, #6a4c30 0px, #6a4c30 1.5px, rgba(0, 0, 0, 0) 2px),
-    radial-gradient(circle 2px at 78% 22%, #7a5a38 0px, #7a5a38 1.5px, rgba(0, 0, 0, 0) 2px),
-    radial-gradient(circle 2px at 30% 78%, #55402a 0px, #55402a 1.5px, rgba(0, 0, 0, 0) 2px),
-    radial-gradient(circle 2px at 62% 70%, #6a4c30 0px, #6a4c30 1.5px, rgba(0, 0, 0, 0) 2px),
-    radial-gradient(circle 2px at 88% 60%, #55402a 0px, #55402a 1.5px, rgba(0, 0, 0, 0) 2px),
-    linear-gradient(180deg, #3a2c1c 0%, #241a10 55%, #14100a 100%);
-  border-color: #0c0805;
-  color: #d8c8a0;
-  font-family: 'EB Garamond', Garamond, 'Times New Roman', serif;
-  font-variant: small-caps;
-  letter-spacing: 0.16em;
-  box-shadow:
-    inset 0 1px 0 rgba(212, 196, 160, 0.2),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.6),
-    0 2px 0 #060402,
-    0 3px 4px rgba(0, 0, 0, 0.55);
-}
-.dial-option[data-id='trash']::before {
-  content: '';
-  position: absolute;
-  left: 18%;
-  top: 0;
-  width: 14%;
-  height: 5px;
-  background: #050302;
-  clip-path: polygon(0 0, 100% 0, 78% 100%, 22% 100%);
-}
-.dial-option[data-id='trash'].active {
-  box-shadow:
-    inset 0 2px 0 rgba(212, 196, 160, 0.3),
-    inset 0 -3px 0 rgba(0, 0, 0, 0.6),
-    0 0 16px rgba(138, 104, 64, 0.4),
-    0 4px 0 #060402,
-    0 6px 10px rgba(0, 0, 0, 0.6);
-}
-.dial-option[data-id='trash']:focus-visible { outline: 2px solid #8a6840; outline-offset: 2px; }
-
-/* ── pressed bevel + crossed guard (last, so they win the cascade) ── */
+/* ── pressed + crossed guard (last, so they win the cascade) ── */
 .dial-option.active:active {
   transform: translateY(-30%) translateY(2px);
-  filter: brightness(0.94);
+  filter: brightness(0.8);
 }
 .dial-option.prev:active,
 .dial-option.next:active {
-  transform: translateY(22%) scale(0.74);
-  filter: brightness(0.9) saturate(0.6);
+  transform: translateY(22%) scale(0.8);
+  filter: brightness(0.75) saturate(0.5);
 }
-.dial-option:active { filter: brightness(0.92); }
+.dial-option:active { filter: brightness(0.85); }
 .dial-option.crossed:hover { filter: none; }
 /* Cascade-order constraint: must stay AFTER the .active::before/::after
    rules — a crossed casting option is also .active (first dial slot), and
@@ -697,13 +324,19 @@
   box-shadow: 0 1px 0 #c8a878;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .dial-option[data-id='cohort'].active { animation: none; }
-  .dial-opinion { animation: none; }
+.dial-option:focus-visible {
+  outline: 2px solid var(--acc, #c8a878);
+  outline-offset: 2px;
 }
 
 /* ── WS4: the wooden arrows are buttons — focus never default (D0004) ── */
 .dial-arrow:focus-visible {
   outline: 2px solid #c89060;
   outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dial-motes { display: none; }
+  .phos-blink { animation: none; }
+  .dial-opinion { animation: none; }
 }
