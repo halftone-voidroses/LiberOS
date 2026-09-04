@@ -91,67 +91,51 @@
       var artId = artifacts[i].data && artifacts[i].data.id ? artifacts[i].data.id : null;
       if (artId && relationsFor(artId).length > 0) boundIndices.push(i);
     }
-    var hasOrbiting = boundIndices.length > 0;
 
     // WS5 competence made visible: as the relation web grows, every edge
     // draws itself thicker and surer (capped).
     var edgeWidth = (1.6 + Math.min(relations.length, 8) * 0.45).toFixed(2);
     var edgeOpacity = Math.min(0.5 + relations.length * 0.06, 0.9).toFixed(2);
 
-    if (hasOrbiting) {
-      html += '<g class="constellation-orbit" style="transform-origin: ' + cx + 'px ' + cy + 'px;">';
+    html += '<g class="constellation-orbit">';
 
-      for (var rr = 0; rr < relations.length; rr++) {
-        var rel = relations[rr];
-        var aIdx = artifacts.findIndex(function (a) { return a.data && a.data.id === rel.from; });
-        if (aIdx < 0) continue;
-        var ap = positionFor(aIdx, artifacts.length, cx, cy, orbitR, orbitR * 0.7);
-        var verb = (rel.verb || '').toString();
-        var mx = (ap.x + sigilPos.x) / 2;
-        var my = (ap.y + sigilPos.y) / 2;
-        html += '<line x1="' + ap.x + '" y1="' + ap.y + '" x2="' + sigilPos.x + '" y2="' + sigilPos.y + '" stroke="rgba(255,105,180,' + edgeOpacity + ')" stroke-width="' + edgeWidth + '" stroke-dasharray="4 5"/>';
-        if (verb && verb !== 'relates to') {
-          html += '<text x="' + mx + '" y="' + (my - 4) + '" text-anchor="middle" fill="rgba(255,200,220,0.7)" font-size="6.5" font-style="italic" font-family="Georgia, serif" style="pointer-events: none;">' + verb + '</text>';
-        }
+    for (var rr = 0; rr < relations.length; rr++) {
+      var rel = relations[rr];
+      var aIdx = artifacts.findIndex(function (a) { return a.data && a.data.id === rel.from; });
+      if (aIdx < 0) continue;
+      var ap = positionFor(aIdx, artifacts.length, cx, cy, orbitR, orbitR * 0.7);
+      var verb = (rel.verb || '').toString();
+      var mx = (ap.x + sigilPos.x) / 2;
+      var my = (ap.y + sigilPos.y) / 2;
+      html += '<line x1="' + ap.x + '" y1="' + ap.y + '" x2="' + sigilPos.x + '" y2="' + sigilPos.y + '" stroke="rgba(255,105,180,' + edgeOpacity + ')" stroke-width="' + edgeWidth + '" stroke-dasharray="4 5"/>';
+      if (verb && verb !== 'relates to') {
+        html += '<text x="' + mx + '" y="' + (my - 4) + '" text-anchor="middle" fill="rgba(255,200,220,0.7)" font-size="6.5" font-style="italic" font-family="Georgia, serif" style="pointer-events: none;">' + verb + '</text>';
       }
-
-      for (var bi = 0; bi < boundIndices.length; bi++) {
-        var i2 = boundIndices[bi];
-        var art2 = artifacts[i2];
-        var p2 = positionFor(i2, artifacts.length, cx, cy, orbitR, orbitR * 0.7);
-        var pal2 = ARTIFACT_PALETTE[i2 % ARTIFACT_PALETTE.length];
-        var id2 = art2.data && art2.data.id ? art2.data.id : 'a' + i2;
-        html += '<circle class="constellation-artifact constellation-artifact-orbiting" data-artifact-id="' + id2 + '" cx="' + p2.x + '" cy="' + p2.y + '" r="9" fill="' + pal2.color + '" fill-opacity="1.0" stroke="#fff" stroke-width="0.6" style="cursor: pointer; filter: drop-shadow(0 0 5px ' + pal2.glow + ');"/>';
-        html += '<text x="' + p2.x + '" y="' + (p2.y + 3) + '" text-anchor="middle" fill="#1a0a05" font-size="8" font-weight="700" style="pointer-events: none;">' + (i2 + 1) + '</text>';
-        var lbl2 = (art2.label || '').toString();
-        if (lbl2.length > 18) lbl2 = lbl2.substring(0, 16) + '..';
-        html += '<text x="' + p2.x + '" y="' + (p2.y - 14) + '" text-anchor="middle" fill="#c8b890" font-size="7" font-family="serif" font-style="italic" style="pointer-events: none;">' + lbl2 + '</text>';
-      }
-
-      html += '</g>';
     }
+
+    for (var bi = 0; bi < artifacts.length; bi++) {
+      var art = artifacts[bi];
+      var p = positionFor(bi, artifacts.length, cx, cy, orbitR, orbitR * 0.7);
+      var pal = ARTIFACT_PALETTE[bi % ARTIFACT_PALETTE.length];
+      var id = art.data && art.data.id ? art.data.id : 'a' + bi;
+      var isBound = boundIndices.indexOf(bi) !== -1;
+      html += '<circle class="constellation-artifact" data-artifact-id="' + id + '" cx="' + p.x + '" cy="' + p.y + '" r="9" fill="' + pal.color + '" fill-opacity="' + (isBound ? '1.0' : '0.55') + '" stroke="#fff" stroke-width="0.6" style="cursor: pointer; filter: drop-shadow(0 0 5px ' + pal.glow + ');"/>';
+      html += '<text x="' + p.x + '" y="' + (p.y + 3) + '" text-anchor="middle" fill="#1a0a05" font-size="8" font-weight="700" style="pointer-events: none;">' + (bi + 1) + '</text>';
+      var lbl = (art.label || '').toString();
+      if (lbl.length > 18) lbl = lbl.substring(0, 16) + '..';
+      html += '<text x="' + p.x + '" y="' + (p.y - 14) + '" text-anchor="middle" fill="#c8b890" font-size="7" font-family="serif" font-style="italic" style="pointer-events: none;">' + lbl + '</text>';
+    }
+
+    html += '</g>';
 
     html += '<circle class="constellation-sigil-halo" cx="' + sigilPos.x + '" cy="' + sigilPos.y + '" r="' + (sigilR + 14) + '" fill="none" stroke="rgba(255,200,100,0.3)" stroke-width="1.5" stroke-dasharray="2 6"/>';
     html += '<circle class="constellation-sigil" id="constellation-sigil" cx="' + sigilPos.x + '" cy="' + sigilPos.y + '" r="' + sigilR + '" fill="rgba(255,200,100,0.95)" stroke="#fff" stroke-width="0.8" style="cursor: pointer; filter: drop-shadow(0 0 10px rgba(255,200,100,0.8));"/>';
     html += '<text x="' + sigilPos.x + '" y="' + (sigilPos.y + 6) + '" text-anchor="middle" fill="#2a1408" font-size="22" font-weight="700" style="pointer-events: none;">★</text>';
     html += '<text x="' + sigilPos.x + '" y="' + (sigilPos.y + sigilR + 18) + '" text-anchor="middle" fill="#c8b890" font-size="8" font-family="serif" font-style="italic" style="pointer-events: none;">cohort</text>';
 
-    for (var i3 = 0; i3 < artifacts.length; i3++) {
-      if (boundIndices.indexOf(i3) !== -1) continue;
-      var p = positionFor(i3, artifacts.length, cx, cy, orbitR, orbitR * 0.7);
-      var pal = ARTIFACT_PALETTE[i3 % ARTIFACT_PALETTE.length];
-      var artId = artifacts[i3].data && artifacts[i3].data.id ? artifacts[i3].data.id : 'a' + i3;
-      var fillOpacity = 0.55;
-      html += '<circle class="constellation-artifact" data-artifact-id="' + artId + '" cx="' + p.x + '" cy="' + p.y + '" r="9" fill="' + pal.color + '" fill-opacity="' + fillOpacity + '" stroke="#fff" stroke-width="0.6" style="cursor: pointer; filter: drop-shadow(0 0 5px ' + pal.glow + ');"/>';
-      html += '<text x="' + p.x + '" y="' + (p.y + 3) + '" text-anchor="middle" fill="#1a0a05" font-size="8" font-weight="700" style="pointer-events: none;">' + (i3 + 1) + '</text>';
-      var lbl = (artifacts[i3].label || '').toString();
-      if (lbl.length > 18) lbl = lbl.substring(0, 16) + '..';
-      html += '<text x="' + p.x + '" y="' + (p.y - 14) + '" text-anchor="middle" fill="#c8b890" font-size="7" font-family="serif" font-style="italic" style="pointer-events: none;">' + lbl + '</text>';
-    }
-
     if (artifacts.length > 0) {
       var boundCount = boundIndices.length;
-      html += '<text x="' + cx + '" y="14" text-anchor="middle" fill="rgba(200,184,144,0.4)" font-size="7" font-family="serif" font-style="italic">— ' + artifacts.length + ' artifact' + (artifacts.length === 1 ? '' : 's') + ', ' + boundCount + ' bound' + (hasOrbiting ? ', orbiting' : '') + ' —</text>';
+      html += '<text x="' + cx + '" y="14" text-anchor="middle" fill="rgba(200,184,144,0.4)" font-size="7" font-family="serif" font-style="italic">— ' + artifacts.length + ' artifact' + (artifacts.length === 1 ? '' : 's') + ', ' + boundCount + ' bound —</text>';
     } else {
       html += '<text x="' + cx + '" y="14" text-anchor="middle" fill="rgba(200,184,144,0.4)" font-size="7" font-family="serif" font-style="italic">— draw a card, play a game, graduate a lesson. they will appear here. —</text>';
     }

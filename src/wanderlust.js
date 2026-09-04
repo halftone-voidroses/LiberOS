@@ -239,8 +239,8 @@
       setTimeout(function () {
         overlay.setAttribute('inert', '');
         cb && cb();
-      }, 350);
-    }, 900);
+      }, 500);
+    }, 1500);
   }
 
   function runSummon(cb) {

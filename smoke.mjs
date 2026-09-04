@@ -75,9 +75,9 @@ await shot('smoke-01-big-q')
 
 console.log('5. Click BIG ? -> summoning ritual -> wanderlust chat opens')
 await page.click('#flaming-q')
-// The summoning poem plays line-by-line (~1.3s per line × 7 lines ≈ 9s)
+// The summoning poem plays line-by-line (~2s per line × 7 lines ≈ 14s)
 // before the chat window opens.
-await page.waitForTimeout(10500)
+await page.waitForTimeout(16000)
 const chatOpenNow = await page.evaluate(() => {
   var w = document.getElementById('wanderlust-window')
   return w && w.classList.contains('open')
@@ -236,7 +236,9 @@ console.assert(artifactExists, 'constellation-artifact should be present')
 await shot('smoke-05-constellation')
 
 console.log('22. Click artifact -> mini-menu opens')
-await page.click('.constellation-artifact')
+// force: the orrery rotates continuously; the artifact is a moving target
+// (humans get hover-to-pause; playwright skips its stability check here).
+await page.click('.constellation-artifact', { force: true })
 await page.waitForTimeout(300)
 const miniOpen = await page.evaluate(() => document.getElementById('constellation-mini').classList.contains('open'))
 console.assert(miniOpen, 'mini-menu should open')

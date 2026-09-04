@@ -14,7 +14,7 @@
     { id: 'sigil',       name: 'cohort'      },
     { id: 'satchel',     name: 'satchel'     },
     { id: 'sea',         name: 'sea'         },
-    { id: 'cohort',      name: 'cohort'      },
+    { id: 'cohort',      name: 'those you carry' },
     { id: 'abstract',    name: 'abstract'    },
     { id: 'games',       name: 'games'       },
     { id: 'divination',  name: 'divination'  },

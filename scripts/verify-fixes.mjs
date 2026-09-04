@@ -116,7 +116,7 @@ check('release writes a state.sea artifact at intensity 5', seaState.length === 
 console.log('C4 — wanderlust final fork')
 await goto('/desktop.html', 900)
 await page.click('#flaming-q');
-await page.waitForTimeout(10500);
+await page.waitForTimeout(16500);
 let clicks = 0;
 while (clicks < 40) {
   const has = await page.evaluate(() => {

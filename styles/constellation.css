@@ -69,7 +69,13 @@
 }
 
 .constellation-orbit {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
   animation: constellation-orbit 60s linear infinite;
+}
+
+.constellation-orbit:hover {
+  animation-play-state: paused;
 }
 
 @keyframes constellation-orbit {

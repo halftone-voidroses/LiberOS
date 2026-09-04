@@ -81,18 +81,6 @@
   cursor: default;
 }
 
-.dial-option.crossed::after {
-  content: '';
-  position: absolute;
-  left: 4%;
-  right: 4%;
-  top: 50%;
-  height: 2px;
-  background: #2a0a05;
-  transform: rotate(-12deg);
-  box-shadow: 0 1px 0 #c8a878;
-}
-
 .dial-option.prev {
   /* 1.4rem × scale(0.75) ≈ 16.8px rendered — holds the D0003 16px floor
      under the side-option scale (WS3: larger dial labels). */
@@ -688,6 +676,21 @@
 }
 .dial-option:active { filter: brightness(0.92); }
 .dial-option.crossed:hover { filter: none; }
+/* Cascade-order constraint: must stay AFTER the .active::before/::after
+   rules — a crossed casting option is also .active (first dial slot), and
+   at equal specificity the later rule wins the ‹ › vs cross fight. */
+.dial-option.crossed::before { content: none; }
+.dial-option.crossed::after {
+  content: '';
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  top: 50%;
+  height: 2px;
+  background: #2a0a05;
+  transform: rotate(-12deg);
+  box-shadow: 0 1px 0 #c8a878;
+}
 
 @media (prefers-reduced-motion: reduce) {
   .dial-option[data-id='cohort'].active { animation: none; }
