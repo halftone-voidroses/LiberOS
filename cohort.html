@@ -44,20 +44,6 @@
             </header>
             <div class="cohort-app" data-state="cohort">
 
-              <div class="cohort-save-prompt" id="cohort-save-prompt" inert>
-                <div class="cohort-save-prompt-inner">
-                  <div class="cohort-save-prompt-head">
-                    <span class="cohort-save-prompt-name">— keep it? —</span>
-                    <button class="cohort-save-prompt-close" type="button" id="cohort-save-prompt-close" aria-label="cancel">×</button>
-                  </div>
-                  <div class="cohort-save-prompt-body" id="cohort-save-prompt-body">confession: (none).</div>
-                  <div class="cohort-save-prompt-actions">
-                    <button class="cohort-save-prompt-keep" type="button" id="cohort-save-prompt-keep">keep</button>
-                    <button class="cohort-save-prompt-discard" type="button" id="cohort-save-prompt-discard">discard</button>
-                  </div>
-                </div>
-              </div>
-
               <div class="cohort-raison" id="cohort-raison" inert>
                 <div class="cohort-raison-inner">
                   <div class="cohort-raison-head">
@@ -65,9 +51,8 @@
                     <button class="cohort-raison-close" type="button" id="cohort-raison-close" aria-label="close">×</button>
                   </div>
                   <div class="cohort-raison-body">
-                    speak into the wax and a name will answer. those you carry gather here. the dark keeps them; you decide which stay.
+                    speak into the wax and e-lizabeth answers, back and forth. nothing is sent anywhere — the room is between you and her alone. when an exchange deserves keeping, seal it: it joins the constellation of those you carry.
                   </div>
-                  
                 </div>
               </div>
 
@@ -82,17 +67,21 @@
 
                   <div class="cohort-header">
                     <div class="cohort-title">E-LIZABETH</div>
-                    <div class="cohort-sub">— the constellation of those you carry —</div>
+                    <div class="cohort-sub">— speak, and it is kept —</div>
                   </div>
 
-                  <div class="cohort-list" id="cohort-list">
-                    <div class="cohort-empty">no one is here yet.<br/><em>cast the cohort, and a name will come.</em></div>
+                  <div class="cohort-transcript" id="cohort-transcript" aria-live="polite"></div>
+
+                  <div class="cohort-sealrow">
+                    <button class="cohort-seal" id="cohort-seal" type="button" title="two exchanges at least, then the wax can hold them" disabled>seal this exchange</button>
                   </div>
 
-                  <div class="cohort-confess" id="cohort-confess">
+                  <div class="cohort-confess">
                     <div class="cohort-confess-label">speak to the dark:</div>
-                    <textarea class="cohort-confess-input" id="cohort-confess-input" rows="2" placeholder="i keep..." spellcheck="false"></textarea>
-                    <button class="cohort-confess-btn" id="cohort-confess-btn" type="button">leave it in the wax</button>
+                    <div class="cohort-inputrow">
+                      <input class="cohort-input" id="cohort-input" type="text" placeholder="i keep..." spellcheck="false" autocomplete="off"/>
+                      <button class="cohort-send" id="cohort-send" type="button">speak</button>
+                    </div>
                   </div>
 
                 </div>
@@ -112,6 +101,7 @@
   <script src="src/static.js"></script>
   <script src="src/shadow.js"></script>
   <script src="src/carvings.js"></script>
+  <script src="src/features/cohort/eliza.js"></script>
   <script src="src/features/cohort/cohort.js"></script>
 </body>
 </html>

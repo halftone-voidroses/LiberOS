@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <link rel="icon" href="data:,">
-  <title>Relations — The Constellation</title>
+  <title>Relations — The Ledger</title>
   <link rel="stylesheet" href="styles/room.css"/>
   <link rel="stylesheet" href="styles/machine.css"/>
   <link rel="stylesheet" href="styles/bezel.css"/>
@@ -51,7 +51,7 @@
                     <button class="relation-raison-close" type="button" id="relation-raison-close" aria-label="close">×</button>
                   </div>
                   <div class="relation-raison-body">
-                    the constellation draws its own lines: what you have cast sits outside, those you carry sit within, and thread runs between them where the elements agree. it is a family tree. it is a map of what holds.
+                    every artifact can be bound to the cohort with a verb — a knot. this room keeps the ledger of the knots: reword them, count them, release them. the web itself is drawn on the desktop, where you touch an artifact and say how it holds.
                   </div>
                 </div>
               </div>
@@ -69,20 +69,17 @@
                     </svg>
                   </div>
                   <div class="relation-header">
-                    <div class="relation-title">the constellation</div>
-                    <div class="relation-sub">— what you have made, and who has come —</div>
+                    <div class="relation-title">the ledger</div>
+                    <div class="relation-sub">— nothing here stands alone. count the links. —</div>
                   </div>
 
-                  <div class="relation-canvas-wrap">
-                    <svg class="relation-svg" id="relation-svg" viewBox="0 0 600 380" preserveAspectRatio="xMidYMid meet"></svg>
+                  <div class="relation-summary" id="relation-summary"></div>
+
+                  <div class="relation-ledger" id="relation-ledger">
                     <div class="relation-empty" id="relation-empty">— nothing has been etched yet —<br/><em>begin with the stone, in cohort.</em></div>
                   </div>
 
-                  <div class="relation-legend">
-                    <span><span class="relation-dot relation-dot-sigil"></span> cohort</span>
-                    <span><span class="relation-dot relation-dot-cohort"></span> those you carry</span>
-                    <span class="relation-counts" id="relation-counts">0 cohort · 0 carried</span>
-                  </div>
+                  <div class="relation-unbound" id="relation-unbound"></div>
                 </div>
               </div>
 

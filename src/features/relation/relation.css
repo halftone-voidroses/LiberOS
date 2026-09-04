@@ -102,28 +102,41 @@
   letter-spacing: 0.1em;
 }
 
-.relation-canvas-wrap {
-  flex: 1;
-  position: relative;
-  min-height: 0;
+/* ─── the summary: the web counted ─── */
+
+.relation-summary {
   border: 1px solid rgba(200, 168, 120, 0.25);
   background: rgba(0, 0, 0, 0.25);
+  padding: 8px 12px;
+  margin-bottom: 8px;
 }
 
-.relation-svg {
-  width: 100%;
-  height: 100%;
-  display: block;
+/* D0003: summary lines are the room's working text — 16px floor, 4.5:1 */
+.relation-summary-line {
+  font-size: 1rem;
+  font-style: italic;
+  color: #d8c8a0;
+  line-height: 1.55;
+  letter-spacing: 0.02em;
 }
 
-/* D0003: empty-state guidance + legend are functional — dim but ≥ 4.5:1. */
-.relation-empty {
-  position: absolute;
-  inset: 0;
+/* ─── the ledger: every knot, in binding order ─── */
+
+.relation-ledger {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  border: 1px solid rgba(200, 168, 120, 0.25);
+  background: rgba(0, 0, 0, 0.25);
+  padding: 8px;
   display: flex;
-  align-items: center;
-  justify-content: center;
   flex-direction: column;
+  gap: 8px;
+}
+
+/* D0003: empty-state guidance is functional — dim but ≥ 4.5:1. */
+.relation-empty {
+  margin: auto;
   font-style: italic;
   color: rgba(232, 208, 152, 0.7);
   font-size: 1.05rem;
@@ -139,55 +152,149 @@
   letter-spacing: 0.05em;
 }
 
-.relation-legend {
+.relation-row {
+  background: linear-gradient(180deg, rgba(42, 32, 48, 0.5) 0%, rgba(20, 10, 24, 0.5) 100%);
+  border: 1px solid rgba(74, 64, 80, 0.8);
+  border-left: 3px solid #4a4050;
+  padding: 8px 10px;
+}
+
+.relation-row-main {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.relation-row-artifact {
+  font-size: 1.05rem;
+  font-variant: small-caps;
+  letter-spacing: 0.12em;
+  color: #e8d098;
+  font-weight: 700;
+}
+
+.relation-row-chip {
+  font-size: 1rem;
+  font-style: italic;
+  color: rgba(232, 208, 152, 0.7);
+}
+
+.relation-row-knot {
   display: flex;
   align-items: center;
-  gap: 18px;
-  font-size: 0.875rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  gap: 6px;
+  margin: 6px 0 4px;
+}
+
+.relation-row-ring {
+  font-family: 'EB Garamond', 'Garamond', serif;
+  color: #8a7440;
+  letter-spacing: 0.05em;
+  user-select: none;
+}
+
+/* D0003: the verb is a worded control — 16px floor. */
+.relation-verb-input {
+  flex: 1;
+  min-width: 0;
+  background: rgba(0, 0, 0, 0.35);
+  border: none;
+  border-bottom: 1px solid rgba(170, 138, 58, 0.55);
+  color: #f0d8a0;
+  font-family: 'EB Garamond', 'Garamond', 'Times New Roman', serif;
+  font-style: italic;
+  font-size: 1rem;
+  padding: 2px 6px;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.relation-verb-input:focus {
+  border-bottom-color: #e8d098;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.relation-row-to {
+  font-size: 1rem;
+  font-variant: small-caps;
+  letter-spacing: 0.14em;
+  color: #ff69b4;
+  text-shadow: 0 0 6px rgba(255, 105, 180, 0.4);
+  white-space: nowrap;
+}
+
+.relation-row-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.relation-row-date {
+  font-size: 1rem;
+  font-style: italic;
   color: rgba(232, 208, 152, 0.7);
-  padding: 8px 0 4px;
-  border-top: 1px solid rgba(200, 168, 120, 0.25);
-  margin-top: 8px;
+  letter-spacing: 0.05em;
 }
 
-.relation-dot {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  margin-right: 6px;
-  vertical-align: middle;
-}
-
-.relation-dot-sigil  { background: #ff69b4; box-shadow: 0 0 6px rgba(255,105,180,0.6); }
-.relation-dot-cohort { background: #d4af37; box-shadow: 0 0 6px rgba(212,175,55,0.5); }
-
-.relation-counts {
-  margin-left: auto;
-  font-family: 'VT323', 'Courier New', monospace;
-  letter-spacing: 0.1em;
-  color: rgba(232, 208, 152, 0.5);
-}
-
-.relation-back-btn {
+.relation-release {
   background: transparent;
-  border: 1px solid rgba(200, 168, 120, 0.4);
-  color: #c8a878;
+  border: 1px solid rgba(74, 64, 80, 0.9);
+  color: #b8a8b0;
   font-family: 'EB Garamond', 'Garamond', serif;
   font-variant: small-caps;
   font-size: 1rem;
-  letter-spacing: 0.25em;
-  padding: 6px 24px;
+  letter-spacing: 0.18em;
+  padding: 3px 12px;
   cursor: pointer;
   border-radius: 2px;
-  transition: all 0.15s;
+  transition: transform 0.12s, filter 0.12s;
 }
-.relation-back-btn:hover {
-  background: rgba(200, 168, 120, 0.12);
-  color: #f0d8a0;
-  border-color: #c8a878;
+
+.relation-release:hover {
+  background: rgba(170, 48, 48, 0.18);
+  border-color: #aa3030;
+  color: #e8b0a8;
+  filter: brightness(1.1);
+}
+
+/* ─── the pointer: what the web could still hold ─── */
+
+.relation-unbound {
+  border-top: 1px solid rgba(200, 168, 120, 0.25);
+  padding-top: 8px;
+  margin-top: 8px;
+}
+
+.relation-unbound-head {
+  font-size: 1rem;
+  font-variant: small-caps;
+  letter-spacing: 0.24em;
+  color: rgba(232, 208, 152, 0.7);
+  margin-bottom: 4px;
+}
+
+.relation-unbound-list {
+  font-size: 1rem;
+  color: #c8b890;
+  line-height: 1.6;
+}
+
+.relation-unbound-item {
+  margin-right: 12px;
+  white-space: nowrap;
+}
+
+.relation-unbound-item em {
+  color: rgba(232, 208, 152, 0.6);
+}
+
+.relation-unbound-hint {
+  font-size: 1rem;
+  font-style: italic;
+  color: rgba(232, 208, 152, 0.7);
+  margin-top: 4px;
 }
 
 .relation-help,
@@ -363,7 +470,7 @@
 .relation-titlebar button { cursor: inherit; }
 
 /* ─── WS4: pressed-bevel + focus (D0004 recipe, iron/gold palette) ─── */
-.relation-back-btn,
+.relation-release,
 .relation-raison-close {
   border-width: 2px;
   box-shadow:
@@ -372,7 +479,7 @@
     0 2px 0 #060310,
     0 3px 4px rgba(0, 0, 0, 0.55);
 }
-.relation-back-btn:active,
+.relation-release:active,
 .relation-raison-close:active {
   transform: translateY(1px);
   filter: brightness(0.92);
@@ -382,7 +489,8 @@
     0 0 0 #060310,
     0 1px 2px rgba(0, 0, 0, 0.55);
 }
-.relation-back-btn:focus-visible,
+.relation-release:focus-visible,
+.relation-verb-input:focus-visible,
 .relation-help:focus-visible,
 .relation-exit:focus-visible,
 .relation-raison-close:focus-visible {
@@ -394,8 +502,8 @@
    into the window's corner, show when the knot is looked at. ─── */
 .relation-mono {
   position: absolute;
-  left: 18px;
-  bottom: 12px;
+  right: 14px;
+  top: 12px;
   width: 48px;
   height: 28px;
   pointer-events: none;

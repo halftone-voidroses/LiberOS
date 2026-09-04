@@ -95,12 +95,22 @@
   .cohort-flame { animation: none; opacity: 0.95; }
 }
 
+.cohort-arch-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+}
+
 .cohort-header {
   text-align: center;
   border-bottom: 1px solid #6a2a18;
   padding-bottom: 8px;
   margin-bottom: 10px;
   width: 100%;
+  flex-shrink: 0;
 }
 
 .cohort-title {
@@ -120,36 +130,37 @@
   letter-spacing: 0.05em;
 }
 
-.cohort-list {
+.cohort-transcript {
   flex: 1;
   width: 100%;
+  min-height: 0;
   overflow-y: auto;
   padding: 4px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-/* D0003: confessions, inputs, and buttons are the app's working text — 16px floor. */
-.cohort-empty {
-  text-align: center;
-  font-style: italic;
-  color: #6a4a30;
-  font-size: 1rem;
-  margin-top: 30px;
-  line-height: 1.6;
-}
-
-.cohort-empty em {
-  color: #8a4a30;
-  font-style: italic;
-}
-
-.cohort-person {
+.cohort-turn {
   background: rgba(216, 160, 112, 0.06);
   border-left: 2px solid #8a4a30;
-  padding: 8px 10px;
-  margin-bottom: 6px;
+  padding: 6px 10px;
 }
 
-.cohort-person-name {
+.cohort-turn-you {
+  border-left: none;
+  border-right: 2px solid #6a2a18;
+  background: rgba(106, 42, 24, 0.14);
+  text-align: right;
+  align-self: flex-end;
+  max-width: 88%;
+}
+
+.cohort-turn-eliza {
+  max-width: 92%;
+}
+
+.cohort-turn-name {
   font-size: 0.9rem;
   font-variant: small-caps;
   letter-spacing: 0.1em;
@@ -157,12 +168,64 @@
   font-weight: 700;
 }
 
-.cohort-person-confession {
+.cohort-turn-you .cohort-turn-name { color: #a87858; }
+
+.cohort-turn-text {
   font-size: 1rem;
   font-style: italic;
-  color: #a88060;
-  margin-top: 3px;
-  line-height: 1.4;
+  color: #d8b890;
+  margin-top: 2px;
+  line-height: 1.45;
+}
+
+.cohort-turn-you .cohort-turn-text { color: #b89878; }
+
+.cohort-note {
+  text-align: center;
+  font-size: 0.875rem;
+  font-variant: small-caps;
+  letter-spacing: 0.3em;
+  color: rgba(216, 160, 112, 0.65);
+  padding: 2px 0;
+}
+
+.cohort-sealrow {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 2px 0 0;
+}
+
+/* the seal: a drop of wax pressed over the exchange (D0004 bevel, wax palette) */
+.cohort-seal {
+  background: radial-gradient(ellipse at 50% 30%, #8a3a20 0%, #6a2a18 45%, #4a0a14 100%);
+  border: 2px solid #8a4a30;
+  color: #f0c890;
+  font-family: inherit;
+  font-size: 1rem;
+  font-variant: small-caps;
+  letter-spacing: 0.22em;
+  padding: 4px 18px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: transform 0.12s, filter 0.12s;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+}
+
+.cohort-seal:hover:not([disabled]) {
+  filter: brightness(1.15);
+  box-shadow: 0 0 14px rgba(216, 160, 112, 0.35);
+}
+
+.cohort-seal:active:not([disabled]) {
+  transform: translateY(1px);
+  filter: brightness(0.92);
+}
+
+.cohort-seal[disabled] {
+  opacity: 0.45;
+  cursor: default;
+  filter: saturate(0.6);
 }
 
 .cohort-confess {
@@ -172,8 +235,9 @@
   margin-top: 6px;
 }
 
+/* D0003: the input, its label, and the buttons are the app's working text — 16px floor. */
 .cohort-confess-label {
-  font-size: 0.875rem;
+  font-size: 1rem;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: #8a4a30;
@@ -181,8 +245,15 @@
   margin-bottom: 3px;
 }
 
-.cohort-confess-input {
-  width: 100%;
+.cohort-inputrow {
+  display: flex;
+  gap: 6px;
+  align-items: stretch;
+}
+
+.cohort-input {
+  flex: 1;
+  min-width: 0;
   background: rgba(0,0,0,0.3);
   border: 1px solid #6a2a18;
   color: #d8b890;
@@ -190,23 +261,21 @@
   font-style: italic;
   font-size: 1rem;
   padding: 4px 8px;
-  resize: vertical;
   outline: none;
   box-sizing: border-box;
 }
 
-.cohort-confess-input:focus {
+.cohort-input:focus {
   border-color: #8a4a30;
   background: rgba(0,0,0,0.5);
 }
 
-.cohort-confess-input::placeholder {
+.cohort-input::placeholder {
   color: #5a3a20;
   font-style: italic;
 }
 
-.cohort-confess-btn {
-  margin-top: 4px;
+.cohort-send {
   background: linear-gradient(180deg, #6a2a18 0%, #4a0a14 100%);
   border: 1px solid #8a4a30;
   color: #d8a070;
@@ -214,13 +283,12 @@
   font-size: 1rem;
   font-variant: small-caps;
   letter-spacing: 0.2em;
-  padding: 5px 12px;
+  padding: 4px 14px;
   cursor: pointer;
-  width: 100%;
-  transition: all 0.15s;
+  transition: transform 0.12s, filter 0.12s;
 }
 
-.cohort-confess-btn:hover {
+.cohort-send:hover {
   background: linear-gradient(180deg, #8a3a20 0%, #6a0a14 100%);
   color: #f0c890;
   box-shadow: 0 0 8px rgba(216, 160, 112, 0.4);
@@ -410,140 +478,6 @@
   letter-spacing: 0.1em;
 }
 
-/* cohort save prompt (per-persona, gothic-arch / candle-wax palette) */
-
-.cohort-save-prompt {
-  position: absolute;
-  inset: 0;
-  background: rgba(20, 8, 4, 0.88);
-  z-index: 60;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s;
-}
-
-.cohort-save-prompt.open {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.cohort-save-prompt-inner {
-  width: 78%;
-  max-width: 420px;
-  background: linear-gradient(180deg, #2a1408 0%, #100804 100%);
-  border: 1px solid #6a2a18;
-  box-shadow:
-    inset 0 0 0 1px #2a1408,
-    inset 0 0 20px rgba(0, 0, 0, 0.7),
-    0 0 30px rgba(216, 160, 112, 0.2);
-  padding: 18px 22px;
-  font-style: italic;
-  color: #d8b890;
-  letter-spacing: 0.03em;
-  position: relative;
-}
-
-.cohort-save-prompt-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #6a2a18;
-  padding-bottom: 8px;
-  margin-bottom: 10px;
-}
-
-.cohort-save-prompt-name {
-  font-size: 0.875rem;
-  color: #f0c890;
-  text-transform: lowercase;
-  letter-spacing: 0.25em;
-  font-weight: 700;
-  text-shadow: 0 0 4px rgba(240, 200, 144, 0.4);
-}
-
-.cohort-save-prompt-close {
-  background: none;
-  border: 1px solid #6a2a18;
-  color: #8a4a30;
-  font-family: inherit;
-  font-size: 0.85rem;
-  line-height: 1;
-  width: 20px;
-  height: 20px;
-  padding: 0;
-  cursor: pointer;
-  border-radius: 2px;
-}
-
-.cohort-save-prompt-close:hover {
-  background: rgba(216, 160, 112, 0.1);
-  color: #d8a070;
-}
-
-.cohort-save-prompt-body {
-  font-size: 1rem;
-  line-height: 1.55;
-  color: #e8c8a0;
-  margin: 8px 0 14px;
-}
-
-.cohort-save-prompt-body em {
-  color: #f0c890;
-  font-style: normal;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  font-size: 1rem;
-  font-weight: 700;
-}
-
-.cohort-save-prompt-actions {
-  display: flex;
-  gap: 8px;
-  justify-content: flex-end;
-  border-top: 1px solid #6a2a18;
-  padding-top: 10px;
-}
-
-.cohort-save-prompt-keep,
-.cohort-save-prompt-discard {
-  background: none;
-  border: 1px solid #6a2a18;
-  color: #d8b890;
-  font-family: inherit;
-  font-size: 1rem;
-  font-style: italic;
-  letter-spacing: 0.18em;
-  text-transform: lowercase;
-  padding: 6px 14px;
-  cursor: pointer;
-  border-radius: 2px;
-  transition: all 0.15s;
-}
-
-.cohort-save-prompt-keep {
-  color: #f0c890;
-  border-color: #8a4a30;
-  text-shadow: 0 0 4px rgba(240, 200, 144, 0.4);
-}
-
-.cohort-save-prompt-keep:hover {
-  background: rgba(216, 160, 112, 0.15);
-  color: #ffe8b8;
-}
-
-.cohort-save-prompt-discard {
-  color: #8a4a30;
-}
-
-.cohort-save-prompt-discard:hover {
-  background: rgba(106, 42, 24, 0.2);
-  color: #d8a070;
-  border-color: #8a4a30;
-}
-
 /* ─── window titlebar (WS3, plan 2026-09-04 §4.3) — the wax-sealed frame ─── */
 
 .cohort-titlebar {
@@ -614,22 +548,18 @@
 .cohort-titlebar button { cursor: inherit; }
 
 /* ─── WS4: pressed-bevel + focus (D0004 recipe, wax palette) ─── */
-.cohort-confess-btn,
-.cohort-raison-close,
-.cohort-save-prompt-close,
-.cohort-save-prompt-keep,
-.cohort-save-prompt-discard {
+.cohort-send,
+.cohort-seal,
+.cohort-raison-close {
   box-shadow:
     inset 0 1px 0 rgba(240, 200, 144, 0.25),
     inset 0 -2px 0 rgba(0, 0, 0, 0.6),
     0 2px 0 #060202,
     0 3px 4px rgba(0, 0, 0, 0.5);
 }
-.cohort-confess-btn:active,
-.cohort-raison-close:active,
-.cohort-save-prompt-close:active,
-.cohort-save-prompt-keep:active,
-.cohort-save-prompt-discard:active {
+.cohort-send:active,
+.cohort-seal:active:not([disabled]),
+.cohort-raison-close:active {
   transform: translateY(1px);
   filter: brightness(0.92);
   box-shadow:
@@ -638,13 +568,11 @@
     0 0 0 #060202,
     0 1px 2px rgba(0, 0, 0, 0.5);
 }
-.cohort-confess-btn:focus-visible,
+.cohort-send:focus-visible,
+.cohort-seal:focus-visible,
 .cohort-help:focus-visible,
 .cohort-exit:focus-visible,
-.cohort-raison-close:focus-visible,
-.cohort-save-prompt-close:focus-visible,
-.cohort-save-prompt-keep:focus-visible,
-.cohort-save-prompt-discard:focus-visible {
+.cohort-raison-close:focus-visible {
   outline: 2px solid #d8a070;
   outline-offset: 2px;
 }
