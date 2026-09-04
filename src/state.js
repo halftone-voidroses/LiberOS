@@ -17,6 +17,7 @@
     learn: [],               // promoted lessons
     abstract: [],            // abstract creations
     sea: [],                 // sea artifacts
+    graveyard: [],           // buried artifacts, awaiting the dig
     satchel: [],             // satchel items
     methodology: [],         // methodology artifacts
     council: [],             // council artifacts

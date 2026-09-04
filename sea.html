@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="icon" href="data:,">
   <title>Sea — Vanir</title>
   <link rel="stylesheet" href="styles/room.css"/>
   <link rel="stylesheet" href="styles/machine.css"/>
@@ -40,14 +41,14 @@
               <button class="sea-help" type="button" id="sea-help" aria-label="help">?</button>
               <button class="sea-exit" type="button" id="sea-exit" aria-label="exit">×</button>
 
-              <div class="sea-raison" id="sea-raison" aria-hidden="true">
+              <div class="sea-raison" id="sea-raison" inert>
                 <div class="sea-raison-inner">
                   <div class="sea-raison-head">
                     <span class="sea-raison-name">raison</span>
                     <button class="sea-raison-close" type="button" id="sea-raison-close" aria-label="close">×</button>
                   </div>
                   <div class="sea-raison-body">
-                    input: mouse movement within the deep. output: the depth gauge fill animates between 20% and 100% based on time since last move. idle for 4s = depth decays to baseline. active movement = depth rises. no state is written; the persona is a meter, not a writer.
+                    move through the deep and it shows you how far down you've gone. bring something to release, if you carry it. the sea does not keep. it only receives.
                   </div>
                   
                 </div>
@@ -56,7 +57,23 @@
               <div class="sea-deep">
                 <div class="sea-vignette"></div>
 
-                <div class="sea-question">what do you carry to the deep?</div>
+                <div class="sea-question" id="sea-question">what do you carry to the deep?</div>
+
+                <div class="sea-carried" id="sea-carried" aria-hidden="true"><span id="sea-carried-text"></span></div>
+
+                <div class="sea-ritual" id="sea-ritual">
+                  <input class="sea-input" id="sea-input" type="text" maxlength="140"
+                         placeholder="name it, if it has a name" autocomplete="off" spellcheck="false"
+                         aria-label="what do you carry to the deep"/>
+                  <div class="sea-intensity" id="sea-intensity" role="group" aria-label="how heavy it sits">
+                    <button class="sea-intensity-dot" type="button" data-value="1" aria-label="barely"></button>
+                    <button class="sea-intensity-dot" type="button" data-value="2" aria-label="lightly"></button>
+                    <button class="sea-intensity-dot on" type="button" data-value="3" aria-label="steady"></button>
+                    <button class="sea-intensity-dot" type="button" data-value="4" aria-label="heavy"></button>
+                    <button class="sea-intensity-dot" type="button" data-value="5" aria-label="sinking"></button>
+                  </div>
+                  <button class="sea-release" id="sea-release" type="button" disabled>release</button>
+                </div>
 
                 <div class="sea-breath" id="sea-breath">
                   <div class="sea-breath-ring sea-breath-ring-1"></div>

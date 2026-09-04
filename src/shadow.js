@@ -14,9 +14,13 @@
     var m = document.querySelector('.machine');
     if (!m || !s) return;
     var theme = s.theme || 'corrupted';
-    var all = ['corrupted', 'clean', 'shadow', 'mono', 'gold'];
-    for (var i = 0; i < all.length; i++) m.classList.remove('theme-' + all[i]);
+    var stale = [];
+    for (var i = 0; i < m.classList.length; i++) {
+      if (m.classList[i].indexOf('theme-') === 0) stale.push(m.classList[i]);
+    }
+    for (var j = 0; j < stale.length; j++) m.classList.remove(stale[j]);
     m.classList.add('theme-' + theme);
+    if (window.Liber && window.Liber.carvings) window.Liber.carvings.setActive(theme);
   }
 
   document.addEventListener('DOMContentLoaded', function () {

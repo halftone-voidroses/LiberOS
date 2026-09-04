@@ -118,13 +118,13 @@
     if (savePromptBodyEl) savePromptBodyEl.textContent = bodyText;
     pendingAction = { keep: onKeep, discard: onDiscard };
     savePromptEl.classList.add('open');
-    savePromptEl.setAttribute('aria-hidden', 'false');
+    savePromptEl.removeAttribute('inert');
   }
 
   function closeSavePrompt() {
     if (!savePromptEl) return;
     savePromptEl.classList.remove('open');
-    savePromptEl.setAttribute('aria-hidden', 'true');
+    savePromptEl.setAttribute('inert', '');
     pendingAction = null;
   }
 
@@ -269,13 +269,13 @@ function loadGhost(bitmapDataUrl) {
     function openRaison() {
       if (raison) {
         raison.classList.add('open');
-        raison.setAttribute('aria-hidden', 'false');
+        raison.removeAttribute('inert');
       }
     }
     function closeRaison() {
       if (raison) {
         raison.classList.remove('open');
-        raison.setAttribute('aria-hidden', 'true');
+        raison.setAttribute('inert', '');
       }
     }
     if (helpBtn) helpBtn.addEventListener('click', openRaison);

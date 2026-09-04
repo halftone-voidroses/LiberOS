@@ -46,7 +46,7 @@
     if (!stage) return;
     stage.innerHTML = '';
     stage.classList.remove('open');
-    stage.setAttribute('aria-hidden', 'true');
+    stage.setAttribute('inert', '');
   }
 
   function saveToDesktopAndSatchel(b, result) {
@@ -66,7 +66,7 @@
     pendingPayload = { summary: summary, doSave: doSave, doDiscard: doDiscard };
     if (body) body.innerHTML = 'booth: <em>' + b.name + '</em>. ' + summary;
     prompt.classList.add('open');
-    prompt.setAttribute('aria-hidden', 'false');
+    prompt.removeAttribute('inert');
   }
 
   var pendingPayload = null;
@@ -75,14 +75,14 @@
     var prompt = document.getElementById('games-save-prompt');
     if (!prompt) return;
     prompt.classList.remove('open');
-    prompt.setAttribute('aria-hidden', 'true');
+    prompt.setAttribute('inert', '');
     pendingPayload = null;
   }
 
   function openPlay(b) {
     if (!stage) return;
     stage.classList.add('open');
-    stage.setAttribute('aria-hidden', 'false');
+    stage.removeAttribute('inert');
     var html = '<div class="games-stage-inner">';
     html += '<div class="games-stage-head">';
     html += '<span class="games-stage-glyph">' + b.glyph + '</span>';
@@ -514,10 +514,10 @@
     var raison = document.getElementById('games-raison');
     var raisonClose = document.getElementById('games-raison-close');
     function openRaison() {
-      if (raison) { raison.classList.add('open'); raison.setAttribute('aria-hidden', 'false'); }
+      if (raison) { raison.classList.add('open'); raison.removeAttribute('inert'); }
     }
     function closeRaison() {
-      if (raison) { raison.classList.remove('open'); raison.setAttribute('aria-hidden', 'true'); }
+      if (raison) { raison.classList.remove('open'); raison.setAttribute('inert', ''); }
     }
     if (helpBtn) helpBtn.addEventListener('click', openRaison);
     if (raisonClose) raisonClose.addEventListener('click', closeRaison);

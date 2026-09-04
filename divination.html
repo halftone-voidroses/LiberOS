@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="icon" href="data:,">
   <title>Divination — Arcana</title>
   <link rel="stylesheet" href="styles/room.css"/>
   <link rel="stylesheet" href="styles/machine.css"/>
@@ -40,7 +41,7 @@
               <button class="divination-help" type="button" id="divination-help" aria-label="help">?</button>
               <button class="divination-exit" type="button" id="divination-exit" aria-label="exit">×</button>
 
-              <div class="divination-save-prompt" id="divination-save-prompt" aria-hidden="true">
+              <div class="divination-save-prompt" id="divination-save-prompt" inert>
                 <div class="divination-save-prompt-inner">
                   <div class="divination-save-prompt-head">
                     <span class="divination-save-prompt-name">— keep it? —</span>
@@ -54,7 +55,7 @@
                 </div>
               </div>
 
-              <div class="divination-raison" id="divination-raison" aria-hidden="true">
+              <div class="divination-raison" id="divination-raison" inert>
                 <div class="divination-raison-inner">
                   <div class="divination-raison-head">
                     <span class="divination-raison-name">raison</span>
@@ -69,7 +70,7 @@
               <div class="divination-felt">
                 <div class="divination-header">
                   <div class="divination-title">Divination</div>
-                  <div class="divination-sub">Type a question &amp; click a card for an interpretation.</div>
+                  <div class="divination-sub" id="divination-sub">Type a question &amp; click a card for an interpretation.</div>
                 </div>
 
                 <div class="divination-modes" id="divination-modes">

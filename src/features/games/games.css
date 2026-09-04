@@ -41,6 +41,7 @@
   display: flex;
   justify-content: space-between;
   z-index: 5;
+  pointer-events: none;
 }
 .games-bulbs-top { top: 6px; }
 .games-bulbs-bottom { bottom: 6px; }
@@ -117,6 +118,8 @@
   gap: 8px;
   width: 100%;
   flex: 1;
+  min-height: 0;
+  overflow-y: auto;
   margin-bottom: 8px;
 }
 

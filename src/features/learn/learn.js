@@ -122,8 +122,8 @@
     var helpBtn = el('learn-help');
     var raison = el('learn-raison');
     var raisonClose = el('learn-raison-close');
-    function openR() { if (raison) { raison.classList.add('open'); raison.setAttribute('aria-hidden', 'false'); } }
-    function closeR() { if (raison) { raison.classList.remove('open'); raison.setAttribute('aria-hidden', 'true'); } }
+    function openR() { if (raison) { raison.classList.add('open'); raison.removeAttribute('inert'); } }
+    function closeR() { if (raison) { raison.classList.remove('open'); raison.setAttribute('inert', ''); } }
     if (helpBtn) helpBtn.addEventListener('click', openR);
     if (raisonClose) raisonClose.addEventListener('click', closeR);
     if (raison) raison.addEventListener('click', function (e) { if (e.target === raison) closeR(); });

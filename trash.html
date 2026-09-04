@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="icon" href="data:,">
   <title>Trash — Ravaging Pete</title>
   <link rel="stylesheet" href="styles/room.css"/>
   <link rel="stylesheet" href="styles/machine.css"/>
@@ -40,16 +41,16 @@
               <button class="trash-help" type="button" id="trash-help" aria-label="help">?</button>
               <button class="trash-exit" type="button" id="trash-exit" aria-label="exit">×</button>
 
-              <div class="trash-save-prompt" id="trash-save-prompt" aria-hidden="true">
+              <div class="trash-save-prompt" id="trash-save-prompt" inert>
                 <div class="trash-save-prompt-inner">
                   <div class="trash-save-prompt-head">
-                    <span class="trash-save-prompt-name">— keep it? —</span>
+                    <span class="trash-save-prompt-name">— bury it? —</span>
                     <button class="trash-save-prompt-close" type="button" id="trash-save-prompt-close" aria-label="cancel">×</button>
                   </div>
-                  <div class="trash-save-prompt-body" id="trash-save-prompt-body">action: bury (none). irreversible.</div>
+                  <div class="trash-save-prompt-body" id="trash-save-prompt-body">nothing chosen to bury yet.</div>
                   <div class="trash-save-prompt-actions">
-                    <button class="trash-save-prompt-keep" type="button" id="trash-save-prompt-keep">keep</button>
-                    <button class="trash-save-prompt-discard" type="button" id="trash-save-prompt-discard">discard</button>
+                    <button class="trash-save-prompt-keep" type="button" id="trash-save-prompt-keep">bury it</button>
+                    <button class="trash-save-prompt-discard" type="button" id="trash-save-prompt-discard">not yet</button>
                   </div>
                 </div>
               </div>
@@ -78,11 +79,16 @@
                     </div>
 
                     <div class="trash-actions">
-                      <div class="trash-action-label">— what to dig —</div>
+                      <div class="trash-action-label">— what to bury —</div>
                       <button class="trash-action" id="trash-bury-sigils" type="button">all sigils</button>
                       <button class="trash-action" id="trash-bury-cohort" type="button">all cohort</button>
                       <button class="trash-action" id="trash-bury-tour" type="button">the tour</button>
                       <button class="trash-action trash-action-hard" id="trash-bury-all" type="button">everything</button>
+                    </div>
+
+                    <div class="trash-dig">
+                      <div class="trash-action-label">— what the soil keeps —</div>
+                      <div class="trash-dig-list" id="trash-dig-list"></div>
                     </div>
                   </div>
                 </div>

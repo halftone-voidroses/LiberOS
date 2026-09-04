@@ -85,7 +85,7 @@
 
   function spawnEgg(entry) {
     if (!eggsEl) return;
-    eggsEl.setAttribute('aria-hidden', 'false');
+    eggsEl.removeAttribute('inert');
     var egg = document.createElement('div');
     egg.className = 'abstract-egg';
     var shape = document.createElement('div');
@@ -103,13 +103,13 @@
     if (!confirmEl || !confirmBody) return;
     confirmBody.textContent = 'absorb "' + (entry.label || entry.id) + '" into the void?';
     confirmEl.classList.add('open');
-    confirmEl.setAttribute('aria-hidden', 'false');
+    confirmEl.removeAttribute('inert');
   }
 
   function closeConfirm() {
     if (!confirmEl) return;
     confirmEl.classList.remove('open');
-    confirmEl.setAttribute('aria-hidden', 'true');
+    confirmEl.setAttribute('inert', '');
     pendingArtifact = null;
   }
 
@@ -179,8 +179,8 @@
     var helpBtn = el('abstract-help');
     var raison = el('abstract-raison');
     var raisonClose = el('abstract-raison-close');
-    function openR() { if (raison) { raison.classList.add('open'); raison.setAttribute('aria-hidden', 'false'); } }
-    function closeR() { if (raison) { raison.classList.remove('open'); raison.setAttribute('aria-hidden', 'true'); } }
+    function openR() { if (raison) { raison.classList.add('open'); raison.removeAttribute('inert'); } }
+    function closeR() { if (raison) { raison.classList.remove('open'); raison.setAttribute('inert', ''); } }
     if (helpBtn) helpBtn.addEventListener('click', openR);
     if (raisonClose) raisonClose.addEventListener('click', closeR);
     if (raison) raison.addEventListener('click', function (e) { if (e.target === raison) closeR(); });

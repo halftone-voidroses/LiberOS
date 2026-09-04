@@ -52,7 +52,7 @@
       pendingConfession = { text: text, name: name };
       if (body) body.innerHTML = 'name: <em>' + name + '</em>. confession: "' + text + '".';
       prompt.classList.add('open');
-      prompt.setAttribute('aria-hidden', 'false');
+      prompt.removeAttribute('inert');
     } else {
       commitConfess(text);
     }
@@ -77,7 +77,7 @@
     var prompt = document.getElementById('cohort-save-prompt');
     if (!prompt) return;
     prompt.classList.remove('open');
-    prompt.setAttribute('aria-hidden', 'true');
+    prompt.setAttribute('inert', '');
     pendingConfession = null;
   }
 
@@ -95,10 +95,10 @@
     var raison = document.getElementById('cohort-raison');
     var raisonClose = document.getElementById('cohort-raison-close');
     function openRaison() {
-      if (raison) { raison.classList.add('open'); raison.setAttribute('aria-hidden', 'false'); }
+      if (raison) { raison.classList.add('open'); raison.removeAttribute('inert'); }
     }
     function closeRaison() {
-      if (raison) { raison.classList.remove('open'); raison.setAttribute('aria-hidden', 'true'); }
+      if (raison) { raison.classList.remove('open'); raison.setAttribute('inert', ''); }
     }
     if (helpBtn) helpBtn.addEventListener('click', openRaison);
     if (raisonClose) raisonClose.addEventListener('click', closeRaison);

@@ -74,10 +74,10 @@
     var raison = document.getElementById('themes-raison');
     var raisonClose = document.getElementById('themes-raison-close');
     function openRaison() {
-      if (raison) { raison.classList.add('open'); raison.setAttribute('aria-hidden', 'false'); }
+      if (raison) { raison.classList.add('open'); raison.removeAttribute('inert'); }
     }
     function closeRaison() {
-      if (raison) { raison.classList.remove('open'); raison.setAttribute('aria-hidden', 'true'); }
+      if (raison) { raison.classList.remove('open'); raison.setAttribute('inert', ''); }
     }
     if (helpBtn) helpBtn.addEventListener('click', openRaison);
     if (raisonClose) raisonClose.addEventListener('click', closeRaison);

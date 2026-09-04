@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="icon" href="data:,">
   <title>Sigil — Mistress Physius</title>
   <link rel="stylesheet" href="styles/room.css"/>
   <link rel="stylesheet" href="styles/machine.css"/>
@@ -40,20 +41,20 @@
                 <button class="sigil-help" type="button" id="sigil-help" aria-label="help">?</button>
                 <button class="sigil-back" type="button" id="sigil-back" aria-label="exit">×</button>
 
-                <div class="sigil-raison" id="sigil-raison" aria-hidden="true">
+                <div class="sigil-raison" id="sigil-raison" inert>
                   <div class="sigil-raison-inner">
                     <div class="sigil-raison-head">
                       <span class="sigil-raison-name">raison</span>
                       <button class="sigil-raison-close" type="button" id="sigil-raison-close" aria-label="close">×</button>
                     </div>
                   <div class="sigil-raison-body">
-                    input: text into the intention field. input: draw strokes into the canvas using the active element cursor. output: a sigil object written to state.sigils on save. the most recent sigil is the hub. redrawing the sigil overwrites state.sigils[0] with the same id.
+                    write the intention once. draw what the elements pull from your hand. what is saved becomes the hub — the one the others gather around. it can be recast, but there is only ever one.
                   </div>
                     
                   </div>
                 </div>
 
-                <div class="sigil-save-prompt" id="sigil-save-prompt" aria-hidden="true">
+                <div class="sigil-save-prompt" id="sigil-save-prompt" inert>
                   <div class="sigil-save-prompt-inner">
                     <div class="sigil-save-prompt-head">
                       <span class="sigil-save-prompt-name">— keep it? —</span>

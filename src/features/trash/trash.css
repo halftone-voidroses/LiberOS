@@ -152,6 +152,59 @@
   background: linear-gradient(180deg, #d8a080 0%, #b07858 60%, #7a4830 100%);
 }
 
+/* what the soil keeps — the dig list */
+.trash-content {
+  overflow-y: auto;
+}
+
+.trash-dig {
+  border-top: 1px dashed #6a4a28;
+  margin-top: 8px;
+  padding-top: 8px;
+}
+
+.trash-dig-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.trash-dig-empty {
+  font-style: italic;
+  font-size: 0.8rem;
+  color: #6a4028;
+  opacity: 0.7;
+  text-align: center;
+  letter-spacing: 0.12em;
+  padding: 2px 0 4px;
+}
+
+.trash-dig-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.trash-dig-label {
+  font-style: italic;
+  font-size: 0.85rem;
+  color: #4a2810;
+  letter-spacing: 0.06em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trash-dig-btn {
+  display: inline-block;
+  width: auto;
+  margin-bottom: 0;
+  padding: 2px 10px;
+  font-size: 0.8rem;
+  flex: none;
+}
+
 /* ─── rubble chunks (boxes, crumpled paper, CRT shards) ─────────────── */
 .trash-chunk {
   position: absolute;

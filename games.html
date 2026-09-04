@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="icon" href="data:,">
   <title>Games — Whimsy Wow</title>
   <link rel="stylesheet" href="styles/room.css"/>
   <link rel="stylesheet" href="styles/machine.css"/>
@@ -40,7 +41,7 @@
               <button class="games-help" type="button" id="games-help" aria-label="help">?</button>
               <button class="games-exit" type="button" id="games-exit" aria-label="exit">×</button>
 
-              <div class="games-save-prompt" id="games-save-prompt" aria-hidden="true">
+              <div class="games-save-prompt" id="games-save-prompt" inert>
                 <div class="games-save-prompt-inner">
                   <div class="games-save-prompt-head">
                     <span class="games-save-prompt-name">— keep it? —</span>
@@ -54,14 +55,14 @@
                 </div>
               </div>
 
-              <div class="games-raison" id="games-raison" aria-hidden="true">
+              <div class="games-raison" id="games-raison" inert>
                 <div class="games-raison-inner">
                   <div class="games-raison-head">
                     <span class="games-raison-name">raison</span>
                     <button class="games-raison-close" type="button" id="games-raison-close" aria-label="close">×</button>
                   </div>
                   <div class="games-raison-body">
-                    input: click a booth to open its stage. output: a game artifact is appended to state.games and a result entry is appended to state.satchel on stage close. booths: tip, stop, wheel, knock down, ring the bell, opposite, check facts, accept. each booth is independent; no shared state between booths.
+                    step right up. pick a booth, play its little game, and what you earn goes in your satchel. no refunds — the barker keeps what the barker keeps.
                   </div>
                   
                 </div>
@@ -83,7 +84,7 @@
                 <div class="games-barker">— the barker is loud. try not to listen. —</div>
               </div>
 
-              <div class="games-stage" id="games-stage" aria-hidden="true"></div>
+              <div class="games-stage" id="games-stage" inert></div>
 
             </div>
           </div>

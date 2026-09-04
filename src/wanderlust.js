@@ -202,14 +202,14 @@
     var textEl = el('summon-text');
     if (!overlay || !textEl) { cb && cb(); return; }
     textEl.textContent = text;
-    overlay.setAttribute('aria-hidden', 'false');
+    overlay.removeAttribute('inert');
     overlay.classList.add('show');
     // The "pieces of ourselves" line shakes the monitor as it shows.
     if (text.indexOf('pieces of ourselves') !== -1) triggerShake(420);
     setTimeout(function () {
       overlay.classList.remove('show');
       setTimeout(function () {
-        overlay.setAttribute('aria-hidden', 'true');
+        overlay.setAttribute('inert', '');
         cb && cb();
       }, 350);
     }, 900);
@@ -239,7 +239,7 @@
     pendingForkIdx = -1;
     isOpen = true;
     runSummon(function () {
-      win.setAttribute('aria-hidden', 'false');
+      win.removeAttribute('inert');
       win.classList.add('open');
       render();
     });
@@ -248,11 +248,12 @@
   function close() {
     if (!win) return;
     win.classList.remove('open');
-    win.setAttribute('aria-hidden', 'true');
+    win.setAttribute('inert', '');
     isOpen = false;
   }
 
   function finishScript() {
+    clearReplies();
     if (window.Liber && window.Liber.state) {
       window.Liber.state.set({ tutorialDone: true });
     }
@@ -263,11 +264,11 @@
   function showArise() {
     var overlay = document.getElementById('arise-overlay');
     if (!overlay) return;
-    overlay.setAttribute('aria-hidden', 'false');
+    overlay.removeAttribute('inert');
     overlay.classList.add('show');
     setTimeout(function () {
       overlay.classList.remove('show');
-      setTimeout(function () { overlay.setAttribute('aria-hidden', 'true'); }, 1200);
+      setTimeout(function () { overlay.setAttribute('inert', ''); }, 1200);
     }, 3000);
   }
 

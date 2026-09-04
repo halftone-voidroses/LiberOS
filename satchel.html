@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="icon" href="data:,">
   <title>Satchel — The Mad Scribe</title>
   <link rel="stylesheet" href="styles/room.css"/>
   <link rel="stylesheet" href="styles/machine.css"/>
@@ -40,14 +41,14 @@
               <button class="satchel-help" type="button" id="satchel-help" aria-label="help">?</button>
               <button class="satchel-exit" type="button" id="satchel-exit" aria-label="exit">×</button>
 
-              <div class="satchel-raison" id="satchel-raison" aria-hidden="true">
+              <div class="satchel-raison" id="satchel-raison" inert>
                 <div class="satchel-raison-inner">
                   <div class="satchel-raison-head">
                     <span class="satchel-raison-name">raison</span>
                     <button class="satchel-raison-close" type="button" id="satchel-raison-close" aria-label="close">×</button>
                   </div>
                   <div class="satchel-raison-body">
-                    input: click a list item to view its page. output: the entry page shows the artifact's stored fields. the margin note is a contenteditable string written to the artifact's annotation field on blur. read-only fields: name, date, element, see-also. editable: annotation only.
+                    click an entry to open its page. the record keeps name, date, element, see-also — set down at the time of making. the margin note is yours to amend. the rest is archive.
                   </div>
                   
                 </div>

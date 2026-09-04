@@ -29,6 +29,32 @@
     'nib', 'compass', 'grate', 'hook',
   ];
 
+  // Theme id → carving id, in bezel arrival order. Apps without a shipped
+  // theme (learn/hole-punch, relation/grate) and non-traveller skins
+  // (corrupted, wanderlust) never glow.
+  const THEME_TO_CARVING = {
+    physius:   'stone',
+    librarian: 'thread',
+    vanir:     'candle',
+    elizabeth: 'bell',
+    entity404: 'glyph',
+    whimsy:    'bulb',
+    arcana:    'tower-rev',
+    raison:    'nib',
+    iris:      'compass',
+    ravaging:  'hook',
+  };
+
+  function setActive(theme) {
+    const container = document.querySelector('.carvings');
+    if (!container) return;
+    const target = THEME_TO_CARVING[theme] || null;
+    const carvings = container.querySelectorAll('.carving');
+    carvings.forEach(function (c) {
+      c.classList.toggle('active', !!target && c.dataset.id === target);
+    });
+  }
+
   function init() {
     const container = document.querySelector('.carvings');
     if (!container) return;
@@ -41,7 +67,12 @@
       c.innerHTML = `<svg viewBox="0 0 20 20" aria-label="${id}">${GLYPHS[id] || ''}</svg>`;
       container.appendChild(c);
     }
+    const s = window.Liber && window.Liber.state ? window.Liber.state.get() : null;
+    setActive(s ? (s.theme || 'corrupted') : 'corrupted');
   }
+
+  window.Liber = window.Liber || {};
+  window.Liber.carvings = { setActive: setActive };
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);

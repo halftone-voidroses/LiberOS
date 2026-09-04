@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="icon" href="data:,">
   <title>Liber Vacui — Desktop</title>
   <link rel="stylesheet" href="styles/room.css"/>
   <link rel="stylesheet" href="styles/machine.css"/>
@@ -96,7 +97,7 @@
                 </svg>
               </button>
 
-              <div class="settings-modal" id="settings-modal" aria-hidden="true">
+              <div class="settings-modal" id="settings-modal" inert>
                 <div class="settings-modal-inner" role="dialog" aria-labelledby="settings-modal-title">
                   <div class="settings-modal-head">
                     <div class="settings-modal-title" id="settings-modal-title">SETTINGS</div>
@@ -111,7 +112,7 @@
                     <div class="settings-modal-section">
                       <div class="settings-modal-section-title">SHADOW</div>
                       <button class="settings-modal-btn" id="settings-shadow" type="button">—</button>
-                      <div class="settings-modal-hint">type <em>extc</em> anywhere to toggle the overdrive.</div>
+                      <div class="settings-modal-hint">the deep water answers to <em>extc</em>.</div>
                     </div>
                     <div class="settings-modal-section">
                       <div class="settings-modal-section-title">STATE</div>
@@ -133,7 +134,7 @@
                 </div>
               </div>
 
-              <div class="wanderlust-window" id="wanderlust-window" aria-hidden="true">
+              <div class="wanderlust-window" id="wanderlust-window" inert>
                 <div class="wanderlust-window-inner">
                   <div class="wanderlust-avatar" id="wanderlust-avatar"></div>
                   <div class="wanderlust-name" id="wanderlust-name">wanderlust</div>
@@ -143,15 +144,15 @@
                 </div>
               </div>
 
-              <div class="arise-overlay" id="arise-overlay" aria-hidden="true">
+              <div class="arise-overlay" id="arise-overlay" inert>
                 <div class="arise-text">I arise the same but different.</div>
               </div>
 
-              <div class="summon-overlay" id="summon-overlay" aria-hidden="true">
+              <div class="summon-overlay" id="summon-overlay" inert>
                 <div class="summon-text" id="summon-text"></div>
               </div>
 
-              <div class="constellation-mini" id="constellation-mini" aria-hidden="true">
+              <div class="constellation-mini" id="constellation-mini" inert>
                 <div class="constellation-mini-inner">
                   <div class="constellation-mini-header">
                     <span class="constellation-mini-label" id="constellation-mini-label">— artifact —</span>
@@ -169,7 +170,7 @@
                 </div>
               </div>
 
-              <div class="wanderlust-confirm" id="wanderlust-confirm" aria-hidden="true">
+              <div class="wanderlust-confirm" id="wanderlust-confirm" inert>
                 <div class="wanderlust-confirm-inner">
                   <div class="wanderlust-confirm-title">— erase all progress? —</div>
                   <div class="wanderlust-confirm-body">restart the whole tutorial sequence. your sigil, artifacts, and relations will be lost.</div>

@@ -22,84 +22,136 @@
     h.addEventListener('mouseup', function () { h.classList.remove('dragging'); });
   }
 
-  function burySigils() {
+  function st() { return window.Liber ? window.Liber.state : null; }
+
+  function snapshotAll() {
+    var s = st() ? st().get() : {};
+    return [
+      { kind: 'sigils', entries: (s.sigils || []).slice() },
+      { kind: 'cohort', entries: (s.cohort || []).slice() },
+      { kind: 'tour', entry: { visited: Object.assign({}, s.visited || {}) } },
+    ];
+  }
+
+  function commitBury(groups) {
+    if (!st()) return;
+    var s = st().get();
+    var graveyard = (s.graveyard || []).slice();
+    var patch = {};
+    var now = Date.now();
+    for (var i = 0; i < groups.length; i++) {
+      var g = groups[i];
+      if (g.kind === 'sigils') {
+        for (var j = 0; j < g.entries.length; j++) {
+          graveyard.push({ kind: 'sigils', entry: g.entries[j], buriedAt: now });
+        }
+        patch.sigils = [];
+      } else if (g.kind === 'cohort') {
+        for (var k = 0; k < g.entries.length; k++) {
+          graveyard.push({ kind: 'cohort', entry: g.entries[k], buriedAt: now });
+        }
+        patch.cohort = [];
+      } else if (g.kind === 'tour') {
+        graveyard.push({ kind: 'tour', entry: g.entry, buriedAt: now });
+        patch.visited = {};
+      }
+    }
+    patch.graveyard = graveyard;
+    st().set(patch);
+  }
+
+  function labelFor(gy) {
+    var e = gy.entry || {};
+    if (gy.kind === 'sigils') return 'a sigil' + (e.name ? ' — ' + e.name : '');
+    if (gy.kind === 'cohort') return 'one you carried' + (e.name ? ' — ' + e.name : '');
+    if (gy.kind === 'tour') return 'the tour, remembered';
+    return gy.kind;
+  }
+
+  function readdToState(gy) {
+    var s = st().get();
+    if (gy.kind === 'sigils') {
+      st().set({ sigils: (s.sigils || []).concat([gy.entry]) });
+    } else if (gy.kind === 'cohort') {
+      st().set({ cohort: (s.cohort || []).concat([gy.entry]) });
+    } else if (gy.kind === 'tour') {
+      var restored = gy.entry && gy.entry.visited ? gy.entry.visited : {};
+      st().set({ visited: Object.assign({}, s.visited || {}, restored) });
+    }
+  }
+
+  function renderDigList() {
+    var list = document.getElementById('trash-dig-list');
+    if (!list || !st()) return;
+    var graveyard = st().get().graveyard || [];
+    list.innerHTML = '';
+    if (!graveyard.length) {
+      var empty = document.createElement('div');
+      empty.className = 'trash-dig-empty';
+      empty.textContent = 'the soil keeps nothing. yet.';
+      list.appendChild(empty);
+      return;
+    }
+    for (var i = 0; i < graveyard.length; i++) {
+      (function (idx) {
+        var gy = graveyard[idx];
+        var row = document.createElement('div');
+        row.className = 'trash-dig-row';
+        var label = document.createElement('span');
+        label.className = 'trash-dig-label';
+        label.textContent = labelFor(gy);
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'trash-action trash-dig-btn';
+        btn.textContent = 'dig it up';
+        btn.addEventListener('click', function () {
+          if (!st()) return;
+          var cur = st().get().graveyard || [];
+          if (idx >= cur.length) return;
+          readdToState(cur[idx]);
+          st().set({ graveyard: cur.filter(function (_, n) { return n !== idx; }) });
+          flash('it returns.');
+          renderDigList();
+        });
+        row.appendChild(label);
+        row.appendChild(btn);
+        list.appendChild(row);
+      })(i);
+    }
+  }
+
+  function openBuryPrompt(kind) {
     var prompt = document.getElementById('trash-save-prompt');
     var body = document.getElementById('trash-save-prompt-body');
-    if (prompt) {
-      pendingBury = { kind: 'sigils' };
-      if (body) body.innerHTML = 'action: bury <em>all sigils</em>. irreversible.';
+    if (prompt && body) {
+      pendingBury = { kind: kind };
+      if (kind === 'sigils') body.innerHTML = 'bury <em>all sigils</em>? the soil keeps them. dig them up later.';
+      else if (kind === 'cohort') body.innerHTML = 'bury <em>all cohort</em>? the soil keeps them. dig them up later.';
+      else if (kind === 'tour') body.innerHTML = 'bury <em>the tour</em>? the soil keeps it. dig it up later.';
+      else if (kind === 'all') body.innerHTML = 'bury <em>everything</em>? the soil keeps it all. dig it up later.';
       prompt.classList.add('open');
-      prompt.setAttribute('aria-hidden', 'false');
+      prompt.removeAttribute('inert');
     } else {
-      commitBurySigils();
+      commitFor(kind);
     }
   }
 
-  function commitBurySigils() {
-    if (window.Liber && window.Liber.state) {
-      window.Liber.state.set({ sigils: [] });
+  function commitFor(kind) {
+    if (!st()) return;
+    if (kind === 'sigils') {
+      commitBury(snapshotAll().filter(function (g) { return g.kind === 'sigils'; }));
+      flash('the sigils are loam.');
+    } else if (kind === 'cohort') {
+      commitBury(snapshotAll().filter(function (g) { return g.kind === 'cohort'; }));
+      flash('the cohort is loam.');
+    } else if (kind === 'tour') {
+      commitBury(snapshotAll().filter(function (g) { return g.kind === 'tour'; }));
+      flash('the tour is forgotten. not gone.');
+    } else if (kind === 'all') {
+      commitBury(snapshotAll());
+      flash('the room is clean. the soil is full.');
     }
-    flash('the sigils are loam.');
-  }
-
-  function buryCohort() {
-    var prompt = document.getElementById('trash-save-prompt');
-    var body = document.getElementById('trash-save-prompt-body');
-    if (prompt) {
-      pendingBury = { kind: 'cohort' };
-      if (body) body.innerHTML = 'action: bury <em>all cohort</em>. irreversible.';
-      prompt.classList.add('open');
-      prompt.setAttribute('aria-hidden', 'false');
-    } else {
-      commitBuryCohort();
-    }
-  }
-
-  function commitBuryCohort() {
-    if (window.Liber && window.Liber.state) {
-      window.Liber.state.set({ cohort: [] });
-    }
-    flash('the cohort is loam.');
-  }
-
-  function buryTour() {
-    var prompt = document.getElementById('trash-save-prompt');
-    var body = document.getElementById('trash-save-prompt-body');
-    if (prompt) {
-      pendingBury = { kind: 'tour' };
-      if (body) body.innerHTML = 'action: bury <em>the tour</em>. irreversible.';
-      prompt.classList.add('open');
-      prompt.setAttribute('aria-hidden', 'false');
-    } else {
-      commitBuryTour();
-    }
-  }
-
-  function commitBuryTour() {
-    if (window.Liber && window.Liber.state) {
-      window.Liber.state.set({ visited: {} });
-    }
-    flash('the tour is forgotten.');
-  }
-
-  function buryAll() {
-    var prompt = document.getElementById('trash-save-prompt');
-    var body = document.getElementById('trash-save-prompt-body');
-    if (prompt) {
-      pendingBury = { kind: 'all' };
-      if (body) body.innerHTML = 'action: bury <em>everything</em>. irreversible.';
-      prompt.classList.add('open');
-      prompt.setAttribute('aria-hidden', 'false');
-    } else {
-      commitBuryAll();
-    }
-  }
-
-  function commitBuryAll() {
-    if (window.Liber && window.Liber.state) {
-      window.Liber.state.reset();
-    }
-    flash('the room is clean. the room is empty.');
+    renderDigList();
   }
 
   var pendingBury = null;
@@ -108,7 +160,7 @@
     var prompt = document.getElementById('trash-save-prompt');
     if (!prompt) return;
     prompt.classList.remove('open');
-    prompt.setAttribute('aria-hidden', 'true');
+    prompt.setAttribute('inert', '');
     pendingBury = null;
   }
 
@@ -137,26 +189,29 @@
     var b2 = document.getElementById('trash-bury-cohort');
     var b3 = document.getElementById('trash-bury-tour');
     var b4 = document.getElementById('trash-bury-all');
-    if (b1) b1.addEventListener('click', burySigils);
-    if (b2) b2.addEventListener('click', buryCohort);
-    if (b3) b3.addEventListener('click', buryTour);
-    if (b4) b4.addEventListener('click', buryAll);
+    if (b1) b1.addEventListener('click', function () { openBuryPrompt('sigils'); });
+    if (b2) b2.addEventListener('click', function () { openBuryPrompt('cohort'); });
+    if (b3) b3.addEventListener('click', function () { openBuryPrompt('tour'); });
+    if (b4) b4.addEventListener('click', function () { openBuryPrompt('all'); });
 
     var prompt = document.getElementById('trash-save-prompt');
-    var keepBtn = document.getElementById('trash-save-prompt-keep');
-    var discardBtn = document.getElementById('trash-save-prompt-discard');
+    var buryBtn = document.getElementById('trash-save-prompt-keep');
+    var cancelBtn = document.getElementById('trash-save-prompt-discard');
     var closeBtn = document.getElementById('trash-save-prompt-close');
-    if (keepBtn) keepBtn.addEventListener('click', function () {
+    if (buryBtn) buryBtn.addEventListener('click', function () {
       var p = pendingBury;
       closePrompt();
       if (!p) return;
-      if (p.kind === 'sigils') commitBurySigils();
-      else if (p.kind === 'cohort') commitBuryCohort();
-      else if (p.kind === 'tour') commitBuryTour();
-      else if (p.kind === 'all') commitBuryAll();
+      commitFor(p.kind);
     });
-    if (discardBtn) discardBtn.addEventListener('click', closePrompt);
+    if (cancelBtn) cancelBtn.addEventListener('click', closePrompt);
     if (closeBtn) closeBtn.addEventListener('click', closePrompt);
-    if (prompt) prompt.addEventListener('click', function (e) { if (e.target === prompt) closePrompt(); });
+    if (prompt) {
+      prompt.addEventListener('click', function (e) { if (e.target === prompt) closePrompt(); });
+      prompt.setAttribute('inert', '');
+    }
+
+    renderDigList();
+    if (st()) st().on('change', renderDigList);
   });
 })();

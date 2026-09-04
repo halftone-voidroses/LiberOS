@@ -183,7 +183,7 @@
       miniVerb.value = existing.length ? (existing[0].verb || '') : '';
       miniVerb.placeholder = 'how does this relate?';
     }
-    mini.setAttribute('aria-hidden', 'false');
+    mini.removeAttribute('inert');
     mini.classList.add('open');
     setTimeout(function () { if (miniVerb) miniVerb.focus(); }, 100);
   }
@@ -191,7 +191,7 @@
   function closeMini() {
     if (!mini) return;
     mini.classList.remove('open');
-    mini.setAttribute('aria-hidden', 'true');
+    mini.setAttribute('inert', '');
     selectedArtifact = null;
   }
 

@@ -203,7 +203,7 @@
     pendingCard = pickCard();
     if (body) body.innerHTML = describeTarot(pendingCard);
     prompt.classList.add('open');
-    prompt.setAttribute('aria-hidden', 'false');
+    prompt.removeAttribute('inert');
   }
 
   function drawTarotNow() {
@@ -228,7 +228,10 @@
     ichingLines.push({ primary: primary, changing: isChanging });
     ichingCastCount++;
     renderHexagram();
-    if (castEl()) castEl.textContent = ichingLines.length < 6 ? ('cast line ' + (ichingLines.length + 1)) : 'read';
+    if (castEl()) {
+      castEl().textContent = ichingLines.length < 6 ? ('cast line ' + (ichingLines.length + 1)) : 'the hexagram stands';
+      castEl().disabled = ichingLines.length >= 6;
+    }
     if (ichingLines.length === 6) readHexagram();
   }
 
@@ -291,7 +294,10 @@
     ichingLines = [];
     ichingCastCount = 0;
     renderHexagram();
-    if (castEl()) castEl.textContent = 'cast line 1';
+    if (castEl()) {
+      castEl().textContent = 'cast line 1';
+      castEl().disabled = false;
+    }
     if (ichingResultEl()) ichingResultEl().hidden = true;
   }
 
@@ -302,6 +308,10 @@
     var iching = el('divination-iching');
     if (tarot) tarot.hidden = (next !== 'tarot');
     if (iching) iching.hidden = (next !== 'iching');
+    var sub = el('divination-sub');
+    if (sub) sub.textContent = next === 'iching'
+      ? 'write your question. cast six lines.'
+      : 'Type a question & click a card for an interpretation.';
     var btns = document.querySelectorAll('.divination-mode');
     for (var i = 0; i < btns.length; i++) {
       if (btns[i].dataset.mode === next) btns[i].classList.add('active');
@@ -331,8 +341,8 @@
     var helpBtn = el('divination-help');
     var raison = el('divination-raison');
     var raisonClose = el('divination-raison-close');
-    function openR() { if (raison) { raison.classList.add('open'); raison.setAttribute('aria-hidden', 'false'); } }
-    function closeR() { if (raison) { raison.classList.remove('open'); raison.setAttribute('aria-hidden', 'true'); } }
+    function openR() { if (raison) { raison.classList.add('open'); raison.removeAttribute('inert'); } }
+    function closeR() { if (raison) { raison.classList.remove('open'); raison.setAttribute('inert', ''); } }
     if (helpBtn) helpBtn.addEventListener('click', openR);
     if (raisonClose) raisonClose.addEventListener('click', closeR);
     if (raison) raison.addEventListener('click', function (e) { if (e.target === raison) closeR(); });
@@ -344,7 +354,7 @@
     function closePrompt() {
       if (!prompt) return;
       prompt.classList.remove('open');
-      prompt.setAttribute('aria-hidden', 'true');
+      prompt.setAttribute('inert', '');
       pendingCard = null;
     }
     if (keepBtn) keepBtn.addEventListener('click', function () {

@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="icon" href="data:,">
   <title>Relations — The Constellation</title>
   <link rel="stylesheet" href="styles/room.css"/>
   <link rel="stylesheet" href="styles/machine.css"/>
@@ -40,14 +41,14 @@
               <button class="relation-help" type="button" id="relation-help" aria-label="help">?</button>
               <button class="relation-exit" type="button" id="relation-exit" aria-label="exit">×</button>
 
-              <div class="relation-raison" id="relation-raison" aria-hidden="true">
+              <div class="relation-raison" id="relation-raison" inert>
                 <div class="relation-raison-inner">
                   <div class="relation-raison-head">
                     <span class="relation-raison-name">raison</span>
                     <button class="relation-raison-close" type="button" id="relation-raison-close" aria-label="close">×</button>
                   </div>
                   <div class="relation-raison-body">
-                    input: state changes. output: a force-laid svg with sigil nodes on an outer ellipse, cohort nodes on an inner ellipse, and pink dashed lines between sigil and cohort when names share an element. click a node = no action. counts are derived from state.sigils.length and state.cohort.length.
+                    the constellation draws its own lines: what you have cast sits outside, those you carry sit within, and thread runs between them where the elements agree. it is a family tree. it is a map of what holds.
                   </div>
                 </div>
               </div>
