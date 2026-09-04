@@ -224,9 +224,7 @@
   // Bfcache restore: the DOM is the old snapshot; state.js resyncs first
   // (it loads earlier), then redraw from the fresh state so the cast made
   // on the casting stone appears without a full reload.
-  window.addEventListener('pageshow', function (e) {
-    if (e.persisted) render();
-  });
+  window.addEventListener('pageshow', function () { render(); });
 
   window.ConstellationRefresh = function () { render(); };
 })();

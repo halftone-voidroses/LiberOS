@@ -46,10 +46,22 @@
   function save(state) {
     try {
       localStorage.setItem(KEY, JSON.stringify(state));
+      diag('save', { ok: 1 });
     } catch (e) {
-      // localStorage may be unavailable in file:// in some browsers.
-      // Silently fall through — session still works for the visit.
+      // Session still works for the visit; the failure is recorded below.
+      diag('save-fail', { err: String(e).slice(0, 120) });
     }
+  }
+
+  // Diagnostic ring for wrapper debugging — keep, it caught the bfcache clobber.
+  function diag(event, extra) {
+    try {
+      const raw = localStorage.getItem('liber_diag');
+      const arr = raw ? JSON.parse(raw) : [];
+      arr.push(Object.assign({ t: Date.now(), e: event, sig: (state.sigils || []).length }, extra || {}));
+      while (arr.length > 60) arr.shift();
+      localStorage.setItem('liber_diag', JSON.stringify(arr));
+    } catch (e) { /* never break the room */ }
   }
 
   const subscribers = {};
@@ -58,6 +70,7 @@
   function get() { return state; }
 
   function set(patch) {
+    diag('set', { k: Object.keys(patch).join(',') });
     state = Object.assign({}, state, patch);
     save(state);
     emit('change', state);
@@ -140,10 +153,11 @@
   // WebKit's page cache (bfcache) restores a page with the JS snapshot it
   // had when hidden — including this module's in-memory state. If another
   // page wrote since, memory is stale and the next set() clobbers the
-  // newer disk state (reported: cast -> back -> the cast is gone). This
-  // resync looks redundant but is not; do not remove.
+  // newer disk state (reported: cast -> back -> the cast is gone).
+  // Resync on EVERY pageshow: WKWebView reports persisted=false on restores
+  // of tauri:// pages, so gating on it skips the one path that needs this.
   window.addEventListener('pageshow', function (e) {
-    if (!e.persisted) return;
+    diag('pageshow', { p: e.persisted ? 1 : 0 });
     state = load();
     emit('change', state);
   });
