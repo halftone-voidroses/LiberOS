@@ -1,0 +1,21 @@
+{
+  "_source": "extracted from archive/yep/LiberReference/index.html lines 2564-2643 (Education): the vocabulary tooltip terms (data-tip), the core pataphysical concept cards, and the section prose. The author's definitions are kept verbatim where the source provides them.",
+  "terms": [
+    { "term": "Pataphysics", "category": "pataphysics", "definition": "The science of imaginary solutions and the laws governing exceptions; a playful philosophy that treats the imaginary as real. Invented by Alfred Jarry (1873-1907), who defines it as \"the science of imaginary solutions, which symbolically attributes the properties of objects, described by their virtuality, to their lineaments\"." },
+    { "term": "Clinamen", "category": "pataphysics", "definition": "The unpredictable swerve; the smallest deviation that creates significant change. The unpredictable swerve of atoms — in Jarry's hands, a key principle applied not just to matter but to language and life itself." },
+    { "term": "Syzygy", "category": "pataphysics", "definition": "The surprising alignment of unlike things; a pun or conjunction that creates new meaning. Originally astronomical: the alignment of three celestial bodies." },
+    { "term": "Pataphor", "category": "pataphysics", "definition": "A metaphor extended beyond its possibility into a small universe." },
+    { "term": "Epiphenomenon", "category": "pataphysics", "definition": "An effect that believes it is a cause; a phenomenon that mistakes itself for the origin — the pataphysical recognition that our explanations often invert the actual order of things." },
+    { "term": "Anomaly", "category": "pataphysics", "definition": "The repressed part of a rule that ensures the rule does not work; the exception that proves the rule." },
+    { "term": "Wise Mind", "category": "dbt", "definition": "The integration of logic and emotion; a state of intuitive knowing in DBT. Linehan's \"what we intuitively know to be the truth under the blanket of emotions\"." },
+    { "term": "Archetype", "category": "jungian", "definition": "Universal, inherited patterns of the human psyche; the collective unconscious." },
+    { "term": "Shadow", "category": "jungian", "definition": "The unacknowledged side of the personality; the part we project or suppress." },
+    { "term": "Noble Shadow", "category": "jungian", "definition": "The unclaimed strengths and gifts exiled along with the painful shadow material. The noble shadow refers to the unclaimed strengths, desires, and capacities that were exiled along with the painful shadow material." },
+    { "term": "Individuation", "category": "jungian", "definition": "The process of integrating conscious and unconscious to become a whole self." },
+    { "term": "Synchronicity", "category": "jungian", "definition": "Acausal connecting principle; meaningful coincidence that bridges inner and outer. Jung proposed it after Richard Wilhelm introduced him to the I Ching." },
+    { "term": "Yin-Yang", "category": "eastern", "definition": "The interplay of opposites; complementary forces in dynamic balance — not conflict but complementarity, driving change." },
+    { "term": "I Ching", "category": "eastern", "definition": "The Book of Changes — the most important ancient source of traditional Chinese culture and cosmology; Jung was introduced to its Taoist wisdom by Richard Wilhelm." },
+    { "term": "Flow", "category": "method", "definition": "The state of absorbed concentration in creative or ritual activity (Csikszentmihalyi's flow, shamanic journeying, absorbed concentration)." },
+    { "term": "The Three Pillars", "category": "method", "definition": "Liber Vacui rests on three pillars: Pataphysics provides the method (the science of imaginary solutions); Eastern Traditions provide the cosmology (the dialectical interplay of Yin and Yang); Depth Psychology provides the map (Jung's archetypes and Linehan's wise mind)." }
+  ]
+}
