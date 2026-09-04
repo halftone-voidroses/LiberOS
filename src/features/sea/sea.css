@@ -41,7 +41,7 @@
   letter-spacing: 0.05em;
   color: #7a9aac;
   text-align: center;
-  opacity: 0.85;
+  opacity: 0.5;
   max-width: 70%;
   line-height: 1.6;
 }
@@ -603,7 +603,7 @@
   transform: translateY(10px);
 }
 .sea-deep:hover .sea-glimmer {
-  opacity: 0.5;
+  opacity: 0.85;
   transform: translateY(0);
 }
 @media (prefers-reduced-motion: reduce) {

@@ -25,7 +25,7 @@
     var sigils = s.sigils || [];
     var cohort = s.cohort || [];
 
-    if (counts) counts.textContent = sigils.length + ' sigils · ' + cohort.length + ' cohort';
+    if (counts) counts.textContent = sigils.length + ' cohort · ' + cohort.length + ' carried';
 
     if (sigils.length === 0 && cohort.length === 0) {
       if (empty) empty.style.display = '';
@@ -55,7 +55,7 @@
     for (var j = 0; j < sigils.length; j++) {
       var p = sigilPos[j];
       html += '<circle cx="' + p.x + '" cy="' + p.y + '" r="8" fill="rgba(255,105,180,0.7)" stroke="#fff" stroke-width="0.5"/>';
-      html += '<text x="' + p.x + '" y="' + (p.y + 18) + '" text-anchor="middle" fill="#d8a0c0" font-size="9" font-family="serif" font-style="italic">sigil ' + (j + 1) + '</text>';
+      html += '<text x="' + p.x + '" y="' + (p.y + 18) + '" text-anchor="middle" fill="#d8a0c0" font-size="9" font-family="serif" font-style="italic">cohort ' + (j + 1) + '</text>';
     }
 
     for (var m = 0; m < cohort.length; m++) {

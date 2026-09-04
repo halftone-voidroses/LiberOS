@@ -603,11 +603,14 @@
   letter-spacing: 0.1em;
 }
 
-/* emergent prompt line — shell-owned surface for the prompt engine */
+/* emergent prompt line — shell-owned surface for the prompt engine.
+   Anchored inside the desktop stage (positioned by [data-state]), above
+   the status line's plate (status plate top ≈ 26% + 36px) and clear of
+   the dial band (dial owns the bottom 26%) — WS5 residual fix. */
 .prompt-line {
-  position: fixed;
+  position: absolute;
   left: 50%;
-  bottom: 120px;
+  bottom: calc(26% + 52px);
   transform: translateX(-50%) translateY(6px);
   max-width: 72%;
   text-align: center;

@@ -71,7 +71,7 @@ window.LIBER_DATA.personas = {
   },
   methodology: {
     id: 'methodology',
-    name: 'riason',
+    name: 'raison',
     opinion: 'a method is a promise made to the margin. read slowly.',
     accent: '#aa3030',
     material: 'folio broadsheet, wax seal',

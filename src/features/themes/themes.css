@@ -436,7 +436,7 @@
   opacity: 0;
   transition: opacity 1s ease;
 }
-.themes-skin:hover .themes-compass { opacity: 0.75; }
+.themes-skin:hover .themes-compass { opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
   .themes-compass { transition: none; }
 }

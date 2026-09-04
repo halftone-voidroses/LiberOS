@@ -16,7 +16,11 @@
     el = document.createElement('div');
     el.className = 'prompt-line';
     el.setAttribute('role', 'status');
-    document.body.appendChild(el);
+    // Anchor inside the CRT screen (the desktop stage) so the whisper
+    // can never straddle the screen border (WS5 residual). Fallback to
+    // body keeps the surface alive if the stage id changes.
+    var stage = document.getElementById('desktop');
+    (stage || document.body).appendChild(el);
     return el;
   }
 

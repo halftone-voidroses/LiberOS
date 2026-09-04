@@ -573,7 +573,7 @@
   opacity: 0;
   transition: opacity 0.7s ease;
 }
-.abstract-void:hover .abstract-void-mem { opacity: 0.3; }
+.abstract-void:hover .abstract-void-mem { opacity: 0.5; }
 @media (prefers-reduced-motion: reduce) {
   .abstract-void-mem { transition: none; }
 }

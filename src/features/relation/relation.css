@@ -403,7 +403,7 @@
   transition: opacity 1s ease;
 }
 .relation-mono svg { width: 100%; height: 100%; }
-.relation-window:hover .relation-mono { opacity: 0.6; }
+.relation-window:hover .relation-mono { opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
   .relation-mono { transition: none; }
 }

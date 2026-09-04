@@ -142,9 +142,9 @@ const dialOptionCount = await page.locator('.dial-option').count()
 console.assert(dialOptionCount === 3, 'expected 3 dial options (prev/active/next)')
 console.log(`   dial options: ${dialOptionCount}`)
 
-console.log('12. Active dial option is "Sigil" (default selectedIdx=0)')
+console.log('12. Active dial option is "Cohort" (default selectedIdx=0)')
 const activeName = await page.textContent('.dial-option.active')
-console.assert(activeName && activeName.toLowerCase().includes('sigil'), 'default active should be sigil')
+console.assert(activeName && activeName.toLowerCase().includes('cohort'), 'default active should be cohort (D0001: sigil app renamed)')
 console.log(`   active: "${activeName}"`)
 
 console.log('13. Click active "Sigil" -> sigil page')

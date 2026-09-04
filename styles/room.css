@@ -15,6 +15,18 @@
   --scan-vignette: 0.7;      /* corner darkening, 0..1 */
 }
 
+/* VT323 self-hosted (audit minor / plan WS7). Shell infrastructure —
+   room.css is loaded by every page; per-persona stylesheets keep their
+   own font-family stacks but now resolve to this local face. No network
+   fetch at runtime; file://-safe relative path. */
+@font-face {
+  font-family: 'VT323';
+  src: url('../fonts/vt323-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 html, body {
   width: 100%;
   height: 100%;

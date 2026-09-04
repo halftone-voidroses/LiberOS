@@ -23,7 +23,7 @@
   function render() {
     var arr = getConfessions();
     if (arr.length === 0) {
-      list.innerHTML = '<div class="cohort-empty">no one is here yet.<br/><em>make a sigil, and a name will come.</em></div>';
+      list.innerHTML = '<div class="cohort-empty">no one is here yet.<br/><em>cast the cohort, and a name will come.</em></div>';
       return;
     }
     var html = '';

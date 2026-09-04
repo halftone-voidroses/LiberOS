@@ -71,7 +71,7 @@
     if (sigils.length === 0) {
       if (empty) {
         empty.style.display = '';
-        empty.innerHTML = '— make a sigil first —<div class="constellation-empty-sub">open the sigil persona from the dial.</div>';
+        empty.innerHTML = '— cast the cohort first —<div class="constellation-empty-sub">open the casting stone from the dial.</div>';
       }
       svg.innerHTML = '';
       return;
@@ -134,7 +134,7 @@
     html += '<circle class="constellation-sigil-halo" cx="' + sigilPos.x + '" cy="' + sigilPos.y + '" r="' + (sigilR + 14) + '" fill="none" stroke="rgba(255,200,100,0.3)" stroke-width="1.5" stroke-dasharray="2 6"/>';
     html += '<circle class="constellation-sigil" id="constellation-sigil" cx="' + sigilPos.x + '" cy="' + sigilPos.y + '" r="' + sigilR + '" fill="rgba(255,200,100,0.95)" stroke="#fff" stroke-width="0.8" style="cursor: pointer; filter: drop-shadow(0 0 10px rgba(255,200,100,0.8));"/>';
     html += '<text x="' + sigilPos.x + '" y="' + (sigilPos.y + 6) + '" text-anchor="middle" fill="#2a1408" font-size="22" font-weight="700" style="pointer-events: none;">★</text>';
-    html += '<text x="' + sigilPos.x + '" y="' + (sigilPos.y + sigilR + 18) + '" text-anchor="middle" fill="#c8b890" font-size="8" font-family="serif" font-style="italic" style="pointer-events: none;">sigil</text>';
+    html += '<text x="' + sigilPos.x + '" y="' + (sigilPos.y + sigilR + 18) + '" text-anchor="middle" fill="#c8b890" font-size="8" font-family="serif" font-style="italic" style="pointer-events: none;">cohort</text>';
 
     for (var i3 = 0; i3 < artifacts.length; i3++) {
       if (boundIndices.indexOf(i3) !== -1) continue;

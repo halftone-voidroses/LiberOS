@@ -61,7 +61,7 @@ truths are defined there).
 | games | whimsy wow | theatrical barker | marquee bulbs, reds + creams |
 | divination | arcana | chalk on felt | white chalk on deep red velvet |
 | learn | the mad scribe | workbook | index cards, ink stamps |
-| methodology | riason | methodical | folio, wax seal |
+| methodology | raison | methodical | folio, wax seal |
 | themes | iris mappa | cartographic | pigment tiles, swatch grid |
 | relation | e-lizabeth | linked | iron rings, chain, monogram |
 | trash | ravaging pete | gravel | die-cut rubble, Artifact Graveyard |

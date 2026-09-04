@@ -62,7 +62,7 @@
 
   function labelFor(gy) {
     var e = gy.entry || {};
-    if (gy.kind === 'sigils') return 'a sigil' + (e.name ? ' — ' + e.name : '');
+    if (gy.kind === 'sigils') return 'the cast cohort' + (e.name ? ' — ' + e.name : '');
     if (gy.kind === 'cohort') return 'one you carried' + (e.name ? ' — ' + e.name : '');
     if (gy.kind === 'tour') return 'the tour, remembered';
     return gy.kind;
@@ -126,8 +126,8 @@
     var body = document.getElementById('trash-save-prompt-body');
     if (prompt && body) {
       pendingBury = { kind: kind };
-      if (kind === 'sigils') body.innerHTML = 'bury <em>all sigils</em>? the soil keeps them. dig them up later.';
-      else if (kind === 'cohort') body.innerHTML = 'bury <em>all cohort</em>? the soil keeps them. dig them up later.';
+      if (kind === 'sigils') body.innerHTML = 'bury <em>the cast cohort</em>? the soil keeps it. dig it up later.';
+      else if (kind === 'cohort') body.innerHTML = 'bury <em>those you carry</em>? the soil keeps them. dig them up later.';
       else if (kind === 'tour') body.innerHTML = 'bury <em>the tour</em>? the soil keeps it. dig it up later.';
       else if (kind === 'all') body.innerHTML = 'bury <em>everything</em>? the soil keeps it all. dig it up later.';
       prompt.classList.add('open');
@@ -141,10 +141,10 @@
     if (!st()) return;
     if (kind === 'sigils') {
       commitBury(snapshotAll().filter(function (g) { return g.kind === 'sigils'; }));
-      flash('the sigils are loam.');
+      flash('the cohort is loam.');
     } else if (kind === 'cohort') {
       commitBury(snapshotAll().filter(function (g) { return g.kind === 'cohort'; }));
-      flash('the cohort is loam.');
+      flash('those you carried are loam.');
     } else if (kind === 'tour') {
       commitBury(snapshotAll().filter(function (g) { return g.kind === 'tour'; }));
       flash('the tour is forgotten. not gone.');

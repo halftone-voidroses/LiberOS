@@ -662,9 +662,9 @@
   opacity: 0;
   transition: opacity 0.9s ease;
   background:
-    radial-gradient(ellipse 8px 11px at 50% 50%, rgba(0, 0, 0, 0) 42%, rgba(216, 160, 112, 0.22) 46%, rgba(0, 0, 0, 0) 52%),
-    radial-gradient(ellipse 12px 16px at 50% 50%, rgba(0, 0, 0, 0) 44%, rgba(216, 160, 112, 0.2) 48%, rgba(0, 0, 0, 0) 55%),
-    radial-gradient(ellipse 5px 7px at 50% 50%, rgba(216, 160, 112, 0.25) 0%, rgba(216, 160, 112, 0) 70%);
+    radial-gradient(ellipse 8px 11px at 50% 50%, rgba(0, 0, 0, 0) 42%, rgba(216, 160, 112, 0.4) 46%, rgba(0, 0, 0, 0) 52%),
+    radial-gradient(ellipse 12px 16px at 50% 50%, rgba(0, 0, 0, 0) 44%, rgba(216, 160, 112, 0.36) 48%, rgba(0, 0, 0, 0) 55%),
+    radial-gradient(ellipse 5px 7px at 50% 50%, rgba(216, 160, 112, 0.45) 0%, rgba(216, 160, 112, 0) 70%);
 }
 .cohort-arch:hover .cohort-seal-mark { opacity: 1; }
 @media (prefers-reduced-motion: reduce) {

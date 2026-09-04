@@ -62,9 +62,11 @@
     {
       // Colour flicker: as Wanderlust names her past identities, the avatar
       // briefly tints to one colour per name, then back to her own.
+      // Payload order maps 1:1 to the names in the line:
+      // Fate=gold, Chance=pale gold, Destiny=violet, Wheel=indigo, Samsara=crimson-rose.
       speaker: 'wanderlust',
       line: 'I have been called many things over the years. Fate. Chance. Destiny. The Wheel. Samsara. But you may call me Wanderlust, for that is the drive behind my whims, both good and evil.',
-      effect: 'flicker:Fate,Chance,Destiny,Wheel,Samsara',
+      effect: 'flicker:#ffd86a,#fff3b8,#b0a8ff,#7a86e0,#f0506e',
       replies: [
         { text: 'wanderlust, then.', kind: 'progress',
           response: { speaker: 'wanderlust', line: 'Good. The others were TITLES. This one is a thirst. Wear it lightly.' } },

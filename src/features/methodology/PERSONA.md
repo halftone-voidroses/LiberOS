@@ -1,4 +1,4 @@
-# Persona — Methodology · Riason
+# Persona — Methodology · raison
 
 ## archetype
 philosopher-methodical. wax seal. broadsheet. speaks from the margin.

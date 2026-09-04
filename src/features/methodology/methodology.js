@@ -1,4 +1,4 @@
-// methodology.js — Riason. Click a step to highlight it. No shared imports (covenant Q.1).
+// methodology.js — raison. Click a step to highlight it. No shared imports (covenant Q.1).
 
 (function () {
   function buildRubric() {

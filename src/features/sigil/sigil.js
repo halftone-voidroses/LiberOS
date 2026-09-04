@@ -213,7 +213,7 @@ function loadGhost(bitmapDataUrl) {
     var input = document.querySelector('.sigil-input');
     if (input) input.innerText = sigil.intention || '';
     var title = document.querySelector('.sigil-title');
-    if (title) title.textContent = 'SIGIL · re-open the stone';
+    if (title) title.textContent = 'COHORT · re-open the stone';
     var sub = document.querySelector('.sigil-subtitle');
     if (sub) sub.textContent = 'redraw and re-save. the old work lingers faintly as a ghost.';
     var hint = document.querySelector('.sigil-ghost-hint');

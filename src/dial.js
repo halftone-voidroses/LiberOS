@@ -11,7 +11,7 @@
   'use strict';
 
   const VISITORS = [
-    { id: 'sigil',       name: 'sigil'       },
+    { id: 'sigil',       name: 'cohort'      },
     { id: 'satchel',     name: 'satchel'     },
     { id: 'sea',         name: 'sea'         },
     { id: 'cohort',      name: 'cohort'      },

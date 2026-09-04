@@ -174,7 +174,7 @@
   padding-top: 6px;
 }
 
-/* ─── help + exit (Riason wax seal style) ──────────────────────────── */
+/* ─── help + exit (raison wax seal style) ──────────────────────────── */
 .learn-help,
 .learn-exit {
   position: absolute;
@@ -382,13 +382,13 @@
   font-style: italic;
   font-size: 0.95rem;
   letter-spacing: 0.06em;
-  color: rgba(74, 40, 16, 0.75);
+  color: rgba(74, 40, 16, 0.9);
   transform: rotate(-3deg);
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.8s ease;
 }
-.learn-card:hover .learn-margin-note { opacity: 0.65; }
+.learn-card:hover .learn-margin-note { opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
   .learn-margin-note { transition: none; }
 }

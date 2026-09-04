@@ -574,7 +574,7 @@
   opacity: 0;
   transition: opacity 0.8s ease;
 }
-.satchel-page-entry:hover .satchel-stamp { opacity: 0.5; }
+.satchel-page-entry:hover .satchel-stamp { opacity: 0.9; }
 @media (prefers-reduced-motion: reduce) {
   .satchel-stamp { transition: none; }
 }

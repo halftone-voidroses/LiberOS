@@ -81,7 +81,7 @@ Per-button block in `styles/dial.css` — `.dial-option[data-id='<id>']`:
    (relation), die-cut bite (trash, via `clip-path` on the pseudo).
 3. **Label in the app's own type voice**: the button inherits that app's
    `font-family` and tracking from its CSS (Times small-caps for
-   physius, EB Garamond for librarian/riason/e-lizabeth, Courier for
+   physius, EB Garamond for librarian/raison/e-lizabeth, Courier for
    entity404, Times 900 italic for whimsy wow, VT323 for iris).
    Caveat: on the *active* option the per-persona `::before` is replaced by
    the ‹ › chevrons (pre-existing pseudo-element use) — accepted trade.
