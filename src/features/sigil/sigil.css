@@ -720,3 +720,89 @@
 
 /* open room for the lintel (machine.css sets [data-state] inset: 0) */
 .sigil-app { top: 36px; }
+
+/* ─── WS4: the stonecutter's cursor (register: data/personas.data.js).
+   Chisel + copper chip; falls back to the standard arrow. Buttons keep
+   her cursor (hover bevels carry the affordance); the drawing canvas
+   keeps its own drawn cursor (cursor: none, .sigil-canvas above). ─── */
+.sigil-app,
+.sigil-titlebar {
+  cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M2 2l9 2-7 7z' fill='%23c8c8d0' stroke='%232a2a30'/><path d='M11 10l3 3 7-7-3-3z' fill='%23aa5a18' stroke='%235a2a08'/></svg>") 2 2, auto;
+}
+.sigil-app button,
+.sigil-titlebar button { cursor: inherit; }
+
+/* ─── WS4: pressed-bevel + focus (D0004 recipe, sigil palette) ─── */
+.sigil-element,
+.sigil-discard,
+.sigil-raison-close,
+.sigil-save-prompt-close,
+.sigil-save-prompt-keep,
+.sigil-save-prompt-discard {
+  box-shadow:
+    inset 0 1px 0 rgba(232, 200, 160, 0.22),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.55),
+    0 2px 0 #0a0503,
+    0 3px 4px rgba(0, 0, 0, 0.5);
+}
+.sigil-element:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(232, 200, 160, 0.3),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.55),
+    0 2px 0 #0a0503,
+    0 3px 6px rgba(200, 144, 96, 0.35);
+}
+.sigil-element:active,
+.sigil-discard:active,
+.sigil-raison-close:active,
+.sigil-save-prompt-close:active,
+.sigil-save-prompt-keep:active,
+.sigil-save-prompt-discard:active {
+  transform: translateY(1px);
+  filter: brightness(0.92);
+  box-shadow:
+    inset 0 1px 0 rgba(232, 200, 160, 0.15),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.55),
+    0 0 0 #0a0503,
+    0 1px 2px rgba(0, 0, 0, 0.5);
+}
+.sigil-element:focus-visible,
+.sigil-save:focus-visible,
+.sigil-discard:focus-visible,
+.sigil-back:focus-visible,
+.sigil-help:focus-visible,
+.sigil-raison-close:focus-visible,
+.sigil-save-prompt-close:focus-visible,
+.sigil-save-prompt-keep:focus-visible,
+.sigil-save-prompt-discard:focus-visible {
+  outline: 2px solid #c89060;
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sigil-save:active { animation: none; }
+}
+
+/* ─── WS4: hover-revelation — stone dust gathers in the cracks
+   when the tablet is attended to. ─── */
+.sigil-dust {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+  background:
+    radial-gradient(circle 2px at 24% 34%, rgba(200, 200, 208, 0.5) 0%, rgba(200, 200, 208, 0) 100%),
+    radial-gradient(circle 1.5px at 33% 46%, rgba(180, 180, 190, 0.45) 0%, rgba(180, 180, 190, 0) 100%),
+    radial-gradient(circle 2px at 38% 62%, rgba(200, 200, 208, 0.4) 0%, rgba(200, 200, 208, 0) 100%),
+    radial-gradient(circle 1.5px at 48% 72%, rgba(170, 170, 180, 0.45) 0%, rgba(170, 170, 180, 0) 100%),
+    radial-gradient(circle 2px at 62% 48%, rgba(200, 200, 208, 0.45) 0%, rgba(200, 200, 208, 0) 100%),
+    radial-gradient(circle 1.5px at 67% 40%, rgba(180, 180, 190, 0.4) 0%, rgba(180, 180, 190, 0) 100%),
+    radial-gradient(circle 2px at 76% 50%, rgba(190, 190, 200, 0.4) 0%, rgba(190, 190, 200, 0) 100%),
+    radial-gradient(circle 1.5px at 44% 82%, rgba(190, 190, 200, 0.4) 0%, rgba(190, 190, 200, 0) 100%),
+    radial-gradient(circle 1.5px at 57% 76%, rgba(200, 200, 208, 0.35) 0%, rgba(200, 200, 208, 0) 100%);
+}
+.sigil-tablet:hover .sigil-dust { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .sigil-dust { transition: none; }
+}

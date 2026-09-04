@@ -110,6 +110,7 @@
       if (window.Liber && window.Liber.state && window.Liber.state.addArtifact) {
         window.Liber.state.addArtifact('sea', { text: text, intensity: intensity });
       }
+      if (window.Liber && window.Liber.sound) window.Liber.sound.play('thunk');
 
       setTimeout(function () {
         carried.classList.add('dissolving');

@@ -18,3 +18,5 @@ index cards. ink stamp. dated marginalia. ink blot.
 ## forbidden
 - do not let the librarian be whimsical. the scribe is dry.
 - do not use sans-serif. the scribe writes in pencil and ink.
+## hover-revelation
+read a card and a pencil note shows in its margin, half-erased: see also \u2014 everything. (hover the card.)

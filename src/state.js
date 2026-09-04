@@ -24,6 +24,7 @@
     theme: 'corrupted',      // current skin of the machine
     shadowUnlocked: false,   // has the user entered the extc password
     shadowOn: false,         // is shadow overdrive active
+    sounds: true,            // synthesized UI sounds (WS4, src/sound.js)
     visited: {},             // visitor id -> last visited
   };
 

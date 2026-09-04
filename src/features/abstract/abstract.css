@@ -509,3 +509,71 @@
 
 /* open room for the prompt bar (machine.css sets [data-state] inset: 0) */
 .abstract-app { top: 36px; }
+
+/* ─── WS4: entity404's cursor (register: data/personas.data.js).
+   A blocky phosphor-green arrow; standard arrow fallback. Rail items
+   keep grab/grabbing (drag affordance). ─── */
+.abstract-app,
+.abstract-titlebar {
+  cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M2 2h4v4h4v4h4v4h4v4h4v4h-6v-2h-2v-2h-2v-2h-2v-2h-2v-2H4V8H2z' fill='%2300ff66' stroke='%23002010'/></svg>") 2 2, auto;
+}
+.abstract-app button,
+.abstract-titlebar button { cursor: inherit; }
+
+/* ─── WS4: pressed-bevel + focus (D0004 recipe, phosphor palette) ─── */
+.abstract-confirm-yes,
+.abstract-confirm-no,
+.abstract-raison-close {
+  border-width: 2px;
+  box-shadow:
+    inset 0 1px 0 rgba(0, 255, 102, 0.25),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.6),
+    0 2px 0 #00200a,
+    0 3px 4px rgba(0, 0, 0, 0.6);
+}
+.abstract-confirm-yes:active,
+.abstract-confirm-no:active,
+.abstract-raison-close:active {
+  transform: translateY(1px);
+  filter: brightness(0.92);
+  box-shadow:
+    inset 0 1px 0 rgba(0, 255, 102, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.6),
+    0 0 0 #00200a,
+    0 1px 2px rgba(0, 0, 0, 0.6);
+}
+.abstract-confirm-yes:focus-visible,
+.abstract-confirm-no:focus-visible,
+.abstract-help:focus-visible,
+.abstract-exit:focus-visible,
+.abstract-raison-close:focus-visible {
+  outline: 2px solid #00ff66;
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .abstract-void-cursor,
+  .abstract-titlebar-sub::after,
+  .abstract-egg { animation: none; }
+}
+
+/* ─── WS4: hover-revelation — the board's boot memory ghosts through
+   the phosphor when someone leans on the void. ─── */
+.abstract-void-mem {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  z-index: 0;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 0.875rem;
+  line-height: 1.35;
+  letter-spacing: 0.08em;
+  color: #00ff66;
+  text-align: right;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.7s ease;
+}
+.abstract-void:hover .abstract-void-mem { opacity: 0.3; }
+@media (prefers-reduced-motion: reduce) {
+  .abstract-void-mem { transition: none; }
+}

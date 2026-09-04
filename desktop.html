@@ -115,6 +115,11 @@
                       <div class="settings-modal-hint">the deep water answers to <em>extc</em>.</div>
                     </div>
                     <div class="settings-modal-section">
+                      <div class="settings-modal-section-title">SOUND</div>
+                      <button class="settings-modal-btn" id="settings-modal-sound" type="button">sound: on</button>
+                      <div class="settings-modal-hint">the machine clicks when touched. it can hold its breath.</div>
+                    </div>
+                    <div class="settings-modal-section">
                       <div class="settings-modal-section-title">STATE</div>
                       <div class="settings-modal-state" id="settings-state">—</div>
                       <button class="settings-modal-btn settings-modal-btn-danger" id="settings-wipe" type="button">wipe the room</button>
@@ -190,6 +195,7 @@
   </div>
 
   <script src="src/state.js"></script>
+  <script src="src/sound.js"></script>
   <script src="data/tarot.data.js"></script>
   <script src="data/prompt-templates.data.js"></script>
   <script src="src/prompt-engine.js"></script>
@@ -234,6 +240,7 @@
       if (window.Liber && window.Liber.state) {
         window.Liber.state.reset();
       }
+      if (window.Liber && window.Liber.sound) window.Liber.sound.play('thunk');
       var c = document.getElementById('wanderlust-confirm');
       c.classList.remove('open');
       c.setAttribute('inert', '');
@@ -285,6 +292,11 @@
           var on = machine && machine.classList.contains('shadow-on');
           sb.textContent = on ? '— step back from shadow —' : '— step into shadow —';
         }
+        var snd = document.getElementById('settings-modal-sound');
+        if (snd) {
+          var sndOn = (window.Liber && window.Liber.sound) ? window.Liber.sound.isEnabled() : true;
+          snd.textContent = 'sound: ' + (sndOn ? 'on' : 'off');
+        }
         var el = document.getElementById('settings-state');
         if (el) el.textContent = out.join('\n');
       }
@@ -301,6 +313,7 @@
 
       var replay = document.getElementById('settings-replay');
       var shadow = document.getElementById('settings-shadow');
+      var sound = document.getElementById('settings-modal-sound');
       var wipe = document.getElementById('settings-wipe');
       if (replay) replay.addEventListener('click', function () {
         if (window.Liber && window.Liber.state) window.Liber.state.set({ tutorialDone: false });
@@ -315,9 +328,16 @@
         }
         renderSettingsState();
       });
+      if (sound) sound.addEventListener('click', function () {
+        if (window.Liber && window.Liber.sound) {
+          window.Liber.sound.setEnabled(!window.Liber.sound.isEnabled());
+        }
+        renderSettingsState();
+      });
       if (wipe) wipe.addEventListener('click', function () {
         if (!window.confirm('wipe the room? this cannot be undone.')) return;
         if (window.Liber && window.Liber.state) window.Liber.state.reset();
+        if (window.Liber && window.Liber.sound) window.Liber.sound.play('thunk');
         renderSettingsState();
       });
 

@@ -18,3 +18,5 @@ brass-clasped leather. sepia paper. index cards. hand-cut folder tabs.
 ## forbidden
 - do not let her ramble. the librarian is terse.
 - do not use sans-serif. the librarian is a serif person.
+## hover-revelation
+hold the entry page and the librarian\u2019s ownership stamp surfaces at its foot: ex libris, liber vacui. (hover the entry page.)

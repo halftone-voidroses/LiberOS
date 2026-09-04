@@ -19,3 +19,5 @@ green-on-black. 8x8 pixel font. blinking cursor. ASCII art banner.
 - do not give entity404 a face. entity404 is a process.
 - do not use serifs. only 8x8 and VT323 fallback.
 - do not introduce warmth. cold phosphor only.
+## hover-revelation
+lean on the void and the board\u2019s boot memory ghosts through the phosphor: 640k conventional ok, himem ok, shadow ram gone. (hover the void.)

@@ -19,3 +19,5 @@ chiseled stone, charcoal dust, copper inlay. the canvas is a tablet of dark slat
 - do not soften the stone. do not add gradients or glass.
 - do not show her face. the avatar is a glyph, not a portrait.
 - do not let wanderlust interrupt mid-ritual.
+## hover-revelation
+stone dust gathers in the cracks of the tablet while the hand attends to it. (hover the tablet; the dust rises along the chiseled seams.)

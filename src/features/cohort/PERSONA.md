@@ -25,3 +25,6 @@ near-black.
 - do not diagnose. the cohort is a relation, not a case.
 - do not let the wax become cute. sealing is solemn.
 - no exclamation marks. she has outlived them.
+
+## hover-revelation
+lean into the arch and a thumbprint shows in the wax above it \u2014 hers, or the last hand that sealed. (hover the arch.)

@@ -18,3 +18,5 @@ waterline. blue-green. foam. the page is a tide pool.
 ## forbidden
 - do not let the sea become cheerful. the sea is patient, not kind.
 - do not use motion that is not water-motion. no bouncy easing.
+## hover-revelation
+watch the deep and something pale turns over far below, once, slowly. (hover the deep; the glimmer rises from the trench.)

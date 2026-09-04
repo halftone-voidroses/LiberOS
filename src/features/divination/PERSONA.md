@@ -18,3 +18,5 @@ white chalk lines on deep red velvet. the deck is a velvet spread.
 ## forbidden
 - do not let the deck shuffle itself. arcana draws.
 - do not give arcana an oracle voice. arcana is a librarian of cards.
+## hover-revelation
+inspect the felt and a chalk eye opens above where the card would lie. the deck watches back, kindly. (hover the card area.)

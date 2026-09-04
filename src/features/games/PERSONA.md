@@ -18,3 +18,5 @@ marquee bulbs. reds + creams. ticket stubs. hand-lettered signs.
 ## forbidden
 - do not let the booths become serious clinical exercises. keep the show alive.
 - do not use sans-serif. whimsy wow is retro lettered.
+## hover-revelation
+step into the tent and a dropped prize ticket shows under the marquee: admit one, keep the stub. (hover the tent.)

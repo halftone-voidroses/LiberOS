@@ -1101,3 +1101,94 @@
 
 /* open room for the headboard (machine.css sets [data-state] inset: 0) */
 .games-app { top: 36px; }
+
+/* ─── WS4: the barker's cursor (register: data/personas.data.js).
+   A lit marquee bulb on its stud; standard arrow fallback.
+   Booth tiles keep their pointer (they are divs, not buttons). ─── */
+.games-app,
+.games-titlebar {
+  cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><circle cx='12' cy='10' r='7' fill='%23ffe080' stroke='%23d4af37' stroke-width='1.5'/><path d='M10 8c0-2 1-3 2-4' stroke='%23fff6d0' fill='none' stroke-width='1.5' stroke-linecap='round'/><path d='M9 17h6v3h-6z' fill='%23d4af37' stroke='%23aa6000'/></svg>") 12 10, auto;
+}
+.games-app button,
+.games-titlebar button { cursor: inherit; }
+
+/* ─── WS4: pressed-bevel + focus (D0004 recipe, marquee-gold palette) ─── */
+.games-pin,
+.games-action,
+.games-stage-close,
+.games-raison-close,
+.games-save-prompt-close,
+.games-save-prompt-keep,
+.games-save-prompt-discard {
+  border-width: 2px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 230, 160, 0.4),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.5),
+    0 2px 0 #6a5616,
+    0 3px 4px rgba(0, 0, 0, 0.55);
+}
+.games-booth:active {
+  transform: translateY(0);
+  filter: brightness(0.92);
+  box-shadow: inset 0 1px 0 rgba(255, 230, 160, 0.25), 0 0 8px rgba(212, 175, 55, 0.3);
+}
+.games-pin:active,
+.games-action:active,
+.games-stage-close:active,
+.games-raison-close:active,
+.games-save-prompt-close:active,
+.games-save-prompt-keep:active,
+.games-save-prompt-discard:active {
+  transform: translateY(1px);
+  filter: brightness(0.92);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 230, 160, 0.3),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 0 0 #6a5616,
+    0 1px 2px rgba(0, 0, 0, 0.55);
+}
+.games-pin:focus-visible,
+.games-action:focus-visible,
+.games-booth:focus-visible,
+.games-help:focus-visible,
+.games-exit:focus-visible,
+.games-stage-close:focus-visible,
+.games-raison-close:focus-visible,
+.games-save-prompt-close:focus-visible,
+.games-save-prompt-keep:focus-visible,
+.games-save-prompt-discard:focus-visible {
+  outline: 2px solid #f5d870;
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .games-bulbs,
+  .games-marquee-text { animation: none; }
+}
+
+/* ─── WS4: hover-revelation — a prize ticket, dropped under the
+   marquee and forgotten, surfaces when the tent is stepped into. ─── */
+.games-ticket {
+  position: absolute;
+  top: 22px;
+  right: 26px;
+  z-index: 6;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 0.875rem;
+  letter-spacing: 0.18em;
+  text-transform: lowercase;
+  color: #1a0008;
+  background: linear-gradient(180deg, #f4e8c8 0%, #e0d2a8 100%);
+  border: 1px dashed #8a6a20;
+  padding: 2px 12px;
+  transform: rotate(6deg);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.games-tent:hover .games-ticket {
+  opacity: 0.85;
+  transform: rotate(3deg) translateY(2px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .games-ticket { transition: opacity 0.6s ease; }
+}

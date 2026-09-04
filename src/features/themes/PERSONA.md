@@ -18,3 +18,5 @@ pigment tiles. swatch grid. quiet map.
 ## forbidden
 - do not let the swatches be neon. iris mixes in earth tones.
 - do not name a colour without a swatch beside it.
+## hover-revelation
+study the atlas and a compass rose inks itself into the corner \u2014 drawn, not printed. (hover the skin sheet.)

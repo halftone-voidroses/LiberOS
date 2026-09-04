@@ -112,6 +112,7 @@
       var p = pendingConfession;
       closePrompt();
       if (p) commitConfess(p.text);
+      if (window.Liber && window.Liber.sound) window.Liber.sound.play('chime');
     });
     if (discardBtn) discardBtn.addEventListener('click', function () {
       closePrompt();

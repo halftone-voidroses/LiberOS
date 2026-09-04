@@ -264,6 +264,11 @@
   transform: translateY(-50%) rotate(35deg);
 }
 
+/* WS4 motion pass: the LED's pulse is ambient — still under reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  .led { animation: none; opacity: 0.8; }
+}
+
 /* ============================================================================
    Theme skins — class swap on .machine, applied from themes.html.
    These live on the machine layer (covenant Q.1: only machine hooks

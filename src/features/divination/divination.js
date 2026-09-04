@@ -287,6 +287,7 @@
         lines: ichingLines.slice(),
         question: q
       });
+      if (window.Liber.sound) window.Liber.sound.play('chime');
     }
   }
 
@@ -358,7 +359,7 @@
       pendingCard = null;
     }
     if (keepBtn) keepBtn.addEventListener('click', function () {
-      if (pendingCard) { reveal(pendingCard); writeCard(pendingCard); }
+      if (pendingCard) { reveal(pendingCard); writeCard(pendingCard); if (window.Liber && window.Liber.sound) window.Liber.sound.play('chime'); }
       closePrompt();
     });
     if (discardBtn) discardBtn.addEventListener('click', function () {

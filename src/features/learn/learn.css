@@ -333,3 +333,62 @@
 
 /* open room for the header card (machine.css sets [data-state] inset: 0) */
 .learn-app { top: 36px; }
+
+/* ─── WS4: the scribe's cursor (register: data/personas.data.js).
+   A pen-nib with its bright slit; standard arrow fallback. ─── */
+.learn-app,
+.learn-titlebar {
+  cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M3 21L9 9l12-6-6 12z' fill='%233a2818' stroke='%231a0e08'/><path d='M3 21l8-8' stroke='%23e8d8a8' stroke-width='1.2'/><circle cx='12' cy='12' r='1.2' fill='%23e8d8a8'/></svg>") 3 21, auto;
+}
+.learn-app button,
+.learn-titlebar button { cursor: inherit; }
+
+/* ─── WS4: pressed-bevel + focus (D0004 recipe, index-card palette) ─── */
+.learn-raison-close {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 248, 0.35),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.5),
+    0 2px 0 #1a0a04,
+    0 3px 4px rgba(0, 0, 0, 0.5);
+}
+.learn-raison-close:active {
+  transform: translateY(1px);
+  filter: brightness(0.92);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 248, 0.25),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 0 0 #1a0a04,
+    0 1px 2px rgba(0, 0, 0, 0.5);
+}
+.learn-drawer:focus-visible,
+.learn-help:focus-visible,
+.learn-exit:focus-visible {
+  outline: 2px solid #aa3030;
+  outline-offset: 2px;
+}
+.learn-raison-close:focus-visible {
+  outline: 2px solid #d8b890;
+  outline-offset: 2px;
+}
+
+/* ─── WS4: hover-revelation — a pencil note in the card margin,
+   written once and half-erased, shows when the card is read. ─── */
+.learn-card { position: relative; }
+.learn-margin-note {
+  position: absolute;
+  right: 14px;
+  bottom: 12px;
+  font-family: 'EB Garamond', 'Garamond', serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+  color: rgba(74, 40, 16, 0.75);
+  transform: rotate(-3deg);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+.learn-card:hover .learn-margin-note { opacity: 0.65; }
+@media (prefers-reduced-motion: reduce) {
+  .learn-margin-note { transition: none; }
+}

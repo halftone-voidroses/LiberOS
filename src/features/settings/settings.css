@@ -134,3 +134,26 @@
   border-top: 1px solid #4a2a18;
   padding-top: 8px;
 }
+
+/* ─── WS4: pressed-bevel + focus (D0004 recipe, machine palette) ─── */
+.settings-btn {
+  border-width: 2px;
+  box-shadow:
+    inset 0 1px 0 rgba(240, 216, 168, 0.25),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.5),
+    0 2px 0 #1a0c04,
+    0 3px 4px rgba(0, 0, 0, 0.5);
+}
+.settings-btn:active {
+  transform: translateY(1px);
+  filter: brightness(0.92);
+  box-shadow:
+    inset 0 1px 0 rgba(240, 216, 168, 0.18),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 0 0 #1a0c04,
+    0 1px 2px rgba(0, 0, 0, 0.5);
+}
+.settings-btn:focus-visible {
+  outline: 2px solid #c89060;
+  outline-offset: 2px;
+}

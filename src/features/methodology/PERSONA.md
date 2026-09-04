@@ -18,3 +18,5 @@ folio. broadsheet. wax seal. rubric margin.
 ## forbidden
 - do not let the folio become a checklist. it is paragraphs.
 - do not use sans-serif. the folio is a printed page.
+## hover-revelation
+hold the folio and a rubric note legible only at the margin surfaces, running down the right edge: read twice. then again. (hover the folio.)

@@ -18,3 +18,5 @@ iron ring. chain links. monogram. wax.
 ## forbidden
 - do not let the relation become a label. it is a knot.
 - do not use sans-serif. e-lizabeth is hand-set.
+## hover-revelation
+look at the knot and two links of the chain appear etched into the window\u2019s corner \u2014 the ones that held. (hover the window.)

@@ -57,6 +57,7 @@
     if (window.Liber.state.addArtifact) {
       window.Liber.state.addArtifact('satchel', { kind: 'game', ref: b.id, name: b.name, result: result, ts: Date.now() });
     }
+    if (window.Liber.sound) window.Liber.sound.play('chime');
   }
 
   function promptSave(b, summary, doSave, doDiscard) {

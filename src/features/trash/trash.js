@@ -112,6 +112,7 @@
           st().set({ graveyard: cur.filter(function (_, n) { return n !== idx; }) });
           flash('it returns.');
           renderDigList();
+          if (window.Liber && window.Liber.sound) window.Liber.sound.play('chime');
         });
         row.appendChild(label);
         row.appendChild(btn);
@@ -203,6 +204,7 @@
       closePrompt();
       if (!p) return;
       commitFor(p.kind);
+      if (window.Liber && window.Liber.sound) window.Liber.sound.play('thunk');
     });
     if (cancelBtn) cancelBtn.addEventListener('click', closePrompt);
     if (closeBtn) closeBtn.addEventListener('click', closePrompt);

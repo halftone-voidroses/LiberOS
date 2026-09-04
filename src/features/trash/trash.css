@@ -565,3 +565,68 @@
 
 /* open room for the lintel (machine.css sets [data-state] inset: 0) */
 .trash-app { top: 40px; }
+
+/* ─── WS4: pete's cursor (register: data/personas.data.js).
+   A gnarled fist of rubble; standard arrow fallback. ─── */
+.trash-app,
+.trash-titlebar {
+  cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M4 14l3-6 5-3 6 3 2 6-4 5-8 1z' fill='%235a4028' stroke='%232a1f15' stroke-width='1.5'/><path d='M7 8l5-3 2 3-4 4z' fill='%236a4c30'/><circle cx='9' cy='15' r='1' fill='%232a1f15'/><circle cx='14' cy='16' r='1.2' fill='%232a1f15'/></svg>") 12 12, auto;
+}
+.trash-app button,
+.trash-titlebar button { cursor: inherit; }
+
+/* ─── WS4: pressed-bevel + focus (D0004 recipe, loam palette).
+   The torn-note buttons keep their own paper press; the prompt
+   keycaps take the standard bevel. ─── */
+.trash-save-prompt-close,
+.trash-save-prompt-keep,
+.trash-save-prompt-discard {
+  border-width: 2px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 245, 220, 0.4),
+    inset 0 -2px 0 rgba(80, 50, 20, 0.4),
+    0 2px 0 #4a3010,
+    0 3px 4px rgba(0, 0, 0, 0.45);
+}
+.trash-save-prompt-close:active,
+.trash-save-prompt-keep:active,
+.trash-save-prompt-discard:active {
+  transform: translateY(1px);
+  filter: brightness(0.92);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 245, 220, 0.3),
+    inset 0 -1px 0 rgba(80, 50, 20, 0.4),
+    0 0 0 #4a3010,
+    0 1px 2px rgba(0, 0, 0, 0.45);
+}
+.trash-action:focus-visible,
+.trash-help:focus-visible,
+.trash-exit:focus-visible,
+.trash-save-prompt-close:focus-visible,
+.trash-save-prompt-keep:focus-visible,
+.trash-save-prompt-discard:focus-visible {
+  outline: 2px solid #c8a880;
+  outline-offset: 2px;
+}
+
+/* ─── WS4: hover-revelation — scratched into the torn window's edge,
+   where only someone rummaging would look. ─── */
+.trash-scratch {
+  position: absolute;
+  top: 8px;
+  right: 30px;
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 0.875rem;
+  letter-spacing: 0.22em;
+  color: #6a4028;
+  transform: rotate(-4deg);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  text-shadow: 0 1px 0 rgba(255, 240, 200, 0.35);
+}
+.trash-window:hover .trash-scratch { opacity: 0.7; }
+@media (prefers-reduced-motion: reduce) {
+  .trash-scratch { transition: none; }
+}

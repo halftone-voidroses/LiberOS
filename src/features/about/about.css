@@ -144,3 +144,9 @@
   color: #b8c8d0;
   border-bottom-color: #b8c8d0;
 }
+
+/* ─── WS4: focus never default on the slate's links (D0004) ─── */
+.about-nav-link:focus-visible {
+  outline: 2px solid #8aa0a8;
+  outline-offset: 2px;
+}

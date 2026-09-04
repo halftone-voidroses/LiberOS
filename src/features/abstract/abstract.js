@@ -136,6 +136,7 @@
     if (window.Liber.state.addArtifact) {
       window.Liber.state.addArtifact('abstract', { label: entry.label || entry.id });
     }
+    if (window.Liber && window.Liber.sound) window.Liber.sound.play('thunk');
     spawnEgg(entry);
     closeConfirm();
     renderRail();

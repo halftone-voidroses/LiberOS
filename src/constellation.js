@@ -202,6 +202,7 @@
       window.Liber.state.unbindRelation(selectedArtifact.data.id);
       window.Liber.state.bindRelation(selectedArtifact.data.id, verb);
     }
+    if (window.Liber && window.Liber.sound) window.Liber.sound.play('chime');
     closeMini();
     render();
   }
@@ -218,6 +219,7 @@
       if (window.Liber.state.releaseArtifact) window.Liber.state.releaseArtifact(kind, id);
       if (window.Liber.state.unbindRelation) window.Liber.state.unbindRelation(id);
     }
+    if (window.Liber && window.Liber.sound) window.Liber.sound.play('thunk');
     closeMini();
     render();
   }

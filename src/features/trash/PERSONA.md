@@ -18,3 +18,5 @@ rubble pile. jagged die-cut window. torn paper. scattered chunks. rusted bolts.
 ## forbidden
 - do not be tidy. pete's pile is a pile.
 - do not give pete a face. the hook is enough.
+## hover-revelation
+rummage the torn window and a scratch shows at its edge: pete was here. (hover the window.)

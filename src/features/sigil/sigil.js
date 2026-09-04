@@ -295,6 +295,7 @@ function loadGhost(bitmapDataUrl) {
       var a = pendingAction;
       closeSavePrompt();
       if (a && a.keep) a.keep();
+      if (window.Liber && window.Liber.sound) window.Liber.sound.play('chime');
     });
     if (discardPromptBtn) discardPromptBtn.addEventListener('click', function () {
       var a = pendingAction;
