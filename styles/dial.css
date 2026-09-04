@@ -51,6 +51,10 @@
 
 /* ── the phosphor tile ── */
 .dial-option {
+  /* fixed footprint: every plaque the same size, so cycling never shifts
+     the set's edges — only the lit glyph changes (user report: the dial
+     "moved" when the wide labels changed the tile width). */
+  width: 116px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -105,6 +109,11 @@
   opacity: 0.55;
   cursor: default;
 }
+
+/* a tile the traveller has entered keeps its phosphor warm; never-visited
+   rooms burn dimmer (the dial remembers where you have been) */
+.dial-option.visited .phos-label { opacity: 1; }
+.dial-option:not(.visited):not(.active) .phos-label { opacity: 0.6; }
 
 .dial-option.prev,
 .dial-option.next {

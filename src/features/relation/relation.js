@@ -12,6 +12,7 @@
   // same artifact kinds the desktop constellation gathers — the ledger
   // must agree with the web it describes.
   var KINDS = [
+    { kind: 'cohort',     chip: 'a sealed exchange', label: function (a) { return a.name; } },
     { kind: 'divination', chip: 'a card',    label: function (a) { return a.name; } },
     { kind: 'games',      chip: 'a game',    label: function (a) { return a.name; } },
     { kind: 'learn',      chip: 'a lesson',  label: function (a) { return a.topic; } },

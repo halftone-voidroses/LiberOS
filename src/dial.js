@@ -59,6 +59,19 @@
     opinionEl.hidden = true;
     opinionEl.setAttribute('aria-live', 'polite');
     dialEl.parentNode.appendChild(opinionEl);
+    // The dial opens on the app the traveller entered last — its glyph is
+    // the one lit on the menu when they come back.
+    var s = (window.Liber && window.Liber.state && window.Liber.state.get()) || {};
+    var latestId = null, latestTs = 0;
+    var visitedMap = s.visited || {};
+    for (var vid in visitedMap) {
+      if (visitedMap[vid] > latestTs) { latestTs = visitedMap[vid]; latestId = vid; }
+    }
+    if (latestId) {
+      for (var vi = 0; vi < VISITORS.length; vi++) {
+        if (VISITORS[vi].id === latestId) { selectedIdx = vi; break; }
+      }
+    }
     render();
     if (leftArrow)  leftArrow.addEventListener('click', function () { cycle(-1); });
     if (rightArrow) rightArrow.addEventListener('click', function () { cycle(+1); });
@@ -90,12 +103,13 @@
     if (!dialEl) return;
     dialEl.innerHTML = '';
     var sigilLocked = isSigilLocked();
+    var visitedMap = ((window.Liber && window.Liber.state && window.Liber.state.get()) || {}).visited || {};
     var prev = VISITORS[(selectedIdx - 1 + VISITORS.length) % VISITORS.length];
     var cur  = VISITORS[selectedIdx];
     var next = VISITORS[(selectedIdx + 1) % VISITORS.length];
-    renderOption(prev, 'prev', sigilLocked);
-    renderOption(cur,  'active', sigilLocked);
-    renderOption(next, 'next', sigilLocked);
+    renderOption(prev, 'prev', sigilLocked, visitedMap);
+    renderOption(cur,  'active', sigilLocked, visitedMap);
+    renderOption(next, 'next', sigilLocked, visitedMap);
   }
 
   // Phosphor bitmap glyphs (suite S2, docs/icon-suites.html) — entity404
@@ -134,10 +148,11 @@
     trash:       { color: '#8a6840', round: '0%' }
   };
 
-function renderOption(v, pos, sigilLocked) {
+function renderOption(v, pos, sigilLocked, visitedMap) {
     var btn = document.createElement('button');
     btn.className = 'dial-option ' + pos;
     if (v.id === 'sigil' && sigilLocked) btn.classList.add('crossed');
+    if (visitedMap && visitedMap[v.id]) btn.classList.add('visited');
     btn.dataset.id = v.id;
     btn.dataset.pos = pos;
     btn.id = 'dial-option-' + v.id;

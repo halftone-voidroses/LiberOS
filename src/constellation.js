@@ -37,6 +37,8 @@
   function allArtifacts() {
     var s = getState();
     var all = [];
+    var c = s.cohort || [];
+    for (var q = 0; q < c.length; q++) all.push({ kind: 'cohort', label: c[q].name || 'sealed words', data: c[q] });
     var d = s.divination || [];
     for (var i = 0; i < d.length; i++) all.push({ kind: 'divination', label: d[i].name, data: d[i] });
     var g = s.games || [];
@@ -61,9 +63,23 @@
   }
 
   var selectedArtifact = null;
+  var lastSig = null;
+
+  // The orbit is a CSS animation on the rendered <g> — rebuilding the SVG
+  // restarts it from zero. Cycling the dial writes `visited` on every press,
+  // which reset the orbit each time (user report). Skip the rebuild unless
+  // something the drawing actually depends on changed.
+  function drawSig(s) {
+    return [s.sigils.length, s.cohort.length, s.divination.length, s.games.length,
+      s.learn.length, s.abstract.length, s.sea.length, s.relations.length].join('|')
+      + ':' + (s.relations || []).map(function (r) { return r.from + '>' + r.verb; }).join(',');
+  }
 
   function render() {
     var s = getState();
+    var sig = drawSig(s);
+    if (sig === lastSig) return;
+    lastSig = sig;
     var sigils = s.sigils || [];
     var artifacts = allArtifacts();
     var relations = s.relations || [];
@@ -71,7 +87,9 @@
     if (sigils.length === 0) {
       if (empty) {
         empty.style.display = '';
-        empty.innerHTML = '— cast the cohort first —<div class="constellation-empty-sub">open the casting stone from the dial.</div>';
+        var sealedWait = (s.cohort || []).length;
+        empty.innerHTML = '— cast the cohort first —<div class="constellation-empty-sub">open the casting stone from the dial.</div>'
+          + (sealedWait > 0 ? '<div class="constellation-empty-sub">' + sealedWait + ' sealed exchange' + (sealedWait === 1 ? '' : 's') + ' wait' + (sealedWait === 1 ? 's' : '') + ' for it.</div>' : '');
       }
       svg.innerHTML = '';
       return;

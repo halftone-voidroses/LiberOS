@@ -87,9 +87,9 @@
 .carving[data-id="tower-rev"]  { top: 50%; right: 14px; transform: translateY(-50%); }
 .carving[data-id="hole-punch"] { top: 18%; right: 14px; }
 .carving[data-id="nib"]        { top: 32%; right: 14px; }
-.carving[data-id="compass"]    { bottom: 60px; left: 50%; transform: translateX(-50%); }
-.carving[data-id="grate"]      { bottom: 60px; left: calc(50% + 50px); }
-.carving[data-id="hook"]       { bottom: 60px; right: calc(50% + 50px); }
+.carving[data-id="compass"]    { bottom: 44px; left: 50%; transform: translateX(-50%); }
+.carving[data-id="grate"]      { bottom: 44px; left: calc(50% + 50px); }
+.carving[data-id="hook"]       { bottom: 44px; right: calc(50% + 50px); }
 
 /* Override the transform on active state to keep them centered. */
 .carving.active[data-id="stone"]   { transform: translateX(-50%) scale(1.1); }
