@@ -1,0 +1,425 @@
+/* trash.css — Ravaging Pete. Pile of rubble, jagged die-cut window, torn paper.
+   This file is COMPLETELY INDEPENDENT. No imports, no shared variables (covenant Q.1). */
+
+.trash-app {
+  position: absolute;
+  inset: 0;
+  background: #1a1410;
+  overflow: hidden;
+  font-family: 'EB Garamond', 'Garamond', 'Times New Roman', serif;
+  color: #c8b890;
+}
+
+/* ─── rubble pile ───────────────────────────────────────────────────── */
+.trash-pile {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 90%, #4a3420 0%, #2a1f15 35%, #0a0604 80%),
+    linear-gradient(180deg, #2a1f15 0%, #1a1410 50%, #0a0604 100%);
+}
+
+/* Jagged die-cut window — the only "clean" rectangle in a sea of rubble. */
+.trash-window {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 78%;
+  max-width: 520px;
+  height: 78%;
+  background:
+    repeating-linear-gradient(0deg,
+      rgba(0, 0, 0, 0.04) 0px, rgba(0, 0, 0, 0.04) 1px,
+      transparent 1px, transparent 4px),
+    linear-gradient(180deg, #d4c4a0 0%, #c0a880 50%, #a08860 100%);
+  /* Irregular, torn-paper / die-cut edge via 12-vertex clip-path. */
+  clip-path: polygon(
+    4% 2%,   18% 0%,   32% 3%,   48% 1%,   64% 4%,   82% 0%,   96% 3%,
+    98% 22%, 100% 38%, 97% 56%, 100% 72%, 99% 88%,
+    92% 98%, 76% 100%, 60% 97%, 44% 100%, 28% 98%, 12% 100%,
+    2% 96%,  0% 78%,  2% 60%,  0% 42%,  3% 22%);
+  padding: 26px 22px 22px;
+  box-shadow:
+    0 0 0 2px #6a4a28,
+    inset 0 0 30px rgba(80, 50, 20, 0.4),
+    0 4px 16px rgba(0, 0, 0, 0.6);
+  font-family: 'EB Garamond', serif;
+}
+
+.trash-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  color: #2a1810;
+}
+
+.trash-header {
+  text-align: center;
+  border-bottom: 1px dashed #6a4a28;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.trash-name {
+  font-variant: small-caps;
+  font-size: 1.4rem;
+  letter-spacing: 0.35em;
+  font-weight: 700;
+  color: #4a2810;
+}
+
+.trash-sub {
+  font-style: italic;
+  font-size: 0.85rem;
+  color: #6a4028;
+  letter-spacing: 0.18em;
+  margin-top: 4px;
+  opacity: 0.8;
+}
+
+.trash-mid {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.trash-warning {
+  font-style: italic;
+  font-size: 1.0rem;
+  color: #4a2810;
+  text-align: center;
+  letter-spacing: 0.06em;
+  border-top: 1px solid #6a4a28;
+  border-bottom: 1px solid #6a4a28;
+  padding: 8px 14px;
+  background: rgba(255, 240, 200, 0.2);
+}
+
+.trash-actions {
+  border-top: 1px dashed #6a4a28;
+  padding-top: 10px;
+}
+
+.trash-action-label {
+  font-style: italic;
+  font-size: 0.8rem;
+  color: #6a4028;
+  letter-spacing: 0.25em;
+  text-transform: lowercase;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+/* Torn-paper note buttons. */
+.trash-action {
+  display: block;
+  width: 100%;
+  margin-bottom: 6px;
+  padding: 6px 12px;
+  background: linear-gradient(180deg, #f4e8c8 0%, #e0d2a8 60%, #c0a880 100%);
+  border: 1px solid #6a4a28;
+  color: #2a1810;
+  font-family: 'EB Garamond', 'Garamond', serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  /* Irregular torn edge via clip-path */
+  clip-path: polygon(
+    2% 0%, 16% 2%, 32% 0%, 50% 3%, 68% 0%, 84% 2%, 98% 0%,
+    100% 22%, 98% 50%, 100% 78%, 98% 100%,
+    84% 98%, 68% 100%, 50% 97%, 32% 100%, 16% 98%, 2% 100%,
+    0% 78%, 2% 50%, 0% 22%);
+  box-shadow: 1px 1px 0 #6a4a28;
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.trash-action:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 2px 2px 0 #6a4a28;
+  background: linear-gradient(180deg, #fff5d0 0%, #e8dab0 60%, #c8b088 100%);
+}
+.trash-action:active {
+  transform: translate(0, 0);
+  box-shadow: 1px 1px 0 #6a4a28;
+}
+.trash-action-hard {
+  background: linear-gradient(180deg, #c89070 0%, #a06848 60%, #6a4028 100%);
+  color: #f4e8c8;
+}
+.trash-action-hard:hover {
+  background: linear-gradient(180deg, #d8a080 0%, #b07858 60%, #7a4830 100%);
+}
+
+/* ─── rubble chunks (boxes, crumpled paper, CRT shards) ─────────────── */
+.trash-chunk {
+  position: absolute;
+  background:
+    repeating-linear-gradient(0deg,
+      rgba(0, 0, 0, 0.06) 0px, rgba(0, 0, 0, 0.06) 1px,
+      transparent 1px, transparent 4px),
+    linear-gradient(135deg, #5a4028 0%, #3a2818 60%, #2a1c10 100%);
+  border: 1px solid #1a1008;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+  transform-origin: center;
+  z-index: 1;
+}
+
+.trash-chunk-1 {
+  left: 4%; top: 12%; width: 56px; height: 38px;
+  transform: rotate(-12deg);
+  background: linear-gradient(180deg, #8a6840 0%, #6a4828 100%);
+  border-color: #3a2010;
+}
+.trash-chunk-2 {
+  left: 8%; bottom: 14%; width: 42px; height: 28px;
+  transform: rotate(8deg);
+  background: linear-gradient(180deg, #c8a880 0%, #a08060 100%);
+  border-color: #6a4028;
+  clip-path: polygon(2% 10%, 22% 0%, 50% 4%, 78% 0%, 98% 8%, 100% 50%, 96% 92%, 70% 100%, 30% 96%, 4% 100%, 0% 60%);
+}
+.trash-chunk-3 {
+  right: 6%; top: 18%; width: 50px; height: 50px;
+  transform: rotate(15deg);
+  background: linear-gradient(135deg, #2a1808 0%, #4a2818 60%, #1a0a04 100%);
+  border-radius: 4px;
+  border-color: #6a4028;
+}
+.trash-chunk-4 {
+  right: 4%; bottom: 18%; width: 64px; height: 30px;
+  transform: rotate(-6deg);
+  background: linear-gradient(180deg, #6a4828 0%, #4a2818 100%);
+  border-color: #2a1008;
+}
+.trash-chunk-5 {
+  left: 24%; top: 4%; width: 36px; height: 28px;
+  transform: rotate(22deg);
+  background: linear-gradient(180deg, #d4c4a0 0%, #b09870 100%);
+  border-color: #6a4028;
+  border-radius: 1px;
+}
+.trash-chunk-6 {
+  right: 22%; bottom: 6%; width: 46px; height: 36px;
+  transform: rotate(-18deg);
+  background: linear-gradient(135deg, #8a4828 0%, #4a2010 100%);
+  border-color: #2a1008;
+}
+
+/* Broken CRT shards. */
+.trash-shard {
+  position: absolute;
+  background: linear-gradient(135deg, #1a0a08 0%, #4a2810 60%, #6a4828 100%);
+  border: 1px solid #2a1408;
+  z-index: 2;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.5);
+}
+.trash-shard-1 {
+  left: 14%; top: 60%; width: 32px; height: 18px;
+  transform: rotate(28deg);
+  clip-path: polygon(0% 30%, 30% 0%, 80% 12%, 100% 50%, 88% 100%, 20% 92%);
+}
+.trash-shard-2 {
+  right: 16%; top: 70%; width: 26px; height: 14px;
+  transform: rotate(-22deg);
+  clip-path: polygon(8% 0%, 92% 8%, 100% 60%, 80% 100%, 0% 90%);
+}
+
+/* Rusted bolts. */
+.trash-bolt {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background:
+    radial-gradient(circle at 35% 35%, #c89060 0%, #6a4028 60%, #2a1408 100%);
+  border: 1px solid #1a0a04;
+  border-radius: 50%;
+  z-index: 2;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
+}
+.trash-bolt::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  background: linear-gradient(90deg, transparent 45%, #1a0a04 45%, #1a0a04 55%, transparent 55%);
+}
+.trash-bolt-1 { left: 32%; top: 90%; }
+.trash-bolt-2 { right: 28%; top: 8%; }
+
+/* ─── save prompt ───────────────────────────────────────────────────── */
+.trash-save-prompt {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 6, 4, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 8;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s;
+}
+.trash-save-prompt.open { opacity: 1; pointer-events: auto; }
+
+.trash-save-prompt-inner {
+  width: 70%;
+  max-width: 420px;
+  background: linear-gradient(180deg, #d4c4a0 0%, #a08860 100%);
+  border: 1px solid #6a4a28;
+  padding: 18px 22px 16px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+  font-family: 'EB Garamond', 'Garamond', serif;
+  color: #2a1810;
+  clip-path: polygon(2% 0%, 98% 2%, 100% 50%, 98% 98%, 50% 100%, 2% 98%, 0% 50%);
+}
+
+.trash-save-prompt-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px dashed #6a4a28;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+  font-style: italic;
+  font-size: 0.95rem;
+}
+
+.trash-save-prompt-close {
+  background: none;
+  border: 1px solid #6a4a28;
+  color: #2a1810;
+  font-family: inherit;
+  font-size: 1rem;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 2px;
+}
+.trash-save-prompt-close:hover { background: rgba(106, 74, 40, 0.2); }
+
+.trash-save-prompt-body {
+  font-style: italic;
+  font-size: 0.9rem;
+  color: #4a2810;
+  margin-bottom: 12px;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.trash-save-prompt-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.trash-save-prompt-keep,
+.trash-save-prompt-discard {
+  background: transparent;
+  border: 1px solid #6a4a28;
+  color: #2a1810;
+  font-family: 'EB Garamond', serif;
+  font-variant: small-caps;
+  font-size: 0.9rem;
+  letter-spacing: 0.2em;
+  padding: 4px 16px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.12s;
+}
+.trash-save-prompt-keep:hover {
+  background: rgba(106, 74, 40, 0.2);
+  border-color: #2a1810;
+}
+.trash-save-prompt-discard:hover {
+  background: rgba(168, 16, 32, 0.2);
+  border-color: #a81020;
+  color: #a81020;
+}
+
+/* ─── help & exit ───────────────────────────────────────────────────── */
+.trash-help {
+  position: absolute;
+  top: 14px;
+  right: 40px;
+  z-index: 5;
+  width: 22px;
+  height: 22px;
+  background: linear-gradient(180deg, rgba(20, 20, 20, 0.6) 0%, rgba(0, 0, 0, 0.7) 100%);
+  border: 1px solid #8a6840;
+  color: #c8a880;
+  font-family: 'VT323', Georgia, 'Times New Roman', Times, serif;
+  font-size: 0.95rem;
+  font-style: italic;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 2px;
+  transition: all 0.15s;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.5),
+    0 1px 0 rgba(0, 0, 0, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+  transition: transform 0.08s, filter 0.15s, box-shadow 0.08s;
+}
+.trash-help:hover {
+  filter: brightness(1.25);
+}
+.trash-help:active {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 0 0 rgba(0, 0, 0, 0.5);
+}
+
+.trash-help:hover {
+  background: rgba(200, 168, 128, 0.1);
+  color: #f4e8c8;
+  border-color: #c8a880;
+}
+
+.trash-exit {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 5;
+  width: 22px;
+  height: 22px;
+  background: linear-gradient(180deg, rgba(20, 20, 20, 0.6) 0%, rgba(0, 0, 0, 0.7) 100%);
+  border: 1px solid #8a6840;
+  color: #c8a880;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 1.05rem;
+  font-style: italic;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 2px;
+  transition: all 0.15s;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.5),
+    0 1px 0 rgba(0, 0, 0, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+  transition: transform 0.08s, filter 0.15s, box-shadow 0.08s;
+}
+.trash-exit:hover {
+  filter: brightness(1.25);
+}
+.trash-exit:active {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 0 0 rgba(0, 0, 0, 0.5);
+}
+
+.trash-exit:hover {
+  background: rgba(200, 168, 128, 0.1);
+  color: #f4e8c8;
+  border-color: #c8a880;
+}

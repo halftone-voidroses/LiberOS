@@ -1,0 +1,234 @@
+// constellation.js — the desktop as a relational graph
+// The sigil is the hub. Every artifact ever created orbits it
+// (regardless of whether a relation exists). Clicking an artifact
+// opens a tiny mini-menu with a free-form verb input to bind it to
+// the sigil. Clicking the sigil itself opens the sigil app.
+
+(function () {
+  var svg = document.getElementById('constellation-svg');
+  var empty = document.getElementById('constellation-empty');
+  var mini = document.getElementById('constellation-mini');
+  var miniVerb = document.getElementById('constellation-mini-verb');
+  var miniSave = document.getElementById('constellation-mini-save');
+  var miniLabel = document.getElementById('constellation-mini-label');
+  var miniClose = document.getElementById('constellation-mini-close');
+  var miniRelease = document.getElementById('constellation-mini-release');
+  if (!svg) return;
+
+  var ARTIFACT_PALETTE = [
+    { color: '#ff69b4', glow: 'rgba(255,105,180,0.5)' },
+    { color: '#d4af6a', glow: 'rgba(212,175,106,0.5)' },
+    { color: '#5a8aaa', glow: 'rgba(90,138,170,0.5)' },
+    { color: '#7a9a4a', glow: 'rgba(122,154,74,0.5)' },
+    { color: '#cc6020', glow: 'rgba(204,96,32,0.5)' },
+    { color: '#a07ac0', glow: 'rgba(160,122,192,0.5)' },
+    { color: '#aa3030', glow: 'rgba(170,48,48,0.5)' },
+    { color: '#4a6068', glow: 'rgba(74,96,104,0.5)' },
+    { color: '#d8c040', glow: 'rgba(216,192,64,0.5)' },
+    { color: '#8a4a8a', glow: 'rgba(138,74,138,0.5)' },
+    { color: '#5a7a4a', glow: 'rgba(90,122,74,0.5)' },
+    { color: '#c89060', glow: 'rgba(200,144,96,0.5)' }
+  ];
+
+  function getState() {
+    return (window.Liber && window.Liber.state && window.Liber.state.get()) || {};
+  }
+
+  function allArtifacts() {
+    var s = getState();
+    var all = [];
+    var d = s.divination || [];
+    for (var i = 0; i < d.length; i++) all.push({ kind: 'divination', label: d[i].name, data: d[i] });
+    var g = s.games || [];
+    for (var j = 0; j < g.length; j++) all.push({ kind: 'games', label: g[j].name, data: g[j] });
+    var l = s.learn || [];
+    for (var k = 0; k < l.length; k++) all.push({ kind: 'learn', label: l[k].topic, data: l[k] });
+    var ab = s.abstract || [];
+    for (var m = 0; m < ab.length; m++) all.push({ kind: 'abstract', label: ab[m].label || 'abstract', data: ab[m] });
+    var se = s.sea || [];
+    for (var n = 0; n < se.length; n++) all.push({ kind: 'sea', label: se[n].label || 'sea', data: se[n] });
+    return all;
+  }
+
+  function relationsFor(fromId) {
+    var s = getState();
+    return (s.relations || []).filter(function (r) { return r.from === fromId; });
+  }
+
+  function positionFor(i, total, cx, cy, rx, ry) {
+    var a = (i / Math.max(total, 1)) * Math.PI * 2 - Math.PI / 2;
+    return { x: cx + Math.cos(a) * rx, y: cy + Math.sin(a) * ry };
+  }
+
+  var selectedArtifact = null;
+
+  function render() {
+    var s = getState();
+    var sigils = s.sigils || [];
+    var artifacts = allArtifacts();
+    var relations = s.relations || [];
+
+    if (sigils.length === 0) {
+      if (empty) {
+        empty.style.display = '';
+        empty.innerHTML = '— make a sigil first —<div class="constellation-empty-sub">open the sigil persona from the dial.</div>';
+      }
+      svg.innerHTML = '';
+      return;
+    }
+    if (empty) empty.style.display = 'none';
+
+    var W = 600, H = 400;
+    var cx = W / 2, cy = H / 2;
+    var sigilR = 22;
+    var orbitR = Math.min(W, H) * 0.32;
+
+    var sigilPos = { x: cx, y: cy };
+    var html = '';
+
+    var boundIndices = [];
+    for (var i = 0; i < artifacts.length; i++) {
+      var artId = artifacts[i].data && artifacts[i].data.id ? artifacts[i].data.id : null;
+      if (artId && relationsFor(artId).length > 0) boundIndices.push(i);
+    }
+    var hasOrbiting = boundIndices.length > 0;
+
+    if (hasOrbiting) {
+      html += '<g class="constellation-orbit" style="transform-origin: ' + cx + 'px ' + cy + 'px;">';
+
+      for (var rr = 0; rr < relations.length; rr++) {
+        var rel = relations[rr];
+        var aIdx = artifacts.findIndex(function (a) { return a.data && a.data.id === rel.from; });
+        if (aIdx < 0) continue;
+        var ap = positionFor(aIdx, artifacts.length, cx, cy, orbitR, orbitR * 0.7);
+        var verb = (rel.verb || '').toString();
+        var mx = (ap.x + sigilPos.x) / 2;
+        var my = (ap.y + sigilPos.y) / 2;
+        html += '<line x1="' + ap.x + '" y1="' + ap.y + '" x2="' + sigilPos.x + '" y2="' + sigilPos.y + '" stroke="rgba(255,105,180,0.5)" stroke-width="1.6" stroke-dasharray="4 5"/>';
+        if (verb && verb !== 'relates to') {
+          html += '<text x="' + mx + '" y="' + (my - 4) + '" text-anchor="middle" fill="rgba(255,200,220,0.7)" font-size="6.5" font-style="italic" font-family="Georgia, serif" style="pointer-events: none;">' + verb + '</text>';
+        }
+      }
+
+      for (var bi = 0; bi < boundIndices.length; bi++) {
+        var i2 = boundIndices[bi];
+        var art2 = artifacts[i2];
+        var p2 = positionFor(i2, artifacts.length, cx, cy, orbitR, orbitR * 0.7);
+        var pal2 = ARTIFACT_PALETTE[i2 % ARTIFACT_PALETTE.length];
+        var id2 = art2.data && art2.data.id ? art2.data.id : 'a' + i2;
+        html += '<circle class="constellation-artifact constellation-artifact-orbiting" data-artifact-id="' + id2 + '" cx="' + p2.x + '" cy="' + p2.y + '" r="9" fill="' + pal2.color + '" fill-opacity="1.0" stroke="#fff" stroke-width="0.6" style="cursor: pointer; filter: drop-shadow(0 0 5px ' + pal2.glow + ');"/>';
+        html += '<text x="' + p2.x + '" y="' + (p2.y + 3) + '" text-anchor="middle" fill="#1a0a05" font-size="8" font-weight="700" style="pointer-events: none;">' + (i2 + 1) + '</text>';
+        var lbl2 = (art2.label || '').toString();
+        if (lbl2.length > 18) lbl2 = lbl2.substring(0, 16) + '..';
+        html += '<text x="' + p2.x + '" y="' + (p2.y - 14) + '" text-anchor="middle" fill="#c8b890" font-size="7" font-family="serif" font-style="italic" style="pointer-events: none;">' + lbl2 + '</text>';
+      }
+
+      html += '</g>';
+    }
+
+    html += '<circle class="constellation-sigil-halo" cx="' + sigilPos.x + '" cy="' + sigilPos.y + '" r="' + (sigilR + 14) + '" fill="none" stroke="rgba(255,200,100,0.3)" stroke-width="1.5" stroke-dasharray="2 6"/>';
+    html += '<circle class="constellation-sigil" id="constellation-sigil" cx="' + sigilPos.x + '" cy="' + sigilPos.y + '" r="' + sigilR + '" fill="rgba(255,200,100,0.95)" stroke="#fff" stroke-width="0.8" style="cursor: pointer; filter: drop-shadow(0 0 10px rgba(255,200,100,0.8));"/>';
+    html += '<text x="' + sigilPos.x + '" y="' + (sigilPos.y + 6) + '" text-anchor="middle" fill="#2a1408" font-size="22" font-weight="700" style="pointer-events: none;">★</text>';
+    html += '<text x="' + sigilPos.x + '" y="' + (sigilPos.y + sigilR + 18) + '" text-anchor="middle" fill="#c8b890" font-size="8" font-family="serif" font-style="italic" style="pointer-events: none;">sigil</text>';
+
+    for (var i3 = 0; i3 < artifacts.length; i3++) {
+      if (boundIndices.indexOf(i3) !== -1) continue;
+      var p = positionFor(i3, artifacts.length, cx, cy, orbitR, orbitR * 0.7);
+      var pal = ARTIFACT_PALETTE[i3 % ARTIFACT_PALETTE.length];
+      var artId = artifacts[i3].data && artifacts[i3].data.id ? artifacts[i3].data.id : 'a' + i3;
+      var fillOpacity = 0.55;
+      html += '<circle class="constellation-artifact" data-artifact-id="' + artId + '" cx="' + p.x + '" cy="' + p.y + '" r="9" fill="' + pal.color + '" fill-opacity="' + fillOpacity + '" stroke="#fff" stroke-width="0.6" style="cursor: pointer; filter: drop-shadow(0 0 5px ' + pal.glow + ');"/>';
+      html += '<text x="' + p.x + '" y="' + (p.y + 3) + '" text-anchor="middle" fill="#1a0a05" font-size="8" font-weight="700" style="pointer-events: none;">' + (i3 + 1) + '</text>';
+      var lbl = (artifacts[i3].label || '').toString();
+      if (lbl.length > 18) lbl = lbl.substring(0, 16) + '..';
+      html += '<text x="' + p.x + '" y="' + (p.y - 14) + '" text-anchor="middle" fill="#c8b890" font-size="7" font-family="serif" font-style="italic" style="pointer-events: none;">' + lbl + '</text>';
+    }
+
+    if (artifacts.length > 0) {
+      var boundCount = boundIndices.length;
+      html += '<text x="' + cx + '" y="14" text-anchor="middle" fill="rgba(200,184,144,0.4)" font-size="7" font-family="serif" font-style="italic">— ' + artifacts.length + ' artifact' + (artifacts.length === 1 ? '' : 's') + ', ' + boundCount + ' bound' + (hasOrbiting ? ', orbiting' : '') + ' —</text>';
+    } else {
+      html += '<text x="' + cx + '" y="14" text-anchor="middle" fill="rgba(200,184,144,0.4)" font-size="7" font-family="serif" font-style="italic">— draw a card, play a game, graduate a lesson. they will appear here. —</text>';
+    }
+
+    svg.innerHTML = html;
+
+    var sigilEl = document.getElementById('constellation-sigil');
+    if (sigilEl) sigilEl.addEventListener('click', openSigilApp);
+    var artEls = svg.querySelectorAll('.constellation-artifact');
+    for (var ai = 0; ai < artEls.length; ai++) {
+      (function (el) {
+        el.addEventListener('click', function () {
+          var id = el.getAttribute('data-artifact-id');
+          var found = null;
+          for (var q = 0; q < artifacts.length; q++) {
+            if (artifacts[q].data && artifacts[q].data.id === id) { found = artifacts[q]; break; }
+          }
+          if (found) openMini(found);
+        });
+      })(artEls[ai]);
+    }
+  }
+
+  function openSigilApp() {
+    window.location.href = 'sigil.html';
+  }
+
+  function openMini(artifact) {
+    selectedArtifact = artifact;
+    if (!mini) return;
+    if (miniLabel) miniLabel.textContent = artifact.label || artifact.data && artifact.data.name || 'artifact';
+    var existing = relationsFor(artifact.data.id);
+    if (miniVerb) {
+      miniVerb.value = existing.length ? (existing[0].verb || '') : '';
+      miniVerb.placeholder = 'how does this relate?';
+    }
+    mini.setAttribute('aria-hidden', 'false');
+    mini.classList.add('open');
+    setTimeout(function () { if (miniVerb) miniVerb.focus(); }, 100);
+  }
+
+  function closeMini() {
+    if (!mini) return;
+    mini.classList.remove('open');
+    mini.setAttribute('aria-hidden', 'true');
+    selectedArtifact = null;
+  }
+
+  function saveMini() {
+    if (!selectedArtifact) return;
+    var verb = (miniVerb && miniVerb.value || '').trim() || 'relates to';
+    if (window.Liber && window.Liber.state) {
+      window.Liber.state.unbindRelation(selectedArtifact.data.id);
+      window.Liber.state.bindRelation(selectedArtifact.data.id, verb);
+    }
+    closeMini();
+    render();
+  }
+
+  if (miniClose) miniClose.addEventListener('click', closeMini);
+  if (miniSave)  miniSave.addEventListener('click', saveMini);
+  if (miniVerb)  miniVerb.addEventListener('keydown', function (e) { if (e.key === 'Enter') saveMini(); if (e.key === 'Escape') closeMini(); });
+
+  function releaseMini() {
+    if (!selectedArtifact) return;
+    var id = selectedArtifact.data.id;
+    var kind = selectedArtifact.kind;
+    if (window.Liber && window.Liber.state) {
+      if (window.Liber.state.releaseArtifact) window.Liber.state.releaseArtifact(kind, id);
+      if (window.Liber.state.unbindRelation) window.Liber.state.unbindRelation(id);
+    }
+    closeMini();
+    render();
+  }
+
+  if (miniRelease) miniRelease.addEventListener('click', releaseMini);
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', render);
+  } else {
+    render();
+  }
+
+  window.ConstellationRefresh = function () { render(); };
+})();

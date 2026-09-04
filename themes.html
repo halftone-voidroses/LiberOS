@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Themes — The Skin</title>
+  <link rel="stylesheet" href="styles/room.css"/>
+  <link rel="stylesheet" href="styles/machine.css"/>
+  <link rel="stylesheet" href="styles/bezel.css"/>
+  <link rel="stylesheet" href="styles/scars.css"/>
+  <link rel="stylesheet" href="src/features/themes/themes.css"/>
+  <link rel="stylesheet" href="styles/shadow.css"/>
+</head>
+<body>
+  <canvas class="dust-canvas" aria-hidden="true"></canvas>
+  <canvas class="static-canvas" aria-hidden="true"></canvas>
+
+  <div class="room">
+    <div class="machine">
+      <div class="bezel">
+        <div class="carvings" id="carvings"></div>
+        <div class="vent-slits" aria-hidden="true"></div>
+        <div class="corruption-scars" aria-hidden="true">
+          <div class="scar scar-1"></div>
+          <div class="scar scar-2"></div>
+          <div class="scar scar-3"></div>
+          <div class="scar scar-4"></div>
+          <div class="scar scar-5"></div>
+          <div class="scar scar-6"></div>
+        </div>
+        <div class="led" aria-hidden="true"></div>
+        <div class="liber-plate">LIBER · VACUI</div>
+        <div class="power-button" aria-hidden="true"></div>
+        <div class="screw" aria-hidden="true"></div>
+
+        <div class="screen">
+          <div class="screen-stage">
+            <div class="themes-app" data-state="themes">
+
+              <button class="themes-help" type="button" id="themes-help" aria-label="help">?</button>
+              <button class="themes-exit" type="button" id="themes-exit" aria-label="exit">×</button>
+
+              <div class="themes-raison" id="themes-raison" aria-hidden="true">
+                <div class="themes-raison-inner">
+                  <div class="themes-raison-head">
+                    <span class="themes-raison-name">raison</span>
+                    <button class="themes-raison-close" type="button" id="themes-raison-close" aria-label="close">×</button>
+                  </div>
+                  <div class="themes-raison-body">
+                    input: click a tile. output: a class theme-{id} is added to .machine and the previous theme class is removed. state.theme is updated and persisted. options: corrupted, clean, shadow, mono, gold. only one theme is active at a time.
+                  </div>
+                  
+                </div>
+              </div>
+
+              <div class="themes-skin">
+                <div class="themes-title">— themes —</div>
+                <div class="themes-sub">paint a new skin for the machine.</div>
+
+                <div class="themes-grid" id="themes-grid"></div>
+
+                <div class="themes-current">
+                  <span class="themes-current-label">current:</span>
+                  <span class="themes-current-value" id="themes-current-value">—</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="monitor-base" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <script src="src/state.js"></script>
+  <script src="src/dust.js"></script>
+  <script src="src/static.js"></script>
+  <script src="src/shadow.js"></script>
+  <script src="src/carvings.js"></script>
+  <script src="src/features/themes/themes.js"></script>
+</body>
+</html>

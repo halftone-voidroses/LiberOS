@@ -1,0 +1,539 @@
+/* cohort.css — E-Lizabeth. Candle-wax, dark wood, red velvet, gothic arch.
+   This file is COMPLETELY INDEPENDENT. No imports, no shared variables (covenant Q.1). */
+
+.cohort-app {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(180, 30, 30, 0.15) 0%, rgba(0,0,0,0) 60%),
+    linear-gradient(180deg, #0a0408 0%, #1a0a0a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: 'EB Garamond', 'Garamond', 'Times New Roman', serif;
+  color: #d8b890;
+}
+
+.cohort-arch {
+  position: relative;
+  width: 86%;
+  height: 92%;
+  background:
+    repeating-linear-gradient(0deg, rgba(180, 30, 30, 0.04) 0px, rgba(180, 30, 30, 0.04) 1px, transparent 1px, transparent 6px),
+    linear-gradient(180deg, #4a0a14 0%, #2a0a0a 50%, #1a0a0a 100%);
+  border-radius: 100% 100% 4px 4px / 22% 22% 4px 4px;
+  border: 2px solid #6a2a18;
+  box-shadow:
+    inset 0 0 0 1px #2a0a08,
+    inset 0 0 40px rgba(0,0,0,0.8),
+    inset 0 0 100px rgba(180, 30, 30, 0.15),
+    0 0 30px rgba(0,0,0,0.7);
+  padding: 30px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cohort-arch-top {
+  position: absolute;
+  top: 12px; left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #8a4a30;
+  font-style: italic;
+}
+
+.cohort-arch::before {
+  content: '';
+  position: absolute;
+  top: 4px; left: 4px; right: 4px;
+  height: 8px;
+  background: linear-gradient(180deg, #6a2a18 0%, #4a0a14 100%);
+  border-radius: 100% 100% 0 0 / 100% 100% 0 0;
+  border: 1px solid #8a4a30;
+  border-bottom: none;
+}
+
+.cohort-arch::after {
+  content: '';
+  position: absolute;
+  top: 12px; left: 8px; right: 8px;
+  height: 6px;
+  background:
+    radial-gradient(circle 2px at 12px 4px, rgba(212, 175, 106, 0.5) 0%, rgba(212, 175, 106, 0) 70%),
+    radial-gradient(circle 2px at 32px 4px, rgba(212, 175, 106, 0.4) 0%, rgba(212, 175, 106, 0) 70%),
+    radial-gradient(circle 2px at 52px 4px, rgba(212, 175, 106, 0.5) 0%, rgba(212, 175, 106, 0) 70%),
+    radial-gradient(circle 2px at 72px 4px, rgba(212, 175, 106, 0.4) 0%, rgba(212, 175, 106, 0) 70%);
+  background-size: 84px 6px;
+  background-repeat: repeat-x;
+}
+
+.cohort-flame {
+  position: absolute;
+  top: -2px;
+  width: 12px; height: 22px;
+  background: radial-gradient(ellipse at 50% 80%, rgba(255, 220, 120, 0.9) 0%, rgba(255, 140, 40, 0.6) 50%, rgba(0,0,0,0) 80%);
+  border-radius: 50% 50% 30% 30% / 60% 60% 40% 40%;
+  filter: blur(1px);
+  animation: cohort-flicker 1.5s ease-in-out infinite;
+}
+
+.cohort-flame-1 { left: 18%; animation-delay: 0s; }
+.cohort-flame-2 { left: 50%; transform: translateX(-50%); animation-delay: 0.3s; }
+.cohort-flame-3 { right: 18%; animation-delay: 0.6s; }
+
+@keyframes cohort-flicker {
+  0%, 100% { opacity: 0.9; transform: scale(1); }
+  50%      { opacity: 1.0; transform: scale(1.05); }
+}
+
+.cohort-header {
+  text-align: center;
+  border-bottom: 1px solid #6a2a18;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.cohort-title {
+  font-size: 1.2rem;
+  font-variant: small-caps;
+  letter-spacing: 0.3em;
+  color: #d8a070;
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(216, 160, 112, 0.4);
+}
+
+.cohort-sub {
+  font-size: 0.65rem;
+  font-style: italic;
+  color: #8a4a30;
+  margin-top: 2px;
+  letter-spacing: 0.05em;
+}
+
+.cohort-list {
+  flex: 1;
+  width: 100%;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+.cohort-empty {
+  text-align: center;
+  font-style: italic;
+  color: #6a4a30;
+  font-size: 0.8rem;
+  margin-top: 30px;
+  line-height: 1.6;
+}
+
+.cohort-empty em {
+  color: #8a4a30;
+  font-style: italic;
+}
+
+.cohort-person {
+  background: rgba(216, 160, 112, 0.06);
+  border-left: 2px solid #8a4a30;
+  padding: 8px 10px;
+  margin-bottom: 6px;
+}
+
+.cohort-person-name {
+  font-size: 0.9rem;
+  font-variant: small-caps;
+  letter-spacing: 0.1em;
+  color: #d8a070;
+  font-weight: 700;
+}
+
+.cohort-person-confession {
+  font-size: 0.75rem;
+  font-style: italic;
+  color: #a88060;
+  margin-top: 3px;
+  line-height: 1.4;
+}
+
+.cohort-confess {
+  width: 100%;
+  border-top: 1px solid #6a2a18;
+  padding-top: 8px;
+  margin-top: 6px;
+}
+
+.cohort-confess-label {
+  font-size: 0.55rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #8a4a30;
+  font-style: italic;
+  margin-bottom: 3px;
+}
+
+.cohort-confess-input {
+  width: 100%;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid #6a2a18;
+  color: #d8b890;
+  font-family: inherit;
+  font-style: italic;
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  resize: vertical;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.cohort-confess-input:focus {
+  border-color: #8a4a30;
+  background: rgba(0,0,0,0.5);
+}
+
+.cohort-confess-input::placeholder {
+  color: #5a3a20;
+  font-style: italic;
+}
+
+.cohort-confess-btn {
+  margin-top: 4px;
+  background: linear-gradient(180deg, #6a2a18 0%, #4a0a14 100%);
+  border: 1px solid #8a4a30;
+  color: #d8a070;
+  font-family: inherit;
+  font-size: 0.65rem;
+  font-variant: small-caps;
+  letter-spacing: 0.2em;
+  padding: 5px 12px;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.15s;
+}
+
+.cohort-confess-btn:hover {
+  background: linear-gradient(180deg, #8a3a20 0%, #6a0a14 100%);
+  color: #f0c890;
+  box-shadow: 0 0 8px rgba(216, 160, 112, 0.4);
+}
+
+/* cohort help + raison (per-persona, gothic-arch / candle-wax palette) */
+
+.cohort-help {
+  position: absolute;
+  top: 14px;
+  right: 40px;
+  z-index: 5;
+  width: 22px;
+  height: 22px;
+  background: linear-gradient(180deg, rgba(20, 20, 20, 0.6) 0%, rgba(0, 0, 0, 0.7) 100%);
+  border: 1px solid #6a2a18;
+  color: #8a4a30;
+  font-family: 'VT323', Georgia, 'Times New Roman', Times, serif;
+  font-size: 0.95rem;
+  font-style: italic;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 2px;
+  transition: all 0.15s;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.5),
+    0 1px 0 rgba(0, 0, 0, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+  transition: transform 0.08s, filter 0.15s, box-shadow 0.08s;
+}
+.cohort-help:hover {
+  filter: brightness(1.25);
+}
+.cohort-help:active {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 0 0 rgba(0, 0, 0, 0.5);
+}
+
+
+.cohort-help:hover {
+  background: rgba(216, 160, 112, 0.1);
+  color: #d8a070;
+  border-color: #8a4a30;
+}
+
+.cohort-exit {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 5;
+  width: 22px;
+  height: 22px;
+  background: linear-gradient(180deg, rgba(20, 20, 20, 0.6) 0%, rgba(0, 0, 0, 0.7) 100%);
+  border: 1px solid #6a2a18;
+  color: #8a4a30;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-style: italic;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 2px;
+  transition: all 0.15s;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.5),
+    0 1px 0 rgba(0, 0, 0, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+  transition: transform 0.08s, filter 0.15s, box-shadow 0.08s;
+}
+.cohort-exit:hover {
+  filter: brightness(1.25);
+}
+.cohort-exit:active {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 0 0 rgba(0, 0, 0, 0.5);
+}
+
+
+.cohort-exit:hover {
+  background: rgba(216, 160, 112, 0.1);
+  color: #d8a070;
+  border-color: #8a4a30;
+}
+
+.cohort-raison {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 4, 8, 0.88);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.cohort-raison.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.cohort-raison-inner {
+  width: 78%;
+  max-width: 420px;
+  background: linear-gradient(180deg, #4a0a14 0%, #1a0a0a 100%);
+  border: 1px solid #6a2a18;
+  box-shadow:
+    inset 0 0 0 1px #2a0a08,
+    inset 0 0 24px rgba(0, 0, 0, 0.7),
+    0 0 30px rgba(216, 160, 112, 0.2);
+  padding: 18px 22px;
+  font-style: italic;
+  color: #d8b890;
+  letter-spacing: 0.03em;
+}
+
+.cohort-raison-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #6a2a18;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.cohort-raison-name {
+  font-size: 0.7rem;
+  color: #d8a070;
+  text-transform: lowercase;
+  letter-spacing: 0.25em;
+  font-weight: 700;
+  font-family: 'EB Garamond', 'Garamond', 'Times New Roman', serif;
+}
+
+.cohort-raison-close {
+  background: none;
+  border: 1px solid #6a2a18;
+  color: #8a4a30;
+  font-family: inherit;
+  font-size: 0.85rem;
+  line-height: 1;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.cohort-raison-close:hover {
+  background: rgba(216, 160, 112, 0.1);
+  color: #d8a070;
+}
+
+.cohort-raison-body {
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+
+.cohort-raison-body em {
+  color: #f0c890;
+  font-style: normal;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.cohort-raison-foot {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid #6a2a18;
+  font-size: 0.65rem;
+  color: #8a4a30;
+  text-align: right;
+  letter-spacing: 0.1em;
+}
+
+/* cohort save prompt (per-persona, gothic-arch / candle-wax palette) */
+
+.cohort-save-prompt {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 8, 4, 0.88);
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.cohort-save-prompt.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.cohort-save-prompt-inner {
+  width: 78%;
+  max-width: 420px;
+  background: linear-gradient(180deg, #2a1408 0%, #100804 100%);
+  border: 1px solid #6a2a18;
+  box-shadow:
+    inset 0 0 0 1px #2a1408,
+    inset 0 0 20px rgba(0, 0, 0, 0.7),
+    0 0 30px rgba(216, 160, 112, 0.2);
+  padding: 18px 22px;
+  font-style: italic;
+  color: #d8b890;
+  letter-spacing: 0.03em;
+  position: relative;
+}
+
+.cohort-save-prompt-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #6a2a18;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.cohort-save-prompt-name {
+  font-size: 0.7rem;
+  color: #f0c890;
+  text-transform: lowercase;
+  letter-spacing: 0.25em;
+  font-weight: 700;
+  text-shadow: 0 0 4px rgba(240, 200, 144, 0.4);
+}
+
+.cohort-save-prompt-close {
+  background: none;
+  border: 1px solid #6a2a18;
+  color: #8a4a30;
+  font-family: inherit;
+  font-size: 0.85rem;
+  line-height: 1;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.cohort-save-prompt-close:hover {
+  background: rgba(216, 160, 112, 0.1);
+  color: #d8a070;
+}
+
+.cohort-save-prompt-body {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: #e8c8a0;
+  margin: 8px 0 14px;
+}
+
+.cohort-save-prompt-body em {
+  color: #f0c890;
+  font-style: normal;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.cohort-save-prompt-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  border-top: 1px solid #6a2a18;
+  padding-top: 10px;
+}
+
+.cohort-save-prompt-keep,
+.cohort-save-prompt-discard {
+  background: none;
+  border: 1px solid #6a2a18;
+  color: #d8b890;
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-style: italic;
+  letter-spacing: 0.18em;
+  text-transform: lowercase;
+  padding: 6px 14px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.15s;
+}
+
+.cohort-save-prompt-keep {
+  color: #f0c890;
+  border-color: #8a4a30;
+  text-shadow: 0 0 4px rgba(240, 200, 144, 0.4);
+}
+
+.cohort-save-prompt-keep:hover {
+  background: rgba(216, 160, 112, 0.15);
+  color: #ffe8b8;
+}
+
+.cohort-save-prompt-discard {
+  color: #8a4a30;
+}
+
+.cohort-save-prompt-discard:hover {
+  background: rgba(106, 42, 24, 0.2);
+  color: #d8a070;
+  border-color: #8a4a30;
+}

@@ -1,0 +1,346 @@
+/* sea.css — Vanir's porthole into the deep. Negative space, kelp, depth.
+   This file is COMPLETELY INDEPENDENT. No imports, no shared variables (covenant Q.1). */
+
+.sea-app {
+  position: absolute;
+  inset: 0;
+  background: #02060a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  color: #5a8090;
+}
+
+.sea-deep {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(ellipse at 50% 100%, rgba(40, 80, 100, 0.25) 0%, rgba(0, 0, 0, 0) 50%),
+    radial-gradient(ellipse at 50% 0%, rgba(20, 40, 50, 0.18) 0%, rgba(0, 0, 0, 0) 50%);
+  overflow: hidden;
+  cursor: crosshair;
+}
+
+.sea-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0) 30%, rgba(0,0,0,0.6) 100%);
+  pointer-events: none;
+}
+
+.sea-question {
+  position: absolute;
+  top: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.85rem;
+  font-style: italic;
+  letter-spacing: 0.05em;
+  color: #608090;
+  text-align: center;
+  opacity: 0.7;
+  max-width: 70%;
+  line-height: 1.6;
+}
+
+.sea-breath {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+}
+
+.sea-breath-ring {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(120, 180, 200, 0.15);
+  border-radius: 50%;
+  animation: sea-breathe 6s ease-in-out infinite;
+}
+
+.sea-breath-ring-2 {
+  inset: 20px;
+  animation-delay: 1.2s;
+  border-color: rgba(120, 180, 200, 0.2);
+}
+
+.sea-breath-ring-3 {
+  inset: 40px;
+  animation-delay: 2.4s;
+  border-color: rgba(120, 180, 200, 0.25);
+}
+
+.sea-breath-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30px;
+  height: 30px;
+  background: radial-gradient(circle, rgba(160, 200, 220, 0.5) 0%, rgba(120, 180, 200, 0) 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: sea-pulse 4s ease-in-out infinite;
+}
+
+@keyframes sea-breathe {
+  0%, 100% { transform: scale(0.85); opacity: 0.3; }
+  50%      { transform: scale(1.05); opacity: 0.7; }
+}
+
+@keyframes sea-pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(0.6); opacity: 0.4; }
+  50%      { transform: translate(-50%, -50%) scale(1.2); opacity: 1.0; }
+}
+
+.sea-gauge {
+  position: absolute;
+  left: 18px;
+  top: 22%;
+  bottom: 22%;
+  width: 2px;
+  background: rgba(80, 120, 140, 0.2);
+}
+
+.sea-gauge-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 30%;
+  background: linear-gradient(180deg, rgba(120, 180, 200, 0.6) 0%, rgba(60, 100, 120, 0.2) 100%);
+  transition: height 4s ease;
+}
+
+.sea-gauge-label {
+  position: absolute;
+  left: 6px;
+  top: 100%;
+  font-size: 0.5rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #406070;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  margin-top: 6px;
+  font-style: italic;
+}
+
+.sea-kelp {
+  position: absolute;
+  bottom: 0;
+  width: 4px;
+  height: 60%;
+  background: linear-gradient(180deg, rgba(40, 80, 60, 0.1) 0%, rgba(40, 80, 60, 0.4) 50%, rgba(20, 50, 40, 0.6) 100%);
+  border-radius: 50% 50% 0 0;
+  transform-origin: bottom center;
+  animation: sea-sway 8s ease-in-out infinite;
+  filter: blur(0.5px);
+}
+
+.sea-kelp-1 { left: 15%; height: 50%; animation-delay: 0s;   }
+.sea-kelp-2 { left: 30%; height: 70%; animation-delay: 1.5s; width: 5px; }
+.sea-kelp-3 { left: 75%; height: 55%; animation-delay: 3s;   }
+.sea-kelp-2::before {
+  content: '';
+  position: absolute;
+  top: 20%;
+  left: -3px;
+  width: 10px;
+  height: 4px;
+  background: rgba(40, 80, 60, 0.5);
+  border-radius: 50%;
+  filter: blur(0.3px);
+}
+
+@keyframes sea-sway {
+  0%, 100% { transform: rotate(-3deg); }
+  50%      { transform: rotate(3deg); }
+}
+
+/* sea help + raison (per-persona, deep-water palette) */
+
+.sea-help {
+  position: absolute;
+  top: 14px;
+  right: 40px;
+  z-index: 5;
+  width: 22px;
+  height: 22px;
+  background: linear-gradient(180deg, rgba(20, 20, 20, 0.6) 0%, rgba(0, 0, 0, 0.7) 100%);
+  border: 1px solid rgba(120, 180, 200, 0.25);
+  color: #608090;
+  font-family: 'VT323', Georgia, 'Times New Roman', Times, serif;
+  font-size: 0.95rem;
+  font-style: italic;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 2px;
+  transition: all 0.15s;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.5),
+    0 1px 0 rgba(0, 0, 0, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+  transition: transform 0.08s, filter 0.15s, box-shadow 0.08s;
+}
+.sea-help:hover {
+  filter: brightness(1.25);
+}
+.sea-help:active {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 0 0 rgba(0, 0, 0, 0.5);
+}
+
+
+.sea-help:hover {
+  background: rgba(120, 180, 200, 0.1);
+  color: #a0c8d8;
+  border-color: rgba(120, 180, 200, 0.5);
+}
+
+.sea-exit {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 5;
+  width: 22px;
+  height: 22px;
+  background: linear-gradient(180deg, rgba(20, 20, 20, 0.6) 0%, rgba(0, 0, 0, 0.7) 100%);
+  border: 1px solid rgba(120, 180, 200, 0.25);
+  color: #608090;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-style: italic;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 2px;
+  transition: all 0.15s;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.5),
+    0 1px 0 rgba(0, 0, 0, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+  transition: transform 0.08s, filter 0.15s, box-shadow 0.08s;
+}
+.sea-exit:hover {
+  filter: brightness(1.25);
+}
+.sea-exit:active {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 0 0 rgba(0, 0, 0, 0.5);
+}
+
+
+.sea-exit:hover {
+  background: rgba(120, 180, 200, 0.1);
+  color: #a0c8d8;
+  border-color: rgba(120, 180, 200, 0.5);
+}
+
+.sea-raison {
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 6, 10, 0.88);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.sea-raison.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sea-raison-inner {
+  width: 78%;
+  max-width: 420px;
+  background: linear-gradient(180deg, #0a1a24 0%, #02060a 100%);
+  border: 1px solid rgba(120, 180, 200, 0.25);
+  box-shadow:
+    inset 0 0 0 1px #02060a,
+    inset 0 0 24px rgba(0, 0, 0, 0.7),
+    0 0 30px rgba(120, 180, 200, 0.2);
+  padding: 18px 22px;
+  font-style: italic;
+  color: #5a8090;
+  letter-spacing: 0.03em;
+}
+
+.sea-raison-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(120, 180, 200, 0.2);
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.sea-raison-name {
+  font-size: 0.7rem;
+  color: #a0c8d8;
+  text-transform: lowercase;
+  letter-spacing: 0.25em;
+  font-weight: 700;
+}
+
+.sea-raison-close {
+  background: none;
+  border: 1px solid rgba(120, 180, 200, 0.25);
+  color: #608090;
+  font-family: inherit;
+  font-size: 0.85rem;
+  line-height: 1;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.sea-raison-close:hover {
+  background: rgba(120, 180, 200, 0.1);
+  color: #a0c8d8;
+}
+
+.sea-raison-body {
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+
+.sea-raison-body em {
+  color: #a0c8d8;
+  font-style: normal;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.sea-raison-foot {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(120, 180, 200, 0.2);
+  font-size: 0.65rem;
+  color: #406070;
+  text-align: right;
+  letter-spacing: 0.1em;
+}

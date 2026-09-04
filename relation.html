@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Relations — The Constellation</title>
+  <link rel="stylesheet" href="styles/room.css"/>
+  <link rel="stylesheet" href="styles/machine.css"/>
+  <link rel="stylesheet" href="styles/bezel.css"/>
+  <link rel="stylesheet" href="styles/scars.css"/>
+  <link rel="stylesheet" href="src/features/relation/relation.css"/>
+  <link rel="stylesheet" href="styles/shadow.css"/>
+</head>
+<body>
+  <canvas class="dust-canvas" aria-hidden="true"></canvas>
+  <canvas class="static-canvas" aria-hidden="true"></canvas>
+
+  <div class="room">
+    <div class="machine">
+      <div class="bezel">
+        <div class="carvings" id="carvings"></div>
+        <div class="vent-slits" aria-hidden="true"></div>
+        <div class="corruption-scars" aria-hidden="true">
+          <div class="scar scar-1"></div>
+          <div class="scar scar-2"></div>
+          <div class="scar scar-3"></div>
+          <div class="scar scar-4"></div>
+          <div class="scar scar-5"></div>
+          <div class="scar scar-6"></div>
+        </div>
+        <div class="led" aria-hidden="true"></div>
+        <div class="liber-plate">LIBER · VACUI</div>
+        <div class="power-button" aria-hidden="true"></div>
+        <div class="screw" aria-hidden="true"></div>
+
+        <div class="screen">
+          <div class="screen-stage">
+            <div class="relation-app" data-state="relation">
+
+              <button class="relation-help" type="button" id="relation-help" aria-label="help">?</button>
+              <button class="relation-exit" type="button" id="relation-exit" aria-label="exit">×</button>
+
+              <div class="relation-raison" id="relation-raison" aria-hidden="true">
+                <div class="relation-raison-inner">
+                  <div class="relation-raison-head">
+                    <span class="relation-raison-name">raison</span>
+                    <button class="relation-raison-close" type="button" id="relation-raison-close" aria-label="close">×</button>
+                  </div>
+                  <div class="relation-raison-body">
+                    input: state changes. output: a force-laid svg with sigil nodes on an outer ellipse, cohort nodes on an inner ellipse, and pink dashed lines between sigil and cohort when names share an element. click a node = no action. counts are derived from state.sigils.length and state.cohort.length.
+                  </div>
+                </div>
+              </div>
+
+              <div class="relation-pile">
+                <div class="relation-chunk relation-chunk-1" aria-hidden="true"></div>
+                <div class="relation-chunk relation-chunk-2" aria-hidden="true"></div>
+                <div class="relation-shard relation-shard-1" aria-hidden="true"></div>
+
+                <div class="relation-window">
+                  <div class="relation-header">
+                    <div class="relation-title">the constellation</div>
+                    <div class="relation-sub">— what you have made, and who has come —</div>
+                  </div>
+
+                  <div class="relation-canvas-wrap">
+                    <svg class="relation-svg" id="relation-svg" viewBox="0 0 600 380" preserveAspectRatio="xMidYMid meet"></svg>
+                    <div class="relation-empty" id="relation-empty">— nothing has been etched yet —<br/><em>begin with the stone, in sigil.</em></div>
+                  </div>
+
+                  <div class="relation-legend">
+                    <span><span class="relation-dot relation-dot-sigil"></span> sigil</span>
+                    <span><span class="relation-dot relation-dot-cohort"></span> cohort</span>
+                    <span class="relation-counts" id="relation-counts">0 sigils · 0 cohort</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="monitor-base" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <script src="src/state.js"></script>
+  <script src="src/dust.js"></script>
+  <script src="src/static.js"></script>
+  <script src="src/carvings.js"></script>
+  <script src="src/shadow.js"></script>
+  <script src="src/features/relation/relation.js"></script>
+</body>
+</html>

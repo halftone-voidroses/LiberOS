@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Liber Vacui 1.0 — Visual Diff</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      background: #0a0000;
+      color: #c0a0a0;
+      font-family: 'Times New Roman', Times, serif;
+    }
+    .wrap { max-width: 1400px; margin: 0 auto; padding: 30px 24px 60px; }
+    h1 {
+      font-size: 2.0rem;
+      color: #aa0000;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .sub { color: #886060; font-style: italic; margin-bottom: 30px; }
+    .pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 30px 0;
+    }
+    .pair .col {
+      background: #1a0000;
+      border: 1px solid #4a0000;
+      padding: 12px;
+    }
+    .pair .col h2 {
+      color: #aa6a6a;
+      font-size: 0.95rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .pair .col .caption {
+      color: #705050;
+      font-size: 0.8rem;
+      font-style: italic;
+      margin-bottom: 6px;
+    }
+    .pair .col img {
+      width: 100%;
+      display: block;
+      border: 1px solid #2a0000;
+    }
+    .legend {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      font-size: 0.85rem;
+    }
+    .legend .item {
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+    .legend .ref { background: #4a0000; color: #ff8a8a; }
+    .legend .new { background: #003a00; color: #8aff8a; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Visual Diff — Reference vs Build</h1>
+    <div class="sub">Side-by-side comparison of the three reference sketches against the LiberVacui1.0 build.</div>
+
+    <div class="legend">
+      <span class="item ref">Reference (user sketch)</span>
+      <span class="item new">Build (LiberVacui1.0)</span>
+    </div>
+
+    <div class="pair">
+      <div class="col">
+        <h2>State 1 — Boot</h2>
+        <div class="caption">Black void, beige CRT, deep red screen, "LIBER.OS" + "[ start ]"</div>
+        <img src="../references/veryfirstscreen.png" alt="Reference boot screen"/>
+      </div>
+      <div class="col">
+        <h2>State 1 — Boot (Build)</h2>
+        <div class="caption">LiberVacui1.0/screenshots/01-boot.png</div>
+        <img src="../screenshots/01-boot.png" alt="Build boot screen"/>
+      </div>
+    </div>
+
+    <div class="pair">
+      <div class="col">
+        <h2>State 3 — Pre-tutorial</h2>
+        <div class="caption">Beige CRT, deep red screen, large flaming ? centered, dial at bottom</div>
+        <img src="../references/pre-tutorial.png" alt="Reference pre-tutorial screen"/>
+      </div>
+      <div class="col">
+        <h2>State 3 — Pre-tutorial (Build)</h2>
+        <div class="caption">LiberVacui1.0/screenshots/03-pre-tutorial.png</div>
+        <img src="../screenshots/03-pre-tutorial.png" alt="Build pre-tutorial screen"/>
+      </div>
+    </div>
+
+    <div class="pair">
+      <div class="col">
+        <h2>State 4 — Post-tutorial</h2>
+        <div class="caption">Beige CRT, deep red screen, ? top-left, sigil+artifacts+pink lines, dial at bottom</div>
+        <img src="../references/post-sigil-creation.png" alt="Reference post-tutorial screen"/>
+      </div>
+      <div class="col">
+        <h2>State 4 — Post-tutorial (Build)</h2>
+        <div class="caption">LiberVacui1.0/screenshots/04-post-tutorial.png</div>
+        <img src="../screenshots/04-post-tutorial.png" alt="Build post-tutorial screen"/>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

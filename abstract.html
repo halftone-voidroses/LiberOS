@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Abstract — Entity404</title>
+  <link rel="stylesheet" href="styles/room.css"/>
+  <link rel="stylesheet" href="styles/machine.css"/>
+  <link rel="stylesheet" href="styles/bezel.css"/>
+  <link rel="stylesheet" href="styles/scars.css"/>
+  <link rel="stylesheet" href="src/features/abstract/abstract.css"/>
+  <link rel="stylesheet" href="styles/shadow.css"/>
+</head>
+<body>
+  <canvas class="dust-canvas" aria-hidden="true"></canvas>
+  <canvas class="static-canvas" aria-hidden="true"></canvas>
+
+  <div class="room">
+    <div class="machine">
+      <div class="bezel">
+        <div class="carvings" id="carvings"></div>
+        <div class="vent-slits" aria-hidden="true"></div>
+        <div class="corruption-scars" aria-hidden="true">
+          <div class="scar scar-1"></div>
+          <div class="scar scar-2"></div>
+          <div class="scar scar-3"></div>
+          <div class="scar scar-4"></div>
+          <div class="scar scar-5"></div>
+          <div class="scar scar-6"></div>
+        </div>
+        <div class="led" aria-hidden="true"></div>
+        <div class="liber-plate">LIBER · VACUI</div>
+        <div class="power-button" aria-hidden="true"></div>
+        <div class="screw" aria-hidden="true"></div>
+
+        <div class="screen">
+          <div class="screen-stage">
+            <div class="abstract-app" data-state="abstract">
+
+              <button class="abstract-help" type="button" id="abstract-help" aria-label="help">?</button>
+              <button class="abstract-exit" type="button" id="abstract-exit" aria-label="exit">×</button>
+
+              <div class="abstract-raison" id="abstract-raison" aria-hidden="true">
+                <div class="abstract-raison-inner">
+                  <div class="abstract-raison-head">
+                    <span class="abstract-raison-name">raison</span>
+                    <button class="abstract-raison-close" type="button" id="abstract-raison-close" aria-label="close">×</button>
+                  </div>
+                  <div class="abstract-raison-body">
+                    entity404 is the void. artifacts you have already named live in the left rail. drag any one of them into the void. a yes/no prompt will ask: abstract it? on confirm, the artifact is absorbed and a hatched egg appears in the void, marked with its name.
+                  </div>
+                </div>
+              </div>
+
+              <div class="abstract-rail" id="abstract-rail" aria-label="artifacts">
+                <div class="abstract-rail-title">┌─ artifacts ─┐</div>
+                <div class="abstract-rail-list" id="abstract-rail-list">
+                  <div class="abstract-rail-empty">no artifacts yet.</div>
+                </div>
+              </div>
+
+              <div class="abstract-void" id="abstract-void">
+                <div class="abstract-void-crt">
+                  <div class="abstract-void-header">
+                    <span class="abstract-void-banner">┌─ ENTITY404 ─┐</span>
+                  </div>
+                  <div class="abstract-void-body" id="abstract-void-body">
+                    <div class="abstract-void-line">drag an artifact from the left rail into this void.</div>
+                    <div class="abstract-void-line">on confirm, a hatched egg will be spawned here, marked with its name.</div>
+                    <div class="abstract-void-line">&nbsp;</div>
+                    <div class="abstract-void-line abstract-void-prompt">C:\entity404&gt; <span class="abstract-void-cursor">_</span></div>
+                  </div>
+                  <div class="abstract-void-footer">
+                    <span class="abstract-void-scanlines" aria-hidden="true"></span>
+                  </div>
+                </div>
+
+                <div class="abstract-eggs" id="abstract-eggs" aria-hidden="true"></div>
+              </div>
+
+              <div class="abstract-confirm" id="abstract-confirm" aria-hidden="true">
+                <div class="abstract-confirm-inner">
+                  <div class="abstract-confirm-title">abstract it?</div>
+                  <div class="abstract-confirm-body" id="abstract-confirm-body">—</div>
+                  <div class="abstract-confirm-actions">
+                    <button class="abstract-confirm-yes" type="button" id="abstract-confirm-yes">Y / yes</button>
+                    <button class="abstract-confirm-no" type="button" id="abstract-confirm-no">N / no</button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="monitor-base" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <script src="src/state.js"></script>
+  <script src="src/dust.js"></script>
+  <script src="src/static.js"></script>
+  <script src="src/shadow.js"></script>
+  <script src="src/carvings.js"></script>
+  <script src="src/features/abstract/abstract.js"></script>
+</body>
+</html>

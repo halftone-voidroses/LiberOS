@@ -1,0 +1,151 @@
+/* ============================================================================
+   room.css — the dark room
+   The viewport IS the room. The CRT is a physical object in the middle of
+   the void. Dust particles drift like stars. CRT scanlines are barely
+   visible. Everything sits on a table implied by a soft shadow under the
+   monitor.
+   ============================================================================ */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --scan-alpha: 0.004;       /* essentially zero — a hairline breath, not visible as a pattern */
+  --scan-line-px: 1px;       /* height of each scanline + gap pair */
+  --scan-vignette: 0.7;      /* corner darkening, 0..1 */
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background: #000000;
+  color: #c0b090;
+  font-family: 'Times New Roman', Times, serif;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* The room itself — center the machine horizontally, sit it on a virtual
+   table. We use a flex column to align top/bottom: monitor centered
+   vertically but with extra space at the top to suggest the table's
+   edge, and a small shadow strip at the bottom to ground the machine.
+
+   Layered radial gradients build a sense of depth:
+   1) Faint warm pool at the bottom-center (candlelight from the monitor
+      reflected on the table).
+   2) Slightly cooler ambient behind the CRT.
+   3) Wall hint: subtle blue-gray bloom at the upper-center that suggests
+      a distant wall and stops the void from feeling flat.
+   4) Faint floor pool: warm amber rise from the bottom edge to imply a
+      table surface.
+   5) Deep black base. */
+.room {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(ellipse at 50% 110%, rgba(80, 40, 25, 0.14) 0%, rgba(0,0,0,0) 50%),
+    radial-gradient(ellipse at 50% 95%, rgba(40, 18, 10, 0.55) 0%, rgba(0,0,0,0) 35%),
+    radial-gradient(ellipse at 50% 30%, rgba(30, 35, 45, 0.10) 0%, rgba(0,0,0,0) 45%),
+    radial-gradient(ellipse at 50% 55%, rgba(20, 10, 5, 0.65) 0%, rgba(0,0,0,1) 75%),
+    #000000;
+}
+
+/* Dust particles canvas — overlays the entire viewport, behind the monitor.
+   Stars drift, twinkling slowly. */
+.dust-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Static noise canvas — sits over the screen area only, NOT the whole
+   viewport. Slightly higher z than dust so it appears in front. */
+.static-canvas {
+  position: fixed;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.04;
+  mix-blend-mode: overlay;
+}
+
+/* CRT scanlines — body pseudo. Tone is controlled by --scan-alpha.
+   Barely visible (0.04) by default. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0) 0px,
+    rgba(0, 0, 0, 0) var(--scan-line-px),
+    rgba(0, 0, 0, 1) var(--scan-line-px),
+    rgba(0, 0, 0, 1) calc(var(--scan-line-px) + 1px)
+  );
+  pointer-events: none;
+  z-index: 100;
+  opacity: var(--scan-alpha);
+}
+
+/* Vignette — gently darken the corners of the room, so the eye is drawn
+   to the monitor. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(0, 0, 0, 0) 35%,
+    rgba(0, 0, 0, calc(var(--scan-vignette) * 0.6)) 90%,
+    rgba(0, 0, 0, calc(var(--scan-vignette) + 0.3)) 100%
+  );
+  pointer-events: none;
+  z-index: 99;
+}
+
+/* Default corruption — a very subtle red tint across the whole room. The
+   OS is already corrupted on first boot. */
+.room {
+  filter: hue-rotate(-8deg) saturate(1.05);
+}
+
+/* The machine sits in the center of the room, above the dust, below the
+   scanlines. */
+.machine {
+  position: relative;
+  z-index: 10;
+}
+
+/* Soft shadow strip below the monitor — implies a table without
+   rendering one. */
+.machine::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -28px;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 28px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0) 70%
+  );
+  filter: blur(2px);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Respect reduced motion — kill dust + scanline animation, keep state
+   still. */
+@media (prefers-reduced-motion: reduce) {
+  body::after, body::before { animation: none !important; }
+  .dust-canvas, .static-canvas { display: none; }
+}

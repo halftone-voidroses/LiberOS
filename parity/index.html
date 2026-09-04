@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Liber Vacui 1.0 — Parity Snapshot</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      background: #0a0000;
+      color: #c0a0a0;
+      font-family: 'Times New Roman', Times, serif;
+      min-height: 100vh;
+    }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 40px 24px 80px; }
+    h1 {
+      font-size: 2.4rem;
+      color: #aa0000;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      text-shadow: 0 0 8px rgba(170, 0, 0, 0.4);
+    }
+    .sub { font-size: 0.95rem; color: #886060; font-style: italic; margin-bottom: 30px; }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 40px;
+      padding: 16px;
+      background: rgba(40, 0, 0, 0.5);
+      border: 1px solid #4a0000;
+      border-radius: 4px;
+    }
+    .summary .stat {
+      text-align: center;
+      padding: 8px 4px;
+    }
+    .summary .stat .n {
+      font-size: 1.8rem;
+      font-weight: 700;
+      display: block;
+    }
+    .summary .stat .l {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #886060;
+    }
+    .stat.done    .n { color: #6aff6a; }
+    .stat.partial .n { color: #ffd86a; }
+    .stat.todo    .n { color: #ff6a6a; }
+
+    .bar {
+      width: 100%;
+      height: 6px;
+      background: rgba(80, 40, 40, 0.4);
+      border-radius: 3px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #6aff6a 0%, #ffd86a 50%, #ff6a6a 100%);
+    }
+
+    .section {
+      margin: 32px 0;
+      border-top: 1px solid #4a0000;
+      padding-top: 16px;
+    }
+    .section h2 {
+      font-size: 1.2rem;
+      color: #aa0000;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+    .items { list-style: none; }
+    .item {
+      display: grid;
+      grid-template-columns: 70px 1fr 200px 100px;
+      gap: 12px;
+      padding: 8px 10px;
+      align-items: center;
+      border-bottom: 1px dotted #2a0000;
+      font-size: 0.92rem;
+    }
+    .item .id { color: #886060; font-family: 'Courier New', monospace; font-size: 0.85rem; }
+    .item .text { color: #c0a0a0; }
+    .item .note { color: #705050; font-size: 0.8rem; font-style: italic; }
+    .item .pill {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 10px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      text-align: center;
+      font-weight: 700;
+    }
+    .pill.done    { background: rgba(106, 255, 106, 0.15); color: #6aff6a; }
+    .pill.partial { background: rgba(255, 216, 106, 0.15); color: #ffd86a; }
+    .pill.todo    { background: rgba(255, 106, 106, 0.15); color: #ff6a6a; }
+
+    .foot {
+      margin-top: 60px;
+      padding-top: 20px;
+      border-top: 1px solid #4a0000;
+      font-size: 0.85rem;
+      color: #705050;
+      font-style: italic;
+    }
+
+    @media (max-width: 700px) {
+      .item { grid-template-columns: 50px 1fr 90px; }
+      .item .note { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Liber Vacui 1.0 — Parity Snapshot</h1>
+    <div class="sub">Coverage of the 39 critique items in <code>CRITIQUES.md</code>. Phase 1 of 3.</div>
+
+    <div class="summary" id="summary"></div>
+
+    <div id="sections"></div>
+
+    <div class="foot">
+      "The covenant is the spec. The reference sketches are the visual ground truth. The inspiration is the feeling."
+      — LiberVacui1.0 / AGENTS.md
+    </div>
+  </div>
+
+  <script type="module">
+    import { SECTIONS, countByStatus, TOTAL } from './data.js'
+
+    const done = countByStatus('done')
+    const partial = countByStatus('partial')
+    const todo = countByStatus('todo')
+
+    const sum = document.getElementById('summary')
+    sum.innerHTML = `
+      <div class="stat done">
+        <span class="n">${done}</span>
+        <span class="l">Done</span>
+      </div>
+      <div class="stat partial">
+        <span class="n">${partial}</span>
+        <span class="l">Partial</span>
+      </div>
+      <div class="stat todo">
+        <span class="n">${todo}</span>
+        <span class="l">Pending</span>
+      </div>
+      <div class="stat">
+        <span class="n">${TOTAL}</span>
+        <span class="l">Total Items</span>
+        <div class="bar"><div class="bar-fill" style="width: ${Math.round((done / TOTAL) * 100)}%"></div></div>
+      </div>
+    `
+
+    const root = document.getElementById('sections')
+    for (const s of SECTIONS) {
+      const sec = document.createElement('section')
+      sec.className = 'section'
+      let html = `<h2>${s.id} — ${s.title}</h2><ul class="items">`
+      for (const it of s.items) {
+        html += `
+          <li class="item">
+            <span class="id">${it.id}</span>
+            <span class="text">${it.text}</span>
+            <span class="note">${it.note || ''}</span>
+            <span class="pill ${it.status}">${it.status}</span>
+          </li>
+        `
+      }
+      html += '</ul>'
+      sec.innerHTML = html
+      root.appendChild(sec)
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Liber Vacui — Desktop</title>
+  <link rel="stylesheet" href="styles/room.css"/>
+  <link rel="stylesheet" href="styles/machine.css"/>
+  <link rel="stylesheet" href="styles/bezel.css"/>
+  <link rel="stylesheet" href="styles/scars.css"/>
+  <link rel="stylesheet" href="styles/dial.css"/>
+  <link rel="stylesheet" href="styles/status-line.css"/>
+  <link rel="stylesheet" href="styles/clock.css"/>
+  <link rel="stylesheet" href="styles/desktop.css"/>
+  <link rel="stylesheet" href="styles/constellation.css"/>
+  <link rel="stylesheet" href="styles/wanderlust.css"/>
+  <link rel="stylesheet" href="styles/shadow.css"/>
+</head>
+<body>
+  <canvas class="dust-canvas" aria-hidden="true"></canvas>
+  <canvas class="static-canvas" aria-hidden="true"></canvas>
+
+  <div class="room">
+    <div class="machine">
+      <div class="bezel">
+        <div class="carvings" id="carvings"></div>
+        <div class="vent-slits" aria-hidden="true"></div>
+        <div class="corruption-scars" aria-hidden="true">
+          <div class="scar scar-1"></div>
+          <div class="scar scar-2"></div>
+          <div class="scar scar-3"></div>
+          <div class="scar scar-4"></div>
+          <div class="scar scar-5"></div>
+          <div class="scar scar-6"></div>
+        </div>
+        <div class="led" aria-hidden="true"></div>
+        <div class="liber-plate">LIBER · VACUI</div>
+        <div class="power-button" aria-hidden="true"></div>
+        <div class="screw" aria-hidden="true"></div>
+
+        <div class="screen">
+          <div class="screen-stage">
+            <div class="state-desktop" data-state="desktop" id="desktop">
+
+              <div class="radial-clock">
+                <canvas></canvas>
+                <div class="date"></div>
+              </div>
+
+              <div class="sigil-overlay" id="sigil-overlay" aria-hidden="true">
+                <img id="sigil-overlay-img" alt="" />
+              </div>
+
+              <div class="flaming-q flaming-q-pre" id="flaming-q" role="button" aria-label="summon wanderlust" tabindex="0">
+                <span class="q-body">?</span>
+              </div>
+
+              <button class="flaming-q-repeat" type="button" id="flaming-q-repeat" aria-label="repeat tutorial">?</button>
+
+              <div class="constellation" id="constellation">
+                <svg class="constellation-svg" id="constellation-svg" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet"></svg>
+                <div class="constellation-empty" id="constellation-empty">
+                  — the desktop is empty —
+                  <div class="constellation-empty-sub">summon wanderlust via the <em>?</em>, or open a persona via the dial.</div>
+                </div>
+              </div>
+
+              <div class="status-line">
+                <span class="status-phrase">liber.os is listening.</span>
+              </div>
+
+              <button class="settings-cog" id="settings-cog" type="button" aria-label="settings" title="settings">
+                <svg viewBox="0 0 100 100" aria-hidden="true">
+                  <defs>
+                    <radialGradient id="cog-grad" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stop-color="#c8a878"/>
+                      <stop offset="60%" stop-color="#8a6a40"/>
+                      <stop offset="100%" stop-color="#4a3018"/>
+                    </radialGradient>
+                  </defs>
+                  <g class="settings-cog-gear">
+                    <circle cx="50" cy="50" r="34" fill="url(#cog-grad)" stroke="#2a1408" stroke-width="1.5"/>
+                    <circle cx="50" cy="50" r="14" fill="#0a0503" stroke="#2a1408" stroke-width="1"/>
+                    <g fill="url(#cog-grad)" stroke="#2a1408" stroke-width="1">
+                      <rect x="47" y="6"  width="6" height="14" rx="1"/>
+                      <rect x="47" y="80" width="6" height="14" rx="1"/>
+                      <rect x="6"  y="47" width="14" height="6" rx="1"/>
+                      <rect x="80" y="47" width="14" height="6" rx="1"/>
+                      <rect x="47" y="6"  width="6" height="14" rx="1" transform="rotate(45 50 50)"/>
+                      <rect x="47" y="80" width="6" height="14" rx="1" transform="rotate(45 50 50)"/>
+                      <rect x="6"  y="47" width="14" height="6" rx="1" transform="rotate(45 50 50)"/>
+                      <rect x="80" y="47" width="14" height="6" rx="1" transform="rotate(45 50 50)"/>
+                    </g>
+                    <circle cx="50" cy="50" r="22" fill="none" stroke="rgba(0,0,0,0.5)" stroke-width="0.8"/>
+                  </g>
+                </svg>
+              </button>
+
+              <div class="settings-modal" id="settings-modal" aria-hidden="true">
+                <div class="settings-modal-inner" role="dialog" aria-labelledby="settings-modal-title">
+                  <div class="settings-modal-head">
+                    <div class="settings-modal-title" id="settings-modal-title">SETTINGS</div>
+                    <button class="settings-modal-close" type="button" id="settings-modal-close" aria-label="close">×</button>
+                  </div>
+                  <div class="settings-modal-body">
+                    <div class="settings-modal-section">
+                      <div class="settings-modal-section-title">TUTORIAL</div>
+                      <button class="settings-modal-btn" id="settings-replay" type="button">↻ replay the tutorial</button>
+                      <div class="settings-modal-hint">wanderlust will be summoned again.</div>
+                    </div>
+                    <div class="settings-modal-section">
+                      <div class="settings-modal-section-title">SHADOW</div>
+                      <button class="settings-modal-btn" id="settings-shadow" type="button">—</button>
+                      <div class="settings-modal-hint">type <em>extc</em> anywhere to toggle the overdrive.</div>
+                    </div>
+                    <div class="settings-modal-section">
+                      <div class="settings-modal-section-title">STATE</div>
+                      <div class="settings-modal-state" id="settings-state">—</div>
+                      <button class="settings-modal-btn settings-modal-btn-danger" id="settings-wipe" type="button">wipe the room</button>
+                      <div class="settings-modal-hint">all sigils, cohort, and tour will return to loam.</div>
+                    </div>
+                  </div>
+                  <div class="settings-modal-foot">— esc / back / × to close —</div>
+                </div>
+              </div>
+
+              <div class="dial">
+                <div class="dial-inner">
+                  <div class="dial-track" aria-hidden="true"></div>
+                  <div class="dial-row" id="dial-row"></div>
+                  <button class="dial-arrow left"  id="dial-left"  type="button" aria-label="previous">&lt;</button>
+                  <button class="dial-arrow right" id="dial-right" type="button" aria-label="next">&gt;</button>
+                </div>
+              </div>
+
+              <div class="wanderlust-window" id="wanderlust-window" aria-hidden="true">
+                <div class="wanderlust-window-inner">
+                  <div class="wanderlust-avatar" id="wanderlust-avatar"></div>
+                  <div class="wanderlust-name" id="wanderlust-name">wanderlust</div>
+                  <div class="wanderlust-line" id="wanderlust-line">—</div>
+                  <div class="wanderlust-replies" id="wanderlust-replies"></div>
+                  <div class="wanderlust-progress" id="wanderlust-progress"></div>
+                </div>
+              </div>
+
+              <div class="arise-overlay" id="arise-overlay" aria-hidden="true">
+                <div class="arise-text">I arise the same but different.</div>
+              </div>
+
+              <div class="summon-overlay" id="summon-overlay" aria-hidden="true">
+                <div class="summon-text" id="summon-text"></div>
+              </div>
+
+              <div class="constellation-mini" id="constellation-mini" aria-hidden="true">
+                <div class="constellation-mini-inner">
+                  <div class="constellation-mini-header">
+                    <span class="constellation-mini-label" id="constellation-mini-label">— artifact —</span>
+                    <button class="constellation-mini-close" id="constellation-mini-close" type="button" aria-label="close">×</button>
+                  </div>
+                  <div class="constellation-mini-row">
+                    <span class="constellation-mini-arrow">—</span>
+                    <input type="text" class="constellation-mini-verb" id="constellation-mini-verb" maxlength="40" spellcheck="false" />
+                    <span class="constellation-mini-arrow constellation-mini-sigil">★</span>
+                  </div>
+                  <div class="constellation-mini-actions">
+                    <button type="button" class="constellation-mini-save" id="constellation-mini-save">bind to sigil</button>
+                    <button type="button" class="constellation-mini-release" id="constellation-mini-release">release</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="wanderlust-confirm" id="wanderlust-confirm" aria-hidden="true">
+                <div class="wanderlust-confirm-inner">
+                  <div class="wanderlust-confirm-title">— erase all progress? —</div>
+                  <div class="wanderlust-confirm-body">restart the whole tutorial sequence. your sigil, artifacts, and relations will be lost.</div>
+                  <div class="wanderlust-confirm-actions">
+                    <button type="button" class="wanderlust-confirm-yes" id="wanderlust-confirm-yes">start over</button>
+                    <button type="button" class="wanderlust-confirm-no"  id="wanderlust-confirm-no">not yet</button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="monitor-base" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <script src="src/state.js"></script>
+  <script src="src/dust.js"></script>
+  <script src="src/static.js"></script>
+  <script src="src/shadow.js"></script>
+  <script src="src/carvings.js"></script>
+  <script src="src/clock.js"></script>
+  <script src="src/status-line.js"></script>
+  <script src="src/wanderlust-script.js"></script>
+  <script src="src/dial.js"></script>
+  <script src="src/constellation.js"></script>
+  <script src="src/sigil-overlay.js"></script>
+  <script src="src/wanderlust.js"></script>
+  <script>
+    (function () {
+      var preQ = document.getElementById('flaming-q');
+      var repeatQ = document.getElementById('flaming-q-repeat');
+      function openConfirm() {
+        var c = document.getElementById('wanderlust-confirm');
+        if (c) {
+          c.setAttribute('aria-hidden', 'false');
+          c.classList.add('open');
+        }
+      }
+      if (preQ) preQ.addEventListener('click', function () {
+        var s = (window.Liber && window.Liber.state && window.Liber.state.get()) || {};
+        if (!s.tutorialDone) {
+          if (window.Wanderlust) window.Wanderlust.open();
+        }
+      });
+      if (repeatQ) repeatQ.addEventListener('click', openConfirm);
+    })();
+    document.getElementById('wanderlust-confirm-no').addEventListener('click', function () {
+      var c = document.getElementById('wanderlust-confirm');
+      c.classList.remove('open');
+      c.setAttribute('aria-hidden', 'true');
+    });
+    document.getElementById('wanderlust-confirm-yes').addEventListener('click', function () {
+      if (window.Liber && window.Liber.state) {
+        window.Liber.state.reset();
+      }
+      var c = document.getElementById('wanderlust-confirm');
+      c.classList.remove('open');
+      c.setAttribute('aria-hidden', 'true');
+      var stage = document.getElementById('desktop');
+      if (stage) stage.classList.remove('tutorial-done');
+      if (window.Wanderlust) window.Wanderlust.restart();
+    });
+
+    (function () {
+      var cog = document.getElementById('settings-cog');
+      var modal = document.getElementById('settings-modal');
+      var closeBtn = document.getElementById('settings-modal-close');
+      if (!cog || !modal) return;
+
+      function open() {
+        location.hash = 'settings';
+        renderSettingsState();
+      }
+      function close() {
+        if (location.hash === '#settings') {
+          history.back();
+        } else {
+          forceClose();
+        }
+      }
+      function forceClose() {
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+      }
+      function sync() {
+        var open_ = location.hash === '#settings';
+        modal.classList.toggle('open', open_);
+        modal.setAttribute('aria-hidden', open_ ? 'false' : 'true');
+        if (open_) renderSettingsState();
+      }
+
+      function renderSettingsState() {
+        var s = (window.Liber && window.Liber.state && window.Liber.state.get()) || {};
+        var out = [];
+        out.push('tutorialDone: ' + !!s.tutorialDone);
+        out.push('sigils: ' + ((s.sigils || []).length));
+        out.push('cohort: ' + ((s.cohort || []).length));
+        out.push('visited: ' + Object.keys(s.visited || {}).length);
+        out.push('shadowOn: ' + !!s.shadowOn);
+        var machine = document.querySelector('.machine');
+        var sb = document.getElementById('settings-shadow');
+        if (sb) {
+          var on = machine && machine.classList.contains('shadow-on');
+          sb.textContent = on ? '— step back from shadow —' : '— step into shadow —';
+        }
+        var el = document.getElementById('settings-state');
+        if (el) el.textContent = out.join('\n');
+      }
+
+      cog.addEventListener('click', open);
+      if (closeBtn) closeBtn.addEventListener('click', close);
+      window.addEventListener('hashchange', sync);
+      if (modal) modal.addEventListener('click', function (e) {
+        if (e.target === modal) close();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && location.hash === '#settings') close();
+      });
+
+      var replay = document.getElementById('settings-replay');
+      var shadow = document.getElementById('settings-shadow');
+      var wipe = document.getElementById('settings-wipe');
+      if (replay) replay.addEventListener('click', function () {
+        if (window.Liber && window.Liber.state) window.Liber.state.set({ tutorialDone: false });
+        window.location.href = 'desktop.html';
+      });
+      if (shadow) shadow.addEventListener('click', function () {
+        var machine = document.querySelector('.machine');
+        if (!machine) return;
+        machine.classList.toggle('shadow-on');
+        if (window.Liber && window.Liber.state) {
+          window.Liber.state.set({ shadowOn: machine.classList.contains('shadow-on') });
+        }
+        renderSettingsState();
+      });
+      if (wipe) wipe.addEventListener('click', function () {
+        if (!window.confirm('wipe the room? this cannot be undone.')) return;
+        if (window.Liber && window.Liber.state) window.Liber.state.reset();
+        renderSettingsState();
+      });
+
+      sync();
+    })();
+  </script>
+</body>
+</html>

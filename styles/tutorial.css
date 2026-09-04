@@ -1,0 +1,124 @@
+/* ============================================================================
+   tutorial.css — the wanderlust tutorial overlay
+   Full state-3 modal that opens when the user clicks the flaming ?
+   question mark. Shows Wanderlust's pink circle avatar, blinking eye,
+   chat messages with "tell me more" disclosures, and screen-shake
+   when she loses her temper.
+
+   This file is scaffolded in Phase 1. The wanderlust chat messages
+   and full screen-shake logic are built in Phase 3.
+   ============================================================================ */
+
+.tutorial-window {
+  position: absolute;
+  inset: 6% 10% 38% 10%;
+  background: #1a0000;
+  border: 2px solid #4a0000;
+  border-radius: 8px;
+  z-index: 60;
+  display: none;
+  flex-direction: column;
+  padding: 1.4em 1.6em;
+  font-family: 'Times New Roman', Times, serif;
+  color: #c0a0a0;
+  box-shadow:
+    0 0 40px rgba(0, 0, 0, 0.8),
+    inset 0 0 30px rgba(0, 0, 0, 0.4);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #4a0000 #1a0000;
+}
+
+.tutorial-window.visible {
+  display: flex;
+  animation: tutorial-shake 0.4s ease-out;
+}
+
+@keyframes tutorial-shake {
+  0%   { transform: translate(-2px, 1px) rotate(-0.3deg); }
+  25%  { transform: translate(2px, -1px) rotate(0.2deg); }
+  50%  { transform: translate(-1px, 2px) rotate(-0.1deg); }
+  75%  { transform: translate(1px, -2px) rotate(0.3deg); }
+  100% { transform: translate(0, 0) rotate(0); }
+}
+
+.tutorial-window .who {
+  font-size: 0.75rem;
+  color: #886060;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 0.4em;
+}
+
+.tutorial-window .who.wanderlust { color: #ff8a8a; }
+.tutorial-window .who.raison     { color: #8acaff; }
+
+.tutorial-window .line {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0.6em 0;
+  font-style: italic;
+}
+
+.tutorial-window .line.angry {
+  color: #ff6a6a;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  animation: tutorial-shake 0.4s ease-out;
+}
+
+.tutorial-window .controls {
+  display: flex;
+  gap: 1em;
+  margin-top: auto;
+  padding-top: 1em;
+  border-top: 1px solid #2a0000;
+}
+
+.tutorial-window .controls button {
+  background: transparent;
+  border: 1px solid #4a0000;
+  color: #aa6a6a;
+  padding: 0.4em 1em;
+  font-family: inherit;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.tutorial-window .controls button:hover {
+  background: #2a0000;
+  color: #ff6a6a;
+}
+
+/* The wanderlust avatar — pink circle, yellow inner, blinking white eye.
+   Placed in the top-left of the tutorial window. */
+.wanderlust-avatar {
+  position: absolute;
+  top: 1.4em;
+  left: 1.6em;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffd86a 0% 30%, #ff69b4 30% 60%, #aa3a6a 100%);
+  box-shadow: 0 0 16px rgba(255, 105, 180, 0.6);
+}
+
+.wanderlust-avatar::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff;
+  animation: wanderlust-blink 3.2s steps(2) infinite;
+}
+
+@keyframes wanderlust-blink {
+  0%, 90%   { opacity: 1; }
+  90.1%, 100% { opacity: 0; }
+}

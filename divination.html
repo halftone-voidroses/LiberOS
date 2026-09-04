@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Divination — Arcana</title>
+  <link rel="stylesheet" href="styles/room.css"/>
+  <link rel="stylesheet" href="styles/machine.css"/>
+  <link rel="stylesheet" href="styles/bezel.css"/>
+  <link rel="stylesheet" href="styles/scars.css"/>
+  <link rel="stylesheet" href="src/features/divination/divination.css"/>
+  <link rel="stylesheet" href="styles/shadow.css"/>
+</head>
+<body>
+  <canvas class="dust-canvas" aria-hidden="true"></canvas>
+  <canvas class="static-canvas" aria-hidden="true"></canvas>
+
+  <div class="room">
+    <div class="machine">
+      <div class="bezel">
+        <div class="carvings" id="carvings"></div>
+        <div class="vent-slits" aria-hidden="true"></div>
+        <div class="corruption-scars" aria-hidden="true">
+          <div class="scar scar-1"></div>
+          <div class="scar scar-2"></div>
+          <div class="scar scar-3"></div>
+          <div class="scar scar-4"></div>
+          <div class="scar scar-5"></div>
+          <div class="scar scar-6"></div>
+        </div>
+        <div class="led" aria-hidden="true"></div>
+        <div class="liber-plate">LIBER · VACUI</div>
+        <div class="power-button" aria-hidden="true"></div>
+        <div class="screw" aria-hidden="true"></div>
+
+        <div class="screen">
+          <div class="screen-stage">
+            <div class="divination-app" data-state="divination">
+
+              <button class="divination-help" type="button" id="divination-help" aria-label="help">?</button>
+              <button class="divination-exit" type="button" id="divination-exit" aria-label="exit">×</button>
+
+              <div class="divination-save-prompt" id="divination-save-prompt" aria-hidden="true">
+                <div class="divination-save-prompt-inner">
+                  <div class="divination-save-prompt-head">
+                    <span class="divination-save-prompt-name">— keep it? —</span>
+                    <button class="divination-save-prompt-close" type="button" id="divination-save-prompt-close" aria-label="cancel">×</button>
+                  </div>
+                  <div class="divination-save-prompt-body" id="divination-save-prompt-body">card: (none). question: (none).</div>
+                  <div class="divination-save-prompt-actions">
+                    <button class="divination-save-prompt-keep" type="button" id="divination-save-prompt-keep">keep</button>
+                    <button class="divination-save-prompt-discard" type="button" id="divination-save-prompt-discard">discard</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="divination-raison" id="divination-raison" aria-hidden="true">
+                <div class="divination-raison-inner">
+                  <div class="divination-raison-head">
+                    <span class="divination-raison-name">raison</span>
+                    <button class="divination-raison-close" type="button" id="divination-raison-close" aria-label="close">×</button>
+                  </div>
+                  <div class="divination-raison-body">
+                    two starting options: <strong>tarot</strong> draws one of 22 cards at random. <strong>i ching</strong> casts six lines to form a hexagram. type a question, then click a card or click cast six times.
+                  </div>
+                </div>
+              </div>
+
+              <div class="divination-felt">
+                <div class="divination-header">
+                  <div class="divination-title">Divination</div>
+                  <div class="divination-sub">Type a question &amp; click a card for an interpretation.</div>
+                </div>
+
+                <div class="divination-modes" id="divination-modes">
+                  <button type="button" class="divination-mode active" data-mode="tarot">tarot</button>
+                  <button type="button" class="divination-mode" data-mode="iching">i ching</button>
+                </div>
+
+                <div class="divination-stage" id="divination-stage">
+                  <div class="divination-tarot" id="divination-tarot">
+                    <div class="divination-deck" id="divination-deck"></div>
+                    <div class="divination-question" id="divination-question">
+                      <input class="divination-input" id="divination-input" type="text" placeholder="speak your question..." spellcheck="false"/>
+                      <button class="divination-draw" id="divination-draw" type="button">draw</button>
+                    </div>
+                    <div class="divination-card-area" id="divination-card-area">
+                      <div class="divination-card-hint">the deck is silent. ask.</div>
+                    </div>
+                    <div class="divination-grief" id="divination-grief">i drew a card for my sister once. it said <em>the drowned</em>.</div>
+                  </div>
+
+                  <div class="divination-iching" id="divination-iching" hidden>
+                    <div class="divination-hexagram" id="divination-hexagram">
+                      <div class="divination-hexagram-empty">cast six lines to build your hexagram.</div>
+                    </div>
+                    <div class="divination-question">
+                      <input class="divination-input" id="iching-input" type="text" placeholder="speak your question..." spellcheck="false"/>
+                      <button class="divination-cast" id="divination-cast" type="button">cast line 1</button>
+                    </div>
+                    <div class="divination-iching-result" id="divination-iching-result" hidden>
+                      <div class="divination-iching-name" id="divination-iching-name"></div>
+                      <div class="divination-iching-desc" id="divination-iching-desc"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="monitor-base" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <script src="src/state.js"></script>
+  <script src="src/dust.js"></script>
+  <script src="src/static.js"></script>
+  <script src="src/shadow.js"></script>
+  <script src="src/carvings.js"></script>
+  <script src="src/features/divination/divination.js"></script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+/* shadow.css — The corruption overdrive. Pushes the default red-tint
+   into full haunted mode: red LED, heartbeat, flicker, chromatic
+   aberration, more dust. Activated by the secret shadow key. */
+
+.shadow-on {
+  animation: shadow-breathe 4s ease-in-out infinite;
+}
+
+@keyframes shadow-breathe {
+  0%, 100% { filter: brightness(1) saturate(1); }
+  50%      { filter: brightness(0.92) saturate(1.3) hue-rotate(-8deg); }
+}
+
+.shadow-on .led {
+  background: radial-gradient(circle, #ff0000 0%, #aa0000 50%, #440000 100%) !important;
+  box-shadow:
+    0 0 8px rgba(255, 0, 0, 0.9),
+    0 0 16px rgba(255, 0, 0, 0.5) !important;
+  animation: shadow-led-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes shadow-led-pulse {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50%      { opacity: 1.0; transform: scale(1.15); }
+}
+
+.shadow-on .bezel::after {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  background: #ff0033;
+  border-radius: 50%;
+  box-shadow:
+    0 0 6px rgba(255, 0, 51, 0.9),
+    0 0 14px rgba(255, 0, 51, 0.5);
+  animation: shadow-heartbeat 1s ease-in-out infinite;
+  z-index: 10;
+}
+
+@keyframes shadow-heartbeat {
+  0%   { opacity: 0.3; transform: translateX(-50%) scale(0.8); }
+  20%  { opacity: 1.0; transform: translateX(-50%) scale(1.3); }
+  40%  { opacity: 0.5; transform: translateX(-50%) scale(1.0); }
+  60%  { opacity: 1.0; transform: translateX(-50%) scale(1.3); }
+  100% { opacity: 0.3; transform: translateX(-50%) scale(0.8); }
+}
+
+.shadow-on .screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(80, 0, 0, 0.4) 100%);
+  pointer-events: none;
+  z-index: 50;
+  animation: shadow-flicker 0.15s steps(2) infinite;
+}
+
+@keyframes shadow-flicker {
+  0%   { opacity: 0.6; }
+  100% { opacity: 0.8; }
+}
+
+.shadow-on .screen::after {
+  filter: hue-rotate(-15deg) saturate(1.4);
+  opacity: 0.6;
+}
+
+.shadow-on .screen-stage {
+  animation: shadow-chroma 2.5s steps(4) infinite;
+}
+
+@keyframes shadow-chroma {
+  0%   { text-shadow: 1px 0 0 rgba(255,0,0,0.4), -1px 0 0 rgba(0,255,255,0.4); }
+  25%  { text-shadow: 2px 0 0 rgba(255,0,0,0.5), -2px 0 0 rgba(0,255,255,0.5); }
+  50%  { text-shadow: 1px 1px 0 rgba(255,0,0,0.4), -1px -1px 0 rgba(0,255,255,0.4); }
+  100% { text-shadow: 1px 0 0 rgba(255,0,0,0.4), -1px 0 0 rgba(0,255,255,0.4); }
+}
+
+.shadow-on .corruption-scars .scar {
+  background: rgba(20, 0, 0, 0.9) !important;
+  box-shadow: 0 0 4px rgba(255, 0, 0, 0.4);
+}
+
+.shadow-on .liber-plate,
+.shadow-on .bezel {
+  filter: saturate(0.7) brightness(0.85);
+}
+
+.shadow-prompt {
+  position: fixed;
+  bottom: 14px;
+  right: 18px;
+  background: rgba(20, 0, 0, 0.9);
+  border: 1px solid #aa3030;
+  color: #f0a080;
+  font-family: 'VT323', monospace;
+  font-size: 0.8rem;
+  padding: 4px 10px;
+  letter-spacing: 0.15em;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.5s;
+  pointer-events: none;
+}
+
+.shadow-prompt.show { opacity: 0.8; }

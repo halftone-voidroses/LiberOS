@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Trash — Ravaging Pete</title>
+  <link rel="stylesheet" href="styles/room.css"/>
+  <link rel="stylesheet" href="styles/machine.css"/>
+  <link rel="stylesheet" href="styles/bezel.css"/>
+  <link rel="stylesheet" href="styles/scars.css"/>
+  <link rel="stylesheet" href="src/features/trash/trash.css"/>
+  <link rel="stylesheet" href="styles/shadow.css"/>
+</head>
+<body>
+  <canvas class="dust-canvas" aria-hidden="true"></canvas>
+  <canvas class="static-canvas" aria-hidden="true"></canvas>
+
+  <div class="room">
+    <div class="machine">
+      <div class="bezel">
+        <div class="carvings" id="carvings"></div>
+        <div class="vent-slits" aria-hidden="true"></div>
+        <div class="corruption-scars" aria-hidden="true">
+          <div class="scar scar-1"></div>
+          <div class="scar scar-2"></div>
+          <div class="scar scar-3"></div>
+          <div class="scar scar-4"></div>
+          <div class="scar scar-5"></div>
+          <div class="scar scar-6"></div>
+        </div>
+        <div class="led" aria-hidden="true"></div>
+        <div class="liber-plate">LIBER · VACUI</div>
+        <div class="power-button" aria-hidden="true"></div>
+        <div class="screw" aria-hidden="true"></div>
+
+        <div class="screen">
+          <div class="screen-stage">
+            <div class="trash-app" data-state="trash">
+
+              <button class="trash-help" type="button" id="trash-help" aria-label="help">?</button>
+              <button class="trash-exit" type="button" id="trash-exit" aria-label="exit">×</button>
+
+              <div class="trash-save-prompt" id="trash-save-prompt" aria-hidden="true">
+                <div class="trash-save-prompt-inner">
+                  <div class="trash-save-prompt-head">
+                    <span class="trash-save-prompt-name">— keep it? —</span>
+                    <button class="trash-save-prompt-close" type="button" id="trash-save-prompt-close" aria-label="cancel">×</button>
+                  </div>
+                  <div class="trash-save-prompt-body" id="trash-save-prompt-body">action: bury (none). irreversible.</div>
+                  <div class="trash-save-prompt-actions">
+                    <button class="trash-save-prompt-keep" type="button" id="trash-save-prompt-keep">keep</button>
+                    <button class="trash-save-prompt-discard" type="button" id="trash-save-prompt-discard">discard</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="trash-pile">
+                <div class="trash-chunk trash-chunk-1" aria-hidden="true"></div>
+                <div class="trash-chunk trash-chunk-2" aria-hidden="true"></div>
+                <div class="trash-chunk trash-chunk-3" aria-hidden="true"></div>
+                <div class="trash-chunk trash-chunk-4" aria-hidden="true"></div>
+                <div class="trash-chunk trash-chunk-5" aria-hidden="true"></div>
+                <div class="trash-chunk trash-chunk-6" aria-hidden="true"></div>
+                <div class="trash-shard trash-shard-1" aria-hidden="true"></div>
+                <div class="trash-shard trash-shard-2" aria-hidden="true"></div>
+                <div class="trash-bolt trash-bolt-1" aria-hidden="true"></div>
+                <div class="trash-bolt trash-bolt-2" aria-hidden="true"></div>
+
+                <div class="trash-window">
+                  <div class="trash-content">
+                    <div class="trash-header">
+                      <div class="trash-name">Artifact Graveyard</div>
+                      <div class="trash-sub">— click to dig for deleted artifacts, then click to re-add —</div>
+                    </div>
+
+                    <div class="trash-mid">
+                      <div class="trash-warning">all that is buried, returns as loam.</div>
+                    </div>
+
+                    <div class="trash-actions">
+                      <div class="trash-action-label">— what to dig —</div>
+                      <button class="trash-action" id="trash-bury-sigils" type="button">all sigils</button>
+                      <button class="trash-action" id="trash-bury-cohort" type="button">all cohort</button>
+                      <button class="trash-action" id="trash-bury-tour" type="button">the tour</button>
+                      <button class="trash-action trash-action-hard" id="trash-bury-all" type="button">everything</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="monitor-base" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <script src="src/state.js"></script>
+  <script src="src/dust.js"></script>
+  <script src="src/static.js"></script>
+  <script src="src/shadow.js"></script>
+  <script src="src/carvings.js"></script>
+  <script src="src/features/trash/trash.js"></script>
+</body>
+</html>

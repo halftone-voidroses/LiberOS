@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Sea — Vanir</title>
+  <link rel="stylesheet" href="styles/room.css"/>
+  <link rel="stylesheet" href="styles/machine.css"/>
+  <link rel="stylesheet" href="styles/bezel.css"/>
+  <link rel="stylesheet" href="styles/scars.css"/>
+  <link rel="stylesheet" href="src/features/sea/sea.css"/>
+  <link rel="stylesheet" href="styles/shadow.css"/>
+</head>
+<body>
+  <canvas class="dust-canvas" aria-hidden="true"></canvas>
+  <canvas class="static-canvas" aria-hidden="true"></canvas>
+
+  <div class="room">
+    <div class="machine">
+      <div class="bezel">
+        <div class="carvings" id="carvings"></div>
+        <div class="vent-slits" aria-hidden="true"></div>
+        <div class="corruption-scars" aria-hidden="true">
+          <div class="scar scar-1"></div>
+          <div class="scar scar-2"></div>
+          <div class="scar scar-3"></div>
+          <div class="scar scar-4"></div>
+          <div class="scar scar-5"></div>
+          <div class="scar scar-6"></div>
+        </div>
+        <div class="led" aria-hidden="true"></div>
+        <div class="liber-plate">LIBER · VACUI</div>
+        <div class="power-button" aria-hidden="true"></div>
+        <div class="screw" aria-hidden="true"></div>
+
+        <div class="screen">
+          <div class="screen-stage">
+            <div class="sea-app" data-state="sea">
+
+              <button class="sea-help" type="button" id="sea-help" aria-label="help">?</button>
+              <button class="sea-exit" type="button" id="sea-exit" aria-label="exit">×</button>
+
+              <div class="sea-raison" id="sea-raison" aria-hidden="true">
+                <div class="sea-raison-inner">
+                  <div class="sea-raison-head">
+                    <span class="sea-raison-name">raison</span>
+                    <button class="sea-raison-close" type="button" id="sea-raison-close" aria-label="close">×</button>
+                  </div>
+                  <div class="sea-raison-body">
+                    input: mouse movement within the deep. output: the depth gauge fill animates between 20% and 100% based on time since last move. idle for 4s = depth decays to baseline. active movement = depth rises. no state is written; the persona is a meter, not a writer.
+                  </div>
+                  
+                </div>
+              </div>
+
+              <div class="sea-deep">
+                <div class="sea-vignette"></div>
+
+                <div class="sea-question">what do you carry to the deep?</div>
+
+                <div class="sea-breath" id="sea-breath">
+                  <div class="sea-breath-ring sea-breath-ring-1"></div>
+                  <div class="sea-breath-ring sea-breath-ring-2"></div>
+                  <div class="sea-breath-ring sea-breath-ring-3"></div>
+                  <div class="sea-breath-core"></div>
+                </div>
+
+                <div class="sea-gauge">
+                  <div class="sea-gauge-fill" id="sea-gauge-fill"></div>
+                  <div class="sea-gauge-label">depth</div>
+                </div>
+
+                <div class="sea-kelp sea-kelp-1"></div>
+                <div class="sea-kelp sea-kelp-2"></div>
+                <div class="sea-kelp sea-kelp-3"></div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="monitor-base" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <script src="src/state.js"></script>
+  <script src="src/dust.js"></script>
+  <script src="src/static.js"></script>
+  <script src="src/shadow.js"></script>
+  <script src="src/carvings.js"></script>
+  <script src="src/features/sea/sea.js"></script>
+</body>
+</html>

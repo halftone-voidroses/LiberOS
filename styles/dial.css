@@ -1,0 +1,190 @@
+/* dial.css — radial-style menu, three-position layout
+   Top: < SELECTED OPTION >   (active, large, bright)
+   Left:  prev   Right: next
+   Side options are NOT shown as a row; cycling moves through them.
+   No imports (covenant Q.1). */
+
+.dial {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 26%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.dial-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.dial-track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 75%;
+  background: linear-gradient(180deg, transparent 0%, rgba(40, 20, 10, 0.4) 30%, rgba(20, 10, 5, 0.7) 100%);
+  border-top: 1px solid #3a2818;
+  pointer-events: none;
+}
+
+.dial-row {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+  padding-bottom: 8px;
+  pointer-events: auto;
+}
+
+.dial-option {
+  background: linear-gradient(180deg, #c8a878 0%, #8a6a40 100%);
+  border: 2px solid #4a2818;
+  color: #1a0a05;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-weight: 700;
+  text-transform: lowercase;
+  letter-spacing: 0.08em;
+  padding: 6px 14px;
+  cursor: pointer;
+  position: relative;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 230, 180, 0.5),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.4),
+    0 2px 0 #2a1408,
+    0 3px 4px rgba(0, 0, 0, 0.5);
+  transition: transform 0.12s, opacity 0.12s;
+  white-space: nowrap;
+  border-radius: 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dial-option .dial-icon { display: inline-flex; align-items: center; }
+.dial-option .dial-icon svg { display: block; }
+
+.dial-option:hover {
+  filter: brightness(1.1);
+}
+
+.dial-option.crossed {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.dial-option.crossed::after {
+  content: '';
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  top: 50%;
+  height: 2px;
+  background: #2a0a05;
+  transform: rotate(-12deg);
+  box-shadow: 0 1px 0 #c8a878;
+}
+
+.dial-option.prev {
+  font-size: 0.85rem;
+  opacity: 0.5;
+  padding: 4px 10px;
+  transform: translateY(20%) scale(0.75);
+  filter: saturate(0.6);
+}
+
+.dial-option.next {
+  font-size: 0.85rem;
+  opacity: 0.5;
+  padding: 4px 10px;
+  transform: translateY(20%) scale(0.75);
+  filter: saturate(0.6);
+}
+
+.dial-option.prev:hover,
+.dial-option.next:hover {
+  opacity: 0.85;
+  transform: translateY(8%) scale(0.85);
+}
+
+.dial-option.active {
+  background: linear-gradient(180deg, #f0d090 0%, #c89060 50%, #8a5028 100%);
+  border: 3px solid #4a2008;
+  color: #1a0500;
+  font-size: 2.1rem;
+  letter-spacing: 0.18em;
+  padding: 12px 36px;
+  text-transform: lowercase;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 240, 200, 0.7),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.4),
+    0 0 16px rgba(255, 180, 100, 0.4),
+    0 4px 0 #2a1408,
+    0 6px 10px rgba(0, 0, 0, 0.6);
+  transform: translateY(-30%);
+  z-index: 2;
+  border-radius: 3px;
+  position: relative;
+}
+
+.dial-option.active::before,
+.dial-option.active::after {
+  content: '‹';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.4rem;
+  color: rgba(20, 5, 0, 0.6);
+  left: 8px;
+}
+
+.dial-option.active::after {
+  content: '›';
+  left: auto;
+  right: 8px;
+}
+
+.dial-arrow {
+  position: absolute;
+  bottom: 16%;
+  width: 0;
+  height: 0;
+  background: transparent;
+  border-style: solid;
+  border-color: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: 3;
+  padding: 0;
+  filter: drop-shadow(0 2px 0 #1a0a05) drop-shadow(0 3px 2px rgba(0, 0, 0, 0.5));
+}
+
+.dial-arrow.left {
+  left: 8%;
+  border-width: 14px 22px 14px 0;
+  border-right-color: #c8a878;
+}
+.dial-arrow.right {
+  right: 8%;
+  border-width: 14px 0 14px 22px;
+  border-left-color: #c8a878;
+}
+
+.dial-arrow:hover {
+  filter: drop-shadow(0 2px 0 #1a0a05) drop-shadow(0 4px 6px rgba(255, 180, 100, 0.4));
+}
+.dial-arrow.left:hover  { border-right-color: #f0d090; }
+.dial-arrow.right:hover { border-left-color: #f0d090; }
+
+.dial-arrow:active {
+  transform: translateY(1px);
+  filter: drop-shadow(0 1px 0 #1a0a05) drop-shadow(0 2px 2px rgba(0, 0, 0, 0.5));
+}

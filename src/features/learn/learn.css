@@ -1,0 +1,276 @@
+/* learn.css — The Librarian. Cabinet of subject cards, sepia, brass.
+   This file is COMPLETELY INDEPENDENT. No imports, no shared variables (covenant Q.1). */
+
+.learn-app {
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.025) 0px, rgba(0, 0, 0, 0.025) 1px, transparent 1px, transparent 3px),
+    radial-gradient(ellipse at 50% 50%, #2a1a08 0%, #1a1008 60%, #0a0604 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: 'OpenDyslexic', 'Lexend', 'EB Garamond', 'Garamond', Georgia, serif;
+  color: #d8b890;
+}
+
+.learn-cabinet {
+  width: 94%;
+  height: 94%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 18px 24px;
+}
+
+.learn-header {
+  text-align: center;
+  border-bottom: 2px double #aa7838;
+  padding-bottom: 8px;
+  margin-bottom: 14px;
+}
+
+.learn-title {
+  font-family: 'EB Garamond', 'Garamond', serif;
+  font-variant: small-caps;
+  font-size: 2rem;
+  letter-spacing: 0.32em;
+  color: #d8b890;
+  font-weight: 700;
+}
+
+.learn-sub {
+  font-style: italic;
+  font-size: 1rem;
+  color: rgba(216, 184, 144, 0.7);
+  margin-top: 4px;
+  letter-spacing: 0.1em;
+}
+
+.learn-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 16px;
+  overflow: hidden;
+}
+
+.learn-drawers {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.learn-drawer {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 10px 12px;
+  background: linear-gradient(180deg, #d4b890 0%, #aa8858 60%, #8a6a40 100%);
+  border: 1px solid #4a3018;
+  color: #2a1408;
+  font-family: 'EB Garamond', 'Garamond', serif;
+  font-variant: small-caps;
+  font-size: 1.05rem;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  text-align: left;
+  border-radius: 2px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 230, 180, 0.45),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+    0 1px 0 #2a1408,
+    0 2px 3px rgba(0, 0, 0, 0.4);
+  transition: transform 0.08s, filter 0.15s, box-shadow 0.08s;
+}
+.learn-drawer:hover { filter: brightness(1.1); }
+.learn-drawer:active {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 230, 180, 0.45),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+    0 0 0 #2a1408;
+}
+.learn-drawer.active {
+  background: linear-gradient(180deg, #f4d8a0 0%, #d4a868 60%, #a07840 100%);
+  border-color: #2a1408;
+}
+
+.learn-drawer-num {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 1rem;
+  color: #4a2810;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.learn-drawer-title {
+  font-weight: 700;
+}
+
+.learn-card {
+  border: 1px solid #aa7838;
+  background: linear-gradient(180deg, #f4e4c4 0%, #d8b890 100%);
+  padding: 4px;
+  overflow-y: auto;
+  box-shadow:
+    inset 0 0 0 1px #2a1408,
+    inset 0 0 30px rgba(120, 80, 30, 0.15),
+    0 0 12px rgba(0, 0, 0, 0.4);
+}
+
+.learn-card-empty {
+  font-style: italic;
+  color: #4a2810;
+  text-align: center;
+  padding: 80px 20px;
+  font-size: 1rem;
+}
+
+.learn-card-inner {
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: #2a1408;
+}
+
+.learn-card-num {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 1rem;
+  letter-spacing: 0.2em;
+  color: #6a4028;
+  text-transform: uppercase;
+}
+
+.learn-card-title {
+  font-family: 'EB Garamond', 'Garamond', serif;
+  font-variant: small-caps;
+  font-size: 2.4rem;
+  letter-spacing: 0.18em;
+  color: #4a2008;
+  font-weight: 700;
+  border-bottom: 1px double #6a4028;
+  padding-bottom: 6px;
+  line-height: 1;
+}
+
+.learn-card-body {
+  font-size: 1.3rem;
+  line-height: 1.55;
+  color: #2a1408;
+  font-family: 'OpenDyslexic', 'Lexend', 'EB Garamond', Georgia, serif;
+}
+
+.learn-card-key {
+  font-style: italic;
+  font-size: 0.95rem;
+  color: #6a4028;
+  letter-spacing: 0.08em;
+  border-top: 1px dotted #6a4028;
+  padding-top: 6px;
+}
+
+/* ─── help + exit (Riason wax seal style) ──────────────────────────── */
+.learn-help,
+.learn-exit {
+  position: absolute;
+  top: 12px;
+  z-index: 5;
+  width: 32px;
+  height: 32px;
+  font-family: 'VT323', Georgia, 'Times New Roman', Times, serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 30px;
+  text-align: center;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 3px;
+  color: #f4e0a0;
+  background: linear-gradient(180deg, #6a4818 0%, #4a2810 50%, #2a1408 100%);
+  border: 2px solid #2a1408;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 220, 140, 0.4),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.5),
+    0 2px 0 #1a0a04,
+    0 4px 6px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.6);
+  transition: transform 0.08s, filter 0.15s, box-shadow 0.08s;
+}
+.learn-help { right: 50px; }
+.learn-exit { right: 12px; }
+.learn-help:hover, .learn-exit:hover { filter: brightness(1.15); color: #fff5d0; }
+.learn-help:active, .learn-exit:active {
+  transform: translateY(2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 220, 140, 0.4),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 1px 0 #1a0a04;
+}
+
+.learn-raison {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 12, 4, 0.85);
+  z-index: 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.learn-raison.open { opacity: 1; pointer-events: auto; }
+
+.learn-raison-inner {
+  width: 78%;
+  max-width: 460px;
+  background: linear-gradient(180deg, #2a1a08 0%, #1a1008 100%);
+  border: 1px solid #aa7838;
+  padding: 18px 20px 16px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+  font-family: 'EB Garamond', 'Garamond', serif;
+  color: #d8b890;
+  position: relative;
+}
+
+.learn-raison-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dotted rgba(216, 184, 144, 0.3);
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.learn-raison-name {
+  font-variant: small-caps;
+  letter-spacing: 0.3em;
+  color: #d8b890;
+  font-weight: 700;
+}
+
+.learn-raison-close {
+  background: none;
+  border: 1px solid rgba(216, 184, 144, 0.3);
+  color: #d8b890;
+  font-family: inherit;
+  font-size: 1rem;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 2px;
+}
+.learn-raison-close:hover { background: rgba(216, 184, 144, 0.1); color: #fff; }
+
+.learn-raison-body {
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: #d8b890;
+  font-style: italic;
+}

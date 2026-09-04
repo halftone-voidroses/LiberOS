@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Satchel — The Mad Scribe</title>
+  <link rel="stylesheet" href="styles/room.css"/>
+  <link rel="stylesheet" href="styles/machine.css"/>
+  <link rel="stylesheet" href="styles/bezel.css"/>
+  <link rel="stylesheet" href="styles/scars.css"/>
+  <link rel="stylesheet" href="src/features/satchel/satchel.css"/>
+  <link rel="stylesheet" href="styles/shadow.css"/>
+</head>
+<body>
+  <canvas class="dust-canvas" aria-hidden="true"></canvas>
+  <canvas class="static-canvas" aria-hidden="true"></canvas>
+
+  <div class="room">
+    <div class="machine">
+      <div class="bezel">
+        <div class="carvings" id="carvings"></div>
+        <div class="vent-slits" aria-hidden="true"></div>
+        <div class="corruption-scars" aria-hidden="true">
+          <div class="scar scar-1"></div>
+          <div class="scar scar-2"></div>
+          <div class="scar scar-3"></div>
+          <div class="scar scar-4"></div>
+          <div class="scar scar-5"></div>
+          <div class="scar scar-6"></div>
+        </div>
+        <div class="led" aria-hidden="true"></div>
+        <div class="liber-plate">LIBER · VACUI</div>
+        <div class="power-button" aria-hidden="true"></div>
+        <div class="screw" aria-hidden="true"></div>
+
+        <div class="screen">
+          <div class="screen-stage">
+            <div class="satchel-app" data-state="satchel">
+
+              <button class="satchel-help" type="button" id="satchel-help" aria-label="help">?</button>
+              <button class="satchel-exit" type="button" id="satchel-exit" aria-label="exit">×</button>
+
+              <div class="satchel-raison" id="satchel-raison" aria-hidden="true">
+                <div class="satchel-raison-inner">
+                  <div class="satchel-raison-head">
+                    <span class="satchel-raison-name">raison</span>
+                    <button class="satchel-raison-close" type="button" id="satchel-raison-close" aria-label="close">×</button>
+                  </div>
+                  <div class="satchel-raison-body">
+                    input: click a list item to view its page. output: the entry page shows the artifact's stored fields. the margin note is a contenteditable string written to the artifact's annotation field on blur. read-only fields: name, date, element, see-also. editable: annotation only.
+                  </div>
+                  
+                </div>
+              </div>
+
+              <div class="satchel-binding">
+                <div class="satchel-spine">
+                  <div class="satchel-spine-text">THE MAD SCRIBE</div>
+                  <div class="satchel-spine-text">BOUND MMXXVI</div>
+                </div>
+                <div class="satchel-pages">
+
+                  <div class="satchel-page satchel-page-list">
+                    <div class="satchel-header">
+                      <div class="satchel-title">Contents</div>
+                      <div class="satchel-sub">an index of marks</div>
+                    </div>
+                    <div class="satchel-list" id="satchel-list">
+                      <div class="satchel-empty">the satchel is empty.<br/>a sigil must first be etched.</div>
+                    </div>
+                    <div class="satchel-footer">
+                      <span class="satchel-page-num">— i —</span>
+                    </div>
+                  </div>
+
+                  <div class="satchel-page satchel-page-entry" id="satchel-entry">
+                    <div class="satchel-header">
+                      <div class="satchel-title satchel-entry-title">— — —</div>
+                      <div class="satchel-sub satchel-entry-date">— —</div>
+                    </div>
+                    <div class="satchel-body">
+                      <div class="satchel-intention"></div>
+                      <div class="satchel-element-tag"></div>
+                      <div class="satchel-see-also">
+                        <div class="satchel-see-label">see also</div>
+                        <div class="satchel-see-list" id="satchel-see-list">—</div>
+                      </div>
+                      <div class="satchel-annotation" id="satchel-annotation" contenteditable="true" spellcheck="false" data-placeholder="margin note..."></div>
+                    </div>
+                    <div class="satchel-footer">
+                      <span class="satchel-back-link" id="satchel-back-contents">← contents</span>
+                      <span class="satchel-page-num" id="satchel-pageno">— ii —</span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="monitor-base" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <script src="src/state.js"></script>
+  <script src="src/dust.js"></script>
+  <script src="src/static.js"></script>
+  <script src="src/shadow.js"></script>
+  <script src="src/carvings.js"></script>
+  <script src="src/features/satchel/satchel.js"></script>
+</body>
+</html>
