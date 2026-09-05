@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>the aesthetic sweep — a critical pass over the machine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Jacquard+24&family=Pirata+One&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#d6ba94; --dim:rgba(214,186,148,0.55); --bg:#0a0605; --panel:#140b08; --rule:#3a2014; --ember:#c87838; }
+  * { box-sizing: border-box; }
+  html, body { margin:0; background:var(--bg); color:var(--ink); }
+  body { font-family: Georgia, 'Times New Roman', serif; padding:40px 20px 80px; max-width:1180px; margin:0 auto; }
+  .head { text-align:center; margin-bottom:24px; }
+  .head h1 { font-family:'Jacquard 24', Georgia, serif; font-weight:400; font-size:3rem; color:#e8cfa0; margin:0 0 6px; text-shadow:0 0 18px rgba(232,207,160,0.25); }
+  .head p { color:var(--dim); margin:0; font-style:italic; }
+  .howto { border:1px solid var(--rule); background:var(--panel); padding:12px 18px; margin:0 auto 40px; max-width:820px; font-size:15px; line-height:1.5; color:var(--dim); text-align:center; border-radius:3px; }
+  .howto b { color:var(--ink); }
+  .part { margin-bottom:64px; }
+  .part-head { display:flex; align-items:baseline; gap:14px; border-bottom:1px solid var(--rule); padding-bottom:10px; margin-bottom:8px; }
+  .part-tag { font-family:'VT323',monospace; font-size:22px; color:#0a0605; background:var(--ink); padding:0 10px; border-radius:2px; }
+  .part-head h2 { font-size:1.7rem; margin:0; font-weight:400; color:#e8cfa0; }
+  .group-h { font-family:'VT323',monospace; font-size:22px; color:#e8cfa0; margin:34px 0 14px; letter-spacing:0.08em; }
+  .group-h span { color:var(--dim); font-size:16px; }
+  .cards { display:grid; grid-template-columns:repeat(auto-fill, minmax(330px, 1fr)); gap:16px; }
+  .card { border:1px solid var(--rule); background:var(--panel); border-radius:3px; padding:16px 16px 14px; position:relative; }
+  .card h3 { margin:0 0 2px; font-size:1.05rem; font-weight:400; color:#e8cfa0; font-style:italic; }
+  .card .now { margin:6px 0; font-size:14px; color:var(--dim); }
+  .card .now b { color:#c89a8a; font-weight:400; font-family:'VT323',monospace; letter-spacing:0.08em; }
+  .card .intricate { margin:8px 0; font-size:15px; line-height:1.5; }
+  .card .tech { margin:8px 0 0; font-size:13px; color:var(--dim); font-family:'VT323',monospace; letter-spacing:0.05em; }
+  .vig { margin:10px 0 4px; border:1px solid #241209; border-radius:3px; background:#080404; overflow:hidden; }
+  .vig svg { display:block; width:100%; height:auto; }
+  .cut { border-style:dashed; }
+  .cut h3 { color:#a88a7a; }
+  /* part 2 */
+  .dial-compare { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media (max-width:900px) { .dial-compare { grid-template-columns:1fr; } }
+  .dial-side { border:1px solid var(--rule); background:var(--panel); border-radius:3px; padding:16px; }
+  .dial-side h3 { margin:0 0 4px; font-weight:400; color:#e8cfa0; font-size:1.1rem; }
+  .dial-side .sub { color:var(--dim); font-size:14px; margin:0 0 14px; font-style:italic; }
+  .strip { background: radial-gradient(ellipse at 50% 30%, rgba(120,20,20,0.16) 0%, rgba(0,0,0,0) 62%), linear-gradient(180deg,#1c0708 0%,#120404 100%); border:1px solid #2a1008; border-radius:4px; padding:22px 16px; }
+  .tile { width:72px; height:88px; border-radius:6px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; position:relative; }
+  .plabel { font-family:'VT323',monospace; font-size:15px; letter-spacing:0.1em; color:var(--acc); text-shadow:0 0 8px var(--glow); }
+  .compare-notes { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px; }
+  @media (max-width:900px) { .compare-notes { grid-template-columns:1fr; } }
+  .compare-notes .card { grid-column:auto; }
+  .foot { margin-top:56px; text-align:center; color:var(--dim); font-style:italic; font-size:15px; }
+  /* part 2 — the dial strips */
+  .strip { background: radial-gradient(ellipse at 50% 30%, rgba(120,20,20,0.16) 0%, rgba(0,0,0,0) 62%), linear-gradient(180deg,#1c0708 0%,#120404 100%); border:1px solid #2a1008; border-radius:4px; padding:22px 16px; }
+  .trio { display:grid; grid-template-columns:1fr auto 1fr; gap:12px; align-items:center; margin-bottom:18px; }
+  .trio .side { justify-self:end; }
+  .trio .side.r { justify-self:start; }
+  .full-row { display:flex; flex-wrap:wrap; gap:8px; }
+  .full-row .d-b { flex:0 0 auto; }
+  .d-b { font-family:'VT323',monospace; font-size:19px; letter-spacing:0.1em; color:var(--acc,#c8a878); background: radial-gradient(ellipse at 50% 22%, rgba(255,255,255,0.09) 0%, rgba(0,0,0,0) 55%), linear-gradient(180deg,#17090a 0%,#0c0404 100%); border:1px solid #3a1414; border-radius:6px; padding:7px 18px 6px; box-shadow: inset 0 0 14px rgba(0,0,0,0.75), inset 0 1px 0 rgba(255,255,255,0.06), 0 0 0 2px #0a0303, 0 0 11px var(--glow, rgba(200,168,120,0.28)); text-shadow:0 0 8px var(--glow, rgba(200,168,120,0.6)); cursor:pointer; position:relative; overflow:hidden; }
+  .d-b::after { content:''; position:absolute; inset:0; background:repeating-linear-gradient(180deg, rgba(0,0,0,0.28) 0px, rgba(0,0,0,0.28) 1px, transparent 1px, transparent 3px); pointer-events:none; }
+  .d-b.is-active { border-color:var(--acc); box-shadow: inset 0 0 18px rgba(0,0,0,0.7), 0 0 0 2px #0a0303, 0 0 22px var(--glow, rgba(200,168,120,0.5)); text-shadow:0 0 12px var(--glow, rgba(200,168,120,0.9)); }
+  .d-b.is-hover, .d-b:hover { filter:brightness(1.22); }
+  .tile { width:76px; height:88px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; }
+  #part2 .tile .plabel { font-size:13px; letter-spacing:0.06em; max-width:68px; overflow:hidden; text-overflow:ellipsis; }
+  .strip-note { font-family:'VT323',monospace; font-size:13px; color:rgba(214,186,148,0.4); letter-spacing:0.08em; margin:12px 0 8px; }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>the aesthetic sweep</h1>
+  <p>a critical pass over the machine — what could be depicted more intricately, and the wheel, redrawn.</p>
+</div>
+
+<div class="howto">
+  part one audits the surfaces: what exists, what more intricate would look
+  like, and what it costs — grouped <b>free wins</b>, <b>worth a session</b>,
+  <b>one day</b>. part two puts the shipped dial beside a dial where
+  <b>each traveller designed their own</b>. two ideas were cut for lying
+  (a mood-ring bezel, encouragement copy) — the report says where.
+</div>
+
+<!-- PART1-HEAD -->
+<div class="part">
+  <div class="part-head"><span class="part-tag">1</span><h2>things that could be depicted more intricately</h2></div>
+
+  <div class="group-h">free wins <span>— pure css/svg, an afternoon</span></div>
+  <div class="cards">
+
+    <div class="card">
+      <h3>the led is a pilot flame, not a dot</h3>
+      <div class="vig"><svg viewBox="0 0 300 90" xmlns="http://www.w3.org/2000/svg">
+        <rect width="300" height="90" fill="#e4d8bc"/>
+        <circle cx="150" cy="38" r="7" fill="#e04828"/>
+        <circle cx="150" cy="38" r="12" fill="none" stroke="rgba(224,72,40,0.35)" stroke-width="2"/>
+        <path d="M142 50 q8 6 16 0 l-2 6 q-6 3 -12 0 Z" fill="#d8c8a8" stroke="#b8a080" stroke-width="0.8"/>
+      </svg></div>
+      <p class="now"><b>now</b> — a static red circle pulsing on a fixed loop.</p>
+      <p class="intricate">a two-phase candle-flicker (fast jitter inside a slow breathe), a tiny wax mound building under it that grows with visits, and a warm 1px halo reflecting on the plastic below.</p>
+      <p class="tech">one keyframe set + a radial-gradient pseudo keyed to the existing patina classes. reduced-motion: static flame.</p>
+    </div>
+
+    <div class="card">
+      <h3>the boot title typesets itself</h3>
+      <div class="vig"><svg viewBox="0 0 300 90" xmlns="http://www.w3.org/2000/svg">
+        <rect width="300" height="90" fill="#0c0303"/>
+        <text x="46" y="56" font-family="Times New Roman" font-size="34" letter-spacing="6" fill="#b83828">LIB</text>
+        <text x="150" y="56" font-family="Times New Roman" font-size="34" letter-spacing="6" fill="#7a1e14">ER.OS</text>
+        <rect x="141" y="60" width="3" height="6" fill="rgba(184,56,40,0.5)"/>
+      </svg></div>
+      <p class="now"><b>now</b> — "LIBER.OS" fades in as one block.</p>
+      <p class="intricate">letterpress — each glyph lands individually with a 1px press-sink and ink-spread, sequenced like a hand-set print. ENTER follows with a physical thunk.</p>
+      <p class="tech">per-letter spans + staggered delays; the boot already has the sound engine for the thunk.</p>
+    </div>
+
+    <div class="card">
+      <h3>the status line is ticker-tape</h3>
+      <div class="vig"><svg viewBox="0 0 300 90" xmlns="http://www.w3.org/2000/svg">
+        <rect width="300" height="90" fill="#0c0303"/>
+        <rect x="30" y="28" width="240" height="34" rx="3" fill="#1c0d08" stroke="#4a2818"/>
+        <circle cx="40" cy="28" r="1.6" fill="#0c0303"/><circle cx="70" cy="28" r="1.6" fill="#0c0303"/><circle cx="100" cy="28" r="1.6" fill="#0c0303"/><circle cx="130" cy="28" r="1.6" fill="#0c0303"/><circle cx="160" cy="28" r="1.6" fill="#0c0303"/><circle cx="190" cy="28" r="1.6" fill="#0c0303"/><circle cx="220" cy="28" r="1.6" fill="#0c0303"/><circle cx="250" cy="28" r="1.6" fill="#0c0303"/>
+        <circle cx="55" cy="62" r="1.6" fill="#0c0303"/><circle cx="85" cy="62" r="1.6" fill="#0c0303"/><circle cx="115" cy="62" r="1.6" fill="#0c0303"/><circle cx="145" cy="62" r="1.6" fill="#0c0303"/><circle cx="175" cy="62" r="1.6" fill="#0c0303"/><circle cx="205" cy="62" r="1.6" fill="#0c0303"/><circle cx="235" cy="62" r="1.6" fill="#0c0303"/>
+        <text x="52" y="50" font-family="VT323" font-size="17" fill="#d6ba94">liber.os is listening.</text>
+      </svg></div>
+      <p class="now"><b>now</b> — a bevelled plate; text swaps every 12s with a fade.</p>
+      <p class="intricate">perforated tape edges (punch-holes along the plate), and each phrase arrives in small horizontal steps like a teletype advancing — not a fade.</p>
+      <p class="tech">dashed-border pseudo-elements + steps() on a translate. the plate is the status line's own; nothing shared reaches the apps.</p>
+    </div>
+
+    <div class="card">
+      <h3>the carvings collect verdigris</h3>
+      <div class="vig"><svg viewBox="0 0 300 90" xmlns="http://www.w3.org/2000/svg">
+        <rect width="300" height="90" fill="#e4d8bc"/>
+        <circle cx="120" cy="45" r="14" fill="none" stroke="#7a6a3a" stroke-width="2"/>
+        <path d="M112 38 q6 -4 10 2 M126 48 q-4 6 -10 3" fill="none" stroke="#4e7a58" stroke-width="2.4" stroke-linecap="round" opacity="0.85"/>
+        <circle cx="190" cy="45" r="14" fill="none" stroke="#7a6a3a" stroke-width="2"/>
+      </svg></div>
+      <p class="now"><b>now</b> — patina deepens the carvings in sepia and brightness tiers.</p>
+      <p class="intricate">the two copper-bearing carvings (the stone's inlay, relation's ring) grow a green oxide bloom in the recesses as visits accumulate — verdigris is what copper does, and it is the one color the bezel never uses.</p>
+      <p class="tech">a green blend layer on the inlay pseudo-elements, keyed to patina-2/3. the room's own chemistry.</p>
+    </div>
+
+    <div class="card">
+      <h3>the glass has a glare that wanders</h3>
+      <div class="vig"><svg viewBox="0 0 300 90" xmlns="http://www.w3.org/2000/svg">
+        <rect width="300" height="90" fill="#120404"/>
+        <polygon points="90,0 130,0 60,90 20,90" fill="rgba(255,240,220,0.05)"/>
+        <polygon points="130,0 150,0 80,90 60,90" fill="rgba(255,240,220,0.03)"/>
+      </svg></div>
+      <p class="now"><b>now</b> — static curvature shading and vignette.</p>
+      <p class="intricate">a slow diagonal glare band crossing the tube every ~40s — barely visible, 8s crossing, warm-white at 3%. the tube is glass; glass reflects the room.</p>
+      <p class="tech">one rotated gradient pseudo on .screen with a long translate loop. reduced-motion gated.</p>
+    </div>
+
+  </div>
+
+  <div class="group-h">worth a session <span>— an hour of craft each</span></div>
+  <div class="cards">
+
+    <div class="card">
+      <h3>the casting stone gathers dust while you draw</h3>
+      <div class="vig"><svg viewBox="0 0 300 90" xmlns="http://www.w3.org/2000/svg">
+        <rect width="300" height="90" fill="#0c0303"/>
+        <path d="M60 60 Q150 30 240 62" fill="none" stroke="#c8b088" stroke-width="2.5"/>
+        <circle cx="96" cy="50" r="1.4" fill="#c8b088" opacity="0.8"/><circle cx="130" cy="42" r="1.2" fill="#c8b088" opacity="0.6"/><circle cx="170" cy="44" r="1.5" fill="#c8b088" opacity="0.75"/><circle cx="205" cy="52" r="1.2" fill="#c8b088" opacity="0.55"/><circle cx="150" cy="55" r="1.1" fill="#c8b088" opacity="0.5"/>
+      </svg></div>
+      <p class="now"><b>now</b> — the sigil revelation shows dust in the cracks on hover.</p>
+      <p class="intricate">while the hand is actually down, canvas particles settle into the stroke grooves and stay — the drawing physically accumulates the room.</p>
+      <p class="tech">the dust canvas already exists; a settle-mode keyed to pointerdown on the sigil canvas. the particles are the room's, not new ones.</p>
+    </div>
+
+    <div class="card">
+      <h3>the wax room's light follows the conversation</h3>
+      <div class="vig"><svg viewBox="0 0 300 90" xmlns="http://www.w3.org/2000/svg">
+        <rect width="300" height="90" fill="#160607"/>
+        <ellipse cx="200" cy="55" rx="120" ry="42" fill="rgba(216,90,72,0.10)"/>
+        <ellipse cx="200" cy="55" rx="70" ry="26" fill="rgba(216,90,72,0.10)"/>
+        <rect x="180" y="42" width="100" height="26" rx="3" fill="#241014" opacity="0.9"/>
+        <text x="192" y="59" font-family="Georgia" font-size="12" font-style="italic" fill="#d6ba94">why do you want to rest?</text>
+      </svg></div>
+      <p class="now"><b>now</b> — three fixed candle flames above the chat transcript.</p>
+      <p class="intricate">the light pool on the tablet shifts toward whichever turn is newest — her words lean the glow cool, yours lean it warm. the newest message is always the best-lit.</p>
+      <p class="tech">a gradient overlay whose origin interpolates to the last turn's side; one transition, no new loops.</p>
+    </div>
+
+    <div class="card">
+      <h3>the sea is deep, not flat</h3>
+      <div class="vig"><svg viewBox="0 0 300 90" xmlns="http://www.w3.org/2000/svg">
+        <rect width="300" height="90" fill="#07161c"/>
+        <path d="M0 70 Q40 62 80 70 T160 70 T240 70 T320 70 V90 H0 Z" fill="#0a222c" opacity="0.8"/>
+        <path d="M0 80 Q50 74 100 80 T200 80 T300 80 V90 H0 Z" fill="#04141c"/>
+        <path d="M60 72 c-3 -8 2 -12 4 -16 M64 72 c2 -7 -1 -11 -1 -15" stroke="#0e2c38" stroke-width="2" fill="none"/>
+        <ellipse cx="220" cy="52" rx="14" ry="5" fill="rgba(160,200,216,0.14)"/>
+      </svg></div>
+      <p class="now"><b>now</b> — a depth gauge, breath rings, one pale hover-shape below.</p>
+      <p class="intricate">two parallax silhouette layers — far kelp and a nearer shelf — drifting at different rates with the mouse depth, so descending feels like passing through water, not sliding a slider.</p>
+      <p class="tech">two silhouette layers translating at ratios of the existing depth value. no new input.</p>
+    </div>
+
+    <div class="card">
+      <h3>the ledger cracks a seal before it unbinds</h3>
+      <div class="vig"><svg viewBox="0 0 300 90" xmlns="http://www.w3.org/2000/svg">
+        <rect width="300" height="90" fill="#140a18"/>
+        <circle cx="90" cy="45" r="14" fill="#571410" stroke="#2e0c08"/>
+        <circle cx="210" cy="45" r="14" fill="#571410" stroke="#2e0c08"/>
+        <path d="M210 33 L206 44 L212 47 L207 58" fill="none" stroke="#0c0303" stroke-width="1.6"/>
+        <path d="M207 58 L212 47" stroke="#c89078" stroke-width="1" opacity="0.6"/>
+      </svg></div>
+      <p class="now"><b>now</b> — release removes the row instantly, with the thunk.</p>
+      <p class="intricate">on release, the row's wax seal cracks (a split running through it over 300ms) and then the row lifts away — destruction you can see, honest about what just happened.</p>
+      <p class="tech">a two-half seal glyph + a keyframed exit transform. the relation app's own css only.</p>
+    </div>
+
+    <div class="card">
+      <h3>the loading ritual has drive chatter</h3>
+      <div class="vig"><svg viewBox="0 0 300 90" xmlns="http://www.w3.org/2000/svg">
+        <rect width="300" height="90" fill="#120404"/>
+        <text x="150" y="42" text-anchor="middle" font-family="Times New Roman" font-size="18" letter-spacing="3" fill="#b83828">NOW LOADING</text>
+        <g fill="rgba(214,186,148,0.5)">
+          <rect x="90" y="60" width="3" height="2"/><rect x="98" y="60" width="6" height="2"/><rect x="110" y="60" width="2" height="2"/><rect x="126" y="60" width="4" height="2"/><rect x="140" y="60" width="2" height="2"/><rect x="152" y="60" width="7" height="2"/><rect x="164" y="60" width="2" height="2"/><rect x="176" y="60" width="4" height="2"/>
+        </g>
+        <text x="150" y="76" text-anchor="middle" font-family="VT323" font-size="12" fill="rgba(214,186,148,0.35)">seek · track · seek · read</text>
+      </svg></div>
+      <p class="now"><b>now</b> — "Now Loading", the fate line, and a wipe.</p>
+      <p class="intricate">a low synthesized drive-chatter under the text — seek, track, seek, read — so the machine sounds like it is reading something real. fades with the wipe.</p>
+      <p class="tech">filtered noise bursts in sound.js's existing voice architecture; a 'chatter' kind wired to the loading page only.</p>
+    </div>
+
+  </div>
+
+  <div class="group-h">one day <span>— needs new machinery</span></div>
+  <div class="cards">
+
+    <div class="card">
+      <h3>the room keeps real hours</h3>
+      <div class="vig"><svg viewBox="0 0 300 90" xmlns="http://www.w3.org/2000/svg">
+        <rect width="150" height="90" fill="#0c0305"/>
+        <ellipse cx="75" cy="70" rx="90" ry="30" fill="rgba(120,20,20,0.14)"/>
+        <rect x="150" width="150" height="90" fill="#05070c"/>
+        <ellipse cx="225" cy="70" rx="90" ry="30" fill="rgba(60,80,120,0.10)"/>
+        <text x="75" y="48" text-anchor="middle" font-family="VT323" font-size="14" fill="rgba(214,186,148,0.5)">3 am — red</text>
+        <text x="225" y="48" text-anchor="middle" font-family="VT323" font-size="14" fill="rgba(214,186,148,0.5)">3 pm — cold</text>
+      </svg></div>
+      <p class="now"><b>now</b> — the radial clock shows the time; the room is the same darkness at 3pm and 3am.</p>
+      <p class="intricate">the ambient glow drifts with the actual local hour — deep red at night, a colder near-black at noon. never announced, never a "theme": just a room with windows it does not have. uses the clock that already ticks.</p>
+      <p class="tech">an hour-derived class (room-noon/dusk/night) set in shadow.js; three gradient overrides in room.css. it is light, not motion — reduced-motion does not hold it back.</p>
+    </div>
+
+    <div class="card">
+      <h3>the cohort has a waveform in the static</h3>
+      <div class="vig"><svg viewBox="0 0 300 90" xmlns="http://www.w3.org/2000/svg">
+        <rect width="300" height="90" fill="#050202"/>
+        <g fill="rgba(214,186,148,0.18)">
+          <rect x="20" y="30" width="2" height="2"/><rect x="40" y="44" width="2" height="2"/><rect x="65" y="26" width="2" height="2"/><rect x="90" y="50" width="2" height="2"/><rect x="230" y="34" width="2" height="2"/><rect x="255" y="48" width="2" height="2"/>
+        </g>
+        <path d="M60 45 Q90 20 120 45 T180 45 T240 45" fill="none" stroke="rgba(216,90,72,0.4)" stroke-width="1.5"/>
+      </svg></div>
+      <p class="now"><b>now</b> — "the cohort becomes louder" is overlay resolution tiers and status-line voice.</p>
+      <p class="intricate">at the loudest tier, the static canvas occasionally carries a faint coherent waveform — a pulse in the noise, one second, gone. the cohort is not text; it is a shape in the signal.</p>
+      <p class="tech">a canvas draw keyed to tier-3 + the seeded ambient scheduler that already exists. one session of canvas work.</p>
+    </div>
+
+    <div class="card cut">
+      <h3>cut on purpose — two ideas that lied</h3>
+      <p class="intricate"><b>the bezel mood-ring</b> — a bezel tint that shifts with app or state. cut: the corrupted default is a truth about the machine, not an indicator to restyle.</p>
+      <p class="intricate"><b>encouragement copy</b> — reassurance after saves or releases. cut: flattery is contempt even from a CRT. the machine does not praise; the covenant already legislated this and the sweep respects it.</p>
+      <p class="tech">the sweep proposes intricacy, not decoration — and never a second voice in the room.</p>
+    </div>
+
+  </div>
+</div>
+<div class="part" id="part2">
+  <div class="part-head"><span class="part-tag">2</span><h2>the wheel, redrawn</h2></div>
+  <p class="dir-desc">the dial as shipped is one grammar: phosphor bitmap plaques,
+  uniform and instant to scan. beside it, the alternative the user asked to
+  see — each traveller designed their own tile, in their own material and
+  hand, parity only in footprint. both are live; hover them.</p>
+
+  <div class="dial-compare">
+
+    <div class="dial-side">
+      <h3>as shipped — one phosphor grammar</h3>
+      <p class="sub">dark glass, the name above, a 12×12 crisp glyph below, the active tier flaring in its own phosphor.</p>
+      <div class="strip">
+        <p class="strip-note">— the trio · hover me —</p>
+        <div class="trio">
+          <div class="d-b side" style="--acc:#8a6840;--glow:rgba(168,136,88,0.4);">trash</div>
+          <div class="d-b is-active" style="--acc:#aa5a18;--glow:rgba(170,90,24,0.5);">cohort</div>
+          <div class="d-b side r" style="--acc:#aa7838;--glow:rgba(170,120,56,0.4);">satchel</div>
+        </div>
+        <p class="strip-note">— the full twelve · 12×12 glyphs as shipped —</p>
+        <div class="full-row">
+          <div class="d-b" style="--acc:#aa5a18;--glow:rgba(170,90,24,0.4);">cohort</div>
+          <div class="d-b" style="--acc:#aa7838;--glow:rgba(170,120,56,0.4);">satchel</div>
+          <div class="d-b" style="--acc:#2a8a8a;--glow:rgba(42,138,138,0.4);">sea</div>
+          <div class="d-b" style="--acc:#c04a58;--glow:rgba(192,74,88,0.4);">chat</div>
+          <div class="d-b" style="--acc:#00ff66;--glow:rgba(0,255,102,0.32);">abstract</div>
+          <div class="d-b" style="--acc:#d4af37;--glow:rgba(212,175,55,0.4);">games</div>
+          <div class="d-b" style="--acc:#f4e8d2;--glow:rgba(244,232,210,0.4);">divination</div>
+          <div class="d-b" style="--acc:#e05a5a;--glow:rgba(224,90,90,0.4);">learn</div>
+          <div class="d-b" style="--acc:#e05a5a;--glow:rgba(224,90,90,0.4);">methodology</div>
+          <div class="d-b" style="--acc:#d4af37;--glow:rgba(212,175,55,0.4);">themes</div>
+          <div class="d-b" style="--acc:#c8a04a;--glow:rgba(200,160,74,0.4);">relation</div>
+          <div class="d-b" style="--acc:#a88858;--glow:rgba(168,136,88,0.4);">trash</div>
+        </div>
+        <p class="strip-note">— in the machine, each tile carries its 12×12 glyph between label and edge —</p>
+      </div>
+    </div>
+
+    <div class="dial-side">
+      <h3>redrawn — each traveller designed their own</h3>
+      <p class="sub">parity only in footprint. everything inside is their hand: their material, their mark, their label.</p>
+      <div class="strip">
+        <div class="full-row">
+          <div class="tile" style="--acc:#aa5a18;--glow:rgba(170,90,24,0.4);background:linear-gradient(180deg,#62626c,#26262e);border:1px solid #17171d;">
+            <span class="plabel">cohort</span>
+            <svg width="30" height="30" viewBox="0 0 12 12"><path d="M4 1h4v1H4zM5 2h3v1H5zM6 3h2v1H6zM7 4h1v1H7zM2 7h8v1H2zM3 8h6v1H3z" fill="none" stroke="#c8b088" stroke-width="0.5"/></svg>
+          </div>
+          <div class="tile" style="--acc:#aa7838;--glow:rgba(170,120,56,0.4);background:linear-gradient(180deg,#ece0c2,#cbb98c);border:1px solid #6a4818;">
+            <span class="plabel" style="color:#3a2010;text-shadow:none;">satchel</span>
+            <svg width="30" height="30" viewBox="0 0 12 12"><path d="M2 3h8v7H2z M2 3h8v1H2z" fill="none" stroke="#3a2010" stroke-width="0.7"/><rect x="5" y="6" width="2" height="2" fill="#8a6222"/></svg>
+          </div>
+          <div class="tile" style="--acc:#2a8a8a;--glow:rgba(42,138,138,0.4);background:repeating-linear-gradient(180deg,rgba(160,200,216,0.07) 0 1px,transparent 1px 6px),linear-gradient(180deg,rgba(168,216,228,0.16) 0,rgba(168,216,228,0) 24%),linear-gradient(180deg,#33505e,#0e1922);border:1px solid #071018;">
+            <span class="plabel">sea</span>
+            <svg width="30" height="30" viewBox="0 0 12 12"><path d="M1 7 Q4 4 6 7 T11 7 M1 10 Q4 7 6 10 T11 10" fill="none" stroke="#a8d8e0" stroke-width="0.8"/></svg>
+          </div>
+          <div class="tile" style="--acc:#c04a58;--glow:rgba(192,74,88,0.4);background:radial-gradient(circle at 30% 40%,rgba(180,60,50,0.22) 0 7px,transparent 8px),radial-gradient(circle at 68% 68%,rgba(140,30,30,0.18) 0 9px,transparent 10px),linear-gradient(180deg,#1c080a,#080303);border:1px solid #3a0a10;">
+            <span class="plabel">chat</span>
+            <svg width="30" height="30" viewBox="0 0 12 12"><circle cx="6" cy="7" r="3.2" fill="none" stroke="#d8b088" stroke-width="0.8"/><path d="M6 1 Q7.4 3 6 4.4 Q4.6 3 6 1" fill="#d85a48"/></svg>
+          </div>
+          <div class="tile" style="--acc:#00ff66;--glow:rgba(0,255,102,0.32);background:#010a04;border:1px solid #0a4018;">
+            <span class="plabel">abstract</span>
+            <svg width="30" height="30" viewBox="0 0 12 12"><rect x="2.5" y="2" width="7" height="6" fill="none" stroke="#00ff66" stroke-width="0.9"/><rect x="1.5" y="9.5" width="9" height="1.2" fill="#00ff66"/></svg>
+          </div>
+          <div class="tile" style="--acc:#d4af37;--glow:rgba(212,175,55,0.4);background:repeating-linear-gradient(90deg,rgba(0,0,0,0.18) 0 2px,transparent 2px 12px),linear-gradient(180deg,#7a1420,#3a0a12);border:1px solid #d4af37;">
+            <span class="plabel">games</span>
+            <svg width="30" height="30" viewBox="0 0 12 12"><circle cx="6" cy="5.5" r="3" fill="none" stroke="#ffe9a8" stroke-width="0.8"/><rect x="5" y="8.6" width="2" height="1.6" fill="#ffe9a8"/></svg>
+          </div>
+        </div>
+        <div class="full-row" style="margin-top:8px;">
+          <div class="tile" style="--acc:#f4e8d2;--glow:rgba(244,232,210,0.4);background:repeating-linear-gradient(45deg,rgba(255,255,255,0.02) 0 1px,transparent 1px 3px),linear-gradient(180deg,#6a1018,#32060a);border:1px solid #1a0205;">
+            <span class="plabel">divination</span>
+            <svg width="30" height="30" viewBox="0 0 12 12"><path d="M2 1h8v10H2z" fill="none" stroke="#f4e8d2" stroke-width="0.7"/><path d="M3.5 3h5M3.5 5h5M3.5 7h5" stroke="rgba(244,232,210,0.5)" stroke-width="0.6"/></svg>
+          </div>
+          <div class="tile" style="--acc:#e05a5a;--glow:rgba(224,90,90,0.4);background:linear-gradient(rgba(170,48,48,0.7),rgba(170,48,48,0.7)) 8px 6px/56px 2px no-repeat,linear-gradient(180deg,#f0e2be,#cbb98c);border:1px solid #6a4818;">
+            <span class="plabel" style="color:#7a1c14;text-shadow:none;">learn</span>
+            <svg width="30" height="30" viewBox="0 0 12 12"><path d="M4 1 L7 6 L4 11" fill="none" stroke="#2a1808" stroke-width="0.9"/><rect x="8" y="8" width="2.4" height="2.4" fill="none" stroke="#aa3030" stroke-width="0.7"/></svg>
+          </div>
+          <div class="tile" style="--acc:#aa3030;--glow:rgba(224,90,90,0.4);background:linear-gradient(180deg,#efe0b2,#cdb884);border:1px solid #6a4a20;border-left:3px solid #aa3030;">
+            <span class="plabel" style="color:#2a1a08;text-shadow:none;">methodology</span>
+            <svg width="30" height="30" viewBox="0 0 12 12"><rect x="2" y="2" width="3.4" height="8" fill="none" stroke="#2a1a08" stroke-width="0.7"/><rect x="7" y="2" width="3.4" height="8" fill="none" stroke="#2a1a08" stroke-width="0.7"/><circle cx="9.6" cy="9.6" r="1.2" fill="#aa3030"/></svg>
+          </div>
+          <div class="tile" style="--acc:#d4af37;--glow:rgba(212,175,55,0.4);background:conic-gradient(#a8481a 0 90deg,#c89a28 90deg 180deg,#20605c 180deg 270deg,#8a1a14 270deg 360deg);background-size:26px 26px;border:2px solid #0c0803;">
+            <span class="plabel" style="color:#f0e4cc;">themes</span>
+            <svg width="30" height="30" viewBox="0 0 12 12"><path d="M1 11 L6 4 L11 11" fill="none" stroke="#f0e4cc" stroke-width="0.8"/></svg>
+          </div>
+          <div class="tile" style="--acc:#c8a04a;--glow:rgba(200,160,74,0.4);background:repeating-linear-gradient(90deg,rgba(90,80,96,0.22) 0 1px,transparent 1px 5px),linear-gradient(180deg,#241428,#0a0410);border:2px solid #4a4050;">
+            <span class="plabel">relation</span>
+            <svg width="30" height="30" viewBox="0 0 12 12"><circle cx="4" cy="6" r="2.6" fill="none" stroke="#5a5060" stroke-width="1"/><circle cx="8" cy="6" r="2.6" fill="none" stroke="#c8a04a" stroke-width="1"/></svg>
+          </div>
+          <div class="tile" style="--acc:#a88858;--glow:rgba(168,136,88,0.4);background:linear-gradient(180deg,#3a2c1c,#14100a);border:1px solid #0c0805;clip-path:polygon(0 8%,8% 0,92% 4%,100% 90%,90% 100%,6% 96%);">
+            <span class="plabel">trash</span>
+            <svg width="30" height="30" viewBox="0 0 12 12"><path d="M2 9 L4 5 L6 8 L8 4 L10 9" fill="none" stroke="#a88858" stroke-width="0.9"/><circle cx="4" cy="4" r="0.7" fill="#a88858"/><circle cx="9" cy="6" r="0.7" fill="#a88858"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="compare-notes">
+    <div class="card">
+      <h3>what the unified grammar gains</h3>
+      <p class="intricate">instant scanning — twelve tiles read as one instrument. cheaper to keep coherent as the machine grows. the phosphor family already matches entity404's room and the CRT premise itself.</p>
+    </div>
+    <div class="card">
+      <h3>what the bespoke hand gains</h3>
+      <p class="intricate">the dial becomes the graveyard's lesson applied to navigation — every tile is a room you have stood in, made by someone who was there. warmer, stranger, and the only place all twelve hands sit side by side.</p>
+    </div>
+    <div class="card">
+      <h3>the hybrid is real</h3>
+      <p class="intricate">bespoke tile backs (their material, their mark) with the unified phosphor label kept above — scanning stays, presence arrives. the material recipes already exist in each app's shipped styles; the dial would be borrowing, not inventing.</p>
+      <p class="tech">this is the recommendation if the bespoke hand wins.</p>
+    </div>
+  </div>
+</div>
+<div class="foot">everything here keeps the frieze, the motes, the crossing ritual, and the reduced-motion gates exactly as shipped. nothing proposed nags, scores, or flatters.</div>
+
+</body>
+</html>
