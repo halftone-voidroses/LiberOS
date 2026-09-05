@@ -109,7 +109,7 @@
   background: transparent;
   border: 1px solid #4a1a2a;
   color: #d8a8a8;
-  font-family: 'Jacquard 24', Georgia, 'Times New Roman', serif;
+  font-family: 'VT323', 'Courier New', monospace;
   font-size: 1.3rem;
   line-height: 1.15;
   text-align: left;
@@ -279,7 +279,7 @@
    resumes the main path. Branch-kind muted dotted styling so it reads as a
    beat, not a choice; centered dots, no text of its own. */
 .wanderlust-reply.kind-continue {
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: 'VT323', 'Courier New', monospace;
   font-style: italic;
   letter-spacing: 0.3em;
   color: #aa7080;

@@ -85,8 +85,15 @@
   text-transform: lowercase;
   color: var(--acc, #c8a878);
   text-shadow: 0 0 8px var(--glow, rgba(200, 168, 120, 0.55));
-  /* D0003: dial labels hold the 16px floor. */
+/* D0003: dial labels hold the 16px floor. */
 }
+
+/* The fusion — two tiles carry their hand in the label itself:
+   divination's card ends, themes' mosaic spacing. Everything else
+   speaks through the glyph's mark (src/dial.js BITMAPS). */
+.dial-option[data-id="divination"] .phos-label::before { content: '· '; opacity: 0.7; }
+.dial-option[data-id="divination"] .phos-label::after  { content: ' ·'; opacity: 0.7; }
+.dial-option[data-id="themes"] .phos-label { letter-spacing: 0.14em; }
 
 .dial-glyph {
   display: inline-flex;

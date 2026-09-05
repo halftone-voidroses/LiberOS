@@ -85,6 +85,38 @@ html, body {
   mix-blend-mode: overlay;
 }
 
+/* Whispers — the machine's phrases leaking into the room as barely
+   visible words drifting up behind the monitor. Ghosts in the dark,
+   never in front of the computer. Fragment timing comes from
+   src/whispers.js; the drift is one slow rise and fade. */
+.whispers {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.whisper {
+  position: absolute;
+  font-family: 'VT323', 'Courier New', Courier, monospace;
+  font-size: clamp(0.85rem, 1.3vw, 1.15rem);
+  letter-spacing: 0.22em;
+  text-transform: lowercase;
+  color: rgba(214, 186, 148, 0.5);
+  text-shadow: 0 0 8px rgba(214, 186, 148, 0.18);
+  filter: blur(0.8px);
+  opacity: 0;
+  animation: whisper-drift var(--drift-dur, 11s) ease-out both;
+}
+
+@keyframes whisper-drift {
+  0%   { opacity: 0;    transform: translate(0, 0); }
+  18%  { opacity: 0.08; }
+  62%  { opacity: 0.06; }
+  100% { opacity: 0;    transform: translate(var(--drift-x, 0px), -9vh); }
+}
+
 /* CRT scanlines removed (plan 2026-09-04 D0002) — the old body::after
    repeating-linear-gradient overlay is gone. The vignette below and the
    static/dust canvases carry the CRT feel now. */
@@ -141,4 +173,5 @@ body::before {
 @media (prefers-reduced-motion: reduce) {
   body::before { animation: none !important; }
   .dust-canvas, .static-canvas { display: none; }
+  .whispers { display: none; }
 }

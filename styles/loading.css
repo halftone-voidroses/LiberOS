@@ -34,7 +34,35 @@
   text-transform: uppercase;
   color: #aa0000;
   text-shadow: 0 0 14px rgba(170, 0, 0, 0.5);
-  animation: loading-pulse 3s ease-in-out infinite;
+}
+
+/* letterpress — each glyph is hand-set: it lands from a raise, sinks
+   1px into the paper, and the ink spreads as it settles. Sequenced by
+   --glyph-i (set from src/boot-title.js). */
+.letterpress-glyph {
+  display: inline-block;
+  animation: letterpress-land 0.32s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+  animation-delay: calc(var(--glyph-i, 0) * 70ms);
+}
+
+.letterpress-space { display: inline-block; width: 0.4em; }
+
+@keyframes letterpress-land {
+  0% {
+    opacity: 0;
+    transform: translateY(-0.14em) scale(1.06);
+    text-shadow: 0 0 0 rgba(170, 0, 0, 0);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(0.02em) scale(1);
+    text-shadow: 0 0 22px rgba(170, 0, 0, 0.7);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    text-shadow: 0 0 14px rgba(170, 0, 0, 0.5);
+  }
 }
 
 .state-loading .loading-now {
@@ -43,6 +71,27 @@
   color: #aa0000;
   letter-spacing: 0.1em;
   opacity: 0.85;
+}
+
+/* the press runs after the title — arrives with the thunk */
+.state-loading .loading-now.letterpress-arrives {
+  animation: letterpress-settle 0.3s ease-out both;
+  animation-delay: var(--arrive-delay, 1200ms);
+}
+
+@keyframes letterpress-settle {
+  0%   { opacity: 0; transform: translateY(-0.2em); }
+  60%  { opacity: 0.85; transform: translateY(0.03em); }
+  100% { opacity: 0.85; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .letterpress-glyph,
+  .state-loading .loading-now.letterpress-arrives {
+    animation: none;
+    opacity: inherit;
+    transform: none;
+  }
 }
 
 .state-loading .loading-patrons {
@@ -55,10 +104,6 @@
   animation: loading-blink 1.4s steps(2) infinite;
 }
 
-@keyframes loading-pulse {
-  0%, 100% { opacity: 0.9; }
-  50%      { opacity: 1.0;  }
-}
 
 @keyframes loading-blink {
   0%, 100% { opacity: 0.6; }

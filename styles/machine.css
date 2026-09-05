@@ -141,7 +141,41 @@
    by the phosphor glow, vignette, static + dust canvases, curvature
    shading above, and time-dependent flicker elsewhere. */
 
-/* The LED — small red dot, top-right of the bezel, pulses softly. */
+/* The glass is glass: a warm-white glare band crosses the tube every
+   ~40s — barely visible (3%), one 8s crossing, then long dark rest.
+   The room reflects in the tube whether anyone watches or not. */
+.screen::after {
+  content: '';
+  position: absolute;
+  top: -30%;
+  bottom: -30%;
+  left: -34%;
+  width: 26%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 240, 220, 0) 0%,
+    rgba(255, 240, 220, 0.03) 45%,
+    rgba(255, 244, 226, 0.05) 50%,
+    rgba(255, 240, 220, 0.03) 55%,
+    rgba(255, 240, 220, 0) 100%
+  );
+  transform: skewX(-18deg);
+  pointer-events: none;
+  z-index: 6;
+  animation: screen-glare 40s linear infinite;
+}
+
+@keyframes screen-glare {
+  0%, 72%   { left: -34%; opacity: 0; }
+  73%       { opacity: 1; }
+  81%       { opacity: 1; }
+  82%, 100% { left: 118%; opacity: 0; }
+}
+
+/* The LED — a pilot flame, not a dot. Top-right of the bezel.
+   Two-phase burn: fast candle jitter inside a slow breathe, a warm
+   halo falling on the plastic below, and a wax mound that builds in
+   the recess under it as presence deepens (patina tiers). */
 .led {
   position: absolute;
   top: 24px;
@@ -149,19 +183,50 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #ff2020;
+  background: radial-gradient(circle at 40% 35%, #ffb08a 0%, #ff5030 38%, #d81808 78%);
   box-shadow:
-    0 0 6px #ff2020,
-    0 0 12px rgba(255, 32, 32, 0.6),
-    inset 0 0 2px rgba(255, 200, 200, 0.8);
-  animation: led-pulse 2.4s ease-in-out infinite;
+    0 0 6px rgba(255, 96, 48, 0.9),
+    0 0 12px rgba(255, 48, 24, 0.6),
+    0 3px 5px rgba(255, 140, 80, 0.22),
+    inset 0 0 2px rgba(255, 220, 200, 0.85);
+  animation:
+    led-flicker 0.9s steps(2, end) infinite,
+    led-breathe 5.6s ease-in-out infinite;
   z-index: 20;
 }
 
-@keyframes led-pulse {
-  0%, 100% { opacity: 0.55; box-shadow: 0 0 6px #ff2020, 0 0 12px rgba(255, 32, 32, 0.6); }
-  50%      { opacity: 1.0;  box-shadow: 0 0 10px #ff2020, 0 0 18px rgba(255, 32, 32, 0.8); }
+/* fast jitter — the candle's small instability */
+@keyframes led-flicker {
+  0%, 100% { opacity: 0.92; transform: scale(1); }
+  50%      { opacity: 1;    transform: scale(1.05); }
 }
+
+/* slow breathe — the flame's resting rhythm */
+@keyframes led-breathe {
+  0%, 100% { filter: brightness(0.82); }
+  50%      { filter: brightness(1.08); }
+}
+
+/* the wax mound — presence pools in the recess under the flame */
+.led::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -3px;
+  width: 10px;
+  height: 3px;
+  transform: translateX(-50%);
+  border-radius: 45% 55% 50% 50% / 100% 100% 0 0;
+  background: linear-gradient(180deg, #e8d0a8 0%, #c8a878 60%, #a88858 100%);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 1.8s ease;
+}
+
+/* wax widens and catches the flame's light as presence etches the room */
+.machine.patina-1 .led::after { opacity: 0.45; height: 4px; }
+.machine.patina-2 .led::after { opacity: 0.7;  height: 5px; width: 12px; }
+.machine.patina-3 .led::after { opacity: 0.95; height: 6px; width: 14px; box-shadow: 0 1px 2px rgba(0,0,0,0.5), 0 0 4px rgba(255,160,96,0.25); }
 
 /* The "LIBER" plate — small metal-looking text on the lower bezel. */
 .liber-plate {
@@ -267,6 +332,7 @@
 /* WS4 motion pass: the LED's pulse is ambient — still under reduced motion. */
 @media (prefers-reduced-motion: reduce) {
   .led { animation: none; opacity: 0.8; }
+  .screen::after { animation: none; opacity: 0; }
 }
 
 /* ============================================================================

@@ -46,6 +46,8 @@
       el.classList.toggle('cohort-voice', !!cohortVoice);
       el.classList.remove('fading');
     }, 400);
+    // the phrase leaks into the room — a whisper behind the machine
+    document.dispatchEvent(new CustomEvent('liber:whisper', { detail: { text: text } }));
   }
 
   function showNext() {
@@ -74,6 +76,7 @@
     if (!el) return;
     rebuild();
     el.textContent = PHRASES[0];
+    document.dispatchEvent(new CustomEvent('liber:whisper', { detail: { text: PHRASES[0] } }));
     timer = setInterval(cycle, INTERVAL);
     if (window.Liber && window.Liber.state && window.Liber.state.on) {
       window.Liber.state.on('change', rebuild);
