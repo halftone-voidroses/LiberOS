@@ -3,9 +3,12 @@
 // you first make something in that traveller's app; the travellers witnessed
 // it. Unlit segments suggest a research-backed art-therapy prompt on
 // hover/focus (docs/gamification.md mechanic 3, reskinned as lore); lit
-// segments show the work line + count. Everything except the one-time prompt
-// is hover-gated — no popups, no XP, no guilt (docs/gamification.md
-// anti-goals).
+// segments show the work line + count, and clicking one GENERATES a
+// research-backed prompt from your own room — the traveller's prompt bank
+// grounded in your latest artifact here, its declared verb, and your
+// cohort's intention (src/prompt-engine.js compose, seeded per click).
+// Everything is hover-gated or click-called — no popups, no XP, no guilt
+// (docs/gamification.md anti-goals).
 // Derived only: reads state, writes nothing. Newly-lit segments fire their
 // tier's prompt once per visit via the existing liber:prompt CustomEvent
 // (rendered by src/prompt-surface.js); the once-cap is in-memory, the same
@@ -114,6 +117,63 @@
     } catch (e) { /* the room never breaks for a prompt */ }
   }
 
+  // ── the click-generated prompt (lit segments only) ────────────────────
+
+  var clickSalt = {};
+
+  function generateFor(id) {
+    var st = state();
+    var w = WORK_BY_ID[id];
+    if (!st || !w) return;
+    var s = st.get();
+    if (!litMap(s)[id]) return; // nothing witnessed — nothing generated
+
+    var text = null;
+    var cite = w.prompt ? w.prompt.cite : null;
+    clickSalt[id] = (clickSalt[id] || 0) + 1;
+
+    // ground it in your room: the latest artifact in this traveller's app,
+    // its declared verb if one exists, and the engine's research-backed
+    // templates (seeded per click, so each activation draws a new reading)
+    var key = id === 'relation' ? 'relations' : id === 'trash' ? 'graveyard' : id;
+    var arts = id === 'themes' ? [] : (s[key] || []);
+    var last = arts.length ? arts[arts.length - 1] : null;
+    var artifactId = last ? (last.id || (last.data && last.data.id)) : null;
+    if (artifactId && window.Liber && window.Liber.prompts) {
+      var verbRel = null;
+      var rels = s.relations || [];
+      for (var i = rels.length - 1; i >= 0; i--) {
+        if (rels[i].from === artifactId) { verbRel = rels[i]; break; }
+      }
+      var rel = verbRel || { from: artifactId, verb: 'relates to' };
+      var composed = null;
+      try { composed = window.Liber.prompts.compose(rel, 'glyph-bar-' + clickSalt[id]); } catch (e) { composed = null; }
+      if (composed && composed.text) text = composed.text;
+    }
+    if (!text && w.prompt && w.prompt.text) text = fill(w.prompt.text, s);
+    if (!text) return;
+
+    try {
+      document.dispatchEvent(new CustomEvent('liber:prompt', {
+        detail: { id: 'glyph-bar-' + id + '-' + clickSalt[id], text: text, ts: Date.now() }
+      }));
+    } catch (e) { /* the room never breaks for a prompt */ }
+
+    // the traveller says it at the bar, in their own accent, citation ready
+    if (tip) {
+      openTip(id);
+      tip.innerHTML = '<p class="tw-line tw-prompt">'
+        + '<span class="tw-name">' + persona(id).name + '</span> '
+        + text
+        + (cite
+            ? '<button type="button" class="twelve-works-fn" aria-label="citation" data-cite="' + cite + '">†</button>'
+            : '')
+        + '</p>';
+      citeOpen = false;
+      tipSig = tipSignature(id, s) + '|gen';
+    }
+  }
+
   // ── the bar + the beside-each-tier line ───────────────────────────────
 
   var container = null;
@@ -132,7 +192,7 @@
     var p = persona(id);
     if (!w) return p.name || id;
     return lit
-      ? p.name + ' — ' + w.work + '. witnessed.'
+      ? p.name + ' — ' + w.work + '. witnessed. activate for a prompt.'
       : p.name + ' — nothing witnessed yet. a suggested work waits on focus.';
   }
 
@@ -174,7 +234,9 @@
         seg.addEventListener('focusout', function (e) {
           if (!tip || !tip.contains(e.relatedTarget)) hideTip();
         });
+        seg.addEventListener('click', function () { generateFor(id); });
         seg.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); generateFor(id); }
           if (e.key === 'Escape') { hideTip(); seg.blur(); }
         });
         bar.appendChild(seg);
