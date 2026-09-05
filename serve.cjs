@@ -57,10 +57,9 @@ function notFound(res) {
 
 const server = http.createServer((req, res) => {
   let urlPath = decodeURIComponent(req.url.split('?')[0]);
-  // `/` is the presentation site (served as a directory so relative assets
-  // resolve); the demo boots at /index.html.
-  if (urlPath === '/' || urlPath === '/presentation') {
-    res.writeHead(302, { Location: '/presentation/' });
+  // `/` is the boot — the machine itself is the front door.
+  if (urlPath === '/') {
+    res.writeHead(302, { Location: '/index.html' });
     return res.end();
   }
 
