@@ -71,7 +71,7 @@
   // something the drawing actually depends on changed.
   function drawSig(s) {
     return [s.sigils.length, s.cohort.length, s.divination.length, s.games.length,
-      s.learn.length, s.abstract.length, s.sea.length, s.relations.length].join('|')
+      s.learn.length, s.abstract.length, s.sea.length, s.relations.length, s.tutorialDone ? 1 : 0].join('|')
       + ':' + (s.relations || []).map(function (r) { return r.from + '>' + r.verb; }).join(',');
   }
 
@@ -85,10 +85,17 @@
     var relations = s.relations || [];
 
     if (sigils.length === 0) {
+      // the invitation waits for the tutorial — it arrives with the bar,
+      // not before (pre-tutorial the desktop is still introducing itself)
       if (empty) {
+        if (!s.tutorialDone) {
+          empty.style.display = 'none';
+          svg.innerHTML = '';
+          return;
+        }
         empty.style.display = '';
         var sealedWait = (s.cohort || []).length;
-        empty.innerHTML = '— cast the cohort first —<div class="constellation-empty-sub">open the casting stone from the dial.</div>'
+        empty.innerHTML = '— cast the cohort first —<div class="constellation-empty-sub">open the cohort app from the dial.</div>'
           + (sealedWait > 0 ? '<div class="constellation-empty-sub">' + sealedWait + ' sealed exchange' + (sealedWait === 1 ? '' : 's') + ' wait' + (sealedWait === 1 ? 's' : '') + ' for it.</div>' : '');
       }
       svg.innerHTML = '';
