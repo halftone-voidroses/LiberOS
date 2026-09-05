@@ -95,7 +95,10 @@ console.log(`   reply chips: ${replyCount}`)
 
 console.log('7. Walk through entire wanderlust script')
 let turns = 0
-while (turns < 30) {
+// The script has grown: 13 steps, each a reply + a response-beat continue,
+// plus '· … ·' transitions inside multi-line speeches (~32 clicks total).
+// The cap needs headroom above that, and must catch a genuinely stuck loop.
+while (turns < 64) {
   const winOpen = await page.evaluate(() => {
     var w = document.getElementById('wanderlust-window')
     return w && w.classList.contains('open')

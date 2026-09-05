@@ -3,6 +3,10 @@
 // ≤ 80 chars), accent (dominant hue of their app CSS), cursor (inline SVG
 // data-URI — a small material token, no network), material (descriptor).
 // Voices sourced from src/features/<app>/PERSONA.md. file://-safe, no fetch.
+// Cast note: ruby keeps the garden (she took the librarian's carving);
+// insightful inquiry keeps the dreams room (iris mappa's carving); riason
+// keeps both the satchel ledger and the methodology folio; wanderlust took
+// the themes room when iris mappa left.
 window.LIBER_DATA = window.LIBER_DATA || {};
 window.LIBER_DATA.personas = {
   sigil: {
@@ -15,11 +19,11 @@ window.LIBER_DATA.personas = {
   },
   satchel: {
     id: 'satchel',
-    name: 'the librarian',
-    opinion: 'everything kept is kept once. index it well.',
+    name: 'riason',
+    opinion: 'a ledger is a promise kept in ink. index it well. label it better.',
     accent: '#aa7838',
-    material: 'sepia vellum over brass clasps',
-    cursor: "url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M2 22l3-7 12-12 4 4-12 12z' fill='%23d8b890' stroke='%236a3a18'/><path d='M2 22l3-7 4 4z' fill='%23e8dcc0' stroke='%236a3a18'/><path d='M17 3l4 4 2-2-4-4z' fill='%23aa7838' stroke='%236a3a18'/></svg>\") 2 22, auto"
+    material: 'indexed vellum over brass clasps',
+    cursor: "url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M3 10 L11 4 L21 9 L17 20 L7 20 Z' fill='%23e8dcc0' stroke='%236a5a30' stroke-width='1.2'/><circle cx='8' cy='9' r='1.4' fill='none' stroke='%23aa7838'/><path d='M11 13 h6 M11 16 h4' stroke='%23aa7838' stroke-width='1.2'/></svg>\") 3 10, auto"
   },
   sea: {
     id: 'sea',
@@ -71,19 +75,35 @@ window.LIBER_DATA.personas = {
   },
   methodology: {
     id: 'methodology',
-    name: 'raison',
+    name: 'riason',
     opinion: 'a method is a promise made to the margin. read slowly.',
     accent: '#aa3030',
     material: 'folio broadsheet, wax seal',
     cursor: "url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><rect x='10.75' y='2' width='2.5' height='9' fill='%236a4a20'/><circle cx='12' cy='16' r='6' fill='%23aa3030' stroke='%236a1a10'/><circle cx='12' cy='16' r='3' fill='none' stroke='%23d8b890'/></svg>\") 12 16, auto"
   },
+  garden: {
+    id: 'garden',
+    name: 'ruby',
+    opinion: 'grow slow. what is tended in patience flowers in its own colour.',
+    accent: '#b5763c',
+    material: 'worn canvas, embroidered thread, pressed petals',
+    cursor: "url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M12 6 C9 2 3 3 4 8 C4.5 11 8 12 11 12 C8 12 4.5 13 4 16 C3 21 9 22 12 18 C15 22 21 21 20 16 C19.5 13 16 12 13 12 C16 12 19.5 11 20 8 C21 3 15 2 12 6 Z' fill='%23b5763c' stroke='%235a3418' stroke-width='1'/><path d='M12 6 L12 18' stroke='%235a3418' stroke-width='1.2'/></svg>\") 12 12, auto"
+  },
+  dreams: {
+    id: 'dreams',
+    name: 'insightful inquiry',
+    opinion: 'i am not certain. the dream is. bring it here and we will read slowly.',
+    accent: '#a48ad4',
+    material: 'white cotton gloves, alkaline paper, foil question mark',
+    cursor: "url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M9 2 c1.2 0 2 0.9 2 2 v6 l1.2 -0.4 c3 -1 5.3 0.6 5.3 3.4 c0 3.4 -1.6 8.6 -6.5 8.6 c-3.6 0 -5.4 -2.4 -6.4 -5.4 l-1.3 -4 c-0.5 -1.6 1.4 -2.7 2.6 -1.5 l1.1 1.1 v-7.8 c0 -1.1 0.9 -2 2 -2 z' fill='%23f4f2ec' stroke='%23555570' stroke-width='1.2'/></svg>\") 9 2, auto"
+  },
   themes: {
     id: 'themes',
-    name: 'iris mappa',
-    opinion: 'every room is a country. i keep the maps.',
-    accent: '#d4af37',
+    name: 'wanderlust',
+    opinion: 'this room wears my paint now. do not blame the mirror, traveller.',
+    accent: '#ff69b4',
     material: 'pigment tile mosaic',
-    cursor: "url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M14 3l7 7-9 9-4-4z' fill='%238a5a28' stroke='%234a2810'/><path d='M8 15l-5 6 6-5z' fill='%23d4af37' stroke='%234a2810'/></svg>\") 3 21, auto"
+    cursor: "url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M12 2 c3 5 7 8 7 13 a7 7 0 1 1 -14 0 c0 -5 4 -8 7 -13 z' fill='%23ff69b4' stroke='%23aa3a6a' stroke-width='1.2'/><circle cx='12' cy='14' r='2' fill='%23ffd86a'/></svg>\") 12 12, auto"
   },
   relation: {
     id: 'relation',

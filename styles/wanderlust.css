@@ -348,6 +348,92 @@
 }
 
 /* ============================================================================
+   The riason intrusion — fires once per tutorial run, the first time the
+   speaker crosses into him. An intruder-alarm flare in the machine's own
+   corrupted red: the screen flares, holds ~2.4s, then his first line reads.
+   When he leaves the frame, .flash runs the same overlay as a brief
+   white-cyan blink — he disappears in a flash. Reduced motion: opacity only.
+   ============================================================================ */
+
+.raison-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 2, 6, 0.94);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  z-index: 36;
+}
+.raison-overlay.show { opacity: 1; }
+.raison-overlay::before {
+  /* the alarm flare — a red scan sweep that crosses the screen once */
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    transparent 0%,
+    rgba(190, 30, 30, 0.22) 46%,
+    rgba(255, 60, 60, 0.4) 50%,
+    rgba(190, 30, 30, 0.22) 54%,
+    transparent 100%);
+  animation: raison-flare 0.9s ease-in-out infinite alternate;
+}
+.raison-overlay-inner {
+  position: relative;
+  text-align: center;
+  padding: 0 40px;
+}
+.raison-overlay-alert {
+  font-family: 'VT323', monospace;
+  font-size: clamp(1.4rem, 3.2vw, 2.4rem);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #ff5a5a;
+  text-shadow:
+    0 0 10px rgba(255, 60, 60, 0.8),
+    0 0 26px rgba(255, 60, 60, 0.35);
+  animation: summon-flicker 0.7s ease-in-out infinite alternate;
+}
+.raison-overlay-sub {
+  margin-top: 12px;
+  font-family: 'VT323', monospace;
+  font-size: clamp(0.95rem, 1.8vw, 1.3rem);
+  letter-spacing: 0.18em;
+  color: #8acaff;
+  text-shadow: 0 0 10px rgba(90, 170, 255, 0.55);
+  opacity: 0;
+  animation: raison-sub-arrive 0.5s ease 1.1s forwards;
+}
+@keyframes raison-flare {
+  0%   { opacity: 0.35; }
+  100% { opacity: 1; }
+}
+@keyframes raison-sub-arrive {
+  to { opacity: 0.9; }
+}
+.raison-overlay.flash { opacity: 1; background: rgba(8, 2, 6, 0.55); }
+.raison-overlay.flash .raison-overlay-alert,
+.raison-overlay.flash .raison-overlay-sub { visibility: hidden; }
+.raison-overlay.flash::before {
+  animation: none;
+  background: linear-gradient(180deg,
+    transparent 0%,
+    rgba(140, 200, 255, 0.18) 46%,
+    rgba(210, 240, 255, 0.5) 50%,
+    rgba(140, 200, 255, 0.18) 54%,
+    transparent 100%);
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .raison-overlay::before,
+  .raison-overlay-alert { animation: none; }
+  .raison-overlay-sub { animation: none; opacity: 0.9; }
+}
+
+/* ============================================================================
    WS4 — pressed-bevel + focus (D0004 recipe, summoning pink), plus
    reduced-motion gates for the avatar blink and the arise shimmer.
    ============================================================================ */

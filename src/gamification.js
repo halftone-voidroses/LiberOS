@@ -44,7 +44,7 @@
 
   // Cohort artifact kinds (prompt-engine's list minus satchel, which mirrors
   // game saves). Thresholds mirror src/shadow.js / src/prompt-engine.js.
-  var ARTIFACT_KINDS = ['divination', 'iching', 'games', 'sea', 'cohort', 'abstract', 'methodology', 'learn', 'council'];
+  var ARTIFACT_KINDS = ['divination', 'iching', 'games', 'sea', 'cohort', 'abstract', 'methodology', 'learn', 'council', 'garden', 'dreams'];
   var PATINA_TIERS = [2, 6, 12];   // visits + artifacts
   var COHORT_TIERS = [2, 6, 12];   // artifacts + relations
 

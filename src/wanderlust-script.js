@@ -5,7 +5,9 @@
 //
 // Script shape:
 //   { speaker: 'wanderlust' | 'raison',
-//     line:    '...',
+//     line:    '...',              // OR `lines: [...]` — long speeches are
+//                                  // broken into installments; the renderer
+//                                  // shows a '· … ·' transition between them
 //     replies: [
 //        { text: '...', kind: 'progress' },   // main-line advance, bright button
 //        { text: '...', kind: 'branch'   },   // mood branch, "ok." italic style
@@ -93,7 +95,10 @@
       line: 'You have already given yourself to the liber vacui. Many have came before you, and have made this journey easier.',
       replies: [
         { text: 'who were they?', kind: 'progress',
-          response: { speaker: 'wanderlust', line: 'Physius, who cuts stone. The Librarian, who shelves what cannot be shelved. Vanir, who bottles weather. Twelve walked this floor before you, and the dial still knows their names.' } },
+          response: { speaker: 'wanderlust', lines: [
+            'Physius, who cuts stone. Ruby, who tends what grows. Vanir, who bottles weather.',
+            'Twelve walked this floor before you, and the dial still knows their names.'
+          ] } },
         { text: 'show me what they made.', kind: 'progress',
           response: { speaker: 'wanderlust', line: 'All in good time. Their works ring this room like coral rings a wreck. First, your own hands.' } },
         { text: 'i did not give myself to anything.', kind: 'branch',
@@ -114,7 +119,11 @@
     },
     {
       speaker: 'raison',
-      line: 'Oh good. The chat is open. She hates this kind of thing but good UI design is important for the user experience. This will appear on the desktop, from there, explore the apps and features made by other travellers like yourself. Some of them are self-help and reflective tools, others divination, some allow you to save artifacts to your desktop.',
+      lines: [
+        'Oh good. The chat is open. She hates this kind of thing but good UI design is important for the user experience.',
+        'This will appear on the desktop, from there, explore the apps and features made by other travellers like yourself.',
+        'Some of them are self-help and reflective tools, others divination, some allow you to save artifacts to your desktop.'
+      ],
       replies: [
         { text: 'who are you?', kind: 'progress',
           response: { speaker: 'raison', line: 'raison. i document the room, keep the borders labelled, and get shouted at in roughly that order.' } },
@@ -152,7 +161,10 @@
     },
     {
       speaker: 'wanderlust',
-      line: 'The sigil represents your shadow and an entity lives within this computer that will speak to you through software, signals, and signs. Listen to what it says, what is the other voice telling you? How does it want to be seen?',
+      lines: [
+        'The sigil represents your shadow and an entity lives within this computer that will speak to you through software, signals, and signs.',
+        'Listen to what it says, what is the other voice telling you? How does it want to be seen?'
+      ],
       replies: [
         { text: 'i will listen.', kind: 'progress',
           response: { speaker: 'wanderlust', line: 'GOOD. Most demand answers. You have offered an ear. The shadow keeps its voice for exactly those.' } },
@@ -164,7 +176,11 @@
     },
     {
       speaker: 'raison',
-      line: 'Ugh. Once you add your first artifact to your desktop you can declare a relation by clicking on the artifact, this links it to the sigil. As a practical example, say your sigil represents your unconscious, unintegrated fear of inadequacy and you draw a card from Arcana\'s tarot deck. She reveals to you the tower (destruction breeds creation). This reminds you of how, despite feeling inadequate, you are particularly good at handling rejection (rare, but if this is you, congrats!). You may say that the tower protects the sigil. You establish the relation.',
+      lines: [
+        'Ugh. Once you add your first artifact to your desktop you can declare a relation by clicking on the artifact, this links it to the sigil.',
+        'As a practical example, say your sigil represents your unconscious, unintegrated fear of inadequacy and you draw a card from Arcana\'s tarot deck. She reveals to you the tower (destruction breeds creation).',
+        'This reminds you of how, despite feeling inadequate, you are particularly good at handling rejection (rare, but if this is you, congrats!). You may say that the tower protects the sigil. You establish the relation.'
+      ],
       replies: [
         { text: 'i understand.', kind: 'progress',
           response: { speaker: 'raison', line: 'good. i explained it twice and nothing caught fire. for this room, a flawless demonstration.' } },
@@ -176,7 +192,10 @@
     },
     {
       speaker: 'raison',
-      line: 'Once you\'ve done that, it will orbit the sigil, and over time the associations with it will grow. Your eventual goal is to establish communication with your cohort, illustrate them using the research backed prompts and ideas laid-out (coming soon).',
+      lines: [
+        'Once you\'ve done that, it will orbit the sigil, and over time the associations with it will grow.',
+        'Your eventual goal is to establish communication with your cohort, illustrate them using the research backed prompts and ideas laid-out (coming soon).'
+      ],
       replies: [
         { text: 'i will come back to that.', kind: 'branch',
           response: { speaker: 'raison', line: 'fine. orbits keep. nothing in this room expires, unlike her patience or my tenure.' } },

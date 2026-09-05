@@ -1,0 +1,915 @@
+/* dreams.css — Insightful Inquiry's reading room. Paper-white folios on the
+   dark screen, purple headings, cyan highlights, thin alchemical line
+   ornaments, a white-gloved hand, question-mark watermarks under the paper.
+   This file is COMPLETELY INDEPENDENT. No imports, no shared variables
+   (covenant Q.1). Every magic value is a custom property, documented below. */
+
+.dreams-app {
+  /* ── palette ── */
+  --dreams-paper: #f4f2ec;                  /* working paper — the sage's stock */
+  --dreams-paper-dim: #e9e6dc;              /* the aged edge of the sheet */
+  --dreams-ink: #2e2a38;                    /* violet-grey ink, never black */
+  --dreams-ink-soft: #6b6478;               /* faded ink — dates, hints */
+  --dreams-purple: #a48ad4;                 /* persona accent — headings, seals */
+  --dreams-purple-deep: #6f5aa0;            /* the same accent, pressed harder */
+  --dreams-cyan: #8acaff;                   /* highlights — focus, live marks */
+  --dreams-screen: #14101f;                 /* the screen behind the paper */
+  --dreams-screen-deep: #0d0a15;            /* the corners of that dark */
+  --dreams-line: rgba(164, 138, 212, 0.4);  /* ornament rule on the dark */
+  --dreams-wm: rgba(164, 138, 212, 0.05);   /* question-mark watermark */
+  --dreams-bar-hi: #efeaf5;                 /* titlebar paper, lit edge */
+  --dreams-bar-mid: #ddd4ea;                /* titlebar paper, body */
+  --dreams-bar-lo: #cfc3e2;                 /* titlebar paper, shadowed edge */
+  /* ── motion ── */
+  --dreams-fade: 160ms;                     /* doors, modals, hovers */
+  /* ── type ── */
+  --dreams-serif: 'EB Garamond', 'Garamond', Georgia, serif;
+  --dreams-mono: 'VT323', 'Courier New', monospace;
+
+  position: absolute;
+  inset: 0;
+  top: 36px; /* open room for the titlebar (machine.css sets [data-state] inset: 0) */
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 38%, var(--dreams-screen) 0%, var(--dreams-screen-deep) 100%);
+  color: var(--dreams-purple);
+  font-family: var(--dreams-serif);
+}
+
+/* ── the reading room ─────────────────────────────────────────────────── */
+
+.dreams-room {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 18px 16px;
+  overflow: hidden;
+}
+
+.dreams-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 14px;
+  position: relative;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.dreams-glove {
+  width: 26px;
+  height: 37px;
+  align-self: center;
+  color: var(--dreams-paper);
+  opacity: 0.92;
+  flex-shrink: 0;
+}
+.dreams-glove-q {
+  font-size: 13px;
+  fill: var(--dreams-cyan);
+  stroke: none;
+  font-family: var(--dreams-serif);
+}
+
+.dreams-title {
+  font-variant: small-caps;
+  font-size: 1.7rem;
+  letter-spacing: 0.3em;
+  font-weight: 700;
+  color: var(--dreams-purple);
+  text-shadow: 0 0 12px rgba(164, 138, 212, 0.35);
+}
+
+.dreams-sub {
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--dreams-ink-soft);
+  letter-spacing: 0.06em;
+}
+
+/* the two doors */
+
+.dreams-doors {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.dreams-door {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 8px 26px 7px;
+  font-family: var(--dreams-serif);
+  font-variant: small-caps;
+  font-size: 1.05rem;
+  letter-spacing: 0.16em;
+  cursor: pointer;
+  color: var(--dreams-ink);
+  background: linear-gradient(180deg, var(--dreams-paper) 0%, var(--dreams-paper-dim) 100%);
+  border: 1px solid var(--dreams-purple-deep);
+  border-top: 3px double var(--dreams-purple-deep);
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  transition: transform var(--dreams-fade), box-shadow var(--dreams-fade), filter var(--dreams-fade);
+}
+.dreams-door:hover { filter: brightness(1.06); }
+.dreams-door:active { transform: translateY(1px); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5); }
+.dreams-door.is-open {
+  border-color: var(--dreams-cyan);
+  border-top-color: var(--dreams-cyan);
+  box-shadow: 0 0 10px rgba(138, 202, 255, 0.28), 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.dreams-door-num {
+  font-family: var(--dreams-mono);
+  font-size: 0.95rem;
+  color: var(--dreams-purple-deep);
+}
+
+.dreams-door-name { font-weight: 700; }
+
+.dreams-pane {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+/* ── the journal — record form + ledger ───────────────────────────────── */
+
+.dreams-record {
+  background: linear-gradient(180deg, var(--dreams-paper) 0%, var(--dreams-paper-dim) 100%);
+  border: 1px solid var(--dreams-purple-deep);
+  border-radius: 2px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.55);
+  padding: 12px 16px 10px;
+  margin-bottom: 14px;
+  position: relative;
+  overflow: hidden;
+}
+.dreams-record::after {           /* question-mark watermark under the paper */
+  content: '?';
+  position: absolute;
+  right: -14px;
+  bottom: -64px;
+  font-size: 11rem;
+  line-height: 1;
+  color: var(--dreams-wm);
+  pointer-events: none;
+  font-family: var(--dreams-serif);
+}
+
+.dreams-field { display: block; margin-bottom: 8px; }
+.dreams-field-label {
+  display: block;
+  font-variant: small-caps;
+  letter-spacing: 0.14em;
+  font-size: 0.85rem;
+  color: var(--dreams-purple-deep);
+  margin-bottom: 3px;
+}
+
+.dreams-field input,
+.dreams-field textarea,
+.dreams-assoc-form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: var(--dreams-serif);
+  font-size: 1rem;
+  line-height: 1.45;
+  color: var(--dreams-ink);
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(111, 90, 160, 0.45);
+  border-radius: 2px;
+  padding: 6px 9px;
+  resize: vertical;
+}
+.dreams-field input::placeholder,
+.dreams-field textarea::placeholder,
+.dreams-assoc-form textarea::placeholder {
+  color: rgba(107, 100, 120, 0.55);
+  font-style: italic;
+}
+.dreams-field input:focus,
+.dreams-field textarea:focus,
+.dreams-assoc-form textarea:focus {
+  outline: 2px solid var(--dreams-cyan);
+  outline-offset: 1px;
+}
+
+.dreams-record-actions {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.dreams-record-btn,
+.dreams-assoc-btn {
+  font-family: var(--dreams-serif);
+  font-variant: small-caps;
+  letter-spacing: 0.12em;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--dreams-paper);
+  background: linear-gradient(180deg, var(--dreams-purple) 0%, var(--dreams-purple-deep) 100%);
+  border: 1px solid var(--dreams-purple-deep);
+  border-radius: 2px;
+  padding: 6px 18px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 2px 4px rgba(0, 0, 0, 0.4);
+  transition: filter var(--dreams-fade), transform var(--dreams-fade);
+}
+.dreams-record-btn:hover,
+.dreams-assoc-btn:hover { filter: brightness(1.12); }
+.dreams-record-btn:active,
+.dreams-assoc-btn:active { transform: translateY(1px); }
+
+.dreams-record-note {
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--dreams-ink-soft);
+}
+
+/* the ledger */
+
+.dreams-ledger { display: flex; flex-direction: column; gap: 6px; }
+
+.dreams-ledger-empty,
+.dreams-assoc-empty,
+.dreams-folio-empty {
+  font-style: italic;
+  text-align: center;
+  color: var(--dreams-purple);
+  opacity: 0.75;
+  padding: 34px 20px;
+  letter-spacing: 0.08em;
+}
+
+.dreams-entry {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas: 'title date' 'preview preview';
+  gap: 2px 12px;
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--dreams-serif);
+  background: linear-gradient(180deg, var(--dreams-paper) 0%, var(--dreams-paper-dim) 100%);
+  border: 1px solid rgba(111, 90, 160, 0.5);
+  border-left: 3px solid var(--dreams-purple);
+  border-radius: 2px;
+  padding: 8px 12px;
+  color: var(--dreams-ink);
+  transition: border-color var(--dreams-fade), box-shadow var(--dreams-fade);
+}
+.dreams-entry:hover {
+  border-left-color: var(--dreams-cyan);
+  box-shadow: 0 0 8px rgba(138, 202, 255, 0.25);
+}
+
+.dreams-entry-title {
+  grid-area: title;
+  font-weight: 700;
+  font-size: 1.02rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dreams-entry-date {
+  grid-area: date;
+  font-family: var(--dreams-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  color: var(--dreams-ink-soft);
+}
+.dreams-entry-preview {
+  grid-area: preview;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--dreams-ink-soft);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── the reading — the dream re-read, the paper, the associations ─────── */
+
+.dreams-back {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  font-family: var(--dreams-serif);
+  font-variant: small-caps;
+  letter-spacing: 0.12em;
+  font-size: 0.95rem;
+  color: var(--dreams-cyan);
+  cursor: pointer;
+  padding: 2px 4px;
+  margin-bottom: 8px;
+}
+.dreams-back:hover { text-shadow: 0 0 8px rgba(138, 202, 255, 0.7); }
+
+.dreams-reading { display: flex; flex-direction: column; height: 100%; min-height: 0; }
+.dreams-reading[hidden] { display: none; } /* the hidden attribute must beat the flex above */
+/* the reading paper scrolls its own interpretation; the associations stay
+   pinned beneath — the second half of the ritual is never out of reach */
+.dreams-reading > .dreams-paper {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(111, 90, 160, 0.55) transparent;
+}
+.dreams-reading > .dreams-assoc { flex: 0 0 auto; }
+
+.dreams-paper {
+  background: linear-gradient(180deg, var(--dreams-paper) 0%, var(--dreams-paper-dim) 100%);
+  border: 1px solid var(--dreams-purple-deep);
+  border-top: 3px double var(--dreams-purple-deep);
+  border-radius: 2px;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.55);
+  padding: 16px 22px 14px;
+  position: relative;
+  overflow: hidden;
+}
+.dreams-paper::after {           /* question-mark watermark under the paper */
+  content: '?';
+  position: absolute;
+  right: -18px;
+  top: -30px;
+  font-size: 13rem;
+  line-height: 1;
+  color: var(--dreams-wm);
+  pointer-events: none;
+  font-family: var(--dreams-serif);
+}
+
+.dreams-read-title {
+  font-variant: small-caps;
+  font-size: 1.45rem;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+  color: var(--dreams-purple-deep);
+  border-bottom: 1px solid var(--dreams-line);
+  padding-bottom: 4px;
+}
+
+.dreams-read-date {
+  font-family: var(--dreams-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  color: var(--dreams-ink-soft);
+  margin: 3px 0 8px;
+}
+
+.dreams-read-text {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--dreams-ink-soft);
+  font-style: italic;
+  max-height: 5.2em;
+  overflow-y: auto;
+}
+
+.dreams-ornament {                /* thin alchemical line, ☿ at the middle */
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+  color: var(--dreams-purple);
+}
+.dreams-ornament::before,
+.dreams-ornament::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--dreams-line) 30%, var(--dreams-line) 70%, transparent);
+}
+.dreams-ornament span { font-size: 0.95rem; opacity: 0.8; }
+
+.dreams-read-body {
+  font-size: 1.08rem;
+  line-height: 1.6;
+  color: var(--dreams-ink);
+}
+
+/* the citation daggers — reading and folios share the glyph, not learn's class */
+.dreams-fn {
+  display: inline;
+  padding: 0 1px;
+  margin: 0 1px;
+  background: none;
+  border: none;
+  font-family: var(--dreams-serif);
+  font-size: 1rem;
+  line-height: 1;
+  font-weight: 700;
+  color: var(--dreams-purple-deep);
+  vertical-align: baseline;
+  cursor: inherit;
+}
+.dreams-fn:hover { text-shadow: 0 0 6px rgba(164, 138, 212, 0.85); }
+.dreams-fn:focus-visible {
+  outline: 2px solid var(--dreams-cyan);
+  outline-offset: 1px;
+  border-radius: 2px;
+}
+
+/* associations */
+
+.dreams-assoc {
+  background: linear-gradient(180deg, var(--dreams-paper) 0%, var(--dreams-paper-dim) 100%);
+  border: 1px solid rgba(111, 90, 160, 0.5);
+  border-top: 3px double var(--dreams-purple-deep);
+  border-radius: 2px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.5);
+  padding: 10px 16px 12px;
+  margin-top: 12px;
+}
+
+.dreams-assoc-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.dreams-assoc-name {
+  font-variant: small-caps;
+  letter-spacing: 0.16em;
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: var(--dreams-purple-deep);
+}
+.dreams-assoc-hint {
+  font-style: italic;
+  font-size: 0.82rem;
+  color: var(--dreams-ink-soft);
+}
+
+.dreams-assoc-form {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  margin-bottom: 10px;
+}
+.dreams-assoc-form textarea { flex: 1; }
+
+.dreams-assoc-list { display: flex; flex-direction: column; gap: 5px; }
+
+.dreams-assoc-item {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  border-left: 3px solid var(--dreams-cyan);
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 0 2px 2px 0;
+  padding: 5px 10px;
+}
+.dreams-assoc-text {
+  flex: 1;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--dreams-ink);
+}
+.dreams-assoc-date {
+  font-family: var(--dreams-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  color: var(--dreams-ink-soft);
+  flex-shrink: 0;
+}
+
+.dreams-assoc-remove {
+  background: none;
+  border: none;
+  font-family: var(--dreams-serif);
+  font-style: italic;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  color: var(--dreams-purple-deep);
+  cursor: pointer;
+  padding: 0 2px;
+  flex-shrink: 0;
+}
+.dreams-assoc-remove:hover { text-decoration: underline; }
+
+/* ── the folios — drawers + card ──────────────────────────────────────── */
+
+.dreams-folios {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 14px;
+  overflow: hidden;
+}
+
+.dreams-drawers {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.dreams-drawer {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--dreams-serif);
+  font-variant: small-caps;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  color: var(--dreams-ink);
+  background: linear-gradient(180deg, var(--dreams-paper) 0%, var(--dreams-paper-dim) 100%);
+  border: 1px solid rgba(111, 90, 160, 0.5);
+  border-radius: 2px;
+  padding: 12px 14px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+  transition: filter var(--dreams-fade), border-color var(--dreams-fade);
+}
+.dreams-drawer:hover { filter: brightness(1.06); }
+.dreams-drawer.active {
+  border-color: var(--dreams-cyan);
+  box-shadow: 0 0 8px rgba(138, 202, 255, 0.3), 0 2px 6px rgba(0, 0, 0, 0.45);
+}
+
+.dreams-drawer-num {
+  font-family: var(--dreams-mono);
+  font-size: 0.95rem;
+  color: var(--dreams-purple-deep);
+}
+.dreams-drawer-title { font-weight: 700; }
+
+.dreams-folio {
+  min-height: 0;
+  overflow-y: auto;
+  background: linear-gradient(180deg, var(--dreams-paper) 0%, var(--dreams-paper-dim) 100%);
+  border: 1px solid var(--dreams-purple-deep);
+  border-top: 3px double var(--dreams-purple-deep);
+  border-radius: 2px;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.55);
+  padding: 4px;
+  position: relative;
+}
+
+.dreams-folio-inner {
+  padding: 16px 22px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: var(--dreams-ink);
+}
+
+.dreams-folio-num {
+  font-family: var(--dreams-mono);
+  font-size: 0.9rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dreams-purple-deep);
+}
+
+.dreams-folio-title {
+  font-variant: small-caps;
+  font-size: 1.7rem;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+  color: var(--dreams-purple-deep);
+  border-bottom: 1px solid var(--dreams-line);
+  padding-bottom: 6px;
+  line-height: 1.15;
+}
+
+.dreams-folio-body {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+.dreams-folio-body b { color: var(--dreams-purple-deep); }
+
+.dreams-lesson-head {
+  font-variant: small-caps;
+  letter-spacing: 0.18em;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--dreams-purple-deep);
+  border-bottom: 1px solid var(--dreams-line);
+  padding-bottom: 3px;
+  margin: 14px 0 6px;
+}
+
+.dreams-rules {
+  margin: 4px 0;
+  padding-left: 22px;
+}
+.dreams-rules li {
+  margin-bottom: 7px;
+  padding-left: 2px;
+}
+.dreams-rules li::marker {
+  font-family: var(--dreams-mono);
+  color: var(--dreams-purple-deep);
+}
+
+.dreams-folio-key {
+  font-style: italic;
+  font-size: 0.88rem;
+  letter-spacing: 0.06em;
+  color: var(--dreams-ink-soft);
+  border-top: 1px dotted var(--dreams-purple-deep);
+  padding-top: 6px;
+  margin-top: 6px;
+}
+
+/* ── titlebar (learn.html pattern, lilac paper for the sage) ──────────── */
+
+.dreams-titlebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 36px;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 76px 0 14px;
+  overflow: hidden;
+  background:
+    linear-gradient(rgba(111, 90, 160, 0.55), rgba(111, 90, 160, 0.55)) 0 calc(100% - 5px) / 100% 2px no-repeat,
+    repeating-linear-gradient(180deg, transparent 0px, transparent 7px, rgba(90, 70, 130, 0.1) 7px, rgba(90, 70, 130, 0.1) 8px),
+    linear-gradient(180deg, var(--dreams-bar-hi) 0%, var(--dreams-bar-mid) 60%, var(--dreams-bar-lo) 100%);
+  border-bottom: 2px solid var(--dreams-purple-deep);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.75),
+    0 2px 6px rgba(0, 0, 0, 0.45);
+  font-family: var(--dreams-serif);
+  color: var(--dreams-ink);
+}
+
+.dreams-titlebar-name {
+  flex-shrink: 0;
+  font-variant: small-caps;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--dreams-purple-deep);
+}
+
+.dreams-titlebar-sub {
+  font-size: 0.95rem;
+  font-style: italic;
+  color: var(--dreams-ink-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* help + exit buttons */
+
+.dreams-help,
+.dreams-exit {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: 30px;
+  height: 30px;
+  font-family: var(--dreams-mono);
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 28px;
+  text-align: center;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 3px;
+  color: var(--dreams-paper);
+  background: linear-gradient(180deg, var(--dreams-purple) 0%, var(--dreams-purple-deep) 100%);
+  border: 1px solid var(--dreams-purple-deep);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.5);
+  transition: filter var(--dreams-fade), transform var(--dreams-fade);
+}
+.dreams-help { right: 44px; }
+.dreams-exit { right: 8px; }
+.dreams-help:hover,
+.dreams-exit:hover { filter: brightness(1.15); }
+.dreams-help:active,
+.dreams-exit:active {
+  transform: translateY(calc(-50% + 1px));
+  filter: brightness(0.94);
+}
+.dreams-help:focus-visible,
+.dreams-exit:focus-visible,
+.dreams-door:focus-visible,
+.dreams-record-btn:focus-visible,
+.dreams-assoc-btn:focus-visible,
+.dreams-back:focus-visible,
+.dreams-entry:focus-visible,
+.dreams-drawer:focus-visible,
+.dreams-assoc-remove:focus-visible {
+  outline: 2px solid var(--dreams-cyan);
+  outline-offset: 2px;
+}
+
+/* ── modals — the riason and the citation slip (learn.html pattern) ───── */
+
+.dreams-raison,
+.dreams-cite {
+  position: absolute;
+  inset: 0;
+  background: rgba(13, 10, 21, 0.85);
+  z-index: 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.dreams-raison.open,
+.dreams-cite.open { opacity: 1; pointer-events: auto; }
+
+.dreams-raison-inner {
+  width: 78%;
+  max-width: 480px;
+  background: linear-gradient(180deg, var(--dreams-screen) 0%, var(--dreams-screen-deep) 100%);
+  border: 1px solid var(--dreams-purple-deep);
+  border-top: 3px double var(--dreams-purple);
+  padding: 16px 20px 14px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.65), 0 0 12px rgba(164, 138, 212, 0.18);
+  color: var(--dreams-purple);
+}
+
+.dreams-raison-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dotted var(--dreams-line);
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.dreams-raison-name {
+  font-variant: small-caps;
+  letter-spacing: 0.3em;
+  font-weight: 700;
+}
+
+.dreams-raison-close,
+.dreams-cite-close {
+  background: none;
+  border: 1px solid var(--dreams-line);
+  color: var(--dreams-purple);
+  font-family: inherit;
+  font-size: 1rem;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 2px;
+}
+.dreams-raison-close:hover,
+.dreams-cite-close:hover {
+  background: rgba(164, 138, 212, 0.12);
+  color: var(--dreams-cyan);
+}
+.dreams-raison-close:focus-visible,
+.dreams-cite-close:focus-visible {
+  outline: 2px solid var(--dreams-cyan);
+  outline-offset: 2px;
+}
+
+.dreams-raison-body {
+  font-size: 1.02rem;
+  line-height: 1.55;
+  font-style: italic;
+}
+
+.dreams-cite-inner {
+  width: 78%;
+  max-width: 540px;
+  max-height: 80%;
+  overflow-y: auto;
+  background: linear-gradient(180deg, var(--dreams-paper) 0%, var(--dreams-paper-dim) 100%);
+  border: 1px solid var(--dreams-purple-deep);
+  border-top: 6px solid var(--dreams-purple);
+  box-shadow:
+    inset 0 0 0 1px var(--dreams-screen-deep),
+    0 0 30px rgba(0, 0, 0, 0.65);
+  padding: 16px 20px 14px;
+  color: var(--dreams-ink);
+}
+
+.dreams-cite-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dotted var(--dreams-purple-deep);
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.dreams-cite-topic {
+  font-family: var(--dreams-mono);
+  font-size: 1rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--dreams-purple-deep);
+}
+
+.dreams-cite-source {
+  font-size: 1.05rem;
+  line-height: 1.5;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.dreams-cite-what {
+  font-size: 0.98rem;
+  line-height: 1.55;
+  margin-bottom: 8px;
+}
+
+.dreams-cite-scope {
+  font-size: 0.98rem;
+  line-height: 1.55;
+  font-style: italic;
+  color: var(--dreams-ink-soft);
+  border-left: 3px double var(--dreams-cyan);
+  padding-left: 10px;
+}
+
+.dreams-cite-note {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  font-style: italic;
+  color: var(--dreams-ink-soft);
+  border-top: 1px dotted var(--dreams-purple-deep);
+  margin-top: 10px;
+  padding-top: 8px;
+}
+
+/* ── reduced motion: the room stills ──────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .dreams-door,
+  .dreams-record-btn,
+  .dreams-assoc-btn,
+  .dreams-raison,
+  .dreams-cite,
+  .dreams-entry,
+  .dreams-drawer {
+    transition: none;
+  }
+}
+
+/* keeping to the book — the deliberate satchel mirror, offered once the
+   reading has had its say. dashed in the sage's register; done = settled */
+.dreams-read-keep {
+  margin-left: auto;
+  font-family: var(--dreams-mono, 'Courier New', monospace);
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  color: var(--dreams-purple-deep, #5a4a8a);
+  background: transparent;
+  border: 1px dashed rgba(111, 90, 160, 0.55);
+  border-radius: 2px;
+  padding: 3px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.dreams-read-keep:hover { border-style: solid; border-color: var(--dreams-cyan, #8acaff); }
+.dreams-read-keep:disabled {
+  color: var(--dreams-ink-soft, #6a5f52);
+  border-color: rgba(111, 90, 160, 0.25);
+  cursor: default;
+}
+
+.dreams-entry-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: stretch;
+}
+.dreams-entry-keep {
+  font-family: var(--dreams-mono, 'Courier New', monospace);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  color: var(--dreams-purple-deep, #5a4a8a);
+  background: transparent;
+  border: 1px dashed rgba(111, 90, 160, 0.45);
+  border-radius: 2px;
+  padding: 4px 10px;
+  cursor: pointer;
+  align-self: center;
+  white-space: nowrap;
+}
+.dreams-entry-keep:hover { border-style: solid; border-color: var(--dreams-cyan, #8acaff); }

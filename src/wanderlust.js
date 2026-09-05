@@ -27,6 +27,7 @@
   var isOpen = false;
   var isSummoning = false;
   var currentSpeaker = null;
+  var raisonSeen = false; // per-run: the intrusion transition fires once
 
   function el(id) { return document.getElementById(id); }
 
@@ -96,11 +97,43 @@
     setTimeout(function () { win.classList.remove('raison-glitch'); }, 1700);
   }
 
+  // The intrusion: the first time he arrives in a run, the machine flares
+  // intruder-alarm red and holds the door 2-3s before his line reads. When
+  // he leaves, the same overlay blinks once — he disappears in a flash.
+  function raisonOverlay() { return el('raison-overlay'); }
+
+  function showRaisonIntro() {
+    var overlay = raisonOverlay();
+    if (!overlay) return 0;
+    overlay.classList.remove('flash');
+    overlay.removeAttribute('inert');
+    overlay.classList.add('show');
+    return 2400;
+  }
+
+  function hideRaisonIntro() {
+    var overlay = raisonOverlay();
+    if (!overlay) return;
+    overlay.classList.remove('show');
+    overlay.setAttribute('inert', '');
+  }
+
+  function raisonFlashOut() {
+    var overlay = raisonOverlay();
+    if (!overlay) return;
+    overlay.classList.remove('show');
+    overlay.setAttribute('inert', '');
+    overlay.classList.add('flash');
+    setTimeout(function () { overlay.classList.remove('flash'); }, 500);
+  }
+
   // Returns true when the speaker change crossed Raison (into or out of).
   function setSpeaker(speaker) {
+    var leftRaison = currentSpeaker === 'raison' && speaker !== 'raison';
     var crossedRaison = currentSpeaker !== null && speaker !== currentSpeaker &&
       (speaker === 'raison' || currentSpeaker === 'raison');
     currentSpeaker = speaker;
+    if (leftRaison) raisonFlashOut();
     if (crossedRaison) triggerRaisonGlitch();
     if (!avatar) return crossedRaison;
     if (speaker === 'wanderlust') {
@@ -110,7 +143,7 @@
     } else {
       avatar.style.background = 'radial-gradient(circle, #cce0ff 0% 30%, #5a8aaa 30% 60%, #2a4a6a 100%)';
       avatar.style.boxShadow = '0 0 18px rgba(90, 138, 170, 0.6)';
-      if (name) { name.textContent = 'raison'; name.style.color = '#8acaff'; }
+      if (name) { name.textContent = 'riason'; name.style.color = '#8acaff'; }
     }
     return crossedRaison;
   }
@@ -173,16 +206,24 @@
   // WS2: the picked reply gets ONE beat where the character answers it in
   // their own voice, then `done` resumes the main path (or the fork/finish).
   // Progress dots stay put for the beat; the continue button keeps pacing
-  // click-driven.
+  // click-driven. A beat may carry `lines` (array) — the answer reads in
+  // installments, '· … ·' between, the last continue resumes the path.
   function renderResponseBeat(response, done) {
-    if (!response || !response.line) { done(); return; }
+    var lines = response.lines || (response.line ? [response.line] : []);
+    if (!lines.length) { done(); return; }
     var crossed = setSpeaker(response.speaker);
     runEffect(response.effect);
+    var i = 0;
     var paint = function () {
-      showLine(response.line);
+      showLine(lines[i]);
       clearReplies();
+      i++;
       if (!replies) return;
-      replies.appendChild(makeReplyButton({ text: '', kind: 'continue' }, done));
+      if (i < lines.length) {
+        replies.appendChild(makeReplyButton({ text: '', kind: 'continue' }, paint));
+      } else {
+        replies.appendChild(makeReplyButton({ text: '', kind: 'continue' }, done));
+      }
     };
     if (crossed) setTimeout(paint, 950);
     else paint();
@@ -198,13 +239,23 @@
 
   function renderScriptStep() {
     var entry = script[step];
+    var firstRaison = entry.speaker === 'raison' && !raisonSeen;
+    if (firstRaison) raisonSeen = true;
     var crossedRaison = setSpeaker(entry.speaker);
     runEffect(entry.effect);
     setProgress(step);
 
+    // The intrusion hold: the flare owns the screen before he speaks.
+    var hold = crossedRaison ? 950 : 0;
+    if (firstRaison) hold = Math.max(hold, showRaisonIntro());
+
+    // A step may carry `lines` (array) — long speeches read in installments
+    // with a '· … ·' transition between, replies held until the last lands.
+    var lines = entry.lines || [entry.line];
+    var lineIdx = 0;
+
     clearReplies();
-    var paint = function () {
-      showLine(entry.line);
+    var showReplies = function () {
       if (!replies) return;
       var entryReplies = entry.replies.map(normaliseReply);
       entryReplies.forEach(function (reply) {
@@ -217,8 +268,20 @@
         }));
       });
     };
+    var paint = function () {
+      hideRaisonIntro();
+      showLine(lines[lineIdx]);
+      clearReplies();
+      lineIdx++;
+      if (!replies) return;
+      if (lineIdx < lines.length) {
+        replies.appendChild(makeReplyButton({ text: '', kind: 'continue' }, paint));
+      } else {
+        showReplies();
+      }
+    };
     // Pacing hold: the drawn-out glitch breathes before the new line reads.
-    if (crossedRaison) setTimeout(paint, 950);
+    if (hold) setTimeout(paint, hold);
     else paint();
   }
 
@@ -269,6 +332,7 @@
     if (!win) return;
     step = 0;
     currentSpeaker = null;
+    raisonSeen = false;
     isOpen = true;
     runSummon(function () {
       win.removeAttribute('inert');

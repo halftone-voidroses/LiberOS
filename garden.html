@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="icon" href="data:,">
+  <title>Garden — Ruby</title>
+  <link rel="stylesheet" href="styles/room.css"/>
+  <link rel="stylesheet" href="styles/machine.css"/>
+  <link rel="stylesheet" href="styles/bezel.css"/>
+  <link rel="stylesheet" href="styles/scars.css"/>
+  <link rel="stylesheet" href="src/features/garden/garden.css"/>
+  <link rel="stylesheet" href="styles/shadow.css"/>
+</head>
+<body>
+  <canvas class="dust-canvas" aria-hidden="true"></canvas>
+  <canvas class="static-canvas" aria-hidden="true"></canvas>
+
+  <div class="room">
+    <div class="machine">
+      <div class="bezel">
+        <div class="carvings" id="carvings"></div>
+        <div class="vent-slits" aria-hidden="true"></div>
+        <div class="corruption-scars" aria-hidden="true">
+          <div class="scar scar-1"></div>
+          <div class="scar scar-2"></div>
+          <div class="scar scar-3"></div>
+          <div class="scar scar-4"></div>
+          <div class="scar scar-5"></div>
+          <div class="scar scar-6"></div>
+        </div>
+        <div class="led" aria-hidden="true"></div>
+        <div class="liber-plate">LIBER · VACUI</div>
+        <div class="power-button" aria-hidden="true"></div>
+        <div class="screw" aria-hidden="true"></div>
+
+        <div class="screen">
+          <div class="screen-stage">
+            <header class="garden-titlebar">
+              <span class="garden-titlebar-name">garden</span>
+              <span class="garden-titlebar-sub">ruby keeps the gem garden</span>
+              <button class="garden-help" type="button" id="garden-help" aria-label="help">?</button>
+              <button class="garden-exit" type="button" id="garden-exit" aria-label="exit">×</button>
+            </header>
+            <div class="garden-app" data-state="gem">
+
+              <div class="garden-raison" id="garden-raison" inert>
+                <div class="garden-raison-inner">
+                  <div class="garden-raison-head">
+                    <span class="garden-raison-name">ruby</span>
+                    <button class="garden-raison-close" type="button" id="garden-raison-close" aria-label="close">×</button>
+                  </div>
+                  <div class="garden-raison-body">
+                    two small plots share this room. the gem arrives jumbled — pour colour from the wells, settle every facet into its own shade, and the path your hands took becomes a draft: keep it in the satchel, or plant it in the bed. planted seeds open into ink-drawn flowers. paint them and the garden learns their colours. grow slow. nothing here needs winning.
+                  </div>
+                </div>
+              </div>
+
+              <div class="garden-draft" id="garden-draft" inert>
+                <div class="garden-draft-inner">
+                  <div class="garden-draft-head">
+                    <span class="garden-draft-title" id="garden-draft-title">complete. save?</span>
+                    <button class="garden-stage-close" type="button" id="garden-draft-close" aria-label="close">×</button>
+                  </div>
+                  <div class="garden-draft-sub">the path your hands took, drawn from where you clicked.</div>
+                  <div class="garden-draft-view" id="garden-draft-view"></div>
+                  <input type="text" class="garden-input" id="garden-draft-name" maxlength="40" placeholder="name it, or leave it be"/>
+                  <div class="garden-draft-actions">
+                    <button type="button" class="garden-action" id="garden-draft-keep">keep it in the satchel</button>
+                    <button type="button" class="garden-action" id="garden-draft-plant">plant it as a seed</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="garden-tabs">
+                <button type="button" class="garden-tab" id="garden-tab-gem" data-room="gem">the gem</button>
+                <button type="button" class="garden-tab" id="garden-tab-bed" data-room="bed">the garden bed</button>
+              </div>
+
+              <div class="garden-room garden-room-gem" id="garden-room-gem">
+                <div class="garden-gem-head">
+                  <span class="garden-gem-count" id="garden-gem-count">0 of 17 settled</span>
+                  <button type="button" class="garden-action" id="garden-gem-draft">the draft so far</button>
+                  <button type="button" class="garden-action" id="garden-gem-new">begin a new gem</button>
+                </div>
+                <div class="garden-gem-stage">
+                  <svg class="garden-gem-svg" id="garden-gem-svg" viewBox="0 0 500 400" role="img" aria-label="the jumbled gem"></svg>
+                </div>
+                <div class="garden-gem-palette">
+                  <div class="garden-slots" id="garden-slots"></div>
+                  <div class="garden-palette-note">click a well to fill the empty slots · click a slot to lift it · pour onto the stone</div>
+                </div>
+                <div class="garden-gem-note" id="garden-gem-note">the gem is jumbled. settle every facet.</div>
+              </div>
+
+              <div class="garden-room garden-room-bed" id="garden-room-bed" inert>
+                <div class="garden-plots" id="garden-plots"></div>
+                <div class="garden-stage" id="garden-stage" inert></div>
+                <div class="garden-butterflies" aria-hidden="true">
+                  <div class="garden-butterfly"></div>
+                  <div class="garden-butterfly"></div>
+                  <div class="garden-butterfly"></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="monitor-base" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <script src="src/state.js"></script>
+  <script src="src/sound.js"></script>
+  <script src="src/dust.js"></script>
+  <script src="src/static.js"></script>
+  <script src="src/shadow.js"></script>
+  <script src="src/carvings.js"></script>
+  <script src="src/features/garden/garden.js"></script>
+</body>
+</html>

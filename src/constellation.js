@@ -49,6 +49,10 @@
     for (var m = 0; m < ab.length; m++) all.push({ kind: 'abstract', label: ab[m].label || 'abstract', data: ab[m] });
     var se = s.sea || [];
     for (var n = 0; n < se.length; n++) all.push({ kind: 'sea', label: se[n].label || 'sea', data: se[n] });
+    var gd = s.garden || [];
+    for (var p = 0; p < gd.length; p++) all.push({ kind: 'garden', label: gd[p].name || 'a planted seed', data: gd[p] });
+    var dr = s.dreams || [];
+    for (var dr2 = 0; dr2 < dr.length; dr2++) all.push({ kind: 'dreams', label: dr[dr2].title || 'a recorded dream', data: dr[dr2] });
     return all;
   }
 

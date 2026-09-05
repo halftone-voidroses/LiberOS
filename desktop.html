@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="styles/dial.css"/>
   <link rel="stylesheet" href="styles/status-line.css"/>
   <link rel="stylesheet" href="styles/twelve-works.css"/>
+  <link rel="stylesheet" href="styles/daily-floor.css"/>
   <link rel="stylesheet" href="styles/clock.css"/>
   <link rel="stylesheet" href="styles/desktop.css"/>
   <link rel="stylesheet" href="styles/constellation.css"/>
@@ -148,6 +149,13 @@
                 <div class="summon-text" id="summon-text"></div>
               </div>
 
+              <div class="raison-overlay" id="raison-overlay" inert aria-hidden="true">
+                <div class="raison-overlay-inner">
+                  <div class="raison-overlay-alert">intruder detected</div>
+                  <div class="raison-overlay-sub">…documenting.</div>
+                </div>
+              </div>
+
               <div class="constellation-mini" id="constellation-mini" inert>
                 <div class="constellation-mini-inner">
                   <div class="constellation-mini-header">
@@ -191,6 +199,7 @@
   <script src="data/prompt-templates.data.js"></script>
   <script src="src/prompt-engine.js"></script>
   <script src="src/gamification.js"></script>
+  <script src="src/daily-floor.js"></script>
   <script src="src/prompt-surface.js"></script>
   <script src="src/dust.js"></script>
   <script src="src/static.js"></script>

@@ -22,13 +22,13 @@ window.LIBER_DATA.twelveWorks = [
     }
   },
   {
-    id: 'satchel',
-    traveller: 'the librarian',
-    work: 'the first keeping',
+    id: 'garden',
+    traveller: 'ruby',
+    work: 'the first planting',
     prompt: {
-      text: 'if what you kept were challenged, what would {cohort} defend first? write the index line. draw the tab if the line will not hold.',
-      cite: 'linehan-1993',
-      exercise: 'mood-journal-collage'
+      text: 'the seed is in the ground. if what you planted were challenged, what would {cohort} water it with? write one line of tending. draw the leaf that answers.',
+      cite: 'soga-2017',
+      exercise: 'grounded-mandala'
     }
   },
   {
@@ -93,7 +93,7 @@ window.LIBER_DATA.twelveWorks = [
   },
   {
     id: 'methodology',
-    traveller: 'raison',
+    traveller: 'riason',
     work: 'the first method',
     prompt: {
       text: 'the phrase went through the mirror and returned altered. if the alteration were challenged, what would {cohort} argue? write the argument in full sentences. draw the two columns: what held, what turned.',
@@ -102,13 +102,13 @@ window.LIBER_DATA.twelveWorks = [
     }
   },
   {
-    id: 'themes',
-    traveller: 'iris mappa',
-    work: 'the first repainting',
+    id: 'dreams',
+    traveller: 'insightful inquiry',
+    work: 'the first recorded dream',
     prompt: {
-      text: 'the machine wears your chosen country now. if the pigment were challenged by the light outside, what would {cohort} remap? draw the room in the colour you avoided. or write what the old skin was protecting.',
-      cite: 'csikszentmihalyi-1990',
-      exercise: 'mindful-coloring'
+      text: 'the dream thins by the hour. if its strangeness were challenged, what would {cohort} ask it? write the dream down before noon. draw the image that will not leave.',
+      cite: 'von-franz-1964',
+      exercise: 'visual-journaling'
     }
   },
   {

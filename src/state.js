@@ -17,10 +17,13 @@
     learn: [],               // promoted lessons
     abstract: [],            // abstract creations
     sea: [],                 // sea artifacts
-    graveyard: [],           // buried artifacts, awaiting the dig
-    satchel: [],             // satchel items
-    methodology: [],         // methodology artifacts
-    council: [],             // council artifacts
+    graveyard: [],          // buried artifacts, awaiting the dig
+    satchel: [],            // satchel items
+    methodology: [],        // methodology artifacts
+    council: [],            // council artifacts
+    garden: [],             // ruby's garden — planted seeds / flowers in bloom
+    dreams: [],             // recorded dreams, kept for interpretation
+    daily: null,            // the day's small works { date: 'YYYY-MM-DD', done: [ids] }
     theme: 'corrupted',      // current skin of the machine
     shadowUnlocked: false,   // has the user entered the extc password
     shadowOn: false,         // is shadow overdrive active
@@ -114,6 +117,26 @@
     return entry;
   }
 
+  // Amend an existing artifact in place (associations added to a dream,
+  // a flower painted further). ts (the making date) is kept; updated moves.
+  function updateArtifact(kind, id, patch) {
+    if (!state[kind]) return null;
+    var arr = state[kind].slice();
+    var idx = -1;
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i] && arr[i].id === id) { idx = i; break; }
+    }
+    if (idx < 0) return null;
+    var entry = Object.assign({}, arr[idx], patch, { updated: Date.now() });
+    arr[idx] = entry;
+    state = Object.assign({}, state);
+    state[kind] = arr;
+    save(state);
+    emit('change', state);
+    emit('artifact', { kind: kind, entry: entry });
+    return entry;
+  }
+
   function bindRelation(fromId, verb) {
     var relations = (state.relations || []).slice();
     if (relations.some(function (r) { return r.from === fromId && r.verb === verb; })) return null;
@@ -163,5 +186,5 @@
   });
 
   global.Liber = global.Liber || {};
-  global.Liber.state = { get, set, on, reset, addArtifact, bindRelation, unbindRelation, releaseArtifact, replaceSigil };
+  global.Liber.state = { get, set, on, reset, addArtifact, updateArtifact, bindRelation, unbindRelation, releaseArtifact, replaceSigil };
 })(window);

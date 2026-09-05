@@ -231,6 +231,173 @@ window.LIBER_DATA.citations = {
         "the colonial-bridging thesis — why perennial frames are missed in a colonial setting"
       ],
       "note": ""
+    },
+    {
+      "id": "freud-1900",
+      "topic": "dream interpretation, the dream-work",
+      "category": "accessible-practical",
+      "source": "Freud, S. (1900). The Interpretation of Dreams (Standard Edition, Vols. IV–V). Hogarth Press.",
+      "claimedFor": [
+        "the dream as a made thing — condensation, displacement, symbolisation",
+        "the Freudian reading the dreams room deliberately argues with",
+        "free association as a method of approach"
+      ],
+      "note": "The baseline of Western dream psychology. The dreams room reads it, honours it, and then does what Jung did: keeps going."
+    },
+    {
+      "id": "anna-freud-1936",
+      "topic": "the ego and its defences",
+      "category": "accessible-practical",
+      "source": "Freud, A. (1936). The Ego and the Mechanisms of Defence. Hogarth Press.",
+      "claimedFor": [
+        "the defence-mechanism pages of the workbook",
+        "projection, repression, denial, intellectualisation, reaction formation, sublimation as named operations",
+        "the idea that the defences protect the ego at a cost"
+      ],
+      "note": "Anna Freud systematised the defences her father described piecemeal. The workbook's pages on how the mind protects itself stand on her catalogue."
+    },
+    {
+      "id": "winnicott-1953",
+      "topic": "transitional objects and transitional phenomena",
+      "category": "accessible-practical",
+      "source": "Winnicott, D. W. (1953). Transitional objects and transitional phenomena. International Journal of Psycho-Analysis, 34, 89-97.",
+      "claimedFor": [
+        "the satchel as a keeping-place — artifacts as transitional objects",
+        "the garden's seeds and the gem drafts as things held between inner and outer",
+        "the alchemy of the games' paint-by-number drafts"
+      ],
+      "note": "Winnicott: the blanket, the teddy, the first 'not-me possession'. The satchel's kept things live in the same territory — between the inner world and the outer one."
+    },
+    {
+      "id": "klein-1932",
+      "topic": "inner objects, the inner world",
+      "category": "accessible-practical",
+      "source": "Klein, M. (1932). The Psycho-Analysis of Children. Hogarth Press.",
+      "claimedFor": [
+        "the object-relations pages — the people inside us as inner figures",
+        "the cohort read as an inner object rather than a metaphor"
+      ],
+      "note": "Klein's inner world is peopled. The workbook's carried figures are Kleinian objects with Jungian names."
+    },
+    {
+      "id": "jung-cw8",
+      "topic": "the structure of the psyche, complexes",
+      "category": "hermetic-esoteric",
+      "source": "Jung, C. G. (1960). The Structure and Dynamics of the Psyche (Collected Works Vol. 8). Princeton University Press.",
+      "claimedFor": [
+        "feeling-toned complexes as the atoms of the personal unconscious",
+        "psychic energy and the constellated field around a symbol",
+        "the dreams room's map of the personal unconscious", "synchronicity as an acausal connecting principle (CW8 carries the essay)"
+      ],
+      "note": ""
+    },
+    {
+      "id": "jung-cw9i",
+      "topic": "archetypes, the collective unconscious",
+      "category": "hermetic-esoteric",
+      "source": "Jung, C. G. (1968). The Archetypes and the Collective Unconscious (Collected Works Vol. 9i). Princeton University Press.",
+      "claimedFor": [
+        "the definitions of persona, shadow, anima/animus, and the Self used throughout the workbook",
+        "the geography-of-the-unconscious teaching in the dreams room",
+        "the symbol essences (house, water, child, wise old man) in the dream readings"
+      ],
+      "note": ""
+    },
+    {
+      "id": "jung-cw9ii",
+      "topic": "Aion — the Self, the shadow, the serpent",
+      "category": "hermetic-esoteric",
+      "source": "Jung, C. G. (1959). Aion: Researches into the Phenomenology of the Self (Collected Works Vol. 9ii). Princeton University Press.",
+      "claimedFor": [
+        "the shadow as the moral problem the ego refuses",
+        "the serpent/snake amplifications in the dream readings",
+        "the Self as the totality the ego circles"
+      ],
+      "note": "Aion carries Jung's sharpest statement that the shadow is 'the moral problem that challenges the whole ego-personality'."
+    },
+    {
+      "id": "jung-transcendent-1957",
+      "topic": "active imagination, the transcendent function",
+      "category": "hermetic-esoteric",
+      "source": "Jung, C. G. (1916/1957). The Transcendent Function. Zurich: Students Association, C. G. Jung Institute.",
+      "claimedFor": [
+        "the active-imagination pages — letting the unconscious answer on the page",
+        "the dialogue-with-the-cohort method",
+        "the garden's painting as deliberate fantasy activity"
+      ],
+      "note": "Written 1916, printed 1957. The method the cohort dialogue is modelled on."
+    },
+    {
+      "id": "von-franz-1964",
+      "topic": "dream symbolism, individuation in Man and His Symbols",
+      "category": "hermetic-esoteric",
+      "source": "von Franz, M.-L. (1964). 'The process of individuation', in C. G. Jung (ed.), Man and His Symbols. Aldus Books.",
+      "claimedFor": [
+        "the house as a picture of the psyche — attic, floors, cellar",
+        "the vehicle-out-of-control reading",
+        "big dreams and little dreams; the dream as the inner truth about the dreamer",
+        "the dreams room's method of circumambulation instead of free association"
+      ],
+      "note": "Von Franz's essay is the most accessible statement of the Jungian dream method this room trusts."
+    },
+    {
+      "id": "von-franz-1974",
+      "topic": "shadow and evil in fairy tales",
+      "category": "hermetic-esoteric",
+      "source": "von Franz, M.-L. (1974). Shadow and Evil in Fairy Tales. Spring Publications.",
+      "claimedFor": [
+        "projection — how the shadow is first met in others and in the world",
+        "the dark-figure and pursuit amplifications in the dream readings",
+        "the witch, the ogress, and the possessed-house symbols"
+      ],
+      "note": ""
+    },
+    {
+      "id": "von-franz-1980",
+      "topic": "alchemy as a psychology of transformation",
+      "category": "hermetic-esoteric",
+      "source": "von Franz, M.-L. (1980). Alchemy: An Introduction to the Symbolism and the Psychology. Inner City Books.",
+      "claimedFor": [
+        "the alchemical stages (nigredo, albedo, rubedo) behind the transformation symbols",
+        "fire, dissolution, and the philosophical tree readings",
+        "the gemstone work in the garden read as alchemical opus"
+      ],
+      "note": ""
+    },
+    {
+      "id": "soga-2017",
+      "topic": "gardening and health — meta-analysis",
+      "category": "research-empirical",
+      "source": "Soga, M., Gaston, K. J., & Yamaura, Y. (2017). Gardening is beneficial for health: A meta-analysis. Preventive Medicine Reports, 5, 92-99.",
+      "claimedFor": [
+        "the garden app's premise — tending as a measured, health-bearing activity",
+        "ruby's tending prompts"
+      ],
+      "note": "The one empirical leg the garden stands on. It carries exactly as far as the studies ran."
+    },
+    {
+      "id": "insinq-2021-stalking",
+      "topic": "stalking synchronicity — the sacred science",
+      "category": "hermetic-esoteric",
+      "source": "Datum, I. (2021, May 10). The Ancient Art and Sacred Science of Stalking Synchronicity. insinq.ink.",
+      "claimedFor": [
+        "the stalking-synchronicity folio in the dreams room",
+        "the touch of meaning — frisson as tactile feedback from the world",
+        "the octave of order — psynchronicity as a faculty that can be trained"
+      ],
+      "note": "A contemporary esoteric essayist's account of synchronicity hunting. Kept as a lineage source: vocabulary and ritual form, not clinical evidence."
+    },
+    {
+      "id": "insinq-2021-tips",
+      "topic": "the ten rules of the stalker's discipline",
+      "category": "hermetic-esoteric",
+      "source": "Datum, I. (2021, August 23). Top Ten Tips for Stalking Synchronicity. insinq.ink.",
+      "claimedFor": [
+        "the ten rules taught in the stalking-synchronicity folio",
+        "everything is a metaphor / everything is connected / always look for the lesson",
+        "the Tinkerbell principle and the practice of suspending judgement"
+      ],
+      "note": "The tips are a practitioner's discipline, reproduced faithfully with credit. They are exercises of attention, not findings."
     }
   ]
 };

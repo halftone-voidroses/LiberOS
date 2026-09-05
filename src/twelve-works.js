@@ -19,9 +19,9 @@
   'use strict';
 
   var ORDER = [
-    'sigil', 'satchel', 'sea', 'cohort',
+    'sigil', 'garden', 'sea', 'cohort',
     'abstract', 'games', 'divination', 'learn',
-    'methodology', 'themes', 'relation', 'trash'
+    'methodology', 'dreams', 'relation', 'trash'
   ];
 
   var WORKS = (window.LIBER_DATA && window.LIBER_DATA.twelveWorks) || [];
@@ -48,6 +48,7 @@
   // module keeps its own inline SVGs (see dial.js, carvings.js).
   var GLYPHS = {
     sigil:       '<rect x="4" y="4" width="12" height="12" rx="1" fill="none"/><circle cx="10" cy="10" r="2.6" fill="none"/>',
+    garden:      '<circle cx="10" cy="7" r="2.4" fill="none"/><path d="M10 9.5 v6 M10 12 q-2.4 0.4 -3 -1.6 M10 13 q2.4 0.4 3 -1.6" fill="none"/>',
     satchel:     '<path d="M5 8 h10 v8 h-10 z" fill="none"/><path d="M8 8 v-2 a2 2 0 0 1 4 0 v2" fill="none"/>',
     sea:         '<path d="M3 9 q2.5 -2.5 5 0 t5 0 t4 0" fill="none"/><path d="M3 13 q2.5 -2.5 5 0 t5 0 t4 0" fill="none"/>',
     cohort:      '<circle cx="10" cy="12" r="5" fill="none"/><path d="M10 3 c1.6 2 1.6 3.2 0 4.6 c-1.6 -1.4 -1.6 -2.6 0 -4.6 z" fill="currentColor" fill-opacity="0.35" stroke="none"/>',
@@ -56,7 +57,7 @@
     divination:  '<rect x="6" y="3" width="8" height="13" rx="1" fill="none"/><path d="M10 7 v5 m-2.5 -2.5 h5" fill="none"/>',
     learn:       '<rect x="4" y="4" width="12" height="12" fill="none"/><path d="M4 8 h12 m-12 4 h12 m-12 4 h8" fill="none"/>',
     methodology: '<rect x="4" y="3" width="12" height="14" fill="none"/><circle cx="10" cy="13" r="2.5" fill="none"/><path d="M7 6.5 h6" fill="none"/>',
-    themes:      '<rect x="4" y="4" width="5.5" height="5.5" fill="none"/><rect x="10.5" y="4" width="5.5" height="5.5" fill="none"/><rect x="4" y="10.5" width="5.5" height="5.5" fill="none"/><rect x="10.5" y="10.5" width="5.5" height="5.5" fill="none"/>',
+    dreams:      '<path d="M12.5 4 a5.2 5.2 0 1 0 2.6 8.4 a5.6 5.6 0 0 1 -2.6 -8.4 z M15 4 h1 v1 h-1 z M16 6 h1 v1 h-1 z" fill="none"/>',
     relation:    '<circle cx="7" cy="10" r="3.5" fill="none"/><circle cx="13" cy="10" r="3.5" fill="none"/>',
     trash:       '<path d="M14 4 a4 4 0 0 1 -4 4 l-4 4 m4 -4 h3" fill="none"/>'
   };
@@ -70,7 +71,7 @@
   function litMap(s) {
     return {
       sigil: (s.sigils || []).length > 0,
-      satchel: (s.satchel || []).length > 0,
+      garden: (s.garden || []).length > 0,
       sea: (s.sea || []).length > 0,
       cohort: (s.cohort || []).length > 0,
       abstract: (s.abstract || []).length > 0,
@@ -78,7 +79,7 @@
       divination: (s.divination || []).length > 0,
       learn: (s.learn || []).length > 0,
       methodology: (s.methodology || []).length > 0,
-      themes: !!s.theme && s.theme !== 'corrupted',
+      dreams: (s.dreams || []).length > 0,
       relation: (s.relations || []).length > 0,
       trash: (s.graveyard || []).length > 0
     };
@@ -86,7 +87,6 @@
 
   function countFor(id, s) {
     var key = id === 'relation' ? 'relations' : id === 'trash' ? 'graveyard' : id;
-    if (id === 'themes') return -1; // the room wears it; nothing is counted
     return (s[key] || []).length;
   }
 
@@ -136,7 +136,7 @@
     // its declared verb if one exists, and the engine's research-backed
     // templates (seeded per click, so each activation draws a new reading)
     var key = id === 'relation' ? 'relations' : id === 'trash' ? 'graveyard' : id;
-    var arts = id === 'themes' ? [] : (s[key] || []);
+    var arts = (s[key] || []);
     var last = arts.length ? arts[arts.length - 1] : null;
     var artifactId = last ? (last.id || (last.data && last.data.id)) : null;
     if (artifactId && window.Liber && window.Liber.prompts) {
@@ -303,7 +303,7 @@
       tip.innerHTML = '<p class="tw-line">'
         + '<span class="tw-name">' + p.name + '</span> '
         + '<span class="tw-work">' + w.work + ' — witnessed.</span> '
-        + '<span class="tw-count">' + (n < 0 ? 'the room wears it.' : n + ' made.') + '</span>'
+        + '<span class="tw-count">' + n + ' made.</span>'
         + '</p>';
     } else {
       tip.innerHTML = '<p class="tw-line tw-prompt">'

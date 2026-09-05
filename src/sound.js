@@ -48,37 +48,59 @@
   }
 
   // ── voices ──────────────────────────────────────────────────────────
+  // Timbre law (user request): low, analog, satisfying — a dry mechanical
+  // click, a soft settling, a warm wooden bell. Nothing above ~900 Hz
+  // leads; every voice carries a filtered-noise body so it reads as
+  // matter, not as a beep.
 
-  // click — a small dry keyclick: square blip pitched down, gone fast.
+  // click — a dry analog keyclick: a bandpassed noise tap with a tiny
+  // wooden knock underneath. Gone in 40 ms, ears stay easy.
   function click(c) {
     var t = c.currentTime;
+
+    var len = Math.floor(c.sampleRate * 0.018);
+    var buf = c.createBuffer(1, len, c.sampleRate);
+    var data = buf.getChannelData(0);
+    for (var i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2);
+    var noise = c.createBufferSource();
+    noise.buffer = buf;
+    var bp = c.createBiquadFilter();
+    bp.type = 'bandpass';
+    bp.frequency.value = 850;
+    bp.Q.value = 1.1;
+    var ng = c.createGain();
+    ng.gain.setValueAtTime(0.16, t);
+    ng.gain.exponentialRampToValueAtTime(0.0001, t + 0.03);
+    noise.connect(bp).connect(ng).connect(c.destination);
+    noise.start(t);
+
     var osc = c.createOscillator();
     var g = c.createGain();
-    osc.type = 'square';
-    osc.frequency.setValueAtTime(1500, t);
-    osc.frequency.exponentialRampToValueAtTime(650, t + 0.03);
-    g.gain.setValueAtTime(0.08, t);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.05);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(210, t);
+    osc.frequency.exponentialRampToValueAtTime(130, t + 0.028);
+    g.gain.setValueAtTime(0.11, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.04);
     osc.connect(g).connect(c.destination);
     osc.start(t);
-    osc.stop(t + 0.06);
+    osc.stop(t + 0.05);
   }
 
-  // thunk — heavy matter settling: low drop plus a filtered soil noise.
+  // thunk — heavy matter settling: softened drop plus warm soil noise.
   function thunk(c) {
     var t = c.currentTime;
     var osc = c.createOscillator();
     var g = c.createGain();
     osc.type = 'sine';
-    osc.frequency.setValueAtTime(150, t);
-    osc.frequency.exponentialRampToValueAtTime(52, t + 0.12);
-    g.gain.setValueAtTime(0.4, t);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.2);
+    osc.frequency.setValueAtTime(120, t);
+    osc.frequency.exponentialRampToValueAtTime(45, t + 0.14);
+    g.gain.setValueAtTime(0.3, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.22);
     osc.connect(g).connect(c.destination);
     osc.start(t);
-    osc.stop(t + 0.22);
+    osc.stop(t + 0.24);
 
-    var len = Math.floor(c.sampleRate * 0.09);
+    var len = Math.floor(c.sampleRate * 0.1);
     var buf = c.createBuffer(1, len, c.sampleRate);
     var data = buf.getChannelData(0);
     for (var i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / len);
@@ -86,20 +108,21 @@
     noise.buffer = buf;
     var lp = c.createBiquadFilter();
     lp.type = 'lowpass';
-    lp.frequency.value = 320;
+    lp.frequency.value = 240;
     var ng = c.createGain();
-    ng.gain.setValueAtTime(0.22, t);
-    ng.gain.exponentialRampToValueAtTime(0.0001, t + 0.1);
+    ng.gain.setValueAtTime(0.18, t);
+    ng.gain.exponentialRampToValueAtTime(0.0001, t + 0.12);
     noise.connect(lp).connect(ng).connect(c.destination);
     noise.start(t);
   }
 
-  // chime — the keeping bell: two sweet partials, long decay.
+  // chime — the keeping bell, an octave down and wooden: two warm
+  // partials, slightly detuned so it breathes, long soft decay.
   function chime(c) {
     var t = c.currentTime;
     var partials = [
-      { f: 1046.5, g: 0.14, d: 0.55, at: 0 },
-      { f: 1568.0, g: 0.08, d: 0.7,  at: 0.07 }
+      { f: 261.6, detune: -4, g: 0.12, d: 0.75, at: 0 },
+      { f: 392.0, detune: 3,  g: 0.07, d: 0.95, at: 0.06 }
     ];
     for (var i = 0; i < partials.length; i++) {
       var p = partials[i];
@@ -107,8 +130,9 @@
       var g = c.createGain();
       osc.type = 'sine';
       osc.frequency.value = p.f;
+      osc.detune.value = p.detune;
       g.gain.setValueAtTime(0.0001, t + p.at);
-      g.gain.exponentialRampToValueAtTime(p.g, t + p.at + 0.012);
+      g.gain.exponentialRampToValueAtTime(p.g, t + p.at + 0.018);
       g.gain.exponentialRampToValueAtTime(0.0001, t + p.at + p.d);
       osc.connect(g).connect(c.destination);
       osc.start(t + p.at);

@@ -6,15 +6,15 @@
   var THEMES = [
     { id: 'corrupted',    name: 'corrupted',        blurb: 'the default · red, faded, drifting.',                 opinion: 'this is the room i was born in. i love it. i cannot leave it.' },
     { id: 'wanderlust',    name: 'wanderlust',       blurb: 'pink & yellow · the summoning.',                    opinion: 'me. i painted it. i do not know why it smells of candy.' },
-    { id: 'raison',        name: 'raison',           blurb: 'blue & violet · the observer.',                      opinion: 'the observer observes himself observing. i tire of him.' },
+    { id: 'raison',        name: 'riason',           blurb: 'blue & violet · the observer.',                      opinion: 'the observer observes himself observing. i tire of him.' },
     { id: 'physius',       name: 'mistress physius', blurb: 'copper & obsidian · the stone.',                     opinion: 'a patient skin. she does not interrupt the work.' },
     { id: 'whimsy',        name: 'whimsy wow',       blurb: 'red & cream · the barker.',                          opinion: 'too loud for the void, too bright for me. i stay anyway.' },
     { id: 'vanir',         name: 'vanir',            blurb: 'deep blue & sea green · the deep.',                  opinion: 'i have drowned in this colour. i will drown in it again.' },
     { id: 'entity404',     name: 'entity404',        blurb: 'green & black · the void.',                          opinion: 'the void is patient. the void does not gossip about me.' },
     { id: 'arcana',        name: 'arcana',           blurb: 'chalk white & black · the deck.',                    opinion: 'the deck tells me what i already knew. i thank it.' },
-    { id: 'librarian',     name: 'the librarian',    blurb: 'sepia & brass · the drawers.',                       opinion: 'the drawers keep what i forget. i am grateful.' },
+    { id: 'librarian',     name: 'riason · the ledger', blurb: 'sepia & brass · the drawers.',                    opinion: 'the drawers keep what i forget. i am grateful. i filed the thanks.' },
     { id: 'elizabeth',     name: 'e-lizabeth',       blurb: 'gothic gold · the linked.',                          opinion: 'gold is what was married and mourned. she carries both.' },
-    { id: 'iris',          name: 'iris mappa',       blurb: 'parchment & ink · the cartographer.',                opinion: 'the map is never of the place. the place is the map.' },
+    { id: 'iris',          name: 'wanderlust · the pigment', blurb: 'parchment & ink · the cartographer.',         opinion: 'the map is never of the place. i repainted it anyway.' },
     { id: 'ravaging',      name: 'ravaging pete',    blurb: 'loam & rust · the rubble.',                         opinion: 'everything i buried here i find again. this is its charm.' }
   ];
 
