@@ -19,7 +19,7 @@
     { id: 'games',       name: 'games'       },
     { id: 'divination',  name: 'divination'  },
     { id: 'learn',       name: 'learn'       },
-    { id: 'methodology', name: 'methodology' },
+    { id: 'methodology', name: 'method' },
     { id: 'garden',      name: 'garden'      },
     { id: 'dreams',      name: 'dreams'      },
     { id: 'themes',      name: 'themes'      },

@@ -172,7 +172,7 @@
     if (!ledgerEl) return;
     var arr = (state() ? (state().get().dreams || []) : []).slice().reverse(); // newest first
     if (!arr.length) {
-      ledgerEl.innerHTML = '<div class="dreams-ledger-empty">the ledger is blank. the night is not.</div>';
+      ledgerEl.innerHTML = '<div class="dreams-ledger-empty">Enter dreams to populate</div>';
       return;
     }
     var html = '';

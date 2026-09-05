@@ -20,7 +20,7 @@ window.LIBER_DATA.personas = {
   satchel: {
     id: 'satchel',
     name: 'riason',
-    opinion: 'a ledger is a promise kept in ink. index it well. label it better.',
+    opinion: 'Journal about your cohort',
     accent: '#aa7838',
     material: 'indexed vellum over brass clasps',
     cursor: "url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M3 10 L11 4 L21 9 L17 20 L7 20 Z' fill='%23e8dcc0' stroke='%236a5a30' stroke-width='1.2'/><circle cx='8' cy='9' r='1.4' fill='none' stroke='%23aa7838'/><path d='M11 13 h6 M11 16 h4' stroke='%23aa7838' stroke-width='1.2'/></svg>\") 3 10, auto"
@@ -35,8 +35,8 @@ window.LIBER_DATA.personas = {
   },
   cohort: {
     id: 'cohort',
-    name: 'e-lizabeth',
-    opinion: 'some are carried, not kept. i carry them still.',
+    name: 'sister physius',
+    opinion: 'Sister Physius: Allow me to guide you through the first step.',
     accent: '#8a2a20',
     material: 'black wax, sealed; faint flame flicker',
     cursor: "url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><circle cx='12' cy='14' r='7' fill='none' stroke='%234a4050' stroke-width='3'/><circle cx='12' cy='14' r='7' fill='none' stroke='%232a2030'/><path d='M12 2c1.5 2 1.5 3.5 0 5c-1.5-1.5-1.5-3 0-5z' fill='%23aa3030'/></svg>\") 12 14, auto"
@@ -44,7 +44,7 @@ window.LIBER_DATA.personas = {
   abstract: {
     id: 'abstract',
     name: 'entity404',
-    opinion: 'no warmth here. only process. state your query.',
+    opinion: 'Entity404: Reduce an artifact to its components and reform it in a new way',
     accent: '#00ff66',
     material: 'phosphor glass, green bloom',
     cursor: "url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M2 2h4v4h4v4h4v4h4v4h4v4h-6v-2h-2v-2h-2v-2h-2v-2h-2v-2H4V8H2z' fill='%2300ff66' stroke='%23002010'/></svg>\") 2 2, auto"
@@ -68,7 +68,7 @@ window.LIBER_DATA.personas = {
   learn: {
     id: 'learn',
     name: 'the mad scribe',
-    opinion: 'dated, stamped, filed. bring your own pencil.',
+    opinion: 'scribe: LEARN!!!!! KEEP LEARNING!! FOREVER!!!!',
     accent: '#aa3030',
     material: 'index card, ink-stamped corner',
     cursor: "url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M3 21L9 9l12-6-6 12z' fill='%233a2818' stroke='%231a0e08'/><path d='M3 21l8-8' stroke='%23e8d8a8' stroke-width='1.2'/><circle cx='12' cy='12' r='1.2' fill='%23e8d8a8'/></svg>\") 3 21, auto"
@@ -76,7 +76,7 @@ window.LIBER_DATA.personas = {
   methodology: {
     id: 'methodology',
     name: 'riason',
-    opinion: 'a method is a promise made to the margin. read slowly.',
+    opinion: 'riason: Follow the steps inside for best results.',
     accent: '#aa3030',
     material: 'folio broadsheet, wax seal',
     cursor: "url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><rect x='10.75' y='2' width='2.5' height='9' fill='%236a4a20'/><circle cx='12' cy='16' r='6' fill='%23aa3030' stroke='%236a1a10'/><circle cx='12' cy='16' r='3' fill='none' stroke='%23d8b890'/></svg>\") 12 16, auto"
@@ -108,7 +108,7 @@ window.LIBER_DATA.personas = {
   relation: {
     id: 'relation',
     name: 'e-lizabeth',
-    opinion: 'nothing here stands alone. count the links.',
+    opinion: 'E-lizabeth: View relations between your artifacts.',
     accent: '#aa8a3a',
     material: 'iron ring + chain links',
     cursor: "url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><circle cx='9' cy='9' r='5.5' fill='none' stroke='%234a4050' stroke-width='3'/><circle cx='9' cy='9' r='5.5' fill='none' stroke='%232a2030'/><path d='M13 13l4 4a3 3 0 1 0 4-4l-4-4' fill='none' stroke='%23aa8a3a' stroke-width='2'/></svg>\") 9 9, auto"
