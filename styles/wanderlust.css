@@ -1,0 +1,518 @@
+/* wanderlust.css — the chat window + arise overlay
+   No imports (covenant Q.1). */
+
+@font-face {
+  font-family: 'Jacquard 24';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/jacquard24-latin.woff2') format('woff2');
+}
+
+.wanderlust-window {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0.85);
+  width: 80%;
+  max-width: 720px;
+  background: linear-gradient(180deg, #1a0a14 0%, #0a0508 100%);
+  border: 3px solid #4a1a2a;
+  border-radius: 8px;
+  box-shadow:
+    0 0 0 2px rgba(255, 105, 180, 0.15),
+    0 -10px 22px rgba(255, 105, 180, 0.35),
+    /* D0003 WS1: centered halo — no y-offset, no smear past the bottom border. */
+    0 0 18px rgba(255, 105, 180, 0.18),
+    inset 0 0 30px rgba(0, 0, 0, 0.6);
+  z-index: 30;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s, transform 0.4s;
+}
+
+.wanderlust-window.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.wanderlust-window-inner {
+  padding: 22px 28px 18px;
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  grid-template-rows: auto auto auto auto;
+  column-gap: 18px;
+  row-gap: 10px;
+  align-items: start;
+}
+
+.wanderlust-avatar {
+  grid-row: 1 / span 4;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffd86a 0% 30%, #ff69b4 30% 60%, #aa3a6a 100%);
+  box-shadow: 0 0 18px rgba(255, 105, 180, 0.6);
+  position: relative;
+  border: 2px solid #1a0a14;
+  align-self: start;
+}
+
+.wanderlust-avatar::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  background: #ffffff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 6px #fff;
+  animation: wanderlust-blink 2.6s infinite;
+}
+
+@keyframes wanderlust-blink {
+  0%, 92%, 100% { opacity: 1; }
+  95% { opacity: 0; }
+}
+
+.wanderlust-name {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 1.1rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #ff8a8a;
+  text-shadow: 0 0 8px rgba(255, 105, 180, 0.6);
+}
+
+.wanderlust-line {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: #f0d8d8;
+  text-shadow: 0 0 4px rgba(255, 105, 180, 0.3);
+  transition: opacity 0.15s;
+  min-height: 4.5em;
+  font-style: italic;
+}
+
+.wanderlust-replies {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.wanderlust-reply {
+  background: transparent;
+  border: 1px solid #4a1a2a;
+  color: #d8a8a8;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 1.3rem;
+  line-height: 1.15;
+  text-align: left;
+  padding: 4px 10px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+
+.wanderlust-reply:hover {
+  background: rgba(255, 105, 180, 0.12);
+  color: #ffd0e0;
+  border-color: #ff69b4;
+}
+
+.wanderlust-rest-note {
+  color: #886a78;
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 1rem;
+}
+
+.wanderlust-progress {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 1rem;
+  color: #6a3a4a;
+  letter-spacing: 0.3em;
+  text-align: right;
+  margin-top: 6px;
+  grid-column: 2;
+}
+
+/* arise overlay — full-screen gothic text moment */
+.arise-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.0s;
+  z-index: 40;
+}
+
+.arise-overlay.show {
+  opacity: 1;
+}
+
+.arise-text {
+  font-family: 'UnifrakturCook', 'UnifrakturMaguntia', 'Cinzel', Georgia, serif;
+  font-size: 3.4rem;
+  color: #ff8a8a;
+  text-shadow:
+    0 0 12px rgba(255, 105, 180, 0.8),
+    0 0 24px rgba(255, 105, 180, 0.5),
+    0 0 48px rgba(170, 50, 100, 0.6);
+  letter-spacing: 0.08em;
+  text-align: center;
+  font-style: italic;
+  animation: arise-shimmer 2.4s ease-in-out infinite;
+  padding: 0 40px;
+}
+
+@keyframes arise-shimmer {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.4); }
+}
+
+.wanderlust-confirm {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0.92);
+  width: 60%;
+  max-width: 540px;
+  background: linear-gradient(180deg, #1a0a14 0%, #0a0508 100%);
+  border: 2px solid #4a1a2a;
+  border-radius: 6px;
+  box-shadow:
+    0 0 0 1px rgba(255, 105, 180, 0.2),
+    0 0 20px rgba(255, 105, 180, 0.4);
+  z-index: 32;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s, transform 0.3s;
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+.wanderlust-confirm.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.wanderlust-confirm-inner {
+  padding: 22px 26px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.wanderlust-confirm-title {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 1.1rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #ff8a8a;
+  text-shadow: 0 0 6px rgba(255, 105, 180, 0.5);
+  text-align: center;
+}
+
+.wanderlust-confirm-body {
+  font-style: italic;
+  color: #c8a8b8;
+  text-align: center;
+  line-height: 1.4;
+  font-size: 1rem;
+}
+
+.wanderlust-confirm-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.wanderlust-confirm-yes,
+.wanderlust-confirm-no {
+  background: transparent;
+  border: 1px solid #4a1a2a;
+  color: #d8a8a8;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 1rem;
+  letter-spacing: 0.15em;
+  padding: 6px 16px;
+  cursor: pointer;
+  text-transform: lowercase;
+  border-radius: 2px;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+
+.wanderlust-confirm-yes:hover {
+  background: rgba(255, 105, 180, 0.18);
+  color: #ffd0e0;
+  border-color: #ff69b4;
+}
+
+.wanderlust-confirm-no:hover {
+  background: rgba(120, 120, 120, 0.15);
+  color: #c8c8c8;
+  border-color: #888;
+}
+
+/* ============================================================================
+   Phase 3 additions: shake / flicker / reply buttons / summoning overlay.
+   ============================================================================ */
+
+/* All dialogue options share ONE style (user request): the base
+   .wanderlust-reply carries it. Only the response-beat's continue
+   affordance keeps its own muted shape so it never reads as a choice. */
+/* WS2: single continue affordance shown during a response beat — one click
+   resumes the main path. Branch-kind muted dotted styling so it reads as a
+   beat, not a choice; centered dots, no text of its own. */
+.wanderlust-reply.kind-continue {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-style: italic;
+  letter-spacing: 0.3em;
+  color: #aa7080;
+  border: 1px dotted #4a1a2a;
+  background: transparent;
+  text-align: center;
+}
+.wanderlust-reply.kind-continue:hover {
+  color: #ffd0e0;
+  border-color: #ff69b4;
+  background: rgba(255, 105, 180, 0.06);
+}
+
+/* Screen shake — applied to .machine by triggerShake(). */
+@keyframes wanderlust-shake {
+  0%   { transform: translate(0, 0) rotate(0deg); }
+  15%  { transform: translate(-6px, 4px) rotate(-0.6deg); }
+  30%  { transform: translate(7px, -3px) rotate(0.5deg); }
+  45%  { transform: translate(-5px, 5px) rotate(-0.4deg); }
+  60%  { transform: translate(4px, -6px) rotate(0.6deg); }
+  75%  { transform: translate(-3px, 3px) rotate(-0.2deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+.machine.machine-shake {
+  animation: wanderlust-shake 0.38s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  transform-origin: 50% 50%;
+}
+@media (prefers-reduced-motion: reduce) {
+  .machine.machine-shake { animation: none; }
+}
+
+/* Summoning poem overlay — full screen, italic flicker, sits above the
+   chat window while the poem plays. */
+.summon-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 2, 6, 0.94);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 35;
+}
+.summon-overlay.show { opacity: 1; }
+.summon-text {
+  font-family: 'UnifrakturCook', 'UnifrakturMaguntia', 'Cinzel', Georgia, serif;
+  font-style: italic;
+  font-size: clamp(1.2rem, 2.8vw, 2.1rem);
+  color: #ffd0e0;
+  text-align: center;
+  letter-spacing: 0.06em;
+  padding: 0 40px;
+  text-shadow:
+    0 0 10px rgba(255, 105, 180, 0.6),
+    0 0 24px rgba(255, 105, 180, 0.3);
+  animation: summon-flicker 1.0s ease-in-out infinite alternate;
+}
+@keyframes summon-flicker {
+  0%   { filter: brightness(0.92); }
+  100% { filter: brightness(1.18); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .summon-text { animation: none; }
+}
+
+/* ============================================================================
+   The riason intrusion — fires once per tutorial run, the first time the
+   speaker crosses into him. An intruder-alarm flare in the machine's own
+   corrupted red: the screen flares, holds ~2.4s, then his first line reads.
+   When he leaves the frame, .flash runs the same overlay as a brief
+   white-cyan blink — he disappears in a flash. Reduced motion: opacity only.
+   ============================================================================ */
+
+.raison-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 2, 6, 0.94);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  z-index: 36;
+}
+.raison-overlay.show { opacity: 1; }
+.raison-overlay::before {
+  /* the alarm flare — a red scan sweep that crosses the screen once */
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    transparent 0%,
+    rgba(190, 30, 30, 0.22) 46%,
+    rgba(255, 60, 60, 0.4) 50%,
+    rgba(190, 30, 30, 0.22) 54%,
+    transparent 100%);
+  animation: raison-flare 0.9s ease-in-out infinite alternate;
+}
+.raison-overlay-inner {
+  position: relative;
+  text-align: center;
+  padding: 0 40px;
+}
+.raison-overlay-alert {
+  font-family: 'VT323', monospace;
+  font-size: clamp(1.4rem, 3.2vw, 2.4rem);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #ff5a5a;
+  text-shadow:
+    0 0 10px rgba(255, 60, 60, 0.8),
+    0 0 26px rgba(255, 60, 60, 0.35);
+  animation: summon-flicker 0.7s ease-in-out infinite alternate;
+}
+.raison-overlay-sub {
+  margin-top: 12px;
+  font-family: 'VT323', monospace;
+  font-size: clamp(0.95rem, 1.8vw, 1.3rem);
+  letter-spacing: 0.18em;
+  color: #8acaff;
+  text-shadow: 0 0 10px rgba(90, 170, 255, 0.55);
+  opacity: 0;
+  animation: raison-sub-arrive 0.5s ease 1.1s forwards;
+}
+@keyframes raison-flare {
+  0%   { opacity: 0.35; }
+  100% { opacity: 1; }
+}
+@keyframes raison-sub-arrive {
+  to { opacity: 0.9; }
+}
+.raison-overlay.flash { opacity: 1; background: rgba(8, 2, 6, 0.55); }
+.raison-overlay.flash .raison-overlay-alert,
+.raison-overlay.flash .raison-overlay-sub { visibility: hidden; }
+.raison-overlay.flash::before {
+  animation: none;
+  background: linear-gradient(180deg,
+    transparent 0%,
+    rgba(140, 200, 255, 0.18) 46%,
+    rgba(210, 240, 255, 0.5) 50%,
+    rgba(140, 200, 255, 0.18) 54%,
+    transparent 100%);
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .raison-overlay::before,
+  .raison-overlay-alert { animation: none; }
+  .raison-overlay-sub { animation: none; opacity: 0.9; }
+}
+
+/* ============================================================================
+   WS4 — pressed-bevel + focus (D0004 recipe, summoning pink), plus
+   reduced-motion gates for the avatar blink and the arise shimmer.
+   ============================================================================ */
+
+.wanderlust-reply,
+.wanderlust-confirm-yes,
+.wanderlust-confirm-no {
+  border-width: 2px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 208, 224, 0.18),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.55),
+    0 2px 0 #1a0508,
+    0 3px 4px rgba(0, 0, 0, 0.5);
+}
+.wanderlust-reply:active,
+.wanderlust-confirm-yes:active,
+.wanderlust-confirm-no:active {
+  transform: translateY(1px);
+  filter: brightness(0.92);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 208, 224, 0.12),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.55),
+    0 0 0 #1a0508,
+    0 1px 2px rgba(0, 0, 0, 0.5);
+}
+.wanderlust-reply:focus-visible,
+.wanderlust-confirm-yes:focus-visible,
+.wanderlust-confirm-no:focus-visible {
+  outline: 2px solid #ff8a8a;
+  outline-offset: 2px;
+}
+
+/* ── Raison crossing — cyan static-glitch when the speaker changes into
+   or out of him (wanderlust.js adds/removes the class on the window).
+   Drawn out deliberately: burst, breath-hold dim, cascade, recovery. ── */
+#wanderlust-window.raison-glitch {
+  animation: raison-glitch-sweep 1.7s steps(14) 1;
+}
+#wanderlust-window.raison-glitch::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(138, 202, 255, 0.12) 0px,
+    rgba(138, 202, 255, 0.12) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  animation: raison-glitch-band 1.7s steps(12) 1;
+}
+#wanderlust-window.raison-glitch .wanderlust-avatar {
+  box-shadow: 0 0 26px rgba(138, 202, 255, 0.9) !important;
+}
+@keyframes raison-glitch-sweep {
+  /* keep the window's own translate(-50%, -50%) centring under the jitter */
+  0%   { filter: brightness(1.8) saturate(0.3); transform: translate(calc(-50% - 3px), -50%); }
+  8%   { filter: brightness(0.55) saturate(1.3); transform: translate(calc(-50% + 3px), -50%); }
+  16%  { filter: brightness(1.4) saturate(0.5) hue-rotate(16deg); transform: translate(calc(-50% - 2px), -50%); }
+  26%  { filter: brightness(0.5) saturate(1.4) hue-rotate(-10deg); transform: translate(calc(-50% + 2px), -50%); }
+  38%  { filter: brightness(1.25) saturate(0.6) hue-rotate(10deg); transform: translate(calc(-50% - 1px), -50%); }
+  50%  { filter: brightness(0.65) saturate(1.25); transform: translate(calc(-50% + 1px), -50%); }
+  62%  { filter: brightness(1.3) saturate(0.65) hue-rotate(8deg); transform: translate(calc(-50% - 2px), -50%); }
+  74%  { filter: brightness(0.85) saturate(1.1); transform: translate(calc(-50% + 1px), -50%); }
+  86%  { filter: brightness(1.15) saturate(0.85) hue-rotate(4deg); transform: translate(calc(-50% - 1px), -50%); }
+  100% { filter: none; transform: translate(-50%, -50%); }
+}
+@keyframes raison-glitch-band {
+  0%   { background-position-y: 0; opacity: 1; }
+  30%  { background-position-y: 9px; opacity: 0.8; }
+  60%  { background-position-y: 21px; opacity: 0.5; }
+  100% { background-position-y: 37px; opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wanderlust-avatar::after,
+  .arise-text { animation: none; }
+  #wanderlust-window.raison-glitch,
+  #wanderlust-window.raison-glitch::before { animation: none; }
+}
