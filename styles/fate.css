@@ -1,0 +1,84 @@
+/* fate.css — the fate-circle companion (shell CSS, like dial.css:
+   the one sanctioned shared sheet; persona rooms never import each other).
+   A 34px ringed avatar with one orbiting mote beside a single voiced
+   line. Bottom-right of the stage; lifted above the dial on desktop. */
+
+.fate {
+  position: absolute;
+  right: 12px;
+  top: 48px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 44%;
+  cursor: pointer;
+}
+
+.fate.on-desktop {
+  top: auto;
+  bottom: 27%;
+}
+
+.fate-avatar {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 2px solid var(--fate-acc, #c8a878);
+  background: rgba(0, 0, 0, 0.55);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.7), 0 0 8px var(--fate-mote, var(--fate-acc, #c8a878));
+}
+
+.fate-avatar i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  background: var(--fate-mote, var(--fate-acc, #c8a878));
+  box-shadow: 0 0 6px var(--fate-mote, var(--fate-acc, #c8a878));
+  animation: fate-orbit 14s linear infinite;
+}
+
+@keyframes fate-orbit {
+  from { transform: rotate(0deg) translateX(11px); }
+  to   { transform: rotate(360deg) translateX(11px); }
+}
+
+.fate-text {
+  display: flex;
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(200, 168, 120, 0.25);
+  border-radius: 6px;
+  padding: 4px 10px;
+  min-width: 0;
+}
+
+.fate-voice {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  color: var(--fate-acc, #c8a878);
+  text-transform: lowercase;
+}
+
+.fate-line {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 1rem;
+  line-height: 1.25;
+  color: rgba(240, 224, 200, 0.95);
+}
+
+.fate:focus-visible {
+  outline: 2px solid #e8c890;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fate-avatar i { animation: none; }
+}

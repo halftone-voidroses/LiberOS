@@ -1,0 +1,81 @@
+/* ============================================================================
+   boot.css — State 1 (Boot screen)
+
+   Black void. A central deep-red `#4a0000` rectangle holds the boot
+   face: serif "LIBER.OS" in a brighter red `#aa0000` and an "ENTER"
+   sub-rectangle with a darker border, clickable, advances to State 2.
+   (Spec C.2 / audit minor 1: void + central rectangle, ENTER, terse
+   machine voice — no corporate line.)
+   ============================================================================ */
+
+.state-boot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: #000000;
+  color: #aa0000;
+  font-family: 'Times New Roman', Times, serif;
+  position: relative;
+}
+
+.state-boot .boot-rect {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(2rem, 6cqi, 4rem) clamp(3rem, 10cqi, 6.5rem);
+  background: #4a0000;
+  border: 2px solid #5a0000;
+  box-shadow:
+    inset 0 0 0 1px #3a0000,
+    inset 0 0 40px rgba(0, 0, 0, 0.55),
+    0 0 30px rgba(74, 0, 0, 0.7);
+  text-align: center;
+}
+
+.state-boot .boot-title {
+  font-size: clamp(2rem, 5vw, 4.5rem);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #aa0000;
+  text-shadow:
+    0 0 12px rgba(170, 0, 0, 0.5),
+    0 0 24px rgba(170, 0, 0, 0.3);
+  margin-bottom: 1.4em;
+  text-align: center;
+  line-height: 1;
+}
+
+.state-boot .boot-start {
+  display: inline-block;
+  margin-top: 0;
+  padding: 0.7em 1.6em;
+  background: #3a0000;
+  border: 2px solid #5a0000;
+  color: #aa0000;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: clamp(1.1rem, 2vw, 1.6rem);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  user-select: none;
+}
+
+.state-boot .boot-start:hover,
+.state-boot .boot-start:focus {
+  background: #5a0000;
+  color: #ff4040;
+  border-color: #aa0000;
+  outline: none;
+}
+
+.state-boot .boot-start:active {
+  background: #aa0000;
+  color: #2a0000;
+}

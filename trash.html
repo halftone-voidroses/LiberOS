@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="icon" href="data:,">
+  <title>Trash — Ravaging Pete</title>
+  <link rel="stylesheet" href="styles/room.css"/>
+  <link rel="stylesheet" href="styles/machine.css"/>
+  <link rel="stylesheet" href="styles/bezel.css"/>
+  <link rel="stylesheet" href="styles/scars.css"/>
+  <link rel="stylesheet" href="src/features/trash/trash.css"/>
+  <link rel="stylesheet" href="styles/shadow.css"/>
+  <link rel="stylesheet" href="styles/fate.css"/>
+  <link rel="stylesheet" href="styles/hijack.css"/>
+</head>
+<body>
+  <canvas class="dust-canvas" aria-hidden="true"></canvas>
+  <canvas class="static-canvas" aria-hidden="true"></canvas>
+
+  <div class="room">
+    <div class="machine">
+      <div class="bezel">
+        <div class="carvings" id="carvings"></div>
+        <div class="vent-slits" aria-hidden="true"></div>
+        <div class="corruption-scars" aria-hidden="true">
+          <div class="scar scar-1"></div>
+          <div class="scar scar-2"></div>
+          <div class="scar scar-3"></div>
+          <div class="scar scar-4"></div>
+          <div class="scar scar-5"></div>
+          <div class="scar scar-6"></div>
+        </div>
+        <div class="led" aria-hidden="true"></div>
+        <div class="liber-plate">LIBER · VACUI</div>
+        <div class="power-button" aria-hidden="true"></div>
+        <div class="screw" aria-hidden="true"></div>
+
+        <div class="screen">
+          <div class="screen-stage">
+            <header class="trash-titlebar">
+              <span class="trash-titlebar-name">the artifact graveyard</span>
+              <span class="trash-titlebar-sub">ravaging pete keeps what you bury</span>
+              <button class="trash-help" type="button" id="trash-help" aria-label="how this room works">?</button>
+              <button class="trash-exit" type="button" id="trash-exit" aria-label="leave">×</button>
+            </header>
+            <div class="trash-app" data-state="trash">
+
+              <div class="trash-save-prompt" id="trash-save-prompt" inert>
+                <div class="trash-save-prompt-inner">
+                  <div class="trash-save-prompt-head">
+                    <span class="trash-save-prompt-name">— bury it? —</span>
+                    <button class="trash-save-prompt-close" type="button" id="trash-save-prompt-close" aria-label="cancel">×</button>
+                  </div>
+                  <div class="trash-save-prompt-body" id="trash-save-prompt-body">nothing chosen to bury yet.</div>
+                  <div class="trash-save-prompt-actions">
+                    <button class="trash-save-prompt-keep" type="button" id="trash-save-prompt-keep">bury it</button>
+                    <button class="trash-save-prompt-discard" type="button" id="trash-save-prompt-discard">not yet</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="trash-raison" id="trash-raison" inert>
+                <div class="trash-raison-inner">
+                  <div class="trash-raison-head">
+                    <span class="trash-raison-name">riason</span>
+                    <button class="trash-raison-close" type="button" id="trash-raison-close" aria-label="close">×</button>
+                  </div>
+                  <div class="trash-raison-body">
+                    bury to release, dig to restore. buried things wait here — nothing is gone, only underground. dig lists what the soil holds; one touch brings it back.
+                  </div>
+                </div>
+              </div>
+
+              <div class="trash-pile">
+                <div class="trash-chunk trash-chunk-1" aria-hidden="true"></div>
+                <div class="trash-chunk trash-chunk-2" aria-hidden="true"></div>
+                <div class="trash-chunk trash-chunk-3" aria-hidden="true"></div>
+                <div class="trash-chunk trash-chunk-4" aria-hidden="true"></div>
+                <div class="trash-chunk trash-chunk-5" aria-hidden="true"></div>
+                <div class="trash-chunk trash-chunk-6" aria-hidden="true"></div>
+                <div class="trash-shard trash-shard-1" aria-hidden="true"></div>
+                <div class="trash-shard trash-shard-2" aria-hidden="true"></div>
+                <div class="trash-bolt trash-bolt-1" aria-hidden="true"></div>
+                <div class="trash-bolt trash-bolt-2" aria-hidden="true"></div>
+
+                <div class="trash-window">
+                  <div class="trash-scratch" aria-hidden="true">pete was here</div>
+                  <div class="trash-content">
+                    <div class="trash-header">
+                      <div class="trash-name">Artifact Graveyard</div>
+                      <div class="trash-sub">— click to dig for deleted artifacts, then click to re-add —</div>
+                    </div>
+
+                    <div class="trash-mid">
+                      <div class="trash-warning">all that is buried, returns as loam.</div>
+                    </div>
+
+                    <div class="trash-actions">
+                      <div class="trash-action-label">— bury —</div>
+                      <button class="trash-action trash-action-hard" id="trash-bury-all" type="button">bury everything</button>
+                    </div>
+
+                    <div class="trash-dig">
+                      <div class="trash-action-label">— what the soil keeps —</div>
+                      <div class="trash-dig-list" id="trash-dig-list"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="monitor-base" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <script src="src/state.js"></script>
+  <script src="src/sound.js"></script>
+  <script src="src/dust.js"></script>
+  <script src="src/static.js"></script>
+  <script src="src/shadow.js"></script>
+  <script src="src/carvings.js"></script>
+  <script src="data/fate.data.js"></script>
+  <script src="src/fate.js"></script>
+  <script src="data/hijack.data.js"></script>
+  <script src="src/hijack.js"></script>
+  <script src="src/features/trash/trash.js"></script>
+</body>
+</html>

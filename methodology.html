@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="icon" href="data:,">
+  <title>Methodology — riason</title>
+  <link rel="stylesheet" href="styles/room.css"/>
+  <link rel="stylesheet" href="styles/machine.css"/>
+  <link rel="stylesheet" href="styles/bezel.css"/>
+  <link rel="stylesheet" href="styles/scars.css"/>
+  <link rel="stylesheet" href="src/features/methodology/methodology.css"/>
+  <link rel="stylesheet" href="styles/shadow.css"/>
+  <link rel="stylesheet" href="styles/fate.css"/>
+  <link rel="stylesheet" href="styles/hijack.css"/>
+</head>
+<body>
+  <canvas class="dust-canvas" aria-hidden="true"></canvas>
+  <canvas class="static-canvas" aria-hidden="true"></canvas>
+
+  <div class="room">
+    <div class="machine">
+      <div class="bezel">
+        <div class="carvings" id="carvings"></div>
+        <div class="vent-slits" aria-hidden="true"></div>
+        <div class="corruption-scars" aria-hidden="true">
+          <div class="scar scar-1"></div>
+          <div class="scar scar-2"></div>
+          <div class="scar scar-3"></div>
+          <div class="scar scar-4"></div>
+          <div class="scar scar-5"></div>
+          <div class="scar scar-6"></div>
+        </div>
+        <div class="led" aria-hidden="true"></div>
+        <div class="liber-plate">LIBER · VACUI</div>
+        <div class="power-button" aria-hidden="true"></div>
+        <div class="screw" aria-hidden="true"></div>
+
+        <div class="screen">
+          <div class="screen-stage">
+            <header class="methodology-titlebar">
+              <span class="methodology-titlebar-name">method</span>
+              <span class="methodology-titlebar-sub">a folio in parts — riason</span>
+              <button class="methodology-help" type="button" id="methodology-help" aria-label="how this room works">?</button>
+              <button class="methodology-exit" type="button" id="methodology-exit" aria-label="leave">×</button>
+            </header>
+            <div class="methodology-app" data-state="methodology">
+
+              <div class="methodology-raison" id="methodology-raison" inert>
+                <div class="methodology-raison-inner">
+                  <div class="methodology-raison-head">
+                    <span class="methodology-raison-name">riason</span>
+                    <button class="methodology-raison-close" type="button" id="methodology-raison-close" aria-label="close">×</button>
+                  </div>
+                  <div class="methodology-raison-body">
+                    a folio, not a checklist. read slowly. come back when the work has changed shape.
+                  </div>
+                </div>
+              </div>
+
+              <div class="method-cite" id="method-cite" inert>
+                <div class="method-cite-inner">
+                  <div class="method-cite-head">
+                    <span class="method-cite-topic" id="method-cite-topic"></span>
+                    <button class="method-cite-close" type="button" id="method-cite-close" aria-label="close citation">×</button>
+                  </div>
+                  <div class="method-cite-body" id="method-cite-body"></div>
+                </div>
+              </div>
+
+              <div class="method-folio">
+                <div class="method-rubric method-rubric-left" id="method-rubric-left"></div>
+                <div class="method-rubric method-rubric-right" id="method-rubric-right"></div>
+                <div class="method-margin-qed" aria-hidden="true">read twice. then again.</div>
+
+                <div class="method-header">
+                  <div class="method-seal">riason</div>
+                  <div class="method-title-main">Method</div>
+                </div>
+
+                <div class="method-thesis">
+                  <span class="method-thesis-tag">a traveller's thesis</span>
+                  <span class="method-thesis-line">the cycle in this folio is the traveller's own synthesis — offered as thesis, never as established finding. the sealed footnotes mark where it touches the research shelf.</span>
+                </div>
+
+                <div class="method-content">
+                  <section class="method-section">
+                    <h2 class="method-section-title">how to use this tool</h2>
+                    <p class="method-lead">
+                      an understanding of the principles behind this methodology is vital.
+                    </p>
+                    <p>
+                      read the website in its entirety, including the education section.
+                    </p>
+                  </section>
+
+                  <section class="method-section">
+                    <h2 class="method-section-title">example cycle <span class="method-thesis-tag">a traveller's thesis</span></h2>
+                    <ol class="method-steps">
+                      <li>Pick a tool from the <em>Games</em> or <em>Exercises</em> section that appeals to you right now.<button type="button" class="method-fn" data-cite="linehan-1993" aria-label="citation">1</button></li>
+                      <li>Follow the instructions — don't overthink, just do the exercise.</li>
+                      <li>Notice what you feel, think or sense, and write down those words within the <em>"Interpretation"</em> section of the tool.</li>
+                      <li>Save your artifact to your satchel (click <em>"Save locally"</em> when available).</li>
+                      <li>Later, compare two artifacts together using the Satchel's <em>relation</em> menu to note how they connect.</li>
+                    </ol>
+                    <p class="method-example">
+                      For example: You love tarot and the archetypes associated with it. Perhaps the random two cards drawn are <em>The Fool</em> (the journey beginning) and <em>The Magician</em> (controlling the path forward). You save them to your satchel. That night, you have a dream about these cards, or a random thought while going for a walk. You rush home and under the <em>Amplification</em> page you draw the symbol that appears to you in your dream, and save it to your satchel. Over time, you can lay these on top of each other. This results in a symbol that represents not just these two things, but the connection between them.
+                    </p>
+                    <p>
+                      There are lots of tools that generate random results. There are no specific ways to use these; the purpose is to become aware of your own inner rhythm, not achieving a specific result.
+                    </p>
+                  </section>
+
+                  <section class="method-section">
+                    <h2 class="method-section-title">amplification <span class="method-thesis-tag">a traveller's thesis</span></h2>
+                    <p>
+                      Casting a <em>buddy</em> (step‑by‑step):<button type="button" class="method-fn" data-cite="jung-red-book" aria-label="citation">2</button>
+                    </p>
+                    <ol class="method-steps">
+                      <li><strong>Set an intention</strong> — write it in the box below and save it to your satchel (for example, <em>"I want to see what's behind my fear of conflict"</em>).</li>
+                      <li><strong>Let your hand move</strong> — on the canvas, draw freely without planning.<button type="button" class="method-fn" data-cite="csikszentmihalyi-1990" aria-label="citation">3</button> If you are struggling to come up with ideas, click the <em>Inspiration</em> button to generate words.</li>
+                      <li><strong>Notice the feelings</strong> — if you feel restless, bored or emotional, that's part of the information. Keep drawing until you reach a natural stopping point.</li>
+                      <li><strong>When you feel finished</strong>, look at the image. What stands out? What does it remind you of? Write down three observations in the <em>Interpretation</em> box below.</li>
+                      <li><strong>Save the buddy</strong> to your satchel (using the <em>"Save locally"</em> button) and optionally save your interpretation notes separately.</li>
+                    </ol>
+                  </section>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="monitor-base" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <script src="src/state.js"></script>
+  <script src="src/sound.js"></script>
+  <script src="src/dust.js"></script>
+  <script src="src/static.js"></script>
+  <script src="src/shadow.js"></script>
+  <script src="src/carvings.js"></script>
+  <script src="data/fate.data.js"></script>
+  <script src="src/fate.js"></script>
+  <script src="data/hijack.data.js"></script>
+  <script src="src/hijack.js"></script>
+  <script src="data/citations.data.js"></script>
+  <script src="src/features/methodology/methodology.js"></script>
+</body>
+</html>

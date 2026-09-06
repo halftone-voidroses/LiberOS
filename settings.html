@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="icon" href="data:,">
+  <title>Settings — Liber Vacui</title>
+  <link rel="stylesheet" href="styles/room.css"/>
+  <link rel="stylesheet" href="styles/machine.css"/>
+  <link rel="stylesheet" href="styles/bezel.css"/>
+  <link rel="stylesheet" href="styles/scars.css"/>
+  <link rel="stylesheet" href="src/features/settings/settings.css"/>
+  <link rel="stylesheet" href="styles/shadow.css"/>
+  <link rel="stylesheet" href="styles/fate.css"/>
+</head>
+<body>
+  <canvas class="dust-canvas" aria-hidden="true"></canvas>
+  <canvas class="static-canvas" aria-hidden="true"></canvas>
+
+  <div class="room">
+    <div class="machine">
+      <div class="bezel">
+        <div class="carvings" id="carvings"></div>
+        <div class="vent-slits" aria-hidden="true"></div>
+        <div class="corruption-scars" aria-hidden="true">
+          <div class="scar scar-1"></div>
+          <div class="scar scar-2"></div>
+          <div class="scar scar-3"></div>
+          <div class="scar scar-4"></div>
+          <div class="scar scar-5"></div>
+          <div class="scar scar-6"></div>
+        </div>
+        <div class="led" aria-hidden="true"></div>
+        <div class="liber-plate">LIBER · VACUI</div>
+        <div class="power-button" aria-hidden="true"></div>
+        <div class="screw" aria-hidden="true"></div>
+
+        <div class="screen">
+          <div class="screen-stage">
+            <div class="settings-app" data-state="settings">
+
+              <div class="settings-panel">
+                <div class="settings-header">
+                  <div class="settings-title">SETTINGS</div>
+                  <div class="settings-sub">— the room's room —</div>
+                </div>
+
+                <div class="settings-section">
+                  <div class="settings-section-title">TUTORIAL</div>
+                  <button class="settings-btn" id="settings-replay" type="button">↻ replay the tutorial</button>
+                  <div class="settings-hint">wanderlust will be summoned again.</div>
+                </div>
+
+                <div class="settings-section">
+                  <div class="settings-section-title">SHADOW</div>
+                  <button class="settings-btn" id="settings-shadow" type="button">—</button>
+                  <div class="settings-hint">the deep water answers to <em>extc</em>.</div>
+                </div>
+
+                <div class="settings-section">
+                  <div class="settings-section-title">SOUND</div>
+                  <button class="settings-btn" id="settings-sound" type="button">sound: on</button>
+                  <div class="settings-hint">the machine clicks when touched. it can hold its breath.</div>
+                </div>
+
+                <div class="settings-section">
+                  <div class="settings-section-title">PAINT</div>
+                  <a class="settings-btn" href="themes.html">repaint the room</a>
+                  <div class="settings-hint">wanderlust keeps the pigments now.</div>
+                </div>
+
+                <div class="settings-section">
+                  <div class="settings-section-title">STATE</div>
+                  <div class="settings-state" id="settings-state">—</div>
+                  <button class="settings-btn settings-btn-danger" id="settings-wipe" type="button">wipe the room</button>
+                  <div class="settings-hint">all artifacts, the buddy, and the tour will return to loam.</div>
+                </div>
+
+                <div class="settings-footer">
+                  <button class="settings-btn settings-btn-back" id="settings-back" type="button">← back</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="monitor-base" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <script src="src/state.js"></script>
+  <script src="src/sound.js"></script>
+  <script src="src/dust.js"></script>
+  <script src="src/static.js"></script>
+  <script src="src/carvings.js"></script>
+  <script src="data/fate.data.js"></script>
+  <script src="src/fate.js"></script>
+  <script src="src/shadow.js"></script>
+  <script src="src/features/settings/settings.js"></script>
+</body>
+</html>

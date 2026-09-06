@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="icon" href="data:,">
+  <title>Relations — The Ledger</title>
+  <link rel="stylesheet" href="styles/room.css"/>
+  <link rel="stylesheet" href="styles/machine.css"/>
+  <link rel="stylesheet" href="styles/bezel.css"/>
+  <link rel="stylesheet" href="styles/scars.css"/>
+  <link rel="stylesheet" href="src/features/relation/relation.css"/>
+  <link rel="stylesheet" href="styles/shadow.css"/>
+  <link rel="stylesheet" href="styles/fate.css"/>
+  <link rel="stylesheet" href="styles/hijack.css"/>
+</head>
+<body>
+  <canvas class="dust-canvas" aria-hidden="true"></canvas>
+  <canvas class="static-canvas" aria-hidden="true"></canvas>
+
+  <div class="room">
+    <div class="machine">
+      <div class="bezel">
+        <div class="carvings" id="carvings"></div>
+        <div class="vent-slits" aria-hidden="true"></div>
+        <div class="corruption-scars" aria-hidden="true">
+          <div class="scar scar-1"></div>
+          <div class="scar scar-2"></div>
+          <div class="scar scar-3"></div>
+          <div class="scar scar-4"></div>
+          <div class="scar scar-5"></div>
+          <div class="scar scar-6"></div>
+        </div>
+        <div class="led" aria-hidden="true"></div>
+        <div class="liber-plate">LIBER · VACUI</div>
+        <div class="power-button" aria-hidden="true"></div>
+        <div class="screw" aria-hidden="true"></div>
+
+        <div class="screen">
+          <div class="screen-stage">
+            <header class="relation-titlebar">
+              <span class="relation-titlebar-name">relation</span>
+              <span class="relation-titlebar-sub">the knot that holds — e-lizabeth</span>
+              <button class="relation-help" type="button" id="relation-help" aria-label="how this room works">?</button>
+              <button class="relation-exit" type="button" id="relation-exit" aria-label="leave">×</button>
+            </header>
+            <div class="relation-app" data-state="relation">
+
+              <div class="relation-raison" id="relation-raison" inert>
+                <div class="relation-raison-inner">
+                  <div class="relation-raison-head">
+                    <span class="relation-raison-name">riason</span>
+                    <button class="relation-raison-close" type="button" id="relation-raison-close" aria-label="close">×</button>
+                  </div>
+                  <div class="relation-raison-body">
+                    every artifact can be bound to the buddy with a verb — a knot. this room keeps the ledger of the knots: reword them, count them, release them. the web itself is drawn on the desktop, where you touch an artifact and say how it holds.
+                  </div>
+                </div>
+              </div>
+
+              <div class="relation-pile">
+                <div class="relation-chunk relation-chunk-1" aria-hidden="true"></div>
+                <div class="relation-chunk relation-chunk-2" aria-hidden="true"></div>
+                <div class="relation-shard relation-shard-1" aria-hidden="true"></div>
+
+                <div class="relation-window">
+                  <div class="relation-mono" aria-hidden="true">
+                    <svg viewBox="0 0 48 28" preserveAspectRatio="xMidYMid meet">
+                      <circle cx="14" cy="14" r="9" fill="none" stroke="rgba(170,138,58,0.55)" stroke-width="2.5"/>
+                      <circle cx="34" cy="14" r="9" fill="none" stroke="rgba(170,138,58,0.55)" stroke-width="2.5"/>
+                    </svg>
+                  </div>
+                  <div class="relation-header">
+                    <div class="relation-title">the ledger</div>
+                    <div class="relation-sub">— nothing here stands alone. count the links. —</div>
+                  </div>
+
+                  <div class="relation-summary" id="relation-summary"></div>
+
+                  <datalist id="verb-families">
+                    <option value="protects"></option>
+                    <option value="carries"></option>
+                    <option value="holds"></option>
+                    <option value="witnesses"></option>
+                    <option value="guards"></option>
+                    <option value="feeds"></option>
+                    <option value="releases"></option>
+                    <option value="hides"></option>
+                    <option value="names"></option>
+                    <option value="follows"></option>
+                  </datalist>
+
+                  <div class="relation-ledger" id="relation-ledger">
+                    <div class="relation-empty" id="relation-empty">— nothing has been etched yet —<br/><em>begin with the stone, in buddy.</em></div>
+                  </div>
+
+                  <div class="relation-unbound" id="relation-unbound"></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="monitor-base" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <script src="src/state.js"></script>
+  <script src="src/sound.js"></script>
+  <script src="src/dust.js"></script>
+  <script src="src/static.js"></script>
+  <script src="src/carvings.js"></script>
+  <script src="data/fate.data.js"></script>
+  <script src="src/fate.js"></script>
+  <script src="data/hijack.data.js"></script>
+  <script src="src/hijack.js"></script>
+  <script src="src/shadow.js"></script>
+  <script src="src/features/relation/relation.js"></script>
+</body>
+</html>

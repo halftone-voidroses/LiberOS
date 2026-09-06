@@ -1,0 +1,199 @@
+/* hijack.css — Riason's walkthrough engine (shell CSS, like fate.css).
+   Dim backdrop, tracking ring in the room accent, floating head with an
+   orbiting mote, dialogue box with ◀ ▶ + skip. Flashy on purpose:
+   sweep shakes the box and flickers the head ember. Reduced-motion
+   gates everything. Rooms never style this themselves. */
+
+.hijack {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+}
+
+.hijack::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 2, 2, 0.72);
+  animation: hijack-dim 0.35s ease-out;
+}
+
+@keyframes hijack-dim {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.hijack-ring {
+  position: absolute;
+  display: none;
+  border: 2px solid var(--hj-acc, #e8c890);
+  border-radius: 8px;
+  box-shadow: 0 0 18px var(--hj-acc, #e8c890), inset 0 0 12px rgba(232, 200, 144, 0.25);
+  pointer-events: none;
+  transition: left 0.3s, top 0.3s, width 0.3s, height 0.3s;
+  animation: hijack-ring-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes hijack-ring-pulse {
+  0%, 100% { box-shadow: 0 0 12px var(--hj-acc, #e8c890), inset 0 0 8px rgba(232, 200, 144, 0.2); }
+  50% { box-shadow: 0 0 26px var(--hj-acc, #e8c890), inset 0 0 16px rgba(232, 200, 144, 0.35); }
+}
+
+.hijack-head {
+  position: absolute;
+  top: 9%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 2px solid var(--hj-acc, #8a6a20);
+  background: radial-gradient(circle at 50% 35%, #2a1a10 0%, #0a0503 70%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.8), 0 0 12px var(--hj-acc, #8a6a20);
+}
+
+.hijack-head span {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 1.8rem;
+  color: var(--hj-acc, #d8b890);
+}
+
+.hijack-head i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  border-radius: 50%;
+  background: var(--hj-acc, #d8b890);
+  box-shadow: 0 0 6px var(--hj-acc, #d8b890);
+  animation: hijack-orbit 5s linear infinite;
+}
+
+@keyframes hijack-orbit {
+  from { transform: rotate(0deg) translateX(27px); }
+  to { transform: rotate(360deg) translateX(27px); }
+}
+
+.hijack.sweep .hijack-head {
+  border-color: #c04a58;
+  animation: hijack-flicker 0.5s steps(2) 3;
+}
+
+.hijack.sweep .hijack-head span {
+  color: #c04a58;
+}
+
+.hijack-box {
+  position: absolute;
+  bottom: 7%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 82%;
+  max-width: 440px;
+  background: linear-gradient(180deg, #241610 0%, #120906 100%);
+  border: 1px solid var(--hj-acc, #8a6a20);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.9);
+  padding: 14px 18px;
+  animation: hijack-rise 0.3s ease-out;
+}
+
+@keyframes hijack-rise {
+  from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.hijack.sweep .hijack-box {
+  border-color: #c04a58;
+  animation: hijack-shake 0.45s;
+}
+
+.hijack-voice {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 0.9rem;
+  letter-spacing: 0.25em;
+  color: var(--hj-acc, #d8a070);
+  margin-bottom: 4px;
+}
+
+.hijack.sweep .hijack-voice {
+  color: #c04a58;
+}
+
+.hijack-line {
+  font-size: 1rem;
+  font-style: italic;
+  line-height: 1.55;
+  color: #ede0c8;
+  min-height: 3em;
+}
+
+.hijack-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.hijack-nav button {
+  background: none;
+  border: 1px solid var(--hj-acc, #8a6a20);
+  color: var(--hj-acc, #d8a070);
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 1.1rem;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 4px 10px;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.hijack-nav button:hover {
+  background: rgba(216, 160, 112, 0.1);
+}
+
+.hijack-nav button:focus-visible {
+  outline: 2px solid #e8c890;
+  outline-offset: 2px;
+}
+
+.hijack-dots {
+  font-family: 'VT323', 'Courier New', monospace;
+  color: var(--hj-acc, #8a6a20);
+  letter-spacing: 0.15em;
+}
+
+.hijack-skip {
+  margin-left: auto;
+  font-size: 0.95rem !important;
+}
+
+.hijack-glow {
+  box-shadow: 0 0 14px var(--hj-acc, rgba(232, 200, 144, 0.8)) !important;
+}
+
+@keyframes hijack-shake {
+  0%, 100% { transform: translateX(-50%); }
+  20% { transform: translateX(calc(-50% - 7px)); }
+  40% { transform: translateX(calc(-50% + 6px)); }
+  60% { transform: translateX(calc(-50% - 4px)); }
+  80% { transform: translateX(calc(-50% + 3px)); }
+}
+
+@keyframes hijack-flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hijack::before { animation: none; }
+  .hijack-ring { transition: none; animation: none; }
+  .hijack-head i { animation: none; }
+  .hijack-box { animation: none; }
+  .hijack.sweep .hijack-box { animation: none; }
+  .hijack.sweep .hijack-head { animation: none; }
+}

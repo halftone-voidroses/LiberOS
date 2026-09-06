@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="icon" href="data:,">
+  <title>Themes — The Skin</title>
+  <link rel="stylesheet" href="styles/room.css"/>
+  <link rel="stylesheet" href="styles/machine.css"/>
+  <link rel="stylesheet" href="styles/bezel.css"/>
+  <link rel="stylesheet" href="styles/scars.css"/>
+  <link rel="stylesheet" href="src/features/themes/themes.css"/>
+  <link rel="stylesheet" href="styles/shadow.css"/>
+  <link rel="stylesheet" href="styles/fate.css"/>
+  <link rel="stylesheet" href="styles/hijack.css"/>
+</head>
+<body>
+  <canvas class="dust-canvas" aria-hidden="true"></canvas>
+  <canvas class="static-canvas" aria-hidden="true"></canvas>
+
+  <div class="room">
+    <div class="machine">
+      <div class="bezel">
+        <div class="carvings" id="carvings"></div>
+        <div class="vent-slits" aria-hidden="true"></div>
+        <div class="corruption-scars" aria-hidden="true">
+          <div class="scar scar-1"></div>
+          <div class="scar scar-2"></div>
+          <div class="scar scar-3"></div>
+          <div class="scar scar-4"></div>
+          <div class="scar scar-5"></div>
+          <div class="scar scar-6"></div>
+        </div>
+        <div class="led" aria-hidden="true"></div>
+        <div class="liber-plate">LIBER · VACUI</div>
+        <div class="power-button" aria-hidden="true"></div>
+        <div class="screw" aria-hidden="true"></div>
+
+        <div class="screen">
+          <div class="screen-stage">
+            <header class="themes-titlebar">
+              <span class="themes-titlebar-name">the atlas of themes</span>
+              <span class="themes-titlebar-sub">wanderlust keeps the pigments now</span>
+              <button class="themes-help" type="button" id="themes-help" aria-label="how this room works">?</button>
+              <button class="themes-exit" type="button" id="themes-exit" aria-label="leave">×</button>
+            </header>
+            <div class="themes-app" data-state="themes">
+
+              <div class="themes-raison" id="themes-raison" inert>
+                <div class="themes-raison-inner">
+                  <div class="themes-raison-head">
+                    <span class="themes-raison-name">riason</span>
+                    <button class="themes-raison-close" type="button" id="themes-raison-close" aria-label="close">×</button>
+                  </div>
+                  <div class="themes-raison-body">
+                    each skin is a traveller's palette. choose one and the machine wears their colours; their carving lights above. the corrupted skin is home — you can always come back.
+                  </div>
+                  
+                </div>
+              </div>
+
+              <div class="themes-skin">
+                <svg class="themes-compass" viewBox="0 0 40 40" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+                  <circle cx="20" cy="20" r="16" fill="none" stroke="rgba(212,175,55,0.6)" stroke-width="1"/>
+                  <path d="M20 4 L23 20 L20 36 L17 20 Z" fill="rgba(168,72,26,0.7)"/>
+                  <path d="M4 20 L20 17 L36 20 L20 23 Z" fill="rgba(32,96,92,0.7)"/>
+                  <circle cx="20" cy="20" r="2" fill="rgba(212,175,55,0.8)"/>
+                </svg>
+                <div class="themes-title">— themes —</div>
+                <div class="themes-sub">paint a new skin for the machine.</div>
+
+                <div class="themes-grid" id="themes-grid"></div>
+
+                <div class="themes-current">
+                  <span class="themes-current-label">current:</span>
+                  <span class="themes-current-value" id="themes-current-value">—</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="monitor-base" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <script src="src/state.js"></script>
+  <script src="src/sound.js"></script>
+  <script src="src/dust.js"></script>
+  <script src="src/static.js"></script>
+  <script src="src/shadow.js"></script>
+  <script src="src/carvings.js"></script>
+  <script src="data/fate.data.js"></script>
+  <script src="src/fate.js"></script>
+  <script src="data/hijack.data.js"></script>
+  <script src="src/hijack.js"></script>
+  <script src="src/features/themes/themes.js"></script>
+</body>
+</html>

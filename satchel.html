@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="icon" href="data:,">
+  <title>Satchel — Riason</title>
+  <link rel="stylesheet" href="styles/room.css"/>
+  <link rel="stylesheet" href="styles/machine.css"/>
+  <link rel="stylesheet" href="styles/bezel.css"/>
+  <link rel="stylesheet" href="styles/scars.css"/>
+  <link rel="stylesheet" href="src/features/satchel/satchel.css"/>
+  <link rel="stylesheet" href="styles/shadow.css"/>
+  <link rel="stylesheet" href="styles/fate.css"/>
+  <link rel="stylesheet" href="styles/hijack.css"/>
+</head>
+<body>
+  <canvas class="dust-canvas" aria-hidden="true"></canvas>
+  <canvas class="static-canvas" aria-hidden="true"></canvas>
+
+  <div class="room">
+    <div class="machine">
+      <div class="bezel">
+        <div class="carvings" id="carvings"></div>
+        <div class="vent-slits" aria-hidden="true"></div>
+        <div class="corruption-scars" aria-hidden="true">
+          <div class="scar scar-1"></div>
+          <div class="scar scar-2"></div>
+          <div class="scar scar-3"></div>
+          <div class="scar scar-4"></div>
+          <div class="scar scar-5"></div>
+          <div class="scar scar-6"></div>
+        </div>
+        <div class="led" aria-hidden="true"></div>
+        <div class="liber-plate">LIBER · VACUI</div>
+        <div class="power-button" aria-hidden="true"></div>
+        <div class="screw" aria-hidden="true"></div>
+
+        <div class="screen">
+          <div class="screen-stage">
+            <header class="satchel-titlebar">
+              <span class="satchel-titlebar-name">The Satchel</span>
+              <span class="satchel-titlebar-sub">Write about your other self</span>
+              <button class="satchel-help" type="button" id="satchel-help" aria-label="how this room works">?</button>
+              <button class="satchel-exit" type="button" id="satchel-exit" aria-label="leave">×</button>
+            </header>
+            <div class="satchel-app" data-state="satchel">
+
+              <div class="satchel-raison" id="satchel-raison" inert>
+                <div class="satchel-raison-inner">
+                  <div class="satchel-raison-head">
+                    <span class="satchel-raison-name">riason</span>
+                    <button class="satchel-raison-close" type="button" id="satchel-raison-close" aria-label="close">×</button>
+                  </div>
+                  <div class="satchel-raison-body">
+                    click an entry to open its page. the record keeps name, date, element, see-also — set down at the time of making. the margin note is yours to amend. the rest is archive.
+                  </div>
+                  
+                </div>
+              </div>
+
+              <div class="satchel-binding">
+                <div class="satchel-spine">
+                  <div class="satchel-spine-text">RIASON</div>
+                  <div class="satchel-spine-text">BOUND MMXXVI</div>
+                </div>
+                <div class="satchel-pages">
+
+                  <div class="satchel-page satchel-page-list">
+                    <div class="satchel-header">
+                      <div class="satchel-title">Contents</div>
+                      <div class="satchel-sub">the buddy &amp; artifacts</div>
+                    </div>
+                    <div class="satchel-list" id="satchel-list">
+                      <div class="satchel-empty">Draw a buddy and associate artifacts to populate this page — riason</div>
+                    </div>
+                    <div class="satchel-footer">
+                      <span class="satchel-page-num">— i —</span>
+                    </div>
+                  </div>
+
+                  <div class="satchel-page satchel-page-entry" id="satchel-entry">
+                    <div class="satchel-header">
+                      <div class="satchel-title satchel-entry-title">— — —</div>
+                      <div class="satchel-sub satchel-entry-date">— —</div>
+                    </div>
+                    <div class="satchel-body">
+                      <div class="satchel-intention"></div>
+                      <div class="satchel-element-tag"></div>
+                      <div class="satchel-see-also">
+                        <div class="satchel-see-label">see also</div>
+                        <div class="satchel-see-list" id="satchel-see-list">—</div>
+                      </div>
+                      <div class="satchel-see-label">margin note</div>
+                      <div class="satchel-annotation" id="satchel-annotation" contenteditable="true" spellcheck="false" aria-label="margin note"></div>
+                    </div>
+                    <div class="satchel-stamp" aria-hidden="true">ex libris · liber vacui</div>
+                    <div class="satchel-footer">
+                      <span class="satchel-back-link" id="satchel-back-contents">← contents</span>
+                      <span class="satchel-page-num" id="satchel-pageno">— ii —</span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="monitor-base" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <script src="src/state.js"></script>
+  <script src="src/sound.js"></script>
+  <script src="src/dust.js"></script>
+  <script src="src/static.js"></script>
+  <script src="src/shadow.js"></script>
+  <script src="src/carvings.js"></script>
+  <script src="data/fate.data.js"></script>
+  <script src="src/fate.js"></script>
+  <script src="data/hijack.data.js"></script>
+  <script src="src/hijack.js"></script>
+  <script src="src/features/satchel/satchel.js"></script>
+</body>
+</html>

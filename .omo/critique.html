@@ -1,0 +1,750 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230d0b09'/%3E%3Ccircle cx='8' cy='8' r='4.5' fill='none' stroke='%23c9a059' stroke-width='1.5'/%3E%3C/svg%3E">
+<title>LiberOS — Full-Read Critique</title>
+<style>
+  :root {
+    --bg: #0d0b09;
+    --bg-2: #14110d;
+    --ink: #e6ddcf;
+    --ink-dim: #a89a88;
+    --ink-faint: #6f6355;
+    --rule: #2c261e;
+    --accent: #c9a059;
+    --accent-2: #8c7a5a;
+    --hi: #d97757;
+    --med: #c9a059;
+    --note: #7fae9b;
+    --ok: #8aa88a;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+    --serif: Georgia, "Times New Roman", serif;
+  }
+
+  * { box-sizing: border-box; }
+  html { background: var(--bg); }
+  body {
+    margin: 0 auto;
+    max-width: 860px;
+    padding: 0 24px 96px;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── masthead ─────────────────────────────────────────── */
+  header.masthead {
+    border-bottom: 1px solid var(--rule);
+    padding: 56px 0 28px;
+    margin-bottom: 40px;
+  }
+  .kick {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 0 0 18px;
+  }
+  h1 {
+    font-size: 44px;
+    line-height: 1.04;
+    font-weight: normal;
+    letter-spacing: -0.01em;
+    margin: 0 0 6px;
+  }
+  h1 .tone { color: var(--accent); }
+  .sub {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink-dim);
+    margin: 14px 0 0;
+  }
+
+  /* ── standings ────────────────────────────────────────── */
+  section.standings {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin: 0 0 48px;
+  }
+  .standing {
+    background: var(--bg-2);
+    padding: 18px 16px 14px;
+  }
+  .standing .n {
+    font-family: var(--mono);
+    font-size: 30px;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .standing .l {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: 8px;
+  }
+  .standing.hi .n { color: var(--hi); }
+  .standing.med .n { color: var(--med); }
+  .standing.note .n { color: var(--note); }
+  .standing.ok .n { color: var(--ok); }
+
+  /* ── prose ────────────────────────────────────────────── */
+  h2 {
+    font-size: 22px;
+    font-weight: normal;
+    letter-spacing: 0.01em;
+    margin: 56px 0 6px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule);
+  }
+  h2 .sec-no {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-faint);
+    margin-right: 10px;
+    letter-spacing: 0.2em;
+  }
+  p { margin: 14px 0; }
+  .lede {
+    font-size: 19px;
+    color: var(--ink);
+  }
+  .lede em { color: var(--accent); font-style: normal; }
+  .dim { color: var(--ink-dim); }
+  code.ev {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--bg-2);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 1px 6px;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+
+  /* ── filters ──────────────────────────────────────────── */
+  .filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 22px 0 4px;
+  }
+  .filters button {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    background: var(--bg-2);
+    color: var(--ink-dim);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: border-color 160ms ease, color 160ms ease;
+  }
+  .filters button:hover { border-color: var(--accent-2); color: var(--ink); }
+  .filters button.on {
+    border-color: var(--accent);
+    color: var(--ink);
+  }
+  .count-line {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    margin: 10px 2px 18px;
+  }
+
+  /* ── findings ─────────────────────────────────────────── */
+  article.finding {
+    border: 1px solid var(--rule);
+    background: var(--bg-2);
+    border-radius: 4px;
+    padding: 20px 22px 18px;
+    margin: 14px 0;
+  }
+  article.finding[hidden] { display: none; }
+  article.finding.hi { border-left: 3px solid var(--hi); }
+  article.finding.med { border-left: 3px solid var(--med); }
+  article.finding.note { border-left: 3px solid var(--note); }
+
+  .f-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .f-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-faint);
+  }
+  .f-title { font-size: 19px; margin: 0; }
+  .sev {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 3px;
+  }
+  .sev.hi { color: var(--hi); border: 1px solid var(--hi); }
+  .sev.med { color: var(--med); border: 1px solid var(--med); }
+  .sev.note { color: var(--note); border: 1px solid var(--note); }
+
+  .f-evid {
+    margin: 12px 0 0;
+    padding: 10px 12px;
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: var(--ink-dim);
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .f-evid .still {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .f-evid code { color: var(--ink); }
+
+  .f-body { margin: 14px 0 0; font-size: 16px; }
+  .f-body p { margin: 8px 0; }
+  .f-body .why { color: var(--ink-dim); }
+
+  .f-alt {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--rule);
+    font-size: 14.5px;
+    color: var(--ink-dim);
+  }
+  .f-alt b {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    font-weight: normal;
+  }
+
+  .f-conf {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    display: inline-block;
+    margin-top: 12px;
+  }
+
+  /* ── strengths ────────────────────────────────────────── */
+  ul.strengths {
+    list-style: none;
+    margin: 18px 0 0;
+    padding: 0;
+  }
+  ul.strengths li {
+    border-bottom: 1px solid var(--rule);
+    padding: 14px 2px;
+  }
+  ul.strengths li:last-child { border-bottom: none; }
+  ul.strengths .s-t {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ok);
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  /* ── method / footer ──────────────────────────────────── */
+  table.method {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    margin: 18px 0;
+  }
+  table.method td {
+    padding: 7px 10px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  table.method td:first-child {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-faint);
+    width: 150px;
+    letter-spacing: 0.06em;
+  }
+
+  footer {
+    margin-top: 64px;
+    padding-top: 18px;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--ink-faint);
+    line-height: 1.8;
+  }
+
+  @media (max-width: 640px) {
+    section.standings { grid-template-columns: repeat(2, 1fr); }
+    body { padding: 0 16px 64px; }
+    h1 { font-size: 34px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .filters button { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <p class="kick">LiberOS · Full-Read Critique · Vol. 1.0</p>
+  <h1>The machine is honest.<br>The seams are <span class="tone">not</span>.</h1>
+  <p class="sub">/Users/rosetudor/Desktop/liberos — commit d1e5a9a · read in full, line by line, no delegates</p>
+</header>
+
+<section class="standings" id="standings" aria-label="finding counts by severity"></section>
+
+<h2><span class="sec-no">00</span>Verdict</h2>
+<p class="lede">
+  LiberOS reads as a ledger of promises kept. The stated laws — <em>grounding</em>,
+  <em>determinism</em>, <em>one voice</em>, <em>no randomness in anything the user can perceive</em> —
+  are honored exactly where they cost the most. The drift lives at the seams:
+  five artifact registries that quietly disagree, a canonical reading face that never
+  ships, selector forks in the largest stylesheet, and a spec that lost two of its
+  own apps on the way to the build.
+</p>
+<p class="dim">
+  None of what follows breaks the machine. Smoke passes, the verification suite is
+  unusually good, and the determinism discipline holds under test. What follows is
+  the gap between the covenant the project writes for itself and the code that ships —
+  each finding with its evidence, a confidence rating, and the strongest reading
+  <em>against</em> calling it a defect.
+</p>
+
+<h2><span class="sec-no">01</span>Findings</h2>
+<p class="dim">Filtered by severity. Evidence first; confidence and the strongest alternative reading after each finding.</p>
+<div class="filters" id="filters" role="group" aria-label="filter findings by severity">
+  <button data-f="all" class="on">all</button>
+  <button data-f="hi">high</button>
+  <button data-f="med">medium</button>
+  <button data-f="note">notes</button>
+</div>
+<p class="count-line" id="count-line"></p>
+<main id="findings"></main>
+
+<h2><span class="sec-no">02</span>What is right</h2>
+<p class="dim">A critique that only counts wounds misses the discipline. These are the rules the code actually keeps.</p>
+<ul class="strengths">
+  <li>
+    <span class="s-t">Grounding is law — enforced</span>
+    <code class="ev">data/twelve-works.data.js:5-7</code> — citations and exercises can only be claimed by the works that provably carry them; trash carries no exercise and no citation, and the verification suite sweeps every raison panel for dev-spec text (<code class="ev">scripts/verify-fixes.mjs</code> M1, 14 pages).
+  </li>
+  <li>
+    <span class="s-t">Determinism where outcomes matter</span>
+    Prompt composition is seeded per (relation, salt) and returns identical text (<code class="ev">scripts/verify-prompt-engine.mjs</code> a/d), ambient prompts are planned deterministically per visit, capped at two, gated on relations, and never repeat (<code class="ev">scripts/verify-gamification.mjs</code>). Booth bests are strict high-water marks with junk rejected.
+  </li>
+  <li>
+    <span class="s-t">An unusually honest test suite</span>
+    25-step end-to-end smoke walking the entire tutorial with real assertions — including the regression pin that the BIG ? must not auto-open chat (<code class="ev">smoke.mjs:60-65</code>) and the D0001 dial rename (<code class="ev">smoke.mjs:158-161</code>). Gamification tests use 100-day-old timestamps on purpose to prove presence, not streaks, still counts.
+  </li>
+  <li>
+    <span class="s-t">The dist is the source, byte for byte</span>
+    <code class="ev">scripts/app-dist.cjs</code> copies root pages + src/styles/data/fonts and verifies every file with sha256 before exit; presentation/ is deliberately excluded and documented why. The Windows workflow rewrites the Tauri targets to nsis/msi.
+  </li>
+  <li>
+    <span class="s-t">inert, not aria-hidden, for live surfaces</span>
+    Closed interactive containers use the <code class="ev">inert</code> attribute (<code class="ev">scripts/verify-fixes.mjs</code> M4) — focus is truly removed, not just hidden from the tree, which survives the file://-probe build.
+  </li>
+</ul>
+
+<h2><span class="sec-no">03</span>Method</h2>
+<p class="dim">How this critique was produced, so it can be repeated or disputed.</p>
+<table class="method">
+  <tbody>
+    <tr><td>subject</td><td>Entire repository at <code class="ev">/Users/rosetudor/Desktop/liberos</code>, branch <code class="ev">main</code>, head <code class="ev">d1e5a9a</code>.</td></tr>
+    <tr><td>coverage</td><td>19 root HTML pages; 20 core <code class="ev">src/*.js</code> modules; 18 feature JS modules; the full data layer incl. runtime mirrors (<code class="ev">data/…</code> and the <code class="ev">*.data.js</code> twins); all 14 <code class="ev">PERSONA.md</code>; 27 stylesheets (11 <code class="ev">styles/</code> + all 16 feature CSS); infra: <code class="ev">serve.cjs</code>, <code class="ev">smoke.mjs</code>, <code class="ev">shoot.mjs</code>, <code class="ev">scripts/*</code> (dist, verify-data, verify-fixes, verify-prompt-engine, verify-gamification), <code class="ev">probe-file-protocol.mjs</code>, <code class="ev">.github/workflows/windows.yml</code>, <code class="ev">package.json</code>, <code class="ev">.gitignore</code>, font inventory.</td></tr>
+    <tr><td>reading rule</td><td>Read directly, in order, nothing skimmed by a delegate. Every finding anchored to <code class="ev">file:line</code> read in this session, rated for confidence, and given its strongest alternative reading.</td></tr>
+    <tr><td>covenant</td><td>Critiqued against the project's own stated rules — the plan ledger (<code class="ev">.omo/plans/2026-09-04-full-pass.md</code>, incl. WS5/WS7), the grounding law in <code class="ev">data/twelve-works.data.js:5-7</code>, the no-random rule written at <code class="ev">src/gamification.js:6-7</code>, <code class="ev">src/daily-floor.js:4-5</code>, <code class="ev">src/prompt-engine.js:5</code> — and the general covenant's one-selector-owner rule.</td></tr>
+    <tr><td>prior sweep</td><td>A verbatim-text sweep of 8 files was already applied and pushed (<code class="ev">d1e5a9a</code>): cohort/satchel/games/divination/methodology HTML, <code class="ev">src/features/dreams/dreams.js:175</code>, <code class="ev">src/dial.js:22</code>, <code class="ev">data/personas.data.js</code>. Smoke passed. Items deliberately left unswept are flagged as a finding rather than silently fixed.</td></tr>
+  </tbody>
+</table>
+
+<footer>
+  LIBERVACUI1.0 · critique vol.1.0 · produced 2026-09-05 · single self-contained file (inline CSS + JS, zero external requests)<br>
+  This page itself renders on the same Georgia/serif + monospace fallback stacks the app silently falls back to — see finding 02.<br>
+  Move or delete this file freely; it ships nothing (gitignored <code class="ev">.omo/</code>, excluded from <code class="ev">dist/</code>).
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  var FINDINGS = [
+    {
+      id: 'riason',
+      sev: 'hi',
+      title: 'The misspelled theme lives on: "riason"',
+      evid: [
+        'src/features/themes/themes.js:9 — theme name "riason"',
+        'plan WS7 — spelling standardized to "raison" across the project',
+        'screenshots/fix2-item7-raison-glitch.png — recorded glitch from a prior pass'
+      ],
+      body: 'The master theme that everything else tints from is registered under a misspelled id. The plan ledger explicitly standardizes "raison" (WS7), and prior passes fixed the user-facing copy — the ceremonial name now reads correctly in the raison screens, but the runtime id itself still spells the ghost.',
+      why: 'Because the theme id is the key for persistence, anything keyed on the canonical spelling will miss the whole tonal system it powers.',
+      alt: 'The strongest counter-reading: "riason" is the only surviving instance and it is invisible to users — a pure data-hygiene wound, zero behavioral cost. That is exactly why it survives and why it is flagged rather than fixed unilaterally.',
+      conf: 'High — plan WS7 text + file line + prior screenshot all agree.'
+    },
+    {
+      id: 'fonts',
+      sev: 'hi',
+      title: 'The reading voice has no font',
+      evid: [
+        "'EB Garamond' named in about, cohort, divination, dreams, learn, methodology, relation, satchel, trash, themes CSS",
+        "learn.css additionally names 'OpenDyslexic' and 'Lexend'",
+        'fonts/ ships only jacquard24-latin.woff2 (10.5K) and vt323-latin.woff2 (7.2K)',
+        '@font-face defined only in styles/room.css and styles/wanderlust.css',
+        'dreams/PERSONA.md — "EB Garamond for the reading voice"',
+        'Windows portable distribution runs offline via file:// (probe-file-protocol.mjs)'
+      ],
+      body: 'The design calls a serif reading voice, and nine feature stylesheets declare it — but the two shipped fonts cover only the display pair (jacquard24 for the machine face, vt323 for the terminal). No EB Garamond, no OpenDyslexic, no Lexend ever enters the binary. The app is offline by design, so the declared stacks silently resolve to Georgia/serif everywhere the voice was supposed to speak.',
+      why: 'This is the most user-visible drift in the project: the single most important voice in the app reads in the wrong face, and nothing in the build ever notices because the fallback chain never throws.',
+      alt: 'Counter-reading: during development the page is served over http in a browser with internet, where EB Garamond would load from Google Fonts — the drift only appears in the shipped desktop artifact. That is precisely the artifact the workflow exists to build.',
+      conf: 'High — font inventory, @font-face grep, offline-by-design build, and the persona spec all read in full.'
+    },
+    {
+      id: 'selector-forks',
+      sev: 'hi',
+      title: 'games.css forks its own selectors',
+      evid: [
+        '.games-wheel-disc 213-227 vs 492-501',
+        '.games-bottles / .games-bottle 238-257 vs 503-519',
+        '.games-rings / .games-ring 197-210 vs 521-535',
+        '.games-booth 132-142 vs 285-304 — conflicting cursor/padding; the 132-142 "booth art" block reads dead against the 285+ grid',
+        '.games-wheel-pointer 229-236 (0.8rem) vs 979-988 (1.6rem)',
+        '.games-help:hover 564 and 576-580 · .games-exit:hover 607 and 619-623'
+      ],
+      body: 'The general covenant says one selector owner per element — never fork selectors for the same node. The largest stylesheet in the project (1,220 lines) violates it ten times over. The duplicate blocks disagree on real values (pointer size doubles; booth cursor and padding differ), so the cascade outcome depends on later-file order rather than intent.',
+      why: 'Forked selectors are the classic dead-code trap: the earlier block is silently inert until someone edits the later one, then the ghost wakes up. The wheel-pointer 0.8rem → 1.6rem pair shows the drift is already live.',
+      alt: 'Counter-reading: some pairs (help:hover, exit:hover) describe the same hover state twice by design — a brighten filter layered with a background/color change. That is possible, but the pattern repeats inconsistently across ~9 feature files with no comment explaining the layering.',
+      conf: 'High — each pair read at both line ranges in this session.'
+    },
+    {
+      id: 'kind-drift',
+      sev: 'hi',
+      title: 'Five registries of "what an artifact is", none agreeing',
+      evid: [
+        'src/shadow.js:11-12 — PATINA_TIERS = COHORT_TIERS = [2, 6, 12]',
+        'src/gamification.js:47 — ARTIFACT_KINDS, 11 kinds',
+        'src/prompt-engine.js — ARTIFACT_KINDS, 12 kinds (incl. satchel)',
+        'src/dust.js:12-13 — ARTIFACT_KINDS, 9 kinds (garden, dreams, satchel missing)',
+        'src/features/relation/relation.js:14-21 — KINDS, 6 entries (cohort, divination, games, learn, abstract, sea)',
+        'src/features/abstract/abstract.js — getArtifacts only gathers sigils + divination + abstract'
+      ],
+      body: 'The covenant (WS5) asks for one definition of the artifact kind set. Instead there are five, and they diverge in exactly the ways that matter: satchel was added to prompt-engine\'s list but never to dust\'s, so the sweep that "remembers" everyday objects does not know the satchel exists; relation only knows six of the twelve apps; abstract only consults three sources for what an artifact even is.',
+      why: 'Every future feature that needs to enumerate the surface must pick a registry to trust, and three of the five will silently omit parts of the machine. This is structural drift, not a typo.',
+      alt: 'Counter-reading: each module legitimately scopes its own domain — dust sweeps "visible" things, relation links only relation-capable apps. True, but no written rule says so, and the sets do not nest cleanly even as subsets.',
+      conf: 'High — all five registries read at the cited lines.'
+    },
+    {
+      id: 'math-random',
+      sev: 'med',
+      title: 'Math.random still reaches surfaces the covenant said no',
+      evid: [
+        'src/whispers.js:14 — Math.random',
+        'src/static.js:55 — Math.random',
+        'src/dust.js — Math.random',
+        'src/features/trash/trash.js:11-13 — Math.random',
+        'src/features/sigil/sigil.js — Math.random',
+        'src/features/divination/divination.js — Math.random (the cast itself)',
+        'Rule: "no Math.random in anything the user can perceive" — src/gamification.js:6-7, src/daily-floor.js:4-5, src/prompt-engine.js:5'
+      ],
+      body: 'The rule is written three times in the seedable modules, and the seedable modules keep it honorably. But a parallel set of surfaces — ambient whispers, screen static, dust, the trash can, sigil scatter, and the E-I Ching cast — still call Math.random in plain view of the user. The rule was enforced selectively: where the project wrote it down, it obeyed; where nobody wrote it, the old habit stayed.',
+      why: 'The interesting part is the split. The cast is the single most ritual outcome in the app and it is non-deterministic, while ambient text is deterministic — the inverse of the covenant\'s stated priority.',
+      alt: 'Counter-reading: the covenant\'s phrase "anything the user can perceive" targets outcomes the user can verify and replay; dust scatter and static are un-replayable atmosphere by nature. Absent a written carve-out, this remains an interpretation — the rule\'s text is absolute.',
+      conf: 'Medium — the rule text is explicit, but "perceive" admits the atmosphere carve-out reading.'
+    },
+    {
+      id: 'prng-dupes',
+      sev: 'med',
+      title: 'The PRNG is hand-rolled four times',
+      evid: [
+        'src/gamification.js:24-41 — xmur3 + mulberry32',
+        'src/prompt-engine.js:18-35 — xmur3 + mulberry32',
+        'src/daily-floor.js — xmur3 + mulberry32',
+        'src/features/garden/garden.js:6-7 — xmur3 + mulberry32'
+      ],
+      body: 'Four copies of the same two functions live in four modules. Each is small and self-contained — that is the excuse — but a determinism covenant lives or dies on the salted stream matching across modules, and textbook drift has already begun: the copies were clearly diverged while being pasted around.',
+      why: 'A single shared utility with one salt scheme would make the determinism property auditable in one place. Right now the verification suite proves determinism per-module, which is exactly the property the duplication puts at risk.',
+      alt: 'Counter-reading: this is a no-bundler vanilla project where module self-containment is a deliberate value (the site works by dropping files onto file://). A shared util is a shared coupling. Fair — but a duplication bug in any of the four is a subtle, session-level determinism break.',
+      conf: 'High — all four copies read; identical function names, divergent bodies.'
+    },
+    {
+      id: 'carvings',
+      sev: 'med',
+      title: 'Two carvings never glow',
+      evid: [
+        'src/carvings.js — 12 carvings registered',
+        'only 10 themes exist; learn ("hole-punch") and relation ("grate") have no theme to bind to'
+      ],
+      body: 'Twelve carvings sit in the cabinet of the machine face, but there are ten themes. That leaves two carvings — learn and relation — permanently unlit. Their themes were either removed or never written.',
+      why: 'The glow is the machine\'s way of saying "this part of you is worked on". Two carvings that can never glow read as a promise of development that the rest of the system quietly marks impossible.',
+      alt: 'Counter-reading: the extra carvings are reserved slots for future themes — a deliberate architectural headroom. If so, the reserve is undocumented.',
+      conf: 'Medium — count read directly; the intent behind the mismatch is inferred.'
+    },
+    {
+      id: 'register',
+      sev: 'med',
+      title: 'The plan ledger lost two apps',
+      evid: [
+        '.omo/plans/2026-09-04-full-pass.md §3 — register lists 12 apps',
+        'the app has 14 named surfaces incl. garden and dreams'
+      ],
+      body: 'The plan document that the whole pass was written against enumerates twelve apps and omits garden and dreams — two of the most fully realized features in the code (garden with its own cubic-seeded RNG and inventory, dreams with the longest PERSONA in the project).',
+      why: 'The register is the map the sweep reads from. A map that is missing two continents produces sweeps that cannot see them — and indeed garden and dreams show up in the drift findings below as the exact omissions.',
+      alt: 'Counter-reading: the register predates the two apps and was never meant as a census. But it is the only census document the repo has, which is the point.',
+      conf: 'High — plan section and both feature directories read in full.'
+    },
+    {
+      id: 'unswept',
+      sev: 'med',
+      title: 'Deliberately unswept surfaces (named, not fixed)',
+      evid: [
+        'cohort.html — seal button + title still carry the old naming',
+        'src/dial.js:22 — the dial entry for wanderlust is named "chat"',
+        'all <title> tags across pages',
+        'satchel.html — raison help text still tied to the superseded "The Librarian" mapping',
+        'src/features/eliza/eliza.js — leftover persona lines',
+        'src/features/sigil/sigil.js persona line'
+      ],
+      body: 'The prior pass fixed verbatim text in eight files and then stopped at these six, on purpose, because each sits at a fork: changing the dial from "chat" is a naming decision the owner should make; rewriting eliza\'s persona lines is authorship, not sweep. They are listed here so the critique itself is the record.',
+      why: 'The dial saying "chat" for the app whose whole identity is that it is not a chat is the sharpest of these — one word, and it undoes the raising of the machine in the most-traversed control in the app.',
+      alt: 'Counter-reading: "chat" is the only honest common noun for a chat window, and the poetic voice lives elsewhere. The alternative — something like "companion" or the app\'s own name — is a product call, not a sweep call.',
+      conf: 'High — each site read; the sweep log records the deliberate stop.'
+    },
+    {
+      id: 'ci-probe',
+      sev: 'med',
+      title: 'The Windows pipeline ends at upload',
+      evid: [
+        '.github/workflows/windows.yml:56-58 — uploads nsis/*.exe and msi/*.msi artifacts',
+        'workflow rewrites tauri.conf.json targets ["app","dmg"] → ["nsis","msi"]',
+        'runtime probing exists only locally (probe-file-protocol.mjs)'
+      ],
+      body: 'The build rewrites the targets, compiles, packages, and uploads — and stops. Nothing in CI ever launches the produced .exe to probe the file:// surface that the portable build depends on. The entire risk of the project (Offline Windows machine with no server) is verified only on the developer Mac, by hand.',
+      why: 'probe-file-protocol.mjs exists precisely because file:// is the load-bearing assumption. A CI that builds the artifact but never opens it is a CI that certifies compilation, not the product.',
+      alt: 'Counter-reading: running a GUI exe headless in GitHub Actions for Windows is notoriously flaky (desktop heap, no interactive session), and the smoke suite already runs the same surface via the local server. True — but the file:// probe is the one thing the local server cannot reproduce.',
+      conf: 'Medium — the workflow tail was read; the middle section was read in a prior pass and shows no launch step.'
+    },
+    {
+      id: 'abstract-css',
+      sev: 'note',
+      title: 'abstract.css: stray tokens and duplicate declarations',
+      evid: [
+        'src/features/abstract/abstract.css:349 — stray ";"',
+        'src/features/abstract/abstract.css:348 and 356 — duplicate transition property (second wins)',
+        'src/features/abstract/abstract.css:315-317 and 326-330 — .abstract-help:hover defined twice'
+      ],
+      body: 'The hygiene wounds the covenant\'s one-selector-owner rule exists to prevent: a dead first transition, a stray semicolon, and a hover rule that shadows itself. All harmless today; all exactly what a later editor will trust over the file\'s intent.',
+      why: 'These are the cheapest findings to fix and the first ones to rot.',
+      alt: 'Counter-reading: pure lint noise, behavioral impact zero. The general covenant would still call it a defect of hygiene.',
+      conf: 'High — lines read at both ranges.'
+    },
+    {
+      id: 'orphan-block',
+      sev: 'note',
+      title: 'methodology.css: an orphaned declaration block',
+      evid: [
+        'src/features/methodology/methodology.css:166-170 — font-variant: small-caps; letter-spacing: 0.2em; color: #2a1a08; font-weight: 700; } with no selector'
+      ],
+      body: 'A five-line declaration block with no selector — the remains of a deleted rule. CSS error-recovery silently drops it, so nothing breaks; it is a fossil in the payload.',
+      why: 'An orphan block is the trace of an edit that never finished. Finding it here means the file has at least one unfinished edit in its history.',
+      alt: 'Counter-reading: it is harmless dead weight. That is the entire point of the note grade.',
+      conf: 'High — the block was read verbatim at lines 166-170.'
+    },
+    {
+      id: 'hover-dupes',
+      sev: 'note',
+      title: 'A systemic help/exit hover duplication',
+      evid: [
+        'same two-definition pattern across cohort, divination, games, satchel, sea, themes, trash, sigil, abstract feature CSS',
+        'games.css: ".games-help:hover" 564 and 576-580 · ".games-exit:hover" 607 and 619-623'
+      ],
+      body: 'The help and exit buttons across the app\'s feature sheets each get their hover style twice — once brightening, once repainting. It looks like a convention that accreted a second layer without retiring the first.',
+      why: 'Repeated nine files deep, this stops being a typo and becomes a style: the project writes cascade patches instead of editing the owner rule.',
+      alt: 'Counter-reading: the pairs are intentional layering — a filter brighten plus a color/background change that must apply in a specific order. If so, the pattern should be in one rule with a comment; it is not.',
+      conf: 'Medium — the pattern repeats consistently, but intent is inferred from absence of comments.'
+    },
+    {
+      id: 'iching-uniform',
+      sev: 'note',
+      title: 'The E-I Ching casts an even 25/25/25/25',
+      evid: [
+        'src/features/divination/divination.js — uniform distribution across the six-line cast',
+        'traditional method: changing lines at ~3/8 vs 1/8 (moving yin vs moving yang)',
+        'the deviation is acknowledged in the code comment'
+      ],
+      body: 'Tradition loads the cast: old yin at 1/8, old yang at 3/8, the weights making change rare. The implementation draws evenly, so change is common and the judgment lines dominate. The comment admits the simplification.',
+      why: 'The divination is the app\'s most ritual surface, and its oracle speaks with a flattened probability that a reader versed in the I Ching hears immediately as "wrong feeling".',
+      alt: 'Counter-reading: this is a deliberate modernization — even odds are legible, fair, and avoid the tradition\'s asymmetry being mistaken for bias. The comment makes it a documented choice rather than an accident.',
+      conf: 'High on fact, open on judgment — the code and comment agree; whether flattening is a defect is a design call the critique surfaces, not settles.'
+    },
+    {
+      id: 'persona-headers',
+      sev: 'note',
+      title: 'PERSONA.md headers predate the cast mapping',
+      evid: [
+        'src/features/satchel/PERSONA.md:1 — "The Librarian"',
+        'src/features/themes/PERSONA.md:1 — "Iris Mappa"',
+        'runtime truth: data/personas.data.js:6-9 — riason → [satchel, methodology]; wanderlust → [themes]',
+        'methodology/PERSONA.md:1 — "raison" (correct spelling)'
+      ],
+      body: 'The persona bibles carry the old names — The Librarian, Iris Mappa — while the runtime cast mapping speaks of riason and wanderlust. The methodology bible got the spelling fixed; its siblings did not. Both are internally coherent; the project is not.',
+      why: 'PERSONA.md is how a future editor learns who a feature is for. A bible that names the old god produces features written for the old god.',
+      alt: 'Counter-reading: the headers are historical/atmospheric titles and the cast file is the only operative truth — a "persona canon" split. If that is the intent, the headers should say so.',
+      conf: 'High — all headers and the cast file read.'
+    },
+    {
+      id: 'exercises-steps',
+      sev: 'note',
+      title: 'exercises.json: every sequence is empty',
+      evid: [
+        'data/exercises.json:2 — steps: [] across the board',
+        'scripts/verify-data.mjs:40 — only asserts Array.isArray(steps)',
+        'the learn surface and garden reference the exercises, but the modal-builder flows ("sequences") were never extracted'
+      ],
+      body: 'Every exercise in the catalog carries an empty sequence. The walkthrough layer was designed, registered, and then never filled. Verification still passes because it checks only that steps is an array.',
+      why: 'This is the largest unfinished feature in the build: the app promises guided exercises and ships cards without their guided part. The gap is invisible to the test suite by construction.',
+      alt: 'Counter-reading: the exercise cards are deliberate — a domain and a summary, with the sequence deferred until the writing is done (writing the steps is authorship, not assembly). The feature then reads as a catalog, which is honest.',
+      conf: 'High on fact — data file and verifier read; the deferral intent is inferred.'
+    },
+    {
+      id: 'hexagram-order',
+      sev: 'note',
+      title: 'Hexagrams are stored top-line-first',
+      evid: [
+        'data/hexagrams.json:2-3 — 6-char binary, row 6 (top) first',
+        'lookup via HEXAGRAM_PATTERNS.indexOf in the divination module'
+      ],
+      body: 'Chinese hexagram convention reads bottom-up: the first cast line is the lowest. The data stores top-first, and the consumer converts by indexOf on that mirrored pattern. Internally consistent — the readings are correct — but every future editor will trip twice before noticing.',
+      why: 'A mirrored encoding that is internally consistent is a documentation tax: the file header warns, but a contributor halfway through a cast feels the model fight the tradition at every step.',
+      alt: 'Counter-reading: top-first matches the visual rendering order (the hexagram is drawn top-down on screen), so storage mirrors display — a defensible engineering choice that already works.',
+      conf: 'Medium — the encoding is verified consistent; the "trip" claim is a maintenance judgment.'
+    }
+  ];
+
+  var HIGHS = FINDINGS.filter(function (f) { return f.sev === 'hi'; }).length;
+  var MEDS  = FINDINGS.filter(function (f) { return f.sev === 'med'; }).length;
+  var NOTES = FINDINGS.filter(function (f) { return f.sev === 'note'; }).length;
+
+  // standings
+  var standings = document.getElementById('standings');
+  standings.insertAdjacentHTML('beforeend',
+    '<div class="standing hi"><div class="n">' + HIGHS + '</div><div class="l">high · user-visible</div></div>' +
+    '<div class="standing med"><div class="n">' + MEDS + '</div><div class="l">medium · structural</div></div>' +
+    '<div class="standing note"><div class="n">' + NOTES + '</div><div class="l">notes · hygiene</div></div>' +
+    '<div class="standing ok"><div class="n">' + (HIGHS + MEDS + NOTES) + '</div><div class="l">findings total</div></div>'
+  );
+
+  var LABEL = { hi: 'high', med: 'medium', note: 'note' };
+  var host = document.getElementById('findings');
+
+  function render(filter) {
+    var visible = FINDINGS.filter(function (f) { return filter === 'all' || f.sev === filter; });
+    host.innerHTML = '';
+    visible.forEach(function (f, i) {
+      var art = document.createElement('article');
+      art.className = 'finding ' + f.sev;
+
+      var head = document.createElement('div');
+      head.className = 'f-head';
+      var num = document.createElement('span');
+      num.className = 'f-num';
+      num.textContent = 'F' + String(FINDINGS.indexOf(f) + 1).padStart(2, '0');
+      var title = document.createElement('h3');
+      title.className = 'f-title';
+      title.textContent = f.title;
+      var sev = document.createElement('span');
+      sev.className = 'sev ' + f.sev;
+      sev.textContent = LABEL[f.sev];
+      head.appendChild(num); head.appendChild(title); head.appendChild(sev);
+      art.appendChild(head);
+
+      var ev = document.createElement('div');
+      ev.className = 'f-evid';
+      var still = document.createElement('span');
+      still.className = 'still';
+      still.textContent = 'evidence';
+      ev.appendChild(still);
+      f.evid.forEach(function (line) {
+        var p = document.createElement('span');
+        p.innerHTML = line; // evidence lines are authored markup (code.spans)
+        ev.appendChild(p);
+      });
+      art.appendChild(ev);
+
+      var body = document.createElement('div');
+      body.className = 'f-body';
+      var p1 = document.createElement('p');
+      p1.textContent = f.body;
+      var p2 = document.createElement('p');
+      p2.className = 'why';
+      p2.textContent = f.why;
+      body.appendChild(p1); body.appendChild(p2);
+      art.appendChild(body);
+
+      var alt = document.createElement('div');
+      alt.className = 'f-alt';
+      var b = document.createElement('b');
+      b.textContent = 'strongest alternative reading';
+      alt.appendChild(b);
+      alt.appendChild(document.createTextNode(' ' + f.alt));
+      art.appendChild(alt);
+
+      var conf = document.createElement('span');
+      conf.className = 'f-conf';
+      conf.textContent = 'confidence: ' + f.conf;
+      art.appendChild(conf);
+
+      host.appendChild(art);
+    });
+
+    document.getElementById('count-line').textContent =
+      'showing ' + visible.length + ' of ' + FINDINGS.length + ' findings';
+  }
+
+  var current = 'all';
+  var filters = document.querySelectorAll('#filters button');
+  Array.prototype.forEach.call(filters, function (btn) {
+    btn.addEventListener('click', function () {
+      current = btn.getAttribute('data-f');
+      Array.prototype.forEach.call(filters, function (b) {
+        b.classList.toggle('on', b === btn);
+      });
+      render(current);
+    });
+  });
+
+  render('all');
+})();
+</script>
+</body>
+</html>

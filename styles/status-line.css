@@ -1,0 +1,52 @@
+/* ============================================================================
+   status-line.css — the bottom status line
+
+   A single line of covenant-voiced text on a small bevelled plate (WS3:
+   taller + chunkier, like a nameplate screwed to the bezel). Cycles
+   through 4 phrasings every 12 seconds. Lowercase. Readable, not in
+   your face.
+
+   Position: just above the dial band (dial owns the bottom 26%), so the
+   plate never collides with the dial options (audit minor 3, kept from
+   WS1). The plate top stays below the settings cog's bottom edge
+   (cog bottom = 26% + 40px; plate top ≈ 26% + 36px).
+   ============================================================================ */
+
+.status-line {
+  position: absolute;
+  bottom: calc(26% + 6px);
+  left: 14px;
+  z-index: 30;
+  padding: 5px 16px 6px 14px;
+  background: linear-gradient(180deg, #2a1410 0%, #140808 100%);
+  border: 1px solid #4a2818;
+  border-radius: 3px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 214, 170, 0.14),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.55),
+    0 2px 0 rgba(0, 0, 0, 0.35),
+    0 3px 6px rgba(0, 0, 0, 0.45);
+  font-family: 'VT323', 'Courier New', Courier, monospace;
+  /* WS1/D0003 caption floor kept: 0.875rem = 14px. */
+  font-size: 0.875rem;
+  color: rgba(214, 138, 138, 0.95);
+  text-shadow: 0 0 4px rgba(200, 80, 80, 0.4);
+  pointer-events: none;
+  letter-spacing: 0.05em;
+}
+
+.status-line .status-phrase {
+  display: inline-block;
+  transition: opacity 0.4s ease;
+}
+
+.status-line .status-phrase.fading {
+  opacity: 0;
+}
+
+/* WS5 — when the line speaks in the buddy's name (tier-gated rotation in
+   src/status-line.js), it shifts a step toward the buddy's crimson. */
+.status-line .status-phrase.buddy-voice {
+  color: rgba(255, 158, 168, 0.95);
+  text-shadow: 0 0 4px rgba(255, 90, 110, 0.45);
+}

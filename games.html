@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="icon" href="data:,">
+  <title>Games — Whimsy Wow</title>
+  <link rel="stylesheet" href="styles/room.css"/>
+  <link rel="stylesheet" href="styles/machine.css"/>
+  <link rel="stylesheet" href="styles/bezel.css"/>
+  <link rel="stylesheet" href="styles/scars.css"/>
+  <link rel="stylesheet" href="src/features/games/games.css"/>
+  <link rel="stylesheet" href="styles/shadow.css"/>
+  <link rel="stylesheet" href="styles/fate.css"/>
+  <link rel="stylesheet" href="styles/hijack.css"/>
+  <link rel="stylesheet" href="styles/cursor.css"/>
+</head>
+<body>
+  <canvas class="dust-canvas" aria-hidden="true"></canvas>
+  <canvas class="static-canvas" aria-hidden="true"></canvas>
+
+  <div class="room">
+    <div class="machine">
+      <div class="bezel">
+        <div class="carvings" id="carvings"></div>
+        <div class="vent-slits" aria-hidden="true"></div>
+        <div class="corruption-scars" aria-hidden="true">
+          <div class="scar scar-1"></div>
+          <div class="scar scar-2"></div>
+          <div class="scar scar-3"></div>
+          <div class="scar scar-4"></div>
+          <div class="scar scar-5"></div>
+          <div class="scar scar-6"></div>
+        </div>
+        <div class="led" aria-hidden="true"></div>
+        <div class="liber-plate">LIBER · VACUI</div>
+        <div class="power-button" aria-hidden="true"></div>
+        <div class="screw" aria-hidden="true"></div>
+
+        <div class="screen">
+          <div class="screen-stage">
+            <header class="games-titlebar">
+              <span class="games-titlebar-name">Whimsy Wow's Game Suite</span>
+              <span class="games-titlebar-sub">tools that keep · games that vanish.</span>
+              <button class="games-help" type="button" id="games-help" aria-label="how this room works">?</button>
+              <button class="games-exit" type="button" id="games-exit" aria-label="leave">×</button>
+            </header>
+            <div class="games-app" data-state="games">
+
+              <div class="games-save-prompt" id="games-save-prompt" inert>
+                <div class="games-save-prompt-inner">
+                  <div class="games-save-prompt-head">
+                    <span class="games-save-prompt-name">— keep it? —</span>
+                    <button class="games-save-prompt-close" type="button" id="games-save-prompt-close" aria-label="cancel">×</button>
+                  </div>
+                  <div class="games-save-prompt-body" id="games-save-prompt-body">result: (none).</div>
+                  <div class="games-save-prompt-actions">
+                    <button class="games-save-prompt-keep" type="button" id="games-save-prompt-keep">keep</button>
+                    <button class="games-save-prompt-discard" type="button" id="games-save-prompt-discard">discard</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="games-raison" id="games-raison" inert>
+                <div class="games-raison-inner">
+                  <div class="games-raison-head">
+                    <span class="games-raison-name">riason</span>
+                    <button class="games-raison-close" type="button" id="games-raison-close" aria-label="close">×</button>
+                  </div>
+                  <div class="games-raison-body">
+                    step right up. the tools keep to your satchel; the games keep nothing but the minute. no refunds — the barker keeps what the barker keeps.
+                  </div>
+                  
+                </div>
+              </div>
+
+              <div class="games-bulbs games-bulbs-top"></div>
+              <div class="games-bulbs games-bulbs-bottom"></div>
+
+              <div class="games-tent">
+                <div class="games-marquee">
+                  <div class="games-marquee-text">★ STEP RIGHT UP ★ STEP RIGHT UP ★ STEP RIGHT UP ★ STEP RIGHT UP ★<span aria-hidden="true">★ STEP RIGHT UP ★ STEP RIGHT UP ★ STEP RIGHT UP ★ STEP RIGHT UP ★</span></div>
+                </div>
+                <div class="games-ticket" aria-hidden="true">admit one · keep the stub</div>
+
+                <div class="games-title">WHIMSY WOW'S</div>
+                <div class="games-sub">dbt tools · pure play</div>
+
+                <div class="games-grid" id="games-grid"></div>
+
+                <div class="games-tipp">
+                  <span class="games-tipp-text">tipp — cold water · paced breath 4-4-6 · tense, release.</span>
+                  <button type="button" class="games-tipp-open" id="games-tipp-open">open the tipp booth</button>
+                </div>
+
+                <div class="games-barker">— the barker is loud. try not to listen. —</div>
+              </div>
+
+              <div class="games-stage" id="games-stage" inert></div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="monitor-base" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <script src="src/state.js"></script>
+  <script src="src/sound.js"></script>
+  <script src="src/dust.js"></script>
+  <script src="src/static.js"></script>
+  <script src="src/shadow.js"></script>
+  <script src="src/carvings.js"></script>
+  <script src="data/fate.data.js"></script>
+  <script src="src/fate.js"></script>
+  <script src="data/hijack.data.js"></script>
+  <script src="src/hijack.js"></script>
+  <script src="src/cursor.js"></script>
+  <script src="src/features/games/games.js"></script>
+</body>
+</html>

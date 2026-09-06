@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="icon" href="data:,">
+  <title>Learn — The Mad Scribe</title>
+  <link rel="stylesheet" href="styles/room.css"/>
+  <link rel="stylesheet" href="styles/machine.css"/>
+  <link rel="stylesheet" href="styles/bezel.css"/>
+  <link rel="stylesheet" href="styles/scars.css"/>
+  <link rel="stylesheet" href="src/features/learn/learn.css"/>
+  <link rel="stylesheet" href="styles/shadow.css"/>
+  <link rel="stylesheet" href="styles/fate.css"/>
+</head>
+<body>
+  <canvas class="dust-canvas" aria-hidden="true"></canvas>
+  <canvas class="static-canvas" aria-hidden="true"></canvas>
+
+  <div class="room">
+    <div class="machine">
+      <div class="bezel">
+        <div class="carvings" id="carvings"></div>
+        <div class="vent-slits" aria-hidden="true"></div>
+        <div class="corruption-scars" aria-hidden="true">
+          <div class="scar scar-1"></div>
+          <div class="scar scar-2"></div>
+          <div class="scar scar-3"></div>
+          <div class="scar scar-4"></div>
+          <div class="scar scar-5"></div>
+          <div class="scar scar-6"></div>
+        </div>
+        <div class="led" aria-hidden="true"></div>
+        <div class="liber-plate">LIBER · VACUI</div>
+        <div class="power-button" aria-hidden="true"></div>
+        <div class="screw" aria-hidden="true"></div>
+
+        <div class="screen">
+          <div class="screen-stage">
+            <header class="learn-titlebar">
+              <span class="learn-titlebar-name">learn — workbook no. 1</span>
+              <span class="learn-titlebar-sub">dated · stamped · filed — the mad scribe</span>
+              <button class="learn-help" type="button" id="learn-help" aria-label="how this room works">?</button>
+              <button class="learn-exit" type="button" id="learn-exit" aria-label="leave">×</button>
+            </header>
+            <div class="learn-app" data-state="learn">
+
+              <div class="learn-raison" id="learn-raison" inert>
+                <div class="learn-raison-inner">
+                  <div class="learn-raison-head">
+                    <span class="learn-raison-name">riason</span>
+                    <button class="learn-raison-close" type="button" id="learn-raison-close" aria-label="close">×</button>
+                  </div>
+                  <div class="learn-raison-body">
+                    click a card to read it. no curriculum, no grades — a reference shelf, read in the order you need it, when you need it. the scribe collects; you consult.
+                  </div>
+                </div>
+              </div>
+
+              <div class="learn-cite" id="learn-cite" inert>
+                <div class="learn-cite-inner">
+                  <div class="learn-cite-head">
+                    <span class="learn-cite-topic" id="learn-cite-topic"></span>
+                    <button class="learn-cite-close" type="button" id="learn-cite-close" aria-label="close citation">×</button>
+                  </div>
+                  <div class="learn-cite-body" id="learn-cite-body"></div>
+                </div>
+              </div>
+
+              <div class="learn-hijack" id="learn-hijack" inert>
+                <div class="learn-hijack-ring" id="learn-hijack-ring" aria-hidden="true"></div>
+                <div class="learn-hijack-head" id="learn-hijack-head" aria-hidden="true"><span>r</span></div>
+                <div class="learn-hijack-box">
+                  <div class="learn-hijack-voice" id="learn-hijack-voice">riason</div>
+                  <div class="learn-hijack-line" id="learn-hijack-line"></div>
+                  <div class="learn-hijack-nav">
+                    <button type="button" id="learn-hijack-back" aria-label="back">◀</button>
+                    <span class="learn-hijack-dots" id="learn-hijack-dots">1 / 5</span>
+                    <button type="button" id="learn-hijack-next" aria-label="forth">▶</button>
+                    <button type="button" id="learn-hijack-skip">skip the tour</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="learn-cabinet">
+                <div class="learn-header">
+                  <div class="learn-title">Learn More</div>
+                  <div class="learn-sub">click a box to learn more.</div>
+                </div>
+
+                <div class="learn-grid">
+                  <div class="learn-drawers" id="learn-drawers"></div>
+                  <div class="learn-card" id="learn-card">
+                    <div class="learn-card-empty">pull a drawer.</div>
+                    <div class="learn-margin-note" aria-hidden="true">see also — everything</div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="monitor-base" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <script src="src/state.js"></script>
+  <script src="src/sound.js"></script>
+  <script src="src/dust.js"></script>
+  <script src="src/static.js"></script>
+  <script src="src/shadow.js"></script>
+  <script src="src/carvings.js"></script>
+  <script src="data/fate.data.js"></script>
+  <script src="src/fate.js"></script>
+  <script src="data/citations.data.js"></script>
+  <script src="src/features/learn/learn.js"></script>
+</body>
+</html>

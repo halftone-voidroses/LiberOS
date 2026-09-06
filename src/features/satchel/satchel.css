@@ -1,0 +1,595 @@
+/* satchel.css — The Mad Scribe's leather-bound archive. Aged paper, leather, foxing.
+   This file is COMPLETELY INDEPENDENT. No imports, no shared variables (covenant Q.1). */
+
+.satchel-app {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(80, 60, 40, 0.3) 0%, rgba(0,0,0,0) 60%),
+    linear-gradient(180deg, #2a1a0a 0%, #1a0a05 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'EB Garamond', 'Garamond', 'Times New Roman', serif;
+  color: #3a2010;
+  overflow: hidden;
+}
+
+.satchel-binding {
+  width: 88%;
+  height: 90%;
+  position: relative;
+  display: flex;
+  background: #2a1a0a;
+  border-radius: 4px;
+  box-shadow:
+    inset 0 0 0 2px #1a0a05,
+    inset 0 0 0 3px #5a3a1a,
+    0 0 30px rgba(0, 0, 0, 0.7);
+  padding: 6px;
+}
+
+.satchel-spine {
+  width: 22px;
+  background:
+    repeating-linear-gradient(90deg,
+      rgba(0,0,0,0.08) 0px, rgba(0,0,0,0.08) 1px,
+      transparent 1px, transparent 4px),
+    linear-gradient(180deg, #4a2a10 0%, #2a1a0a 50%, #4a2a10 100%);
+  box-shadow:
+    inset 1px 0 0 rgba(0,0,0,0.5),
+    inset -1px 0 0 rgba(120, 80, 40, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+}
+
+.satchel-spine-text {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 0.5rem;
+  letter-spacing: 0.4em;
+  color: #c89060;
+  text-transform: uppercase;
+  font-weight: 700;
+  text-shadow: 0 0 3px rgba(200, 144, 96, 0.3);
+}
+
+.satchel-spine::before,
+.satchel-spine::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  width: 1px;
+  background-image: repeating-linear-gradient(0deg, rgba(200,144,96,0.4) 0px, rgba(200,144,96,0.4) 2px, transparent 2px, transparent 5px);
+}
+.satchel-spine::before { left: 3px; }
+.satchel-spine::after { right: 3px; }
+
+.satchel-pages {
+  flex: 1;
+  display: flex;
+  position: relative;
+}
+
+.satchel-page {
+  flex: 1;
+  position: relative;
+  background:
+    radial-gradient(circle 12px at 18% 12%, rgba(120, 70, 30, 0.18) 0%, rgba(120, 70, 30, 0) 70%),
+    radial-gradient(circle 8px at 78% 28%, rgba(100, 60, 25, 0.15) 0%, rgba(100, 60, 25, 0) 70%),
+    radial-gradient(circle 16px at 42% 78%, rgba(130, 80, 35, 0.18) 0%, rgba(130, 80, 35, 0) 70%),
+    radial-gradient(circle 10px at 88% 88%, rgba(110, 65, 30, 0.15) 0%, rgba(110, 65, 30, 0) 70%),
+    radial-gradient(circle 7px at 8% 65%, rgba(95, 55, 25, 0.18) 0%, rgba(95, 55, 25, 0) 70%),
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.015) 0px, rgba(0,0,0,0.015) 1px, transparent 1px, transparent 3px),
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.012) 0px, rgba(0,0,0,0.012) 1px, transparent 1px, transparent 4px),
+    linear-gradient(180deg, #e8d8b8 0%, #d8c8a0 60%, #c8b890 100%);
+  padding: 14px 18px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.satchel-page-list {
+  border-right: 1px solid rgba(80, 50, 20, 0.3);
+  box-shadow: inset -2px 0 4px rgba(0,0,0,0.1);
+}
+
+.satchel-page-entry {
+  background:
+    radial-gradient(circle 14px at 82% 14%, rgba(120, 70, 30, 0.18) 0%, rgba(120, 70, 30, 0) 70%),
+    radial-gradient(circle 9px at 22% 36%, rgba(100, 60, 25, 0.15) 0%, rgba(100, 60, 25, 0) 70%),
+    radial-gradient(circle 12px at 58% 88%, rgba(130, 80, 35, 0.18) 0%, rgba(130, 80, 35, 0) 70%),
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.015) 0px, rgba(0,0,0,0.015) 1px, transparent 1px, transparent 3px),
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.012) 0px, rgba(0,0,0,0.012) 1px, transparent 1px, transparent 4px),
+    linear-gradient(180deg, #d8c8a0 0%, #c8b890 100%);
+}
+
+.satchel-header {
+  border-bottom: 1px solid rgba(80, 50, 20, 0.3);
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.satchel-title {
+  font-size: 1.1rem;
+  font-variant: small-caps;
+  letter-spacing: 0.15em;
+  color: #3a1a08;
+  font-weight: 700;
+}
+
+.satchel-sub {
+  font-size: 0.875rem;
+  font-style: italic;
+  color: #6a4a20;
+  margin-top: 2px;
+  letter-spacing: 0.05em;
+}
+
+.satchel-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+.satchel-list-item {
+  padding: 6px 4px;
+  margin: 4px 0;
+  border-bottom: 1px dotted rgba(80, 50, 20, 0.3);
+  cursor: pointer;
+  font-size: 1rem;
+  font-style: italic;
+  color: #3a1a08;
+  transition: background 0.15s;
+}
+
+.satchel-list-item:hover {
+  background: rgba(120, 80, 40, 0.12);
+}
+
+/* D0003: artifact metadata + labels — 14px caption floor. */
+.satchel-list-item .meta {
+  font-size: 0.875rem;
+  color: #6a4a20;
+  font-style: normal;
+  letter-spacing: 0.05em;
+  margin-top: 1px;
+}
+
+.satchel-empty {
+  font-size: 1rem;
+  font-style: italic;
+  color: #6a4a20;
+  text-align: center;
+  margin-top: 40px;
+  line-height: 1.6;
+}
+
+.satchel-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 6px 4px;
+}
+
+.satchel-intention {
+  font-size: 1.0rem;
+  font-style: italic;
+  line-height: 1.5;
+  color: #2a1004;
+  margin-bottom: 8px;
+  quotes: """ """;
+}
+
+.satchel-intention::before { content: open-quote; }
+.satchel-intention::after  { content: close-quote; }
+
+.satchel-element-tag {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #6a3010;
+  border: 1px solid #6a3010;
+  padding: 2px 8px;
+  margin-bottom: 10px;
+  font-variant: small-caps;
+}
+
+.satchel-see-also {
+  margin-top: auto;
+  padding-top: 6px;
+  border-top: 1px solid rgba(80, 50, 20, 0.3);
+}
+
+.satchel-see-label {
+  font-size: 0.875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #6a4a20;
+  margin-bottom: 3px;
+  font-style: italic;
+}
+
+.satchel-see-list {
+  font-size: 1rem;
+  color: #3a1a08;
+  font-style: italic;
+}
+
+.satchel-annotation {
+  margin-top: 10px;
+  min-height: 1.2em;
+  font-size: 1rem;
+  font-style: italic;
+  color: #6a3010;
+  border: none;
+  border-bottom: 1px dashed rgba(106, 48, 16, 0.4);
+  padding: 2px 0;
+  outline: none;
+}
+
+.satchel-annotation:focus {
+  border-bottom-color: #6a3010;
+  color: #2a1004;
+}
+
+.satchel-annotation:empty::before {
+  content: attr(data-placeholder);
+  color: rgba(106, 48, 16, 0.8);
+}
+
+.satchel-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px dotted rgba(80, 50, 20, 0.3);
+  font-size: 0.875rem;
+  color: #6a4a20;
+  font-style: italic;
+}
+
+.satchel-page-num {
+  letter-spacing: 0.1em;
+}
+
+.satchel-back-link {
+  cursor: pointer;
+  color: #6a3010;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.satchel-back-link:hover {
+  color: #2a1004;
+  text-decoration: underline;
+}
+
+.satchel-app.on-entry .satchel-page-list {
+  filter: brightness(0.92) saturate(0.7);
+}
+
+/* satchel help + raison (per-persona, aged-paper/leather palette) */
+
+.satchel-help {
+  position: absolute;
+  top: 14px;
+  right: 40px;
+  z-index: 5;
+  width: 22px;
+  height: 22px;
+  background: linear-gradient(180deg, rgba(20, 20, 20, 0.6) 0%, rgba(0, 0, 0, 0.7) 100%);
+  border: 1px solid #6a4a20;
+  color: #6a4a20;
+  font-family: 'VT323', Georgia, 'Times New Roman', Times, serif;
+  font-size: 0.95rem;
+  font-style: italic;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 2px;
+  transition: all 0.15s;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.5),
+    0 1px 0 rgba(0, 0, 0, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+  transition: transform 0.08s, filter 0.15s, box-shadow 0.08s;
+}
+.satchel-help:hover {
+  filter: brightness(1.25);
+}
+.satchel-help:active {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 0 0 rgba(0, 0, 0, 0.5);
+}
+
+
+.satchel-help:hover {
+  background: rgba(120, 80, 40, 0.12);
+  color: #3a1a08;
+  border-color: #3a1a08;
+}
+
+.satchel-exit {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 5;
+  width: 22px;
+  height: 22px;
+  background: linear-gradient(180deg, rgba(20, 20, 20, 0.6) 0%, rgba(0, 0, 0, 0.7) 100%);
+  border: 1px solid #6a4a20;
+  color: #6a4a20;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-style: italic;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 2px;
+  transition: all 0.15s;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.5),
+    0 1px 0 rgba(0, 0, 0, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+  transition: transform 0.08s, filter 0.15s, box-shadow 0.08s;
+}
+.satchel-exit:hover {
+  filter: brightness(1.25);
+}
+.satchel-exit:active {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 0 0 rgba(0, 0, 0, 0.5);
+}
+
+
+.satchel-exit:hover {
+  background: rgba(120, 80, 40, 0.12);
+  color: #3a1a08;
+  border-color: #3a1a08;
+}
+
+.satchel-raison {
+  position: absolute;
+  inset: 0;
+  background: rgba(42, 26, 10, 0.85);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.satchel-raison.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.satchel-raison-inner {
+  width: 78%;
+  max-width: 420px;
+  background:
+    radial-gradient(circle 12px at 18% 12%, rgba(120, 70, 30, 0.18) 0%, rgba(120, 70, 30, 0) 70%),
+    linear-gradient(180deg, #e8d8b8 0%, #c8b890 100%);
+  border: 1px solid #6a4a20;
+  box-shadow:
+    inset 0 0 0 1px #4a2a10,
+    inset 0 0 20px rgba(120, 70, 30, 0.15),
+    0 0 30px rgba(0, 0, 0, 0.6);
+  padding: 18px 22px;
+  font-style: italic;
+  color: #3a2010;
+  letter-spacing: 0.03em;
+}
+
+.satchel-raison-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #6a4a20;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.satchel-raison-name {
+  font-size: 0.875rem;
+  color: #6a3010;
+  text-transform: lowercase;
+  letter-spacing: 0.25em;
+  font-weight: 700;
+  font-family: 'EB Garamond', 'Garamond', 'Times New Roman', serif;
+}
+
+.satchel-raison-close {
+  background: none;
+  border: 1px solid #6a4a20;
+  color: #6a4a20;
+  font-family: inherit;
+  font-size: 0.85rem;
+  line-height: 1;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.satchel-raison-close:hover {
+  background: rgba(120, 80, 40, 0.12);
+  color: #3a1a08;
+}
+
+.satchel-raison-body {
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.satchel-raison-body em {
+  color: #6a3010;
+  font-style: normal;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.satchel-raison-foot {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid #6a4a20;
+  font-size: 0.875rem;
+  color: #6a4a20;
+  text-align: right;
+  letter-spacing: 0.1em;
+}
+
+/* ─── window titlebar (WS3, plan 2026-09-04 §4.3) — the librarian's ledger head ─── */
+
+.satchel-titlebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 36px;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 76px 0 14px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle 10px at 88% 30%, rgba(120, 70, 30, 0.15) 0%, rgba(120, 70, 30, 0) 70%),
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.02) 0px, rgba(0, 0, 0, 0.02) 1px, transparent 1px, transparent 3px),
+    linear-gradient(180deg, #e8d8b8 0%, #d4c4a0 60%, #c4b28a 100%);
+  border-bottom: 3px double #aa7838;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 250, 230, 0.8),
+    0 2px 6px rgba(0, 0, 0, 0.45);
+  font-family: 'EB Garamond', 'Garamond', 'Times New Roman', serif;
+  color: #3a2010;
+}
+
+.satchel-titlebar-name {
+  flex-shrink: 0;
+  font-size: 1.05rem;
+  font-variant: small-caps;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: #3a1a08;
+}
+
+.satchel-titlebar-sub {
+  font-size: 1rem;
+  font-style: italic;
+  color: #6a4a20;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.satchel-titlebar .satchel-help,
+.satchel-titlebar .satchel-exit {
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+}
+.satchel-titlebar .satchel-help { right: 36px; }
+.satchel-titlebar .satchel-exit { right: 8px; }
+.satchel-titlebar .satchel-help, .satchel-titlebar .satchel-exit {
+  width: 40px;
+  height: 40px;
+  line-height: 38px;
+  text-align: center;
+  font-size: 1.15rem;
+  top: 50%;
+  filter: brightness(1.4);
+}
+.satchel-titlebar .satchel-help { right: 56px; }
+.satchel-titlebar .satchel-exit { right: 8px; }
+.satchel-help:focus-visible, .satchel-exit:focus-visible {
+  outline: 2px solid #e8c890;
+  outline-offset: 2px;
+}
+.satchel-titlebar .satchel-help:active,
+.satchel-titlebar .satchel-exit:active {
+  transform: translateY(calc(-50% + 1px));
+}
+
+/* open room for the ledger head (machine.css sets [data-state] inset: 0) */
+.satchel-app { top: 36px; }
+
+/* ─── WS4: the librarian's cursor (register: data/personas.data.js).
+   A quill, nib-first at the baseline; standard arrow fallback. ─── */
+.satchel-app,
+.satchel-titlebar {
+  cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M2 22l3-7 12-12 4 4-12 12z' fill='%23d8b890' stroke='%236a3a18'/><path d='M2 22l3-7 4 4z' fill='%23e8dcc0' stroke='%236a3a18'/><path d='M17 3l4 4 2-2-4-4z' fill='%23aa7838' stroke='%236a3a18'/></svg>") 2 22, auto;
+}
+.satchel-app button,
+.satchel-titlebar button { cursor: inherit; }
+
+/* ─── WS4: pressed-bevel + focus (D0004 recipe, vellum/brass palette) ─── */
+.satchel-raison-close {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 250, 230, 0.5),
+    inset 0 -2px 0 rgba(90, 60, 25, 0.35),
+    0 2px 0 #4a2e10,
+    0 3px 4px rgba(0, 0, 0, 0.4);
+}
+.satchel-raison-close:active {
+  transform: translateY(1px);
+  filter: brightness(0.92);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 250, 230, 0.4),
+    inset 0 -1px 0 rgba(90, 60, 25, 0.35),
+    0 0 0 #4a2e10,
+    0 1px 2px rgba(0, 0, 0, 0.4);
+}
+.satchel-help:focus-visible,
+.satchel-exit:focus-visible,
+.satchel-raison-close:focus-visible {
+  outline: 2px solid #aa7838;
+  outline-offset: 2px;
+}
+
+/* ─── WS4: hover-revelation — the librarian's ownership stamp
+   surfaces on the vellum when the entry page is held. ─── */
+.satchel-stamp {
+  position: absolute;
+  bottom: 34px;
+  right: 26px;
+  font-variant: small-caps;
+  font-size: 0.875rem;
+  letter-spacing: 0.3em;
+  color: #6a3010;
+  border: 1.5px solid #6a3010;
+  padding: 2px 10px;
+  transform: rotate(-7deg);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+.satchel-page-entry:hover .satchel-stamp { opacity: 0.9; }
+@media (prefers-reduced-motion: reduce) {
+  .satchel-stamp { transition: none; }
+}

@@ -1,0 +1,701 @@
+/* learn.css — The Librarian. Cabinet of subject cards, sepia, brass.
+   This file is COMPLETELY INDEPENDENT. No imports, no shared variables (covenant Q.1). */
+
+.learn-app {
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.025) 0px, rgba(0, 0, 0, 0.025) 1px, transparent 1px, transparent 3px),
+    radial-gradient(ellipse at 50% 50%, #2a1a08 0%, #1a1008 60%, #0a0604 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: 'OpenDyslexic', 'Lexend', 'EB Garamond', 'Garamond', Georgia, serif;
+  color: #d8b890;
+}
+
+.learn-cabinet {
+  width: 94%;
+  height: 94%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 18px 24px;
+}
+
+.learn-header {
+  text-align: center;
+  border-bottom: 2px double #aa7838;
+  padding-bottom: 8px;
+  margin-bottom: 14px;
+}
+
+.learn-title {
+  font-family: 'EB Garamond', 'Garamond', serif;
+  font-variant: small-caps;
+  font-size: 2rem;
+  letter-spacing: 0.32em;
+  color: #d8b890;
+  font-weight: 700;
+}
+
+.learn-sub {
+  font-style: italic;
+  font-size: 1rem;
+  color: rgba(216, 184, 144, 0.7);
+  margin-top: 4px;
+  letter-spacing: 0.1em;
+}
+
+.learn-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 16px;
+  overflow: hidden;
+}
+
+.learn-drawers {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.learn-drawer {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 10px 12px;
+  background: linear-gradient(180deg, #d4b890 0%, #aa8858 60%, #8a6a40 100%);
+  border: 1px solid #4a3018;
+  color: #2a1408;
+  font-family: 'EB Garamond', 'Garamond', serif;
+  font-variant: small-caps;
+  font-size: 1.05rem;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  text-align: left;
+  border-radius: 2px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 230, 180, 0.45),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+    0 1px 0 #2a1408,
+    0 2px 3px rgba(0, 0, 0, 0.4);
+  transition: transform 0.08s, filter 0.15s, box-shadow 0.08s;
+}
+.learn-drawer:hover { filter: brightness(1.1); }
+.learn-drawer:active {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 230, 180, 0.45),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+    0 0 0 #2a1408;
+}
+.learn-drawer.active {
+  background: linear-gradient(180deg, #f4d8a0 0%, #d4a868 60%, #a07840 100%);
+  border-color: #2a1408;
+}
+
+.learn-drawer-num {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 1rem;
+  color: #4a2810;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.learn-drawer-title {
+  font-weight: 700;
+}
+
+.learn-card {
+  border: 1px solid #aa7838;
+  background: linear-gradient(180deg, #f4e4c4 0%, #d8b890 100%);
+  padding: 4px;
+  overflow-y: auto;
+  box-shadow:
+    inset 0 0 0 1px #2a1408,
+    inset 0 0 30px rgba(120, 80, 30, 0.15),
+    0 0 12px rgba(0, 0, 0, 0.4);
+}
+
+.learn-card-empty {
+  font-style: italic;
+  color: #4a2810;
+  text-align: center;
+  padding: 80px 20px;
+  font-size: 1rem;
+}
+
+.learn-card-inner {
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: #2a1408;
+}
+
+.learn-card-num {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 1rem;
+  letter-spacing: 0.2em;
+  color: #6a4028;
+  text-transform: uppercase;
+}
+
+.learn-card-title {
+  font-family: 'EB Garamond', 'Garamond', serif;
+  font-variant: small-caps;
+  font-size: 2.4rem;
+  letter-spacing: 0.18em;
+  color: #4a2008;
+  font-weight: 700;
+  border-bottom: 1px double #6a4028;
+  padding-bottom: 6px;
+  line-height: 1;
+}
+
+.learn-card-body {
+  font-size: 1.3rem;
+  line-height: 1.55;
+  color: #2a1408;
+  font-family: 'OpenDyslexic', 'Lexend', 'EB Garamond', Georgia, serif;
+}
+
+.learn-card-key {
+  font-style: italic;
+  font-size: 0.95rem;
+  color: #6a4028;
+  letter-spacing: 0.08em;
+  border-top: 1px dotted #6a4028;
+  padding-top: 6px;
+}
+
+/* ─── help + exit (raison wax seal style) ──────────────────────────── */
+.learn-help,
+.learn-exit {
+  position: absolute;
+  top: 12px;
+  z-index: 5;
+  width: 32px;
+  height: 32px;
+  font-family: 'VT323', Georgia, 'Times New Roman', Times, serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 30px;
+  text-align: center;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 3px;
+  color: #f4e0a0;
+  background: linear-gradient(180deg, #6a4818 0%, #4a2810 50%, #2a1408 100%);
+  border: 2px solid #2a1408;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 220, 140, 0.4),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.5),
+    0 2px 0 #1a0a04,
+    0 4px 6px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.6);
+  transition: transform 0.08s, filter 0.15s, box-shadow 0.08s;
+}
+.learn-help { right: 50px; }
+.learn-exit { right: 12px; }
+.learn-help, .learn-exit {
+  width: 40px;
+  height: 40px;
+  line-height: 38px;
+  text-align: center;
+  font-size: 1.15rem;
+  top: 50%;
+  filter: brightness(1.4);
+}
+.learn-help { right: 56px !important; }
+.learn-exit { right: 8px !important; }
+.learn-help:focus-visible, .learn-exit:focus-visible {
+  outline: 2px solid #e8c890;
+  outline-offset: 2px;
+}
+
+.learn-hijack {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  display: none;
+}
+.learn-hijack.open {
+  display: block;
+}
+.learn-hijack::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 2, 2, 0.72);
+}
+.learn-hijack-ring {
+  position: absolute;
+  display: none;
+  border: 2px solid #e8c890;
+  border-radius: 8px;
+  box-shadow: 0 0 18px rgba(232, 200, 144, 0.55), inset 0 0 12px rgba(232, 200, 144, 0.25);
+  pointer-events: none;
+  transition: left 0.3s, top 0.3s, width 0.3s, height 0.3s;
+}
+.learn-hijack-head {
+  position: absolute;
+  top: 9%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 2px solid #8a6a20;
+  background: radial-gradient(circle at 50% 35%, #2a1a10 0%, #0a0503 70%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.8);
+}
+.learn-hijack-head span {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 1.8rem;
+  color: #d8b890;
+}
+.learn-hijack.sweep .learn-hijack-head {
+  border-color: #c04a58;
+  animation: hijack-flicker 0.5s steps(2) 3;
+}
+.learn-hijack.sweep .learn-hijack-head span {
+  color: #c04a58;
+}
+.learn-hijack-box {
+  position: absolute;
+  bottom: 7%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 82%;
+  max-width: 440px;
+  background: linear-gradient(180deg, #241610 0%, #120906 100%);
+  border: 1px solid #8a6a20;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.9);
+  padding: 14px 18px;
+}
+.learn-hijack.sweep .learn-hijack-box {
+  border-color: #c04a58;
+  animation: hijack-shake 0.45s;
+}
+.learn-hijack-voice {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 0.9rem;
+  letter-spacing: 0.25em;
+  color: #d8a070;
+  margin-bottom: 4px;
+}
+.learn-hijack.sweep .learn-hijack-voice {
+  color: #c04a58;
+}
+.learn-hijack-line {
+  font-size: 1rem;
+  font-style: italic;
+  line-height: 1.55;
+  color: #ede0c8;
+  min-height: 3em;
+}
+.learn-hijack-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+.learn-hijack-nav button {
+  background: none;
+  border: 1px solid #8a6a20;
+  color: #d8a070;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 1.1rem;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 4px 10px;
+  cursor: pointer;
+  border-radius: 2px;
+}
+.learn-hijack-nav button:hover {
+  background: rgba(216, 160, 112, 0.1);
+}
+.learn-hijack-nav button:focus-visible {
+  outline: 2px solid #e8c890;
+  outline-offset: 2px;
+}
+.learn-hijack-dots {
+  font-family: 'VT323', 'Courier New', monospace;
+  color: #8a6a20;
+  letter-spacing: 0.15em;
+}
+.learn-hijack-skip {
+  margin-left: auto;
+  font-size: 0.95rem !important;
+}
+.learn-drawer.hijack-glow {
+  box-shadow: 0 0 14px rgba(232, 200, 144, 0.8) !important;
+}
+@keyframes hijack-shake {
+  0%, 100% { transform: translateX(-50%); }
+  20% { transform: translateX(calc(-50% - 7px)); }
+  40% { transform: translateX(calc(-50% + 6px)); }
+  60% { transform: translateX(calc(-50% - 4px)); }
+  80% { transform: translateX(calc(-50% + 3px)); }
+}
+@keyframes hijack-flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .learn-hijack-ring { transition: none; }
+  .learn-hijack.sweep .learn-hijack-box { animation: none; }
+  .learn-hijack.sweep .learn-hijack-head { animation: none; }
+}
+.learn-help:hover, .learn-exit:hover { filter: brightness(1.15); color: #fff5d0; }
+.learn-help:active, .learn-exit:active {
+  transform: translateY(2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 220, 140, 0.4),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 1px 0 #1a0a04;
+}
+
+.learn-raison {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 12, 4, 0.85);
+  z-index: 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.learn-raison.open { opacity: 1; pointer-events: auto; }
+
+.learn-raison-inner {
+  width: 78%;
+  max-width: 460px;
+  background: linear-gradient(180deg, #2a1a08 0%, #1a1008 100%);
+  border: 1px solid #aa7838;
+  padding: 18px 20px 16px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+  font-family: 'EB Garamond', 'Garamond', serif;
+  color: #d8b890;
+  position: relative;
+}
+
+.learn-raison-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dotted rgba(216, 184, 144, 0.3);
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.learn-raison-name {
+  font-variant: small-caps;
+  letter-spacing: 0.3em;
+  color: #d8b890;
+  font-weight: 700;
+}
+
+.learn-raison-close {
+  background: none;
+  border: 1px solid rgba(216, 184, 144, 0.3);
+  color: #d8b890;
+  font-family: inherit;
+  font-size: 1rem;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 2px;
+}
+.learn-raison-close:hover { background: rgba(216, 184, 144, 0.1); color: #fff; }
+
+.learn-raison-body {
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: #d8b890;
+  font-style: italic;
+}
+
+/* ─── window titlebar (WS3, plan 2026-09-04 §4.3) — the workbook header card ─── */
+
+.learn-titlebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 36px;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 76px 0 14px;
+  overflow: hidden;
+  background:
+    linear-gradient(rgba(170, 48, 48, 0.6), rgba(170, 48, 48, 0.6)) 0 calc(100% - 5px) / 100% 2px no-repeat,
+    repeating-linear-gradient(180deg, transparent 0px, transparent 7px, rgba(120, 90, 50, 0.12) 7px, rgba(120, 90, 50, 0.12) 8px),
+    linear-gradient(180deg, #f0e2be 0%, #e0d0a4 60%, #d2c294 100%);
+  border-bottom: 2px solid #6a4818;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 248, 0.8),
+    0 2px 6px rgba(0, 0, 0, 0.45);
+  font-family: 'OpenDyslexic', 'Lexend', 'EB Garamond', 'Garamond', Georgia, serif;
+  color: #2a1808;
+}
+
+.learn-titlebar-name {
+  flex-shrink: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #2a1004;
+}
+
+.learn-titlebar-sub {
+  font-size: 1rem;
+  font-style: italic;
+  color: #6a4028;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.learn-titlebar .learn-help,
+.learn-titlebar .learn-exit {
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+}
+.learn-titlebar .learn-help { right: 36px; }
+.learn-titlebar .learn-exit { right: 8px; }
+.learn-titlebar .learn-help:active,
+.learn-titlebar .learn-exit:active {
+  transform: translateY(calc(-50% + 1px));
+}
+
+/* open room for the header card (machine.css sets [data-state] inset: 0) */
+.learn-app { top: 36px; }
+
+/* ─── WS4: the scribe's cursor (register: data/personas.data.js).
+   A pen-nib with its bright slit; standard arrow fallback. ─── */
+.learn-app,
+.learn-titlebar {
+  cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M3 21L9 9l12-6-6 12z' fill='%233a2818' stroke='%231a0e08'/><path d='M3 21l8-8' stroke='%23e8d8a8' stroke-width='1.2'/><circle cx='12' cy='12' r='1.2' fill='%23e8d8a8'/></svg>") 3 21, auto;
+}
+.learn-app button,
+.learn-titlebar button { cursor: inherit; }
+
+/* ─── WS4: pressed-bevel + focus (D0004 recipe, index-card palette) ─── */
+.learn-raison-close {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 248, 0.35),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.5),
+    0 2px 0 #1a0a04,
+    0 3px 4px rgba(0, 0, 0, 0.5);
+}
+.learn-raison-close:active {
+  transform: translateY(1px);
+  filter: brightness(0.92);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 248, 0.25),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 0 0 #1a0a04,
+    0 1px 2px rgba(0, 0, 0, 0.5);
+}
+.learn-drawer:focus-visible,
+.learn-help:focus-visible,
+.learn-exit:focus-visible {
+  outline: 2px solid #aa3030;
+  outline-offset: 2px;
+}
+.learn-raison-close:focus-visible {
+  outline: 2px solid #d8b890;
+  outline-offset: 2px;
+}
+
+/* ─── WS4: hover-revelation — a pencil note in the card margin,
+   written once and half-erased, shows when the card is read. ─── */
+.learn-card { position: relative; }
+.learn-margin-note {
+  position: absolute;
+  right: 14px;
+  bottom: 12px;
+  font-family: 'EB Garamond', 'Garamond', serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+  color: rgba(74, 40, 16, 0.9);
+  transform: rotate(-3deg);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+.learn-card:hover .learn-margin-note { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .learn-margin-note { transition: none; }
+}
+
+/* ─── WS6: citations traveller — footnote daggers, thesis stamps and the
+   filed-citation slip. Research voice, rendered from data/citations.data.js;
+   visually an index-card slip, apart from the workbook's mythic register. ── */
+
+.learn-fn {
+  display: inline;
+  padding: 0 1px;
+  margin: 0 1px;
+  background: none;
+  border: none;
+  font-family: 'EB Garamond', 'Garamond', Georgia, serif;
+  font-size: 1.05rem;
+  line-height: 1;
+  font-weight: 700;
+  color: #aa3030;
+  vertical-align: baseline;
+  cursor: inherit;
+}
+.learn-fn:hover { text-shadow: 0 0 6px rgba(170, 48, 48, 0.75); }
+.learn-fn:focus-visible {
+  outline: 2px solid #aa3030;
+  outline-offset: 1px;
+  border-radius: 2px;
+}
+
+.learn-thesis-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.learn-thesis {
+  flex-shrink: 0;
+  display: inline-block;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 1rem;
+  letter-spacing: 0.14em;
+  color: #aa3030;
+  border: 2px solid #aa3030;
+  border-radius: 2px;
+  padding: 2px 10px;
+  transform: rotate(-1.5deg);
+  background: rgba(170, 48, 48, 0.07);
+}
+.learn-thesis-note {
+  font-size: 1rem;
+  font-style: italic;
+  color: #6a4028;
+}
+
+.learn-cite {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 12, 4, 0.85);
+  z-index: 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.learn-cite.open { opacity: 1; pointer-events: auto; }
+
+.learn-cite-inner {
+  width: 78%;
+  max-width: 520px;
+  max-height: 80%;
+  overflow-y: auto;
+  background: linear-gradient(180deg, #f4e4c4 0%, #e8d8a8 100%);
+  border: 1px solid #aa7838;
+  border-top: 6px solid #aa3030;
+  box-shadow:
+    inset 0 0 0 1px #2a1408,
+    inset 0 0 24px rgba(120, 80, 30, 0.15),
+    0 0 30px rgba(0, 0, 0, 0.6);
+  padding: 16px 20px 14px;
+  font-family: 'EB Garamond', 'Garamond', serif;
+  color: #2a1408;
+}
+
+.learn-cite-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dotted #6a4028;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.learn-cite-topic {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 1.05rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #aa3030;
+}
+
+.learn-cite-close {
+  background: none;
+  border: 1px solid #6a4028;
+  color: #6a4028;
+  font-family: inherit;
+  font-size: 1rem;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 2px;
+}
+.learn-cite-close:hover { background: rgba(106, 64, 40, 0.12); color: #4a2008; }
+
+.learn-cite-source {
+  font-size: 1.1rem;
+  line-height: 1.5;
+  font-weight: 700;
+  color: #4a2008;
+  margin-bottom: 10px;
+}
+
+.learn-cite-what {
+  font-size: 1rem;
+  line-height: 1.55;
+  margin-bottom: 8px;
+}
+
+.learn-cite-scope {
+  font-size: 1rem;
+  line-height: 1.55;
+  font-style: italic;
+  color: #6a2010;
+  border-left: 3px double #aa3030;
+  padding-left: 10px;
+}
+
+.learn-cite-note {
+  font-size: 1rem;
+  line-height: 1.5;
+  font-style: italic;
+  color: #6a4028;
+  border-top: 1px dotted #6a4028;
+  margin-top: 10px;
+  padding-top: 8px;
+}
+
+.learn-cite-close:focus-visible {
+  outline: 2px solid #aa3030;
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .learn-cite { transition: none; }
+}

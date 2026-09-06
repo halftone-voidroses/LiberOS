@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="icon" href="data:,">
+  <title>Sea — Vanir</title>
+  <link rel="stylesheet" href="styles/room.css"/>
+  <link rel="stylesheet" href="styles/machine.css"/>
+  <link rel="stylesheet" href="styles/bezel.css"/>
+  <link rel="stylesheet" href="styles/scars.css"/>
+  <link rel="stylesheet" href="src/features/sea/sea.css"/>
+  <link rel="stylesheet" href="styles/shadow.css"/>
+  <link rel="stylesheet" href="styles/fate.css"/>
+  <link rel="stylesheet" href="styles/hijack.css"/>
+</head>
+<body>
+  <canvas class="dust-canvas" aria-hidden="true"></canvas>
+  <canvas class="static-canvas" aria-hidden="true"></canvas>
+
+  <div class="room">
+    <div class="machine">
+      <div class="bezel">
+        <div class="carvings" id="carvings"></div>
+        <div class="vent-slits" aria-hidden="true"></div>
+        <div class="corruption-scars" aria-hidden="true">
+          <div class="scar scar-1"></div>
+          <div class="scar scar-2"></div>
+          <div class="scar scar-3"></div>
+          <div class="scar scar-4"></div>
+          <div class="scar scar-5"></div>
+          <div class="scar scar-6"></div>
+        </div>
+        <div class="led" aria-hidden="true"></div>
+        <div class="liber-plate">LIBER · VACUI</div>
+        <div class="power-button" aria-hidden="true"></div>
+        <div class="screw" aria-hidden="true"></div>
+
+        <div class="screen">
+          <div class="screen-stage">
+            <header class="sea-titlebar">
+              <span class="sea-titlebar-name">the sea</span>
+              <span class="sea-titlebar-sub">vanir holds the tide</span>
+              <button class="sea-help" type="button" id="sea-help" aria-label="how this room works">?</button>
+              <button class="sea-exit" type="button" id="sea-exit" aria-label="leave">×</button>
+            </header>
+            <div class="sea-app" data-state="sea">
+
+              <div class="sea-raison" id="sea-raison" inert>
+                <div class="sea-raison-inner">
+                  <div class="sea-raison-head">
+                    <span class="sea-raison-name">riason</span>
+                    <button class="sea-raison-close" type="button" id="sea-raison-close" aria-label="close">×</button>
+                  </div>
+                  <div class="sea-raison-body">
+                    move through the deep and it shows you how far down you've gone. bring something to release, if you carry it. the sea does not keep. it only receives.
+                  </div>
+                  
+                </div>
+              </div>
+
+              <div class="sea-deep">
+                <div class="sea-vignette"></div>
+
+                <div class="sea-far" id="sea-far" aria-hidden="true"></div>
+                <div class="sea-near" id="sea-near" aria-hidden="true"></div>
+
+                <div class="sea-glimmer" aria-hidden="true"></div>
+
+                <div class="sea-question" id="sea-question">what do you carry to the deep?</div>
+
+                <div class="sea-carried" id="sea-carried" aria-hidden="true"><span id="sea-carried-text"></span></div>
+
+                <div class="sea-ritual" id="sea-ritual">
+                  <input class="sea-input" id="sea-input" type="text" maxlength="140"
+                         autocomplete="off" spellcheck="false"
+                         aria-label="what do you carry to the deep"/>
+                  <div class="sea-intensity" id="sea-intensity" role="group" aria-label="how heavy it sits">
+                    <button class="sea-intensity-dot" type="button" data-value="1" aria-label="barely"></button>
+                    <button class="sea-intensity-dot" type="button" data-value="2" aria-label="lightly"></button>
+                    <button class="sea-intensity-dot on" type="button" data-value="3" aria-label="steady"></button>
+                    <button class="sea-intensity-dot" type="button" data-value="4" aria-label="heavy"></button>
+                    <button class="sea-intensity-dot" type="button" data-value="5" aria-label="sinking"></button>
+                  </div>
+                  <button class="sea-release" id="sea-release" type="button" disabled>release</button>
+                  <button class="sea-breath-toggle" id="sea-breath-toggle" type="button" aria-pressed="false">breathe with it</button>
+                  <div class="sea-breath-phase" id="sea-breath-phase" aria-live="polite"></div>
+                </div>
+
+                <div class="sea-breath" id="sea-breath">
+                  <div class="sea-breath-ring sea-breath-ring-1"></div>
+                  <div class="sea-breath-ring sea-breath-ring-2"></div>
+                  <div class="sea-breath-ring sea-breath-ring-3"></div>
+                  <div class="sea-breath-core"></div>
+                </div>
+
+                <div class="sea-gauge">
+                  <div class="sea-gauge-fill" id="sea-gauge-fill"></div>
+                  <div class="sea-gauge-label">depth</div>
+                </div>
+
+                <div class="sea-kelp sea-kelp-1"></div>
+                <div class="sea-kelp sea-kelp-2"></div>
+                <div class="sea-kelp sea-kelp-3"></div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="monitor-base" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <script src="src/state.js"></script>
+  <script src="src/sound.js"></script>
+  <script src="src/dust.js"></script>
+  <script src="src/static.js"></script>
+  <script src="src/shadow.js"></script>
+  <script src="src/carvings.js"></script>
+  <script src="data/fate.data.js"></script>
+  <script src="src/fate.js"></script>
+  <script src="data/hijack.data.js"></script>
+  <script src="src/hijack.js"></script>
+  <script src="src/features/sea/sea.js"></script>
+</body>
+</html>

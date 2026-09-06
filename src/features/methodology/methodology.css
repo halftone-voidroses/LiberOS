@@ -1,0 +1,703 @@
+/* methodology.css — raison. Scribe's folio, rubric margins, amber. Formal, clinical.
+   This file is COMPLETELY INDEPENDENT. No imports, no shared variables (covenant Q.1). */
+
+.methodology-app {
+  position: absolute;
+  inset: 0;
+  background: #1a1008;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: 'EB Garamond', 'Garamond', 'Times New Roman', serif;
+  color: #2a1a08;
+}
+
+.method-folio {
+  width: 90%;
+  height: 92%;
+  position: relative;
+  background:
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.015) 0px, rgba(0,0,0,0.015) 1px, transparent 1px, transparent 4px),
+    linear-gradient(180deg, #f0e0b0 0%, #e0c890 100%);
+  border: 1px solid #6a4a20;
+  border-radius: 2px;
+  box-shadow:
+    inset 0 0 0 1px #2a1a08,
+    inset 0 0 30px rgba(120, 70, 30, 0.15),
+    0 0 20px rgba(0,0,0,0.6);
+  padding: 14px 50px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.method-rubric {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 24px;
+  border-right: 1px solid rgba(170, 48, 48, 0.25);
+  border-left: 1px solid rgba(170, 48, 48, 0.25);
+  background: transparent;
+  pointer-events: none;
+}
+
+.method-rubric-left { left: 48px; }
+.method-rubric-right { right: 48px; }
+
+.method-rubric::before {
+  content: '';
+  position: absolute;
+  top: 8px; bottom: 8px;
+  width: 1px;
+  background: rgba(170, 48, 48, 0.18);
+  left: 50%;
+}
+
+.method-rubric-left::before { left: 0; right: auto; }
+.method-rubric-right::before { right: 0; left: auto; }
+
+.method-header {
+  text-align: center;
+  border-bottom: 2px double #6a4a20;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.method-seal {
+  font-size: 0.7rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: #6a4a20;
+  font-weight: 700;
+  border: 1px solid #6a4a20;
+  display: inline-block;
+  padding: 2px 10px;
+  margin-bottom: 4px;
+  background: rgba(212, 175, 106, 0.1);
+}
+
+.method-title-main {
+  font-family: 'EB Garamond', 'Garamond', serif;
+  font-variant: small-caps;
+  font-size: 1.6rem;
+  letter-spacing: 0.32em;
+  color: #2a1a08;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+/* Phase 9: section-based prose, paragraphs (not numbered steps). */
+.method-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 8px;
+  font-size: 1.1rem;
+  line-height: 1.55;
+  color: #2a1a08;
+}
+
+.method-section {
+  margin-bottom: 18px;
+}
+
+.method-section-title {
+  font-size: 1.6rem;
+  font-variant: small-caps;
+  letter-spacing: 0.15em;
+  color: #4a2810;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  border-bottom: 1px dashed #6a4a20;
+  padding-bottom: 4px;
+}
+
+.method-section p {
+  margin: 0 0 12px 0;
+  font-style: italic;
+  color: #2a1a08;
+  text-align: justify;
+}
+
+.method-example {
+  background: rgba(106, 74, 32, 0.06);
+  border-left: 3px double #6a4a20;
+  padding: 8px 14px;
+  font-size: 1.05rem;
+}
+.method-example em { color: #4a2810; }
+
+.method-lead {
+  font-style: italic;
+  font-size: 1.05rem;
+  color: #4a2810;
+  border-left: 3px double #6a4a20;
+  padding: 6px 12px;
+  margin: 0 0 12px 0;
+  background: rgba(106, 74, 32, 0.04);
+}
+
+.method-steps {
+  margin: 0 0 14px 1.4em;
+  padding: 0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #2a1a08;
+  font-style: italic;
+}
+.method-steps li {
+  margin-bottom: 8px;
+  padding-left: 4px;
+}
+.method-steps li::marker {
+  color: #6a4a20;
+  font-weight: 700;
+  font-style: normal;
+}
+.method-steps li strong {
+  font-style: normal;
+  color: #4a2810;
+  letter-spacing: 0.02em;
+}
+.method-steps em {
+  color: #4a2810;
+  font-style: italic;
+}
+  font-variant: small-caps;
+  letter-spacing: 0.2em;
+  color: #2a1a08;
+  font-weight: 700;
+}
+
+.method-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 0;
+  /* audit minor 7: the native scrollbar breaks the folio illusion —
+     ink-brown thumb on a parchment-shadow track. */
+  scrollbar-width: thin;
+  scrollbar-color: #6a4a20 rgba(42, 26, 8, 0.25);
+}
+
+.method-content::-webkit-scrollbar { width: 10px; }
+.method-content::-webkit-scrollbar-track {
+  background: rgba(42, 26, 8, 0.22);
+  border-left: 1px solid rgba(106, 74, 32, 0.35);
+}
+.method-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #8a6a3a 0%, #6a4a20 100%);
+  border: 1px solid #4a2810;
+  border-radius: 2px;
+}
+.method-content::-webkit-scrollbar-thumb:hover { background: #a08050; }
+
+.method-step {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dotted #6a4a20;
+}
+
+.method-step:last-child { border-bottom: none; }
+
+/* D0003: step names + bodies are the method's working text — 16px floor. */
+.method-step-num {
+  font-size: 0.875rem;
+  font-style: italic;
+  color: #6a4a20;
+  letter-spacing: 0.1em;
+}
+
+.method-step-name {
+  font-size: 1rem;
+  font-variant: small-caps;
+  letter-spacing: 0.1em;
+  color: #2a1a08;
+  font-weight: 700;
+  margin: 2px 0 4px;
+}
+
+.method-step-body {
+  font-size: 1rem;
+  font-style: italic;
+  line-height: 1.5;
+  color: #3a2010;
+  text-align: justify;
+}
+
+.method-step.active {
+  background: rgba(212, 175, 106, 0.15);
+  margin: 0 -8px 12px;
+  padding: 8px;
+  border-bottom: 1px solid #6a4a20;
+}
+
+.method-step.active .method-step-name {
+  color: #6a2010;
+}
+
+.method-footer {
+  text-align: center;
+  border-top: 1px solid #6a4a20;
+  padding-top: 6px;
+  margin-top: 4px;
+}
+
+.method-stamp {
+  font-size: 0.55rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #6a4a20;
+  font-style: italic;
+  font-weight: 700;
+  border: 1px solid #6a4a20;
+  padding: 2px 10px;
+  transform: rotate(-2deg);
+  display: inline-block;
+  background: rgba(170, 48, 48, 0.06);
+}
+
+/* methodology help + exit — raison wax seal (amber on dark folio)
+   Keyboard-cap: thick bevel, raised feel, amber on dark. */
+.methodology-help,
+.methodology-exit {
+  position: absolute;
+  top: 12px;
+  z-index: 5;
+  width: 34px;
+  height: 34px;
+  font-family: 'VT323', Georgia, 'Times New Roman', Times, serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 32px;
+  text-align: center;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 3px;
+  color: #f4e0a0;
+  background:
+    linear-gradient(180deg, #6a4818 0%, #4a2810 50%, #2a1408 100%);
+  border: 2px solid #2a1408;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 220, 140, 0.4),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.5),
+    0 2px 0 #1a0a04,
+    0 4px 6px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.6);
+  transition: transform 0.08s, filter 0.15s, box-shadow 0.08s;
+}
+.methodology-help { right: 52px; }
+.methodology-exit { right: 12px; }
+
+.methodology-help:hover,
+.methodology-exit:hover {
+  filter: brightness(1.15);
+  color: #fff5d0;
+}
+.methodology-help:active,
+.methodology-exit:active {
+  transform: translateY(2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 220, 140, 0.4),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 1px 0 #1a0a04;
+}
+
+.methodology-raison {
+  position: absolute;
+  inset: 0;
+  background: rgba(26, 16, 8, 0.85);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.methodology-raison.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.methodology-raison-inner {
+  width: 78%;
+  max-width: 420px;
+  background: linear-gradient(180deg, #f0e0b0 0%, #e0c890 100%);
+  border: 1px solid #6a4a20;
+  box-shadow:
+    inset 0 0 0 1px #2a1a08,
+    inset 0 0 24px rgba(120, 70, 30, 0.15),
+    0 0 30px rgba(0, 0, 0, 0.6);
+  padding: 18px 22px;
+  font-style: italic;
+  color: #2a1a08;
+  letter-spacing: 0.03em;
+}
+
+.methodology-raison-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #6a4a20;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.methodology-raison-name {
+  font-size: 0.875rem;
+  color: #6a2010;
+  text-transform: lowercase;
+  letter-spacing: 0.25em;
+  font-weight: 700;
+  font-family: 'EB Garamond', 'Garamond', 'Times New Roman', serif;
+}
+
+.methodology-raison-close {
+  background: none;
+  border: 1px solid #6a4a20;
+  color: #6a4a20;
+  font-family: inherit;
+  font-size: 0.85rem;
+  line-height: 1;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.methodology-raison-close:hover {
+  background: rgba(212, 175, 106, 0.15);
+  color: #2a1a08;
+}
+
+.methodology-raison-body {
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.methodology-raison-body em {
+  color: #6a2010;
+  font-style: normal;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.methodology-raison-foot {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid #6a4a20;
+  font-size: 0.875rem;
+  color: #6a4a20;
+  text-align: right;
+  letter-spacing: 0.1em;
+}
+
+/* ─── window titlebar (WS3, plan 2026-09-04 §4.3) — the folio running head ─── */
+
+.methodology-titlebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 36px;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 76px 0 18px;
+  overflow: hidden;
+  background:
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.02) 0px, rgba(0, 0, 0, 0.02) 1px, transparent 1px, transparent 4px),
+    linear-gradient(180deg, #efe0b2 0%, #e2d09c 60%, #d4c088 100%);
+  border-bottom: 2px solid #6a4a20;
+  box-shadow:
+    inset 4px 0 0 rgba(170, 48, 48, 0.75),
+    inset 0 1px 0 rgba(255, 250, 230, 0.75),
+    0 2px 6px rgba(0, 0, 0, 0.4);
+  font-family: 'EB Garamond', 'Garamond', 'Times New Roman', serif;
+  color: #2a1a08;
+}
+
+.methodology-titlebar-name {
+  flex-shrink: 0;
+  font-size: 1.05rem;
+  font-variant: small-caps;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: #2a1a08;
+}
+
+.methodology-titlebar-sub {
+  font-size: 1rem;
+  font-style: italic;
+  color: #6a4a20;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.methodology-titlebar .methodology-help,
+.methodology-titlebar .methodology-exit {
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+}
+.methodology-titlebar .methodology-help { right: 36px; }
+.methodology-titlebar .methodology-exit { right: 8px; }
+.methodology-titlebar .methodology-help, .methodology-titlebar .methodology-exit {
+  width: 40px;
+  height: 40px;
+  line-height: 38px;
+  text-align: center;
+  font-size: 1.15rem;
+  top: 50%;
+  filter: brightness(1.4);
+}
+.methodology-titlebar .methodology-help { right: 56px; }
+.methodology-titlebar .methodology-exit { right: 8px; }
+.methodology-help:focus-visible, .methodology-exit:focus-visible {
+  outline: 2px solid #e8c890;
+  outline-offset: 2px;
+}
+.methodology-titlebar .methodology-help:active,
+.methodology-titlebar .methodology-exit:active {
+  transform: translateY(calc(-50% + 1px));
+}
+
+/* open room for the running head (machine.css sets [data-state] inset: 0) */
+.methodology-app { top: 36px; }
+
+/* ─── WS4: raison's cursor (register: data/personas.data.js).
+   The wax seal and its handle; standard arrow fallback. ─── */
+.methodology-app,
+.methodology-titlebar {
+  cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><rect x='10.75' y='2' width='2.5' height='9' fill='%236a4a20'/><circle cx='12' cy='16' r='6' fill='%23aa3030' stroke='%236a1a10'/><circle cx='12' cy='16' r='3' fill='none' stroke='%23d8b890'/></svg>") 12 16, auto;
+}
+.methodology-app button,
+.methodology-titlebar button { cursor: inherit; }
+
+/* ─── WS4: pressed-bevel + focus (D0004 recipe, folio palette) ─── */
+.methodology-raison-close {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 250, 230, 0.55),
+    inset 0 -2px 0 rgba(90, 60, 20, 0.35),
+    0 2px 0 #4a2c0c,
+    0 3px 4px rgba(0, 0, 0, 0.45);
+}
+.methodology-raison-close:active {
+  transform: translateY(1px);
+  filter: brightness(0.92);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 250, 230, 0.4),
+    inset 0 -1px 0 rgba(90, 60, 20, 0.35),
+    0 0 0 #4a2c0c,
+    0 1px 2px rgba(0, 0, 0, 0.45);
+}
+.methodology-help:focus-visible,
+.methodology-exit:focus-visible {
+  outline: 2px solid #f4e0a0;
+  outline-offset: 2px;
+}
+.methodology-raison-close:focus-visible {
+  outline: 2px solid #aa3030;
+  outline-offset: 2px;
+}
+
+/* ─── WS4: hover-revelation — a rubric note in invisible ink down the
+   right margin, legible only when the folio is held. ─── */
+.method-margin-qed {
+  position: absolute;
+  top: 120px;
+  right: 12px;
+  writing-mode: vertical-rl;
+  font-family: 'EB Garamond', 'Garamond', serif;
+  font-style: italic;
+  font-size: 0.875rem;
+  letter-spacing: 0.24em;
+  color: rgba(170, 48, 48, 0.8);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+.method-folio:hover .method-margin-qed { opacity: 0.9; }
+@media (prefers-reduced-motion: reduce) {
+  .method-margin-qed { transition: none; }
+}
+
+/* ─── WS6: citations traveller — superscript footnotes, the traveller's-thesis
+   seal and the sealed citation. Research voice, rendered from
+   data/citations.data.js; folio register, apart from any mythic voice. ─── */
+
+.method-fn {
+  display: inline;
+  padding: 0 1px;
+  margin-left: 2px;
+  background: none;
+  border: none;
+  font-family: 'EB Garamond', 'Garamond', 'Times New Roman', serif;
+  font-size: 1rem;
+  line-height: 1;
+  font-weight: 700;
+  color: #aa3030;
+  vertical-align: super;
+  cursor: inherit;
+}
+.method-fn:hover { text-shadow: 0 0 5px rgba(170, 48, 48, 0.6); }
+.method-fn:focus-visible {
+  outline: 2px solid #aa3030;
+  outline-offset: 1px;
+  border-radius: 2px;
+}
+
+.method-thesis {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  border-left: 3px double #aa3030;
+  background: rgba(170, 48, 48, 0.06);
+  padding: 6px 12px;
+  margin: 0 0 12px 0;
+}
+
+.method-thesis-tag {
+  flex-shrink: 0;
+  display: inline-block;
+  font-family: 'EB Garamond', 'Garamond', serif;
+  font-variant: small-caps;
+  font-size: 1rem;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+  color: #aa3030;
+  border: 1px solid #aa3030;
+  padding: 1px 8px;
+  transform: rotate(-1deg);
+  background: rgba(212, 175, 106, 0.08);
+}
+
+.method-section-title .method-thesis-tag {
+  font-size: 1rem;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.method-thesis-line {
+  font-size: 1rem;
+  font-style: italic;
+  color: #6a2010;
+}
+
+.method-cite {
+  position: absolute;
+  inset: 0;
+  background: rgba(26, 16, 8, 0.85);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.method-cite.open { opacity: 1; pointer-events: auto; }
+
+.method-cite-inner {
+  width: 78%;
+  max-width: 520px;
+  max-height: 80%;
+  overflow-y: auto;
+  background: linear-gradient(180deg, #f0e0b0 0%, #e0c890 100%);
+  border: 1px solid #6a4a20;
+  border-left: 4px solid #aa3030;
+  box-shadow:
+    inset 0 0 0 1px #2a1a08,
+    inset 0 0 24px rgba(120, 70, 30, 0.15),
+    0 0 30px rgba(0, 0, 0, 0.6);
+  padding: 18px 22px;
+  font-family: 'EB Garamond', 'Garamond', 'Times New Roman', serif;
+  color: #2a1a08;
+}
+
+.method-cite-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #6a4a20;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.method-cite-topic {
+  font-size: 1rem;
+  font-variant: small-caps;
+  letter-spacing: 0.16em;
+  font-weight: 700;
+  color: #aa3030;
+}
+.method-cite-topic::before {
+  content: '●';
+  margin-right: 8px;
+  font-size: 0.75rem;
+  vertical-align: 2px;
+}
+
+.method-cite-close {
+  background: none;
+  border: 1px solid #6a4a20;
+  color: #6a4a20;
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 2px;
+}
+.method-cite-close:hover { background: rgba(212, 175, 106, 0.15); color: #2a1a08; }
+
+.method-cite-source {
+  font-size: 1.05rem;
+  line-height: 1.5;
+  font-weight: 700;
+  color: #4a2810;
+  margin-bottom: 10px;
+}
+
+.method-cite-what {
+  font-size: 1rem;
+  line-height: 1.55;
+  font-style: italic;
+  margin-bottom: 8px;
+}
+
+.method-cite-standing {
+  font-size: 1rem;
+  line-height: 1.55;
+  color: #6a2010;
+  border-left: 3px double #aa3030;
+  padding-left: 10px;
+}
+
+.method-cite-note {
+  font-size: 1rem;
+  line-height: 1.5;
+  font-style: italic;
+  color: #6a4a20;
+  border-top: 1px solid #6a4a20;
+  margin-top: 10px;
+  padding-top: 8px;
+}
+
+.method-fn:focus-visible,
+.method-cite-close:focus-visible {
+  outline: 2px solid #aa3030;
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .method-cite { transition: none; }
+}

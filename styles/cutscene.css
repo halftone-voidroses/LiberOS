@@ -1,0 +1,344 @@
+/* cutscene.css — flow fork cinematic tutorial (desktop only).
+   Ritual (pink flames, black-flame glow, shakes), chat window beats,
+   intruder flash, Riason wireframe box, bind overlay, finale (flash,
+   shake, hub burst), pink wipe, black arise window. Reduced-motion
+   gates everything. */
+
+.cutscene {
+  position: absolute;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.88);
+  animation: cutscene-in 0.4s ease-out;
+}
+
+@keyframes cutscene-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.cutscene-box {
+  width: 82%;
+  max-width: 440px;
+  background: linear-gradient(180deg, #241610 0%, #120906 100%);
+  border: 1px solid #8a6a20;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.9);
+  padding: 16px 20px;
+}
+
+.cutscene-voice {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 0.9rem;
+  letter-spacing: 0.25em;
+  text-transform: lowercase;
+  color: #ff8a8a;
+  margin-bottom: 6px;
+}
+
+.cutscene-voice:empty {
+  display: none;
+}
+
+.cutscene-line {
+  font-size: 1.1rem;
+  font-style: italic;
+  line-height: 1.6;
+  color: #f0c8c8;
+  min-height: 3em;
+}
+
+.chat-name {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 1.3rem;
+  letter-spacing: 0.2em;
+  color: #ffd86a;
+  text-shadow: 0 0 10px rgba(255, 216, 106, 0.7);
+  opacity: 0;
+  animation: chat-name-in 0.4s ease-out forwards;
+}
+
+@keyframes chat-name-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.cutscene-box.burst-in {
+  animation: cutscene-burst-in 0.5s ease-out;
+}
+
+@keyframes cutscene-burst-in {
+  0% { transform: scale(0.85); filter: brightness(2); }
+  100% { transform: scale(1); filter: none; }
+}
+
+.cutscene-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.cutscene-nav button {
+  background: none;
+  border: 1px solid #8a6a20;
+  color: #d8a070;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 1.1rem;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 4px 12px;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.cutscene-nav button:hover {
+  background: rgba(216, 160, 112, 0.1);
+  border-color: #e8c890;
+}
+
+.cutscene-nav button:focus-visible {
+  outline: 2px solid #e8c890;
+  outline-offset: 2px;
+}
+
+.cutscene-skip {
+  margin-left: auto;
+  font-size: 0.95rem !important;
+}
+
+.cutscene.docked {
+  background: none;
+  align-items: flex-end;
+  justify-content: center;
+  pointer-events: none;
+  animation: none;
+}
+
+.cutscene.docked .cutscene-box {
+  pointer-events: auto;
+  margin-bottom: 9%;
+  max-width: 380px;
+}
+
+.cutscene-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.cutscene-option {
+  background: rgba(216, 160, 112, 0.06);
+  border: 1px solid #8a6a20;
+  color: #e8c890;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  font-size: 1rem;
+  padding: 6px 14px;
+  cursor: pointer;
+  border-radius: 20px;
+}
+
+.cutscene-option:hover {
+  border-color: #e8c890;
+  background: rgba(216, 160, 112, 0.14);
+}
+
+.cutscene-option:focus-visible {
+  outline: 2px solid #e8c890;
+  outline-offset: 2px;
+}
+
+/* ritual: flames + summon lines */
+
+.cutscene.ritual {
+  flex-direction: column;
+  gap: 18px;
+}
+
+.ritual-flames {
+  display: flex;
+  gap: 22px;
+}
+
+.ritual-flame {
+  width: 14px;
+  height: 22px;
+  border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
+  background: #2a1418;
+  border: 1px solid #4a2a30;
+  transition: background 0.5s ease, box-shadow 0.5s ease;
+}
+
+.ritual-flame.lit {
+  background: radial-gradient(circle at 50% 70%, #ffd0e0 0%, #ff69b4 45%, #c02060 100%);
+  border-color: #ff8ab8;
+  box-shadow: 0 0 18px rgba(255, 105, 180, 0.9), 0 0 44px rgba(255, 105, 180, 0.4);
+}
+
+.ritual-box {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  text-align: center;
+}
+
+.ritual-line {
+  font-size: 1.25rem;
+  min-height: 2em;
+  transition: color 0.6s ease, text-shadow 0.6s ease;
+}
+
+.ritual-line.is-glow {
+  color: #f0d0e0;
+  text-shadow: 0 0 14px rgba(200, 200, 200, 0.8);
+}
+
+.ritual-line.is-flames {
+  color: #ffb8d0;
+  text-shadow: 0 0 18px rgba(255, 105, 180, 0.9);
+}
+
+.ritual-line.is-shake,
+.ritual-line.is-shake-more {
+  color: #ffd0e0;
+  text-shadow: 0 0 20px rgba(255, 105, 180, 1);
+}
+
+.cutscene.ritual.do-shake .ritual-box {
+  animation: cutscene-shake 0.5s;
+}
+
+.cutscene.ritual.do-shake-more .ritual-box,
+.cutscene.ritual.do-shake-more {
+  animation: cutscene-shake-hard 1.1s;
+}
+
+.cutscene.ritual.blackflame {
+  background: radial-gradient(ellipse at 50% 60%, rgba(20, 4, 10, 0.95) 0%, #000 75%);
+  box-shadow: inset 0 0 120px rgba(255, 105, 180, 0.25);
+}
+
+.cutscene.ritual.blackflame .ritual-flame.lit {
+  background: radial-gradient(circle at 50% 70%, #30101c 0%, #000 70%);
+  border-color: #ff69b4;
+  box-shadow: 0 0 22px rgba(255, 105, 180, 1), 0 0 70px rgba(255, 105, 180, 0.5);
+}
+
+@keyframes cutscene-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-7px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(3px); }
+}
+
+/* Riason wireframe register */
+
+.cutscene[data-riason="1"] .cutscene-box,
+.cutscene-box.riason {
+  border: 1px solid #8acaff;
+  background:
+    repeating-linear-gradient(0deg, rgba(138, 202, 255, 0.05) 0px, rgba(138, 202, 255, 0.05) 1px, transparent 1px, transparent 14px),
+    repeating-linear-gradient(90deg, rgba(138, 202, 255, 0.05) 0px, rgba(138, 202, 255, 0.05) 1px, transparent 1px, transparent 14px),
+    linear-gradient(180deg, #0a1420 0%, #060a10 100%);
+}
+
+.cutscene-box.riason .cutscene-voice,
+.cutscene-box.riason .cutscene-line {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-style: normal;
+  color: #cce0ff;
+}
+
+/* finale: flash, shake, burst, wipe, black window */
+
+.cutscene-flash {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  pointer-events: none;
+  animation: cutscene-flash-out 0.5s ease-out forwards;
+}
+
+@keyframes cutscene-flash-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.machine.do-shake-hard {
+  animation: cutscene-machine-shake 1.2s linear;
+}
+
+@keyframes cutscene-machine-shake {
+  0%, 100% { transform: translateX(0); }
+  10% { transform: translateX(-9px) rotate(-0.4deg); }
+  25% { transform: translateX(8px) rotate(0.4deg); }
+  40% { transform: translateX(-7px); }
+  55% { transform: translateX(6px) rotate(-0.3deg); }
+  70% { transform: translateX(-4px); }
+  85% { transform: translateX(3px); }
+}
+
+.hub-burst {
+  transform-box: view-box;
+  transform-origin: center;
+  animation: hub-burst 1.1s ease-out forwards;
+}
+
+@keyframes hub-burst {
+  0% { transform: scale(1); opacity: 1; }
+  35% { transform: scale(2.4); opacity: 1; filter: brightness(2.4); }
+  100% { transform: scale(0.2); opacity: 0; }
+}
+
+.cutscene-wipe {
+  position: absolute;
+  inset: 0;
+  z-index: 110;
+  background: linear-gradient(180deg, #ff8ab8 0%, #ff5c9c 55%, #d42a72 100%);
+  transform: translateY(-101%);
+  animation: cutscene-wipe-down 1.4s ease-in forwards;
+  pointer-events: all;
+}
+
+@keyframes cutscene-wipe-down {
+  to { transform: translateY(0); }
+}
+
+.cutscene-black {
+  position: absolute;
+  inset: 0;
+  z-index: 111;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: cutscene-in 0.3s ease-out;
+}
+
+.cutscene-arise {
+  font-family: 'UnifrakturCook', 'UnifrakturMaguntia', 'Cinzel', Georgia, serif;
+  font-style: italic;
+  font-size: 2.2rem;
+  color: #ff8ab8;
+  text-shadow: 0 0 16px rgba(255, 105, 180, 0.9), 0 0 60px rgba(170, 50, 100, 0.6);
+  text-align: center;
+  padding: 0 30px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cutscene { animation: none; }
+  .cutscene.ritual.do-shake .ritual-box,
+  .cutscene.ritual.do-shake-more .ritual-box,
+  .cutscene.ritual.do-shake-more { animation: none; }
+  .chat-name { animation: none; opacity: 1; }
+  .cutscene-box.burst-in { animation: none; }
+  .machine.do-shake-hard { animation: none; }
+  .hub-burst { animation: none; opacity: 0; }
+  .cutscene-wipe { animation: none; transform: none; }
+  .cutscene-flash { animation: none; opacity: 0; }
+}

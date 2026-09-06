@@ -1,0 +1,111 @@
+/* ============================================================================
+   loading.css — State 2 (Loading ritual)
+
+   Three lines of text, centered vertically:
+     "Liber Vacui"     (serif, large)
+     "Now Loading"     (serif, medium)
+     "==fate appreciates your patronage=="  (VT323, monospace, small)
+   All in red. Auto-advances to State 3 after ~2.5s.
+   ============================================================================ */
+
+.state-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: #2a0000;
+  color: #aa0000;
+  font-family: 'Times New Roman', Times, serif;
+  gap: 1.2em;
+  animation: loading-fade 0.6s ease-out;
+}
+
+@keyframes loading-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.state-loading .loading-title {
+  font-size: clamp(2.2rem, 5vw, 4.5rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #aa0000;
+  text-shadow: 0 0 14px rgba(170, 0, 0, 0.5);
+}
+
+/* letterpress — each glyph is hand-set: it lands from a raise, sinks
+   1px into the paper, and the ink spreads as it settles. Sequenced by
+   --glyph-i (set from src/boot-title.js). */
+.letterpress-glyph {
+  display: inline-block;
+  animation: letterpress-land 0.32s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+  animation-delay: calc(var(--glyph-i, 0) * 70ms);
+}
+
+.letterpress-space { display: inline-block; width: 0.4em; }
+
+@keyframes letterpress-land {
+  0% {
+    opacity: 0;
+    transform: translateY(-0.14em) scale(1.06);
+    text-shadow: 0 0 0 rgba(170, 0, 0, 0);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(0.02em) scale(1);
+    text-shadow: 0 0 22px rgba(170, 0, 0, 0.7);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    text-shadow: 0 0 14px rgba(170, 0, 0, 0.5);
+  }
+}
+
+.state-loading .loading-now {
+  font-size: clamp(1rem, 1.8vw, 1.5rem);
+  font-style: italic;
+  color: #aa0000;
+  letter-spacing: 0.1em;
+  opacity: 0.85;
+}
+
+/* the press runs after the title — arrives with the thunk */
+.state-loading .loading-now.letterpress-arrives {
+  animation: letterpress-settle 0.3s ease-out both;
+  animation-delay: var(--arrive-delay, 1200ms);
+}
+
+@keyframes letterpress-settle {
+  0%   { opacity: 0; transform: translateY(-0.2em); }
+  60%  { opacity: 0.85; transform: translateY(0.03em); }
+  100% { opacity: 0.85; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .letterpress-glyph,
+  .state-loading .loading-now.letterpress-arrives {
+    animation: none;
+    opacity: inherit;
+    transform: none;
+  }
+}
+
+.state-loading .loading-patrons {
+  font-family: 'VT323', 'Courier New', Courier, monospace;
+  font-size: clamp(0.9rem, 1.4vw, 1.1rem);
+  color: #aa0000;
+  letter-spacing: 0.05em;
+  opacity: 0.6;
+  margin-top: 1em;
+  animation: loading-blink 1.4s steps(2) infinite;
+}
+
+
+@keyframes loading-blink {
+  0%, 100% { opacity: 0.6; }
+  50%      { opacity: 0.2; }
+}

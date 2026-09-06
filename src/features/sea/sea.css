@@ -1,0 +1,696 @@
+/* sea.css — Vanir's porthole into the deep. Negative space, kelp, depth.
+   This file is COMPLETELY INDEPENDENT. No imports, no shared variables (covenant Q.1). */
+
+.sea-app {
+  position: absolute;
+  inset: 0;
+  background: #02060a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  color: #5a8090;
+}
+
+.sea-deep {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(ellipse at 50% 100%, rgba(40, 80, 100, 0.25) 0%, rgba(0, 0, 0, 0) 50%),
+    radial-gradient(ellipse at 50% 0%, rgba(20, 40, 50, 0.18) 0%, rgba(0, 0, 0, 0) 50%);
+  overflow: hidden;
+  cursor: inherit;
+}
+
+.sea-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.sea-far {
+  position: absolute;
+  left: -5%;
+  right: -5%;
+  bottom: -4%;
+  height: 46%;
+  pointer-events: none;
+  opacity: 0.5;
+  background:
+    radial-gradient(ellipse 30px 90px at 12% 100%, rgba(30, 60, 55, 0.5) 0%, rgba(0, 0, 0, 0) 70%),
+    radial-gradient(ellipse 22px 70px at 28% 100%, rgba(30, 60, 55, 0.4) 0%, rgba(0, 0, 0, 0) 70%),
+    radial-gradient(ellipse 36px 110px at 55% 100%, rgba(30, 60, 55, 0.45) 0%, rgba(0, 0, 0, 0) 70%),
+    radial-gradient(ellipse 24px 80px at 78% 100%, rgba(30, 60, 55, 0.4) 0%, rgba(0, 0, 0, 0) 70%),
+    radial-gradient(ellipse 30px 100px at 92% 100%, rgba(30, 60, 55, 0.5) 0%, rgba(0, 0, 0, 0) 70%);
+}
+
+.sea-near {
+  position: absolute;
+  left: -5%;
+  right: -5%;
+  bottom: -22%;
+  height: 40%;
+  pointer-events: none;
+  opacity: 0.35;
+  background:
+    radial-gradient(ellipse 120% 60% at 50% 100%, rgba(50, 90, 80, 0.35) 0%, rgba(0, 0, 0, 0) 70%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(20, 50, 45, 0.5) 100%);
+}
+
+.sea-question {
+  position: absolute;
+  top: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1rem;
+  font-style: italic;
+  letter-spacing: 0.05em;
+  color: #7a9aac;
+  text-align: center;
+  opacity: 0.5;
+  max-width: 70%;
+  line-height: 1.6;
+}
+
+.sea-breath {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+}
+
+.sea-breath-ring {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(120, 180, 200, 0.15);
+  border-radius: 50%;
+  animation: sea-breathe 6s ease-in-out infinite;
+}
+
+.sea-breath-ring-2 {
+  inset: 20px;
+  animation-delay: 1.2s;
+  border-color: rgba(120, 180, 200, 0.2);
+}
+
+.sea-breath-ring-3 {
+  inset: 40px;
+  animation-delay: 2.4s;
+  border-color: rgba(120, 180, 200, 0.25);
+}
+
+.sea-breath-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30px;
+  height: 30px;
+  background: radial-gradient(circle, rgba(160, 200, 220, 0.5) 0%, rgba(120, 180, 200, 0) 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: sea-pulse 4s ease-in-out infinite;
+}
+
+@keyframes sea-breathe {
+  0%, 100% { transform: scale(calc(0.85 - var(--sea-amp, 0) * 0.1)); opacity: 0.3; }
+  50%      { transform: scale(calc(1.05 + var(--sea-amp, 0) * 0.45)); opacity: 0.7; }
+}
+
+@keyframes sea-pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(0.6); opacity: 0.4; }
+  50%      { transform: translate(-50%, -50%) scale(1.2); opacity: 1.0; }
+}
+
+.sea-breath-toggle {
+  background: none;
+  border: 1px solid rgba(120, 180, 200, 0.35);
+  color: #7a9aac;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-style: italic;
+  letter-spacing: 0.1em;
+  padding: 6px 14px;
+  cursor: pointer;
+  border-radius: 20px;
+}
+.sea-breath-toggle:hover {
+  border-color: rgba(160, 210, 230, 0.7);
+  color: #a8c8d8;
+}
+.sea-breath-toggle[aria-pressed="true"] {
+  color: #d8ecf4;
+  border-color: rgba(160, 210, 230, 0.8);
+  background: rgba(120, 180, 200, 0.08);
+}
+.sea-breath-toggle:focus-visible {
+  outline: 2px solid #a8c8d8;
+  outline-offset: 2px;
+}
+.sea-breath-phase {
+  min-height: 1.5em;
+  font-size: 1.1rem;
+  font-style: italic;
+  letter-spacing: 0.3em;
+  color: #a8c8d8;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .sea-app.guided .sea-breath-ring {
+    animation-duration: 14s;
+  }
+}
+
+.sea-gauge {
+  position: absolute;
+  left: 18px;
+  top: 22%;
+  bottom: 22%;
+  width: 2px;
+  background: rgba(80, 120, 140, 0.2);
+}
+
+.sea-gauge-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 30%;
+  background: linear-gradient(180deg, rgba(120, 180, 200, 0.6) 0%, rgba(60, 100, 120, 0.2) 100%);
+  transition: height 4s ease;
+}
+
+.sea-gauge-label {
+  position: absolute;
+  left: 6px;
+  top: 100%;
+  font-size: 0.875rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #406070;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  margin-top: 6px;
+  font-style: italic;
+}
+
+.sea-kelp {
+  position: absolute;
+  bottom: 0;
+  width: 4px;
+  height: 60%;
+  background: linear-gradient(180deg, rgba(40, 80, 60, 0.1) 0%, rgba(40, 80, 60, 0.4) 50%, rgba(20, 50, 40, 0.6) 100%);
+  border-radius: 50% 50% 0 0;
+  transform-origin: bottom center;
+  animation: sea-sway 8s ease-in-out infinite;
+  filter: blur(0.5px);
+}
+
+.sea-kelp-1 { left: 15%; height: 50%; animation-delay: 0s;   }
+.sea-kelp-2 { left: 30%; height: 70%; animation-delay: 1.5s; width: 5px; }
+.sea-kelp-3 { left: 75%; height: 55%; animation-delay: 3s;   }
+.sea-kelp-2::before {
+  content: '';
+  position: absolute;
+  top: 20%;
+  left: -3px;
+  width: 10px;
+  height: 4px;
+  background: rgba(40, 80, 60, 0.5);
+  border-radius: 50%;
+  filter: blur(0.3px);
+}
+
+@keyframes sea-sway {
+  0%, 100% { transform: rotate(-3deg); }
+  50%      { transform: rotate(3deg); }
+}
+
+/* sea help + raison (per-persona, deep-water palette) */
+
+.sea-help {
+  position: absolute;
+  top: 14px;
+  right: 40px;
+  z-index: 5;
+  width: 22px;
+  height: 22px;
+  background: linear-gradient(180deg, rgba(20, 20, 20, 0.6) 0%, rgba(0, 0, 0, 0.7) 100%);
+  border: 1px solid rgba(120, 180, 200, 0.25);
+  color: #608090;
+  font-family: 'VT323', Georgia, 'Times New Roman', Times, serif;
+  font-size: 0.95rem;
+  font-style: italic;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 2px;
+  transition: all 0.15s;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.5),
+    0 1px 0 rgba(0, 0, 0, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+  transition: transform 0.08s, filter 0.15s, box-shadow 0.08s;
+}
+.sea-help:hover {
+  filter: brightness(1.25);
+}
+.sea-help:active {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 0 0 rgba(0, 0, 0, 0.5);
+}
+
+
+.sea-help:hover {
+  background: rgba(120, 180, 200, 0.1);
+  color: #a0c8d8;
+  border-color: rgba(120, 180, 200, 0.5);
+}
+
+.sea-exit {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 5;
+  width: 22px;
+  height: 22px;
+  background: linear-gradient(180deg, rgba(20, 20, 20, 0.6) 0%, rgba(0, 0, 0, 0.7) 100%);
+  border: 1px solid rgba(120, 180, 200, 0.25);
+  color: #608090;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-style: italic;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 2px;
+  transition: all 0.15s;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.5),
+    0 1px 0 rgba(0, 0, 0, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+  transition: transform 0.08s, filter 0.15s, box-shadow 0.08s;
+}
+.sea-exit:hover {
+  filter: brightness(1.25);
+}
+.sea-exit:active {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 0 0 rgba(0, 0, 0, 0.5);
+}
+
+
+.sea-exit:hover {
+  background: rgba(120, 180, 200, 0.1);
+  color: #a0c8d8;
+  border-color: rgba(120, 180, 200, 0.5);
+}
+
+.sea-raison {
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 6, 10, 0.88);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.sea-raison.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sea-raison-inner {
+  width: 78%;
+  max-width: 420px;
+  background: linear-gradient(180deg, #0a1a24 0%, #02060a 100%);
+  border: 1px solid rgba(120, 180, 200, 0.25);
+  box-shadow:
+    inset 0 0 0 1px #02060a,
+    inset 0 0 24px rgba(0, 0, 0, 0.7),
+    0 0 30px rgba(120, 180, 200, 0.2);
+  padding: 18px 22px;
+  font-style: italic;
+  color: #5a8090;
+  letter-spacing: 0.03em;
+}
+
+.sea-raison-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(120, 180, 200, 0.2);
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.sea-raison-name {
+  font-size: 0.875rem;
+  color: #a0c8d8;
+  text-transform: lowercase;
+  letter-spacing: 0.25em;
+  font-weight: 700;
+}
+
+.sea-raison-close {
+  background: none;
+  border: 1px solid rgba(120, 180, 200, 0.25);
+  color: #608090;
+  font-family: inherit;
+  font-size: 0.85rem;
+  line-height: 1;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.sea-raison-close:hover {
+  background: rgba(120, 180, 200, 0.1);
+  color: #a0c8d8;
+}
+
+.sea-raison-body {
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.sea-raison-body em {
+  color: #a0c8d8;
+  font-style: normal;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.sea-raison-foot {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(120, 180, 200, 0.2);
+  font-size: 0.875rem;
+  color: #406070;
+  text-align: right;
+  letter-spacing: 0.1em;
+}
+
+/* the release ritual — bring something, weigh it, let it sink */
+
+.sea-ritual {
+  position: absolute;
+  bottom: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  z-index: 4;
+  transition: opacity 1.6s ease, filter 1.6s ease;
+}
+
+.sea-app.releasing .sea-ritual {
+  opacity: 0;
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+.sea-input {
+  width: 300px;
+  max-width: 70vw;
+  background: rgba(6, 18, 26, 0.55);
+  border: 1px solid rgba(120, 180, 200, 0.22);
+  border-bottom-color: rgba(120, 180, 200, 0.45);
+  color: #a0c8d8;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-style: italic;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-align: center;
+  padding: 7px 10px;
+  border-radius: 2px;
+  outline: none;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.sea-input::placeholder {
+  color: rgba(143, 180, 196, 0.8);
+}
+
+.sea-input:focus {
+  border-color: rgba(160, 200, 220, 0.5);
+  background: rgba(10, 26, 36, 0.65);
+}
+
+.sea-intensity {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.sea-intensity-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1px solid rgba(120, 180, 200, 0.35);
+  background: rgba(6, 18, 26, 0.4);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.sea-intensity-dot.on {
+  background: rgba(160, 200, 220, 0.75);
+  border-color: rgba(160, 200, 220, 0.8);
+  box-shadow: 0 0 8px rgba(120, 180, 200, 0.5);
+}
+
+.sea-intensity-dot.locked {
+  opacity: 0.3;
+}
+
+.sea-release {
+  background: none;
+  border: none;
+  color: #608090;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-style: italic;
+  font-size: 1rem;
+  letter-spacing: 0.28em;
+  text-transform: lowercase;
+  cursor: pointer;
+  padding: 4px 10px;
+  transition: color 0.25s, letter-spacing 0.25s, opacity 0.25s;
+}
+
+.sea-release:not(:disabled):hover {
+  color: #a0c8d8;
+  letter-spacing: 0.36em;
+}
+
+.sea-release:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.sea-carried {
+  position: absolute;
+  top: 34%;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 70%;
+  text-align: center;
+  font-style: italic;
+  font-size: 1rem;
+  letter-spacing: 0.06em;
+  color: #a8ccd8;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 4;
+  transition: opacity 1.2s ease;
+}
+
+.sea-carried.visible {
+  opacity: 0.9;
+}
+
+.sea-carried.dissolving {
+  transition: opacity 2.6s ease, transform 2.6s ease, filter 2.6s ease;
+  opacity: 0;
+  transform: translateX(-50%) translateY(120px);
+  filter: blur(3px);
+}
+
+.sea-app.releasing .sea-question {
+  transition: opacity 1.6s ease;
+  opacity: 0;
+}
+
+/* ─── window titlebar (WS3, plan 2026-09-04 §4.3) — the wet slate cap ─── */
+
+.sea-titlebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 36px;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 76px 0 14px;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(160, 200, 216, 0.22) 0%, rgba(160, 200, 216, 0) 45%),
+    linear-gradient(180deg, #2c4450 0%, #16262e 70%, #101a22 100%);
+  border-bottom: 2px solid #071018;
+  box-shadow:
+    inset 0 1px 0 rgba(210, 235, 245, 0.25),
+    inset 0 -4px 3px -3px rgba(160, 200, 216, 0.35),
+    0 2px 6px rgba(0, 0, 0, 0.5);
+  font-family: 'Georgia', 'Times New Roman', serif;
+  color: #d8ecf4;
+}
+
+.sea-titlebar-name {
+  flex-shrink: 0;
+  font-size: 1.05rem;
+  font-style: italic;
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.sea-titlebar-sub {
+  font-size: 1rem;
+  font-style: italic;
+  color: #a0c8d8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.sea-titlebar .sea-help,
+.sea-titlebar .sea-exit {
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+}
+.sea-titlebar .sea-help { right: 36px; }
+.sea-titlebar .sea-exit { right: 8px; }
+.sea-titlebar .sea-help, .sea-titlebar .sea-exit {
+  width: 40px;
+  height: 40px;
+  line-height: 38px;
+  text-align: center;
+  font-size: 1.15rem;
+  top: 50%;
+  filter: brightness(1.4);
+}
+.sea-titlebar .sea-help { right: 56px; }
+.sea-titlebar .sea-exit { right: 8px; }
+.sea-help:focus-visible, .sea-exit:focus-visible {
+  outline: 2px solid #e8c890;
+  outline-offset: 2px;
+}
+.sea-titlebar .sea-help:active,
+.sea-titlebar .sea-exit:active {
+  transform: translateY(calc(-50% + 1px));
+}
+
+/* open room for the slate cap (machine.css sets [data-state] inset: 0) */
+.sea-app { top: 36px; }
+
+/* WS4 motion pass: the deep's breathing is ambient — still under reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  .sea-breath-ring,
+  .sea-breath-ring-2,
+  .sea-breath-ring-3,
+  .sea-breath-core,
+  .sea-kelp { animation: none; }
+}
+
+/* ─── WS4: vanir's cursor (register: data/personas.data.js).
+   A deep-water droplet, centre-hotspot; standard arrow fallback.
+   The deep gives up its crosshair so the droplet reads everywhere. ─── */
+.sea-app,
+.sea-titlebar {
+  cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M12 2c5 7 8 10 8 14a8 8 0 1 1-16 0c0-4 3-7 8-14z' fill='%232a8a8a' stroke='%23050a18' stroke-width='1.5'/><path d='M8 16c0 2.2 1.8 4 4 4' fill='none' stroke='%23a0c8d8' stroke-width='1.5' stroke-linecap='round'/></svg>") 12 12, auto;
+}
+.sea-app button,
+.sea-titlebar button { cursor: inherit; }
+
+/* ─── WS4: pressed-bevel + focus (D0004 recipe, deep-water palette) ─── */
+.sea-raison-close {
+  box-shadow:
+    inset 0 1px 0 rgba(210, 235, 245, 0.25),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.55),
+    0 2px 0 #050b10,
+    0 3px 4px rgba(0, 0, 0, 0.5);
+}
+.sea-raison-close:active,
+.sea-intensity-dot:active,
+.sea-release:not(:disabled):active {
+  transform: translateY(1px);
+  filter: brightness(0.92);
+  box-shadow:
+    inset 0 1px 0 rgba(210, 235, 245, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.55),
+    0 0 0 #050b10,
+    0 1px 2px rgba(0, 0, 0, 0.5);
+}
+.sea-intensity-dot.on:active {
+  box-shadow:
+    inset 0 1px 0 rgba(210, 235, 245, 0.3),
+    0 0 6px rgba(120, 180, 200, 0.5);
+}
+.sea-help:focus-visible,
+.sea-exit:focus-visible,
+.sea-raison-close:focus-visible,
+.sea-intensity-dot:focus-visible,
+.sea-release:focus-visible {
+  outline: 2px solid #a0c8d8;
+  outline-offset: 2px;
+}
+
+/* ─── WS4: hover-revelation — something pale turns over far below
+   when the deep is watched. ─── */
+.sea-glimmer {
+  position: absolute;
+  left: 30%;
+  bottom: 8%;
+  width: 40%;
+  height: 5%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(190, 220, 232, 0.5) 0%, rgba(190, 220, 232, 0) 70%);
+  filter: blur(3px);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.6s ease, transform 1.6s ease;
+  transform: translateY(10px);
+}
+.sea-deep:hover .sea-glimmer {
+  opacity: 0.85;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .sea-glimmer { transition: opacity 1.6s ease; transform: none; }
+}

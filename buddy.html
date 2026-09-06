@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="icon" href="data:,">
+  <title>Chat — E-Lizabeth</title>
+  <link rel="stylesheet" href="styles/room.css"/>
+  <link rel="stylesheet" href="styles/machine.css"/>
+  <link rel="stylesheet" href="styles/bezel.css"/>
+  <link rel="stylesheet" href="styles/scars.css"/>
+  <link rel="stylesheet" href="src/features/buddy/buddy.css"/>
+  <link rel="stylesheet" href="styles/shadow.css"/>
+  <link rel="stylesheet" href="styles/fate.css"/>
+  <link rel="stylesheet" href="styles/hijack.css"/>
+</head>
+<body>
+  <canvas class="dust-canvas" aria-hidden="true"></canvas>
+  <canvas class="static-canvas" aria-hidden="true"></canvas>
+
+  <div class="room">
+    <div class="machine">
+      <div class="bezel">
+        <div class="carvings" id="carvings"></div>
+        <div class="vent-slits" aria-hidden="true"></div>
+        <div class="corruption-scars" aria-hidden="true">
+          <div class="scar scar-1"></div>
+          <div class="scar scar-2"></div>
+          <div class="scar scar-3"></div>
+          <div class="scar scar-4"></div>
+          <div class="scar scar-5"></div>
+          <div class="scar scar-6"></div>
+        </div>
+        <div class="led" aria-hidden="true"></div>
+        <div class="liber-plate">LIBER · VACUI</div>
+        <div class="power-button" aria-hidden="true"></div>
+        <div class="screw" aria-hidden="true"></div>
+
+        <div class="screen">
+          <div class="screen-stage">
+            <header class="buddy-titlebar">
+              <span class="buddy-titlebar-name">buddy</span>
+              <span class="buddy-titlebar-sub">mistress physius keeps the ritual</span>
+              <button class="buddy-help" type="button" id="buddy-help" aria-label="how this room works">?</button>
+              <button class="buddy-exit" type="button" id="buddy-exit" aria-label="leave">×</button>
+            </header>
+            <div class="buddy-app" data-state="buddy">
+
+              <div class="buddy-raison" id="buddy-raison" inert>
+                <div class="buddy-raison-inner">
+                  <div class="buddy-raison-head">
+                    <span class="buddy-raison-name">riason</span>
+                    <button class="buddy-raison-close" type="button" id="buddy-raison-close" aria-label="close">×</button>
+                  </div>
+                  <div class="buddy-raison-body">
+                    This is the first step, write an aspect of your unconscious. For example, being scared to be creative, or emotional, being afraid. Something that <em>others</em> have noticed that you don't see in yourself and want to reveal and integrate.
+                  </div>
+                </div>
+              </div>
+
+              <div class="buddy-how" id="buddy-how" inert>
+                <div class="buddy-how-inner">
+                  <div class="buddy-how-head">
+                    <span class="buddy-how-name">how this room works</span>
+                    <button class="buddy-how-close" type="button" id="buddy-how-close" aria-label="close">×</button>
+                  </div>
+                  <div class="buddy-how-body">
+                    <p class="buddy-how-wander">speak, and it is kept.</p>
+                    <p>two exchanges, then the wax can hold them. sealed lines orbit the desktop. enter speaks, esc leaves.</p>
+                    <p>a thoughtform, if you want the technical term — a kept image that answers back.</p>
+                  </div>
+                  <div class="buddy-how-foot">
+                    <button type="button" class="buddy-how-note" id="buddy-how-note">riason's first-step note</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="buddy-arch">
+                <div class="buddy-arch-top"></div>
+                <div class="buddy-seal-mark" aria-hidden="true"></div>
+                <div class="buddy-arch-body">
+
+                  <div class="buddy-flame buddy-flame-1"></div>
+                  <div class="buddy-flame buddy-flame-2"></div>
+                  <div class="buddy-flame buddy-flame-3"></div>
+
+                  <div class="buddy-header">
+                    <div class="buddy-title">The Buddy Forge</div>
+                    <div class="buddy-sub">— as above so below —</div>
+                  </div>
+
+                  <div class="buddy-transcript" id="buddy-transcript" aria-live="polite"></div>
+
+                  <div class="buddy-sealrow">
+                    <button class="buddy-seal" id="buddy-seal" type="button" title="two exchanges at least, then the wax can hold them" disabled>seal this exchange</button>
+                  </div>
+
+                  <div class="buddy-confess">
+                    <div class="buddy-confess-label">Buddy - a stone in the hand</div>
+                    <div class="buddy-inputrow">
+                      <input class="buddy-input" id="buddy-input" type="text" aria-label="speak into the stone" spellcheck="false" autocomplete="off"/>
+                      <button class="buddy-send" id="buddy-send" type="button">Intention - speak into the stone</button>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="monitor-base" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <script src="src/state.js"></script>
+  <script src="src/sound.js"></script>
+  <script src="src/dust.js"></script>
+  <script src="src/static.js"></script>
+  <script src="src/shadow.js"></script>
+  <script src="src/carvings.js"></script>
+  <script src="data/fate.data.js"></script>
+  <script src="src/fate.js"></script>
+  <script src="data/hijack.data.js"></script>
+  <script src="src/hijack.js"></script>
+  <script src="src/features/buddy/eliza.js"></script>
+  <script src="src/features/buddy/buddy.js"></script>
+</body>
+</html>

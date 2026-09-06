@@ -1,0 +1,24 @@
+{
+  "_source": "extracted from archive/yep/LiberReference/index.html lines 2269-2400 (Exercises / Games menu). Instructional step sequences live in the script.js modal builders (from ~line 4500) and are not yet extracted — steps are empty where the HTML summary is all the source provides.",
+  "exercises": [
+    { "id": "birth-tarot", "title": "Birth Tarot", "domain": "divination", "summary": "Calculate your birth cards based on your date of birth.", "steps": [], "research": "" },
+    { "id": "card-table", "title": "Card Table", "domain": "divination", "summary": "Draw Tarot cards for reflection and archetypal insight.", "steps": [], "research": "" },
+    { "id": "six-line-machine", "title": "Six-Line Machine", "domain": "divination", "summary": "Cast the I Ching hexagram by hexagram.", "steps": [], "research": "" },
+    { "id": "pocket-orrery", "title": "Pocket Orrery", "domain": "divination", "summary": "Place celestial bodies and read their aspects.", "steps": [], "research": "" },
+    { "id": "cut-up-desk", "title": "Cut-Up Desk", "domain": "shadow", "summary": "Reveal word pairs, draw on the canvas, and compose your associations.", "steps": [], "research": "" },
+    { "id": "redaction-mirror", "title": "Redaction Mirror", "domain": "shadow", "summary": "Reframe personal phrases through dialectical operations.", "steps": [], "research": "" },
+    { "id": "emotion-wheel", "title": "Emotion Wheel", "domain": "dbt", "summary": "Map emotions to colours and labels.", "steps": [], "research": "DBT · emotion awareness" },
+    { "id": "mood-journal-collage", "title": "Mood Journal Collage", "domain": "dbt", "summary": "Track emotions daily through collage.", "steps": [], "research": "DBT · tracking" },
+    { "id": "emotions-thermometer", "title": "Emotions Thermometer", "domain": "dbt", "summary": "Rate emotional intensity and identify triggers.", "steps": [], "research": "DBT · distress tolerance" },
+    { "id": "grounded-mandala", "title": "Grounded Mandala", "domain": "art-therapy", "summary": "Trace a pre-drawn mandala to ground attention.", "steps": [], "research": "mindfulness · grounding" },
+    { "id": "safe-space-collage", "title": "Safe Space Collage", "domain": "art-therapy", "summary": "Build a visual safe place using artifacts and drawing.", "steps": [], "research": "trauma · containment" },
+    { "id": "communication-mask", "title": "Communication Mask", "domain": "shadow", "summary": "Explore the gap between outer presentation and inner feeling.", "steps": [], "research": "interpersonal · shadow" },
+    { "id": "boundaries-shield", "title": "Boundaries Shield", "domain": "art-therapy", "summary": "Identify and visualise personal boundaries.", "steps": [], "research": "interpersonal · self-care" },
+    { "id": "relationship-circle", "title": "Relationship Circle", "domain": "art-therapy", "summary": "Map your social network and emotional investment.", "steps": [], "research": "interpersonal · social" },
+    { "id": "mindful-coloring", "title": "Mindful Coloring", "domain": "art-therapy", "summary": "Colour pre-drawn pages or your own artifacts.", "steps": [], "research": "mindfulness · regulation" },
+    { "id": "emotion-drawing", "title": "Emotion Drawing", "domain": "art-therapy", "summary": "Express a specific emotion through free drawing.", "steps": [], "research": "CBT · expression" },
+    { "id": "visual-journaling", "title": "Visual Journaling", "domain": "art-therapy", "summary": "Daily visual record of mood, challenges, and insights.", "steps": [], "research": "tracking · reflection" },
+    { "id": "body-mapping", "title": "Body Mapping", "domain": "art-therapy", "summary": "Connect emotions to physical sensations.", "steps": [], "research": "somatic · trauma" },
+    { "id": "alternative-perception", "title": "Alternative Perception", "domain": "art-therapy", "summary": "Draw an alternative, balanced view of a situation.", "steps": [], "research": "CBT · reframing" }
+  ]
+}

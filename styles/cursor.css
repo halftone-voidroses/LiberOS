@@ -1,0 +1,58 @@
+/* cursor.css — the stagehand cursor (shell; desktop, sigil, games).
+   A Riason-blue ring with an orbiting mote. pointer-events:none so it
+   never steals a click; it only performs through real handlers. */
+
+.stagehand-cursor {
+  position: fixed;
+  left: -100px;
+  top: -100px;
+  width: 30px;
+  height: 30px;
+  margin: -15px 0 0 -15px;
+  border-radius: 50%;
+  border: 2px solid #8acaff;
+  background: rgba(138, 202, 255, 0.08);
+  box-shadow: 0 0 14px rgba(138, 202, 255, 0.7), inset 0 0 8px rgba(138, 202, 255, 0.25);
+  z-index: 95;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.stagehand-cursor::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  border-radius: 50%;
+  background: #cce0ff;
+  box-shadow: 0 0 6px #cce0ff;
+  animation: stagehand-orbit 3s linear infinite;
+}
+
+@keyframes stagehand-orbit {
+  from { transform: rotate(0deg) translateX(11px); }
+  to { transform: rotate(360deg) translateX(11px); }
+}
+
+.stagehand-cursor.burst {
+  animation: stagehand-burst 0.6s ease-out forwards;
+}
+
+@keyframes stagehand-burst {
+  0% { transform: scale(1); opacity: 1; }
+  40% { transform: scale(2.6); opacity: 1; filter: brightness(2.2); }
+  100% { transform: scale(4.5); opacity: 0; }
+}
+
+.stagehand-cursor.gone {
+  opacity: 0 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stagehand-cursor::after { animation: none; }
+  .stagehand-cursor.burst { animation: none; opacity: 0; }
+}

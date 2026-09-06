@@ -1,0 +1,85 @@
+/* ============================================================================
+   daily-floor.css — the day's small works (shell chrome, not persona CSS:
+   same family as twelve-works.css / status-line.css). A quiet checklist in
+   the screen's right margin, below the radial clock and clear of the
+   twelve-works bar. Pre-tutorial the screen belongs to the big ? alone.
+   ============================================================================ */
+
+.daily-floor {
+  position: absolute;
+  top: 144px;      /* clears the clock (top 12 + 120 tall + date line) and
+                      the repeat-?; above the dial band */
+  right: 16px;
+  width: 232px;
+  z-index: 20;
+  pointer-events: auto;
+  font-family: 'VT323', monospace;
+  color: #c0b090;
+}
+
+.state-desktop:not(.tutorial-done) .daily-floor { display: none; }
+
+.daily-floor-head {
+  font-size: 15px;
+  letter-spacing: 0.22em;
+  text-transform: lowercase;
+  color: #a89878;
+  border-bottom: 1px solid rgba(200, 168, 120, 0.25);
+  padding-bottom: 4px;
+  margin-bottom: 6px;
+  text-shadow: 0 0 6px rgba(200, 168, 120, 0.25);
+}
+
+.daily-floor-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 2px 0;
+}
+
+.daily-floor-tick {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  line-height: 18px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid rgba(200, 168, 120, 0.4);
+  border-radius: 2px;
+  color: #c8a878;
+  font-family: inherit;
+  font-size: 15px;
+  cursor: pointer;
+  align-self: center;
+}
+.daily-floor-tick:hover { border-color: #c8a878; }
+
+.daily-floor-label {
+  color: #c0b090;
+  font-size: 16px;
+  line-height: 1.25;
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(200, 168, 120, 0.35);
+}
+.daily-floor-label:hover { color: #e8d8a8; }
+
+.daily-floor-row.done .daily-floor-label {
+  color: #6a6048;
+  text-decoration: line-through;
+  border-bottom-color: transparent;
+}
+.daily-floor-row.done .daily-floor-tick {
+  color: #6a6048;
+  border-color: rgba(200, 168, 120, 0.2);
+}
+
+.daily-floor-foot {
+  margin-top: 8px;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: #5a5040;
+}
+
+@media (max-height: 720px) {
+  .daily-floor { top: 96px; width: 208px; }
+}

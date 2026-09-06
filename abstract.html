@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="icon" href="data:,">
+  <title>Abstract — Entity404</title>
+  <link rel="stylesheet" href="styles/room.css"/>
+  <link rel="stylesheet" href="styles/machine.css"/>
+  <link rel="stylesheet" href="styles/bezel.css"/>
+  <link rel="stylesheet" href="styles/scars.css"/>
+  <link rel="stylesheet" href="src/features/abstract/abstract.css"/>
+  <link rel="stylesheet" href="styles/shadow.css"/>
+  <link rel="stylesheet" href="styles/fate.css"/>
+  <link rel="stylesheet" href="styles/hijack.css"/>
+</head>
+<body>
+  <canvas class="dust-canvas" aria-hidden="true"></canvas>
+  <canvas class="static-canvas" aria-hidden="true"></canvas>
+
+  <div class="room">
+    <div class="machine">
+      <div class="bezel">
+        <div class="carvings" id="carvings"></div>
+        <div class="vent-slits" aria-hidden="true"></div>
+        <div class="corruption-scars" aria-hidden="true">
+          <div class="scar scar-1"></div>
+          <div class="scar scar-2"></div>
+          <div class="scar scar-3"></div>
+          <div class="scar scar-4"></div>
+          <div class="scar scar-5"></div>
+          <div class="scar scar-6"></div>
+        </div>
+        <div class="led" aria-hidden="true"></div>
+        <div class="liber-plate">LIBER · VACUI</div>
+        <div class="power-button" aria-hidden="true"></div>
+        <div class="screw" aria-hidden="true"></div>
+
+        <div class="screen">
+          <div class="screen-stage">
+            <header class="abstract-titlebar">
+              <span class="abstract-titlebar-name">ABSTRACT.SYS</span>
+              <span class="abstract-titlebar-sub">board 404 · carrier held — entity404</span>
+              <button class="abstract-help" type="button" id="abstract-help" aria-label="how this room works">?</button>
+              <button class="abstract-exit" type="button" id="abstract-exit" aria-label="leave">×</button>
+            </header>
+            <div class="abstract-app" data-state="abstract">
+
+              <div class="abstract-raison" id="abstract-raison" inert>
+                <div class="abstract-raison-inner">
+                  <div class="abstract-raison-head">
+                    <span class="abstract-raison-name">riason</span>
+                    <button class="abstract-raison-close" type="button" id="abstract-raison-close" aria-label="close">×</button>
+                  </div>
+                  <div class="abstract-raison-body">
+                    entity404 keeps the void for play, not for shadow work. artifacts you have already named live in the left rail. drag any one of them into the void. a yes/no prompt will ask: abstract it? on confirm, the artifact is absorbed and a hatched egg appears in the void, marked with its name. cut, reform, do not explain.
+                  </div>
+                </div>
+              </div>
+
+              <div class="abstract-rail" id="abstract-rail" aria-label="artifacts">
+                <div class="abstract-rail-title">┌─ artifacts ─┐</div>
+                <div class="abstract-rail-list" id="abstract-rail-list">
+                  <div class="abstract-rail-empty">no artifacts yet.</div>
+                </div>
+              </div>
+
+              <div class="abstract-void" id="abstract-void">
+                <div class="abstract-void-mem" aria-hidden="true">640K conventional .... ok<br>himem present ........ ok<br>shadow ram .......... gone</div>
+                <div class="abstract-void-crt">
+                  <div class="abstract-void-header">
+                    <span class="abstract-void-banner">┌─ ENTITY404 ─┐</span>
+                  </div>
+                  <div class="abstract-void-body" id="abstract-void-body">
+                    <div class="abstract-void-line">drag an artifact from the left rail into this void.</div>
+                    <div class="abstract-void-line">on confirm, a hatched egg will be spawned here, marked with its name.</div>
+                    <div class="abstract-void-line">&nbsp;</div>
+                    <div class="abstract-void-line abstract-void-prompt">C:\entity404&gt; <span class="abstract-void-cursor">_</span></div>
+                  </div>
+                  <div class="abstract-void-footer"></div>
+                </div>
+
+                <div class="abstract-eggs" id="abstract-eggs" aria-hidden="true"></div>
+              </div>
+
+              <div class="abstract-confirm" id="abstract-confirm" inert>
+                <div class="abstract-confirm-inner">
+                  <div class="abstract-confirm-title">abstract it?</div>
+                  <div class="abstract-confirm-body" id="abstract-confirm-body">—</div>
+                  <div class="abstract-confirm-actions">
+                    <button class="abstract-confirm-yes" type="button" id="abstract-confirm-yes">Y / yes</button>
+                    <button class="abstract-confirm-no" type="button" id="abstract-confirm-no">N / no</button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="monitor-base" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <script src="src/state.js"></script>
+  <script src="src/sound.js"></script>
+  <script src="src/dust.js"></script>
+  <script src="src/static.js"></script>
+  <script src="src/shadow.js"></script>
+  <script src="src/carvings.js"></script>
+  <script src="data/fate.data.js"></script>
+  <script src="src/fate.js"></script>
+  <script src="data/hijack.data.js"></script>
+  <script src="src/hijack.js"></script>
+  <script src="src/features/abstract/abstract.js"></script>
+</body>
+</html>

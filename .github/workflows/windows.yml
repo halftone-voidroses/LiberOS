@@ -1,0 +1,58 @@
+name: Windows installer
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - name: Install frontend deps
+        run: npm ci
+
+      # mac bundle formats (app/dmg) don't exist on windows runners; rewrite in place
+      - name: Point bundle targets at Windows formats
+        shell: pwsh
+        run: |
+          $cfg = Get-Content src-tauri/tauri.conf.json -Raw
+          $cfg = $cfg -replace '"targets": \["app", "dmg"\]', '"targets": ["nsis", "msi"]'
+          if ($cfg -notmatch '"nsis"') { throw 'bundle targets not found in tauri.conf.json' }
+          Set-Content src-tauri/tauri.conf.json $cfg
+
+      - name: Build installer
+        run: npm run app:build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LiberOS-windows-installer
+          path: |
+            src-tauri/target/release/bundle/nsis/*.exe
+            src-tauri/target/release/bundle/msi/*.msi
+          if-no-files-found: error
+
+      # tag pushes land the windows installers on the release the lead
+      # opened with the mac dmg — same tag, one release, two platforms
+      - name: Attach installers to the release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            src-tauri/target/release/bundle/nsis/*.exe
+            src-tauri/target/release/bundle/msi/*.msi

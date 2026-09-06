@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="icon" href="data:,">
+  <title>Liber Vacui — Desktop</title>
+  <link rel="stylesheet" href="styles/room.css"/>
+  <link rel="stylesheet" href="styles/machine.css"/>
+  <link rel="stylesheet" href="styles/bezel.css"/>
+  <link rel="stylesheet" href="styles/scars.css"/>
+  <link rel="stylesheet" href="styles/dial.css"/>
+  <link rel="stylesheet" href="styles/status-line.css"/>
+  <link rel="stylesheet" href="styles/twelve-works.css"/>
+  <link rel="stylesheet" href="styles/daily-floor.css"/>
+  <link rel="stylesheet" href="styles/clock.css"/>
+  <link rel="stylesheet" href="styles/desktop.css"/>
+  <link rel="stylesheet" href="styles/constellation.css"/>
+  <link rel="stylesheet" href="styles/shadow.css"/>
+  <link rel="stylesheet" href="styles/fate.css"/>
+  <link rel="stylesheet" href="styles/cutscene.css"/>
+  <link rel="stylesheet" href="styles/cursor.css"/>
+</head>
+<body>
+  <canvas class="dust-canvas" aria-hidden="true"></canvas>
+  <canvas class="static-canvas" aria-hidden="true"></canvas>
+
+  <div class="room">
+    <div class="machine">
+      <div class="bezel">
+        <div class="carvings" id="carvings"></div>
+        <div class="vent-slits" aria-hidden="true"></div>
+        <div class="corruption-scars" aria-hidden="true">
+          <div class="scar scar-1"></div>
+          <div class="scar scar-2"></div>
+          <div class="scar scar-3"></div>
+          <div class="scar scar-4"></div>
+          <div class="scar scar-5"></div>
+          <div class="scar scar-6"></div>
+        </div>
+        <div class="led" aria-hidden="true"></div>
+        <div class="liber-plate">LIBER · VACUI</div>
+        <div class="power-button" aria-hidden="true"></div>
+        <div class="screw" aria-hidden="true"></div>
+
+        <div class="screen">
+          <div class="screen-stage">
+            <div class="state-desktop" data-state="desktop" id="desktop">
+
+              <div class="radial-clock">
+                <canvas></canvas>
+                <div class="date"></div>
+              </div>
+
+              <div class="sigil-overlay" id="sigil-overlay" aria-hidden="true">
+                <img id="sigil-overlay-img" alt="" />
+              </div>
+
+              <div class="constellation" id="constellation">
+                <svg class="constellation-svg" id="constellation-svg" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet"></svg>
+                <div class="constellation-empty" id="constellation-empty">
+                  — the desktop is empty —
+                  <div class="constellation-empty-sub">open the buddy from the dial.</div>
+                </div>
+              </div>
+
+              <div class="status-line">
+                <span class="status-phrase">liber.os is listening.</span>
+              </div>
+
+              <button class="settings-cog" id="settings-cog" type="button" aria-label="settings" title="settings">
+                <svg viewBox="0 0 100 100" aria-hidden="true">
+                  <defs>
+                    <radialGradient id="cog-grad" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stop-color="#c8a878"/>
+                      <stop offset="60%" stop-color="#8a6a40"/>
+                      <stop offset="100%" stop-color="#4a3018"/>
+                    </radialGradient>
+                  </defs>
+                  <g class="settings-cog-gear">
+                    <path fill="url(#cog-grad)" stroke="#2a1408" stroke-width="1.5" d="M50 8 L58 8 L60 20 Q66 22 71 26 L82 20 L88 26 L82 37 Q86 42 88 50 L100 50 L100 58 L88 60 Q86 66 82 71 L88 82 L82 88 L71 82 Q66 86 60 88 L58 100 L50 100 L42 100 L40 88 Q34 86 29 82 L18 88 L12 82 L18 71 Q14 66 12 60 L0 58 L0 50 L12 50 Q14 42 18 37 L12 26 L18 20 L29 26 Q34 22 40 20 L42 8 Z"/>
+                    <circle cx="50" cy="50" r="16" fill="#0a0503" stroke="#2a1408" stroke-width="1.5"/>
+                  </g>
+                </svg>
+                <span class="settings-cog-label">settings</span>
+              </button>
+
+              <div class="dial">
+                <div class="dial-inner">
+                  <div class="dial-track" aria-hidden="true"></div>
+                  <div class="dial-row" id="dial-row"></div>
+                  <button class="dial-arrow left"  id="dial-left"  type="button" aria-label="previous">&lt;</button>
+                  <button class="dial-arrow right" id="dial-right" type="button" aria-label="next">&gt;</button>
+                </div>
+              </div>
+
+              <div class="constellation-mini" id="constellation-mini" inert>
+                <div class="constellation-mini-inner">
+                  <div class="constellation-mini-header">
+                    <span class="constellation-mini-label" id="constellation-mini-label">— artifact —</span>
+                    <button class="constellation-mini-close" id="constellation-mini-close" type="button" aria-label="close">×</button>
+                  </div>
+                  <div class="constellation-mini-row">
+                    <span class="constellation-mini-arrow">—</span>
+                    <input type="text" class="constellation-mini-verb" id="constellation-mini-verb" maxlength="40" spellcheck="false" list="verb-families" />
+                    <datalist id="verb-families">
+                      <option value="protects"></option>
+                      <option value="carries"></option>
+                      <option value="holds"></option>
+                      <option value="witnesses"></option>
+                      <option value="guards"></option>
+                      <option value="feeds"></option>
+                      <option value="releases"></option>
+                      <option value="hides"></option>
+                      <option value="names"></option>
+                      <option value="follows"></option>
+                    </datalist>
+                    <span class="constellation-mini-arrow constellation-mini-sigil">★</span>
+                  </div>
+                  <div class="constellation-mini-actions">
+                    <button type="button" class="constellation-mini-save" id="constellation-mini-save">bind to buddy</button>
+                    <button type="button" class="constellation-mini-release" id="constellation-mini-release">release</button>
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="monitor-base" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <script src="src/state.js"></script>
+  <script src="src/sound.js"></script>
+  <script src="data/tarot.data.js"></script>
+  <script src="data/prompt-templates.data.js"></script>
+  <script src="src/prompt-engine.js"></script>
+  <script src="src/gamification.js"></script>
+  <script src="src/daily-floor.js"></script>
+  <script src="src/prompt-surface.js"></script>
+  <script src="src/dust.js"></script>
+  <script src="src/static.js"></script>
+  <script src="src/shadow.js"></script>
+  <script src="src/carvings.js"></script>
+  <script src="data/fate.data.js"></script>
+  <script src="src/fate.js"></script>
+  <script src="src/cursor.js"></script>
+  <script src="src/cutscene.js"></script>
+  <script src="src/clock.js"></script>
+  <script src="src/status-line.js"></script>
+  <script src="src/whispers.js"></script>
+  <script src="data/personas.data.js"></script>
+  <script src="data/citations.data.js"></script>
+  <script src="data/twelve-works.data.js"></script>
+  <script src="src/dial.js"></script>
+  <script src="src/constellation.js"></script>
+  <script src="src/twelve-works.js"></script>
+  <script src="src/sigil-overlay.js"></script>
+  <script>
+    (function () {
+      var cog = document.getElementById('settings-cog');
+      if (cog) cog.addEventListener('click', function () {
+        window.location.href = 'settings.html';
+      });
+    })();
+  </script>
+</body>
+</html>

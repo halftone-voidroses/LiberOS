@@ -1,0 +1,594 @@
+/* abstract.css — Entity404. DOS-green-on-black void, hatched-egg drop.
+   This file is COMPLETELY INDEPENDENT. No imports, no shared variables (covenant Q.1). */
+
+.abstract-app {
+  position: absolute;
+  inset: 0;
+  background: #000000;
+  color: #00ff66;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  grid-template-rows: 1fr;
+  column-gap: 8px;
+  padding: 18px 18px 24px;
+}
+
+/* ─── left rail ─────────────────────────────────────────────────────── */
+.abstract-rail {
+  border: 1px solid #00ff66;
+  background: rgba(0, 32, 12, 0.4);
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+  position: relative;
+}
+
+.abstract-rail-title {
+  padding: 6px 10px;
+  border-bottom: 1px dashed #00ff66;
+  color: #00ff66;
+  text-shadow: 0 0 6px rgba(0, 255, 102, 0.6);
+  font-weight: 700;
+  letter-spacing: 0.15em;
+}
+
+.abstract-rail-list {
+  padding: 8px 6px;
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.abstract-rail-empty {
+  color: #1a8a3e;
+  font-style: italic;
+  padding: 4px 8px;
+}
+
+.abstract-rail-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 4px 8px;
+  border: 1px dotted #00ff66;
+  background: rgba(0, 60, 24, 0.4);
+  cursor: grab;
+  user-select: none;
+  transition: background 0.12s, color 0.12s;
+}
+.abstract-rail-item:hover {
+  background: rgba(0, 255, 102, 0.15);
+  color: #aaffcc;
+}
+.abstract-rail-item.dragging { opacity: 0.5; cursor: grabbing; }
+
+.abstract-rail-item-label {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.abstract-rail-item-source {
+  font-size: 0.875rem;
+  color: #1a8a3e;
+  letter-spacing: 0.1em;
+  text-transform: lowercase;
+}
+
+/* ─── central void ──────────────────────────────────────────────────── */
+.abstract-void {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: stretch;
+  border: 1px solid #00ff66;
+  background: rgba(0, 16, 6, 0.6);
+  overflow: hidden;
+}
+
+.abstract-void.drag-over {
+  background: rgba(0, 60, 24, 0.6);
+  box-shadow: inset 0 0 24px rgba(0, 255, 102, 0.4);
+}
+
+.abstract-void-crt {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 16px;
+}
+
+.abstract-void-header {
+  border-bottom: 1px dashed #00ff66;
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+
+.abstract-void-banner {
+  color: #00ff66;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-shadow: 0 0 8px rgba(0, 255, 102, 0.6);
+}
+
+.abstract-void-body {
+  flex: 1;
+  overflow-y: auto;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #00ff66;
+}
+
+.abstract-void-line { padding: 1px 0; }
+
+.abstract-void-prompt { margin-top: 6px; }
+
+.abstract-void-cursor {
+  display: inline-block;
+  animation: abstract-blink 1.0s steps(1, end) infinite;
+}
+@keyframes abstract-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.abstract-void-footer {
+  margin-top: 10px;
+  border-top: 1px dashed #00ff66;
+  padding-top: 6px;
+  font-size: 0.875rem;
+  color: #1a8a3e;
+}
+
+/* (.abstract-void-scanlines removed — D0002 scanline purge.) */
+
+/* ─── hatched eggs (drop targets) ───────────────────────────────────── */
+.abstract-eggs {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 14px;
+  padding: 60px 18px 18px 18px;
+  z-index: 3;
+}
+
+.abstract-egg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  pointer-events: auto;
+  animation: abstract-egg-spawn 0.45s ease-out both;
+}
+@keyframes abstract-egg-spawn {
+  0%   { transform: translateY(8px) scale(0.7); opacity: 0; }
+  100% { transform: translateY(0)    scale(1);   opacity: 1; }
+}
+
+.abstract-egg-shape {
+  width: 36px;
+  height: 46px;
+  background:
+    radial-gradient(ellipse at 50% 30%, #f4f0d8 0%, #d8c89c 60%, #aa8e58 100%);
+  border: 1px solid #6a5530;
+  border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
+  position: relative;
+  box-shadow:
+    inset -3px -4px 6px rgba(0, 0, 0, 0.3),
+    0 0 10px rgba(255, 200, 100, 0.25);
+}
+.abstract-egg-shape::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  background-image:
+    linear-gradient(45deg, transparent 45%, rgba(60, 40, 10, 0.5) 45%, rgba(60, 40, 10, 0.5) 55%, transparent 55%),
+    linear-gradient(-45deg, transparent 45%, rgba(60, 40, 10, 0.5) 45%, rgba(60, 40, 10, 0.5) 55%, transparent 55%);
+  background-size: 6px 6px;
+  border-radius: inherit;
+  opacity: 0.4;
+}
+
+.abstract-egg-label {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 0.875rem;
+  color: #00ff66;
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 4px rgba(0, 255, 102, 0.6);
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ─── confirm modal ─────────────────────────────────────────────────── */
+.abstract-confirm {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.78);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 8;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+}
+.abstract-confirm.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.abstract-confirm-inner {
+  width: 70%;
+  max-width: 380px;
+  border: 1px solid #00ff66;
+  background: #001008;
+  padding: 18px 22px 16px;
+  box-shadow: 0 0 24px rgba(0, 255, 102, 0.3);
+}
+
+.abstract-confirm-title {
+  font-size: 1.0rem;
+  letter-spacing: 0.25em;
+  text-transform: lowercase;
+  color: #00ff66;
+  text-align: center;
+  margin-bottom: 10px;
+  text-shadow: 0 0 8px rgba(0, 255, 102, 0.6);
+}
+
+.abstract-confirm-body {
+  text-align: center;
+  font-size: 1rem;
+  color: #aaffcc;
+  margin-bottom: 14px;
+  word-break: break-all;
+}
+
+.abstract-confirm-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.abstract-confirm-yes,
+.abstract-confirm-no {
+  background: transparent;
+  border: 1px solid #00ff66;
+  color: #00ff66;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  padding: 4px 14px;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+.abstract-confirm-yes:hover {
+  background: rgba(0, 255, 102, 0.2);
+  color: #ffffff;
+}
+.abstract-confirm-no:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #cccccc;
+}
+
+/* ─── help & exit ───────────────────────────────────────────────────── */
+.abstract-help {
+  position: absolute;
+  top: 14px;
+  right: 40px;
+  z-index: 7;
+  width: 22px;
+  height: 22px;
+  background: none;
+  border: 1px solid #00ff66;
+  color: #00ff66;
+  font-family: 'VT323', Georgia, 'Times New Roman', Times, serif;
+  font-size: 0.95rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 2px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.5),
+    0 1px 0 rgba(0, 0, 0, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+  transition: transform 0.08s, filter 0.15s, box-shadow 0.08s;
+}
+.abstract-help:hover {
+  filter: brightness(1.25);
+}
+.abstract-help:active {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 0 0 rgba(0, 0, 0, 0.5);
+}
+
+.abstract-help:hover {
+  background: rgba(0, 255, 102, 0.15);
+  color: #aaffcc;
+  border-color: #aaffcc;
+}
+
+.abstract-exit {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 7;
+  width: 22px;
+  height: 22px;
+  background: none;
+  border: 1px solid #00ff66;
+  color: #00ff66;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 1.05rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 2px;
+  transition: all 0.15s;
+;
+ box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.5),
+    0 1px 0 rgba(0, 0, 0, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+  transition: transform 0.08s, filter 0.15s, box-shadow 0.08s;
+}
+.abstract-exit:hover {
+  filter: brightness(1.25);
+}
+.abstract-exit:active {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 0 0 rgba(0, 0, 0, 0.5);
+}
+
+.abstract-exit:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+/* ─── riason modal ──────────────────────────────────────────────────── */
+.abstract-riason {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.abstract-riason.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.abstract-riason-inner {
+  width: 78%;
+  max-width: 460px;
+  border: 1px solid #00ff66;
+  background: #001008;
+  padding: 18px 20px 16px;
+  box-shadow: 0 0 24px rgba(0, 255, 102, 0.3);
+  font-family: 'VT323', 'Courier New', monospace;
+  color: #00ff66;
+  position: relative;
+}
+
+.abstract-riason-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dashed #00ff66;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.abstract-riason-name {
+  letter-spacing: 0.25em;
+  text-transform: lowercase;
+  color: #00ff66;
+  font-weight: 700;
+  text-shadow: 0 0 6px rgba(0, 255, 102, 0.6);
+}
+
+.abstract-riason-close {
+  background: none;
+  border: 1px solid #00ff66;
+  color: #00ff66;
+  font-family: inherit;
+  font-size: 1rem;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 2px;
+}
+.abstract-riason-close:hover {
+  background: rgba(0, 255, 102, 0.15);
+  color: #ffffff;
+}
+
+.abstract-riason-body {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #aaffcc;
+}
+
+/* ─── window titlebar (WS3, plan 2026-09-04 §4.3) — BBS prompt bar ─── */
+
+.abstract-titlebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 36px;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 76px 0 14px;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 140%, rgba(0, 255, 102, 0.12) 0%, rgba(0, 255, 102, 0) 60%),
+    linear-gradient(180deg, #03140a 0%, #010804 100%);
+  border-bottom: 2px solid #0a4018;
+  box-shadow:
+    inset 0 0 12px rgba(0, 255, 102, 0.1),
+    inset 0 1px 0 rgba(0, 255, 102, 0.2);
+  font-family: 'VT323', 'Courier New', monospace;
+  color: #00ff66;
+}
+
+.abstract-titlebar-name {
+  flex-shrink: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-shadow: 0 0 6px rgba(0, 255, 102, 0.5);
+}
+
+.abstract-titlebar-sub {
+  font-size: 1rem;
+  color: #1a8a3e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.abstract-titlebar-sub::after {
+  content: '\2588';
+  margin-left: 0.4em;
+  color: #00ff66;
+  animation: abstract-caret 1.2s steps(2) infinite;
+}
+
+@keyframes abstract-caret {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+
+.abstract-titlebar .abstract-help,
+.abstract-titlebar .abstract-exit {
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+}
+.abstract-titlebar .abstract-help { right: 36px; }
+.abstract-titlebar .abstract-exit { right: 8px; }
+.abstract-titlebar .abstract-help, .abstract-titlebar .abstract-exit {
+  width: 40px;
+  height: 40px;
+  line-height: 38px;
+  text-align: center;
+  font-size: 1.15rem;
+  top: 50%;
+  filter: brightness(1.4);
+}
+.abstract-titlebar .abstract-help { right: 56px; }
+.abstract-titlebar .abstract-exit { right: 8px; }
+.abstract-help:focus-visible, .abstract-exit:focus-visible {
+  outline: 2px solid #e8c890;
+  outline-offset: 2px;
+}
+.abstract-titlebar .abstract-help:active,
+.abstract-titlebar .abstract-exit:active {
+  transform: translateY(calc(-50% + 1px));
+}
+
+/* open room for the prompt bar (machine.css sets [data-state] inset: 0) */
+.abstract-app { top: 36px; }
+
+/* ─── WS4: entity404's cursor (register: data/personas.data.js).
+   A blocky phosphor-green arrow; standard arrow fallback. Rail items
+   keep grab/grabbing (drag affordance). ─── */
+.abstract-app,
+.abstract-titlebar {
+  cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M2 2h4v4h4v4h4v4h4v4h4v4h-6v-2h-2v-2h-2v-2h-2v-2h-2v-2H4V8H2z' fill='%2300ff66' stroke='%23002010'/></svg>") 2 2, auto;
+}
+.abstract-app button,
+.abstract-titlebar button { cursor: inherit; }
+
+/* ─── WS4: pressed-bevel + focus (D0004 recipe, phosphor palette) ─── */
+.abstract-confirm-yes,
+.abstract-confirm-no,
+.abstract-raison-close {
+  border-width: 2px;
+  box-shadow:
+    inset 0 1px 0 rgba(0, 255, 102, 0.25),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.6),
+    0 2px 0 #00200a,
+    0 3px 4px rgba(0, 0, 0, 0.6);
+}
+.abstract-confirm-yes:active,
+.abstract-confirm-no:active,
+.abstract-raison-close:active {
+  transform: translateY(1px);
+  filter: brightness(0.92);
+  box-shadow:
+    inset 0 1px 0 rgba(0, 255, 102, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.6),
+    0 0 0 #00200a,
+    0 1px 2px rgba(0, 0, 0, 0.6);
+}
+.abstract-confirm-yes:focus-visible,
+.abstract-confirm-no:focus-visible,
+.abstract-help:focus-visible,
+.abstract-exit:focus-visible,
+.abstract-raison-close:focus-visible {
+  outline: 2px solid #00ff66;
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .abstract-void-cursor,
+  .abstract-titlebar-sub::after,
+  .abstract-egg { animation: none; }
+}
+
+/* ─── WS4: hover-revelation — the board's boot memory ghosts through
+   the phosphor when someone leans on the void. ─── */
+.abstract-void-mem {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  z-index: 0;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 0.875rem;
+  line-height: 1.35;
+  letter-spacing: 0.08em;
+  color: #00ff66;
+  text-align: right;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.7s ease;
+}
+.abstract-void:hover .abstract-void-mem { opacity: 0.5; }
+@media (prefers-reduced-motion: reduce) {
+  .abstract-void-mem { transition: none; }
+}

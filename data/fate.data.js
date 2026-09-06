@@ -1,0 +1,23 @@
+// fate.data.js — the fate-circle's lines, one voice per room.
+// file://-safe, no fetch. Each room: voice (who speaks) + two lines
+// (shown first, then on tap). House rules: suggest, never nag; no
+// encouragement; lowercase-leaning; Wanderlust's theatrics excepted.
+window.LIBER_DATA = window.LIBER_DATA || {};
+window.LIBER_DATA.fate = {
+  desktop:     { voice: 'wanderlust', lines: ['the town fills window by window. begin with the stone.', 'the floor suggests. nothing is owed.'] },
+  sigil:       { voice: 'mistress physius', lines: ['the stone remembers what the hand confesses.', 'say it like a chisel. intention, never volume.'] },
+  buddy:      { voice: 'e-lizabeth', lines: ['speak, and it is kept.', 'two exchanges, then the wax can hold them.'] },
+  satchel:     { voice: 'riason', lines: ['kept once, kept well. the margins take notes.', 'everything kept is kept once. index it well.'] },
+  sea:         { voice: 'vanir', lines: ['the water takes. it does not keep.', 'come down anyway. the breath is slow.'] },
+  garden:      { voice: 'ruby', lines: ['grow slow. settle three facets.', 'what is tended in patience flowers in its own colour.'] },
+  dreams:      { voice: 'insightful inquiry', lines: ['i am not certain. bring the dream anyway.', 'a symbol, a weight, a question. never a verdict.'] },
+  games:       { voice: 'whimsy wow', lines: ['step right up! the tools keep, the games release.', 'tipp sits at the floor. start there if it is loud.'] },
+  divination:  { voice: 'arcana', lines: ['the deck is still. ask.', 'the chalk answers. you read.'] },
+  learn:       { voice: 'the mad scribe', lines: ['one drawer a visit. the † marks what is cited.', 'dated, stamped, filed. bring your own pencil.'] },
+  methodology: { voice: 'riason', lines: ['name the question. return changed.', 'a method is a promise made to the margin.'] },
+  abstract:    { voice: 'entity404', lines: ['reduce. reform. do not explain.', 'no warmth here. only process.'] },
+  relation:    { voice: 'e-lizabeth', lines: ['touch one kept thing. give it a verb.', 'nothing here stands alone. count the links.'] },
+  themes:      { voice: 'wanderlust', lines: ['repaint the room. do not blame the mirror.', 'this room wears my paint now.'] },
+  trash:       { voice: 'ravaging pete', lines: ['what you bury, i keep.', 'the soil forgets nothing, friend.'] },
+  settings:    { voice: 'riason', lines: ['the doors stay labelled. the light stays humane.', 'wipe returns everything to loam. nothing else does.'] }
+};
