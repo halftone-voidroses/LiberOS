@@ -7,12 +7,6 @@
 // mechanics, meaning, close. Brief, skippable, never twice.
 window.LIBER_DATA = window.LIBER_DATA || {};
 window.LIBER_DATA.hijack = {
-  buddy: { flag: 'walkBuddy', steps: [
-    { voice: 'riason', line: 'type what you carry. press enter to send.', target: 'buddy-input' },
-    { voice: 'riason', line: 'two exchanges, then seal. sealed lines orbit the desktop.', target: 'buddy-seal' },
-    { voice: 'riason', line: 'speak, and it is kept. two exchanges, then seal.', target: null },
-    { voice: 'riason', line: 'this is the buddy room. type and send.', target: 'buddy-send', glow: true }
-  ] },
   satchel: { flag: 'walkSatchel', steps: [
     { voice: 'riason', line: 'everything kept lands here. list on the left, page on the right.', target: 'satchel-list' },
     { voice: 'riason', line: 'margin notes save with ⌘↵. the book keeps what the hands bring.', target: 'satchel-annotation' },

@@ -316,7 +316,7 @@ console.log('18. Legacy save migrates: sigils[] -> buddy stone, to:sigil -> to:b
 await page.evaluate(() => {
   try {
     localStorage.setItem('liber_vacui_v1', JSON.stringify({
-      tutorialDone: true, tutorialStage: 'done', cutsceneBuild: 'riasondemo1',
+      tutorialDone: true, tutorialStage: 'done', cutsceneBuild: 'riasondemo2',
       sigils: [{ id: 'sigil-1', intention: 'old stone', element: 'earth', ts: 1 }],
       buddy: [{ name: 'old chat', confession: 'old words' }],
       relations: [{ from: 'x', to: 'sigil', verb: 'holds', ts: 2 }]

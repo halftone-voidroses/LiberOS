@@ -5,7 +5,7 @@
   'use strict';
 
   const KEY = 'liber_vacui_v1';
-  const CUTSCENE_BUILD = 'riasondemo1';
+  const CUTSCENE_BUILD = 'riasondemo2';
 
   const DEFAULT = {
     cutsceneBuild: CUTSCENE_BUILD,
@@ -60,6 +60,8 @@
       }
       if (parsed.cutsceneBuild !== CUTSCENE_BUILD) {
         parsed.cutsceneBuild = CUTSCENE_BUILD;
+        var retours = ['walkSatchel', 'walkSea', 'walkAbstract', 'walkDivination', 'walkDreams', 'walkGarden', 'walkGames', 'walkMethod', 'walkThemes', 'walkRelation', 'walkTrash', 'walkSigil', 'walkLearn'];
+        for (var ri = 0; ri < retours.length; ri++) delete parsed[retours[ri]];
         var shelve = ['buddy', 'relations', 'divination', 'games', 'learn', 'abstract', 'sea', 'garden', 'dreams'];
         var grave = Array.isArray(parsed.graveyard) ? parsed.graveyard.slice() : [];
         var now = Date.now(), k, i;
