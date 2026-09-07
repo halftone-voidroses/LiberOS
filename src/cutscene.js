@@ -154,19 +154,18 @@
     ring.className = 'crt-flames';
     ring.id = 'crt-flames';
     ring.setAttribute('aria-hidden', 'true');
-    var sr = stage.getBoundingClientRect();
-    var scrEl = stage.querySelector('.screen') || machine;
-    var mr = scrEl ? scrEl.getBoundingClientRect() : null;
+    var vw = window.innerWidth || 1280, vh = window.innerHeight || 800;
+    var mr = machine ? machine.getBoundingClientRect() : null;
     var spots = [];
     function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
     if (mr && mr.width > 0) {
-      var x0 = mr.left - sr.left, y0 = mr.top - sr.top, w = mr.width, h = mr.height, si;
-      var PX = function (x, y) { return { x: clamp(x, 8, sr.width - 8), y: clamp(y, 8, sr.height - 8) }; };
-      for (si = 0; si < 3; si++) spots.push(PX(x0 + w * (0.2 + si * 0.3), y0 + h + 14));
-      for (si = 0; si < 2; si++) spots.push(PX(x0 - 26, y0 + h * (0.3 + si * 0.4)));
-      for (si = 0; si < 2; si++) spots.push(PX(x0 + w + 14, y0 + h * (0.3 + si * 0.4)));
-      var tops = [0.06, 0.27, 0.5, 0.73, 0.94];
-      for (si = 0; si < tops.length; si++) spots.push(PX(x0 + w * tops[si], y0 - 18));
+      var x0 = mr.left, y0 = mr.top, w = mr.width, h = mr.height, si;
+      var PX = function (x, y) { return { x: clamp(x, -60, vw + 60), y: clamp(y, -80, vh + 80) }; };
+      for (si = 0; si < 4; si++) spots.push(PX(x0 + w * (0.12 + si * 0.25), y0 + h + 12));
+      for (si = 0; si < 3; si++) spots.push(PX(x0 - 44, y0 + h * (0.2 + si * 0.3)));
+      for (si = 0; si < 3; si++) spots.push(PX(x0 + w + 32, y0 + h * (0.2 + si * 0.3)));
+      var tops = [0.04, 0.21, 0.38, 0.55, 0.72, 0.9];
+      for (si = 0; si < tops.length; si++) spots.push(PX(x0 + w * tops[si], Math.max(y0 + 130, 130)));
     }
     var flameEls = [];
     spots.forEach(function (p, n) {
@@ -178,7 +177,7 @@
       ring.appendChild(f);
       flameEls.push(f);
     });
-    stage.appendChild(ring);
+    document.body.appendChild(ring);
     if (machine) machine.classList.add('flame-live');
     function setGlow(on) { if (machine) machine.classList.toggle('flame-glow', !!on); }
     function breakHard(ms) {
@@ -221,8 +220,8 @@
       if (!alive()) return;
       if (i >= SUMMON.length) { finish(); return; }
       var s = SUMMON[i];
-      for (var k = 0; k < 3; k++) {
-        var f = flameEls[i * 3 + k];
+      for (var k = 0; k < 4; k++) {
+        var f = flameEls[i * 4 + k];
         if (f) f.classList.add('lit');
       }
       if (lineEl) {

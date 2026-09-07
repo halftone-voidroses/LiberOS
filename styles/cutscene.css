@@ -598,10 +598,10 @@
 }
 
 .cutscene.ritual {
-  background: radial-gradient(ellipse at 50% 55%, rgba(10, 2, 6, 0.25) 0%, rgba(0, 0, 0, 0.88) 78%);
+  background: #000;
 }
 .crt-flames {
-  position: absolute;
+  position: fixed;
   inset: 0;
   z-index: 80;
   pointer-events: none;
@@ -616,22 +616,37 @@
 .ritual-flame {
   position: absolute;
   width: 40px;
-  height: 96px;
-  margin: -92px 0 0 -20px;
-  border-radius: 50% 50% 46% 54% / 72% 72% 28% 28%;
+  height: 150px;
+  margin: -144px 0 0 -20px;
+  border-radius: 50% 50% 46% 54% / 74% 74% 26% 26%;
   background: radial-gradient(ellipse at 50% 80%, rgba(60, 16, 24, 0.9) 0%, rgba(30, 8, 12, 0.4) 60%, transparent 75%);
   opacity: 0.4;
   transition: opacity 0.5s ease;
 }
+.ritual-flame::before {
+  content: '';
+  position: absolute;
+  inset: -30px -34px;
+  background: radial-gradient(ellipse, rgba(255, 90, 40, 0.0) 0%, transparent 70%);
+  filter: blur(8px);
+}
 .ritual-flame.lit {
   opacity: 1;
   background:
-    radial-gradient(ellipse at 50% 88%, rgba(255, 244, 230, 0.95) 0%, rgba(255, 214, 170, 0.85) 12%, transparent 30%),
-    radial-gradient(ellipse at 50% 72%, rgba(255, 105, 180, 0.9) 0%, rgba(255, 60, 120, 0.55) 45%, transparent 72%),
-    radial-gradient(ellipse at 50% 55%, rgba(255, 90, 40, 0.5) 0%, rgba(192, 74, 88, 0.3) 55%, transparent 80%);
-  box-shadow: 0 0 22px rgba(255, 105, 180, 0.75), 0 0 60px rgba(255, 90, 40, 0.4), 0 -8px 34px rgba(255, 200, 140, 0.35);
-  animation: flame-flick 0.5s ease-in-out infinite alternate;
+    radial-gradient(ellipse at 50% 90%, rgba(255, 250, 240, 1) 0%, rgba(255, 217, 168, 0.9) 10%, transparent 26%),
+    radial-gradient(ellipse at 50% 70%, rgba(255, 106, 168, 0.95) 0%, rgba(194, 20, 80, 0.6) 38%, transparent 62%),
+    radial-gradient(ellipse at 50% 45%, rgba(74, 16, 24, 0.85) 0%, transparent 60%);
+  box-shadow: 0 0 18px rgba(255, 80, 150, 0.9), 0 0 70px rgba(255, 60, 30, 0.35);
+  animation: flame-flick 0.32s ease-in-out infinite alternate;
 }
+.ritual-flame.lit::before {
+  background: radial-gradient(ellipse, rgba(255, 110, 50, 0.4) 0%, transparent 70%);
+}
+.ritual-flame.lit:nth-child(6n+1) { animation-duration: 0.38s; }
+.ritual-flame.lit:nth-child(6n+2) { animation-duration: 0.29s; }
+.ritual-flame.lit:nth-child(6n+3) { animation-duration: 0.46s; }
+.ritual-flame.lit:nth-child(6n+4) { animation-duration: 0.34s; }
+.ritual-flame.lit:nth-child(6n+5) { animation-duration: 0.42s; }
 .ritual-flame.ember {
   opacity: 0.5;
   background: radial-gradient(ellipse at 50% 85%, rgba(255, 80, 60, 0.7) 0%, rgba(120, 20, 20, 0.35) 55%, transparent 75%);
