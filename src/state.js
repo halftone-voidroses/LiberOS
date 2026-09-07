@@ -5,8 +5,10 @@
   'use strict';
 
   const KEY = 'liber_vacui_v1';
+  const CUTSCENE_BUILD = 'riasondemo1';
 
   const DEFAULT = {
+    cutsceneBuild: CUTSCENE_BUILD,
     state: 'boot',           // boot | loading | desktop
     tutorialDone: false,
     buddy: [],              // buddy artifacts: stone casts (kind stone) + sealed chats (kind sealed)
@@ -55,6 +57,11 @@
       }
       if (Array.isArray(parsed.relations)) {
         parsed.relations = parsed.relations.map(function (r) { return (r && r.to === 'sigil') ? Object.assign({}, r, { to: 'buddy' }) : r; });
+      }
+      if (parsed.cutsceneBuild !== CUTSCENE_BUILD) {
+        parsed.cutsceneBuild = CUTSCENE_BUILD;
+        parsed.tutorialDone = false;
+        parsed.tutorialStage = null;
       }
       return Object.assign({}, DEFAULT, parsed);
     } catch (e) {
