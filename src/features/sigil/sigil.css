@@ -262,19 +262,11 @@
 .sigil-cursor[data-element="earth"]  { color: #8a7050; filter: drop-shadow(0 0 6px rgba(138, 112, 80, 0.6)); }
 .sigil-cursor[data-element="spirit"] { color: #e8c8a0; filter: drop-shadow(0 0 12px rgba(232, 200, 160, 0.9)); }
 
-.sigil-elements {
-  display: flex;
-  gap: 6px;
-  padding: 6px 12px;
-  background: linear-gradient(180deg, #1a0a05 0%, #2a1a0a 100%);
-  border-top: 1px solid #5a3a20;
-  justify-content: center;
-}
-
 .sigil-palette,
 .sigil-tools,
 .sigil-parts {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 6px;
   padding: 5px 12px;
@@ -302,11 +294,15 @@
 }
 
 .sigil-palette-tray {
-  display: flex;
-  gap: 4px;
-  overflow-x: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 20px);
+  gap: 5px;
+  justify-content: start;
+  overflow: visible;
   padding: 2px;
-  flex: 1;
+  flex: 1 1 100%;
+  min-width: 0;
+  align-content: flex-start;
 }
 
 .sigil-swatch {
@@ -372,41 +368,6 @@
 
 .sigil-canvas-wrap.armed {
   cursor: crosshair;
-}
-
-.sigil-element {
-  width: 38px;
-  height: 38px;
-  background: linear-gradient(180deg, #2a1a0a 0%, #1a0a05 100%);
-  border: 1px solid #5a3a20;
-  border-radius: 3px;
-  color: #806040;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  box-shadow: inset 0 0 0 1px #0a0503, inset 0 1px 0 rgba(120, 80, 40, 0.2);
-  transition: all 0.2s;
-}
-
-.sigil-element svg { width: 22px; height: 22px; }
-
-.sigil-element:hover {
-  color: #c89060;
-  border-color: #8a5a30;
-  box-shadow: inset 0 0 0 1px #1a0a05, 0 0 8px rgba(200, 144, 96, 0.3);
-}
-
-.sigil-element.active {
-  color: #e8c8a0;
-  border-color: #c89060;
-  background: linear-gradient(180deg, #3a2a1a 0%, #2a1a0a 100%);
-  box-shadow: inset 0 0 0 1px #1a0a05, 0 0 12px rgba(200, 144, 96, 0.5);
-}
-
-.sigil-element-spirit {
-  margin-left: auto;
 }
 
 .sigil-actions {
@@ -494,7 +455,6 @@
 
 .sigil-app.saved .sigil-input,
 .sigil-app.saved .sigil-canvas-wrap,
-.sigil-app.saved .sigil-elements,
 .sigil-app.saved .sigil-save,
 .sigil-app.saved .sigil-discard {
   pointer-events: none;
@@ -878,7 +838,6 @@
 .sigil-titlebar button { cursor: inherit; }
 
 /* ─── WS4: pressed-bevel + focus (D0004 recipe, sigil palette) ─── */
-.sigil-element,
 .sigil-raison-close,
 .sigil-save-prompt-close,
 .sigil-save-prompt-keep,
@@ -897,14 +856,6 @@
     0 2px 0 #0a0a0e,
     0 3px 4px rgba(0, 0, 0, 0.5);
 }
-.sigil-element:hover {
-  box-shadow:
-    inset 0 1px 0 rgba(232, 200, 160, 0.3),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.55),
-    0 2px 0 #0a0503,
-    0 3px 6px rgba(200, 144, 96, 0.35);
-}
-.sigil-element:active,
 .sigil-raison-close:active,
 .sigil-save-prompt-close:active,
 .sigil-save-prompt-keep:active,
@@ -926,7 +877,6 @@
     0 0 0 #0a0a0e,
     0 1px 2px rgba(0, 0, 0, 0.5);
 }
-.sigil-element:focus-visible,
 .sigil-save:focus-visible,
 .sigil-discard:focus-visible,
 .sigil-back:focus-visible,
@@ -1026,9 +976,28 @@
   color: #cfe2f5;
   line-height: 1.5;
 }
+.sigil-demo-next {
+  margin-top: 10px;
+  background: none;
+  border: 1px solid #4a8aaa;
+  color: #cfe2f5;
+  font-family: 'VT323', monospace;
+  font-size: 1.1rem;
+  letter-spacing: 0.15em;
+  padding: 3px 18px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.sigil-demo-next:hover { background: rgba(74, 138, 170, 0.18); }
+.sigil-demo-next:focus-visible { outline: 2px solid #cfe2f5; outline-offset: 2px; }
 .sigil-input.demo-blue {
   color: #4a8aaa;
   font-family: Georgia, 'Times New Roman', serif;
+}
+#sigil-save.demo-hit {
+  border-color: #e8c890;
+  color: #e8c890;
+  box-shadow: 0 0 14px rgba(232, 200, 144, 0.6);
 }
 .demo-blue-preview {
   width: 26px;

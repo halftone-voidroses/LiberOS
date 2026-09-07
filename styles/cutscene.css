@@ -202,12 +202,6 @@
   box-shadow: inset 0 0 120px rgba(255, 105, 180, 0.25);
 }
 
-.cutscene.ritual.blackflame .ritual-flame.lit {
-  background: radial-gradient(circle at 50% 70%, #30101c 0%, #000 70%);
-  border-color: #ff69b4;
-  box-shadow: 0 0 22px rgba(255, 105, 180, 1), 0 0 70px rgba(255, 105, 180, 0.5);
-}
-
 @keyframes cutscene-shake {
   0%, 100% { transform: translateX(0); }
   20% { transform: translateX(-7px); }
@@ -613,55 +607,22 @@
 .machine.flame-glow {
   filter: drop-shadow(0 0 34px rgba(255, 80, 140, 0.45));
 }
-.ritual-flame {
-  position: absolute;
-  width: 40px;
-  height: 150px;
-  margin: -144px 0 0 -20px;
-  border-radius: 50% 50% 46% 54% / 74% 74% 26% 26%;
-  background: radial-gradient(ellipse at 50% 80%, rgba(60, 16, 24, 0.9) 0%, rgba(30, 8, 12, 0.4) 60%, transparent 75%);
-  opacity: 0.4;
-  transition: opacity 0.5s ease;
+.inferno-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
-.ritual-flame::before {
-  content: '';
-  position: absolute;
-  inset: -30px -34px;
-  background: radial-gradient(ellipse, rgba(255, 90, 40, 0.0) 0%, transparent 70%);
-  filter: blur(8px);
+.inferno-arc {
+  opacity: 0;
+  transition: opacity 0.9s ease;
 }
-.ritual-flame.lit {
-  opacity: 1;
-  background:
-    radial-gradient(ellipse at 50% 90%, rgba(255, 250, 240, 1) 0%, rgba(255, 217, 168, 0.9) 10%, transparent 26%),
-    radial-gradient(ellipse at 50% 70%, rgba(255, 106, 168, 0.95) 0%, rgba(194, 20, 80, 0.6) 38%, transparent 62%),
-    radial-gradient(ellipse at 50% 45%, rgba(74, 16, 24, 0.85) 0%, transparent 60%);
-  box-shadow: 0 0 18px rgba(255, 80, 150, 0.9), 0 0 70px rgba(255, 60, 30, 0.35);
-  animation: flame-flick 0.32s ease-in-out infinite alternate;
+.inferno-arc path {
+  fill: none;
+  stroke-linecap: round;
 }
-.ritual-flame.lit::before {
-  background: radial-gradient(ellipse, rgba(255, 110, 50, 0.4) 0%, transparent 70%);
-}
-.ritual-flame.lit:nth-child(6n+1) { animation-duration: 0.38s; }
-.ritual-flame.lit:nth-child(6n+2) { animation-duration: 0.29s; }
-.ritual-flame.lit:nth-child(6n+3) { animation-duration: 0.46s; }
-.ritual-flame.lit:nth-child(6n+4) { animation-duration: 0.34s; }
-.ritual-flame.lit:nth-child(6n+5) { animation-duration: 0.42s; }
-.ritual-flame.ember {
-  opacity: 0.5;
-  background: radial-gradient(ellipse at 50% 85%, rgba(255, 80, 60, 0.7) 0%, rgba(120, 20, 20, 0.35) 55%, transparent 75%);
-  box-shadow: 0 0 10px rgba(255, 60, 40, 0.35);
-}
-.crt-flames.flare .ritual-flame.lit {
-  background:
-    radial-gradient(ellipse at 50% 88%, rgba(255, 240, 240, 0.95) 0%, transparent 30%),
-    radial-gradient(ellipse at 50% 70%, rgba(255, 40, 50, 0.9) 0%, rgba(192, 20, 30, 0.55) 50%, transparent 75%);
-  box-shadow: 0 0 26px rgba(255, 40, 50, 0.85), 0 0 70px rgba(255, 40, 50, 0.45);
-}
-@keyframes flame-flick {
-  from { transform: scaleY(1) skewX(0deg); filter: brightness(1); }
-  to { transform: scaleY(1.13) skewX(-3deg); filter: brightness(1.22); }
-}
+.inferno-arc.lit { opacity: 1; }
+.inferno-arc.ember { opacity: 0.32; filter: saturate(0.55) brightness(0.75); }
+.crt-flames.flare { filter: hue-rotate(-28deg) saturate(1.5); }
 .machine-break { animation: machine-break 0.55s linear 2; }
 .machine-break-hard { animation: machine-break 0.45s linear 5; }
 @keyframes machine-break {
@@ -672,7 +633,9 @@
   80% { transform: translate(4px, 5px) rotate(0.3deg); }
 }
 .cutscene.ritual .ritual-box {
-  box-shadow: 0 0 0 2px rgba(255, 105, 180, 0.15), 0 -10px 22px rgba(255, 105, 180, 0.35), 0 0 18px rgba(255, 105, 180, 0.18);
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 .cutscene.ritual .ritual-line {
   font-family: 'UnifrakturCook', 'UnifrakturMaguntia', 'Cinzel', Georgia, serif;
@@ -695,6 +658,6 @@
   .cutscene.ritual .ritual-line { animation: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .ritual-flame, .ritual-flame.lit { animation: none; }
+  .inferno-arc { transition: none; }
   .machine-break, .machine-break-hard { animation: none; }
 }

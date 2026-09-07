@@ -91,15 +91,16 @@
     var artifacts = allArtifacts();
     var relations = s.relations || [];
 
-    if (sigils.length === 0) {
-      // the invitation waits for the tutorial — it arrives with the bar,
-      // not before (pre-tutorial the desktop is still introducing itself)
+    if (!s.tutorialDone) {
       if (empty) {
-        if (!s.tutorialDone) {
-          empty.style.display = 'none';
-          svg.innerHTML = '';
-          return;
-        }
+        empty.style.display = '';
+        empty.innerHTML = '— cast the buddy first —<div class="constellation-empty-sub">open the buddy from the dial.</div>';
+      }
+      svg.innerHTML = '';
+      return;
+    }
+    if (sigils.length === 0) {
+      if (empty) {
         empty.style.display = '';
         var sealedWait = sealedOf(s.buddy).length;
         empty.innerHTML = '— cast the buddy first —<div class="constellation-empty-sub">open the buddy from the dial.</div>'

@@ -156,27 +156,36 @@
     ring.setAttribute('aria-hidden', 'true');
     var vw = window.innerWidth || 1280, vh = window.innerHeight || 800;
     var mr = machine ? machine.getBoundingClientRect() : null;
-    var spots = [];
-    function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
-    if (mr && mr.width > 0) {
-      var x0 = mr.left, y0 = mr.top, w = mr.width, h = mr.height, si;
-      var PX = function (x, y) { return { x: clamp(x, -60, vw + 60), y: clamp(y, -80, vh + 80) }; };
-      for (si = 0; si < 4; si++) spots.push(PX(x0 + w * (0.12 + si * 0.25), y0 + h + 12));
-      for (si = 0; si < 3; si++) spots.push(PX(x0 - 44, y0 + h * (0.2 + si * 0.3)));
-      for (si = 0; si < 3; si++) spots.push(PX(x0 + w + 32, y0 + h * (0.2 + si * 0.3)));
-      var tops = [0.04, 0.21, 0.38, 0.55, 0.72, 0.9];
-      for (si = 0; si < tops.length; si++) spots.push(PX(x0 + w * tops[si], Math.max(y0 + 130, 130)));
-    }
+    var reduced = false;
+    try { reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); } catch (e) {}
+    var NS = 'http://www.w3.org/2000/svg';
+    var svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('viewBox', '0 0 ' + vw + ' ' + vh);
+    svg.setAttribute('class', 'inferno-svg');
     var flameEls = [];
-    spots.forEach(function (p, n) {
-      var f = document.createElement('span');
-      f.className = 'ritual-flame';
-      f.style.left = p.x + 'px';
-      f.style.top = p.y + 'px';
-      f.style.animationDelay = ((n % 4) * 0.13) + 's';
-      ring.appendChild(f);
-      flameEls.push(f);
-    });
+    if (mr && mr.width > 0) {
+      var x0 = Math.max(mr.left - 46, -60), y0 = Math.max(mr.top - 46, -80);
+      var x1 = Math.min(mr.left + mr.width + 46, vw + 60), y1 = Math.min(mr.top + mr.height + 46, vh + 80);
+      var anim = reduced ? '' : '<animate attributeName="baseFrequency" values="0.009 0.035;0.013 0.07;0.009 0.035" dur="1.6s" repeatCount="indefinite"/>';
+      svg.innerHTML = '<defs>'
+        + '<linearGradient id="fireOut" gradientUnits="userSpaceOnUse" x1="0" y1="' + y1 + '" x2="0" y2="' + y0 + '">'
+        + '<stop offset="0" stop-color="#fff3da"/><stop offset=".35" stop-color="#ff6aa8"/><stop offset=".7" stop-color="#a01040"/><stop offset="1" stop-color="#3a0a12" stop-opacity="0"/></linearGradient>'
+        + '<linearGradient id="fireCore" gradientUnits="userSpaceOnUse" x1="0" y1="' + y1 + '" x2="0" y2="' + y0 + '">'
+        + '<stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#ffd9a8"/><stop offset="1" stop-color="#ffd9a8" stop-opacity="0"/></linearGradient>'
+        + '<filter id="fireTurb" x="-20%" y="-20%" width="140%" height="140%">'
+        + '<feTurbulence type="fractalNoise" baseFrequency="0.009 0.035" numOctaves="2" seed="7" result="n">' + anim + '</feTurbulence>'
+        + '<feDisplacementMap in="SourceGraphic" in2="n" scale="54"/><feGaussianBlur stdDeviation="7"/>'
+        + '</filter></defs>'
+        + '<g filter="url(#fireTurb)">'
+        + '<g class="inferno-arc"><path d="M ' + (x0 + 60) + ' ' + y1 + ' L ' + (x1 - 60) + ' ' + y1 + '" stroke="url(#fireOut)" stroke-width="54"/><path d="M ' + (x0 + 60) + ' ' + y1 + ' L ' + (x1 - 60) + ' ' + y1 + '" stroke="url(#fireCore)" stroke-width="20"/></g>'
+        + '<g class="inferno-arc"><path d="M ' + x0 + ' ' + (y0 + 60) + ' L ' + x0 + ' ' + (y1 - 60) + '" stroke="url(#fireOut)" stroke-width="54"/><path d="M ' + x0 + ' ' + (y0 + 60) + ' L ' + x0 + ' ' + (y1 - 60) + '" stroke="url(#fireCore)" stroke-width="20"/></g>'
+        + '<g class="inferno-arc"><path d="M ' + x1 + ' ' + (y0 + 60) + ' L ' + x1 + ' ' + (y1 - 60) + '" stroke="url(#fireOut)" stroke-width="54"/><path d="M ' + x1 + ' ' + (y0 + 60) + ' L ' + x1 + ' ' + (y1 - 60) + '" stroke="url(#fireCore)" stroke-width="20"/></g>'
+        + '<g class="inferno-arc"><path d="M ' + (x0 + 60) + ' ' + y0 + ' L ' + (x1 - 60) + ' ' + y0 + '" stroke="url(#fireOut)" stroke-width="54"/><path d="M ' + (x0 + 60) + ' ' + y0 + ' L ' + (x1 - 60) + ' ' + y0 + '" stroke="url(#fireCore)" stroke-width="20"/></g>'
+        + '</g>';
+      var arcs = svg.querySelectorAll('.inferno-arc');
+      for (var ai = 0; ai < arcs.length; ai++) flameEls.push(arcs[ai]);
+    }
+    ring.appendChild(svg);
     document.body.appendChild(ring);
     if (machine) machine.classList.add('flame-live');
     function setGlow(on) { if (machine) machine.classList.toggle('flame-glow', !!on); }
@@ -220,10 +229,8 @@
       if (!alive()) return;
       if (i >= SUMMON.length) { finish(); return; }
       var s = SUMMON[i];
-      for (var k = 0; k < 4; k++) {
-        var f = flameEls[i * 4 + k];
-        if (f) f.classList.add('lit');
-      }
+      var g = flameEls[i];
+      if (g) g.classList.add('lit');
       if (lineEl) {
         lineEl.textContent = s.line;
         lineEl.classList.remove('is-glow', 'is-flames', 'is-shake', 'is-shake-more');
@@ -433,7 +440,7 @@
     var ring = document.getElementById('crt-flames');
     if (ring) {
       ring.classList.remove('flare');
-      var fl = ring.querySelectorAll('.ritual-flame');
+      var fl = ring.querySelectorAll('.inferno-arc');
       for (var fi = 0; fi < fl.length; fi++) { fl[fi].classList.remove('ember'); fl[fi].classList.add('lit'); }
     }
     var machine = document.querySelector('.machine');
@@ -457,32 +464,26 @@
     clearBox();
     var stage = document.querySelector('.screen-stage');
     if (!stage) { endClean(); return; }
-    var wipe = document.createElement('div');
-    wipe.className = 'cutscene-wipe slow';
-    stage.appendChild(wipe);
+    var black = document.createElement('div');
+    black.className = 'cutscene-black';
+    black.innerHTML = '<div class="cutscene-arise">I arise the same but different</div>';
+    stage.appendChild(black);
     setTimeout(function () {
-      var black = document.createElement('div');
-      black.className = 'cutscene-black';
-      black.innerHTML = '<div class="cutscene-arise">I arise the same but different</div>';
-      stage.appendChild(black);
+      var arise = black.querySelector('.cutscene-arise');
+      if (arise) arise.classList.add('fade');
       setTimeout(function () {
-        var arise = black.querySelector('.cutscene-arise');
-        if (arise) arise.classList.add('fade');
         setTimeout(function () {
-          if (wipe.parentNode) wipe.parentNode.removeChild(wipe);
+          if (black.parentNode) black.parentNode.removeChild(black);
+          var veil = document.createElement('div');
+          veil.className = 'cutscene-reveal';
+          stage.appendChild(veil);
           setTimeout(function () {
-            if (black.parentNode) black.parentNode.removeChild(black);
-            var veil = document.createElement('div');
-            veil.className = 'cutscene-reveal';
-            stage.appendChild(veil);
-            setTimeout(function () {
-              if (veil.parentNode) veil.parentNode.removeChild(veil);
-              endClean();
-            }, 2600);
-          }, 2000);
+            if (veil.parentNode) veil.parentNode.removeChild(veil);
+            endClean();
+          }, 2600);
         }, 2000);
-      }, 3000);
-    }, 2000);
+      }, 2000);
+    }, 3000);
   }
 
   function endClean() {

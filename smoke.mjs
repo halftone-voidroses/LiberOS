@@ -105,8 +105,18 @@ await page.waitForURL('**/sigil.html', { timeout: 15000 })
 console.log('   stone room, Riason demo running')
 await shot('smoke-02-demo')
 
-console.log('6. Demo auto-plays on the real stone; the chain is fake so NOTHING is written')
-await page.waitForURL('**/desktop.html', { timeout: 90000 })
+console.log('6. Demo plays slowly on the real stone, one >> per step; chain is fake so NOTHING is written')
+for (let d = 0; d < 18; d++) {
+  if (await page.evaluate(() => location.href.includes('desktop.html'))) break
+  const hasNext = await page.evaluate(() => {
+    const b = document.querySelector('.sigil-demo-next')
+    return !!(b && !b.hidden)
+  })
+  if (hasNext) await page.click('.sigil-demo-next')
+  else await page.waitForTimeout(2500)
+  await page.waitForTimeout(800)
+}
+await page.waitForURL('**/desktop.html', { timeout: 30000 })
 await page.waitForFunction(() => {
   var l = document.querySelector('#cutscene .cutscene-line')
   return !!(l && /arrow keys/.test(l.textContent))
@@ -195,6 +205,7 @@ console.log('13. Manual cast in the stone room (intention, ink, circle, save)')
 await page.goto(BASE + '/sigil.html', { waitUntil: 'networkidle' })
 await page.waitForTimeout(600)
 await dismissHijack()
+await page.evaluate(() => { const i = document.querySelector('.sigil-input'); if (i) i.innerText = '' })
 await page.click('.sigil-input')
 await page.keyboard.type('putting logic over emotions', { delay: 20 })
 await page.click('#sigil-palette-tray button')
