@@ -39,6 +39,8 @@
   }
 
   function init() {
+    // Companion hidden by user direction; engine (rites/crisis) untouched.
+    return;
     var stage = document.querySelector('.screen-stage');
     if (!stage || document.getElementById('fate')) return;
     var all = (window.LIBER_DATA && window.LIBER_DATA.fate) || {};

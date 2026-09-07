@@ -64,7 +64,11 @@ async function stateCounts() {
 async function clickBeat() {
   const hasOpt = await page.evaluate(() => !!document.querySelector('#cutscene .cutscene-option'))
   if (hasOpt) await page.click('#cutscene .cutscene-option')
-  else await page.click('#cutscene .cutscene-next')
+  else {
+    const hasNext = await page.evaluate(() => !!document.querySelector('#cutscene .cutscene-next'))
+    if (hasNext) await page.click('#cutscene .cutscene-next')
+    else await page.waitForTimeout(1500)
+  }
   await page.waitForTimeout(700)
 }
 
@@ -92,29 +96,17 @@ const chatGone = await page.evaluate(() => !document.getElementById('flaming-q')
 console.assert(chatGone, 'summon ? should be removed in flow')
 await shot('smoke-01-cutscene-arise')
 
-console.log('5. Walk opening beats until Riason starts his demo')
-let sawDemo = false
+console.log('5. Walk opening beats until Riason takes the stone room')
 for (let i = 0; i < 16; i++) {
-  const st = await page.evaluate(() => {
-    if (document.getElementById('demo-app')) return 'DEMO'
-    var c = document.getElementById('cutscene')
-    if (!c) return 'gone'
-    var v = c.querySelector('.cutscene-voice')
-    return 'beat:' + (v ? v.textContent : '')
-  })
-  if (st === 'DEMO') { sawDemo = true; break }
+  if (await page.evaluate(() => location.href.includes('sigil.html'))) break
   await clickBeat()
 }
-console.assert(sawDemo, 'Riason demo app should open after Sure..')
-console.log('   demo dock open')
+await page.waitForURL('**/sigil.html', { timeout: 15000 })
+console.log('   stone room, Riason demo running')
 await shot('smoke-02-demo')
 
-console.log('6. Demo auto-plays; the chain is fake so NOTHING is written')
-await page.waitForFunction(() => !!document.getElementById('demo-preview'), { timeout: 15000 })
-await page.waitForFunction(() => {
-  var pv = document.getElementById('demo-preview')
-  return !!(pv && pv.classList.contains('shown'))
-}, { timeout: 30000 })
+console.log('6. Demo auto-plays on the real stone; the chain is fake so NOTHING is written')
+await page.waitForURL('**/desktop.html', { timeout: 90000 })
 await page.waitForFunction(() => {
   var l = document.querySelector('#cutscene .cutscene-line')
   return !!(l && /arrow keys/.test(l.textContent))

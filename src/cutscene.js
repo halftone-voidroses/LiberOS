@@ -57,7 +57,7 @@
     if (old) old.remove();
   }
 
-  function optionRow(box, options, onPick) {
+  function optionRow(box, options, onPick, delay) {
     if (!options || !options.length) return;
     var row = document.createElement('div');
     row.className = 'cutscene-options';
@@ -69,7 +69,60 @@
       b.addEventListener('click', function () { onPick(label); });
       row.appendChild(b);
     });
+    if (delay && delay > 0) {
+      row.style.visibility = 'hidden';
+      setTimeout(function () { row.style.visibility = ''; }, delay);
+    }
     box.querySelector('.cutscene-box').appendChild(row);
+  }
+
+  function shatterOut(box, done) {
+    var inner = box.querySelector('.cutscene-box');
+    if (!inner) { done(); return; }
+    inner.style.visibility = 'hidden';
+    var r = inner.getBoundingClientRect();
+    var i, piece;
+    var quads = [
+      'polygon(0 0, 50% 0, 50% 50%, 0 50%)', 'polygon(50% 0, 100% 0, 100% 50%, 50% 50%)',
+      'polygon(0 50%, 50% 50%, 50% 100%, 0 100%)', 'polygon(50% 50%, 100% 50%, 100% 100%, 50% 100%)'
+    ];
+    var outs = ['translate(-70px,-50px)', 'translate(70px,-50px)', 'translate(-70px,50px)', 'translate(70px,50px)'];
+    for (i = 0; i < 4; i++) {
+      piece = document.createElement('div');
+      piece.className = 'shatter-piece';
+      piece.innerHTML = inner.innerHTML;
+      piece.style.cssText = 'left:' + r.left + 'px;top:' + r.top + 'px;width:' + r.width + 'px;clip-path:' + quads[i] + ';--out:' + outs[i];
+      document.body.appendChild(piece);
+      void piece.offsetWidth;
+      piece.classList.add('go');
+      (function (p) { setTimeout(function () { if (p.parentNode) p.parentNode.removeChild(p); }, 900); })(piece);
+    }
+    thunk();
+    setTimeout(done, 800);
+  }
+
+  function stripOut(box, done) {
+    var inner = box.querySelector('.cutscene-box');
+    if (!inner) { done(); return; }
+    inner.style.visibility = 'hidden';
+    var r = inner.getBoundingClientRect();
+    var speeds = ['0.45s', '0.6s', '0.52s'];
+    for (var i = 0; i < 3; i++) {
+      (function (n) {
+        var piece = document.createElement('div');
+        piece.className = 'strip-piece';
+        piece.innerHTML = inner.innerHTML;
+        piece.style.cssText = 'left:' + r.left + 'px;top:' + r.top + 'px;width:' + r.width + 'px;'
+          + 'clip-path:polygon(' + (n * 33.4) + '% 0,' + ((n + 1) * 33.4) + '% 0,' + ((n + 1) * 33.4) + '% 100%,' + (n * 33.4) + '% 100%);'
+          + 'animation-duration:' + speeds[n] + ';';
+        document.body.appendChild(piece);
+        void piece.offsetWidth;
+        piece.classList.add('go');
+        setTimeout(function () { if (piece.parentNode) piece.parentNode.removeChild(piece); }, 800);
+      })(i);
+    }
+    thunk();
+    setTimeout(done, 620);
   }
 
   function mountBox(extraClass, voice, lineHtml) {
@@ -199,6 +252,15 @@
 
   function playBeats(beats, done) {
     var idx = 0;
+    function go() {
+      var cur = beats[idx];
+      function next() { idx++; show(); }
+      var boxNow = el('cutscene');
+      if (!boxNow) return;
+      if (cur.shatterNext) shatterOut(boxNow, next);
+      else if (cur.bustNext) stripOut(boxNow, next);
+      else next();
+    }
     function show() {
       if (idx >= beats.length) { done(); return; }
       var b = beats[idx];
@@ -206,6 +268,7 @@
       if (!box) { done(); return; }
       var riasonInner = box.querySelector('.cutscene-box');
       if (riasonInner && b.voice === 'riason') riasonInner.classList.add('riason');
+      if (b.myth) box.classList.add('myth-speech');
       if (b.flare) showFlare();
       if (b.glitchIn && box) box.classList.add('riason-glitch');
       var lineEl = box.querySelector('.cutscene-line');
@@ -222,18 +285,8 @@
         });
         setTimeout(function () {
           if (!document.body.contains(box)) return;
-          var inner = box.querySelector('.cutscene-box');
-          var row = document.createElement('div');
-          row.className = 'cutscene-nav';
-          var next = document.createElement('button');
-          next.type = 'button';
-          next.className = 'cutscene-next';
-          next.textContent = '▶';
-          next.addEventListener('click', function () { idx++; show(); });
-          row.appendChild(next);
-          inner.appendChild(row);
-          optionRow(box, b.options, function () { idx++; show(); });
-        }, 450 * (b.names.length + 1) + 200);
+          optionRow(box, b.options, go, b.settle || 0);
+        }, 300 * (b.names.length + 1) + 200);
         return;
       }
       lineEl.textContent = b.line;
@@ -241,17 +294,11 @@
         box.classList.add('burst-in');
         thunk();
       }
-      var inner = box.querySelector('.cutscene-box');
-      var row = document.createElement('div');
-      row.className = 'cutscene-nav';
-      var next = document.createElement('button');
-      next.type = 'button';
-      next.className = 'cutscene-next';
-      next.textContent = b.nextLabel || '▶';
-      next.addEventListener('click', function () { idx++; show(); });
-      row.appendChild(next);
-      inner.appendChild(row);
-      optionRow(box, b.options, function () { idx++; show(); });
+      if (b.options && b.options.length) {
+        optionRow(box, b.options, go, b.settle || 0);
+      } else {
+        setTimeout(function () { if (document.body.contains(box)) go(); }, b.hold || 1800);
+      }
     }
     show();
   }
@@ -262,122 +309,22 @@
         { voice: 'wanderlust', line: 'Greetings traveller, I am Wanderlust. I was sent here from the imaginary realm to assist you on your journey.', options: ['okay..'] },
         { voice: 'wanderlust', names: NAMES, options: ['I think I get it..'] },
         { voice: 'wanderlust', line: 'You, though, may call me Wanderlust, for what fate truly does is push you to see the world.', options: ['>>'] },
-        { voice: 'wanderlust', line: 'Through destruction breeds creation.', options: ['(What is this place?)'] },
-        { voice: 'wanderlust', line: 'This is the liber vacui, many have been here before you, they have left their mark and will continue to whisper aid.', options: ['Like who?'] },
-        { voice: 'wanderlust', line: 'You RAT!', burst: true, flare: true, options: [] },
+        { voice: 'wanderlust', line: 'Through destruction breeds creation.', options: ['(What is this place?)'], settle: 600 },
+        { voice: 'wanderlust', line: 'This is the liber vacui, many have been here before you, they have left their mark and will continue to whisper aid.', options: ['Like who?'], settle: 600 },
+        { voice: 'wanderlust', line: 'You RAT!', burst: true, flare: true, shatterNext: true, hold: 4000, options: [] },
         { voice: 'riason', line: 'My god what a pristine UI box!', glitchIn: true, options: ['Hello?'] },
         { voice: 'riason', line: 'Ah! You must be the new traveller, I have forced my way into the tutorial sequence in order to teach you how to use this software.', options: ["Where's Wanderlust?"] },
         { voice: 'riason', line: "Don't worry, she will be back, and I will be yelled at. In that order.", options: ['>>'] },
         { voice: 'riason', line: 'For now, let me load up the buddy app and I can show you how this works.', options: ['Sure..'] }
       ], function () {
-        setStage('stone');
-        playDemo();
+        setStage('stonedemo');
+        window.location.href = 'sigil.html';
       });
     });
   }
 
-  // ── act 3: Riason's demo — HE makes the buddy, the user watches ──
-  // Fake chain throughout: resembles the real buddy flow, writes nothing.
-  // If the user grabs for control mid-demo, Riason objects, then resumes.
-
-  var DEMO_TEXT = 'putting logic over emotions';
-
-  function riasonSay(box, text) {
-    var line = box ? box.querySelector('.demo-riasay') : null;
-    if (line) line.textContent = text;
-  }
-
-  function playDemo() {
-    clearBox();
-    var stage = document.querySelector('.screen-stage');
-    if (!stage) { endClean(); return; }
-    var box = document.createElement('div');
-    box.className = 'cutscene demodock';
-    box.id = 'cutscene';
-    box.innerHTML =
-      '<div class="demo-cursor" id="demo-cursor" aria-hidden="true"></div>' +
-      '<div class="demo-app" id="demo-app">' +
-        '<div class="demo-applabel">buddy <span>demo — riason at the controls</span></div>' +
-        '<div class="demo-field"><label>buddy</label><div class="demo-input" id="demo-input"></div></div>' +
-        '<div class="demo-swatches">' +
-          '<button type="button" class="demo-sw" data-c="gold" aria-label="gold"></button>' +
-          '<button type="button" class="demo-sw" data-c="blue" aria-label="blue"></button>' +
-          '<button type="button" class="demo-sw" data-c="red" aria-label="red"></button>' +
-        '</div>' +
-        '<svg class="demo-canvas" id="demo-canvas" viewBox="0 0 120 90" aria-hidden="true"><circle id="demo-circle" cx="60" cy="45" r="26"/></svg>' +
-        '<button type="button" class="demo-save" id="demo-save">save</button>' +
-        '<div class="demo-preview" id="demo-preview" aria-hidden="true"></div>' +
-      '</div>' +
-      '<div class="cutscene-box riason demobox"><div class="cutscene-voice">riason</div>' +
-        '<div class="cutscene-line demo-riasay">This is the buddy app. First you decide what your buddy is going to represent!</div></div>';
-    stage.appendChild(box);
-    var cursor = document.getElementById('demo-cursor');
-    var app = document.getElementById('demo-app');
-    var input = document.getElementById('demo-input');
-    function alive() { return document.body.contains(box); }
-    box.addEventListener('pointerdown', function () {
-      if (!alive()) return;
-      riasonSay(box, 'Not yet. Let me finish this.');
-      box.classList.remove('do-deny');
-      void box.offsetWidth;
-      box.classList.add('do-deny');
-      thunk();
-    });
-    function moveCursor(x, y, ms, done) {
-      if (!cursor) { if (done) done(); return; }
-      cursor.style.transition = 'left ' + ms + 'ms ease-in-out, top ' + ms + 'ms ease-in-out';
-      cursor.style.left = x;
-      cursor.style.top = y;
-      setTimeout(function () { if (done && alive()) done(); }, ms + 60);
-    }
-    function typeText(done) {
-      var i = 0;
-      (function tick() {
-        if (!alive()) return;
-        if (i > DEMO_TEXT.length) { if (done) done(); return; }
-        if (input) input.textContent = DEMO_TEXT.slice(0, i);
-        i++;
-        setTimeout(tick, 45);
-      })();
-    }
-    moveCursor('50%', '88%', 10, function () {
-      if (app) app.classList.add('open');
-      moveCursor('50%', '58%', 900, function () {
-        riasonSay(box, 'This is just a random example, no correlation at all.');
-        moveCursor('38%', '46%', 800, function () {
-          typeText(function () {
-            if (input) input.classList.add('held');
-            riasonSay(box, 'Next, you can choose what colours you want to use. Wanderlust will be back any minute so I had better just do one.');
-            moveCursor('62%', '56%', 800, function () {
-              var sw = box.querySelector('.demo-sw[data-c="blue"]');
-              if (sw) sw.classList.add('picked');
-              moveCursor('50%', '70%', 900, function () {
-                var c = document.getElementById('demo-circle');
-                if (c) c.classList.add('drawn');
-                setTimeout(function () {
-                  if (!alive()) return;
-                  riasonSay(box, 'When you are finished, you click save and the buddy shows up on your desktop.');
-                  moveCursor('50%', '82%', 800, function () {
-                    var sv = document.getElementById('demo-save');
-                    if (sv) sv.classList.add('hit');
-                    chime();
-                    setTimeout(function () {
-                      if (!alive()) return;
-                      if (app) app.classList.add('collapsed');
-                      var pv = document.getElementById('demo-preview');
-                      if (pv) pv.classList.add('shown');
-                      setStage('bind');
-                      setTimeout(function () { if (alive()) playBindPrompt(); }, 1400);
-                    }, 700);
-                  });
-                }, 1400);
-              });
-            });
-          });
-        });
-      });
-    });
-  }
+  // ── act 3: Riason's demo — performed live in sigil.html on the real
+  // stone room (own code there). Fake throughout: writes nothing.
 
   // ── act 4: the artifact — the user clicks, the chain is fake ──
 
@@ -407,19 +354,24 @@
     });
   }
 
-  function playFakeChain() {
-    var stage = document.querySelector('.screen-stage');
+  function playFakeChain() {    var stage = document.querySelector('.screen-stage');
     clearBox();
     if (!stage) { playFinale(); return; }
     var fx = document.createElement('div');
     fx.className = 'cutscene fakedock';
     fx.id = 'cutscene';
     var bits = '', i;
-    for (i = 0; i < 14; i++) {
+    for (i = 0; i < 20; i++) {
       var a = (i * 137.5) * Math.PI / 180;
       bits += '<span class="fake-bit" style="--dx:' + Math.cos(a).toFixed(2) + ';--dy:' + Math.sin(a).toFixed(2) + '"></span>';
     }
-    fx.innerHTML = '<div class="fake-burst">' + bits + '</div>' +
+    for (i = 0; i < 10; i++) {
+      var c = (i * 137.5 + 18) * Math.PI / 180;
+      bits += '<span class="fake-bit blue" style="--dx:' + (Math.cos(c) * 0.7).toFixed(2) + ';--dy:' + (Math.sin(c) * 0.7).toFixed(2) + '"></span>';
+    }
+    var waves = '';
+    for (i = 1; i <= 5; i++) waves += '<span class="fake-wave" style="animation-delay:' + (i * 0.28).toFixed(2) + 's"></span>';
+    fx.innerHTML = '<div class="fake-waves">' + waves + '</div><div class="fake-burst">' + bits + '</div>' +
       '<div class="cutscene-box riason fakebox"><div class="cutscene-voice">riason</div>' +
       '<div class="cutscene-line">Oh Sh—</div></div>';
     stage.appendChild(fx);
@@ -428,7 +380,11 @@
     flash('rgba(255,240,220,0.85)', 450);
     shakeMachine(1400);
     thunk();
-    setTimeout(function () { playFinale(); }, 1500);
+    setTimeout(function () {
+      var bx = document.getElementById('cutscene');
+      if (bx && document.body.contains(bx)) stripOut(bx, playFinale);
+      else playFinale();
+    }, 1500);
   }
 
   // ── act 4: finale — explosions, return, wipe, arise ──
@@ -451,7 +407,7 @@
       if (o.parentNode) o.parentNode.removeChild(o);
       var r2 = document.getElementById('crt-flames');
       if (r2) r2.classList.remove('flare');
-    }, 1700);
+    }, 4200);
   }
 
   function flash(color, ms) {    var f = document.createElement('div');
@@ -491,9 +447,9 @@
     thunk();
     setTimeout(function () {
       playBeats([
-        { voice: 'wanderlust', line: 'INSOLENT WORM! HOW DARE YOU INVOKE YOUR WICKED LAWS IN MY MAGICAL DOMAIN!!!', burst: true, options: ['Wanderlust, no..'] },
-        { voice: 'wanderlust', line: 'Hah, you talk to me as if I am a housecat. This process is yours, not his, I will clear the process and you can figure it out.', options: ['>>'] },
-        { voice: 'wanderlust', line: 'Allow me to leave you with parting words of wisdom', options: ["I'm ready"] }
+        { voice: 'wanderlust', line: 'INSOLENT WORM! HOW DARE YOU INVOKE YOUR WICKED LAWS IN MY MAGICAL DOMAIN!!!', burst: true, myth: true, options: ['Wanderlust, no..'], settle: 600 },
+        { voice: 'wanderlust', line: 'Hah, you talk to me as if I am a housecat. This process is yours, not his, I will clear the process and you can figure it out.', options: ['>>'], settle: 600 },
+        { voice: 'wanderlust', line: 'Allow me to leave you with parting words of wisdom', options: ["I'm ready"], settle: 600 }
       ], playWipe);
     }, 1300);
   }
@@ -503,7 +459,7 @@
     var stage = document.querySelector('.screen-stage');
     if (!stage) { endClean(); return; }
     var wipe = document.createElement('div');
-    wipe.className = 'cutscene-wipe';
+    wipe.className = 'cutscene-wipe slow';
     stage.appendChild(wipe);
     setTimeout(function () {
       var black = document.createElement('div');
@@ -511,11 +467,23 @@
       black.innerHTML = '<div class="cutscene-arise">I arise the same but different</div>';
       stage.appendChild(black);
       setTimeout(function () {
-        if (wipe.parentNode) wipe.parentNode.removeChild(wipe);
-        if (black.parentNode) black.parentNode.removeChild(black);
-        endClean();
-      }, 2600);
-    }, 1400);
+        var arise = black.querySelector('.cutscene-arise');
+        if (arise) arise.classList.add('fade');
+        setTimeout(function () {
+          if (wipe.parentNode) wipe.parentNode.removeChild(wipe);
+          setTimeout(function () {
+            if (black.parentNode) black.parentNode.removeChild(black);
+            var veil = document.createElement('div');
+            veil.className = 'cutscene-reveal';
+            stage.appendChild(veil);
+            setTimeout(function () {
+              if (veil.parentNode) veil.parentNode.removeChild(veil);
+              endClean();
+            }, 2600);
+          }, 2000);
+        }, 2000);
+      }, 3000);
+    }, 2000);
   }
 
   function endClean() {
@@ -543,7 +511,7 @@
     if (g.tutorialDone) return;
     if (g.tutorialStage && g.tutorialStage !== 'done') {
       if (g.tutorialStage === 'bind') playBindPrompt();
-      else if (g.tutorialStage === 'stone') playDemo();
+      else if (g.tutorialStage === 'stonedemo') window.location.href = 'sigil.html';
       return;
     }
     if (g.tutorialStage) return;

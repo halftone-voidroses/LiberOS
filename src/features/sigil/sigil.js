@@ -601,6 +601,90 @@ function loadGhost(bitmapDataUrl) {
       wrap.addEventListener('mouseleave', leave);
     }
 
+    if ((window.Liber && window.Liber.state && window.Liber.state.get().tutorialStage) === 'stonedemo') runRiasonDemo();
+    function runRiasonDemo() {
+      var C = window.Cursor || null;
+      var bar = document.createElement('div');
+      bar.className = 'sigil-demo';
+      bar.innerHTML = '<div class="sigil-demo-voice">riason</div><div class="sigil-demo-line">This is the buddy app. First you decide what your buddy is going to represent!</div>';
+      document.body.appendChild(bar);
+      var veil = document.createElement('div');
+      veil.className = 'sigil-veil';
+      document.body.appendChild(veil);
+      var lineEl = bar.querySelector('.sigil-demo-line');
+      function say(t) { if (lineEl) lineEl.textContent = t; }
+      function deny() {
+        say('Not yet. Let me finish this.');
+        veil.classList.remove('deny');
+        void veil.offsetWidth;
+        veil.classList.add('deny');
+        if (window.Liber && window.Liber.sound) { try { window.Liber.sound.play('thunk'); } catch (e) {} }
+        setTimeout(function () { veil.classList.remove('deny'); }, 600);
+      }
+      veil.addEventListener('pointerdown', deny);
+      function alive() { return document.body.contains(bar); }
+      function after(ms) { return new Promise(function (res) { setTimeout(res, ms); }); }
+      function goDesktop() {
+        var st = (window.Liber && window.Liber.state) || null;
+        if (st) st.set({ tutorialStage: 'bind' });
+        window.location.href = 'desktop.html';
+      }
+      var input = document.querySelector('.sigil-input');
+      if (input) input.innerText = '';
+      try { if (typeof ctx !== 'undefined' && ctx && canvas) ctx.clearRect(0, 0, canvas.width, canvas.height); } catch (e) {}
+      after(1000).then(function () {
+        if (!alive()) return after(0);
+        say('This is just a random example, no correlation at all.');
+        if (input) input.classList.add('demo-blue');
+        if (input && C && C.typeText) { try { C.typeText(input, 'putting logic over emotions', 45); } catch (e) { input.innerText = 'putting logic over emotions'; } }
+        else if (input) input.innerText = 'putting logic over emotions';
+        return after(2300);
+      }).then(function () {
+        if (!alive()) return after(0);
+        say('Next, you can choose what colours you want to use. I had better just do one.');
+        var tray = document.querySelectorAll('#sigil-palette-tray .sigil-swatch');
+        var sw = tray[15] || tray[0];
+        if (sw && C && C.clickEl) { try { C.clickEl(sw, 500); } catch (e) { sw.click(); } }
+        else if (sw) sw.click();
+        return after(1200);
+      }).then(function () {
+        if (!alive()) return after(0);
+        var tool = document.querySelector('.sigil-tool[data-tool="circle"]');
+        var cv = document.querySelector('.sigil-canvas');
+        if (tool) { if (C && C.clickEl) { try { C.clickEl(tool, 400); } catch (e) { tool.click(); } } else tool.click(); }
+        return after(700).then(function () {
+          if (!alive()) return;
+          if (cv && C && C.canvasStroke && C.circlePoints) {
+            try {
+              var r = cv.getBoundingClientRect();
+              C.canvasStroke(cv, C.circlePoints(r.width / 2, r.height / 2, Math.min(r.width, r.height) * 0.3, 36), 40);
+            } catch (e) {}
+          }
+          return after(2000);
+        });
+      }).then(function () {
+        if (!alive()) return after(0);
+        say('When you are finished, you click save and the buddy shows up on your desktop.');
+        var sv = document.getElementById('sigil-save');
+        if (sv && C && C.clickEl) { try { C.clickEl(sv, 500); } catch (e) { sv.click(); } }
+        else if (sv) sv.click();
+        return after(1500);
+      }).then(function () {
+        if (!alive()) return after(0);
+        var close = document.getElementById('sigil-save-prompt-close');
+        if (close) close.click();
+        var pv = document.createElement('div');
+        pv.className = 'demo-blue-preview';
+        var tab = document.querySelector('.sigil-tablet');
+        (tab || document.body).appendChild(pv);
+        if (input) input.classList.remove('demo-blue');
+        say('Blue buddy preview. Mine stays with me — yours comes later.');
+        return after(2400);
+      }).then(function () {
+        if (alive()) goDesktop();
+      });
+    }
+
     var saveBtn = document.getElementById('sigil-save');
     if (saveBtn) saveBtn.addEventListener('click', promptSave);
     var deskBtn = document.getElementById('sigil-todesktop');
