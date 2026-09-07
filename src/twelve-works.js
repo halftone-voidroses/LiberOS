@@ -65,15 +65,17 @@
   function state() {
     return (window.Liber && window.Liber.state) ? window.Liber.state : null;
   }
+  function stoneOf(list) { return (list || []).filter(function (e) { return e && e.kind === 'stone'; }); }
+  function sealedOf(list) { return (list || []).filter(function (e) { return !e || e.kind !== 'stone'; }); }
 
   // ── lit states (derived only — no state writes anywhere here) ─────────
 
   function litMap(s) {
     return {
-      sigil: (s.sigils || []).length > 0,
+      sigil: stoneOf(s.buddy).length > 0,
       garden: (s.garden || []).length > 0,
       sea: (s.sea || []).length > 0,
-      buddy: (s.buddy || []).length > 0,
+      buddy: sealedOf(s.buddy).length > 0,
       abstract: (s.abstract || []).length > 0,
       games: (s.games || []).length > 0,
       divination: (s.divination || []).length > 0,
@@ -86,6 +88,8 @@
   }
 
   function countFor(id, s) {
+    if (id === 'sigil') return stoneOf(s.buddy).length;
+    if (id === 'buddy') return sealedOf(s.buddy).length;
     var key = id === 'relation' ? 'relations' : id === 'trash' ? 'graveyard' : id;
     return (s[key] || []).length;
   }
@@ -93,7 +97,7 @@
   // Same slots the prompt engine fills ({buddy}, {intention}) — mirrored
   // from src/prompt-engine.js buddyName()/intention().
   function fill(text, s) {
-    var sig = s && Array.isArray(s.sigils) && s.sigils[0];
+    var sig = stoneOf(s && s.buddy)[0];
     var intent = sig && typeof sig.intention === 'string' ? sig.intention.trim() : '';
     return text
       .split('{buddy}').join(intent || 'your buddy')

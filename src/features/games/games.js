@@ -17,14 +17,15 @@
     { id: 'emotion',     wing: 'dbt tools', heat: 3, name: 'emotion wheel',       glyph: '◉', desc: 'pick a wedge. name the weight. colour it. keep it.' },
     { id: 'boundary',    wing: 'dbt tools', heat: 2, name: 'boundary shield',     glyph: '◈', desc: 'draw the line. name what stays out.' },
     { id: 'relcircle',   wing: 'dbt tools', heat: 2, name: 'relationship circle', glyph: '◎', desc: 'who stands close? place them honestly.' },
-    { id: 'thermometer', wing: 'dbt tools', heat: 3, name: 'thermometer',         glyph: '°', desc: 'name it. colour it. watch the level.' },
+    { id: 'thermometer', wing: 'dbt tools', heat: 3, name: 'thermometer',       glyph: '°', desc: 'name it. colour it. watch the level.' },
+    { id: 'sandplay',    wing: 'dbt tools', heat: 2, name: 'sandplay',          glyph: '▦', desc: 'deal three toys. place them. say one line. (Punnett 2020 · Freedle 2025)' },
     { id: 'mandala',     wing: 'pure play', heat: 1, name: 'mandala',             glyph: '◯', desc: 'trace the lines. ground the attention.' },
     { id: 'static',      wing: 'pure play', heat: 1, name: 'static stare',        glyph: '▓', desc: 'stare into the noise. press when something surfaces.' },
     { id: 'candle',      wing: 'pure play', heat: 1, name: 'candle watch',        glyph: '◍', desc: 'shelter the flame. keep it lit.' }
   ];
 
   var WING_SCOPE = {
-    'dbt tools': 'faithful tools — what you finish here is kept to your satchel.',
+    'dbt tools': 'faithful tools — what you finish here is kept to your satchel. small local acts: one booth, one breath, one kept line. (Kast 2024)',
     'pure play': 'distractions, no ledger — nothing is kept here.'
   };
 
@@ -681,6 +682,242 @@
         }
       }, 500);
       paintCandle();
+    } else if (b.id === 'sandplay') {
+      var PHASES = [
+        { name: 'deal', hint: 'three toys dealt. the tray never arrives empty.' },
+        { name: 'place', hint: 'drag each toy where it wants to stand.' },
+        { name: 'line', hint: 'one line per toy. speech follows the hands.' },
+        { name: 'tend', hint: 'rake, mound, or mist. the sand keeps what the hands do.' },
+        { name: 'witness', hint: 'look once more. the scene is the sentence.' },
+        { name: 'keep', hint: 'keep it to the book, or smooth the sand and begin again.' },
+        { name: 'release', hint: 'the tray empties. nothing is owed.' }
+      ];
+      function sandHash(str) {
+        var h = 1779033703 ^ str.length, i;
+        for (i = 0; i < str.length; i++) { h = Math.imul(h ^ str.charCodeAt(i), 3432918353); h = (h << 13) | (h >>> 19); }
+        return (h ^= h >>> 16) >>> 0;
+      }
+      function sandRnd(seed) {
+        var a = seed >>> 0;
+        return function () {
+          a = (a + 0x6D2B79F5) | 0;
+          var t = Math.imul(a ^ (a >>> 15), 1 | a);
+          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+      function sandDeal() {
+        var st = (window.Liber && window.Liber.state) ? window.Liber.state.get() : {};
+        function lastOf(arr) { return (Array.isArray(arr) && arr.length) ? arr[arr.length - 1] : null; }
+        var pool = [];
+        var dv = lastOf(st.divination);
+        if (dv) pool.push({ toy: 'tower', label: String(dv.name || dv.title || 'card').slice(0, 18), glyph: '\u265C' });
+        if (lastOf(st.buddy)) pool.push({ toy: 'buddy', label: 'buddy', glyph: '\u25CF' });
+        if (lastOf(st.garden)) pool.push({ toy: 'flower', label: 'garden', glyph: '\u273F' });
+        if (lastOf(st.dreams)) pool.push({ toy: 'moon', label: 'dream', glyph: '\u263D' });
+        if (lastOf(st.sea)) pool.push({ toy: 'wave', label: 'sea', glyph: '\u301C' });
+        var fb = [
+          { toy: 'stone', label: 'stone', glyph: '\u2B22' }, { toy: 'shell', label: 'shell', glyph: '\u25CD' },
+          { toy: 'key', label: 'key', glyph: '\u26B7' }, { toy: 'star', label: 'star', glyph: '\u2605' },
+          { toy: 'boat', label: 'boat', glyph: '\u26F5' }
+        ];
+        var d = new Date();
+        var rng = sandRnd(sandHash('sand|' + d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate()));
+        var i, k;
+        for (i = pool.length - 1; i > 0; i--) { k = Math.floor(rng() * (i + 1)); var tmp = pool[i]; pool[i] = pool[k]; pool[k] = tmp; }
+        var out = pool.slice(0, 3);
+        for (i = 0; out.length < 3 && i < fb.length; i++) {
+          var dup = false, j;
+          for (j = 0; j < out.length; j++) { if (out[j].toy === fb[i].toy) dup = true; }
+          if (!dup) out.push(fb[i]);
+        }
+        var n = 0;
+        return out.map(function (t) { t.x = null; t.y = null; t.line = ''; t.n = (n++); return t; });
+      }
+      var sandToys = sandDeal();
+      var sandMounds = [];
+      var sandPhase = 0;
+      var sandTool = 'place';
+      function esc(s) {
+        return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+      body.innerHTML =
+        '<div class="games-prompt">sandplay — deal three toys. place them. say one line. (Punnett 2020 · Freedle 2025)</div>' +
+        '<div class="sand-phase" id="sand-phase"></div>' +
+        '<div class="sand-hint" id="sand-hint"></div>' +
+        '<div class="sand-shelf" id="sand-shelf" aria-label="toy shelf"></div>' +
+        '<div class="sand-tray" id="sand-tray" aria-label="sand tray"></div>' +
+        '<div class="sand-tools">' +
+          '<button type="button" class="games-action" id="sand-rake">rake</button>' +
+          '<button type="button" class="games-action" id="sand-mound">mound</button>' +
+          '<button type="button" class="games-action" id="sand-mist">mist</button>' +
+          '<button type="button" class="games-action" id="sand-next">next</button>' +
+        '</div>' +
+        '<div class="sand-lines" id="sand-lines"></div>' +
+        '<div class="games-actions"><button type="button" class="games-action" id="sand-keep">keep the scene</button></div>';
+      var sandTray = document.getElementById('sand-tray');
+      var sandShelf = document.getElementById('sand-shelf');
+      function paintPhase() {
+        var ph = document.getElementById('sand-phase');
+        var hint = document.getElementById('sand-hint');
+        if (ph) {
+          var html = '', i;
+          for (i = 0; i < PHASES.length; i++) html += '<i class="' + (i <= sandPhase ? 'on' : '') + '"></i>';
+          html += '<span>' + PHASES[sandPhase].name + ' · ' + (sandPhase + 1) + '/7</span>';
+          ph.innerHTML = html;
+        }
+        if (hint) hint.textContent = PHASES[sandPhase].hint;
+      }
+      function paintShelf() {
+        if (!sandShelf) return;
+        sandShelf.innerHTML = '';
+        sandToys.forEach(function (t) {
+          if (t.x !== null) return;
+          var el = document.createElement('div');
+          el.className = 'sand-toy shelf';
+          el.setAttribute('data-n', t.n);
+          el.innerHTML = '<span class="g">' + t.glyph + '</span><span class="l">' + esc(t.label) + '</span>';
+          bindToyDrag(el, t);
+          sandShelf.appendChild(el);
+        });
+      }
+      function paintTray() {
+        if (!sandTray) return;
+        var keeps = sandTray.querySelectorAll('.sand-toy');
+        var i;
+        for (i = keeps.length - 1; i >= 0; i--) keeps[i].parentNode.removeChild(keeps[i]);
+        var mounds = sandTray.querySelectorAll('.sand-mound');
+        for (i = mounds.length - 1; i >= 0; i--) mounds[i].parentNode.removeChild(mounds[i]);
+        sandMounds.forEach(function (m) {
+          var md = document.createElement('div');
+          md.className = 'sand-mound';
+          md.style.left = m.x + '%';
+          md.style.top = m.y + '%';
+          sandTray.appendChild(md);
+        });
+        sandToys.forEach(function (t) {
+          if (t.x === null) return;
+          var el = document.createElement('div');
+          el.className = 'sand-toy placed';
+          el.setAttribute('data-n', t.n);
+          el.style.left = t.x + '%';
+          el.style.top = t.y + '%';
+          el.innerHTML = '<span class="g">' + t.glyph + '</span><span class="l">' + esc(t.label) + '</span>';
+          bindToyDrag(el, t);
+          sandTray.appendChild(el);
+        });
+      }
+      function paintLines() {
+        var host = document.getElementById('sand-lines');
+        if (!host) return;
+        host.innerHTML = '';
+        sandToys.forEach(function (t) {
+          if (t.x === null) return;
+          var row = document.createElement('div');
+          row.className = 'sand-line';
+          row.innerHTML = '<label>' + esc(t.label) + ' says</label>';
+          var inp = document.createElement('input');
+          inp.type = 'text';
+          inp.value = t.line;
+          inp.setAttribute('aria-label', 'one line for ' + t.label);
+          inp.setAttribute('maxlength', '140');
+          inp.addEventListener('input', function () { t.line = inp.value; });
+          row.appendChild(inp);
+          host.appendChild(row);
+        });
+      }
+      function paintSand() { paintPhase(); paintShelf(); paintTray(); paintLines(); }
+      function trayPos(e) {
+        var r = sandTray.getBoundingClientRect();
+        var x = ((e.clientX - r.left) / r.width) * 100;
+        var y = ((e.clientY - r.top) / r.height) * 100;
+        return { x: Math.max(4, Math.min(96, x)), y: Math.max(8, Math.min(92, y)) };
+      }
+      function bindToyDrag(el, t) {
+        el.addEventListener('pointerdown', function (e) {
+          e.preventDefault();
+          try { el.setPointerCapture(e.pointerId); } catch (err) {}
+          function move(ev) {
+            if (!sandTray) return;
+            var r = sandTray.getBoundingClientRect();
+            var x = (((ev.clientX - r.left) / r.width) * 100).toFixed(1);
+            var y = (((ev.clientY - r.top) / r.height) * 100).toFixed(1);
+            el.style.left = x + '%';
+            el.style.top = y + '%';
+          }
+          function up(ev) {
+            el.removeEventListener('pointermove', move);
+            el.removeEventListener('pointerup', up);
+            el.removeEventListener('pointercancel', up);
+            if (!sandTray) return;
+            var r = sandTray.getBoundingClientRect();
+            var inside = ev.clientX >= r.left && ev.clientX <= r.right && ev.clientY >= r.top && ev.clientY <= r.bottom;
+            if (inside) {
+              var p = trayPos(ev);
+              t.x = p.x; t.y = p.y;
+              if (window.Liber && window.Liber.sound) window.Liber.sound.play('click');
+            }
+            paintSand();
+          }
+          el.addEventListener('pointermove', move);
+          el.addEventListener('pointerup', up);
+          el.addEventListener('pointercancel', up);
+        });
+      }
+      function markTool(btn, name) {
+        var ids = ['sand-rake', 'sand-mound', 'sand-mist'];
+        ids.forEach(function (id) {
+          var el = document.getElementById(id);
+          if (el) el.classList.toggle('on', id === btn && sandTool === name);
+        });
+      }
+      var rakeBtn = document.getElementById('sand-rake');
+      var moundBtn = document.getElementById('sand-mound');
+      var mistBtn = document.getElementById('sand-mist');
+      var nextBtn = document.getElementById('sand-next');
+      if (rakeBtn) rakeBtn.addEventListener('click', function () {
+        sandTool = (sandTool === 'rake') ? 'place' : 'rake';
+        if (sandTool === 'rake') {
+          sandToys.forEach(function (t) { t.x = null; t.y = null; });
+          sandMounds = [];
+          paintSand();
+        }
+        markTool('sand-rake', 'rake');
+      });
+      if (moundBtn) moundBtn.addEventListener('click', function () {
+        sandTool = (sandTool === 'mound') ? 'place' : 'mound';
+        markTool('sand-mound', 'mound');
+      });
+      if (mistBtn) mistBtn.addEventListener('click', function () {
+        sandMounds = [];
+        sandTool = 'place';
+        markTool('', '');
+        paintSand();
+      });
+      if (sandTray) sandTray.addEventListener('pointerdown', function (e) {
+        if (sandTool !== 'mound') return;
+        if (e.target !== sandTray) return;
+        var p = trayPos(e);
+        sandMounds.push(p);
+        if (window.Liber && window.Liber.sound) window.Liber.sound.play('click');
+        paintTray();
+      });
+      if (nextBtn) nextBtn.addEventListener('click', function () {
+        if (sandPhase < PHASES.length - 1) { sandPhase++; paintPhase(); }
+      });
+      var keepBtn = document.getElementById('sand-keep');
+      if (keepBtn) keepBtn.addEventListener('click', function () {
+        var placed = sandToys.filter(function (t) { return t.x !== null; });
+        var lined = placed.filter(function (t) { return t.line.trim() !== ''; }).length;
+        promptSave(b, placed.length + ' toys placed, ' + lined + ' lines said.', function () {
+          var saved = saveToDesktopAndSatchel(b, { type: 'sandplay', toys: placed.map(function (t) { return { toy: t.toy, label: t.label, x: t.x, y: t.y, line: t.line }; }), mounds: sandMounds.length, phase: PHASES[sandPhase].name });
+          var bestHtml = (saved.best && saved.best.newBest) ? whimsyLine(saved.best) : '';
+          body.innerHTML = '<div class="games-result">— kept · ' + placed.length + ' toys, ' + lined + ' lines —</div>' + bestHtml;
+        }, function () {
+          body.innerHTML = '<div class="games-result">— smoothed over —</div>';
+        });
+      });
+      paintSand();
     }
   }
 

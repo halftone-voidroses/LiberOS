@@ -1,8 +1,8 @@
 // constellation.js — the desktop as a relational graph
-// The sigil is the hub. Every artifact ever created orbits it
+// The buddy stone is the hub. Every artifact ever created orbits it
 // (regardless of whether a relation exists). Clicking an artifact
 // opens a tiny mini-menu with a free-form verb input to bind it to
-// the sigil. Clicking the sigil itself opens the sigil app.
+// the buddy. Clicking the stone itself opens the sigil app.
 
 (function () {
   var svg = document.getElementById('constellation-svg');
@@ -33,6 +33,8 @@
   function getState() {
     return (window.Liber && window.Liber.state && window.Liber.state.get()) || {};
   }
+  function stoneOf(list) { return (list || []).filter(function (e) { return e && e.kind === 'stone'; }); }
+  function sealedOf(list) { return (list || []).filter(function (e) { return !e || e.kind !== 'stone'; }); }
 
   function allArtifacts() {
     var s = getState();
@@ -74,7 +76,7 @@
   // which reset the orbit each time (user report). Skip the rebuild unless
   // something the drawing actually depends on changed.
   function drawSig(s) {
-    return [s.sigils.length, s.buddy.length, s.divination.length, s.games.length,
+    return [stoneOf(s.buddy).length, sealedOf(s.buddy).length, s.divination.length, s.games.length,
       s.learn.length, s.abstract.length, s.sea.length, s.garden.length, s.dreams.length,
       s.relations.length, s.tutorialDone ? 1 : 0].join('|')
       + ':' + (s.relations || []).map(function (r) { return r.from + '>' + r.verb; }).join(',');
@@ -85,7 +87,7 @@
     var sig = drawSig(s);
     if (sig === lastSig) return;
     lastSig = sig;
-    var sigils = s.sigils || [];
+    var sigils = stoneOf(s.buddy);
     var artifacts = allArtifacts();
     var relations = s.relations || [];
 
@@ -99,7 +101,7 @@
           return;
         }
         empty.style.display = '';
-        var sealedWait = (s.buddy || []).length;
+        var sealedWait = sealedOf(s.buddy).length;
         empty.innerHTML = '— cast the buddy first —<div class="constellation-empty-sub">open the buddy from the dial.</div>'
           + (sealedWait > 0 ? '<div class="constellation-empty-sub">' + sealedWait + ' sealed exchange' + (sealedWait === 1 ? '' : 's') + ' wait' + (sealedWait === 1 ? 's' : '') + ' for it.</div>' : '');
       }
@@ -266,7 +268,7 @@
   // on the casting stone appears without a full reload.
   window.addEventListener('pageshow', function () { render(); });
 
-  // Redraw on any state change — reset ("start over") clears sigils in
+  // Redraw on any state change — reset ("start over") clears the stone in
   // place, and without this the desktop kept showing the old star.
   if (window.Liber && window.Liber.state && window.Liber.state.on) {
     window.Liber.state.on('change', render);

@@ -825,3 +825,14 @@
   background: rgba(201, 162, 39, 0.12);
   color: #f2ead6;
 }
+.garden-ghost {
+  border: 1px dashed rgba(181, 118, 60, 0.45);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin: 6px 0;
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: rgba(185, 166, 132, 0.6);
+  text-align: center;
+}

@@ -80,18 +80,37 @@
       return dot ? parseInt(dot.getAttribute('data-value'), 10) : NaN;
     }
 
+    function deepOpen() {
+      if (!window.Liber || !window.Liber.state) return true;
+      var s = window.Liber.state.get() || {};
+      return ((s.relations || []).length >= 5) && (Object.keys(s.visited || {}).length >= 3);
+    }
+    function gateNote() {
+      var ritual = document.getElementById('sea-ritual');
+      if (!ritual || ritual.querySelector('.sea-gate-note')) return;
+      var s = (window.Liber && window.Liber.state) ? window.Liber.state.get() : {};
+      var need = Math.max(0, 5 - ((s.relations || []).length));
+      var n = document.createElement('div');
+      n.className = 'sea-gate-note';
+      n.textContent = need > 0 ? ('the deep end stays shut until the room knows you. ' + need + ' more knot' + (need === 1 ? '' : 's') + '.') : 'the deep end stays shut until the room knows you. return once more.';
+      ritual.appendChild(n);
+      setTimeout(function () { if (n.parentNode) n.parentNode.removeChild(n); }, 2600);
+    }
     function paintIntensity() {
       var dots = intensityWrap.querySelectorAll('.sea-intensity-dot');
       for (var i = 0; i < dots.length; i++) {
         var v = parseInt(dots[i].getAttribute('data-value'), 10);
         if (v === intensity) dots[i].classList.add('on');
         else dots[i].classList.remove('on');
+        if (v >= 4) dots[i].classList.toggle('locked', !deepOpen());
+        else dots[i].classList.remove('locked');
       }
     }
 
     intensityWrap.addEventListener('click', function (e) {
       var v = intensityFromEvent(e);
       if (isNaN(v) || releasing) return;
+      if (v >= 4 && !deepOpen()) { gateNote(); return; }
       intensity = v;
       paintIntensity();
     });

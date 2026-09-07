@@ -69,7 +69,8 @@
   letter-spacing: 0.05em;
   color: #7a9aac;
   text-align: center;
-  opacity: 0.5;
+  opacity: 0.75;
+  text-shadow: 0 0 10px rgba(122, 154, 172, 0.45);
   max-width: 70%;
   line-height: 1.6;
 }
@@ -694,3 +695,5 @@
 @media (prefers-reduced-motion: reduce) {
   .sea-glimmer { transition: opacity 1.6s ease; transform: none; }
 }
+.sea-intensity-dot.locked { opacity: 0.35; border-style: dashed; }
+.sea-gate-note { font-family: Georgia, serif; font-style: italic; font-size: 0.95rem; color: #d8a070; text-align: center; margin-top: 10px; text-shadow: 0 0 10px rgba(216, 160, 112, 0.5); }

@@ -451,6 +451,13 @@
       empty.className = 'garden-empty';
       empty.textContent = 'the bed is empty. settle a gem, then plant its draft here.';
       plotsEl.appendChild(empty);
+      var gi;
+      for (gi = 1; gi <= 3; gi++) {
+        var ghost = document.createElement('div');
+        ghost.className = 'garden-ghost';
+        ghost.textContent = 'an empty pot — settle a gem to plant here';
+        plotsEl.appendChild(ghost);
+      }
       return;
     }
     for (var i = 0; i < list.length; i++) {

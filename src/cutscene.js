@@ -167,6 +167,8 @@
       if (!box) { done(); return; }
       var riasonInner = box.querySelector('.cutscene-box');
       if (riasonInner && b.voice === 'riason') riasonInner.classList.add('riason');
+      if (b.flare) showFlare();
+      if (b.glitchIn && box) box.classList.add('riason-glitch');
       var lineEl = box.querySelector('.cutscene-line');
       if (b.names) {
         lineEl.innerHTML = '';
@@ -235,53 +237,193 @@
         { voice: 'wanderlust', line: 'You, though, may call me Wanderlust, for what fate truly does is push you to see the world.', options: ['>>'] },
         { voice: 'wanderlust', line: 'Through destruction breeds creation.', options: ['(What is this place?)'] },
         { voice: 'wanderlust', line: 'This is the liber vacui, many have been here before you, they have left their mark and will continue to whisper aid.', options: ['Like who?'] },
-        { voice: 'wanderlust', line: 'You RAT!', burst: true, options: [] },
-        { voice: 'riason', line: 'My god what a pristine UI box!', options: ['Hello?'] },
+        { voice: 'wanderlust', line: 'You RAT!', burst: true, flare: true, options: [] },
+        { voice: 'riason', line: 'My god what a pristine UI box!', glitchIn: true, options: ['Hello?'] },
         { voice: 'riason', line: 'Ah! You must be the new traveller, I have forced my way into the tutorial sequence in order to teach you how to use this software.', options: ["Where's Wanderlust?"] },
         { voice: 'riason', line: "Don't worry, she will be back, and I will be yelled at. In that order.", options: ['>>'] },
         { voice: 'riason', line: 'For now, let me load up the buddy app and I can show you how this works.', options: ['Sure..'] }
       ], function () {
         setStage('stone');
-        window.location.href = 'sigil.html';
+        playDemo();
       });
     });
   }
 
-  // ── act 3: the bind (waits for the user's own click) ──
+  // ── act 3: Riason's demo — HE makes the buddy, the user watches ──
+  // Fake chain throughout: resembles the real buddy flow, writes nothing.
+  // If the user grabs for control mid-demo, Riason objects, then resumes.
 
-  function playBind() {
-    var box = mountBox('chatbeat', 'riason',
-      'You click the artifact to set its relation to the buddy. This one is yours to do — I will watch.');
-    if (!box) return;
-    box.classList.add('docked');
-    var inner = box.querySelector('.cutscene-box');
-    var row = document.createElement('div');
-    row.className = 'cutscene-nav';
-    var skip = document.createElement('button');
-    skip.type = 'button';
-    skip.className = 'cutscene-skip';
-    skip.textContent = 'skip the binding';
-    skip.addEventListener('click', function () { playFinale(); });
-    row.appendChild(skip);
-    inner.appendChild(row);
-    var s = st();
-    var seen = s ? (s.get().relations || []).length : 0;
-    var timer = setInterval(function () {
-      var boxNow = el('cutscene');
-      if (!boxNow) { clearInterval(timer); return; }
-      var s2 = st();
-      var n = s2 ? (s2.get().relations || []).length : 0;
-      if (n > seen) {
-        clearInterval(timer);
-        playFinale();
+  var DEMO_TEXT = 'putting logic over emotions';
+
+  function riasonSay(box, text) {
+    var line = box ? box.querySelector('.demo-riasay') : null;
+    if (line) line.textContent = text;
+  }
+
+  function playDemo() {
+    clearBox();
+    var stage = document.querySelector('.screen-stage');
+    if (!stage) { endClean(); return; }
+    var box = document.createElement('div');
+    box.className = 'cutscene demodock';
+    box.id = 'cutscene';
+    box.innerHTML =
+      '<div class="demo-cursor" id="demo-cursor" aria-hidden="true"></div>' +
+      '<div class="demo-app" id="demo-app">' +
+        '<div class="demo-applabel">buddy <span>demo — riason at the controls</span></div>' +
+        '<div class="demo-field"><label>buddy</label><div class="demo-input" id="demo-input"></div></div>' +
+        '<div class="demo-swatches">' +
+          '<button type="button" class="demo-sw" data-c="gold" aria-label="gold"></button>' +
+          '<button type="button" class="demo-sw" data-c="blue" aria-label="blue"></button>' +
+          '<button type="button" class="demo-sw" data-c="red" aria-label="red"></button>' +
+        '</div>' +
+        '<svg class="demo-canvas" id="demo-canvas" viewBox="0 0 120 90" aria-hidden="true"><circle id="demo-circle" cx="60" cy="45" r="26"/></svg>' +
+        '<button type="button" class="demo-save" id="demo-save">save</button>' +
+        '<div class="demo-preview" id="demo-preview" aria-hidden="true"></div>' +
+      '</div>' +
+      '<div class="cutscene-box riason demobox"><div class="cutscene-voice">riason</div>' +
+        '<div class="cutscene-line demo-riasay">This is the buddy app. First you decide what your buddy is going to represent!</div></div>' +
+      '<div class="cutscene-nav demonav"><button type="button" class="cutscene-skip" id="demo-skip">skip the cutscene</button></div>';
+    stage.appendChild(box);
+    var skip = document.getElementById('demo-skip');
+    if (skip) skip.addEventListener('click', skipAll);
+    var cursor = document.getElementById('demo-cursor');
+    var app = document.getElementById('demo-app');
+    var input = document.getElementById('demo-input');
+    function alive() { return document.body.contains(box); }
+    box.addEventListener('pointerdown', function (e) {
+      if (!alive()) return;
+      if (e.target.closest && e.target.closest('#demo-skip')) return;
+      riasonSay(box, 'Not yet. Let me finish this.');
+      box.classList.remove('do-deny');
+      void box.offsetWidth;
+      box.classList.add('do-deny');
+      thunk();
+    });
+    function moveCursor(x, y, ms, done) {
+      if (!cursor) { if (done) done(); return; }
+      cursor.style.transition = 'left ' + ms + 'ms ease-in-out, top ' + ms + 'ms ease-in-out';
+      cursor.style.left = x;
+      cursor.style.top = y;
+      setTimeout(function () { if (done && alive()) done(); }, ms + 60);
+    }
+    function typeText(done) {
+      var i = 0;
+      (function tick() {
+        if (!alive()) return;
+        if (i > DEMO_TEXT.length) { if (done) done(); return; }
+        if (input) input.textContent = DEMO_TEXT.slice(0, i);
+        i++;
+        setTimeout(tick, 45);
+      })();
+    }
+    moveCursor('50%', '88%', 10, function () {
+      if (app) app.classList.add('open');
+      moveCursor('50%', '58%', 900, function () {
+        riasonSay(box, 'This is just a random example, no correlation at all.');
+        moveCursor('38%', '46%', 800, function () {
+          typeText(function () {
+            if (input) input.classList.add('held');
+            riasonSay(box, 'Next, you can choose what colours you want to use. Wanderlust will be back any minute so I had better just do one.');
+            moveCursor('62%', '56%', 800, function () {
+              var sw = box.querySelector('.demo-sw[data-c="blue"]');
+              if (sw) sw.classList.add('picked');
+              moveCursor('50%', '70%', 900, function () {
+                var c = document.getElementById('demo-circle');
+                if (c) c.classList.add('drawn');
+                setTimeout(function () {
+                  if (!alive()) return;
+                  riasonSay(box, 'When you are finished, you click save and the buddy shows up on your desktop.');
+                  moveCursor('50%', '82%', 800, function () {
+                    var sv = document.getElementById('demo-save');
+                    if (sv) sv.classList.add('hit');
+                    chime();
+                    setTimeout(function () {
+                      if (!alive()) return;
+                      if (app) app.classList.add('collapsed');
+                      var pv = document.getElementById('demo-preview');
+                      if (pv) pv.classList.add('shown');
+                      setStage('bind');
+                      setTimeout(function () { if (alive()) playBindPrompt(); }, 1400);
+                    }, 700);
+                  });
+                }, 1400);
+              });
+            });
+          });
+        });
+      });
+    });
+  }
+
+  // ── act 4: the artifact — the user clicks, the chain is fake ──
+
+  function playBindPrompt() {
+    playBeats([
+      { voice: 'riason', line: 'From here you can use the arrow keys or buttons to navigate to games, and save one as an artifact.', options: ['>>'] },
+      { voice: 'riason', line: 'To use my example, maybe ruby\u2019s gem garden makes me feel a strong emotion that challenges my buddy.', options: ['>>'] }
+    ], function () {
+      var stage = document.querySelector('.screen-stage');
+      if (!stage) { playFinale(); return; }
+      clearBox();
+      var box = document.createElement('div');
+      box.className = 'cutscene artifactdock';
+      box.id = 'cutscene';
+      box.innerHTML = '<div class="demo-artifact" id="demo-artifact" role="button" tabindex="0" aria-label="artifact"></div>' +
+        '<div class="cutscene-box riason"><div class="cutscene-voice">riason</div>' +
+        '<div class="cutscene-line">You click the artifact to set its relation to the buddy.</div></div>' +
+        '<div class="cutscene-nav"><button type="button" class="cutscene-skip" id="art-skip">skip the binding</button></div>';
+      stage.appendChild(box);
+      var skip = document.getElementById('art-skip');
+      if (skip) skip.addEventListener('click', function () { playFinale(); });
+      var art = document.getElementById('demo-artifact');
+      function go() { playFakeChain(); }
+      if (art) {
+        art.addEventListener('click', go);
+        art.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); }
+        });
       }
-    }, 500);
+    });
+  }
+
+  function playFakeChain() {
+    var stage = document.querySelector('.screen-stage');
+    clearBox();
+    if (!stage) { playFinale(); return; }
+    var fx = document.createElement('div');
+    fx.className = 'cutscene fakedock';
+    fx.id = 'cutscene';
+    var bits = '', i;
+    for (i = 0; i < 14; i++) {
+      var a = (i * 137.5) * Math.PI / 180;
+      bits += '<span class="fake-bit" style="--dx:' + Math.cos(a).toFixed(2) + ';--dy:' + Math.sin(a).toFixed(2) + '"></span>';
+    }
+    fx.innerHTML = '<div class="fake-burst">' + bits + '</div>' +
+      '<div class="cutscene-box riason fakebox"><div class="cutscene-voice">riason</div>' +
+      '<div class="cutscene-line">Oh Sh—</div></div>';
+    stage.appendChild(fx);
+    void fx.offsetWidth;
+    fx.classList.add('go');
+    flash('rgba(255,240,220,0.85)', 450);
+    shakeMachine(1400);
+    thunk();
+    setTimeout(function () { playFinale(); }, 1500);
   }
 
   // ── act 4: finale — explosions, return, wipe, arise ──
 
-  function flash(color, ms) {
-    var f = document.createElement('div');
+  function showFlare() {
+    var stage = document.querySelector('.screen-stage');
+    if (!stage || stage.querySelector('.flare-overlay')) return;
+    var o = document.createElement('div');
+    o.className = 'flare-overlay';
+    o.innerHTML = '<div class="flare-alert">intruder detected</div><div class="flare-sub">…documenting.</div>';
+    stage.appendChild(o);
+    setTimeout(function () { if (o.parentNode) o.parentNode.removeChild(o); }, 1700);
+  }
+
+  function flash(color, ms) {    var f = document.createElement('div');
     f.className = 'cutscene-flash';
     if (color) f.style.background = color;
     document.body.appendChild(f);
@@ -354,7 +496,8 @@
     var g = s ? s.get() : {};
     if (g.tutorialDone) return;
     if (g.tutorialStage && g.tutorialStage !== 'done') {
-      if (g.tutorialStage === 'bind') playBind();
+      if (g.tutorialStage === 'bind') playBindPrompt();
+      else if (g.tutorialStage === 'stone') playDemo();
       return;
     }
     if (g.tutorialStage) return;

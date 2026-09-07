@@ -50,7 +50,7 @@ window.LIBER_DATA.hijack = {
     { voice: 'ruby', line: 'that is the garden. grow slow.', target: 'garden-gem-new', glow: true }
   ] },
   games: { flag: 'walkGames', steps: [
-    { voice: 'whimsy wow', line: 'eight booths, two tents. the tools keep to your book — the games keep nothing but the minute.', target: 'games-grid' },
+    { voice: 'whimsy wow', line: 'nine booths, two tents. the tools keep to your book — the games keep nothing but the minute.', target: 'games-grid' },
     { voice: 'whimsy wow', line: 'tipp sits pinned at the floor. start there if it is loud.', target: 'games-tipp-open' },
     { voice: 'whimsy wow', line: 'the tools pay out in satchel-weight. the games pay in calm.', target: null },
     { voice: 'whimsy wow', line: 'that is the tent. play.', target: 'games-grid', glow: true }

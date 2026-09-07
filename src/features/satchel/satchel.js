@@ -9,7 +9,7 @@
 
   function getSigs() {
     var s = (window.Liber && window.Liber.state && window.Liber.state.get()) || {};
-    return s.sigils || [];
+    return ((s.buddy || []).filter(function (e) { return e && e.kind === 'stone'; }));
   }
 
   function fmtDate(ts) {
@@ -33,10 +33,12 @@
     var st = (window.Liber && window.Liber.state) || null;
     var annEl = document.getElementById('satchel-annotation');
     if (!st || !annEl || currentIdx < 0) return;
-    var sigs = (st.get().sigils || []).slice();
+    var all = st.get().buddy || [];
+    var sealed = all.filter(function (e) { return !e || e.kind !== 'stone'; });
+    var sigs = all.filter(function (e) { return e && e.kind === 'stone'; }).slice();
     if (!sigs[currentIdx]) return;
     sigs[currentIdx] = Object.assign({}, sigs[currentIdx], { annotation: annEl.textContent });
-    st.set({ sigils: sigs });
+    st.set({ buddy: sigs.concat(sealed) });
     if (window.Liber && window.Liber.sound) window.Liber.sound.play('chime');
   }
 

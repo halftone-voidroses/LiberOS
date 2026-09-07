@@ -76,7 +76,7 @@
     if (confession.length > 600) confession = confession.substring(0, 600) + '...';
 
     if (window.Liber && window.Liber.state && window.Liber.state.addArtifact) {
-      window.Liber.state.addArtifact('buddy', { name: name, confession: confession });
+      window.Liber.state.addArtifact('buddy', { kind: 'sealed', name: name, confession: confession });
     }
     if (window.Liber && window.Liber.sound) window.Liber.sound.play('chime');
 

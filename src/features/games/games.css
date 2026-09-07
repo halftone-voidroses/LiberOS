@@ -273,7 +273,7 @@
      a fixed or min-content row makes the next row's border cut through
      the text above it */
   grid-auto-rows: minmax(112px, auto);
-  gap: 8px;
+  gap: 6px;
   width: 100%;
   flex: 1;
   min-height: 0;
@@ -294,7 +294,7 @@
   cursor: pointer;
   box-shadow: inset 0 0 0 1px #8a6a20, 0 0 8px rgba(212, 175, 55, 0.3);
   text-align: center;
-  min-height: 88px;
+  min-height: 80px;
   transition: transform 0.12s, box-shadow 0.12s;
 }
 
@@ -1527,4 +1527,32 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .games-flame { animation: none; }
+}
+
+/* ─── sandplay booth ─── */
+.sand-phase{display:flex;gap:6px;align-items:center;margin:10px 0 2px;flex-wrap:wrap}
+.sand-phase i{display:block;width:10px;height:10px;border-radius:50%;border:1px solid #8a6a3a;background:transparent}
+.sand-phase i.on{background:#e8c890;box-shadow:0 0 8px rgba(232,200,144,.8)}
+.sand-phase span{font-family:'VT323','Courier New',monospace;font-size:1rem;letter-spacing:.15em;color:#d8a070;margin-left:6px}
+.sand-hint{font-family:Georgia,serif;font-style:italic;font-size:.95rem;color:#b9a684;margin:2px 0 8px;min-height:1.5em}
+.sand-shelf{display:flex;gap:10px;align-items:center;margin:6px 0 10px;min-height:52px;padding:6px 8px;border:1px dashed rgba(200,168,120,.35);border-radius:8px;background:rgba(0,0,0,.3)}
+.sand-shelf:empty::after{content:'the shelf is empty — all toys are in the sand.';font-family:Georgia,serif;font-style:italic;font-size:.85rem;color:#7a6a52}
+.sand-tray{position:relative;width:100%;aspect-ratio:16/10;border:2px solid #6a5a30;border-radius:10px;overflow:hidden;touch-action:none;background:linear-gradient(180deg,#3a2c18 0%,#4a3820 45%,#5a4527 100%);box-shadow:inset 0 0 40px rgba(0,0,0,.65),inset 0 6px 18px rgba(255,230,170,.08),0 0 22px rgba(200,168,120,.12)}
+.sand-tray::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 40%,transparent 55%,rgba(0,0,0,.45) 100%)}
+.sand-toy{position:absolute;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:10px;background:linear-gradient(180deg,#241a10,#120c06);border:1px solid #8a6a3a;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;box-shadow:0 3px 8px rgba(0,0,0,.6);z-index:3}
+.sand-toy:active{cursor:grabbing}
+.sand-toy .g{font-size:1.15rem;line-height:1;color:#e8c890;text-shadow:0 0 8px rgba(232,200,144,.6)}
+.sand-toy .l{font-family:'VT323','Courier New',monospace;font-size:.7rem;color:#b9a684;max-width:44px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sand-toy.placed{border-color:#e8c890;box-shadow:0 0 12px rgba(232,200,144,.55),0 3px 8px rgba(0,0,0,.6)}
+.sand-toy.shelf{position:static;margin:0}
+.sand-mound{position:absolute;width:36px;height:20px;margin:-10px 0 0 -18px;border-radius:50%;background:radial-gradient(ellipse at 50% 35%,#6a5230 0%,#4a3820 60%,transparent 75%);pointer-events:none;z-index:2}
+.sand-tools{display:flex;gap:8px;margin:10px 0;flex-wrap:wrap}
+.sand-tools .games-action.on{border-color:#e8c890;background:rgba(216,160,112,.16)}
+.sand-lines{display:flex;flex-direction:column;gap:6px;margin:6px 0}
+.sand-line{display:flex;gap:8px;align-items:center}
+.sand-line label{font-family:'VT323','Courier New',monospace;font-size:.95rem;color:#d8a070;white-space:nowrap}
+.sand-line input{flex:1;background:rgba(0,0,0,.4);border:1px solid #6a5a30;border-radius:4px;color:#ede0c8;font-family:Georgia,serif;font-size:.95rem;padding:5px 9px}
+.sand-line input:focus-visible{outline:2px solid #e8c890;outline-offset:1px}
+@media (prefers-reduced-motion: reduce) {
+  .sand-toy { transition: none; }
 }

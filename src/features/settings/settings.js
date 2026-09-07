@@ -6,8 +6,8 @@
     var s = (window.Liber && window.Liber.state && window.Liber.state.get()) || {};
     var out = [];
     out.push('tutorialDone: ' + !!s.tutorialDone);
-    out.push('sigils: ' + ((s.sigils || []).length));
-    out.push('buddy: ' + ((s.buddy || []).length));
+    out.push('stone: ' + ((s.buddy || []).filter(function (e) { return e && e.kind === 'stone'; }).length));
+    out.push('sealed: ' + ((s.buddy || []).filter(function (e) { return !e || e.kind !== 'stone'; }).length));
     out.push('visited: ' + Object.keys(s.visited || {}).length + ' visitor' + (Object.keys(s.visited || {}).length === 1 ? '' : 's'));
     out.push('shadowOn: ' + !!s.shadowOn);
     out.push('shadowUnlocked: ' + !!s.shadowUnlocked);

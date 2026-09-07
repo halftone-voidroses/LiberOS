@@ -454,13 +454,24 @@ function loadGhost(bitmapDataUrl) {
     if (desk) desk.removeAttribute('hidden');
   }
 
+  function getStone() {
+    var s = (window.Liber && window.Liber.state && window.Liber.state.get()) || {};
+    return ((s.buddy || []).filter(function (e) { return e && e.kind === 'stone'; }));
+  }
+  function setStone(arr) {
+    var st = (window.Liber && window.Liber.state) || null;
+    if (!st) return;
+    var sealed = ((st.get().buddy || []).filter(function (e) { return !e || e.kind !== 'stone'; }));
+    st.set({ buddy: arr.concat(sealed) });
+  }
+
   function save() {
     var app = document.querySelector('.sigil-app');
     if (!app) return;
     app.classList.add('saved');
     if (window.Liber && window.Liber.state) {
       var s = window.Liber.state.get() || {};
-      var arr = s.sigils || [];
+      var arr = getStone();
       var intention = document.querySelector('.sigil-input').innerText;
       var bitmap = snapshotBitmap();
       if (replaceMode && currentId) {
@@ -472,7 +483,7 @@ function loadGhost(bitmapDataUrl) {
               ts: Date.now(),
               bitmap: bitmap || arr[i].bitmap || null
             });
-            window.Liber.state.set({ sigils: arr });
+            setStone(arr);
             signedUI();
             advanceStoneStage();
             return;
@@ -482,13 +493,14 @@ function loadGhost(bitmapDataUrl) {
       var id = 'sigil-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
       arr.push({
         id: id,
+        kind: 'stone',
         intention: intention,
         element: activeElement,
         ts: Date.now(),
         annotation: '',
         bitmap: bitmap
       });
-      window.Liber.state.set({ sigils: arr });
+      setStone(arr);
       signedUI();
       advanceStoneStage();
     }
@@ -531,7 +543,7 @@ function loadGhost(bitmapDataUrl) {
     var existing = [];
     try {
       var s = (window.Liber && window.Liber.state && window.Liber.state.get()) || {};
-      existing = s.sigils || [];
+      existing = getStone();
     } catch (e) {}
 
     if (existing.length > 0) {
@@ -599,7 +611,7 @@ function loadGhost(bitmapDataUrl) {
       var tst = (window.Liber && window.Liber.state) || null;
       var tss = tst ? tst.get() : {};
       var stoneTour = (tss.tutorialStage === 'stone') ||
-        (tss.tutorialDone && (tss.sigils || []).length === 0 && !tss.walkSigil);
+        (tss.tutorialDone && getStone().length === 0 && !tss.walkSigil);
       if (stoneTour) {
         window.Hijack.run({ flag: 'walkSigil', room: 'sigil', accent: '#8acaff',
           onStep: function (idx, box) {

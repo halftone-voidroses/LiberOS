@@ -15,7 +15,7 @@
   function getArtifacts() {
     if (!(window.Liber && window.Liber.state)) return [];
     var s = window.Liber.state.get();
-    var sigils = s.sigils || [];
+    var sigils = (s.buddy || []).filter(function (e) { return e && e.kind === 'stone'; });
     var div = s.divination || [];
     var abs = s.abstract || [];
     var all = [].concat(sigils, div, abs);
@@ -23,7 +23,7 @@
   }
 
   function sourceOf(entry) {
-    if (entry && entry.id && entry.id.indexOf('sigil-') === 0) return 'sigil';
+    if (entry && entry.id && entry.id.indexOf('sigil-') === 0) return 'buddy';
     if (entry && entry.id && entry.id.indexOf('divination-') === 0) return 'divination';
     return 'abstract';
   }
@@ -124,7 +124,7 @@
     // Remove from the source array; if it's an `abstract` entry (already
     // an egg), we just leave the new egg. If it's from sigil/divination,
     // we release it from its source so it no longer appears in the rail.
-    if (src === 'sigil' || src === 'divination') {
+    if (src === 'buddy' || src === 'divination') {
       try {
         if (window.Liber.state.releaseArtifact) {
           window.Liber.state.releaseArtifact(src, entry.id);

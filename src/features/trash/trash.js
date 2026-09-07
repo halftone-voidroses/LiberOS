@@ -26,9 +26,11 @@
 
   function snapshotAll() {
     var s = st() ? st().get() : {};
+    var stone = ((s.buddy || []).filter(function (e) { return e && e.kind === 'stone'; }));
+    var sealed = ((s.buddy || []).filter(function (e) { return !e || e.kind !== 'stone'; }));
     return [
-      { kind: 'sigils', entries: (s.sigils || []).slice() },
-      { kind: 'buddy', entries: (s.buddy || []).slice() },
+      { kind: 'sigils', entries: stone.slice() },
+      { kind: 'buddy', entries: sealed.slice() },
       { kind: 'tour', entry: { visited: Object.assign({}, s.visited || {}) } },
     ];
   }
@@ -45,12 +47,12 @@
         for (var j = 0; j < g.entries.length; j++) {
           graveyard.push({ kind: 'sigils', entry: g.entries[j], buriedAt: now });
         }
-        patch.sigils = [];
+        patch.buddy = ((s.buddy || []).filter(function (e) { return !e || e.kind !== 'stone'; }));
       } else if (g.kind === 'buddy') {
         for (var k = 0; k < g.entries.length; k++) {
           graveyard.push({ kind: 'buddy', entry: g.entries[k], buriedAt: now });
         }
-        patch.buddy = [];
+        patch.buddy = ((s.buddy || []).filter(function (e) { return e && e.kind === 'stone'; }));
       } else if (g.kind === 'tour') {
         graveyard.push({ kind: 'tour', entry: g.entry, buriedAt: now });
         patch.visited = {};
@@ -71,9 +73,9 @@
   function readdToState(gy) {
     var s = st().get();
     if (gy.kind === 'sigils') {
-      st().set({ sigils: (s.sigils || []).concat([gy.entry]) });
+      st().set({ buddy: (s.buddy || []).concat([Object.assign({}, gy.entry, { kind: 'stone' })]) });
     } else if (gy.kind === 'buddy') {
-      st().set({ buddy: (s.buddy || []).concat([gy.entry]) });
+      st().set({ buddy: (s.buddy || []).concat([Object.assign({}, gy.entry, gy.entry && gy.entry.kind ? {} : { kind: 'sealed' })]) });
     } else if (gy.kind === 'tour') {
       var restored = gy.entry && gy.entry.visited ? gy.entry.visited : {};
       st().set({ visited: Object.assign({}, s.visited || {}, restored) });

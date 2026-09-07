@@ -141,7 +141,7 @@
       if (Array.isArray(s[kinds[i]])) kept += s[kinds[i]].length;
     }
     return {
-      cast: (s.sigils || []).length > 0,
+      cast: (s.buddy || []).some(function (e) { return e && e.kind === 'stone'; }),
       keep: kept > 0,
       bind: (s.relations || []).length > 0,
       release: (s.sea || []).length > 0

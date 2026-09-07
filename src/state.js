@@ -9,8 +9,7 @@
   const DEFAULT = {
     state: 'boot',           // boot | loading | desktop
     tutorialDone: false,
-    sigils: [],              // user's etched sigils
-    buddy: [],              // the user's artifact set
+    buddy: [],              // buddy artifacts: stone casts (kind stone) + sealed chats (kind sealed)
     relations: [],           // sigil <- artifact edges
     divination: [],          // cards drawn from arcana
     games: [],               // saved game artifacts
@@ -44,6 +43,19 @@
         parsed.buddy = parsed.cohort;
         delete parsed.cohort;
       }
+      if (Array.isArray(parsed.sigils) && parsed.sigils.length) {
+        var stone = parsed.sigils.map(function (e) { return Object.assign({}, e, { kind: 'stone' }); });
+        parsed.buddy = stone.concat(Array.isArray(parsed.buddy) ? parsed.buddy : []);
+        delete parsed.sigils;
+      } else {
+        delete parsed.sigils;
+      }
+      if (Array.isArray(parsed.buddy)) {
+        parsed.buddy = parsed.buddy.map(function (e) { return (e && !e.kind) ? Object.assign({}, e, { kind: 'sealed' }) : e; });
+      }
+      if (Array.isArray(parsed.relations)) {
+        parsed.relations = parsed.relations.map(function (r) { return (r && r.to === 'sigil') ? Object.assign({}, r, { to: 'buddy' }) : r; });
+      }
       return Object.assign({}, DEFAULT, parsed);
     } catch (e) {
       return Object.assign({}, DEFAULT);
@@ -65,7 +77,7 @@
     try {
       const raw = localStorage.getItem('liber_diag');
       const arr = raw ? JSON.parse(raw) : [];
-      arr.push(Object.assign({ t: Date.now(), e: event, sig: (state.sigils || []).length }, extra || {}));
+      arr.push(Object.assign({ t: Date.now(), e: event, sig: (state.buddy || []).filter(function (e) { return e && e.kind === 'stone'; }).length }, extra || {}));
       while (arr.length > 60) arr.shift();
       localStorage.setItem('liber_diag', JSON.stringify(arr));
     } catch (e) { /* never break the room */ }
@@ -144,7 +156,7 @@
   function bindRelation(fromId, verb) {
     var relations = (state.relations || []).slice();
     if (relations.some(function (r) { return r.from === fromId && r.verb === verb; })) return null;
-    var rel = { from: fromId, to: 'sigil', verb: verb || 'relates to', ts: Date.now() };
+    var rel = { from: fromId, to: 'buddy', verb: verb || 'relates to', ts: Date.now() };
     relations.push(rel);
     state = Object.assign({}, state, { relations: relations });
     save(state);
@@ -171,7 +183,8 @@
   }
 
   function replaceSigil(sigil) {
-    state.sigils = [sigil];
+    var sealed = (state.buddy || []).filter(function (e) { return !e || e.kind !== 'stone'; });
+    state.buddy = [Object.assign({}, sigil, { kind: 'stone' })].concat(sealed);
     state = Object.assign({}, state);
     save(state);
     emit('change', state);

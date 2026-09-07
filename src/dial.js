@@ -76,7 +76,7 @@
 
   function isSigilLocked() {
     var s = (window.Liber && window.Liber.state && window.Liber.state.get()) || {};
-    return (s.sigils || []).length > 0;
+    return ((s.buddy || []).some(function (e) { return e && e.kind === 'stone'; }));
   }
 
   function init() {

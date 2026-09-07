@@ -114,13 +114,13 @@
   }
 
   function buddyName(s) {
-    var sig = s && Array.isArray(s.sigils) && s.sigils[0];
+    var sig = (((s && s.buddy) || []).filter(function (e) { return e && e.kind === 'stone'; }))[0];
     var intent = sig && typeof sig.intention === 'string' ? sig.intention.trim() : '';
     return intent || 'your buddy';
   }
 
   function intention(s) {
-    var sig = s && Array.isArray(s.sigils) && s.sigils[0];
+    var sig = (((s && s.buddy) || []).filter(function (e) { return e && e.kind === 'stone'; }))[0];
     return (sig && typeof sig.intention === 'string' && sig.intention.trim()) || 'the intention you cast';
   }
 

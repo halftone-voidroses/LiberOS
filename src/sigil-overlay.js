@@ -9,7 +9,7 @@
     var img = document.getElementById('sigil-overlay-img');
     if (!overlay || !img) return;
     var s = (window.Liber && window.Liber.state) ? window.Liber.state.get() : {};
-    var sigils = s.sigils || [];
+    var sigils = (s.buddy || []).filter(function (e) { return e && e.kind === 'stone'; });
     if (!sigils.length || !sigils[0].bitmap) {
       overlay.style.display = 'none';
       overlay.setAttribute('aria-hidden', 'true');

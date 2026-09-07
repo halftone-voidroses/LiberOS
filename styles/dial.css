@@ -120,14 +120,14 @@
 /* a tile the traveller has entered keeps its phosphor warm; never-visited
    rooms burn dimmer (the dial remembers where you have been) */
 .dial-option.visited .phos-label { opacity: 1; }
-.dial-option:not(.visited):not(.active) .phos-label { opacity: 0.6; }
+.dial-option:not(.visited):not(.active) .phos-label { opacity: 0.85; }
 
 .dial-option.prev,
 .dial-option.next {
   justify-self: end;
-  opacity: 0.8;
-  transform: translateY(20%) scale(0.82);
-  filter: saturate(0.55) brightness(0.8);
+  opacity: 0.92;
+  transform: translateY(12%) scale(0.9);
+  filter: saturate(0.8) brightness(0.95);
 }
 
 .dial-option.next { justify-self: start; }
@@ -255,6 +255,14 @@
   z-index: 3;
   padding: 0;
   filter: drop-shadow(0 2px 0 #1a0a05) drop-shadow(0 3px 2px rgba(0, 0, 0, 0.5));
+}
+.dial-arrow::after {
+  content: '';
+  position: absolute;
+  top: -17px;
+  bottom: -17px;
+  left: -13px;
+  right: -13px;
 }
 
 .dial-arrow.left {
