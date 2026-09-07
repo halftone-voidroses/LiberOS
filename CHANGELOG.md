@@ -1,5 +1,34 @@
 # LiberOS changelog
 
+## 2.0.1 — stabilize the batch
+
+Bugfix release over the post-2.0.0 batch. No new features.
+
+### Fixed
+- Satchel: margin-note list opens the tapped entry (filtered-index bug),
+  and notes also save on blur — not only on Cmd/Ctrl+Enter.
+- Stone room: brush `mousemove` restored; `mouseup` now also caught at
+  document level so strokes commit when released outside the canvas;
+  shape-preview snapshot restored on pointer leave.
+- Relation ledger + desktop mini-menu show each artifact's original
+  content (sea text, buddy confession/intention, dream title+text) and
+  the mini-menu gains an "open in room" jump.
+- Learn: prose pass (shadow, divination, clinamen, defences, anima,
+  active imagination), The Self split into Self + Individuation, new
+  Inner Household drawer, FAQ drawers (Questions; Keeping, Orbits,
+  Slots), citation panel labels.
+- Themes: new deep-purple Royalty skin; themes paint the desktop too.
+- Dreams: associations pin the selected reading words as a quote.
+- Settings: three save slots (mess about / serious work / show someone)
+  with per-slot summaries; state namespaced per slot with legacy
+  migration.
+- Cutscene NAMES beat: names land faster with per-name color flicker.
+- Smoke hardened to enforcing assertions and covers slots, migration,
+  shelving, and notes.
+
+### Proven
+- 21-step smoke green on fresh profiles, zero page/console errors.
+
 ## 2.0.0 — flow becomes main
 
 The former `LiberOS-flow` fork is now the mainline build. The previous
