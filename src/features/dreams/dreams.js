@@ -172,7 +172,7 @@
     if (!ledgerEl) return;
     var arr = (state() ? (state().get().dreams || []) : []).slice().reverse(); // newest first
     if (!arr.length) {
-      ledgerEl.innerHTML = '<div class="dreams-ledger-empty">Enter dreams to populate</div>';
+      ledgerEl.innerHTML = '<div class="dreams-ledger-empty">no dreams recorded yet.</div>';
       return;
     }
     var html = '';
@@ -235,7 +235,7 @@
     var d = currentId ? findDream(currentId) : null;
     var list = (d && d.associations) || [];
     if (!list.length) {
-      assocListEl.innerHTML = '<div class="dreams-assoc-empty">nothing yet. the image is still speaking.</div>';
+      assocListEl.innerHTML = '<div class="dreams-assoc-empty">no associations yet.</div>';
       return;
     }
     var html = '';

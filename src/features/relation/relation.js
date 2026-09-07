@@ -103,7 +103,7 @@
 
     // ── the ledger itself ──
     if (artifacts.length === 0) {
-      ledgerEl.innerHTML = '<div class="relation-empty">— nothing has been etched yet —<br/><em>begin with the stone, in buddy.</em></div>';
+      ledgerEl.innerHTML = '<div class="relation-empty">nothing saved yet.<br/><em>make a buddy, save something, then bind it here.</em></div>';
       unboundEl.innerHTML = '';
       return;
     }

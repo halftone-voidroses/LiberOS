@@ -316,7 +316,7 @@ console.log('18. Legacy save migrates: sigils[] -> buddy stone, to:sigil -> to:b
 await page.evaluate(() => {
   try {
     localStorage.setItem('liber_vacui_v1', JSON.stringify({
-      tutorialDone: true, tutorialStage: 'done',
+      tutorialDone: true, tutorialStage: 'done', cutsceneBuild: 'riasondemo1',
       sigils: [{ id: 'sigil-1', intention: 'old stone', element: 'earth', ts: 1 }],
       buddy: [{ name: 'old chat', confession: 'old words' }],
       relations: [{ from: 'x', to: 'sigil', verb: 'holds', ts: 2 }]
@@ -341,6 +341,45 @@ console.assert(migrated.stone === 1 && migrated.intent === 'old stone', 'stone p
 console.assert(migrated.sealed === 1, 'sealed chat preserved: ' + JSON.stringify(migrated))
 console.assert(migrated.relTo === 'buddy', 'relation retargeted: ' + JSON.stringify(migrated))
 console.log(`   migrated: ${JSON.stringify(migrated)}`)
+
+console.log('19. New-build replay shelves legacy artifacts into the trash, homescreen clean')
+await page.evaluate(() => {
+  localStorage.setItem('liber_vacui_v1', JSON.stringify({
+    tutorialDone: true, tutorialStage: 'done',
+    buddy: [{ kind: 'stone', id: 'sigil-9', intention: 'old' }, { kind: 'sealed', name: 'old chat', confession: 'x' }],
+    relations: [{ from: 'a', to: 'buddy', verb: 'holds' }],
+    divination: [{ id: 'divination-1', name: 'the tower' }]
+  }))
+})
+await page.goto(BASE + '/desktop.html', { waitUntil: 'networkidle' })
+await page.waitForTimeout(1200)
+const shelved = await page.evaluate(() => {
+  const s = window.Liber.state.get()
+  return {
+    buddy: (s.buddy || []).length, relations: (s.relations || []).length, divination: (s.divination || []).length,
+    grave: (s.graveyard || []).length, done: !!s.tutorialDone,
+    orbits: document.querySelectorAll('.constellation-artifact').length
+  }
+})
+console.assert(shelved.buddy === 0 && shelved.relations === 0 && shelved.divination === 0, 'active sets cleared: ' + JSON.stringify(shelved))
+console.assert(shelved.grave >= 4, 'shelved into trash: ' + JSON.stringify(shelved))
+console.assert(!shelved.done && shelved.orbits === 0, 'tutorial replays on clean homescreen: ' + JSON.stringify(shelved))
+console.log(`   shelved: ${JSON.stringify(shelved)}`)
+
+console.log('20. Scratch notes keep to the satchel')
+await page.evaluate(() => { window.Liber.state.set({ tutorialDone: true, tutorialStage: 'done' }) })
+await page.reload({ waitUntil: 'networkidle' })
+await page.waitForTimeout(800)
+await page.fill('#notes-pad', 'a scratch line for the book')
+await page.click('#notes-save')
+await page.waitForTimeout(400)
+const noteKept = await page.evaluate(() => {
+  const s = window.Liber.state.get()
+  const notes = (s.satchel || []).filter(e => e && e.kind === 'note')
+  return { n: notes.length, text: ((notes[0] || {}).text || '').slice(0, 30) }
+})
+console.assert(noteKept.n === 1 && noteKept.text.includes('scratch line'), 'note kept: ' + JSON.stringify(noteKept))
+console.log(`   note: ${JSON.stringify(noteKept)}`)
 
 if (errors.length) {
   console.log('\nErrors:')

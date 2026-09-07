@@ -45,7 +45,7 @@
   function renderList() {
     var sigs = getSigs();
     if (sigs.length === 0) {
-      list.innerHTML = '<div class="satchel-empty">the satchel is empty.<br/>a buddy must first be cast.</div>';
+      list.innerHTML = '<div class="satchel-empty">the satchel is empty.<br/>make a buddy first.</div>';
       return;
     }
     var elements = [];

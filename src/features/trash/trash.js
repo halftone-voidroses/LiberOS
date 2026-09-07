@@ -67,7 +67,10 @@
     if (gy.kind === 'sigils') return 'the cast buddy' + (e.name ? ' — ' + e.name : '');
     if (gy.kind === 'buddy') return 'one you carried' + (e.name ? ' — ' + e.name : '');
     if (gy.kind === 'tour') return 'the tour, remembered';
-    return gy.kind;
+    if (gy.kind === 'relations') return 'a bound knot — ' + (e.verb || 'bound');
+    var nm = e.name || e.title || e.topic || (typeof e.text === 'string' ? e.text : '');
+    if (nm && nm.length > 42) nm = nm.substring(0, 39) + '...';
+    return gy.kind + (nm ? ' — ' + nm : '');
   }
 
   function readdToState(gy) {
@@ -79,6 +82,12 @@
     } else if (gy.kind === 'tour') {
       var restored = gy.entry && gy.entry.visited ? gy.entry.visited : {};
       st().set({ visited: Object.assign({}, s.visited || {}, restored) });
+    } else {
+      var arr = Array.isArray(s[gy.kind]) ? s[gy.kind].slice() : [];
+      arr.push(gy.entry);
+      var patch = {};
+      patch[gy.kind] = arr;
+      st().set(patch);
     }
   }
 
@@ -90,7 +99,7 @@
     if (!graveyard.length) {
       var empty = document.createElement('div');
       empty.className = 'trash-dig-empty';
-      empty.textContent = 'the soil keeps nothing. yet.';
+      empty.textContent = 'nothing buried. bury things to remove them; dig to bring them back.';
       list.appendChild(empty);
       return;
     }

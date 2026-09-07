@@ -60,6 +60,17 @@
       }
       if (parsed.cutsceneBuild !== CUTSCENE_BUILD) {
         parsed.cutsceneBuild = CUTSCENE_BUILD;
+        var shelve = ['buddy', 'relations', 'divination', 'games', 'learn', 'abstract', 'sea', 'garden', 'dreams'];
+        var grave = Array.isArray(parsed.graveyard) ? parsed.graveyard.slice() : [];
+        var now = Date.now(), k, i;
+        for (k = 0; k < shelve.length; k++) {
+          var arr = parsed[shelve[k]];
+          if (Array.isArray(arr) && arr.length) {
+            for (i = 0; i < arr.length; i++) grave.push({ kind: shelve[k], entry: arr[i], buriedAt: now });
+            parsed[shelve[k]] = [];
+          }
+        }
+        parsed.graveyard = grave;
         parsed.tutorialDone = false;
         parsed.tutorialStage = null;
       }

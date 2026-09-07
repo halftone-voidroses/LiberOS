@@ -94,7 +94,7 @@
     if (!s.tutorialDone) {
       if (empty) {
         empty.style.display = '';
-        empty.innerHTML = '— cast the buddy first —<div class="constellation-empty-sub">open the buddy from the dial.</div>';
+        empty.innerHTML = '— make a buddy first —<div class="constellation-empty-sub">open buddy on the dial.</div>';
       }
       svg.innerHTML = '';
       return;
@@ -104,7 +104,7 @@
         empty.style.display = '';
         var sealedWait = sealedOf(s.buddy).length;
         empty.innerHTML = '— cast the buddy first —<div class="constellation-empty-sub">open the buddy from the dial.</div>'
-          + (sealedWait > 0 ? '<div class="constellation-empty-sub">' + sealedWait + ' sealed exchange' + (sealedWait === 1 ? '' : 's') + ' wait' + (sealedWait === 1 ? 's' : '') + ' for it.</div>' : '');
+          + (sealedWait > 0 ? '<div class="constellation-empty-sub">' + sealedWait + ' sealed chat' + (sealedWait === 1 ? '' : 's') + ' saved.</div>' : '');
       }
       svg.innerHTML = '';
       return;
@@ -112,10 +112,10 @@
     if (empty) {
       if (artifacts.length === 0) {
         empty.style.display = '';
-        empty.innerHTML = '— the stone is signed —<div class="constellation-empty-sub">bring one thing back — a card, a line, a seed.</div>';
+        empty.innerHTML = '— buddy made —<div class="constellation-empty-sub">save one thing: a card, a line, a seed.</div>';
       } else if (relations.length === 0) {
         empty.style.display = '';
-        empty.innerHTML = '— something kept —<div class="constellation-empty-sub">touch it to bind it with a verb.</div>';
+        empty.innerHTML = '— something saved —<div class="constellation-empty-sub">give it a verb to bind it to your buddy.</div>';
       } else {
         empty.style.display = 'none';
       }

@@ -56,8 +56,21 @@
     renderState();
   }
 
+  var wipeArmed = false, wipeTimer = null;
   function wipe() {
-    if (!confirm('wipe the room? this cannot be undone.')) return;
+    var btn = document.getElementById('settings-wipe');
+    if (!wipeArmed) {
+      wipeArmed = true;
+      if (btn) btn.textContent = 'click again — wipe the room. this cannot be undone.';
+      wipeTimer = setTimeout(function () {
+        wipeArmed = false;
+        if (btn) btn.textContent = 'wipe the room';
+      }, 5000);
+      return;
+    }
+    if (wipeTimer) clearTimeout(wipeTimer);
+    wipeArmed = false;
+    if (btn) btn.textContent = 'wipe the room';
     if (window.Liber && window.Liber.state) window.Liber.state.reset();
     if (window.Liber && window.Liber.sound) window.Liber.sound.play('thunk');
     renderState();

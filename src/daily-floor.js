@@ -1,4 +1,4 @@
-// daily-floor.js — the day's small works (desktop.html only).
+// daily-floor.js — Todays Tasks (desktop.html only).
 // A quiet checklist in the screen's right margin: three suggestions per day,
 // picked deterministically from the date (seeded PRNG — the same shape as
 // src/gamification.js / src/prompt-engine.js; no Math.random in anything the
@@ -13,18 +13,18 @@
   'use strict';
 
   var POOL = [
-    { id: 'divination',  room: 'divination.html', text: 'cast one card in the still room' },
-    { id: 'dreams',      room: 'dreams.html',     text: 'record one dream before it thins' },
-    { id: 'garden',      room: 'garden.html',     text: 'plant a seed, or water what grows' },
-    { id: 'sea',         room: 'sea.html',        text: 'let the water take one line' },
-    { id: 'chat',        room: 'buddy.html',     text: 'speak one honest thing to the chat, and seal it' },
-    { id: 'games',       room: 'games.html',      text: 'play one hand at the booths' },
-    { id: 'abstract',    room: 'abstract.html',   text: 'cut one pair in the void' },
-    { id: 'learn',       room: 'learn.html',      text: 'read one page of the workbook' },
-    { id: 'methodology', room: 'methodology.html', text: 'read one folio page in the methodology' },
-    { id: 'themes',      room: 'themes.html',     text: 'repaint the room in a colour you avoided' },
-    { id: 'satchel',     room: 'satchel.html',    text: 'open the book and annotate one kept thing' },
-    { id: 'relation',    room: 'desktop.html',    text: 'bind one kept artifact to the buddy with a verb' }
+    { id: 'divination',  room: 'divination.html', text: 'draw one tarot card' },
+    { id: 'dreams',      room: 'dreams.html',     text: 'write down one dream' },
+    { id: 'garden',      room: 'garden.html',     text: 'work on the gem' },
+    { id: 'sea',         room: 'sea.html',        text: 'release one line into the sea' },
+    { id: 'chat',        room: 'buddy.html',     text: 'talk to the buddy and seal it' },
+    { id: 'games',       room: 'games.html',      text: 'play one booth game' },
+    { id: 'abstract',    room: 'abstract.html',   text: 'cut apart one pair' },
+    { id: 'learn',       room: 'learn.html',      text: 'read one workbook page' },
+    { id: 'methodology', room: 'methodology.html', text: 'read one methodology page' },
+    { id: 'themes',      room: 'themes.html',     text: 'try a new room color' },
+    { id: 'satchel',     room: 'satchel.html',     text: 'write a note on one kept item' },
+    { id: 'relation',    room: 'desktop.html',    text: 'give one kept item a verb' }
   ];
 
   // Anything in the book set drags the checklist toward the kept things.
@@ -102,7 +102,7 @@
     container.className = 'daily-floor';
     container.id = 'daily-floor';
     container.setAttribute('role', 'group');
-    container.setAttribute('aria-label', "today's small works");
+    container.setAttribute('aria-label', "Todays Tasks");
     var stage = document.getElementById('desktop');
     stage.appendChild(container);
   }
@@ -117,7 +117,7 @@
     container.innerHTML = '';
     var head = document.createElement('div');
     head.className = 'daily-floor-head';
-    head.textContent = "today's small works";
+    head.textContent = "Todays Tasks";
     container.appendChild(head);
 
     works.forEach(function (w) {
@@ -150,7 +150,7 @@
 
     var foot = document.createElement('div');
     foot.className = 'daily-floor-foot';
-    foot.textContent = 'the floor suggests. nothing is owed.';
+    foot.textContent = 'optional tasks. ticking is private.';
     container.appendChild(foot);
   }
 

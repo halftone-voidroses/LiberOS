@@ -1,14 +1,12 @@
 /* ============================================================================
-   daily-floor.css — the day's small works (shell chrome, not persona CSS:
+   daily-floor.css — Todays Tasks (shell chrome, not persona CSS:
    same family as twelve-works.css / status-line.css). A quiet checklist in
-   the screen's right margin, below the radial clock and clear of the
-   twelve-works bar. Pre-tutorial the screen belongs to the big ? alone.
+   the screen's right margin. Pre-tutorial the screen belongs to the bar.
    ============================================================================ */
 
 .daily-floor {
   position: absolute;
-  top: 144px;      /* clears the clock (top 12 + 120 tall + date line) and
-                      the repeat-?; above the dial band */
+  top: 44px;
   right: 16px;
   width: 232px;
   z-index: 20;

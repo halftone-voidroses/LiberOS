@@ -1,0 +1,84 @@
+/* ============================================================================
+   notes.css — scratch notes pad (shell chrome, same family as
+   daily-floor.css). Left margin mirror of the tasks window.
+   ============================================================================ */
+
+.notes {
+  position: absolute;
+  top: 44px;
+  left: 16px;
+  width: 232px;
+  z-index: 20;
+  pointer-events: auto;
+  font-family: 'VT323', monospace;
+  color: #c0b090;
+}
+
+.state-desktop:not(.tutorial-done) .notes { display: none; }
+
+.notes-head {
+  font-size: 15px;
+  letter-spacing: 0.22em;
+  text-transform: lowercase;
+  color: #a89878;
+  border-bottom: 1px solid rgba(200, 168, 120, 0.25);
+  padding-bottom: 4px;
+  margin-bottom: 6px;
+  text-shadow: 0 0 6px rgba(200, 168, 120, 0.25);
+}
+
+.notes-pad {
+  width: 100%;
+  min-height: 88px;
+  resize: vertical;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(200, 168, 120, 0.4);
+  border-radius: 2px;
+  color: #ede0c8;
+  font-family: Georgia, serif;
+  font-size: 15px;
+  line-height: 1.4;
+  padding: 6px 8px;
+}
+.notes-pad:focus-visible {
+  outline: 2px solid #e8c890;
+  outline-offset: 1px;
+}
+
+.notes-save {
+  margin-top: 6px;
+  background: none;
+  border: 1px solid rgba(200, 168, 120, 0.4);
+  border-radius: 2px;
+  color: #c8a878;
+  font-family: inherit;
+  font-size: 15px;
+  letter-spacing: 0.12em;
+  padding: 3px 14px;
+  cursor: pointer;
+}
+.notes-save:hover { border-color: #c8a878; }
+.notes-save:focus-visible { outline: 2px solid #e8c890; outline-offset: 2px; }
+
+.notes-status {
+  font-size: 13px;
+  color: #7a6a52;
+  margin-top: 4px;
+  min-height: 1.2em;
+}
+
+.notes-list {
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.notes-item {
+  font-size: 13.5px;
+  line-height: 1.3;
+  color: #b9a684;
+  border-left: 2px solid rgba(200, 168, 120, 0.35);
+  padding-left: 8px;
+  word-break: break-word;
+}

@@ -158,7 +158,7 @@
     var x = Math.min(x0, x1), y = Math.min(y0, y1);
     var w = Math.max(Math.abs(x1 - x0), 4), h = Math.max(Math.abs(y1 - y0), 4);
     ctx.strokeStyle = activeInk;
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 4.5;
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
     ctx.beginPath();
@@ -188,7 +188,7 @@
     if (!ctx) return;
     var s = 46, h = s / 2;
     ctx.strokeStyle = activeInk;
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 4.5;
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
     ctx.beginPath();
@@ -357,7 +357,7 @@
     var s = STROKES[activeElement];
     var j = s.jitter;
     ctx.strokeStyle = activeInk;
-    ctx.lineWidth = s.width;
+    ctx.lineWidth = 6;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     ctx.beginPath();
@@ -419,11 +419,15 @@ function loadGhost(bitmapDataUrl) {
     if (!bitmapDataUrl || !ctx) return;
     var img = new Image();
     img.onload = function () {
-      // Phase 7: bitmap is drawn at its original 1:1 size, anchored top-left.
-      // The canvas itself crops the ghost to its own bounds.
+      // The ghost always returns at the same visible size: fitted inside
+      // the canvas with aspect preserved and centered, never cropped,
+      // never stretched, never blown up.
+      var cw = canvas.width / 2, ch = canvas.height / 2;
+      var sc = Math.min(cw / img.width, ch / img.height, 1);
+      var dw = img.width * sc, dh = img.height * sc;
       ctx.save();
       ctx.globalAlpha = 0.3;
-      ctx.drawImage(img, 0, 0);
+      ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
       ctx.restore();
       ghostLoaded = true;
       // Persist the original bitmap dimensions for the desktop overlay.

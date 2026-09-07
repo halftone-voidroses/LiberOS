@@ -8,75 +8,75 @@
 window.LIBER_DATA = window.LIBER_DATA || {};
 window.LIBER_DATA.hijack = {
   buddy: { flag: 'walkBuddy', steps: [
-    { voice: 'riason', line: 'write the ugly thing first. plain words. the wax takes them.', target: 'buddy-input' },
+    { voice: 'riason', line: 'type what you carry. press enter to send.', target: 'buddy-input' },
     { voice: 'riason', line: 'two exchanges, then seal. sealed lines orbit the desktop.', target: 'buddy-seal' },
-    { voice: 'riason', line: 'speak, and it is kept. the wax is soft, and so is she.', target: null },
-    { voice: 'riason', line: 'that is the forge. speak.', target: 'buddy-send', glow: true }
+    { voice: 'riason', line: 'speak, and it is kept. two exchanges, then seal.', target: null },
+    { voice: 'riason', line: 'this is the buddy room. type and send.', target: 'buddy-send', glow: true }
   ] },
   satchel: { flag: 'walkSatchel', steps: [
     { voice: 'riason', line: 'everything kept lands here. list on the left, page on the right.', target: 'satchel-list' },
     { voice: 'riason', line: 'margin notes save with ⌘↵. the book keeps what the hands bring.', target: 'satchel-annotation' },
-    { voice: 'riason', line: 'kept once, kept well. index it — future you is counting on present you.', target: null },
-    { voice: 'riason', line: 'that is the ledger. index it well.', target: 'satchel-list', glow: true }
+    { voice: 'riason', line: 'write a margin note so you can find things later.', target: null },
+    { voice: 'riason', line: 'this is the satchel. everything you keep lands here.', target: 'satchel-list', glow: true }
   ] },
   sea: { flag: 'walkSea', steps: [
     { voice: 'riason', line: 'name it in the box. weigh it on the dots — four and five open later.', target: 'sea-input' },
     { voice: 'riason', line: 'release sinks it. the water takes; it does not keep.', target: 'sea-release' },
-    { voice: 'riason', line: 'the breath of the deep is slow. come down anyway.', target: 'sea-breath' },
-    { voice: 'riason', line: 'that is the tide. it does not keep.', target: 'sea-breath-toggle', glow: true }
+    { voice: 'riason', line: 'turn on guided breathing with the breath button.', target: 'sea-breath' },
+    { voice: 'riason', line: 'this is the sea. release here to end a session.', target: 'sea-breath-toggle', glow: true }
   ] },
   abstract: { flag: 'walkAbstract', steps: [
     { voice: 'riason', line: 'the rail holds your pairs. pick one apart.', target: 'abstract-rail-list' },
     { voice: 'riason', line: 'left what was, right what becomes. reform it.', target: 'abstract-void' },
-    { voice: 'riason', line: 'no warmth here. only process. bring a pair.', target: null },
-    { voice: 'riason', line: 'that is the void. do not explain it.', target: 'abstract-void', glow: true }
+    { voice: 'riason', line: 'bring two related artifacts to take apart.', target: null },
+    { voice: 'riason', line: 'this is the void. cut pairs apart here.', target: 'abstract-void', glow: true }
   ] },
   divination: { flag: 'walkDivination', steps: [
     { voice: 'riason', line: 'type the question. one worth being answered.', target: 'divination-input' },
     { voice: 'riason', line: 'draw one card. the deck does the rest.', target: 'divination-draw' },
-    { voice: 'riason', line: 'the deck is still. ask, and the chalk will answer.', target: 'divination-tarot' },
-    { voice: 'riason', line: 'that is the tent. ask.', target: 'divination-tarot', glow: true }
+    { voice: 'riason', line: 'one card per draw. keep it or discard it.', target: 'divination-tarot' },
+    { voice: 'riason', line: 'this is the tent. ask one question at a time.', target: 'divination-tarot', glow: true }
   ] },
   dreams: { flag: 'walkDreams', steps: [
     { voice: 'riason', line: 'write the dream down before it thins. strangeness mandatory.', target: 'dreams-record' },
     { voice: 'riason', line: 'the reading hedges, then asks. keep it to the book — or plant it as a seed.', target: 'dreams-ledger' },
-    { voice: 'riason', line: 'i am not certain. the dream is. bring it here and we will read slowly.', target: null },
-    { voice: 'riason', line: 'that is the reading room. record.', target: 'dreams-title-input', glow: true }
+    { voice: 'riason', line: 'write down what happened, strange parts included.', target: null },
+    { voice: 'riason', line: 'this is the dreams room. record first.', target: 'dreams-title-input', glow: true }
   ] },
   garden: { flag: 'walkGarden', steps: [
     { voice: 'riason', line: 'click a well, fill the slots, pour onto the stone. seventeen facets.', target: 'garden-gem-svg' },
     { voice: 'riason', line: 'finish it and the draft asks: satchel, or plant it in the bed.', target: 'garden-tab-bed' },
-    { voice: 'riason', line: 'grow slow. what is tended in patience flowers in its own colour.', target: null },
-    { voice: 'riason', line: 'that is the garden. grow slow.', target: 'garden-gem-new', glow: true }
+    { voice: 'riason', line: 'finish one gem before starting another.', target: null },
+    { voice: 'riason', line: 'this is the garden. finish the gem in front of you.', target: 'garden-gem-new', glow: true }
   ] },
   games: { flag: 'walkGames', steps: [
     { voice: 'riason', line: 'nine booths, two tents. the tools keep to your book — the games keep nothing but the minute.', target: 'games-grid' },
     { voice: 'riason', line: 'tipp sits pinned at the floor. start there if it is loud.', target: 'games-tipp-open' },
-    { voice: 'riason', line: 'the tools pay out in satchel-weight. the games pay in calm.', target: null },
-    { voice: 'riason', line: 'that is the tent. play.', target: 'games-grid', glow: true }
+    { voice: 'riason', line: 'booth results save to your satchel.', target: null },
+    { voice: 'riason', line: 'these are the booths. play one.', target: 'games-grid', glow: true }
   ] },
   methodology: { flag: 'walkMethod', steps: [
     { voice: 'riason', line: 'name the question. name what is known. name what is unknown.', target: 'method-rubric-left' },
     { voice: 'riason', line: 'choose one wall. return — the question will have changed.', target: 'method-rubric-right' },
-    { voice: 'riason', line: 'a method is a promise made to the margin. read slowly.', target: null },
-    { voice: 'riason', line: 'that is the folio. return.', target: 'method-rubric-left', glow: true }
+    { voice: 'riason', line: 'fill in each wall in writing, then come back to it later.', target: null },
+    { voice: 'riason', line: 'this is the methodology room. come back to each wall.', target: 'method-rubric-left', glow: true }
   ] },
   themes: { flag: 'walkThemes', steps: [
     { voice: 'riason', line: 'every pigment is a past room. click to repaint — nothing breaks.', target: 'themes-grid' },
-    { voice: 'riason', line: 'this strip shows the room wearing it. do not blame the mirror.', target: 'themes-current-value' },
-    { voice: 'riason', line: 'she took this room, so i keep its notes. paint responsibly.', target: null },
-    { voice: 'riason', line: 'that is the atlas. repaint.', target: 'themes-grid', glow: true }
+    { voice: 'riason', line: 'the preview strip shows the current room in that color.', target: 'themes-current-value' },
+    { voice: 'riason', line: 'each pigment comes from a room.', target: null },
+    { voice: 'riason', line: 'these are the room colors. pick one.', target: 'themes-grid', glow: true }
   ] },
   relation: { flag: 'walkRelation', steps: [
     { voice: 'riason', line: 'every kept thing waits here unbound. touch one.', target: 'relation-unbound' },
     { voice: 'riason', line: 'give it a verb. protects, carries — the word is the work.', target: 'relation-ledger' },
-    { voice: 'riason', line: 'nothing here stands alone. count the links.', target: null },
-    { voice: 'riason', line: 'that is the knot. tie it.', target: 'relation-ledger', glow: true }
+    { voice: 'riason', line: 'bound artifacts show their verbs here.', target: null },
+    { voice: 'riason', line: 'this is where bindings happen. pick an item, give it a verb.', target: 'relation-ledger', glow: true }
   ] },
   trash: { flag: 'walkTrash', steps: [
-    { voice: 'riason', line: 'what you bury lands here. nothing is gone, only buried, friend.', target: 'trash-dig-list' },
+    { voice: 'riason', line: 'what you bury lands here. nothing is gone, only buried.', target: 'trash-dig-list' },
     { voice: 'riason', line: 'bury to release, dig to restore. mind the labels.', target: 'trash-bury-buddy' },
-    { voice: 'riason', line: 'what you bury, i keep. the soil forgets nothing, friend.', target: null },
-    { voice: 'riason', line: 'that is the graveyard. bury kindly.', target: 'trash-dig-list', glow: true }
+    { voice: 'riason', line: 'what you bury, i keep. dig it back any time.', target: null },
+    { voice: 'riason', line: 'this is the trash room. buried things can be dug back up.', target: 'trash-dig-list', glow: true }
   ] }
 };

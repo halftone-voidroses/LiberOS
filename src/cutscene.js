@@ -154,38 +154,7 @@
     ring.className = 'crt-flames';
     ring.id = 'crt-flames';
     ring.setAttribute('aria-hidden', 'true');
-    var vw = window.innerWidth || 1280, vh = window.innerHeight || 800;
-    var mr = machine ? machine.getBoundingClientRect() : null;
-    var reduced = false;
-    try { reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); } catch (e) {}
-    var NS = 'http://www.w3.org/2000/svg';
-    var svg = document.createElementNS(NS, 'svg');
-    svg.setAttribute('viewBox', '0 0 ' + vw + ' ' + vh);
-    svg.setAttribute('class', 'inferno-svg');
     var flameEls = [];
-    if (mr && mr.width > 0) {
-      var x0 = Math.max(mr.left - 46, -60), y0 = Math.max(mr.top - 46, -80);
-      var x1 = Math.min(mr.left + mr.width + 46, vw + 60), y1 = Math.min(mr.top + mr.height + 46, vh + 80);
-      var anim = reduced ? '' : '<animate attributeName="baseFrequency" values="0.009 0.035;0.013 0.07;0.009 0.035" dur="1.6s" repeatCount="indefinite"/>';
-      svg.innerHTML = '<defs>'
-        + '<linearGradient id="fireOut" gradientUnits="userSpaceOnUse" x1="0" y1="' + y1 + '" x2="0" y2="' + y0 + '">'
-        + '<stop offset="0" stop-color="#fff3da"/><stop offset=".35" stop-color="#ff6aa8"/><stop offset=".7" stop-color="#a01040"/><stop offset="1" stop-color="#3a0a12" stop-opacity="0"/></linearGradient>'
-        + '<linearGradient id="fireCore" gradientUnits="userSpaceOnUse" x1="0" y1="' + y1 + '" x2="0" y2="' + y0 + '">'
-        + '<stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#ffd9a8"/><stop offset="1" stop-color="#ffd9a8" stop-opacity="0"/></linearGradient>'
-        + '<filter id="fireTurb" x="-20%" y="-20%" width="140%" height="140%">'
-        + '<feTurbulence type="fractalNoise" baseFrequency="0.009 0.035" numOctaves="2" seed="7" result="n">' + anim + '</feTurbulence>'
-        + '<feDisplacementMap in="SourceGraphic" in2="n" scale="54"/><feGaussianBlur stdDeviation="7"/>'
-        + '</filter></defs>'
-        + '<g filter="url(#fireTurb)">'
-        + '<g class="inferno-arc"><path d="M ' + (x0 + 60) + ' ' + y1 + ' L ' + (x1 - 60) + ' ' + y1 + '" stroke="url(#fireOut)" stroke-width="54"/><path d="M ' + (x0 + 60) + ' ' + y1 + ' L ' + (x1 - 60) + ' ' + y1 + '" stroke="url(#fireCore)" stroke-width="20"/></g>'
-        + '<g class="inferno-arc"><path d="M ' + x0 + ' ' + (y0 + 60) + ' L ' + x0 + ' ' + (y1 - 60) + '" stroke="url(#fireOut)" stroke-width="54"/><path d="M ' + x0 + ' ' + (y0 + 60) + ' L ' + x0 + ' ' + (y1 - 60) + '" stroke="url(#fireCore)" stroke-width="20"/></g>'
-        + '<g class="inferno-arc"><path d="M ' + x1 + ' ' + (y0 + 60) + ' L ' + x1 + ' ' + (y1 - 60) + '" stroke="url(#fireOut)" stroke-width="54"/><path d="M ' + x1 + ' ' + (y0 + 60) + ' L ' + x1 + ' ' + (y1 - 60) + '" stroke="url(#fireCore)" stroke-width="20"/></g>'
-        + '<g class="inferno-arc"><path d="M ' + (x0 + 60) + ' ' + y0 + ' L ' + (x1 - 60) + ' ' + y0 + '" stroke="url(#fireOut)" stroke-width="54"/><path d="M ' + (x0 + 60) + ' ' + y0 + ' L ' + (x1 - 60) + ' ' + y0 + '" stroke="url(#fireCore)" stroke-width="20"/></g>'
-        + '</g>';
-      var arcs = svg.querySelectorAll('.inferno-arc');
-      for (var ai = 0; ai < arcs.length; ai++) flameEls.push(arcs[ai]);
-    }
-    ring.appendChild(svg);
     document.body.appendChild(ring);
     if (machine) machine.classList.add('flame-live');
     function setGlow(on) { if (machine) machine.classList.toggle('flame-glow', !!on); }
@@ -280,6 +249,12 @@
       var lineEl = box.querySelector('.cutscene-line');
       if (b.names) {
         lineEl.innerHTML = '';
+        if (b.line) {
+          var lead = document.createElement('div');
+          lead.className = 'chat-lead';
+          lead.textContent = b.line;
+          lineEl.appendChild(lead);
+        }
         b.names.forEach(function (n, k) {
           setTimeout(function () {
             if (!document.body.contains(box)) return;
@@ -313,7 +288,7 @@
     playRitual(function () {
       playBeats([
         { voice: 'wanderlust', line: 'Greetings traveller, I am Wanderlust. I was sent here from the imaginary realm to assist you on your journey.', options: ['okay..'] },
-        { voice: 'wanderlust', names: NAMES, options: ['I think I get it..'] },
+        { voice: 'wanderlust', line: 'I have been called many things over the years', names: NAMES, options: ['I think I get it..'] },
         { voice: 'wanderlust', line: 'You, though, may call me Wanderlust, for what fate truly does is push you to see the world.', options: ['>>'] },
         { voice: 'wanderlust', line: 'Through destruction breeds creation.', options: ['(What is this place?)'], settle: 600 },
         { voice: 'wanderlust', line: 'This is the liber vacui, many have been here before you, they have left their mark and will continue to whisper aid.', options: ['Like who?'], settle: 600 },
