@@ -29,28 +29,52 @@
     'pure play': 'distractions, no ledger — nothing is kept here.'
   };
 
+  var activeWing = null;
+
+  function wingList() {
+    var out = [], seen = {};
+    for (var i = 0; i < BOOTHS.length; i++) {
+      if (!seen[BOOTHS[i].wing]) { seen[BOOTHS[i].wing] = 1; out.push(BOOTHS[i].wing); }
+    }
+    return out;
+  }
+
   function buildBooths() {
     if (!grid) return;
     grid.innerHTML = '';
-    var lastWing = null;
+    var ws = wingList();
+    if (!activeWing || ws.indexOf(activeWing) < 0) activeWing = ws[0];
+    var head = document.getElementById('games-head');
+    if (!head) {
+      head = document.createElement('div');
+      head.id = 'games-head';
+      head.className = 'games-head';
+      grid.parentNode.insertBefore(head, grid);
+    }
+    head.innerHTML = '';
+    if (ws.length > 1) {
+      var tabs = document.createElement('div');
+      tabs.className = 'games-tabs';
+      ws.forEach(function (w) {
+        var t = document.createElement('button');
+        t.type = 'button';
+        t.className = 'games-tab' + (w === activeWing ? ' on' : '');
+        t.textContent = w;
+        t.setAttribute('aria-label', w + ' booths');
+        t.addEventListener('click', function () { activeWing = w; buildBooths(); });
+        tabs.appendChild(t);
+      });
+      head.appendChild(tabs);
+    }
+    if (WING_SCOPE[activeWing]) {
+      var wsc = document.createElement('div');
+      wsc.className = 'games-wing-scope';
+      wsc.textContent = WING_SCOPE[activeWing];
+      head.appendChild(wsc);
+    }
     for (var i = 0; i < BOOTHS.length; i++) {
       (function (b) {
-        if (b.wing !== lastWing) {
-          lastWing = b.wing;
-          var h = document.createElement('div');
-          h.className = 'games-wing';
-          var wt = document.createElement('div');
-          wt.className = 'games-wing-title';
-          wt.textContent = lastWing;
-          h.appendChild(wt);
-          if (WING_SCOPE[lastWing]) {
-            var ws = document.createElement('div');
-            ws.className = 'games-wing-scope';
-            ws.textContent = WING_SCOPE[lastWing];
-            h.appendChild(ws);
-          }
-          grid.appendChild(h);
-        }
+        if (b.wing !== activeWing) return;
         var div = document.createElement('div');
         div.className = 'games-booth';
         div.setAttribute('data-game', b.id);

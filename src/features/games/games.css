@@ -272,7 +272,7 @@
   /* rows must track booth content (glyph + name + up to 4 desc lines);
      a fixed or min-content row makes the next row's border cut through
      the text above it */
-  grid-auto-rows: minmax(112px, auto);
+  grid-auto-rows: minmax(92px, auto);
   gap: 6px;
   width: 100%;
   flex: 1;
@@ -290,11 +290,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 6px;
+  padding: 4px 6px;
   cursor: pointer;
   box-shadow: inset 0 0 0 1px #8a6a20, 0 0 8px rgba(212, 175, 55, 0.3);
   text-align: center;
-  min-height: 80px;
+  min-height: 70px;
   transition: transform 0.12s, box-shadow 0.12s;
 }
 
@@ -1537,7 +1537,7 @@
 .sand-hint{font-family:Georgia,serif;font-style:italic;font-size:.95rem;color:#b9a684;margin:2px 0 8px;min-height:1.5em}
 .sand-shelf{display:flex;gap:10px;align-items:center;margin:6px 0 10px;min-height:52px;padding:6px 8px;border:1px dashed rgba(200,168,120,.35);border-radius:8px;background:rgba(0,0,0,.3)}
 .sand-shelf:empty::after{content:'the shelf is empty — all toys are in the sand.';font-family:Georgia,serif;font-style:italic;font-size:.85rem;color:#7a6a52}
-.sand-tray{position:relative;width:100%;aspect-ratio:16/10;border:2px solid #6a5a30;border-radius:10px;overflow:hidden;touch-action:none;background:linear-gradient(180deg,#3a2c18 0%,#4a3820 45%,#5a4527 100%);box-shadow:inset 0 0 40px rgba(0,0,0,.65),inset 0 6px 18px rgba(255,230,170,.08),0 0 22px rgba(200,168,120,.12)}
+.sand-tray{position:relative;flex:none;width:100%;aspect-ratio:16/10;border:2px solid #6a5a30;border-radius:10px;overflow:hidden;touch-action:none;background:linear-gradient(180deg,#3a2c18 0%,#4a3820 45%,#5a4527 100%);box-shadow:inset 0 0 40px rgba(0,0,0,.65),inset 0 6px 18px rgba(255,230,170,.08),0 0 22px rgba(200,168,120,.12)}
 .sand-tray::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 40%,transparent 55%,rgba(0,0,0,.45) 100%)}
 .sand-toy{position:absolute;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:10px;background:linear-gradient(180deg,#241a10,#120c06);border:1px solid #8a6a3a;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;box-shadow:0 3px 8px rgba(0,0,0,.6);z-index:3}
 .sand-toy:active{cursor:grabbing}
@@ -1553,6 +1553,17 @@
 .sand-line label{font-family:'VT323','Courier New',monospace;font-size:.95rem;color:#d8a070;white-space:nowrap}
 .sand-line input{flex:1;background:rgba(0,0,0,.4);border:1px solid #6a5a30;border-radius:4px;color:#ede0c8;font-family:Georgia,serif;font-size:.95rem;padding:5px 9px}
 .sand-line input:focus-visible{outline:2px solid #e8c890;outline-offset:1px}
+.games-head{min-height:0;margin-bottom:6px}
+.games-tabs{display:flex;gap:8px;margin:0 0 4px;min-height:0}
+.games-tab{background:none;border:1px solid #8a6a20;border-radius:14px;color:#d8a070;font-family:'VT323','Courier New',monospace;font-size:1rem;line-height:1.2;letter-spacing:.1em;padding:3px 16px;cursor:pointer}
+.games-tab.on{border-color:#e8c890;color:#e8c890;background:rgba(216,160,112,.12);box-shadow:0 0 10px rgba(232,200,144,.25)}
+.games-tab:focus-visible{outline:2px solid #e8c890;outline-offset:2px}
+.games-wing{grid-column:1/-1;min-height:0}
+.games-wing-scope{font-size:.82rem;line-height:1.35;margin:0 0 2px}
+.games-booth-desc{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:.8rem;line-height:1.35}
+.games-tab{background:none;border:1px solid #8a6a20;border-radius:14px;color:#d8a070;font-family:'VT323','Courier New',monospace;font-size:1rem;letter-spacing:.1em;padding:3px 16px;cursor:pointer}
+.games-tab.on{border-color:#e8c890;color:#e8c890;background:rgba(216,160,112,.12);box-shadow:0 0 10px rgba(232,200,144,.25)}
+.games-tab:focus-visible{outline:2px solid #e8c890;outline-offset:2px}
 @media (prefers-reduced-motion: reduce) {
   .sand-toy { transition: none; }
 }

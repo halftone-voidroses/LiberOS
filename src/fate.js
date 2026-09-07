@@ -54,7 +54,7 @@
     var idx = Math.floor(rng() * lines.length) % lines.length;
 
     var box = document.createElement('div');
-    box.className = 'fate' + (document.getElementById('desktop') ? ' on-desktop' : '');
+    box.className = 'fate' + (document.getElementById('desktop') ? ' on-desktop' : '') + ' fate-in-' + room;
     box.id = 'fate';
     box.setAttribute('role', 'note');
     box.setAttribute('aria-label', 'fate keeps one line per room. tap for another.');

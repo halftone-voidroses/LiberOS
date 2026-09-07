@@ -19,6 +19,12 @@
   top: auto;
   bottom: 27%;
 }
+.fate-in-games {
+  top: 104px;
+}
+.fate-in-garden {
+  top: 300px;
+}
 
 .fate-avatar {
   position: relative;
