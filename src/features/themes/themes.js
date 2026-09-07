@@ -15,7 +15,8 @@
     { id: 'librarian',     name: 'riason · the ledger', blurb: 'sepia & brass · the drawers.',                    opinion: 'the drawers keep what i forget. i am grateful. i filed the thanks.' },
     { id: 'elizabeth',     name: 'e-lizabeth',       blurb: 'gothic gold · the linked.',                          opinion: 'gold is what was married and mourned. she carries both.' },
     { id: 'iris',          name: 'wanderlust · the pigment', blurb: 'parchment & ink · the cartographer.',         opinion: 'the map is never of the place. i repainted it anyway.' },
-    { id: 'ravaging',      name: 'ravaging pete',    blurb: 'loam & rust · the rubble.',                         opinion: 'everything i buried here i find again. this is its charm.' }
+    { id: 'ravaging',      name: 'ravaging pete',    blurb: 'loam & rust · the rubble.',                         opinion: 'everything i buried here i find again. this is its charm.' },
+    { id: 'royalty',       name: 'royalty',          blurb: 'deep purple & gold · the throne. high contrast, no red-green distinction needed.', opinion: 'a throne room at last. sit up straight, traveller.' }
   ];
 
   function current() {

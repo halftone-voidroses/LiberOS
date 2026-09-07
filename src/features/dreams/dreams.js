@@ -241,12 +241,24 @@
     var html = '';
     for (var i = 0; i < list.length; i++) {
       html += '<div class="dreams-assoc-item">'
+           + (list[i].quote ? '<span class="dreams-assoc-quote">“' + esc(list[i].quote) + '”</span>' : '')
            + '<span class="dreams-assoc-text">' + esc(list[i].text) + '</span>'
            + '<span class="dreams-assoc-date">' + fmtDate(list[i].ts) + '</span>'
            + '<button type="button" class="dreams-assoc-remove" data-idx="' + i + '" aria-label="remove this association">release</button>'
            + '</div>';
     }
     assocListEl.innerHTML = html;
+  }
+
+  function readingSelection() {
+    try {
+      var sel = window.getSelection ? window.getSelection().toString() : '';
+      sel = (sel || '').trim().replace(/\s+/g, ' ');
+      if (sel.length > 140) sel = sel.substring(0, 137) + '...';
+      var body = readBodyEl ? (readBodyEl.textContent || '') : '';
+      if (sel && body.indexOf(sel.replace(/\.\.\.$/, '')) < 0) return '';
+      return sel;
+    } catch (e) { return ''; }
   }
 
   function addAssoc() {
@@ -256,7 +268,7 @@
     var d = findDream(currentId);
     if (!d) return;
     var list = d.associations ? d.associations.slice() : [];
-    list.push({ text: text, ts: Date.now() });
+    list.push({ text: text, ts: Date.now(), quote: readingSelection() });
     state().updateArtifact('dreams', currentId, { associations: list });
     assocInputEl.value = '';
     if (global.Liber && global.Liber.sound) global.Liber.sound.play('chime');

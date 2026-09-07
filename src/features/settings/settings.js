@@ -76,6 +76,37 @@
     renderState();
   }
 
+  function slotSummary(id) {
+    var raw = null;
+    try {
+      raw = localStorage.getItem('liber_vacui_v1__' + id);
+      if (!raw && id === 'keep') raw = localStorage.getItem('liber_vacui_v1');
+      if (!raw) return 'empty';
+      var s = JSON.parse(raw);
+      var kinds = ['buddy', 'divination', 'games', 'learn', 'abstract', 'sea', 'garden', 'dreams', 'satchel', 'methodology'];
+      var n = 0, i;
+      for (i = 0; i < kinds.length; i++) if (Array.isArray(s[kinds[i]])) n += s[kinds[i]].length;
+      return (n ? n + ' kept' : 'empty') + (s.tutorialDone ? '' : ' · new');
+    } catch (e) { return ''; }
+  }
+
+  function paintSlots() {
+    var cur = null;
+    try {
+      var st0 = (window.Liber && window.Liber.state) || null;
+      cur = st0 && st0.getSlot ? st0.getSlot() : 'keep';
+    } catch (e) { cur = 'keep'; }
+    var btns = document.querySelectorAll('[data-slot]');
+    for (var i = 0; i < btns.length; i++) {
+      (function (b) {
+        var id = b.getAttribute('data-slot');
+        var base = b.textContent.split(' — ')[0];
+        b.textContent = base + ' — ' + slotSummary(id);
+        if (id === cur) b.classList.add('on');
+        else b.classList.remove('on');
+      })(btns[i]);
+    }
+  }
   function back() {
     if (window.history.length > 1) window.history.back();
     else window.location.href = 'desktop.html';
@@ -83,6 +114,7 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     renderState();
+    paintSlots();
     var r = document.getElementById('settings-replay');
     var s = document.getElementById('settings-shadow');
     var sd = document.getElementById('settings-sound');
@@ -93,5 +125,14 @@
     if (sd) sd.addEventListener('click', toggleSound);
     if (w) w.addEventListener('click', wipe);
     if (b) b.addEventListener('click', back);
+    var slotBtns = document.querySelectorAll('[data-slot]');
+    for (var si = 0; si < slotBtns.length; si++) {
+      (function (btn) {
+        btn.addEventListener('click', function () {
+          var st = (window.Liber && window.Liber.state) || null;
+          if (st && st.setSlot) st.setSlot(btn.getAttribute('data-slot'));
+        });
+      })(slotBtns[si]);
+    }
   });
 })();

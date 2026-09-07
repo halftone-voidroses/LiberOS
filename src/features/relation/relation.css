@@ -550,6 +550,14 @@
 }
 .relation-mono svg { width: 100%; height: 100%; }
 .relation-window:hover .relation-mono { opacity: 1; }
+.relation-row-text {
+  font-size: 0.95rem;
+  font-style: italic;
+  line-height: 1.5;
+  color: #d8bfae;
+  margin: 4px 0 2px;
+}
+.relation-row-text:empty { display: none; }
 @media (prefers-reduced-motion: reduce) {
   .relation-mono { transition: none; }
 }

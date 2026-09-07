@@ -4,7 +4,13 @@
 (function (global) {
   'use strict';
 
-  const KEY = 'liber_vacui_v1';
+  const SLOT_KEY = 'liber_vacui_slot';
+  const SLOTS = ['play', 'keep', 'show'];
+  var slot = 'keep';
+  try { slot = localStorage.getItem(SLOT_KEY) || 'keep'; } catch (e) { slot = 'keep'; }
+  if (SLOTS.indexOf(slot) < 0) slot = 'keep';
+  const KEY = 'liber_vacui_v1__' + slot;
+  const LEGACY_KEY = 'liber_vacui_v1';
   const CUTSCENE_BUILD = 'riasondemo2';
 
   const DEFAULT = {
@@ -38,7 +44,8 @@
 
   function load() {
     try {
-      const raw = localStorage.getItem(KEY);
+      var raw = localStorage.getItem(KEY);
+      if (!raw) raw = localStorage.getItem(LEGACY_KEY);
       if (!raw) return Object.assign({}, DEFAULT);
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed.cohort) && (!Array.isArray(parsed.buddy) || parsed.buddy.length === 0)) {
@@ -223,5 +230,12 @@
   });
 
   global.Liber = global.Liber || {};
-  global.Liber.state = { get, set, on, reset, addArtifact, updateArtifact, bindRelation, unbindRelation, releaseArtifact, replaceSigil };
+  function getSlot() { return slot; }
+  function setSlot(id) {
+    if (SLOTS.indexOf(id) < 0) return;
+    try { localStorage.setItem(SLOT_KEY, id); } catch (e) { return; }
+    window.location.reload();
+  }
+
+  global.Liber.state = { get, set, on, reset, addArtifact, updateArtifact, bindRelation, unbindRelation, releaseArtifact, replaceSigil, getSlot, setSlot };
 })(window);

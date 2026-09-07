@@ -159,3 +159,7 @@
   outline: 2px solid #c89060;
   outline-offset: 2px;
 }
+.settings-btn.on {
+  border-color: #e8c890;
+  color: #e8c890;
+}

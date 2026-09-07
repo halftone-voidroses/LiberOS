@@ -389,6 +389,9 @@
   function leave() {
     cursor.classList.remove('visible');
     cursorVisible = false;
+    if (shapeAnchor && shapeSnap && ctx) {
+      try { ctx.putImageData(shapeSnap, 0, 0); } catch (e) {}
+    }
     drawing = false;
     shapeAnchor = null;
     shapeSnap = null;
@@ -600,6 +603,7 @@ function loadGhost(bitmapDataUrl) {
       canvas.addEventListener('mousemove', move);
       canvas.addEventListener('mouseup', end);
       canvas.addEventListener('mouseleave', leave);
+      document.addEventListener('mouseup', end);
     }
     if (wrap) {
       wrap.addEventListener('mouseleave', leave);

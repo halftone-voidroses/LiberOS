@@ -255,17 +255,28 @@
           lead.textContent = b.line;
           lineEl.appendChild(lead);
         }
+        var NAME_TINTS = ['#ffd86a', '#fff3b8', '#b0a8ff', '#7a86e0', '#f0506e'];
         b.names.forEach(function (n, k) {
           setTimeout(function () {
             if (!document.body.contains(box)) return;
             var d = document.createElement('div');
             d.className = 'chat-name';
             d.textContent = n;
+            var tint = NAME_TINTS[k % NAME_TINTS.length];
+            d.style.color = tint;
+            d.style.textShadow = '0 0 12px ' + tint;
             lineEl.appendChild(d);
-          }, 450 * (k + 1));
+            var inner = box.querySelector('.cutscene-box');
+            if (inner) {
+              inner.style.setProperty('--flick', tint);
+              inner.classList.add('flick');
+            }
+          }, 300 * (k + 1));
         });
         setTimeout(function () {
           if (!document.body.contains(box)) return;
+          var inner = box.querySelector('.cutscene-box');
+          if (inner) inner.classList.remove('flick');
           optionRow(box, b.options, go, b.settle || 0);
         }, 300 * (b.names.length + 1) + 200);
         return;

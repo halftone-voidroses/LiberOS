@@ -59,6 +59,13 @@
   opacity: 0;
   animation: chat-name-in 0.4s ease-out forwards;
 }
+.cutscene.chatbeat .cutscene-box.flick {
+  box-shadow: 0 0 0 2px var(--flick, #ffd86a), 0 -10px 22px var(--flick, #ffd86a), 0 0 30px var(--flick, #ffd86a);
+}
+.cutscene.chatbeat .cutscene-box.flick .cutscene-voice {
+  color: var(--flick, #ff8a8a);
+  text-shadow: 0 0 10px var(--flick, #ff8a8a);
+}
 
 @keyframes chat-name-in {
   from { opacity: 0; transform: translateY(6px); }

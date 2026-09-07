@@ -81,9 +81,9 @@
     }
     var items = list.querySelectorAll('.satchel-list-item');
     for (var j = 0; j < items.length; j++) {
-      items[j].addEventListener('click', (function (idx) {
-        return function () { showEntry(idx); };
-      })(j));
+      items[j].addEventListener('click', function () {
+        showEntry(parseInt(this.getAttribute('data-i'), 10));
+      });
     }
   }
 
@@ -128,6 +128,9 @@
     var annBox = document.getElementById('satchel-annotation');
     if (annBox) annBox.addEventListener('keydown', function (e) {
       if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); saveAnn(); }
+    });
+    if (annBox) annBox.addEventListener('blur', function () {
+      if (currentIdx >= 0) saveAnn();
     });
     if (exit) exit.addEventListener('click', function () {
       if (history.length > 1) history.back(); else location.href = 'desktop.html';

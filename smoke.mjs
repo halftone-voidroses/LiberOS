@@ -29,6 +29,7 @@ const browser = await chromium.launch()
 const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } })
 const page = await ctx.newPage()
 const errors = []
+function sassert(cond, msg) { if (!cond) { errors.push('assert: ' + msg); console.log('Assertion failed: ' + msg) } }
 page.on('pageerror', e => errors.push('pageerror: ' + e.message))
 page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text()) })
 
@@ -78,7 +79,7 @@ await clearState()
 await page.reload({ waitUntil: 'networkidle' })
 await page.waitForTimeout(800)
 const bootTitle = await page.textContent('.boot-title')
-console.assert(bootTitle.toLowerCase().includes('liber'), 'boot title missing')
+sassert(bootTitle.toLowerCase().includes('liber'), 'boot title missing')
 console.log(`   boot title: "${bootTitle}"`)
 
 console.log('2. Click [ start ]')
@@ -91,9 +92,9 @@ await page.waitForTimeout(800)
 
 console.log('4. Cutscene auto-opens (chat stays shut — deprecated)')
 const cutOpen = await page.evaluate(() => !!document.getElementById('cutscene'))
-console.assert(cutOpen, 'cutscene should auto-open on first run')
+sassert(cutOpen, 'cutscene should auto-open on first run')
 const chatGone = await page.evaluate(() => !document.getElementById('flaming-q'))
-console.assert(chatGone, 'summon ? should be removed in flow')
+sassert(chatGone, 'summon ? should be removed in flow')
 await shot('smoke-01-cutscene-arise')
 
 console.log('5. Walk opening beats until Riason takes the stone room')
@@ -122,9 +123,9 @@ await page.waitForFunction(() => {
   return !!(l && /arrow keys/.test(l.textContent))
 }, { timeout: 30000 })
 const afterDemo = await stateCounts()
-console.assert(afterDemo.stone === 0 && afterDemo.sealed === 0 && afterDemo.relations === 0 && afterDemo.games === 0,
+sassert(afterDemo.stone === 0 && afterDemo.sealed === 0 && afterDemo.relations === 0 && afterDemo.games === 0,
   'fake chain must write nothing: ' + JSON.stringify(afterDemo))
-console.assert(afterDemo.stage === 'bind', 'stage should be bind after demo, got ' + afterDemo.stage)
+sassert(afterDemo.stage === 'bind', 'stage should be bind after demo, got ' + afterDemo.stage)
 console.log(`   after demo: ${JSON.stringify(afterDemo)}`)
 
 console.log('7. Two prompt beats, then click the artifact -> fake chain')
@@ -157,31 +158,31 @@ await page.waitForFunction(() => {
   } catch (e) { return false; }
 }, { timeout: 20000 })
 const finalState = await stateCounts()
-console.assert(finalState.tutorialDone, 'tutorial should be done')
-console.assert(finalState.stone === 0 && finalState.sealed === 0 && finalState.relations === 0,
+sassert(finalState.tutorialDone, 'tutorial should be done')
+sassert(finalState.stone === 0 && finalState.sealed === 0 && finalState.relations === 0,
   'clean slate: no artifacts after fake chain: ' + JSON.stringify(finalState))
 const cleanOverlay = await page.evaluate(() => !document.getElementById('cutscene'))
-console.assert(cleanOverlay, 'overlays should clear after wipe')
+sassert(cleanOverlay, 'overlays should clear after wipe')
 console.log(`   final: ${JSON.stringify(finalState)}`)
 await shot('smoke-04-clean-slate')
 
 console.log('9. Desktop chrome: no summon buttons (deprecated), dial present')
 const chatGone2 = await page.evaluate(() => !document.getElementById('flaming-q') && !document.querySelector('.flaming-q-repeat'))
-console.assert(chatGone2, 'summon buttons should stay removed after tutorial')
+sassert(chatGone2, 'summon buttons should stay removed after tutorial')
 const dialOptionCount = await page.locator('.dial-option').count()
-console.assert(dialOptionCount === 3, 'expected 3 dial options (prev/active/next)')
+sassert(dialOptionCount === 3, 'expected 3 dial options (prev/active/next)')
 console.log(`   chat deprecated ok, dial options: ${dialOptionCount}`)
 
 console.log('10. Pre-cast invitation shows (user has cast nothing yet)')
 const beatCopy = await page.evaluate(() => document.getElementById('constellation-empty').textContent)
-console.assert(beatCopy && beatCopy.includes('cast the buddy first'), 'first-beat invitation expected, got: ' + (beatCopy || '').trim().slice(0, 60))
+sassert(beatCopy && beatCopy.includes('cast the buddy first'), 'first-beat invitation expected, got: ' + (beatCopy || '').trim().slice(0, 60))
 console.log(`   beat: "${beatCopy.trim().slice(0, 60)}..."`)
 
 console.log('11. Sigil dial option is NOT crossed (nothing cast — no premature attachment)')
 const sigilCrossed = await page.evaluate(() => {
   return document.querySelector('[data-id="sigil"]').classList.contains('crossed')
 })
-console.assert(!sigilCrossed, 'sigil should not be crossed before any cast')
+sassert(!sigilCrossed, 'sigil should not be crossed before any cast')
 console.log(`   sigil crossed: ${sigilCrossed}`)
 
 console.log('12. Open divination, draw a card (auto-pins)')
@@ -198,7 +199,7 @@ const divinationCount = await page.evaluate(() => {
   var s = (window.Liber && window.Liber.state && window.Liber.state.get()) || {}
   return (s.divination || []).length
 })
-console.assert(divinationCount === 1, 'expected 1 divination card auto-saved')
+sassert(divinationCount === 1, 'expected 1 divination card auto-saved')
 console.log(`   divination: ${divinationCount}`)
 
 console.log('13. Manual cast in the stone room (intention, ink, circle, save)')
@@ -228,8 +229,8 @@ const castState = await page.evaluate(() => {
   var stone = (s.buddy || []).filter(e => e && e.kind === 'stone')
   return { stone: stone.length, intent: ((stone[0] || {}).intention || '').slice(0, 30) }
 })
-console.assert(castState.stone === 1, 'manual cast should save one stone buddy')
-console.assert(castState.intent.includes('putting'), 'intention should persist')
+sassert(castState.stone === 1, 'manual cast should save one stone buddy')
+sassert(castState.intent.includes('putting'), 'intention should persist')
 console.log(`   cast: ${JSON.stringify(castState)}`)
 await shot('smoke-05-manual-cast')
 
@@ -240,7 +241,7 @@ await dismissHijack()
 await page.click('.games-booth[data-game="sandplay"]')
 await page.waitForTimeout(500)
 const shelfCount = await page.evaluate(() => document.querySelectorAll('#sand-shelf .sand-toy').length)
-console.assert(shelfCount === 3, 'three toys dealt, got ' + shelfCount)
+sassert(shelfCount === 3, 'three toys dealt, got ' + shelfCount)
 const toyBox = await page.evaluate(() => {
   const r = document.querySelector('#sand-shelf .sand-toy').getBoundingClientRect()
   return { x: r.x, y: r.y, width: r.width, height: r.height }
@@ -255,7 +256,7 @@ await page.mouse.move(trayBox.x + trayBox.width / 2, trayBox.y + trayBox.height 
 await page.mouse.up()
 await page.waitForTimeout(400)
 const placedCount = await page.evaluate(() => document.querySelectorAll('#sand-tray .sand-toy').length)
-console.assert(placedCount === 1, 'one toy placed, got ' + placedCount)
+sassert(placedCount === 1, 'one toy placed, got ' + placedCount)
 await page.fill('#sand-lines input', 'the tower stands where the day fell')
 await page.click('#sand-keep')
 await page.waitForTimeout(400)
@@ -267,7 +268,7 @@ const sandSaved = await page.evaluate(() => {
   const st = (s.satchel || []).filter(a => a.ref === 'sandplay')
   return { games: g.length, satchel: st.length, lines: ((g[0] || {}).result || {}).toys }
 })
-console.assert(sandSaved.games === 1 && sandSaved.satchel === 1, 'sandplay kept to games + satchel: ' + JSON.stringify(sandSaved))
+sassert(sandSaved.games === 1 && sandSaved.satchel === 1, 'sandplay kept to games + satchel: ' + JSON.stringify(sandSaved))
 console.log(`   sandplay: ${JSON.stringify({ games: sandSaved.games, satchel: sandSaved.satchel })}`)
 await shot('smoke-05b-sandplay')
 
@@ -275,9 +276,9 @@ console.log('14. Return to desktop -> artifact orbits the sigil')
 await page.goto(BASE + '/desktop.html', { waitUntil: 'networkidle' })
 await page.waitForTimeout(500)
 const artifactExists = await page.evaluate(() => !!document.querySelector('.constellation-artifact'))
-console.assert(artifactExists, 'constellation-artifact should be present')
+sassert(artifactExists, 'constellation-artifact should be present')
 const starExists = await page.evaluate(() => !!document.getElementById('constellation-sigil'))
-console.assert(starExists, 'constellation-sigil star should be present as hub after cast')
+sassert(starExists, 'constellation-sigil star should be present as hub after cast')
 await shot('smoke-06-constellation')
 
 console.log('15. Click artifact -> mini-menu opens')
@@ -286,7 +287,7 @@ console.log('15. Click artifact -> mini-menu opens')
 await page.click('.constellation-artifact', { force: true })
 await page.waitForTimeout(300)
 const miniOpen = await page.evaluate(() => document.getElementById('constellation-mini').classList.contains('open'))
-console.assert(miniOpen, 'mini-menu should open')
+sassert(miniOpen, 'mini-menu should open')
 
 console.log('16. Type verb, save -> first real relation (tutorial bound nothing)')
 await page.fill('#constellation-mini-verb', 'protects')
@@ -296,12 +297,12 @@ const relationsCount = await page.evaluate(() => {
   var s = (window.Liber && window.Liber.state && window.Liber.state.get()) || {}
   return (s.relations || []).length
 })
-console.assert(relationsCount === 1, 'expected the first real relation, got ' + relationsCount)
+sassert(relationsCount === 1, 'expected the first real relation, got ' + relationsCount)
 const verbStored = await page.evaluate(() => {
   var s = (window.Liber && window.Liber.state && window.Liber.state.get()) || {}
   return ((s.relations || []).slice(-1)[0] || {}).verb
 })
-console.assert(verbStored === 'protects', 'expected verb "protects"')
+sassert(verbStored === 'protects', 'expected verb "protects"')
 console.log(`   verb: ${verbStored}`)
 await shot('smoke-07-relation')
 
@@ -309,12 +310,13 @@ console.log('17. Reset lives in settings now (chat repeat-button deprecated, con
 await page.goto(BASE + '/settings.html', { waitUntil: 'networkidle' })
 await page.waitForTimeout(500)
 const wipeExists = await page.evaluate(() => !!document.getElementById('settings-wipe'))
-console.assert(wipeExists, 'settings wipe should exist as the reset path')
+sassert(wipeExists, 'settings wipe should exist as the reset path')
 console.log('   settings wipe present; state untouched')
 
 console.log('18. Legacy save migrates: sigils[] -> buddy stone, to:sigil -> to:buddy')
 await page.evaluate(() => {
   try {
+    localStorage.removeItem('liber_vacui_v1__keep')
     localStorage.setItem('liber_vacui_v1', JSON.stringify({
       tutorialDone: true, tutorialStage: 'done', cutsceneBuild: 'riasondemo2',
       sigils: [{ id: 'sigil-1', intention: 'old stone', element: 'earth', ts: 1 }],
@@ -336,14 +338,15 @@ const migrated = await page.evaluate(() => {
     intent: ((stone[0] || {}).intention || ''), relTo: (((s.relations || [])[0] || {}).to || null)
   }
 })
-console.assert(!migrated.hasSigilsKey, 'sigils key retired, got: ' + JSON.stringify(migrated))
-console.assert(migrated.stone === 1 && migrated.intent === 'old stone', 'stone preserved: ' + JSON.stringify(migrated))
-console.assert(migrated.sealed === 1, 'sealed chat preserved: ' + JSON.stringify(migrated))
-console.assert(migrated.relTo === 'buddy', 'relation retargeted: ' + JSON.stringify(migrated))
+sassert(!migrated.hasSigilsKey, 'sigils key retired, got: ' + JSON.stringify(migrated))
+sassert(migrated.stone === 1 && migrated.intent === 'old stone', 'stone preserved: ' + JSON.stringify(migrated))
+sassert(migrated.sealed === 1, 'sealed chat preserved: ' + JSON.stringify(migrated))
+sassert(migrated.relTo === 'buddy', 'relation retargeted: ' + JSON.stringify(migrated))
 console.log(`   migrated: ${JSON.stringify(migrated)}`)
 
 console.log('19. New-build replay shelves legacy artifacts into the trash, homescreen clean')
 await page.evaluate(() => {
+  localStorage.removeItem('liber_vacui_v1__keep')
   localStorage.setItem('liber_vacui_v1', JSON.stringify({
     tutorialDone: true, tutorialStage: 'done',
     buddy: [{ kind: 'stone', id: 'sigil-9', intention: 'old' }, { kind: 'sealed', name: 'old chat', confession: 'x' }],
@@ -361,9 +364,9 @@ const shelved = await page.evaluate(() => {
     orbits: document.querySelectorAll('.constellation-artifact').length
   }
 })
-console.assert(shelved.buddy === 0 && shelved.relations === 0 && shelved.divination === 0, 'active sets cleared: ' + JSON.stringify(shelved))
-console.assert(shelved.grave >= 4, 'shelved into trash: ' + JSON.stringify(shelved))
-console.assert(!shelved.done && shelved.orbits === 0, 'tutorial replays on clean homescreen: ' + JSON.stringify(shelved))
+sassert(shelved.buddy === 0 && shelved.relations === 0 && shelved.divination === 0, 'active sets cleared: ' + JSON.stringify(shelved))
+sassert(shelved.grave >= 4, 'shelved into trash: ' + JSON.stringify(shelved))
+sassert(!shelved.done && shelved.orbits === 0, 'tutorial replays on clean homescreen: ' + JSON.stringify(shelved))
 console.log(`   shelved: ${JSON.stringify(shelved)}`)
 
 console.log('20. Scratch notes keep to the satchel')
@@ -378,8 +381,27 @@ const noteKept = await page.evaluate(() => {
   const notes = (s.satchel || []).filter(e => e && e.kind === 'note')
   return { n: notes.length, text: ((notes[0] || {}).text || '').slice(0, 30) }
 })
-console.assert(noteKept.n === 1 && noteKept.text.includes('scratch line'), 'note kept: ' + JSON.stringify(noteKept))
+sassert(noteKept.n === 1 && noteKept.text.includes('scratch line'), 'note kept: ' + JSON.stringify(noteKept))
 console.log(`   note: ${JSON.stringify(noteKept)}`)
+
+console.log('21. Save slots switch rooms')
+await page.goto(BASE + '/settings.html', { waitUntil: 'networkidle' })
+await page.waitForTimeout(500)
+await page.click('[data-slot="play"]')
+await page.waitForTimeout(1500)
+const slotState = await page.evaluate(() => {
+  const s = (window.Liber && window.Liber.state && window.Liber.state.get()) || {}
+  return { slot: window.Liber.state.getSlot(), done: !!s.tutorialDone, buddy: (s.buddy || []).length }
+})
+sassert(slotState.slot === 'play', 'slot should be play, got ' + slotState.slot)
+sassert(!slotState.done && slotState.buddy === 0, 'play slot starts fresh: ' + JSON.stringify(slotState))
+await page.goto(BASE + '/settings.html', { waitUntil: 'networkidle' })
+await page.waitForTimeout(500)
+await page.click('[data-slot="keep"]')
+await page.waitForTimeout(1500)
+const backState = await page.evaluate(() => ({ slot: window.Liber.state.getSlot() }))
+sassert(backState.slot === 'keep', 'back to keep slot')
+console.log(`   slots: play fresh, keep restored`)
 
 if (errors.length) {
   console.log('\nErrors:')

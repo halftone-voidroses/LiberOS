@@ -476,6 +476,16 @@
   line-height: 1.45;
   color: var(--dreams-ink);
 }
+.dreams-assoc-item { flex-wrap: wrap; }
+.dreams-assoc-quote {
+  flex: 1 1 100%;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--dreams-ink-soft);
+  border-left: 2px solid var(--dreams-cyan, #8acaff);
+  padding-left: 8px;
+  margin-bottom: 2px;
+}
 .dreams-assoc-date {
   font-family: var(--dreams-mono);
   font-size: 0.8rem;

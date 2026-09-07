@@ -12,13 +12,28 @@
   // same artifact kinds the desktop constellation gathers — the ledger
   // must agree with the web it describes.
   var KINDS = [
-    { kind: 'buddy',     chip: 'a sealed exchange', label: function (a) { return a.name; } },
+    { kind: 'buddy',     chip: 'a sealed exchange', label: function (a) { return a.name || a.intention || 'a sealed exchange'; } },
     { kind: 'divination', chip: 'a card',    label: function (a) { return a.name; } },
     { kind: 'games',      chip: 'a game',    label: function (a) { return a.name; } },
     { kind: 'learn',      chip: 'a lesson',  label: function (a) { return a.topic; } },
     { kind: 'abstract',   chip: 'a shape',   label: function (a) { return a.label || 'a shape'; } },
-    { kind: 'sea',        chip: 'a release', label: function (a) { return a.label || 'a release'; } }
+    { kind: 'sea',        chip: 'a release', label: function (a) { return a.text || 'a release'; } },
+    { kind: 'garden',     chip: 'a seed',    label: function (a) { return a.name || 'a planted seed'; } },
+    { kind: 'dreams',     chip: 'a dream',   label: function (a) { return a.title || 'a recorded dream'; } }
   ];
+
+  function fullText(kind, a) {
+    a = a || {};
+    if (kind === 'sea') return a.text || '';
+    if (kind === 'buddy') return a.confession || a.intention || a.name || '';
+    if (kind === 'dreams') return ((a.title ? a.title + ' — ' : '') + (a.text || a.dream || '')).trim();
+    if (kind === 'divination') return [a.question, a.reading, a.name].filter(Boolean).join(' — ');
+    if (kind === 'games') return a.result || a.name || '';
+    if (kind === 'garden') return a.name || '';
+    if (kind === 'learn') return a.topic || '';
+    if (kind === 'abstract') return a.label || '';
+    return '';
+  }
 
   var MONTHS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
 
@@ -60,7 +75,7 @@
 
   function artifactName(fromId, artifacts) {
     for (var i = 0; i < artifacts.length; i++) {
-      if (artifacts[i].data.id === fromId) return { name: artifacts[i].label, chip: artifacts[i].chip };
+      if (artifacts[i].data.id === fromId) return { name: artifacts[i].label, chip: artifacts[i].chip, kind: artifacts[i].kind, data: artifacts[i].data };
     }
     return null;
   }
@@ -121,6 +136,7 @@
               +     '<span class="relation-row-artifact">' + esc(name) + '</span>'
               +     '<span class="relation-row-chip">' + esc(chip) + '</span>'
               +   '</div>'
+              +   '<div class="relation-row-text">' + esc(fullText(art ? art.kind : '', art ? art.data : null)) + '</div>'
               +   '<div class="relation-row-knot">'
               +     '<span class="relation-row-ring" aria-hidden="true">—o—</span>'
               +     '<input class="relation-verb-input" list="verb-families" value="' + esc(verbOf(rel)) + '" aria-label="re-word the verb" spellcheck="false"/>'

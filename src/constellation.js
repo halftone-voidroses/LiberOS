@@ -40,7 +40,7 @@
     var s = getState();
     var all = [];
     var c = s.buddy || [];
-    for (var q = 0; q < c.length; q++) all.push({ kind: 'buddy', label: c[q].name || 'sealed words', data: c[q] });
+    for (var q = 0; q < c.length; q++) all.push({ kind: 'buddy', label: c[q].name || c[q].intention || 'sealed words', data: c[q] });
     var d = s.divination || [];
     for (var i = 0; i < d.length; i++) all.push({ kind: 'divination', label: d[i].name, data: d[i] });
     var g = s.games || [];
@@ -50,7 +50,7 @@
     var ab = s.abstract || [];
     for (var m = 0; m < ab.length; m++) all.push({ kind: 'abstract', label: ab[m].label || 'abstract', data: ab[m] });
     var se = s.sea || [];
-    for (var n = 0; n < se.length; n++) all.push({ kind: 'sea', label: se[n].label || 'sea', data: se[n] });
+    for (var n = 0; n < se.length; n++) all.push({ kind: 'sea', label: se[n].text || 'sea', data: se[n] });
     var gd = s.garden || [];
     for (var p = 0; p < gd.length; p++) all.push({ kind: 'garden', label: gd[p].name || 'a planted seed', data: gd[p] });
     var dr = s.dreams || [];
@@ -206,10 +206,34 @@
     window.location.href = 'sigil.html';
   }
 
+  var miniText = document.getElementById('constellation-mini-text');
+  var miniOpen = document.getElementById('constellation-mini-open');
+
+  function roomFor(kind, data) {
+    if (kind === 'buddy') return (data && data.kind === 'stone') ? 'sigil.html' : 'buddy.html';
+    var pages = { divination: 'divination.html', games: 'games.html', learn: 'learn.html', abstract: 'abstract.html', sea: 'sea.html', garden: 'garden.html', dreams: 'dreams.html' };
+    return pages[kind] || 'desktop.html';
+  }
+
+  function contentOf(kind, d) {
+    d = d || {};
+    if (kind === 'sea') return d.text || '';
+    if (kind === 'buddy') return d.confession || d.intention || d.name || '';
+    if (kind === 'dreams') return ((d.title ? d.title + ' — ' : '') + (d.text || d.dream || '')).trim();
+    if (kind === 'divination') return [d.question, d.reading, d.name].filter(Boolean).join(' — ');
+    if (kind === 'games') return d.result || d.name || '';
+    if (kind === 'garden') return d.name || '';
+    if (kind === 'learn') return d.topic || '';
+    if (kind === 'abstract') return d.label || '';
+    return '';
+  }
+
   function openMini(artifact) {
     selectedArtifact = artifact;
     if (!mini) return;
     if (miniLabel) miniLabel.textContent = artifact.label || artifact.data && artifact.data.name || 'artifact';
+    if (miniText) miniText.textContent = contentOf(artifact.kind, artifact.data);
+    if (miniOpen) miniOpen.onclick = function () { window.location.href = roomFor(artifact.kind, artifact.data); };
     var existing = relationsFor(artifact.data.id);
     if (miniVerb) {
       miniVerb.value = existing.length ? (existing[0].verb || '') : '';
