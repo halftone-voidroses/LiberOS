@@ -57,15 +57,6 @@
     if (old) old.remove();
   }
 
-  function skipAll() {
-    var s = st();
-    if (s) s.set({ tutorialDone: true, tutorialStage: 'done' });
-    clearBox();
-    var wipe = document.querySelector('.cutscene-wipe');
-    if (wipe) wipe.remove();
-  }
-
-
   function optionRow(box, options, onPick) {
     if (!options || !options.length) return;
     var row = document.createElement('div');
@@ -103,51 +94,99 @@
     var stage = document.querySelector('.screen-stage');
     if (!stage) { done(); return; }
     clearBox();
+    var oldRing = document.getElementById('crt-flames');
+    if (oldRing && oldRing.parentNode) oldRing.parentNode.removeChild(oldRing);
+    var machine = document.querySelector('.machine');
+    var ring = document.createElement('div');
+    ring.className = 'crt-flames';
+    ring.id = 'crt-flames';
+    ring.setAttribute('aria-hidden', 'true');
+    var sr = stage.getBoundingClientRect();
+    var scrEl = stage.querySelector('.screen') || machine;
+    var mr = scrEl ? scrEl.getBoundingClientRect() : null;
+    var spots = [];
+    function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+    if (mr && mr.width > 0) {
+      var x0 = mr.left - sr.left, y0 = mr.top - sr.top, w = mr.width, h = mr.height, si;
+      var PX = function (x, y) { return { x: clamp(x, 8, sr.width - 8), y: clamp(y, 8, sr.height - 8) }; };
+      for (si = 0; si < 3; si++) spots.push(PX(x0 + w * (0.2 + si * 0.3), y0 + h + 14));
+      for (si = 0; si < 2; si++) spots.push(PX(x0 - 26, y0 + h * (0.3 + si * 0.4)));
+      for (si = 0; si < 2; si++) spots.push(PX(x0 + w + 14, y0 + h * (0.3 + si * 0.4)));
+      var tops = [0.06, 0.27, 0.5, 0.73, 0.94];
+      for (si = 0; si < tops.length; si++) spots.push(PX(x0 + w * tops[si], y0 - 18));
+    }
+    var flameEls = [];
+    spots.forEach(function (p, n) {
+      var f = document.createElement('span');
+      f.className = 'ritual-flame';
+      f.style.left = p.x + 'px';
+      f.style.top = p.y + 'px';
+      f.style.animationDelay = ((n % 4) * 0.13) + 's';
+      ring.appendChild(f);
+      flameEls.push(f);
+    });
+    stage.appendChild(ring);
+    if (machine) machine.classList.add('flame-live');
+    function setGlow(on) { if (machine) machine.classList.toggle('flame-glow', !!on); }
+    function breakHard(ms) {
+      if (!machine) return;
+      machine.classList.remove('machine-break', 'machine-break-hard');
+      void machine.offsetWidth;
+      machine.classList.add('machine-break-hard');
+      setTimeout(function () { if (machine) machine.classList.remove('machine-break', 'machine-break-hard'); }, ms || 1200);
+    }
+    function breakOnce() {
+      if (!machine) return;
+      machine.classList.remove('machine-break');
+      void machine.offsetWidth;
+      machine.classList.add('machine-break');
+      setTimeout(function () { if (machine) machine.classList.remove('machine-break'); }, 1100);
+    }
     var box = document.createElement('div');
     box.className = 'cutscene ritual';
     box.id = 'cutscene';
     box.dataset.act = 'ritual';
-    var flames = '';
-    for (var f = 0; f < 5; f++) flames += '<span class="ritual-flame" aria-hidden="true"></span>';
     box.innerHTML =
-      '<div class="ritual-flames">' + flames + '</div>' +
       '<div class="cutscene-box ritual-box">' +
         '<div class="cutscene-line ritual-line"></div>' +
-        '<div class="cutscene-nav"><button type="button" class="cutscene-skip">skip the cutscene</button></div>' +
       '</div>';
     stage.appendChild(box);
-    var skip = box.querySelector('.cutscene-skip');
-    if (skip) skip.addEventListener('click', skipAll);
     var lineEl = box.querySelector('.ritual-line');
-    var flameEls = box.querySelectorAll('.ritual-flame');
     var dead = false;
     function alive() { return !dead && document.body.contains(box); }
-    box.addEventListener('click', function (e) {
-      if (e.target.closest && e.target.closest('button')) return;
-      if (e.target === box || e.target.closest('.ritual-box')) {
-        dead = true;
-        done();
-      }
-    });
+    function finish() {
+      if (!alive()) return;
+      dead = true;
+      box.classList.add('blackflame');
+      setGlow(false);
+      flameEls.forEach(function (f) { f.classList.remove('lit'); f.classList.add('ember'); });
+      setTimeout(function () { done(); }, 1600);
+    }
+    box.addEventListener('click', function () { finish(); });
     var i = 0;
     function step() {
       if (!alive()) return;
-      if (i >= SUMMON.length) {
-        box.classList.add('blackflame');
-        setTimeout(function () { if (alive()) done(); }, 1600);
-        return;
-      }
+      if (i >= SUMMON.length) { finish(); return; }
       var s = SUMMON[i];
-      if (flameEls[i]) flameEls[i].classList.add('lit');
+      for (var k = 0; k < 3; k++) {
+        var f = flameEls[i * 3 + k];
+        if (f) f.classList.add('lit');
+      }
       if (lineEl) {
         lineEl.textContent = s.line;
         lineEl.classList.remove('is-glow', 'is-flames', 'is-shake', 'is-shake-more');
         lineEl.classList.add('is-' + s.fx);
       }
+      setGlow(true);
       if (s.fx === 'shake' || s.fx === 'shake-more') {
         box.classList.remove('do-shake', 'do-shake-more');
         void box.offsetWidth;
         box.classList.add(s.fx === 'shake' ? 'do-shake' : 'do-shake-more');
+        ring.classList.remove('lean', 'flare-up');
+        void ring.offsetWidth;
+        ring.classList.add('lean');
+        if (s.fx === 'shake-more') { ring.classList.add('flare-up'); breakHard(1400); } else breakOnce();
+        setTimeout(function () { ring.classList.remove('lean', 'flare-up'); }, s.fx === 'shake-more' ? 2100 : 1100);
         thunk();
       }
       i++;
@@ -191,13 +230,7 @@
           next.className = 'cutscene-next';
           next.textContent = '▶';
           next.addEventListener('click', function () { idx++; show(); });
-          var skip = document.createElement('button');
-          skip.type = 'button';
-          skip.className = 'cutscene-skip';
-          skip.textContent = 'skip the cutscene';
-          skip.addEventListener('click', skipAll);
           row.appendChild(next);
-          row.appendChild(skip);
           inner.appendChild(row);
           optionRow(box, b.options, function () { idx++; show(); });
         }, 450 * (b.names.length + 1) + 200);
@@ -216,13 +249,7 @@
       next.className = 'cutscene-next';
       next.textContent = b.nextLabel || '▶';
       next.addEventListener('click', function () { idx++; show(); });
-      var skip = document.createElement('button');
-      skip.type = 'button';
-      skip.className = 'cutscene-skip';
-      skip.textContent = 'skip the cutscene';
-      skip.addEventListener('click', skipAll);
       row.appendChild(next);
-      row.appendChild(skip);
       inner.appendChild(row);
       optionRow(box, b.options, function () { idx++; show(); });
     }
@@ -282,18 +309,14 @@
         '<div class="demo-preview" id="demo-preview" aria-hidden="true"></div>' +
       '</div>' +
       '<div class="cutscene-box riason demobox"><div class="cutscene-voice">riason</div>' +
-        '<div class="cutscene-line demo-riasay">This is the buddy app. First you decide what your buddy is going to represent!</div></div>' +
-      '<div class="cutscene-nav demonav"><button type="button" class="cutscene-skip" id="demo-skip">skip the cutscene</button></div>';
+        '<div class="cutscene-line demo-riasay">This is the buddy app. First you decide what your buddy is going to represent!</div></div>';
     stage.appendChild(box);
-    var skip = document.getElementById('demo-skip');
-    if (skip) skip.addEventListener('click', skipAll);
     var cursor = document.getElementById('demo-cursor');
     var app = document.getElementById('demo-app');
     var input = document.getElementById('demo-input');
     function alive() { return document.body.contains(box); }
-    box.addEventListener('pointerdown', function (e) {
+    box.addEventListener('pointerdown', function () {
       if (!alive()) return;
-      if (e.target.closest && e.target.closest('#demo-skip')) return;
       riasonSay(box, 'Not yet. Let me finish this.');
       box.classList.remove('do-deny');
       void box.offsetWidth;
@@ -371,11 +394,8 @@
       box.id = 'cutscene';
       box.innerHTML = '<div class="demo-artifact" id="demo-artifact" role="button" tabindex="0" aria-label="artifact"></div>' +
         '<div class="cutscene-box riason"><div class="cutscene-voice">riason</div>' +
-        '<div class="cutscene-line">You click the artifact to set its relation to the buddy.</div></div>' +
-        '<div class="cutscene-nav"><button type="button" class="cutscene-skip" id="art-skip">skip the binding</button></div>';
+        '<div class="cutscene-line">You click the artifact to set its relation to the buddy.</div></div>';
       stage.appendChild(box);
-      var skip = document.getElementById('art-skip');
-      if (skip) skip.addEventListener('click', function () { playFinale(); });
       var art = document.getElementById('demo-artifact');
       function go() { playFakeChain(); }
       if (art) {
@@ -420,7 +440,18 @@
     o.className = 'flare-overlay';
     o.innerHTML = '<div class="flare-alert">intruder detected</div><div class="flare-sub">…documenting.</div>';
     stage.appendChild(o);
-    setTimeout(function () { if (o.parentNode) o.parentNode.removeChild(o); }, 1700);
+    var ring = document.getElementById('crt-flames');
+    if (ring) ring.classList.add('flare');
+    var machine = document.querySelector('.machine');
+    if (machine) {
+      machine.classList.add('flame-glow', 'machine-break-hard');
+      setTimeout(function () { if (machine) machine.classList.remove('machine-break-hard'); }, 1500);
+    }
+    setTimeout(function () {
+      if (o.parentNode) o.parentNode.removeChild(o);
+      var r2 = document.getElementById('crt-flames');
+      if (r2) r2.classList.remove('flare');
+    }, 1700);
   }
 
   function flash(color, ms) {    var f = document.createElement('div');
@@ -444,6 +475,17 @@
     if (window.Cursor) { try { window.Cursor.burst(); } catch (e) {} }
     var hub = document.getElementById('constellation-sigil');
     if (hub) hub.classList.add('hub-burst');
+    var ring = document.getElementById('crt-flames');
+    if (ring) {
+      ring.classList.remove('flare');
+      var fl = ring.querySelectorAll('.ritual-flame');
+      for (var fi = 0; fi < fl.length; fi++) { fl[fi].classList.remove('ember'); fl[fi].classList.add('lit'); }
+    }
+    var machine = document.querySelector('.machine');
+    if (machine) {
+      machine.classList.add('flame-glow', 'machine-break-hard');
+      setTimeout(function () { if (machine) machine.classList.remove('machine-break-hard'); }, 1500);
+    }
     flash('rgba(255,240,220,0.85)', 450);
     shakeMachine(1400);
     thunk();
@@ -478,6 +520,10 @@
 
   function endClean() {
     clearBox();
+    var ring = document.getElementById('crt-flames');
+    if (ring && ring.parentNode) ring.parentNode.removeChild(ring);
+    var machine = document.querySelector('.machine');
+    if (machine) machine.classList.remove('flame-live', 'flame-glow', 'machine-break', 'machine-break-hard');
     var s = st();
     if (s) s.set({ tutorialDone: true, tutorialStage: 'done' });
     chime();

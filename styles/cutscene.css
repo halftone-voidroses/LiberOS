@@ -159,26 +159,6 @@
   gap: 18px;
 }
 
-.ritual-flames {
-  display: flex;
-  gap: 22px;
-}
-
-.ritual-flame {
-  width: 14px;
-  height: 22px;
-  border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
-  background: #2a1418;
-  border: 1px solid #4a2a30;
-  transition: background 0.5s ease, box-shadow 0.5s ease;
-}
-
-.ritual-flame.lit {
-  background: radial-gradient(circle at 50% 70%, #ffd0e0 0%, #ff69b4 45%, #c02060 100%);
-  border-color: #ff8ab8;
-  box-shadow: 0 0 18px rgba(255, 105, 180, 0.9), 0 0 44px rgba(255, 105, 180, 0.4);
-}
-
 .ritual-box {
   background: transparent;
   border: none;
@@ -645,4 +625,88 @@
 .fakebox { animation: fakebox-fall 0.5s ease-in 0.4s forwards; }
 @keyframes fakebox-fall {
   to { transform: translateY(46px); opacity: 0; }
+}
+
+.cutscene.ritual {
+  background: radial-gradient(ellipse at 50% 55%, rgba(10, 2, 6, 0.25) 0%, rgba(0, 0, 0, 0.88) 78%);
+}
+.crt-flames {
+  position: absolute;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+}
+.machine.flame-live {
+  position: relative;
+  z-index: 2;
+}
+.machine.flame-glow {
+  filter: drop-shadow(0 0 34px rgba(255, 80, 140, 0.45));
+}
+.ritual-flame {
+  position: absolute;
+  width: 30px;
+  height: 74px;
+  margin: -70px 0 0 -15px;
+  border-radius: 50% 50% 46% 54% / 72% 72% 28% 28%;
+  background: radial-gradient(ellipse at 50% 80%, rgba(60, 16, 24, 0.9) 0%, rgba(30, 8, 12, 0.4) 60%, transparent 75%);
+  opacity: 0.4;
+  transition: opacity 0.5s ease;
+}
+.ritual-flame.lit {
+  opacity: 1;
+  background:
+    radial-gradient(ellipse at 50% 88%, rgba(255, 244, 230, 0.95) 0%, rgba(255, 214, 170, 0.85) 12%, transparent 30%),
+    radial-gradient(ellipse at 50% 72%, rgba(255, 105, 180, 0.9) 0%, rgba(255, 60, 120, 0.55) 45%, transparent 72%),
+    radial-gradient(ellipse at 50% 55%, rgba(255, 90, 40, 0.5) 0%, rgba(192, 74, 88, 0.3) 55%, transparent 80%);
+  box-shadow: 0 0 22px rgba(255, 105, 180, 0.75), 0 0 60px rgba(255, 90, 40, 0.4), 0 -8px 34px rgba(255, 200, 140, 0.35);
+  animation: flame-flick 0.5s ease-in-out infinite alternate;
+}
+.ritual-flame.ember {
+  opacity: 0.5;
+  background: radial-gradient(ellipse at 50% 85%, rgba(255, 80, 60, 0.7) 0%, rgba(120, 20, 20, 0.35) 55%, transparent 75%);
+  box-shadow: 0 0 10px rgba(255, 60, 40, 0.35);
+}
+.crt-flames.flare .ritual-flame.lit {
+  background:
+    radial-gradient(ellipse at 50% 88%, rgba(255, 240, 240, 0.95) 0%, transparent 30%),
+    radial-gradient(ellipse at 50% 70%, rgba(255, 40, 50, 0.9) 0%, rgba(192, 20, 30, 0.55) 50%, transparent 75%);
+  box-shadow: 0 0 26px rgba(255, 40, 50, 0.85), 0 0 70px rgba(255, 40, 50, 0.45);
+}
+@keyframes flame-flick {
+  from { transform: scaleY(1) skewX(0deg); filter: brightness(1); }
+  to { transform: scaleY(1.13) skewX(-3deg); filter: brightness(1.22); }
+}
+.machine-break { animation: machine-break 0.55s linear 2; }
+.machine-break-hard { animation: machine-break 0.45s linear 5; }
+@keyframes machine-break {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  20% { transform: translate(-7px, 4px) rotate(-0.5deg); }
+  40% { transform: translate(6px, -5px) rotate(0.45deg); }
+  60% { transform: translate(-5px, -3px) rotate(-0.35deg); }
+  80% { transform: translate(4px, 5px) rotate(0.3deg); }
+}
+.cutscene.ritual .ritual-box {
+  box-shadow: 0 0 0 2px rgba(255, 105, 180, 0.15), 0 -10px 22px rgba(255, 105, 180, 0.35), 0 0 18px rgba(255, 105, 180, 0.18);
+}
+.cutscene.ritual .ritual-line {
+  font-size: clamp(2.4rem, 6vw, 4.5rem);
+  letter-spacing: 0.08em;
+  line-height: 1.25;
+  text-shadow: 0 0 18px rgba(255, 105, 180, 0.85), 0 0 60px rgba(255, 90, 40, 0.4);
+  animation: summon-flicker 1.0s ease-in-out infinite alternate;
+}
+.crt-flames { transition: transform 0.3s ease, filter 0.3s ease; }
+.crt-flames.lean {
+  transform: translateX(-7px) skewX(-2deg);
+}
+.crt-flames.flare-up {
+  filter: brightness(1.35) saturate(1.2);
+}
+@media (prefers-reduced-motion: reduce) {
+  .cutscene.ritual .ritual-line { animation: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ritual-flame, .ritual-flame.lit { animation: none; }
+  .machine-break, .machine-break-hard { animation: none; }
 }
