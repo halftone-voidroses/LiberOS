@@ -57,6 +57,13 @@
     }
   }
 
+  function tink() {
+    if (REDUCED) return;
+    if (window.Liber && window.Liber.sound) {
+      try { window.Liber.sound.play('tink'); } catch (e) {}
+    }
+  }
+
   var REDUCED = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
   function el(id) { return document.getElementById(id); }
@@ -212,7 +219,19 @@
       if (stackEl) {
         var fallen = document.createElement('div');
         fallen.className = 'cutscene-line ritual-line ritual-fall is-' + s.fx;
-        fallen.textContent = s.line;
+        var chars = s.line.split('');
+        for (var ci = 0; ci < chars.length; ci++) {
+          (function (ch, n) {
+            var sp = document.createElement('span');
+            sp.className = 'rl';
+            sp.style.setProperty('--d', (n * 40) + 'ms');
+            sp.textContent = ch === ' ' ? ' ' : ch;
+            fallen.appendChild(sp);
+            if (!REDUCED) {
+              setTimeout(function () { if (alive()) tink(); }, n * 40 + 450);
+            }
+          })(chars[ci], ci);
+        }
         stackEl.appendChild(fallen);
         tick();
       }
@@ -229,7 +248,7 @@
         thunk();
       }
       i++;
-      setTimeout(step, s.fx === 'shake-more' ? 2200 : 1500);
+      setTimeout(step, s.fx === 'shake-more' ? 2600 : 2300);
     }
     step();
   }

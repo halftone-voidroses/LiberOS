@@ -5,7 +5,8 @@
 //
 // API: window.Liber.sound = { init, play(kind), setEnabled(bool), isEnabled() }
 // Kinds: 'click' (button press) · 'thunk' (heavy / destructive) ·
-//        'chime' (artifact saved / kept) · 'tick' (faint ritual line-fall).
+//        'chime' (artifact saved / kept) · 'tick' (faint ritual line-fall) ·
+//        'tink' (bright letter landing in the summoning).
 // The context is created lazily and resumes on the first user gesture
 // (autoplay-safe). Every path is guarded: a missing or blocked
 // AudioContext can never break the room. The press sound is delegated —
@@ -162,6 +163,22 @@
     osc.stop(t + 0.06);
   }
 
+  // tink — a bright letter landing for the summoning: one glassy blip,
+  // higher than the tick, barely there, gone in 60 ms.
+  function tink(c) {
+    var t = c.currentTime;
+    var osc = c.createOscillator();
+    var g = c.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(880, t);
+    osc.frequency.exponentialRampToValueAtTime(660, t + 0.04);
+    g.gain.setValueAtTime(0.03, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.06);
+    osc.connect(g).connect(c.destination);
+    osc.start(t);
+    osc.stop(t + 0.07);
+  }
+
   // ── public surface ──────────────────────────────────────────────────
 
   function play(kind) {
@@ -176,6 +193,7 @@
       if (kind === 'thunk') thunk(c);
       else if (kind === 'chime') chime(c);
       else if (kind === 'tick') tick(c);
+      else if (kind === 'tink') tink(c);
       else click(c);
     } catch (e) { /* never break the room for a sound */ }
   }

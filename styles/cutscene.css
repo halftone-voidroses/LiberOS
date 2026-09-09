@@ -179,20 +179,24 @@
   transition: color 0.6s ease, text-shadow 0.6s ease;
 }
 
-.ritual-line.is-glow {
-  color: #f0d0e0;
-  text-shadow: 0 0 14px rgba(200, 200, 200, 0.8);
+.cutscene.ritual .ritual-line.is-glow {
+  color: #ffd8ec;
+  text-shadow: 0 0 18px rgba(255, 255, 255, 0.9), 0 0 34px rgba(255, 150, 200, 0.8);
 }
 
-.ritual-line.is-flames {
-  color: #ffb8d0;
-  text-shadow: 0 0 18px rgba(255, 105, 180, 0.9);
+.cutscene.ritual .ritual-line.is-flames {
+  color: #ffd86a;
+  text-shadow: 0 0 20px rgba(255, 200, 90, 0.95), 0 0 44px rgba(255, 120, 60, 0.8);
 }
 
-.ritual-line.is-shake,
-.ritual-line.is-shake-more {
-  color: #ffd0e0;
-  text-shadow: 0 0 20px rgba(255, 105, 180, 1);
+.cutscene.ritual .ritual-line.is-shake {
+  color: #d8b8ff;
+  text-shadow: 0 0 22px rgba(190, 130, 255, 1), 0 0 50px rgba(150, 80, 255, 0.85);
+}
+
+.cutscene.ritual .ritual-line.is-shake-more {
+  color: #fff0f5;
+  text-shadow: 0 0 26px rgba(255, 255, 255, 1), 0 0 60px rgba(255, 105, 180, 1);
 }
 
 /* Summon lines fall from above one at a time and stay, centered and
@@ -205,13 +209,23 @@
 }
 
 .ritual-line.ritual-fall {
-  animation: ritual-fall-in 0.9s ease-out both;
+  animation: none;
 }
 
-@keyframes ritual-fall-in {
-  from { opacity: 0; transform: translateY(-56px); }
-  60%  { opacity: 1; }
-  to   { opacity: 1; transform: translateY(0); }
+/* Summon letters rain one at a time and land with a pop. Delay comes
+   from --d, set per letter in cutscene.js. Colour inherits the line. */
+.ritual-line .rl {
+  display: inline-block;
+  opacity: 0;
+  animation: ritual-letter-in 0.55s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+
+@keyframes ritual-letter-in {
+  from { opacity: 0; transform: translateY(-72px) scale(1.3); }
+  60%  { opacity: 1; transform: translateY(6px) scale(0.96); }
+  80%  { transform: translateY(-2px) scale(1.04); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .cutscene.ritual.do-shake .ritual-box {
@@ -675,6 +689,7 @@
 @media (prefers-reduced-motion: reduce) {
   .cutscene.ritual .ritual-line { animation: none; }
   .ritual-line.ritual-fall { animation: none; }
+  .ritual-line .rl { animation: none; opacity: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
   .inferno-arc { transition: none; }
