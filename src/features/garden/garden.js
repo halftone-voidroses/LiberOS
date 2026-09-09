@@ -104,36 +104,14 @@
     return el;
   }
 
-  function facetCentroid(points) {
-    var nums = points.split(/[\s,]+/);
-    var x = 0, y = 0, n = 0;
-    for (var i = 0; i + 1 < nums.length; i += 2) {
-      x += parseFloat(nums[i]);
-      y += parseFloat(nums[i + 1]);
-      n++;
-    }
-    return { x: x / n, y: y / n };
-  }
-
-  // ─── game 1: the jumbled gem ─────────────────────────────────────────────
+  // ─── game 1: the empty gem ─────────────────────────────────────────────
 
   var gemPaint = [];   // per facet: hex currently poured on, or null (cleared)
-  var gemSettled = []; // per facet: true once its target colour sits there
+  var gemSettled = []; // per facet: true once filled
   var ledger = [];     // the click ledger: { x, y, color, act } in svg coords
   var slots = [];      // 6 palette slots: hex or null
   var selectedSlot = -1;
-  var gemDoneTimer = null; // the settle→draft handoff; cancelled if the gem moves on early
-  var gemMark = 0; // mile-markers already called out for this gem (5, 11)
-
-  function isFirstGem() {
-    var st = (window.Liber && window.Liber.state && window.Liber.state.get()) || {};
-    if ((st.garden || []).length > 0) return false;
-    var sat = st.satchel || [];
-    for (var i = 0; i < sat.length; i++) {
-      if (sat[i] && sat[i].kind === 'gem-draft') return false;
-    }
-    return true;
-  }
+  var gemDoneTimer = null; // the fill→draft handoff; cancelled if the gem moves on early
 
   function scrambleGem() {
     if (gemDoneTimer) { clearTimeout(gemDoneTimer); gemDoneTimer = null; }
@@ -142,29 +120,14 @@
     ledger = [];
     slots = [null, null, null, null, null, null];
     selectedSlot = -1;
-    gemMark = 0;
     if (gemSvg) gemSvg.classList.remove('garden-gem-done');
     for (var i = 0; i < FACETS.length; i++) {
-      // never leave a facet accidentally correct: skip the target shade
-      var wrong = (FACETS[i].target + 1 + Math.floor(Math.random() * (GEM_COLORS.length - 1))) % GEM_COLORS.length;
-      gemPaint.push(GEM_COLORS[wrong].hex);
+      gemPaint.push(null);
       gemSettled.push(false);
-    }
-    if (isFirstGem()) {
-      // competence first: the first stone arrives with eleven facets
-      // already settled, so the first session finishes instead of starting.
-      var open = [1, 4, 7, 10, 13, 15];
-      for (var j = 0; j < FACETS.length; j++) {
-        if (open.indexOf(j) < 0) {
-          gemPaint[j] = GEM_COLORS[FACETS[j].target].hex;
-          gemSettled[j] = true;
-        }
-      }
-      gemMark = 11;
     }
     renderGem();
     renderSlots();
-    setNote(isFirstGem() ? 'eleven settled already. finish the last six.' : 'the gem is jumbled. settle every facet.');
+    setNote('the gem is empty. fill every facet.');
   }
 
   function setNote(t) { if (gemNote) gemNote.textContent = t; }
@@ -176,7 +139,7 @@
   }
 
   function syncCount() {
-    if (gemCount) gemCount.textContent = settledCount() + ' of ' + FACETS.length + ' settled';
+    if (gemCount) gemCount.textContent = settledCount() + ' of ' + FACETS.length + ' filled';
   }
 
   function renderGem() {
@@ -206,21 +169,9 @@
     var facets = svgEl('g', { 'class': 'garden-facets' });
     for (var i = 0; i < FACETS.length; i++) {
       (function (f, i) {
-        var c = facetCentroid(f.points);
         var g = svgEl('g', { 'class': 'garden-facet', 'data-facet': i });
         var poly = svgEl('polygon', { points: f.points, fill: gemPaint[i] || 'transparent' });
-        // the whisper: the target colour at low opacity, so the stone shows
-        // how it wants to be settled without naming it outright
-        var hint = svgEl('polygon', {
-          'class': 'garden-facet-hint', points: f.points, fill: GEM_COLORS[f.target].hex
-        });
-        var num = svgEl('text', {
-          'class': 'garden-facet-num', x: (c.x + 75).toFixed(1), y: (c.y + 4.5).toFixed(1), 'text-anchor': 'middle'
-        });
-        num.textContent = String(f.target + 1);
         g.appendChild(poly);
-        g.appendChild(hint);
-        g.appendChild(num);
         g.addEventListener('click', function (e) { facetClick(i, e); });
         facets.appendChild(g);
       })(FACETS[i], i);
@@ -236,13 +187,9 @@
   function facetStates() {
     var gs = gemSvg.querySelectorAll('.garden-facet');
     for (var i = 0; i < gs.length; i++) {
-      var poly = gs[i].querySelector('polygon:not(.garden-facet-hint)');
+      var poly = gs[i].querySelector('polygon');
       if (poly) poly.setAttribute('fill', gemPaint[i] || 'transparent');
       gs[i].classList.toggle('settled', !!gemSettled[i]);
-      gs[i].classList.toggle('painted', !!gemPaint[i] && !gemSettled[i]);
-      // the hint sleeps once the right colour sits there
-      var hint = gs[i].querySelector('.garden-facet-hint');
-      if (hint) hint.classList.toggle('hinted', !gemSettled[i]);
     }
   }
 
@@ -267,36 +214,30 @@
   }
 
   function facetClick(i, e) {
-    if (gemSettled[i]) return;
     var p = svgPoint(e);
     var poured = selectedSlot >= 0 ? slots[selectedSlot] : null;
     if (poured) {
       gemPaint[i] = poured;
+      gemSettled[i] = true;
       ledger.push({ x: p.x, y: p.y, color: poured, act: 'pour' });
       slots[selectedSlot] = null;
       selectedSlot = -1;
-      if (poured === GEM_COLORS[FACETS[i].target].hex) {
-        gemSettled[i] = true;
-        chime();
-        var settledNow = settledCount();
-        if (settledNow === 5 && gemMark < 5) { gemMark = 5; setNote('five settled. the stone takes shape.'); }
-        if (settledNow === 11 && gemMark < 11) { gemMark = 11; setNote('eleven settled. six remain — finish it.'); }
-      }
+      chime();
       renderSlots();
       facetStates();
       syncCount();
       if (settledCount() === FACETS.length) {
-        // the settle: the stone breathes once, then the draft arrives asking
+        // the fill: the stone breathes once, then the draft arrives asking
         if (gemSvg) {
           gemSvg.classList.remove('garden-gem-done');
           void gemSvg.offsetWidth;
           gemSvg.classList.add('garden-gem-done');
         }
-        setNote('complete. every facet settled.');
+        setNote('complete. every facet filled.');
         gemDoneTimer = setTimeout(function () {
           gemDoneTimer = null;
-          // the gem may have moved on (re-scrambled, draft kept) before the
-          // breathe finished — only open the complete draft if it still is
+          // the gem may have moved on before the breathe finished — only
+          // open the complete draft if it still is
           if (settledCount() !== FACETS.length || !ledger.length) return;
           if (gemSvg) gemSvg.classList.remove('garden-gem-done');
           openDraft(true);
@@ -305,7 +246,9 @@
     } else if (gemPaint[i]) {
       ledger.push({ x: p.x, y: p.y, color: gemPaint[i], act: 'clear' });
       gemPaint[i] = null;
+      gemSettled[i] = false;
       facetStates();
+      syncCount();
     }
   }
 
@@ -340,10 +283,10 @@
     if (!panel || !view) return;
     view.innerHTML = draftSvg();
     if (name) name.value = '';
-    if (title) title.textContent = complete ? 'complete. save?' : 'the draft so far. save it, or plant it.';
+    if (title) title.textContent = complete ? 'complete. plant it?' : 'the draft so far. plant it when ready.';
     panel.classList.add('open');
     panel.removeAttribute('inert');
-    setNote(complete ? 'the gem is settled. keep the draft, or plant it.' : 'the draft so far — it grows with every pour.');
+    setNote(complete ? 'the gem is filled. plant it below.' : 'the draft so far — it grows with every pour.');
   }
 
   function closeDraft(msg) {
@@ -364,32 +307,36 @@
     return n;
   }
 
-  function saveDraft(where) {
+  // saving plants: the draft is kept in the satchel with its picture,
+  // and the seed goes straight into the bed. One button, no fork.
+  function saveDraft() {
     if (!window.Liber || !window.Liber.state) return;
     var nameEl = document.getElementById('garden-draft-name');
     var given = nameEl ? nameEl.value.trim() : '';
     var svg = draftSvg();
-    if (where === 'satchel') {
-      window.Liber.state.addArtifact('satchel', {
-        kind: 'gem-draft',
-        name: given || 'a draft of rearranging',
-        svg: svg,
-        points: pourLedgerCount(),
-        ts: Date.now()
-      });
-      closeDraft('kept in the satchel.');
-    } else {
-      var palette = GEM_COLORS.map(function (c) { return c.hex; });
-      var digest = ('00000000' + hashSeed(JSON.stringify(ledger)).toString(16)).slice(-8);
-      window.Liber.state.addArtifact('garden', {
-        kind: 'seed',
-        name: given || 'a seed',
-        gemPalette: palette,
-        pattern: { points: ledger.slice(), digest: digest },
-        bloom: null
-      });
-      closeDraft('planted in the bed. it opens when you visit.');
-    }
+    var shot = null;
+    try { shot = 'data:image/svg+xml;utf8,' + encodeURIComponent(svg); } catch (e) {}
+    window.Liber.state.addArtifact('satchel', {
+      kind: 'gem-draft',
+      name: given || 'a draft of colouring',
+      svg: svg,
+      shot: shot,
+      points: pourLedgerCount(),
+      ts: Date.now()
+    });
+    var palette = GEM_COLORS.map(function (c) { return c.hex; });
+    var digest = ('00000000' + hashSeed(JSON.stringify(ledger)).toString(16)).slice(-8);
+    window.Liber.state.addArtifact('garden', {
+      kind: 'seed',
+      name: given || 'a seed',
+      gemPalette: palette,
+      pattern: { points: ledger.slice(), digest: digest },
+      shot: shot,
+      bloom: null
+    });
+    closeDraft('planted in the bed. a new empty stone waits below.');
+    scrambleGem();
+    renderBed();
     chime();
   }
 
@@ -449,13 +396,13 @@
     if (!list.length) {
       var empty = document.createElement('div');
       empty.className = 'garden-empty';
-      empty.textContent = 'the bed is empty. settle a gem, then plant its draft here.';
+      empty.textContent = 'the bed is empty. fill a gem above and plant it here.';
       plotsEl.appendChild(empty);
       var gi;
       for (gi = 1; gi <= 3; gi++) {
         var ghost = document.createElement('div');
         ghost.className = 'garden-ghost';
-        ghost.textContent = 'an empty pot — settle a gem to plant here';
+        ghost.textContent = 'an empty patch of soil — fill a gem to plant here';
         plotsEl.appendChild(ghost);
       }
       return;
@@ -463,7 +410,7 @@
     for (var i = 0; i < list.length; i++) {
       (function (entry) {
         var row = document.createElement('div');
-        row.className = 'garden-plot';
+        row.className = 'garden-plot' + (entry.painted ? ' grown' : '');
         row.setAttribute('data-seed', entry.id);
         var tint = document.createElement('div');
         tint.className = 'garden-plot-tint';
@@ -472,6 +419,9 @@
         if (tintHex) tint.style.background = tintHex;
         var pot = document.createElement('div');
         pot.className = 'garden-pot';
+        var sprout = document.createElement('div');
+        sprout.className = 'garden-sprout';
+        sprout.setAttribute('aria-hidden', 'true');
         var name = document.createElement('div');
         name.className = 'garden-plot-name';
         name.textContent = entry.name || 'a seed';
@@ -479,6 +429,7 @@
         meta.className = 'garden-plot-meta';
         meta.textContent = 'sown ' + fmtDate(entry.ts || Date.now()) + ' · ' + bloomState(entry);
         row.appendChild(pot);
+        row.appendChild(sprout);
         row.appendChild(name);
         row.appendChild(meta);
         row.appendChild(tint);
@@ -872,6 +823,40 @@
     if (room === 'bed') renderBed();
   }
 
+  // the watering can: drag it onto a plot to open the colouring window.
+  // Pointer-based (reliable file://); plots also open on plain click.
+  function wireCan() {
+    var can = document.getElementById('garden-can');
+    if (!can || !plotsEl) return;
+    var ghost = null;
+    function moveGhost(ev) {
+      if (!ghost) return;
+      ghost.style.left = ev.clientX + 'px';
+      ghost.style.top = ev.clientY + 'px';
+    }
+    function up(ev) {
+      document.removeEventListener('pointermove', moveGhost);
+      document.removeEventListener('pointerup', up);
+      if (ghost && ghost.parentNode) ghost.parentNode.removeChild(ghost);
+      ghost = null;
+      var el = null;
+      try { el = document.elementFromPoint(ev.clientX, ev.clientY); } catch (e) {}
+      var plot = el && el.closest ? el.closest('.garden-plot') : null;
+      if (plot && plot.getAttribute('data-seed')) openFlower(plot.getAttribute('data-seed'));
+    }
+    can.addEventListener('pointerdown', function (e) {
+      e.preventDefault();
+      ghost = document.createElement('div');
+      ghost.className = 'garden-can-ghost';
+      ghost.innerHTML = can.innerHTML;
+      ghost.style.left = e.clientX + 'px';
+      ghost.style.top = e.clientY + 'px';
+      document.body.appendChild(ghost);
+      document.addEventListener('pointermove', moveGhost);
+      document.addEventListener('pointerup', up);
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     var newGem = document.getElementById('garden-gem-new');
     if (newGem) newGem.addEventListener('click', scrambleGem);
@@ -895,14 +880,12 @@
     if (riasonClose) riasonClose.addEventListener('click', closeRiason);
     if (riason) riason.addEventListener('click', function (e) { if (e.target === riason) closeRiason(); });
 
-    var keep = document.getElementById('garden-draft-keep');
     var plant = document.getElementById('garden-draft-plant');
     var draftClose = document.getElementById('garden-draft-close');
-    if (keep) keep.addEventListener('click', function () { saveDraft('satchel'); });
-    if (plant) plant.addEventListener('click', function () { saveDraft('garden'); });
+    if (plant) plant.addEventListener('click', function () { saveDraft(); });
     var draftName = document.getElementById('garden-draft-name');
     if (draftName) draftName.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') { e.preventDefault(); saveDraft('satchel'); }
+      if (e.key === 'Enter') { e.preventDefault(); saveDraft(); }
     });
     if (draftClose) draftClose.addEventListener('click', function () { closeDraft('the draft faded. begin a new gem when ready.'); });
     var draft = document.getElementById('garden-draft');
@@ -920,6 +903,7 @@
       window.Liber.state.on('change', function () { renderBed(); });
     }
 
+    wireCan();
     showRoom('gem');
     scrambleGem();
     renderBed();

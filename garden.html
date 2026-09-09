@@ -53,7 +53,7 @@
                     <button class="garden-raison-close" type="button" id="garden-raison-close" aria-label="close">×</button>
                   </div>
                   <div class="garden-raison-body">
-                    two small plots share this room. the gem arrives jumbled — pour colour from the wells, settle every facet into its own shade, and the path your hands took becomes a draft: keep it in the satchel, or plant it in the bed. planted seeds open into ink-drawn flowers. paint them and the garden learns their colours. grow slow. nothing here needs winning.
+                    fill the empty stone from the wells, then plant it — saving plants it in the bed below. drag the watering can onto a sprout to colour it. grow slow. nothing here needs winning.
                   </div>
                 </div>
               </div>
@@ -68,8 +68,7 @@
                   <div class="garden-draft-view" id="garden-draft-view"></div>
                   <input type="text" class="garden-input" id="garden-draft-name" maxlength="40" aria-label="name the draft, or leave it be"/>
                   <div class="garden-draft-actions">
-                    <button type="button" class="garden-action" id="garden-draft-keep">keep it in the satchel</button>
-                    <button type="button" class="garden-action" id="garden-draft-plant">plant it as a seed</button>
+                    <button type="button" class="garden-action" id="garden-draft-plant">plant it</button>
                   </div>
                 </div>
               </div>
@@ -96,6 +95,20 @@
               </div>
 
               <div class="garden-room garden-room-bed" id="garden-room-bed" inert>
+                <div class="garden-bed-head">
+                  <span class="garden-bed-title">the bed</span>
+                  <span class="garden-bed-hint">drag the can onto a sprout to colour it</span>
+                  <span class="garden-can" id="garden-can" role="button" tabindex="0" aria-label="watering can — drag onto a sprout">
+                    <svg viewBox="0 0 48 40" width="44" height="38" aria-hidden="true">
+                      <path d="M10 16 h20 v16 h-20 Z" fill="#7a9ab0" stroke="#2a3a44" stroke-width="2"/>
+                      <path d="M30 20 L42 10" stroke="#7a9ab0" stroke-width="4" stroke-linecap="round"/>
+                      <path d="M8 16 C4 16 4 26 8 26" fill="none" stroke="#7a9ab0" stroke-width="3"/>
+                      <circle cx="42" cy="32" r="1.6" fill="#7ac0e0"/>
+                      <circle cx="45" cy="35" r="1.6" fill="#7ac0e0"/>
+                      <circle cx="39" cy="36" r="1.6" fill="#7ac0e0"/>
+                    </svg>
+                  </span>
+                </div>
                 <div class="garden-plots" id="garden-plots"></div>
                 <div class="garden-stage" id="garden-stage" inert></div>
                 <div class="garden-butterflies" aria-hidden="true">

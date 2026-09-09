@@ -38,10 +38,8 @@ window.LIBER_DATA.hijack = {
     { voice: 'riason', line: 'this is the dreams room. record first.', target: 'dreams-title-input', glow: true }
   ] },
   garden: { flag: 'walkGarden', steps: [
-    { voice: 'riason', line: 'click a well, fill the slots, pour onto the stone. seventeen facets.', target: 'garden-gem-svg' },
-    { voice: 'riason', line: 'finish it and the draft asks: satchel, or plant it in the bed.', target: 'garden-tab-bed' },
-    { voice: 'riason', line: 'finish one gem before starting another.', target: null },
-    { voice: 'riason', line: 'this is the garden. finish the gem in front of you.', target: 'garden-gem-new', glow: true }
+    { voice: 'riason', line: 'Welcome to Ruby\u2019s Garden! Here you can engage in relaxing paint-by-numbers, water your creations, watch them grow!', target: 'garden-room-gem' },
+    { voice: 'riason', line: 'I like Ruby\u2019s app, its really easy. You don\u2019t need me here, I am going to go color in the void..', target: 'garden-plots', glow: true }
   ] },
   games: { flag: 'walkGames', steps: [
     { voice: 'riason', line: 'Five games, every one keeps. Pick one on the left.', target: 'games-grid' },
