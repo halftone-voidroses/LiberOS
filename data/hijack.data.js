@@ -7,7 +7,11 @@
 // mechanics, meaning, close. Brief, skippable, never twice.
 window.LIBER_DATA = window.LIBER_DATA || {};
 window.LIBER_DATA.hijack = {
-  satchel: { flag: 'walkSatchel', steps: [
+  buddy: { flag: 'walkBuddy', steps: [
+    { voice: 'riason', line: 'Welcome to LiberChat, this allows you to talk to your buddy.', target: 'chat-users' },
+    { voice: 'riason', line: 'I\u2019m not sure who that other user is, but perhaps when you use this more more people will show up..', target: 'chat-log' },
+    { voice: 'riason', line: 'Just find them on the left and say hello. The conversation stays on this device \u2014 nothing you say leaves the room.', target: 'chat-input', glow: true }
+  ] },  satchel: { flag: 'walkSatchel', steps: [
     { voice: 'riason', line: 'Welcome to the satchel, my handiwork. Hem hem.', target: 'satchel-drawers' },
     { voice: 'riason', line: 'Anyway, when you save relations, buddies, or set relations they get logged in the satchel, and you are able to write notes about them.', target: 'satchel-list' },
     { voice: 'riason', line: 'Clicking on a category brings up the list you created, you can take notes on the right.', target: 'satchel-note' },

@@ -62,7 +62,34 @@
     if (window.Liber && window.Liber.carvings) window.Liber.carvings.setActive(theme);
   }
 
+  // LiberChat check-ins, everywhere: about every ten minutes of tool use,
+  // if a buddy exists, Buddy queues a line and raises the chat badge. The
+  // text resolves at flush time (buddy.html), so rooms without the word
+  // hoard can still deliver. One line per due window, never a pile.
+  var CHAT_TICK_MS = 60000;
+  var CHAT_DUE_MS = 10 * 60 * 1000;
+
+  function chatTick() {
+    try {
+      var st = (window.Liber && window.Liber.state) || null;
+      if (!st) return;
+      var s = st.get() || {};
+      if (!s.tutorialDone) return;
+      var stones = ((s.buddy || []).filter(function (e) { return e && e.kind === 'stone'; }));
+      if (!stones.length) return;
+      var chat = s.chat || {};
+      if (Date.now() - (chat.lastBuddyMsg || 0) < CHAT_DUE_MS) return;
+      var inbox = (chat.inbox || []).slice();
+      inbox.push({ from: 'buddy', at: Date.now() });
+      var unread = Object.assign({}, chat.unread);
+      unread.buddy = (unread.buddy || 0) + 1;
+      st.set({ chat: Object.assign({}, chat, { inbox: inbox, unread: unread, lastBuddyMsg: Date.now() }) });
+    } catch (e) {}
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
+    chatTick();
+    try { setInterval(chatTick, CHAT_TICK_MS); } catch (e) {}
     if (window.Liber && window.Liber.state) {
       var s = window.Liber.state.get() || {};
       var m = document.querySelector('.machine');

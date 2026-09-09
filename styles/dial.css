@@ -486,3 +486,24 @@
     linear-gradient(180deg, #181008 0%, #0a0603 100%);
   border-color: #5a4028;
 }
+
+/* unread badge for the chat tile — a small wax-red count. */
+.dial-option { position: relative; }
+
+.dial-badge {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  min-width: 18px;
+  height: 18px;
+  line-height: 18px;
+  text-align: center;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 0.95rem;
+  color: #fff;
+  background: #c04a58;
+  border-radius: 9px;
+  padding: 0 4px;
+  box-shadow: 0 0 8px rgba(192, 74, 88, 0.8);
+  pointer-events: none;
+}

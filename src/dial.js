@@ -214,8 +214,17 @@ function renderOption(v, pos, sigilLocked, visitedMap) {
     btn.style.setProperty('--mote-color', mote.color);
     btn.style.setProperty('--mote-round', mote.round);
     var motesHtml = '<span class="dial-motes" aria-hidden="true"><i></i><i></i><i></i><i></i></span>';
+    var badgeHtml = '';
+    if (v.id === 'buddy') {
+      try {
+        var gs = (window.Liber && window.Liber.state && window.Liber.state.get()) || {};
+        var n = ((gs.chat || {}).unread || {}).buddy || 0;
+        if (n > 0) badgeHtml = '<span class="dial-badge" aria-hidden="true">' + Math.min(n, 9) + '</span>';
+      } catch (e) {}
+    }
     btn.innerHTML = '<span class="phos-label">' + v.name + '</span>'
       + '<span class="dial-glyph"><svg viewBox="0 0 12 12" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true">' + b.svg + (b.mark || '') + '</svg></span>'
+      + badgeHtml
       + motesHtml;
     var p = PERSONAS[v.id];
     if (p && p.cursor && !(v.id === 'sigil' && sigilLocked)) {

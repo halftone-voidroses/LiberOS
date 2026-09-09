@@ -236,6 +236,65 @@
     if (sealBtn) sealBtn.disabled = true;
   }
 
+  // ── unlocks, teasers, inbox ───────────────────────────────────────
+  // Vanir joins once the room holds enough kept work; further ??? slots
+  // tease future users (data-only additions later via registerUser).
+
+  var UNLOCK_AT = 3;
+  var TEASERS = 2;
+
+  function artifactCount() {
+    var s = (st() && st().get()) || {};
+    var kinds = ['buddy', 'divination', 'games', 'sea', 'learn', 'garden', 'dreams', 'satchel'];
+    var n = 0;
+    for (var i = 0; i < kinds.length; i++) {
+      if (Array.isArray(s[kinds[i]])) n += s[kinds[i]].length;
+    }
+    return n + ((s.relations || []).length);
+  }
+
+  function unlocked() {
+    var s = (st() && st().get()) || {};
+    var list = (((s.chat || {}).unlocked) || []).slice();
+    if (artifactCount() >= UNLOCK_AT && list.indexOf('vanir') === -1) {
+      list.push('vanir');
+      var chat = Object.assign({}, s.chat);
+      chat.unlocked = list;
+      st().set({ chat: chat });
+    }
+    return list;
+  }
+
+  function paintTeasers() {
+    if (!usersEl) return;
+    var olds = usersEl.querySelectorAll('.chat-user.locked');
+    for (var i = olds.length - 1; i >= 0; i--) olds[i].remove();
+    for (var k = 0; k < TEASERS; k++) {
+      var b = document.createElement('div');
+      b.className = 'chat-user locked';
+      b.innerHTML = '<span class="dot"></span><span>??? — keep saving artifacts</span>';
+      usersEl.appendChild(b);
+    }
+  }
+
+  function flushInbox() {
+    var s = (st() && st().get()) || {};
+    var chat = s.chat || {};
+    var box = chat.inbox || [];
+    if (!box.length || !users.buddy) return;
+    var def = (window.LiberAIML && window.LiberAIML.buddy) || {};
+    var notes = def.checkins || [];
+    var was = currentId;
+    currentId = 'buddy';
+    for (var i = 0; i < box.length; i++) {
+      var line = notes.length ? notes[(i + users.buddy.log.length) % notes.length] : 'Still here. What surfaced?';
+      users.buddy.log.push({ who: 'buddy', text: line, at: stamp() });
+    }
+    var fresh = Object.assign({}, chat, { inbox: [] });
+    st().set({ chat: fresh });
+    currentId = was;
+  }
+
   // public surface for later phases (Vanir, unlocks, check-ins)
   window.LiberChat = {
     register: registerUser,
@@ -270,6 +329,18 @@
         aiml: window.LiberAIML.buddy
       });
     }
+    var open = unlocked();
+    if (open.indexOf('vanir') !== -1 && window.LiberAIML && window.LiberAIML.vanir) {
+      registerUser({
+        id: 'vanir',
+        name: 'Vanir',
+        color: '#4aa8c8',
+        topic: 'LiberChat — Vanir holds the deep. No evasion.',
+        aiml: window.LiberAIML.vanir
+      });
+    }
+    renderLocked = paintTeasers;
+    flushInbox();
     if (order.length) switchTo(order[0]);
 
     if (sendBtn) sendBtn.addEventListener('click', send);

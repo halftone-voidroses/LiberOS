@@ -69,6 +69,7 @@ window.LiberAIML.buddy = {
     { p: 'NO', t: ['No is a complete sentence here. What is it refusing?', 'No. Good — what would yes cost you?'] },
     { p: 'OK', t: ['Okay. Where does that leave us?', 'Okay. What is underneath the okay?'] },
     { p: 'OKAY', srai: 'OK' },
+    { p: 'FINE', t: ['“Fine” tells me nothing and you know it. One real word.', 'Fine like still water, or fine like a held breath?'] },
     { p: 'SORRY', t: ['Nothing to forgive here. What were you really saying?', 'Do not apologize to the wax. Just tell it.'] },
     { p: 'PLEASE', t: ['Please what? Ask it plainly.', 'You do not need manners here. Say the need.'] },
     // ── names ──

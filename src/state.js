@@ -40,6 +40,7 @@
     arcShownFor: 0,          // sessionStart the sea-arc line was shown for (once per visit)
     bests: {},               // per-booth personal bests { boothId: value } (WS5)
     ambient: null,           // per-visit ambient prompt bookkeeping { seed, fired: [] }
+    chat: null,              // LiberChat: { unread: {Buddy: n}, unlocked: [], pred: {}, lastBuddyMsg: 0, inbox: [] }
   };
 
   function load() {

@@ -621,6 +621,13 @@ function loadGhost(bitmapDataUrl) {
         tags: tags
       });
       setStone(arr);
+      try {
+        var g0 = window.Liber.state.get() || {};
+        var ch0 = Object.assign({}, g0.chat);
+        ch0.unread = Object.assign({}, ch0.unread);
+        ch0.unread.buddy = (ch0.unread.buddy || 0) + 1;
+        window.Liber.state.set({ chat: ch0 });
+      } catch (e0) {}
       signedUI();
       advanceStoneStage();
     }
