@@ -26,6 +26,7 @@
   left: 50%;
   top: 118px; /* hugs the top of the monitor, under the twelve-works frieze — keeps the centre clear for the ? */
   transform: translateX(-50%);
+  max-width: 46%; /* narrow screens: wrap instead of reaching the side panels */
   text-align: center;
   font-family: Georgia, 'Times New Roman', serif;
   font-style: italic;
@@ -48,6 +49,28 @@
   font-style: normal;
   font-weight: 700;
   font-size: 1.1em;
+}
+
+/* Mid widths: the center gap fits ~180px, so the invitation wraps
+   instead of reaching the side panels. Wide screens are unaffected. */
+@media (max-width: 1280px) and (min-width: 1001px) {
+  .constellation-empty {
+    max-width: 170px;
+  }
+}
+
+/* Narrow screens: the side panels close in, so the invitation tucks
+   into the clear pocket under the notes — left column, above the dial. */
+@media (max-width: 1000px) {
+  .constellation-empty {
+    left: 6%;
+    transform: none;
+    text-align: left;
+    top: auto;
+    bottom: 5%;
+    max-width: 34%;
+    font-size: 0.85rem;
+  }
 }
 
 .constellation-sigil {
