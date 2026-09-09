@@ -98,11 +98,11 @@ sassert(chatGone, 'summon ? should be removed in flow')
 await shot('smoke-01-cutscene-arise')
 
 console.log('5. Walk opening beats until Riason takes the stone room')
-for (let i = 0; i < 16; i++) {
+for (let i = 0; i < 24; i++) {
   if (await page.evaluate(() => location.href.includes('sigil.html'))) break
   await clickBeat()
 }
-await page.waitForURL('**/sigil.html', { timeout: 15000 })
+await page.waitForURL('**/sigil.html', { timeout: 30000 })
 console.log('   stone room, Riason demo running')
 await shot('smoke-02-demo')
 

@@ -65,8 +65,8 @@ await goto('/settings.html')
 const c3b = await page.evaluate(() => document.body.innerHTML.includes('anywhere to toggle the overdrive'));
 check('no "extc anywhere" copy on settings', !c3b);
 
-// ─── C2: trash graveyard round-trip + confirm labels ──────────────────
-console.log('C2 — trash graveyard')
+// ─── C2: trash re-add loop + confirm labels ───────────────────────────
+console.log('C2 — trash re-add')
 await goto('/trash.html')
 await page.evaluate(() => {
   window.Liber.state.set({ sigils: [{ id: 'sigil-1', intention: 'fear of the dark', ts: Date.now() }] });
@@ -78,7 +78,7 @@ const labels = await page.evaluate(() => ({
   discard: document.getElementById('trash-save-prompt-discard').textContent.trim(),
 }));
 check('confirm labels are bury it / not yet', labels.keep === 'bury it' && labels.discard === 'not yet', JSON.stringify(labels));
-await page.click('#trash-bury-sigils');
+await page.click('#trash-bury-all');
 await page.click('#trash-save-prompt-keep');
 await page.waitForTimeout(200);
 const buried = await page.evaluate(() => ({
@@ -86,15 +86,22 @@ const buried = await page.evaluate(() => ({
   gy: window.Liber.state.get().graveyard.length,
   rows: document.querySelectorAll('.trash-dig-row').length,
 }));
-check('bury moves sigils to graveyard', buried.sigils === 0 && buried.gy === 1 && buried.rows === 1, JSON.stringify(buried));
-await page.click('.trash-dig-btn');
-await page.waitForTimeout(200);
-const dug = await page.evaluate(() => ({
-  sigils: window.Liber.state.get().sigils.length,
-  gy: window.Liber.state.get().graveyard.length,
-  intent: (window.Liber.state.get().sigils[0] || {}).intention,
-}));
-check('dig it up restores the artifact', dug.sigils === 1 && dug.gy === 0 && dug.intent === 'fear of the dark', JSON.stringify(dug));
+check('bury moves sigils to trash queue', buried.sigils === 0 && buried.gy === 2 && buried.rows === 2, JSON.stringify(buried));
+await page.fill('.trash-dig-row .trash-why', 'it still protects me');
+await page.click('.trash-dig-row .trash-readd-btn');
+await page.waitForTimeout(300);
+const readded = await page.evaluate(() => {
+  const s = window.Liber.state.get();
+  const stones = (s.buddy || []).filter(e => e && e.kind === 'stone');
+  const rel = (s.relations || []).find(r => r.verb === 'it still protects me');
+  const sat = (s.satchel || []).find(a => a.kind === 'kept-reason');
+  return {
+    stones: stones.length, gy: s.graveyard.length,
+    rel: !!rel, relTo: rel ? rel.to : null,
+    sat: !!sat, satVerb: rel ? rel.verb : null
+  };
+});
+check('re-add restores orbit + reason satellite relation', readded.stones === 1 && readded.gy === 1 && readded.rel && readded.sat, JSON.stringify(readded));
 
 // ─── C1: sea release ritual ───────────────────────────────────────────
 console.log('C1 — sea release ritual')

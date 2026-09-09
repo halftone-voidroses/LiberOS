@@ -99,7 +99,7 @@
     if (!graveyard.length) {
       var empty = document.createElement('div');
       empty.className = 'trash-dig-empty';
-      empty.textContent = 'nothing buried. bury things to remove them; dig to bring them back.';
+      empty.textContent = 'nothing buried. released things land here; say why to bring one back.';
       list.appendChild(empty);
       return;
     }
@@ -111,25 +111,58 @@
         var label = document.createElement('span');
         label.className = 'trash-dig-label';
         label.textContent = labelFor(gy);
+        var why = document.createElement('input');
+        why.type = 'text';
+        why.className = 'trash-why';
+        why.maxLength = 140;
+        why.setAttribute('aria-label', 'why bring it back');
+        why.placeholder = 'why bring it back?';
+        why.spellcheck = false;
+        why.autocomplete = 'off';
         var btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = 'trash-action trash-dig-btn';
-        btn.textContent = 'dig it up';
+        btn.className = 'trash-action trash-readd-btn';
+        btn.textContent = 're-add it';
         btn.addEventListener('click', function () {
           if (!st()) return;
-          var cur = st().get().graveyard || [];
-          if (idx >= cur.length) return;
-          readdToState(cur[idx]);
-          st().set({ graveyard: cur.filter(function (_, n) { return n !== idx; }) });
-          flash('it returns.');
-          renderDigList();
-          if (window.Liber && window.Liber.sound) window.Liber.sound.play('chime');
+          var reason = (why.value || '').trim();
+          if (!reason) {
+            why.focus();
+            flash('say why first — the reason rides back with it.');
+            return;
+          }
+          readdWithReason(idx, reason);
         });
         row.appendChild(label);
+        row.appendChild(why);
         row.appendChild(btn);
         list.appendChild(row);
       })(i);
     }
+  }
+
+  // re-adding restores the artifact to orbit and binds its reason as a
+  // satellite: a kept note orbiting the artifact as a new relation.
+  function readdWithReason(idx, why) {
+    if (!st()) return;
+    var cur = st().get().graveyard || [];
+    if (idx >= cur.length) return;
+    var gy = cur[idx];
+    readdToState(gy);
+    st().set({ graveyard: cur.filter(function (_, n) { return n !== idx; }) });
+    if (gy.kind !== 'tour' && gy.entry && gy.entry.id) {
+      var sid = 'sat-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
+      var short = why.length > 60 ? why.substring(0, 60) + '...' : why;
+      if (st().addArtifact) {
+        st().addArtifact('satchel', { id: sid, kind: 'kept-reason', name: short, text: why, ts: Date.now() });
+      }
+      if (st().bindRelation) {
+        try { st().bindRelation(sid, short, gy.entry.id); } catch (e) {}
+      }
+    }
+    flash('it returns — with its reason riding alongside.');
+    renderDigList();
+    if (window.Liber && window.Liber.sound) { try { window.Liber.sound.play('chime'); } catch (e) {} }
   }
 
   function openBuryPrompt() {
@@ -137,7 +170,7 @@
     var body = document.getElementById('trash-save-prompt-body');
     if (prompt && body) {
       pendingBury = { kind: 'all' };
-      body.innerHTML = 'bury <em>everything</em>? the soil keeps it all. dig it up later.';
+        body.innerHTML = 'bury <em>everything</em>? the soil keeps it all. re-add it later, with a reason.';
       prompt.classList.add('open');
       prompt.removeAttribute('inert');
     } else {

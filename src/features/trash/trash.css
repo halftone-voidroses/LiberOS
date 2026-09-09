@@ -717,3 +717,29 @@
 .trash-app ::-webkit-scrollbar-thumb, .trash-app::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #a88858 0%, #2c2318 100%); border-radius: 6px; border: 2px solid rgba(0, 0, 0, 0.45); }
 .trash-app ::-webkit-scrollbar-thumb:hover { filter: brightness(1.25); }
 .trash-app, .trash-app * { scrollbar-width: thin; scrollbar-color: #a88858 rgba(0, 0, 0, 0.35); }
+
+/* re-add rows: the label, a reason line, and the bring-back button. */
+
+.trash-dig-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.trash-why {
+  flex: 1;
+  min-width: 140px;
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(168, 136, 88, 0.5);
+  color: #e8d8b8;
+  border-radius: 4px;
+  padding: 4px 8px;
+}
+
+.trash-why:focus { outline: none; border-color: #e8c890; }
+
+.trash-readd-btn { white-space: nowrap; }

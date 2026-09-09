@@ -48,9 +48,8 @@ window.LIBER_DATA.hijack = {
     { voice: 'riason', line: 'This is Whimsy\u2019s tent. Everything kept lands in the satchel.', target: 'games-grid', glow: true }
   ] },
   trash: { flag: 'walkTrash', steps: [
-    { voice: 'riason', line: 'what you bury lands here. nothing is gone, only buried.', target: 'trash-dig-list' },
-    { voice: 'riason', line: 'bury to release, dig to restore. mind the labels.', target: 'trash-bury-buddy' },
-    { voice: 'riason', line: 'what you bury, i keep. dig it back any time.', target: null },
-    { voice: 'riason', line: 'this is the trash room. buried things can be dug back up.', target: 'trash-dig-list', glow: true }
+    { voice: 'riason', line: 'What you bury lands here. Nothing is gone, only underground.', target: 'trash-dig-list' },
+    { voice: 'riason', line: 'To bring one back, say why. The reason matters more than the thing.', target: 'trash-dig-list' },
+    { voice: 'riason', line: 'Say it plainly and it returns to orbit — with your reason riding alongside as a new relation.', target: null, glow: true }
   ] }
 };

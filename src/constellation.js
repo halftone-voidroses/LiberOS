@@ -351,13 +351,16 @@
     if (!selectedArtifact) return;
     var id = selectedArtifact.data.id;
     var kind = selectedArtifact.kind;
+    var data = selectedArtifact.data;
     if (window.Liber && window.Liber.state) {
       if (window.Liber.state.releaseArtifact) window.Liber.state.releaseArtifact(kind, id);
       if (window.Liber.state.unbindRelation) window.Liber.state.unbindRelation(id);
       try {
         var st = window.Liber.state.get() || {};
         var rels = (st.relations || []).filter(function (r) { return (r.to || 'buddy') !== id; });
-        window.Liber.state.set({ relations: rels });
+        var grave = (st.graveyard || []).slice();
+        grave.push({ kind: kind, entry: data, buriedAt: Date.now(), from: 'released' });
+        window.Liber.state.set({ relations: rels, graveyard: grave });
       } catch (e) {}
     }
     if (window.Liber && window.Liber.sound) window.Liber.sound.play('thunk');

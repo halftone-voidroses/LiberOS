@@ -1,5 +1,17 @@
 # LiberOS changelog
 
+## 2.4.0 — letters, LiberChat, new games, garden rework
+### New
+- Summoning ritual: each line now rains letter by letter with landing sounds, in a brighter palette (white-pink, gold, violet, near-white).
+- Satchel rebuilt as a filing cabinet: buddy / artifacts / relations drawers on the left third, a large persistent note page on the right, pen dock (highlighter + coloured pencils), click-a-highlight comment popovers, polaroid pictures for visual artifacts.
+- LiberChat: the chat room is now a terminal/IRC window with a user list. AIML engine (wildcards, srai, random, predicates, that/topic) replaces ELIZA. Buddy ships with a 100+ category mind; Vanir (blue, challenging, shadow-pointing) unlocks at 3+ artifacts with ??? teasers for future users. Unread badge on the chat tile, periodic Buddy check-ins, per-user seal flow unchanged.
+- Games rebuilt: emotion wheel (dart throws), communication mask, boundaries shield, relationship circles, powder tent (falling-sand sim). Uniform Whimsy-pitched shell; every game keeps with a polaroid.
+- Garden reworked: the gem starts empty and fills by pouring; saving auto-plants; the bed is soil rows with sprouts; drag the watering can onto a sprout to colour it.
+### Removed
+- Relations room deleted (binding engine, constellation web, and old saves untouched). Nine old booths retired with the games rebuild.
+### Changed
+- Riason walkthroughs rewritten for satchel, sea, chat, and garden; sea/chats copy kept otherwise. Vague fate lines and room help copy rewritten in clear language; the main tutorial is untouched.
+
 ## 2.3.0 — questions beside the monitor, rooms removed
 ### New
 - Desktop: a pixel-art "?" in the black space right of the monitor opens a question list; each question expands its answer below it, with the apps as a nested submenu. Hover speaks abstract's phosphor language (green bloom + blink).
