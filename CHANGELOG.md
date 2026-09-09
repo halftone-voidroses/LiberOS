@@ -1,5 +1,22 @@
 # LiberOS changelog
 
+## 2.2.0 — buddy room, designed scrolls, resolution hardening
+
+### New
+- Buddy window: tag picker is a compact dropdown with chips (no more scrolling rail); the whole stone room fits without scrolling at 1280×800.
+- Canvas: stone bitmap refits on window resize/load with the work preserved and contained (no more stretch or drift).
+- Desktop app opens maximized (windowed fullscreen) instead of small.
+- Designed scrollbars in every scrolling room, each in its persona palette (settings, satchel, dreams, relation, learn, buddy, cohort, games, garden, methodology, abstract, trash, themes, sea, divination, sigil, tutorial, desktop shell, constellation mini-menu).
+- Riason stone tour now fires during the tutorial only — no leftover tour in the buddy app afterwards.
+- Tutorial demo artifact carries Riason's drawn mark (circled star) instead of a blank card.
+- Resolution hardening: machine width clamps against viewport height, so short windows no longer clip top/bottom — verified 900×650 through 1600×1000 with zero errors.
+
+### Fixed
+- Stone-room tour gating no longer depends on post-tutorial stone absence.
+
+### Proven
+- 21-step smoke green, prompt-engine + data verifiers green, sigil/tour/resolution checks green, zero page/console errors.
+
 ## 2.1.0 — satchel web, orbits, dreams, elizabeth, tags
 
 ### New

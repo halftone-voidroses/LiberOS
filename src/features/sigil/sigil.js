@@ -292,14 +292,58 @@
     cursor.innerHTML = GLYPHS[el];
   }
 
+  var fitW = 0, fitH = 0;
+
   function initCanvas() {
     if (!canvas) return;
     var rect = canvas.getBoundingClientRect();
-    canvas.width = Math.floor(rect.width * 2);
-    canvas.height = Math.floor(rect.height * 2);
+    if (rect.width < 2 || rect.height < 2) return;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.floor(rect.width * dpr);
+    canvas.height = Math.floor(rect.height * dpr);
     ctx = canvas.getContext('2d');
-    ctx.scale(2, 2);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    fitW = rect.width;
+    fitH = rect.height;
   }
+
+  function refitCanvas() {
+    if (!canvas || !ctx) return;
+    var rect = canvas.getBoundingClientRect();
+    if (rect.width < 2 || rect.height < 2) return;
+    if (Math.abs(fitW - rect.width) < 2 && Math.abs(fitH - rect.height) < 2) return;
+    var keep = null;
+    try { keep = canvas.toDataURL('image/png'); } catch (e) {}
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var oldW = fitW || rect.width, oldH = fitH || rect.height;
+    canvas.width = Math.floor(rect.width * dpr);
+    canvas.height = Math.floor(rect.height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    fitW = rect.width;
+    fitH = rect.height;
+    undoStack = [];
+    var u = document.getElementById('sigil-undo');
+    if (u) u.classList.add('spent');
+    if (!keep) return;
+    var img = new Image();
+    img.onload = function () {
+      var sc = Math.min(rect.width / oldW, rect.height / oldH, 1);
+      var dw = oldW * sc, dh = oldH * sc;
+      ctx.save();
+      ctx.drawImage(img, 0, 0, img.width, img.height, (rect.width - dw) / 2, (rect.height - dh) / 2, dw, dh);
+      ctx.restore();
+    };
+    img.src = keep;
+  }
+
+  var refitTimer = null;
+  window.addEventListener('resize', function () {
+    if (refitTimer) clearTimeout(refitTimer);
+    refitTimer = setTimeout(refitCanvas, 200);
+  });
+  window.addEventListener('load', function () {
+    setTimeout(refitCanvas, 400);
+  });
 
   function pos(e) {
     var rect = canvas.getBoundingClientRect();
@@ -471,32 +515,64 @@ function loadGhost(bitmapDataUrl) {
     return ['shadow', 'anima', 'animus', 'persona', 'self', 'ego', 'trickster', 'wise old', 'great mother', 'puer', 'senex', 'hero'];
   }
   function buildTagGrid(selected) {
-    var grid = document.getElementById('sigil-tags-grid');
-    if (!grid) return;
-    grid.innerHTML = '';
+    var sel = document.getElementById('sigil-tags-select');
+    var chips = document.getElementById('sigil-tags-chips');
+    if (!sel || !chips) return;
+    sel.innerHTML = '';
+    var hint = document.createElement('option');
+    hint.value = '';
+    hint.textContent = '+ add tag…';
+    sel.appendChild(hint);
     var tags = buddyTags();
-    var sel = selected || [];
     for (var i = 0; i < tags.length; i++) {
+      var o = document.createElement('option');
+      o.value = tags[i];
+      o.textContent = tags[i];
+      sel.appendChild(o);
+    }
+    sel.value = '';
+    setSelectedTags(selected || []);
+    if (!sel.dataset.wired) {
+      sel.dataset.wired = '1';
+      sel.addEventListener('change', function () {
+        if (!sel.value) return;
+        var cur = selectedTags();
+        if (cur.indexOf(sel.value) < 0) {
+          cur.push(sel.value);
+          setSelectedTags(cur);
+        }
+        sel.value = '';
+      });
+    }
+  }
+  function setSelectedTags(list) {
+    var chips = document.getElementById('sigil-tags-chips');
+    if (!chips) return;
+    chips.innerHTML = '';
+    for (var i = 0; i < (list || []).length; i++) {
       (function (t) {
-        var b = document.createElement('button');
-        b.type = 'button';
-        b.className = 'sigil-tag' + (sel.indexOf(t) >= 0 ? ' on' : '');
-        b.textContent = t;
-        b.setAttribute('aria-pressed', sel.indexOf(t) >= 0 ? 'true' : 'false');
-        b.addEventListener('click', function () {
-          var on = b.classList.toggle('on');
-          b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        var c = document.createElement('button');
+        c.type = 'button';
+        c.className = 'sigil-tag-chip';
+        c.setAttribute('aria-label', 'remove tag ' + t);
+        c.textContent = t + ' ×';
+        c.addEventListener('click', function () {
+          var cur = selectedTags().filter(function (x) { return x !== t; });
+          setSelectedTags(cur);
         });
-        grid.appendChild(b);
-      })(tags[i]);
+        chips.appendChild(c);
+      })(list[i]);
     }
   }
   function selectedTags() {
     var out = [];
-    var grid = document.getElementById('sigil-tags-grid');
-    if (!grid) return out;
-    var btns = grid.querySelectorAll('.sigil-tag.on');
-    for (var i = 0; i < btns.length; i++) out.push(btns[i].textContent);
+    var chips = document.getElementById('sigil-tags-chips');
+    if (!chips) return out;
+    var btns = chips.querySelectorAll('.sigil-tag-chip');
+    for (var i = 0; i < btns.length; i++) {
+      var t = btns[i].textContent.replace(/\s×$/, '');
+      if (t) out.push(t);
+    }
     return out;
   }
   function setStone(arr) {
@@ -753,8 +829,7 @@ function loadGhost(bitmapDataUrl) {
     if (window.Hijack && window.Cursor) {
       var tst = (window.Liber && window.Liber.state) || null;
       var tss = tst ? tst.get() : {};
-      var stoneTour = (tss.tutorialStage === 'stone') ||
-        (tss.tutorialDone && getStone().length === 0 && !tss.walkSigil);
+      var stoneTour = (tss.tutorialStage === 'stone');
       if (stoneTour) {
         window.Hijack.run({ flag: 'walkSigil', room: 'sigil', accent: '#8acaff',
           onStep: function (idx, box) {

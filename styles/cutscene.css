@@ -475,6 +475,14 @@
   box-shadow: 0 0 24px rgba(74, 138, 170, 0.5);
   animation: artifact-rise 0.9s ease-out;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.demo-artifact svg {
+  width: 84px;
+  height: 84px;
+  filter: drop-shadow(0 0 8px rgba(232, 200, 144, 0.55));
 }
 .demo-artifact:hover, .demo-artifact:focus-visible { border-color: #e8c890; outline: none; }
 @keyframes artifact-rise {

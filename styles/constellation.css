@@ -282,3 +282,8 @@
 }
 .constellation-mini-target:focus { border-color: #ff69b4; }
 .constellation-satellite { pointer-events: auto; }
+.constellation-mini ::-webkit-scrollbar, .constellation-mini::-webkit-scrollbar { width: 8px; height: 8px; }
+.constellation-mini ::-webkit-scrollbar-track, .constellation-mini::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.4); border-radius: 5px; }
+.constellation-mini ::-webkit-scrollbar-thumb, .constellation-mini::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #ff69b4 0%, #4a1a2a 100%); border-radius: 5px; border: 2px solid rgba(0, 0, 0, 0.45); }
+.constellation-mini ::-webkit-scrollbar-thumb:hover { filter: brightness(1.25); }
+.constellation-mini, .constellation-mini * { scrollbar-width: thin; scrollbar-color: #ff69b4 rgba(0, 0, 0, 0.4); }

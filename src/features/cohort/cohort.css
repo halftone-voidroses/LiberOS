@@ -598,3 +598,8 @@
 @media (prefers-reduced-motion: reduce) {
   .cohort-seal-mark { transition: none; }
 }
+.cohort-app ::-webkit-scrollbar, .cohort-app::-webkit-scrollbar { width: 10px; height: 10px; }
+.cohort-app ::-webkit-scrollbar-track, .cohort-app::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.35); border-radius: 6px; }
+.cohort-app ::-webkit-scrollbar-thumb, .cohort-app::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #c04a58 0%, #3a0e14 100%); border-radius: 6px; border: 2px solid rgba(0, 0, 0, 0.45); }
+.cohort-app ::-webkit-scrollbar-thumb:hover { filter: brightness(1.25); }
+.cohort-app, .cohort-app * { scrollbar-width: thin; scrollbar-color: #c04a58 rgba(0, 0, 0, 0.35); }

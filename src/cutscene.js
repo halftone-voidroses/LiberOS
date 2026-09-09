@@ -331,7 +331,7 @@
       var box = document.createElement('div');
       box.className = 'cutscene artifactdock';
       box.id = 'cutscene';
-      box.innerHTML = '<div class="demo-artifact" id="demo-artifact" role="button" tabindex="0" aria-label="artifact"></div>' +
+      box.innerHTML = '<div class="demo-artifact" id="demo-artifact" role="button" tabindex="0" aria-label="artifact"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="34" fill="none" stroke="#e8c890" stroke-width="2.5"/><circle cx="50" cy="50" r="26" fill="none" stroke="#4a8aaa" stroke-width="1.2" stroke-dasharray="4 3"/><path d="M50 24l7.5 16.5 17.5 2-12.8 12 3.3 17.5-15.5-8.7-15.5 8.7 3.3-17.5-12.8-12 17.5-2z" fill="none" stroke="#e8c890" stroke-width="2" stroke-linejoin="round"/></svg></div>' +
         '<div class="cutscene-box riason"><div class="cutscene-voice">riason</div>' +
         '<div class="cutscene-line">You click the artifact to set its relation to the buddy.</div></div>';
       stage.appendChild(box);

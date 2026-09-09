@@ -142,6 +142,7 @@
 
 .sigil-tablet {
   flex: 1;
+  min-height: 0;
   margin: 8px 0;
   position: relative;
   background:
@@ -216,6 +217,7 @@
 
 .sigil-canvas-wrap {
   flex: 1;
+  min-height: 0;
   position: relative;
   z-index: 1;
   margin: 6px 16px 12px;
@@ -922,30 +924,32 @@
 .sigil-stage {
   flex: 2 1 0;
   min-width: 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
 }
 .sigil-rail {
   flex: 1 1 0;
   min-width: 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  overflow: hidden;
   border-left: 1px solid #6a5228;
   background: linear-gradient(180deg, rgba(20, 14, 6, 0.6) 0%, rgba(10, 7, 3, 0.6) 100%);
 }
 .sigil-tags {
-  padding: 8px 12px 4px;
+  padding: 6px 12px 2px;
 }
-.sigil-tags-grid {
+.sigil-tags-row {
   display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  margin-top: 6px;
-  max-height: 118px;
-  overflow-y: auto;
+  gap: 6px;
+  align-items: flex-start;
+  margin-top: 4px;
 }
-.sigil-tag {
+.sigil-tags-select {
+  flex: none;
+  max-width: 118px;
   background: linear-gradient(180deg, #241a0c 0%, #120c04 100%);
   border: 1px solid #6a5228;
   border-radius: 2px;
@@ -953,23 +957,30 @@
   font-family: Georgia, serif;
   font-style: italic;
   font-size: 0.82rem;
-  padding: 3px 9px;
+  padding: 3px 4px;
   cursor: pointer;
 }
-.sigil-tag.on {
-  border-color: #e8c890;
-  color: #ffe8b8;
-  box-shadow: 0 0 8px rgba(232, 200, 144, 0.45);
+.sigil-tags-select:focus-visible { outline: 2px solid #e8c890; outline-offset: 1px; }
+.sigil-tags-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-width: 0;
 }
-.sigil-tag:focus-visible { outline: 2px solid #e8c890; outline-offset: 1px; }
-.sigil-tags-hint {
+.sigil-tag-chip {
+  background: linear-gradient(180deg, #241a0c 0%, #120c04 100%);
+  border: 1px solid #e8c890;
+  border-radius: 2px;
+  color: #ffe8b8;
   font-family: Georgia, serif;
   font-style: italic;
-  font-size: 0.8rem;
-  color: #8a7050;
-  margin-top: 6px;
-  line-height: 1.4;
+  font-size: 0.78rem;
+  padding: 2px 7px;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(232, 200, 144, 0.35);
 }
+.sigil-tag-chip:hover { border-color: #ff9a8a; color: #ffc8b8; }
+.sigil-tag-chip:focus-visible { outline: 2px solid #e8c890; outline-offset: 1px; }
 .sigil-rail .sigil-intention {
   padding: 10px 12px 4px;
 }
@@ -1043,3 +1054,8 @@
   background: radial-gradient(circle, #4a8aaa 0%, #1a2a3a 70%);
   box-shadow: 0 0 16px rgba(74, 138, 170, 0.9);
 }
+.sigil-app ::-webkit-scrollbar, .sigil-app::-webkit-scrollbar { width: 10px; height: 10px; }
+.sigil-app ::-webkit-scrollbar-track, .sigil-app::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.35); border-radius: 6px; }
+.sigil-app ::-webkit-scrollbar-thumb, .sigil-app::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #8a8a98 0%, #1a1a20 100%); border-radius: 6px; border: 2px solid rgba(0, 0, 0, 0.45); }
+.sigil-app ::-webkit-scrollbar-thumb:hover { filter: brightness(1.25); }
+.sigil-app, .sigil-app * { scrollbar-width: thin; scrollbar-color: #8a8a98 rgba(0, 0, 0, 0.35); }
