@@ -1,38 +1,38 @@
+// satchel.js — Riason's filing cabinet. Three drawers (buddies, artifacts,
+// knots) on the left third; the note page on the right two thirds with a
+// large persistent editor and a dock of pens. Marks (ink colours,
+// highlighter + attached notes) persist per item. No shared imports.
+
 (function () {
-  var entry = document.getElementById('satchel-entry');
   var list = document.getElementById('satchel-list');
-  var app = document.querySelector('.satchel-app');
-  var back = document.getElementById('satchel-back-contents');
+  var drawers = document.getElementById('satchel-drawers');
+  var titleEl = document.getElementById('satchel-note-title');
+  var dateEl = document.getElementById('satchel-note-date');
+  var intentEl = document.getElementById('satchel-intention');
+  var editor = document.getElementById('satchel-editor');
+  var toolsEl = document.getElementById('satchel-tools');
+  var polaroid = document.getElementById('satchel-polaroid');
+  var pop = document.getElementById('satchel-pop');
+  var popText = document.getElementById('satchel-pop-text');
+  var popNote = document.getElementById('satchel-pop-note');
   var exit = document.getElementById('satchel-exit');
 
   function st() { return (window.Liber && window.Liber.state) || null; }
   function getS() { return (st() && st().get()) || {}; }
 
-  function getSigs() {
-    var s = getS();
-    return ((s.buddy || []).filter(function (e) { return e && e.kind === 'stone'; }));
-  }
-
-  function fmtDate(ts) {
-    var d = new Date(ts);
-    return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
-  }
-
-  function romanize(n) {
-    var map = [['M',1000],['CM',900],['D',500],['CD',400],['C',100],['XC',90],['L',50],['XL',40],['X',10],['IX',9],['V',5],['IV',4],['I',1]];
-    var s = '';
-    for (var i = 0; i < map.length; i++) {
-      while (n >= map[i][1]) { s += map[i][0]; n -= map[i][1]; }
-    }
-    return s || 'I';
-  }
-
   function esc(s) {
     return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
+  function fmtDate(ts) {
+    if (!ts) return '— —';
+    var d = new Date(ts);
+    return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
+  }
+
+  // artifact kinds gathered under the artifacts drawer (old shapes and
+  // methods included so earlier saves still open).
   var KINDS = [
-    { kind: 'buddy', label: 'sealed exchanges', get: function (s) { return (s.buddy || []).filter(function (e) { return !e || e.kind !== 'stone'; }); }, name: function (a) { return a.name || a.intention || 'sealed words'; } },
     { kind: 'divination', label: 'cards', get: function (s) { return s.divination || []; }, name: function (a) { return a.name || 'a card'; } },
     { kind: 'games', label: 'games', get: function (s) { return s.games || []; }, name: function (a) { return a.name || 'a game'; } },
     { kind: 'learn', label: 'lessons', get: function (s) { return s.learn || []; }, name: function (a) { return a.topic || 'a lesson'; } },
@@ -44,7 +44,15 @@
     { kind: 'satchel', label: 'kept in satchel', get: function (s) { return s.satchel || []; }, name: function (a) { return a.name || a.text || a.excerpt || a.kind || 'kept'; } }
   ];
 
-  function noteOf(a) { return (a && (a.annotation || a.satchelNote || a.note)) || ''; }
+  function getSigs() {
+    var s = getS();
+    return ((s.buddy || []).filter(function (e) { return e && e.kind === 'stone'; }));
+  }
+  function getSealed() {
+    var s = getS();
+    return ((s.buddy || []).filter(function (e) { return !e || e.kind !== 'stone'; }));
+  }
+
   function artifactById(id) {
     var s = getS();
     for (var i = 0; i < KINDS.length; i++) {
@@ -58,137 +66,6 @@
       if (stones[k] && stones[k].id === id) return { kind: 'stone', data: stones[k] };
     }
     return null;
-  }
-
-  var current = null;
-  var elementFilter = 'all';
-
-  function saveCurrentNote() {
-    if (!st() || !current) return;
-    var annEl = document.getElementById('satchel-annotation');
-    var text = annEl ? annEl.textContent : '';
-    if (current.type === 'stone') {
-      var s = getS();
-      var all = s.buddy || [];
-      var stones = all.filter(function (e) { return e && e.kind === 'stone'; });
-      var sealed = all.filter(function (e) { return !e || e.kind !== 'stone'; });
-      var idx = -1;
-      for (var i = 0; i < stones.length; i++) {
-        if (stones[i].id === current.id) { idx = i; break; }
-      }
-      if (idx < 0 && typeof current.idx === 'number') idx = current.idx;
-      if (idx >= 0 && stones[idx]) {
-        stones[idx] = Object.assign({}, stones[idx], { annotation: text });
-        st().set({ buddy: stones.concat(sealed) });
-      }
-    } else if (current.type === 'relation') {
-      if (st().setRelationNote) st().setRelationNote(current.id, text);
-      else {
-        var rels = (getS().relations || []).slice();
-        for (var r = 0; r < rels.length; r++) {
-          if (rels[r].from === current.id) rels[r] = Object.assign({}, rels[r], { note: text });
-        }
-        st().set({ relations: rels });
-      }
-    } else {
-      if (st().updateArtifact) st().updateArtifact(current.type, current.id, { annotation: text, satchelNote: text });
-    }
-    if (window.Liber && window.Liber.sound) { try { window.Liber.sound.play('chime'); } catch (e) {} }
-  }
-
-  function renderList() {
-    var s = getS();
-    var sigs = getSigs();
-    var relations = s.relations || [];
-    var html = '';
-    var totalArtifacts = 0;
-    for (var ci = 0; ci < KINDS.length; ci++) totalArtifacts += KINDS[ci].get(s).length;
-    html += '<div class="satchel-netline">' + sigs.length + ' sigil' + (sigs.length === 1 ? '' : 's') + ' · ' + totalArtifacts + ' artifacts · ' + relations.length + ' knots</div>';
-
-    if (sigs.length === 0 && totalArtifacts === 0) {
-      list.innerHTML = html + '<div class="satchel-empty">the satchel is empty.<br/>make a buddy first.</div>';
-      return;
-    }
-
-    if (sigs.length) {
-      var elements = [];
-      for (var e = 0; e < sigs.length; e++) {
-        var elName = sigs[e].element || 'earth';
-        if (elements.indexOf(elName) < 0) elements.push(elName);
-      }
-      html += '<div class="satchel-sect">sigils</div>';
-      html += '<div class="satchel-filters" role="group" aria-label="filter by element">';
-      html += '<button type="button" class="satchel-filter' + (elementFilter === 'all' ? ' on' : '') + '" data-el="all">all</button>';
-      for (var f = 0; f < elements.length; f++) {
-        html += '<button type="button" class="satchel-filter' + (elementFilter === elements[f] ? ' on' : '') + '" data-el="' + esc(elements[f]) + '">' + esc(elements[f]) + '</button>';
-      }
-      html += '</div>';
-      for (var i = 0; i < sigs.length; i++) {
-        var sig = sigs[i];
-        if (elementFilter !== 'all' && (sig.element || 'earth') !== elementFilter) continue;
-        var date = sig.ts ? fmtDate(sig.ts) : '—';
-        var intention = (sig.intention || '(no intention)').substring(0, 60);
-        var tags = Array.isArray(sig.tags) && sig.tags.length ? ' · ' + sig.tags.join(', ') : '';
-        var mark = noteOf(sig) ? '<span class="satchel-ann-dot" aria-hidden="true">✎</span>' : '';
-        html += '<div class="satchel-list-item" data-type="stone" data-id="' + esc(sig.id || '') + '" data-i="' + i + '">'
-              +   mark + esc(intention)
-              +   '<div class="meta">' + esc(sig.element || 'earth') + ' · ' + esc(date) + esc(tags) + '</div>'
-              + '</div>';
-      }
-    }
-
-    for (var k = 0; k < KINDS.length; k++) {
-      var arr = KINDS[k].get(s);
-      if (!arr.length) continue;
-      html += '<div class="satchel-sect">' + esc(KINDS[k].label) + '</div>';
-      for (var j = 0; j < arr.length; j++) {
-        var a = arr[j];
-        var nm = '';
-        try { nm = KINDS[k].name(a) || ''; } catch (e2) { nm = ''; }
-        nm = String(nm).substring(0, 70);
-        var dt = a.ts ? fmtDate(a.ts) : '';
-        var nn = noteOf(a) ? '<span class="satchel-ann-dot" aria-hidden="true">✎</span>' : '';
-        html += '<div class="satchel-list-item" data-type="' + esc(KINDS[k].kind) + '" data-id="' + esc(a.id || '') + '">'
-              + nn + esc(nm)
-              + '<div class="meta">' + esc(KINDS[k].kind) + (dt ? ' · ' + esc(dt) : '') + '</div>'
-              + '</div>';
-      }
-    }
-
-    if (relations.length) {
-      html += '<div class="satchel-sect">knots</div>';
-      for (var r = 0; r < relations.length; r++) {
-        var rel = relations[r];
-        var found = artifactById(rel.from);
-        var aname = found ? String(found.data.name || found.data.title || found.data.topic || found.data.intention || found.data.label || found.data.text || 'an artifact').substring(0, 60) : 'an artifact released';
-        var toName = (rel.to || 'buddy') === 'buddy' ? 'the buddy' : 'an artifact';
-        if ((rel.to || 'buddy') !== 'buddy') {
-          var tof = artifactById(rel.to);
-          if (tof) toName = String(tof.data.name || tof.data.title || tof.data.topic || tof.data.label || 'an artifact').substring(0, 40);
-        }
-        var rmark = rel.note ? '<span class="satchel-ann-dot" aria-hidden="true">✎</span>' : '';
-        html += '<div class="satchel-list-item" data-type="relation" data-id="' + esc(rel.from) + '">'
-              + rmark + esc(aname)
-              + '<div class="meta">' + esc(rel.verb || 'relates to') + ' → ' + esc(toName) + '</div>'
-              + '</div>';
-      }
-    }
-
-    list.innerHTML = html;
-
-    var filters = list.querySelectorAll('.satchel-filter');
-    for (var q = 0; q < filters.length; q++) {
-      filters[q].addEventListener('click', function () {
-        elementFilter = this.getAttribute('data-el');
-        renderList();
-      });
-    }
-    var items = list.querySelectorAll('.satchel-list-item');
-    for (var m = 0; m < items.length; m++) {
-      items[m].addEventListener('click', function () {
-        openEntry(this.getAttribute('data-type'), this.getAttribute('data-id'), this.getAttribute('data-i'));
-      });
-    }
   }
 
   function bodyOf(type, d) {
@@ -208,124 +85,440 @@
     return d.name || d.title || d.text || '';
   }
 
-  function openEntry(type, id, idx) {
-    var title = entry.querySelector('.satchel-entry-title');
-    var date = entry.querySelector('.satchel-entry-date');
-    var body = entry.querySelector('.satchel-intention');
-    var tag = entry.querySelector('.satchel-element-tag');
-    var see = document.getElementById('satchel-see-list');
-    var pn = document.getElementById('satchel-pageno');
-    var ann = document.getElementById('satchel-annotation');
-    var found = null, relFound = null;
+  var tab = 'buddy';
+  var current = null; // { tab, type, id, idx }
+  var saveTimer = null;
 
+  // ── pens ──────────────────────────────────────────────────────────────
+
+  var PENS = [
+    { id: 'hl', name: 'highlighter', hl: true, color: '#f0dc5a' },
+    { id: 'red', name: 'red', color: '#b03030' },
+    { id: 'blue', name: 'blue', color: '#2a5aaa' },
+    { id: 'green', name: 'green', color: '#2a7a3a' },
+    { id: 'violet', name: 'violet', color: '#7a3aaa' }
+  ];
+  var activePen = null;
+
+  function penSvg(p) {
+    if (p.hl) {
+      return '<svg width="26" height="44" viewBox="0 0 26 44" aria-hidden="true">'
+        + '<path d="M8 2h10v22H8z" fill="' + p.color + '" stroke="#5a4a10"/>'
+        + '<path d="M8 24h10l-5 8z" fill="#e8e0c8" stroke="#5a4a10"/>'
+        + '<path d="M11 32h4v10h-4z" fill="#3a2a10"/></svg>';
+    }
+    return '<svg width="22" height="46" viewBox="0 0 22 46" aria-hidden="true">'
+      + '<path d="M7 2h8v26H7z" fill="' + p.color + '" stroke="#2a1a08"/>'
+      + '<path d="M7 28h8l-4 9z" fill="#e0c9a0" stroke="#2a1a08"/>'
+      + '<path d="M10 37h2l-1 4z" fill="#2a2a2a"/></svg>';
+  }
+
+  function buildTools() {
+    if (!toolsEl) return;
+    toolsEl.innerHTML = '';
+    PENS.forEach(function (p) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'satchel-pen';
+      b.setAttribute('aria-label', p.name);
+      b.setAttribute('aria-pressed', 'false');
+      b.innerHTML = penSvg(p) + '<span class="satchel-pen-name">' + p.name + '</span>';
+      b.addEventListener('click', function () {
+        if (activePen === p.id) { setPen(null); return; }
+        setPen(p.id);
+        applyPenToSelection();
+      });
+      toolsEl.appendChild(b);
+    });
+  }
+
+  function setPen(id) {
+    activePen = id;
+    var btns = toolsEl ? toolsEl.querySelectorAll('.satchel-pen') : [];
+    for (var i = 0; i < btns.length; i++) {
+      var on = PENS[i] && PENS[i].id === id;
+      btns[i].classList.toggle('active', !!on);
+      btns[i].setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+  }
+
+  function penById(id) {
+    for (var i = 0; i < PENS.length; i++) if (PENS[i].id === id) return PENS[i];
+    return null;
+  }
+
+  function currentRange() {
+    try {
+      var sel = window.getSelection();
+      if (!sel || sel.rangeCount === 0) return null;
+      var r = sel.getRangeAt(0);
+      if (!editor.contains(r.commonAncestorContainer)) return null;
+      return r;
+    } catch (e) { return null; }
+  }
+
+  // wrap the range in a mark span; extractContents fallback covers ranges
+  // that split text nodes (surroundContents would throw).
+  function wrapRange(range, pen) {
+    if (!range || range.collapsed) return null;
+    var span = document.createElement('span');
+    span.className = 'smark' + (pen.hl ? ' smark-hl' : '');
+    if (pen.hl) span.setAttribute('data-hl', '1');
+    else span.setAttribute('data-c', pen.color);
+    span.style.color = pen.hl ? '' : pen.color;
+    try {
+      range.surroundContents(span);
+    } catch (e) {
+      try {
+        span.appendChild(range.extractContents());
+        range.insertNode(span);
+      } catch (e2) { return null; }
+    }
+    return span;
+  }
+
+  function applyPenToSelection() {
+    var pen = penById(activePen);
+    if (!pen || !current) { if (!current) setPen(null); return; }
+    var sp = wrapRange(currentRange(), pen);
+    if (sp) scheduleSave(false);
+    else setPen(null);
+  }
+
+  // ── lists ─────────────────────────────────────────────────────────────
+
+  function itemLabel(type, d) {
+    if (type === 'stone') return (d.intention || '(no intention)').substring(0, 60);
+    if (type === 'relation') return 'a knot';
+    return String(d.name || d.title || d.topic || d.label || (d.text || '').slice(0, 60) || type).substring(0, 60);
+  }
+
+  function metaOf(type, d) {
+    if (type === 'stone') return (d.element || 'earth') + (d.ts ? ' · ' + fmtDate(d.ts) : '');
+    if (type === 'relation') return (d.verb || 'relates to') + ' → ' + ((d.to || 'buddy') === 'buddy' ? 'the buddy' : 'an artifact');
+    return type + (d.ts ? ' · ' + fmtDate(d.ts) : '');
+  }
+
+  function collect(tabName) {
+    var s = getS();
+    if (tabName === 'buddy') {
+      var out = [];
+      var stones = getSigs();
+      for (var i = 0; i < stones.length; i++) out.push({ type: 'stone', id: stones[i].id, idx: i, data: stones[i] });
+      var sealed = getSealed();
+      for (var j = 0; j < sealed.length; j++) out.push({ type: 'buddy', id: sealed[j].id, data: sealed[j] });
+      return out;
+    }
+    if (tabName === 'relations') {
+      var rels = s.relations || [];
+      var list = [];
+      for (var r = 0; r < rels.length; r++) list.push({ type: 'relation', id: rels[r].from, data: rels[r] });
+      return list;
+    }
+    var arts = [];
+    for (var k = 0; k < KINDS.length; k++) {
+      var arr = KINDS[k].get(s);
+      for (var m = 0; m < arr.length; m++) arts.push({ type: KINDS[k].kind, id: arr[m].id, data: arr[m] });
+    }
+    return arts;
+  }
+
+  function hasMarks(d) {
+    return !!(d && ((d.marks && d.marks.length) || d.annotation || d.satchelNote || d.note));
+  }
+
+  function renderTabs() {
+    if (!drawers) return;
+    var btns = drawers.querySelectorAll('.satchel-tab');
+    for (var i = 0; i < btns.length; i++) {
+      var on = btns[i].getAttribute('data-tab') === tab;
+      btns[i].setAttribute('aria-selected', on ? 'true' : 'false');
+    }
+  }
+
+  function renderList() {
+    if (!list) return;
+    renderTabs();
+    var items = collect(tab);
+    var html = '';
+    if (!items.length) {
+      var hint = tab === 'buddy' ? 'make a buddy first.' : (tab === 'relations' ? 'bind an artifact on the desktop first.' : 'save something first.');
+      list.innerHTML = '<div class="satchel-empty">the drawer is empty.<br/>' + hint + '</div>';
+      return;
+    }
+    for (var i = 0; i < items.length; i++) {
+      var it = items[i];
+      var dot = hasMarks(it.data) ? '<span class="satchel-ann-dot" aria-hidden="true">✎</span>' : '';
+      var cur = (current && current.type === it.type && current.id === it.id) ? ' current' : '';
+      html += '<div class="satchel-list-item' + cur + '" data-type="' + esc(it.type) + '" data-id="' + esc(it.id || '') + '" data-i="' + (it.idx == null ? '' : it.idx) + '">'
+            + dot + esc(itemLabel(it.type, it.data))
+            + '<div class="meta">' + esc(metaOf(it.type, it.data)) + '</div></div>';
+    }
+    list.innerHTML = html;
+    var rows = list.querySelectorAll('.satchel-list-item');
+    for (var m = 0; m < rows.length; m++) {
+      rows[m].addEventListener('click', function () {
+        openNote(tab, this.getAttribute('data-type'), this.getAttribute('data-id'), this.getAttribute('data-i'));
+      });
+    }
+  }
+
+  // ── the note page ─────────────────────────────────────────────────────
+
+  function resolveItem(type, id, idx) {
     if (type === 'stone') {
-      var sigs = getSigs();
+      var stones = getSigs();
       var si = -1;
-      if (id) {
-        for (var a = 0; a < sigs.length; a++) { if (sigs[a].id === id) { si = a; break; } }
-      }
-      if (si < 0 && idx !== null && idx !== '') si = parseInt(idx, 10);
-      if (si < 0 || !sigs[si]) return;
-      found = sigs[si];
-      current = { type: 'stone', id: found.id, idx: si };
-      title.textContent = 'mark ' + (si + 1);
-      date.textContent = found.ts ? fmtDate(found.ts) : '—';
-      body.textContent = found.intention || '(no intention recorded)';
-      tag.textContent = (found.element || 'earth') + (Array.isArray(found.tags) && found.tags.length ? ' · ' + found.tags.join(', ') : '');
-      pn.textContent = '— ' + romanize(si + 2) + ' —';
-      ann.textContent = noteOf(found) || '';
-      var related = [];
-      for (var k = 0; k < sigs.length; k++) {
-        if (k !== si && sigs[k].element === found.element) related.push('mark ' + (k + 1));
-      }
-      see.textContent = related.length ? related.join(', ') : '— none yet —';
-    } else if (type === 'relation') {
-      var rels = getS().relations || [];
-      for (var ri = 0; ri < rels.length; ri++) {
-        if (rels[ri].from === id) { relFound = rels[ri]; break; }
-      }
-      if (!relFound) return;
-      var art = artifactById(relFound.from);
-      var anm = art ? (art.data.name || art.data.title || art.data.topic || art.data.intention || art.data.label || art.data.text || 'an artifact') : 'an artifact released';
-      current = { type: 'relation', id: relFound.from };
-      title.textContent = 'a knot';
-      date.textContent = relFound.ts ? fmtDate(relFound.ts) : '—';
-      body.textContent = String(anm).substring(0, 300) + ' — ' + (relFound.verb || 'relates to') + ' → ' + ((relFound.to || 'buddy') === 'buddy' ? 'the buddy' : 'an artifact');
-      tag.textContent = 'knot';
-      pn.textContent = '— † —';
-      ann.textContent = relFound.note || '';
-      see.textContent = '— the web holds it —';
-    } else {
-      var hit = artifactById(id);
-      if (!hit) return;
-      found = hit.data;
-      current = { type: hit.kind, id: found.id };
-      title.textContent = String((hit.data.name || hit.data.title || hit.data.topic || hit.kind) || '').substring(0, 40) || 'kept';
-      date.textContent = found.ts ? fmtDate(found.ts) : '—';
-      body.textContent = bodyOf(hit.kind, found) || '(no words kept)';
-      var t2 = found.element || hit.kind;
-      if (found.kind === 'note') t2 = 'note';
-      tag.textContent = t2;
-      pn.textContent = '— ✎ —';
-      ann.textContent = noteOf(found) || '';
-      see.textContent = '— kept in the book —';
+      for (var a = 0; a < stones.length; a++) { if (stones[a].id === id) { si = a; break; } }
+      if (si < 0 && idx !== '' && idx != null) si = parseInt(idx, 10);
+      if (si < 0 || !stones[si]) return null;
+      return { type: 'stone', id: stones[si].id, idx: si, data: stones[si] };
     }
-    app.classList.add('on-entry');
-    if (ann) ann.focus();
+    if (type === 'relation') {
+      var rels = getS().relations || [];
+      for (var r = 0; r < rels.length; r++) {
+        if (rels[r].from === id) return { type: 'relation', id: id, data: rels[r] };
+      }
+      return null;
+    }
+    var hit = artifactById(id);
+    if (!hit) return null;
+    return { type: hit.kind, id: id, data: hit.data };
   }
 
-  function hideEntry() {
-    if (current && document.getElementById('satchel-annotation')) {
-      try { saveCurrentNote(); } catch (e) {}
-    }
-    current = null;
-    app.classList.remove('on-entry');
+  function baseTextOf(item) {
+    var d = item.data;
+    return (d && (d.annotation || d.satchelNote || d.note)) || '';
   }
+
+  // rebuild the editor from stored {text, marks}; marks outside the text
+  // are dropped (offsets invalidated by edits never resurrect).
+  function paintEditor(text, marks) {
+    if (!editor) return;
+    editor.innerHTML = '';
+    text = String(text || '');
+    marks = (marks || []).slice().sort(function (a, b) { return a.s - b.s; });
+    var pos = 0;
+    function addText(t) { if (t) editor.appendChild(document.createTextNode(t)); }
+    for (var i = 0; i < marks.length; i++) {
+      var m = marks[i];
+      if (m == null || m.s < pos || m.e > text.length || m.e <= m.s) continue;
+      addText(text.slice(pos, m.s));
+      var span = document.createElement('span');
+      span.className = 'smark' + (m.h ? ' smark-hl' : '');
+      if (m.h) span.setAttribute('data-hl', '1');
+      else span.setAttribute('data-c', m.c || '');
+      if (!m.h && m.c) span.style.color = m.c;
+      if (m.note) span.setAttribute('data-note', m.note);
+      span.textContent = text.slice(m.s, m.e);
+      editor.appendChild(span);
+      pos = m.e;
+    }
+    addText(text.slice(pos));
+  }
+
+  // derive {text, marks} from the live DOM; spans carry their own data.
+  function readEditor() {
+    if (!editor) return { text: '', marks: [] };
+    var text = '';
+    var marks = [];
+    function walk(node) {
+      if (node.nodeType === 3) {
+        text += node.nodeValue;
+        return;
+      }
+      if (node.nodeType !== 1) return;
+      if (node.classList && node.classList.contains('smark')) {
+        var start = text.length;
+        var note = node.getAttribute('data-note') || '';
+        var hl = node.getAttribute('data-hl') === '1';
+        var c = node.getAttribute('data-c') || '';
+        for (var i = 0; i < node.childNodes.length; i++) walk(node.childNodes[i]);
+        if (text.length > start) marks.push({ s: start, e: text.length, c: c, h: hl ? 1 : 0, note: note });
+        return;
+      }
+      if (node.tagName === 'BR') { text += '\n'; return; }
+      for (var j = 0; j < node.childNodes.length; j++) walk(node.childNodes[j]);
+      if (node.tagName === 'DIV' || node.tagName === 'P') text += '\n';
+    }
+    for (var k = 0; k < editor.childNodes.length; k++) walk(editor.childNodes[k]);
+    return { text: text.replace(/\n+$/, ''), marks: marks };
+  }
+
+  function titleOf(item) {
+    var d = item.data;
+    if (item.type === 'stone') return 'a buddy · ' + (d.element || 'earth');
+    if (item.type === 'relation') return 'a knot · ' + (d.verb || 'relates to');
+    if (item.type === 'buddy') return 'a sealed chat';
+    return String(d.name || d.title || d.topic || d.label || item.type || 'kept').substring(0, 40);
+  }
+
+  function openNote(tabName, type, id, idx) {
+    var item = resolveItem(type, id, idx);
+    if (!item) return;
+    tab = tabName;
+    current = { tab: tab, type: item.type, id: item.id, idx: item.idx };
+    hidePop();
+    if (titleEl) titleEl.textContent = titleOf(item);
+    if (dateEl) dateEl.textContent = item.data.ts ? fmtDate(item.data.ts) : '— —';
+    if (intentEl) intentEl.textContent = bodyOf(item.type, item.data);
+    if (polaroid) {
+      if (item.data.shot) { polaroid.src = item.data.shot; polaroid.hidden = false; }
+      else { polaroid.removeAttribute('src'); polaroid.hidden = true; }
+    }
+    paintEditor(baseTextOf(item), item.data.marks);
+    renderList();
+  }
+
+  function persist(chime) {
+    if (!st() || !current) return;
+    var got = readEditor();
+    var item = resolveItem(current.type, current.id, current.idx);
+    if (!item) return;
+    if (current.type === 'stone') {
+      var s = getS();
+      var stones = getSigs();
+      var sealed = getSealed();
+      if (item.idx >= 0 && stones[item.idx]) {
+        stones[item.idx] = Object.assign({}, stones[item.idx], { annotation: got.text, marks: got.marks });
+        st().set({ buddy: stones.concat(sealed) });
+      }
+    } else if (current.type === 'relation') {
+      var rels = (getS().relations || []).slice();
+      for (var r = 0; r < rels.length; r++) {
+        if (rels[r].from === current.id) rels[r] = Object.assign({}, rels[r], { note: got.text, marks: got.marks });
+      }
+      st().set({ relations: rels });
+    } else {
+      if (st().updateArtifact) st().updateArtifact(current.type, current.id, { annotation: got.text, satchelNote: got.text, marks: got.marks });
+    }
+    if (chime && window.Liber && window.Liber.sound) { try { window.Liber.sound.play('chime'); } catch (e) {} }
+  }
+
+  function scheduleSave(chime) {
+    if (saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(function () { saveTimer = null; persist(!!chime); renderList(); }, chime ? 0 : 800);
+  }
+
+  // ── highlight popover ─────────────────────────────────────────────────
+
+  var popMark = null;
+
+  function hidePop() {
+    if (pop) pop.hidden = true;
+    popMark = null;
+  }
+
+  function showPop(span, x, y) {
+    if (!pop || !span) return;
+    popMark = span;
+    if (popText) popText.textContent = span.textContent;
+    if (popNote) popNote.value = span.getAttribute('data-note') || '';
+    pop.hidden = false;
+    var cab = document.getElementById('satchel-cabinet');
+    var cr = cab ? cab.getBoundingClientRect() : { left: 0, top: 0 };
+    pop.style.left = Math.max(8, Math.min(x - cr.left - 110, (cr.width || 300) - 230)) + 'px';
+    pop.style.top = Math.max(8, (y - cr.top) + 14) + 'px';
+    if (popNote) popNote.focus();
+  }
+
+  function wirePop() {
+    var save = document.getElementById('satchel-pop-save');
+    var clear = document.getElementById('satchel-pop-clear');
+    var close = document.getElementById('satchel-pop-close');
+    if (save) save.addEventListener('click', function () {
+      if (popMark && popNote) {
+        if (popNote.value.trim()) popMark.setAttribute('data-note', popNote.value.trim());
+        else popMark.removeAttribute('data-note');
+        scheduleSave(false);
+      }
+      hidePop();
+    });
+    if (clear) clear.addEventListener('click', function () {
+      if (popMark) {
+        var parent = popMark.parentNode;
+        while (popMark.firstChild) parent.insertBefore(popMark.firstChild, popMark);
+        parent.removeChild(popMark);
+        scheduleSave(false);
+      }
+      hidePop();
+    });
+    if (close) close.addEventListener('click', hidePop);
+  }
+
+  // ── boot ──────────────────────────────────────────────────────────────
 
   function openHash() {
     try {
       var h = (location.hash || '').replace(/^#/, '');
       if (!h) return;
       var hit = artifactById(h);
-      if (hit) openEntry(hit.kind === 'stone' ? 'stone' : hit.kind, h, null);
-      else {
-        var rels = getS().relations || [];
-        for (var i = 0; i < rels.length; i++) {
-          if (rels[i].from === h) { openEntry('relation', h, null); break; }
-        }
+      if (hit) {
+        var stones = getSigs();
+        var isStone = hit.kind === 'stone';
+        openNote(isStone ? 'buddy' : 'artifacts', hit.kind, h, null);
+        return;
+      }
+      var rels = getS().relations || [];
+      for (var i = 0; i < rels.length; i++) {
+        if (rels[i].from === h) { openNote('relations', 'relation', h, null); break; }
       }
     } catch (e) {}
   }
 
   document.addEventListener('DOMContentLoaded', function () {
+    buildTools();
     renderList();
-    openHash();
-    if (back) back.addEventListener('click', hideEntry);
-    var annBox = document.getElementById('satchel-annotation');
-    if (annBox) annBox.addEventListener('keydown', function (e) {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); saveCurrentNote(); }
-    });
-    if (annBox) annBox.addEventListener('blur', function () {
-      if (current) saveCurrentNote();
-    });
+
+    var tabs = drawers ? drawers.querySelectorAll('.satchel-tab') : [];
+    for (var t = 0; t < tabs.length; t++) {
+      tabs[t].addEventListener('click', function () {
+        if (current) persist(true);
+        hidePop();
+        tab = this.getAttribute('data-tab');
+        current = null;
+        if (titleEl) titleEl.textContent = '— — —';
+        if (dateEl) dateEl.textContent = '— —';
+        if (intentEl) intentEl.textContent = '';
+        if (polaroid) { polaroid.removeAttribute('src'); polaroid.hidden = true; }
+        if (editor) editor.innerHTML = '';
+        renderList();
+      });
+    }
+
+    if (editor) {
+      editor.addEventListener('input', function () { scheduleSave(false); });
+      editor.addEventListener('blur', function () { if (current) persist(true); });
+      editor.addEventListener('click', function (e) {
+        var hl = e.target && e.target.closest ? e.target.closest('.smark-hl') : null;
+        if (hl && editor.contains(hl)) showPop(hl, e.clientX, e.clientY);
+        else hidePop();
+      });
+      editor.addEventListener('keydown', function (e) {
+        if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); persist(true); }
+      });
+    }
+    wirePop();
+
     if (exit) exit.addEventListener('click', function () {
-      try { if (current) saveCurrentNote(); } catch (e) {}
+      try { if (current) persist(true); } catch (e) {}
       if (history.length > 1) history.back(); else location.href = 'desktop.html';
     });
 
     var helpBtn = document.getElementById('satchel-help');
-    var riason = document.getElementById('satchel-raison');
-    var riasonClose = document.getElementById('satchel-raison-close');
-    function openRiason() {
-      if (riason) { riason.classList.add('open'); riason.removeAttribute('inert'); }
+    var raison = document.getElementById('satchel-raison');
+    var raisonClose = document.getElementById('satchel-raison-close');
+    function openRaison() {
+      if (raison) { raison.classList.add('open'); raison.removeAttribute('inert'); }
     }
-    function closeRiason() {
-      if (riason) { riason.classList.remove('open'); riason.setAttribute('inert', ''); }
+    function closeRaison() {
+      if (raison) { raison.classList.remove('open'); raison.setAttribute('inert', ''); }
     }
-    if (helpBtn) helpBtn.addEventListener('click', openRiason);
-    if (riasonClose) riasonClose.addEventListener('click', closeRiason);
-    if (riason) riason.addEventListener('click', function (e) { if (e.target === riason) closeRiason(); });
+    if (helpBtn) helpBtn.addEventListener('click', openRaison);
+    if (raisonClose) raisonClose.addEventListener('click', closeRaison);
+    if (raison) raison.addEventListener('click', function (e) { if (e.target === raison) closeRaison(); });
     if (st()) st().on('change', function () { renderList(); });
     window.addEventListener('hashchange', openHash);
+    openHash();
   });
 })();

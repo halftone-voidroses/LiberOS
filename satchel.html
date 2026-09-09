@@ -53,7 +53,7 @@
                     <button class="satchel-raison-close" type="button" id="satchel-raison-close" aria-label="close">×</button>
                   </div>
                   <div class="satchel-raison-body">
-                    click an entry to open its page. the record keeps name, date, element, see-also — set down at the time of making. the margin note is yours to amend. the rest is archive.
+                    three drawers on the left — buddies, artifacts, knots. click a tab, then an entry; write on the right. pens on the side.
                   </div>
                   
                 </div>
@@ -64,44 +64,40 @@
                   <div class="satchel-spine-text">RIASON</div>
                   <div class="satchel-spine-text">BOUND MMXXVI</div>
                 </div>
-                <div class="satchel-pages">
 
-                  <div class="satchel-page satchel-page-list">
-                    <div class="satchel-header">
-                      <div class="satchel-title">Contents</div>
-                      <div class="satchel-sub">the buddy &amp; artifacts</div>
+                <div class="satchel-cabinet" id="satchel-cabinet">
+                  <div class="satchel-drawers" id="satchel-drawers">
+                    <div class="satchel-tabcards" role="tablist" aria-label="satchel drawers">
+                      <button type="button" class="satchel-tab" data-tab="buddy" role="tab" aria-selected="true">buddy</button>
+                      <button type="button" class="satchel-tab" data-tab="artifacts" role="tab" aria-selected="false">artifacts</button>
+                      <button type="button" class="satchel-tab" data-tab="relations" role="tab" aria-selected="false">relations</button>
                     </div>
-                    <div class="satchel-list" id="satchel-list">
-                      <div class="satchel-empty">Draw a buddy and associate artifacts to populate this page — riason</div>
-                    </div>
-                    <div class="satchel-footer">
-                      <span class="satchel-page-num">— i —</span>
-                    </div>
+                    <div class="satchel-list" id="satchel-list" role="tabpanel"></div>
                   </div>
 
-                  <div class="satchel-page satchel-page-entry" id="satchel-entry">
-                    <div class="satchel-header">
-                      <div class="satchel-title satchel-entry-title">— — —</div>
-                      <div class="satchel-sub satchel-entry-date">— —</div>
+                  <div class="satchel-note" id="satchel-note">
+                    <div class="satchel-note-head">
+                      <div class="satchel-note-title" id="satchel-note-title">— — —</div>
+                      <div class="satchel-note-date" id="satchel-note-date">— —</div>
                     </div>
-                    <div class="satchel-body">
-                      <div class="satchel-intention"></div>
-                      <div class="satchel-element-tag"></div>
-                      <div class="satchel-see-also">
-                        <div class="satchel-see-label">see also</div>
-                        <div class="satchel-see-list" id="satchel-see-list">—</div>
-                      </div>
-                      <div class="satchel-see-label">margin note</div>
-                      <div class="satchel-annotation" id="satchel-annotation" contenteditable="true" spellcheck="false" aria-label="margin note"></div>
-                    </div>
+                    <img class="satchel-polaroid" id="satchel-polaroid" alt="kept image" hidden />
+                    <div class="satchel-intention" id="satchel-intention"></div>
+                    <div class="satchel-editor" id="satchel-editor" contenteditable="true" spellcheck="false" aria-label="note"></div>
+                    <div class="satchel-tools" id="satchel-tools" role="toolbar" aria-label="pens"></div>
                     <div class="satchel-stamp" aria-hidden="true">ex libris · liber vacui</div>
-                    <div class="satchel-footer">
-                      <span class="satchel-back-link" id="satchel-back-contents">← contents</span>
-                      <span class="satchel-page-num" id="satchel-pageno">— ii —</span>
-                    </div>
                   </div>
-
                 </div>
+
+                <div class="satchel-pop" id="satchel-pop" hidden>
+                  <div class="satchel-pop-text" id="satchel-pop-text"></div>
+                  <textarea class="satchel-pop-note" id="satchel-pop-note" rows="3" aria-label="note on this passage"></textarea>
+                  <div class="satchel-pop-actions">
+                    <button type="button" id="satchel-pop-save">keep</button>
+                    <button type="button" id="satchel-pop-clear">unmark</button>
+                    <button type="button" id="satchel-pop-close" aria-label="close">×</button>
+                  </div>
+                </div>
+
               </div>
 
             </div>

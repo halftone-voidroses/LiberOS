@@ -8,16 +8,18 @@
 window.LIBER_DATA = window.LIBER_DATA || {};
 window.LIBER_DATA.hijack = {
   satchel: { flag: 'walkSatchel', steps: [
-    { voice: 'riason', line: 'everything kept lands here. list on the left, page on the right.', target: 'satchel-list' },
-    { voice: 'riason', line: 'margin notes save with ⌘↵. the book keeps what the hands bring.', target: 'satchel-annotation' },
-    { voice: 'riason', line: 'write a margin note so you can find things later.', target: null },
-    { voice: 'riason', line: 'this is the satchel. everything you keep lands here.', target: 'satchel-list', glow: true }
+    { voice: 'riason', line: 'Welcome to the satchel, my handiwork. Hem hem.', target: 'satchel-drawers' },
+    { voice: 'riason', line: 'Anyway, when you save relations, buddies, or set relations they get logged in the satchel, and you are able to write notes about them.', target: 'satchel-list' },
+    { voice: 'riason', line: 'Clicking on a category brings up the list you created, you can take notes on the right.', target: 'satchel-note' },
+    { voice: 'riason', line: 'On the bottom right there are highlighters and pens, give them a shot!', target: 'satchel-tools' },
+    { voice: 'riason', line: 'That is the whole of it. Three drawers, one page, pens in the corner. The rest you will figure out by using it.', target: null, glow: true }
   ] },
   sea: { flag: 'walkSea', steps: [
-    { voice: 'riason', line: 'name it in the box. weigh it on the dots — four and five open later.', target: 'sea-input' },
-    { voice: 'riason', line: 'release sinks it. the water takes; it does not keep.', target: 'sea-release' },
-    { voice: 'riason', line: 'turn on guided breathing with the breath button.', target: 'sea-breath' },
-    { voice: 'riason', line: 'this is the sea. release here to end a session.', target: 'sea-breath-toggle', glow: true }
+    { voice: 'riason', line: 'This is the sea, if you are holding onto negative thoughts, you can release them here.', target: 'sea-input' },
+    { voice: 'riason', line: 'Type in the thought, and click release. It will appear in the middle of the screen and float away. You can also breathe with it before releasing it, feel yourself get calmer.', target: 'sea-release' },
+    { voice: 'riason', line: 'This will save the thought in your satchel and on the window. But you can release it from there too if you\u2019d like.', target: null },
+    { voice: 'riason', line: 'The power is yours!', target: 'sea-breath-toggle', glow: true },
+    { voice: 'riason', line: 'That is the whole of it. One thought, one breath, one release. Come back whenever you are carrying something.', target: null }
   ] },
   divination: { flag: 'walkDivination', steps: [
     { voice: 'riason', line: 'type the question. one worth being answered.', target: 'divination-input' },

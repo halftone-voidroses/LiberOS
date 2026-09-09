@@ -1,5 +1,8 @@
-/* satchel.css — The Mad Scribe's leather-bound archive. Aged paper, leather, foxing.
-   This file is COMPLETELY INDEPENDENT. No imports, no shared variables (covenant Q.1). */
+/* satchel.css — Riason's filing cabinet. Aged paper, leather, brass.
+   Left third: three overlapping card-note tabs (buddy / artifacts /
+   relations) with their lists. Right two thirds: the note page with a
+   large persistent editor and a dock of pens. No imports, no shared
+   variables (covenant Q.1). */
 
 .satchel-app {
   position: absolute;
@@ -16,7 +19,7 @@
 }
 
 .satchel-binding {
-  width: 88%;
+  width: 92%;
   height: 90%;
   position: relative;
   display: flex;
@@ -31,6 +34,7 @@
 
 .satchel-spine {
   width: 22px;
+  flex-shrink: 0;
   background:
     repeating-linear-gradient(90deg,
       rgba(0,0,0,0.08) 0px, rgba(0,0,0,0.08) 1px,
@@ -58,84 +62,80 @@
   text-shadow: 0 0 3px rgba(200, 144, 96, 0.3);
 }
 
-.satchel-spine::before,
-.satchel-spine::after {
-  content: '';
-  position: absolute;
-  top: 6px;
-  bottom: 6px;
-  width: 1px;
-  background-image: repeating-linear-gradient(0deg, rgba(200,144,96,0.4) 0px, rgba(200,144,96,0.4) 2px, transparent 2px, transparent 5px);
-}
-.satchel-spine::before { left: 3px; }
-.satchel-spine::after { right: 3px; }
+/* ── the cabinet: drawers left third, note right two thirds ── */
 
-.satchel-pages {
+.satchel-cabinet {
   flex: 1;
   display: flex;
-  position: relative;
+  min-width: 0;
+  background:
+    linear-gradient(180deg, #e8d8b8 0%, #d8c8a0 60%, #c8b890 100%);
 }
 
-.satchel-page {
-  flex: 1;
-  position: relative;
-  background:
-    radial-gradient(circle 12px at 18% 12%, rgba(120, 70, 30, 0.18) 0%, rgba(120, 70, 30, 0) 70%),
-    radial-gradient(circle 8px at 78% 28%, rgba(100, 60, 25, 0.15) 0%, rgba(100, 60, 25, 0) 70%),
-    radial-gradient(circle 16px at 42% 78%, rgba(130, 80, 35, 0.18) 0%, rgba(130, 80, 35, 0) 70%),
-    radial-gradient(circle 10px at 88% 88%, rgba(110, 65, 30, 0.15) 0%, rgba(110, 65, 30, 0) 70%),
-    radial-gradient(circle 7px at 8% 65%, rgba(95, 55, 25, 0.18) 0%, rgba(95, 55, 25, 0) 70%),
-    repeating-linear-gradient(0deg, rgba(0,0,0,0.015) 0px, rgba(0,0,0,0.015) 1px, transparent 1px, transparent 3px),
-    repeating-linear-gradient(90deg, rgba(0,0,0,0.012) 0px, rgba(0,0,0,0.012) 1px, transparent 1px, transparent 4px),
-    linear-gradient(180deg, #e8d8b8 0%, #d8c8a0 60%, #c8b890 100%);
-  padding: 14px 18px;
-  overflow: hidden;
+.satchel-drawers {
+  width: 33%;
+  min-width: 170px;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
-}
-
-.satchel-page-list {
-  border-right: 1px solid rgba(80, 50, 20, 0.3);
-  box-shadow: inset -2px 0 4px rgba(0,0,0,0.1);
-}
-
-.satchel-page-entry {
+  border-right: 2px solid rgba(80, 50, 20, 0.4);
   background:
-    radial-gradient(circle 14px at 82% 14%, rgba(120, 70, 30, 0.18) 0%, rgba(120, 70, 30, 0) 70%),
-    radial-gradient(circle 9px at 22% 36%, rgba(100, 60, 25, 0.15) 0%, rgba(100, 60, 25, 0) 70%),
-    radial-gradient(circle 12px at 58% 88%, rgba(130, 80, 35, 0.18) 0%, rgba(130, 80, 35, 0) 70%),
-    repeating-linear-gradient(0deg, rgba(0,0,0,0.015) 0px, rgba(0,0,0,0.015) 1px, transparent 1px, transparent 3px),
-    repeating-linear-gradient(90deg, rgba(0,0,0,0.012) 0px, rgba(0,0,0,0.012) 1px, transparent 1px, transparent 4px),
-    linear-gradient(180deg, #d8c8a0 0%, #c8b890 100%);
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.02) 0px, rgba(0,0,0,0.02) 1px, transparent 1px, transparent 4px),
+    linear-gradient(180deg, #d8c8a0 0%, #c4b28e 100%);
+  padding: 10px 8px 10px 10px;
 }
 
-.satchel-header {
-  border-bottom: 1px solid rgba(80, 50, 20, 0.3);
-  padding-bottom: 8px;
-  margin-bottom: 10px;
-  text-align: center;
+/* Overlapping card-note tabs: the active card sits on top. */
+.satchel-tabcards {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: -2px;
 }
 
-.satchel-title {
-  font-size: 1.1rem;
+.satchel-tab {
+  font-family: inherit;
+  font-size: 1rem;
   font-variant: small-caps;
-  letter-spacing: 0.15em;
-  color: #3a1a08;
-  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-align: left;
+  padding: 7px 12px 5px;
+  margin-top: -14px;
+  background: linear-gradient(180deg, #cbb88f 0%, #b8a276 100%);
+  color: #5a3a18;
+  border: 1px solid rgba(80, 50, 20, 0.45);
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  cursor: pointer;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.15);
+  position: relative;
 }
 
-.satchel-sub {
-  font-size: 0.875rem;
-  font-style: italic;
-  color: #6a4a20;
-  margin-top: 2px;
-  letter-spacing: 0.05em;
+.satchel-tab:first-child { margin-top: 0; }
+
+.satchel-tab[aria-selected="true"] {
+  background: linear-gradient(180deg, #f0e2c0 0%, #e2d0a8 100%);
+  color: #2a1004;
+  font-weight: 700;
+  z-index: 3;
+  padding-bottom: 9px;
+  box-shadow: 0 -3px 8px rgba(0, 0, 0, 0.2);
 }
+
+.satchel-tab:nth-child(1) { z-index: 1; }
+.satchel-tab:nth-child(2) { z-index: 2; }
+.satchel-tab:nth-child(3) { z-index: 1; }
+.satchel-tab[aria-selected="true"] { z-index: 4; }
+
+.satchel-tab:hover { color: #2a1004; }
 
 .satchel-list {
   flex: 1;
   overflow-y: auto;
-  padding: 4px 0;
+  background: linear-gradient(180deg, #f0e2c0 0%, #e2d0a8 100%);
+  border: 1px solid rgba(80, 50, 20, 0.45);
+  border-radius: 0 4px 4px 4px;
+  padding: 6px 8px;
+  z-index: 2;
 }
 
 .satchel-list-item {
@@ -146,14 +146,15 @@
   font-size: 1rem;
   font-style: italic;
   color: #3a1a08;
-  transition: background 0.15s;
 }
 
-.satchel-list-item:hover {
-  background: rgba(120, 80, 40, 0.12);
+.satchel-list-item:hover { background: rgba(120, 80, 40, 0.12); }
+
+.satchel-list-item.current {
+  background: rgba(120, 80, 40, 0.2);
+  font-weight: 700;
 }
 
-/* D0003: artifact metadata + labels — 14px caption floor. */
 .satchel-list-item .meta {
   font-size: 0.875rem;
   color: #6a4a20;
@@ -167,9 +168,10 @@
   font-style: italic;
   color: #6a4a20;
   text-align: center;
-  margin-top: 40px;
+  margin-top: 30px;
   line-height: 1.6;
 }
+
 .satchel-netline {
   font-size: 0.875rem;
   font-style: italic;
@@ -180,25 +182,60 @@
   padding-bottom: 6px;
   margin-bottom: 6px;
 }
-.satchel-sect {
-  font-size: 0.875rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: #6a3010;
-  margin: 10px 0 2px;
-  border-bottom: 1px solid rgba(80, 50, 20, 0.25);
-  padding-bottom: 2px;
-}
 
-.satchel-body {
+.satchel-ann-dot { color: #6a3010; margin-right: 4px; }
+
+/* ── the note page ── */
+
+.satchel-note {
   flex: 1;
+  min-width: 0;
+  position: relative;
   display: flex;
   flex-direction: column;
-  padding: 6px 4px;
+  padding: 14px 18px 14px;
+  background:
+    radial-gradient(circle 14px at 82% 14%, rgba(120, 70, 30, 0.15) 0%, rgba(120, 70, 30, 0) 70%),
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.015) 0px, rgba(0,0,0,0.015) 1px, transparent 1px, transparent 3px),
+    linear-gradient(180deg, #e8d8b8 0%, #d8c8a0 100%);
+  overflow: hidden;
+}
+
+.satchel-note-head {
+  border-bottom: 1px solid rgba(80, 50, 20, 0.3);
+  padding-bottom: 6px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.satchel-note-title {
+  font-size: 1.1rem;
+  font-variant: small-caps;
+  letter-spacing: 0.15em;
+  color: #3a1a08;
+  font-weight: 700;
+}
+
+.satchel-note-date {
+  font-size: 0.875rem;
+  font-style: italic;
+  color: #6a4a20;
+}
+
+.satchel-polaroid {
+  align-self: center;
+  max-width: 150px;
+  max-height: 150px;
+  background: #f4efe2;
+  padding: 6px 6px 20px;
+  margin: 4px 0 8px;
+  transform: rotate(-2.5deg);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(80, 50, 20, 0.3);
 }
 
 .satchel-intention {
-  font-size: 1.0rem;
+  font-size: 1rem;
   font-style: italic;
   line-height: 1.5;
   color: #2a1004;
@@ -207,97 +244,147 @@
 }
 
 .satchel-intention::before { content: open-quote; }
-.satchel-intention::after  { content: close-quote; }
+.satchel-intention::after { content: close-quote; }
+.satchel-intention:empty { display: none; }
 
-.satchel-element-tag {
-  display: inline-block;
-  align-self: flex-start;
-  font-size: 0.875rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: #6a3010;
-  border: 1px solid #6a3010;
-  padding: 2px 8px;
-  margin-bottom: 10px;
-  font-variant: small-caps;
-}
-
-.satchel-see-also {
-  margin-top: auto;
-  padding-top: 6px;
-  border-top: 1px solid rgba(80, 50, 20, 0.3);
-}
-
-.satchel-see-label {
-  font-size: 0.875rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: #6a4a20;
-  margin-bottom: 3px;
-  font-style: italic;
-}
-
-.satchel-see-list {
-  font-size: 1rem;
-  color: #3a1a08;
-  font-style: italic;
-}
-
-.satchel-annotation {
-  margin-top: 10px;
-  min-height: 1.2em;
-  font-size: 1rem;
-  font-style: italic;
-  color: #6a3010;
-  border: none;
-  border-bottom: 1px dashed rgba(106, 48, 16, 0.4);
-  padding: 2px 0;
+/* The large persistent editor. */
+.satchel-editor {
+  flex: 1;
+  overflow-y: auto;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #2a1004;
   outline: none;
+  padding: 4px 2px 30px;
+  caret-color: #6a3010;
 }
 
-.satchel-annotation:focus {
-  border-bottom-color: #6a3010;
-  color: #2a1004;
-}
-
-.satchel-annotation:empty::before {
-  content: attr(data-placeholder);
-  color: rgba(106, 48, 16, 0.8);
-}
-
-.satchel-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 8px;
-  padding-top: 6px;
-  border-top: 1px dotted rgba(80, 50, 20, 0.3);
-  font-size: 0.875rem;
-  color: #6a4a20;
+.satchel-editor:empty::before {
+  content: 'write here. the book keeps it.';
+  color: rgba(106, 48, 16, 0.7);
   font-style: italic;
 }
 
-.satchel-page-num {
-  letter-spacing: 0.1em;
+.satchel-editor .smark { border-radius: 2px; padding: 0 1px; }
+.satchel-editor .smark-hl { background: rgba(240, 220, 90, 0.55); cursor: pointer; }
+.satchel-editor .smark-hl:hover { background: rgba(240, 220, 90, 0.85); }
+
+/* ── the pen dock: highlighter + coloured pencils, bottom-right ── */
+
+.satchel-tools {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  z-index: 5;
 }
 
-.satchel-back-link {
+.satchel-pen {
+  font-family: inherit;
+  background: none;
+  border: none;
+  padding: 0;
   cursor: pointer;
-  color: #6a3010;
-  font-weight: 700;
-  letter-spacing: 0.05em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  opacity: 0.75;
+  transition: transform 0.12s ease, opacity 0.12s ease;
 }
 
-.satchel-back-link:hover {
+.satchel-pen:hover { opacity: 1; }
+
+.satchel-pen.active {
+  opacity: 1;
+  transform: translateY(-4px);
+  filter: drop-shadow(0 0 5px rgba(255, 240, 200, 0.9));
+}
+
+.satchel-pen svg { display: block; }
+
+.satchel-pen-name {
+  font-size: 0.7rem;
+  font-style: italic;
+  color: #5a3a18;
+}
+
+/* ── highlight popover ── */
+
+.satchel-pop {
+  position: absolute;
+  z-index: 60;
+  width: 220px;
+  background: linear-gradient(180deg, #f0e2c0 0%, #d8c49a 100%);
+  border: 1px solid #6a4a20;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  padding: 8px 10px;
+}
+
+.satchel-pop[hidden] { display: none; }
+
+.satchel-pop-text {
+  font-size: 0.95rem;
+  font-style: italic;
+  color: #3a1a08;
+  border-left: 3px solid rgba(240, 200, 60, 0.9);
+  padding-left: 6px;
+  margin-bottom: 6px;
+  max-height: 60px;
+  overflow: hidden;
+}
+
+.satchel-pop-note {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 0.95rem;
   color: #2a1004;
-  text-decoration: underline;
+  background: rgba(255, 250, 235, 0.6);
+  border: 1px solid rgba(106, 74, 32, 0.5);
+  border-radius: 2px;
+  padding: 4px 6px;
+  resize: vertical;
 }
 
-.satchel-app.on-entry .satchel-page-list {
-  filter: brightness(0.92) saturate(0.7);
+.satchel-pop-actions { display: flex; gap: 6px; margin-top: 6px; }
+
+.satchel-pop-actions button {
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-style: italic;
+  background: none;
+  border: 1px solid #6a4a20;
+  color: #3a1a08;
+  border-radius: 2px;
+  padding: 2px 10px;
+  cursor: pointer;
 }
 
-/* satchel help + raison (per-persona, aged-paper/leather palette) */
+.satchel-pop-actions button:hover { background: rgba(120, 80, 40, 0.15); }
+
+/* ── stamp, raison, titlebar, cursor, scrollbars (house kept) ── */
+
+.satchel-stamp {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  font-variant: small-caps;
+  font-size: 0.875rem;
+  letter-spacing: 0.3em;
+  color: #6a3010;
+  border: 1.5px solid #6a3010;
+  padding: 2px 10px;
+  transform: rotate(-7deg) translateX(-50%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.satchel-note:hover .satchel-stamp { opacity: 0.9; }
 
 .satchel-help {
   position: absolute;
@@ -316,26 +403,13 @@
   cursor: pointer;
   padding: 0;
   border-radius: 2px;
-  transition: all 0.15s;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.18),
     inset 0 -2px 0 rgba(0, 0, 0, 0.5),
     0 1px 0 rgba(0, 0, 0, 0.5),
     0 2px 4px rgba(0, 0, 0, 0.6);
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
-  transition: transform 0.08s, filter 0.15s, box-shadow 0.08s;
 }
-.satchel-help:hover {
-  filter: brightness(1.25);
-}
-.satchel-help:active {
-  transform: translateY(1px);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.18),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
-    0 0 0 rgba(0, 0, 0, 0.5);
-}
-
 
 .satchel-help:hover {
   background: rgba(120, 80, 40, 0.12);
@@ -360,26 +434,13 @@
   cursor: pointer;
   padding: 0;
   border-radius: 2px;
-  transition: all 0.15s;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.18),
     inset 0 -2px 0 rgba(0, 0, 0, 0.5),
     0 1px 0 rgba(0, 0, 0, 0.5),
     0 2px 4px rgba(0, 0, 0, 0.6);
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
-  transition: transform 0.08s, filter 0.15s, box-shadow 0.08s;
 }
-.satchel-exit:hover {
-  filter: brightness(1.25);
-}
-.satchel-exit:active {
-  transform: translateY(1px);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.18),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
-    0 0 0 rgba(0, 0, 0, 0.5);
-}
-
 
 .satchel-exit:hover {
   background: rgba(120, 80, 40, 0.12);
@@ -437,7 +498,6 @@
   text-transform: lowercase;
   letter-spacing: 0.25em;
   font-weight: 700;
-  font-family: 'EB Garamond', 'Garamond', 'Times New Roman', serif;
 }
 
 .satchel-raison-close {
@@ -463,27 +523,6 @@
   font-size: 1rem;
   line-height: 1.55;
 }
-
-.satchel-raison-body em {
-  color: #6a3010;
-  font-style: normal;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  font-size: 0.875rem;
-  font-weight: 700;
-}
-
-.satchel-raison-foot {
-  margin-top: 12px;
-  padding-top: 8px;
-  border-top: 1px solid #6a4a20;
-  font-size: 0.875rem;
-  color: #6a4a20;
-  text-align: right;
-  letter-spacing: 0.1em;
-}
-
-/* ─── window titlebar (WS3, plan 2026-09-04 §4.3) — the librarian's ledger head ─── */
 
 .satchel-titlebar {
   position: absolute;
@@ -532,18 +571,14 @@
   top: 50%;
   bottom: auto;
   transform: translateY(-50%);
-}
-.satchel-titlebar .satchel-help { right: 36px; }
-.satchel-titlebar .satchel-exit { right: 8px; }
-.satchel-titlebar .satchel-help, .satchel-titlebar .satchel-exit {
   width: 40px;
   height: 40px;
   line-height: 38px;
   text-align: center;
   font-size: 1.15rem;
-  top: 50%;
   filter: brightness(1.4);
 }
+
 .satchel-titlebar .satchel-help { right: 56px; }
 .satchel-titlebar .satchel-exit { right: 8px; }
 .satchel-help:focus-visible, .satchel-exit:focus-visible {
@@ -555,65 +590,23 @@
   transform: translateY(calc(-50% + 1px));
 }
 
-/* open room for the ledger head (machine.css sets [data-state] inset: 0) */
 .satchel-app { top: 36px; }
 
-/* ─── WS4: the librarian's cursor (register: data/personas.data.js).
-   A quill, nib-first at the baseline; standard arrow fallback. ─── */
 .satchel-app,
 .satchel-titlebar {
   cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M2 22l3-7 12-12 4 4-12 12z' fill='%23d8b890' stroke='%236a3a18'/><path d='M2 22l3-7 4 4z' fill='%23e8dcc0' stroke='%236a3a18'/><path d='M17 3l4 4 2-2-4-4z' fill='%23aa7838' stroke='%236a3a18'/></svg>") 2 22, auto;
 }
+
 .satchel-app button,
 .satchel-titlebar button { cursor: inherit; }
 
-/* ─── WS4: pressed-bevel + focus (D0004 recipe, vellum/brass palette) ─── */
-.satchel-raison-close {
-  box-shadow:
-    inset 0 1px 0 rgba(255, 250, 230, 0.5),
-    inset 0 -2px 0 rgba(90, 60, 25, 0.35),
-    0 2px 0 #4a2e10,
-    0 3px 4px rgba(0, 0, 0, 0.4);
-}
-.satchel-raison-close:active {
-  transform: translateY(1px);
-  filter: brightness(0.92);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 250, 230, 0.4),
-    inset 0 -1px 0 rgba(90, 60, 25, 0.35),
-    0 0 0 #4a2e10,
-    0 1px 2px rgba(0, 0, 0, 0.4);
-}
-.satchel-help:focus-visible,
-.satchel-exit:focus-visible,
-.satchel-raison-close:focus-visible {
-  outline: 2px solid #aa7838;
-  outline-offset: 2px;
-}
-
-/* ─── WS4: hover-revelation — the librarian's ownership stamp
-   surfaces on the vellum when the entry page is held. ─── */
-.satchel-stamp {
-  position: absolute;
-  bottom: 34px;
-  right: 26px;
-  font-variant: small-caps;
-  font-size: 0.875rem;
-  letter-spacing: 0.3em;
-  color: #6a3010;
-  border: 1.5px solid #6a3010;
-  padding: 2px 10px;
-  transform: rotate(-7deg);
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.8s ease;
-}
-.satchel-page-entry:hover .satchel-stamp { opacity: 0.9; }
-@media (prefers-reduced-motion: reduce) {
-  .satchel-stamp { transition: none; }
-}
 .satchel-app ::-webkit-scrollbar, .satchel-app::-webkit-scrollbar { width: 10px; height: 10px; }
 .satchel-app ::-webkit-scrollbar-track, .satchel-app::-webkit-scrollbar-track { background: rgba(58, 26, 8, 0.4); border-radius: 6px; }
 .satchel-app ::-webkit-scrollbar-thumb, .satchel-app::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #aa7838 0%, #4a2a10 100%); border-radius: 6px; border: 2px solid rgba(26, 10, 5, 0.6); }
 .satchel-app ::-webkit-scrollbar-thumb:hover { filter: brightness(1.25); }
 .satchel-app, .satchel-app * { scrollbar-width: thin; scrollbar-color: #aa7838 rgba(58, 26, 8, 0.4); }
+
+@media (prefers-reduced-motion: reduce) {
+  .satchel-stamp { transition: none; }
+  .satchel-pen { transition: none; }
+}
