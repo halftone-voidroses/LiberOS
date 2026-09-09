@@ -7,6 +7,7 @@
 - LiberChat: the chat room is now a terminal/IRC window with a user list. AIML engine (wildcards, srai, random, predicates, that/topic) replaces ELIZA. Buddy ships with a 100+ category mind; Vanir (blue, challenging, shadow-pointing) unlocks at 3+ artifacts with ??? teasers for future users. Unread badge on the chat tile, periodic Buddy check-ins, per-user seal flow unchanged.
 - Games rebuilt: emotion wheel (dart throws), communication mask, boundaries shield, relationship circles, powder tent (falling-sand sim). Uniform Whimsy-pitched shell; every game keeps with a polaroid.
 - Garden reworked: the gem starts empty and fills by pouring; saving auto-plants; the bed is soil rows with sprouts; drag the watering can onto a sprout to colour it.
+- Trash loop reworked: released artifacts queue in trash; digging is gone — re-adding asks why, and the reason returns as a satellite relation orbiting the artifact.
 ### Removed
 - Relations room deleted (binding engine, constellation web, and old saves untouched). Nine old booths retired with the games rebuild.
 ### Changed

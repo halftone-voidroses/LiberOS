@@ -286,22 +286,8 @@ await page.reload({ waitUntil: 'networkidle' });
 await page.waitForTimeout(400);
 const bestsPersist = await page.evaluate(() => window.Liber.state.get().bests);
 check('bests persist across reloads (localStorage)', bestsPersist && bestsPersist.tip === 30, JSON.stringify(bestsPersist));
-// UI path: clear bests, hold the ice ~2s, save — whimsy announces in-voice
-await page.evaluate(() => window.Liber.state.set({ bests: {} }));
-await page.click('.games-booth[data-game="tip"]');
-await page.waitForTimeout(200);
-await page.click('#tip-ice');
-await page.waitForTimeout(2300);
-await page.click('#tip-ice');
-await page.click('#tip-save');
-await page.waitForTimeout(200);
-await page.click('#games-save-prompt-keep');
-await page.waitForTimeout(300);
-const whimsy = await page.evaluate(() => {
-  const el = document.querySelector('.games-best');
-  return { exists: !!el, text: el ? el.textContent : null, best: window.Liber.state.get().bests.tip };
-});
-check('whimsy announces the new record theatrically, in-voice', whimsy.exists && /house record/.test(whimsy.text || '') && whimsy.best === 2, whimsy.text);
+// UI path retired with the tip booth (P5: five honest games, no scores).
+// The recordBest API above stays pinned.
 
 await browser.close();
 server.kill();
