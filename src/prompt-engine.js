@@ -46,7 +46,7 @@
   // Thresholds mirror src/gamification.js presence().
   var BUDDY_TIERS = [2, 6, 12];
   function buddyLevel(s) {
-    var kinds = ['divination', 'iching', 'games', 'sea', 'buddy', 'abstract', 'methodology', 'learn', 'council', 'garden', 'dreams'];
+    var kinds = ['divination', 'iching', 'games', 'sea', 'buddy', 'learn', 'council', 'garden', 'dreams'];
     var count = 0;
     for (var i = 0; i < kinds.length; i++) {
       if (Array.isArray(s && s[kinds[i]])) count += s[kinds[i]].length;
@@ -88,7 +88,7 @@
   }
 
   function allArtifacts(s) {
-    var kinds = ['divination', 'iching', 'games', 'sea', 'buddy', 'satchel', 'abstract', 'methodology', 'learn', 'council', 'garden', 'dreams'];
+    var kinds = ['divination', 'iching', 'games', 'sea', 'buddy', 'satchel', 'learn', 'council', 'garden', 'dreams'];
     var out = [];
     for (var i = 0; i < kinds.length; i++) {
       var arr = s[kinds[i]];

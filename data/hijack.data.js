@@ -19,12 +19,6 @@ window.LIBER_DATA.hijack = {
     { voice: 'riason', line: 'turn on guided breathing with the breath button.', target: 'sea-breath' },
     { voice: 'riason', line: 'this is the sea. release here to end a session.', target: 'sea-breath-toggle', glow: true }
   ] },
-  abstract: { flag: 'walkAbstract', steps: [
-    { voice: 'riason', line: 'the rail holds your pairs. pick one apart.', target: 'abstract-rail-list' },
-    { voice: 'riason', line: 'left what was, right what becomes. reform it.', target: 'abstract-void' },
-    { voice: 'riason', line: 'bring two related artifacts to take apart.', target: null },
-    { voice: 'riason', line: 'this is the void. cut pairs apart here.', target: 'abstract-void', glow: true }
-  ] },
   divination: { flag: 'walkDivination', steps: [
     { voice: 'riason', line: 'type the question. one worth being answered.', target: 'divination-input' },
     { voice: 'riason', line: 'draw one card. the deck does the rest.', target: 'divination-draw' },
@@ -48,18 +42,6 @@ window.LIBER_DATA.hijack = {
     { voice: 'riason', line: 'tipp sits pinned at the floor. start there if it is loud.', target: 'games-tipp-open' },
     { voice: 'riason', line: 'booth results save to your satchel.', target: null },
     { voice: 'riason', line: 'these are the booths. play one.', target: 'games-grid', glow: true }
-  ] },
-  methodology: { flag: 'walkMethod', steps: [
-    { voice: 'riason', line: 'name the question. name what is known. name what is unknown.', target: 'method-rubric-left' },
-    { voice: 'riason', line: 'choose one wall. return — the question will have changed.', target: 'method-rubric-right' },
-    { voice: 'riason', line: 'fill in each wall in writing, then come back to it later.', target: null },
-    { voice: 'riason', line: 'this is the methodology room. come back to each wall.', target: 'method-rubric-left', glow: true }
-  ] },
-  themes: { flag: 'walkThemes', steps: [
-    { voice: 'riason', line: 'every pigment is a past room. click to repaint — nothing breaks.', target: 'themes-grid' },
-    { voice: 'riason', line: 'the preview strip shows the current room in that color.', target: 'themes-current-value' },
-    { voice: 'riason', line: 'each pigment comes from a room.', target: null },
-    { voice: 'riason', line: 'these are the room colors. pick one.', target: 'themes-grid', glow: true }
   ] },
   relation: { flag: 'walkRelation', steps: [
     { voice: 'riason', line: 'every kept thing waits here unbound. touch one.', target: 'relation-unbound' },

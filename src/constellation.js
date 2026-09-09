@@ -243,7 +243,7 @@
 
   function roomFor(kind, data) {
     if (kind === 'buddy') return (data && data.kind === 'stone') ? 'sigil.html' : 'buddy.html';
-    var pages = { divination: 'divination.html', games: 'games.html', learn: 'learn.html', abstract: 'abstract.html', sea: 'sea.html', garden: 'garden.html', dreams: 'dreams.html', methodology: 'methodology.html', satchel: 'satchel.html' };
+    var pages = { divination: 'divination.html', games: 'games.html', learn: 'learn.html', sea: 'sea.html', garden: 'garden.html', dreams: 'dreams.html', satchel: 'satchel.html' };
     if (kind === 'satchel') return 'satchel.html';
     return pages[kind] || 'desktop.html';
   }

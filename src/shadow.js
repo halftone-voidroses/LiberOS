@@ -10,7 +10,7 @@
 (function () {
   var PATINA_TIERS = [2, 6, 12];   // visits + artifacts
   var BUDDY_TIERS = [2, 6, 12];   // artifacts + relations
-  var ARTIFACT_KINDS = ['divination', 'iching', 'games', 'sea', 'buddy', 'abstract', 'methodology', 'learn', 'council'];
+  var ARTIFACT_KINDS = ['divination', 'iching', 'games', 'sea', 'buddy', 'learn', 'council'];
 
   function tierLevel(n, tiers) {
     var level = 0;

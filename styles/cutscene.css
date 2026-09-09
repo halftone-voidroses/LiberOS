@@ -195,6 +195,25 @@
   text-shadow: 0 0 20px rgba(255, 105, 180, 1);
 }
 
+/* Summon lines fall from above one at a time and stay, centered and
+   pink — the liber vacui text rain. Each keeps its summon fx tint. */
+.ritual-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.ritual-line.ritual-fall {
+  animation: ritual-fall-in 0.9s ease-out both;
+}
+
+@keyframes ritual-fall-in {
+  from { opacity: 0; transform: translateY(-56px); }
+  60%  { opacity: 1; }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 .cutscene.ritual.do-shake .ritual-box {
   animation: cutscene-shake 0.5s;
 }
@@ -655,6 +674,7 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .cutscene.ritual .ritual-line { animation: none; }
+  .ritual-line.ritual-fall { animation: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .inferno-arc { transition: none; }

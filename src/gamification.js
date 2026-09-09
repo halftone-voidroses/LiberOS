@@ -44,7 +44,7 @@
 
   // Buddy artifact kinds (prompt-engine's list minus satchel, which mirrors
   // game saves). Thresholds mirror src/shadow.js / src/prompt-engine.js.
-  var ARTIFACT_KINDS = ['divination', 'iching', 'games', 'sea', 'buddy', 'abstract', 'methodology', 'learn', 'council', 'garden', 'dreams'];
+  var ARTIFACT_KINDS = ['divination', 'iching', 'games', 'sea', 'buddy', 'learn', 'council', 'garden', 'dreams'];
   var PATINA_TIERS = [2, 6, 12];   // visits + artifacts
   var BUDDY_TIERS = [2, 6, 12];   // artifacts + relations
 

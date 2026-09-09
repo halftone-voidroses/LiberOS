@@ -353,7 +353,7 @@
     if (!sel || !state()) return;
     if (sel.options.length > 1) return;
     var s = state().get() || {};
-    var kinds = ['divination', 'games', 'learn', 'abstract', 'sea', 'garden', 'methodology', 'buddy', 'dreams'];
+    var kinds = ['divination', 'games', 'learn', 'sea', 'garden', 'buddy', 'dreams'];
     for (var k = 0; k < kinds.length; k++) {
       var arr = s[kinds[k]] || [];
       for (var i = 0; i < arr.length; i++) {

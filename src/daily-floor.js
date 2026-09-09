@@ -19,9 +19,7 @@
     { id: 'sea',         room: 'sea.html',        text: 'release one line. let it go.' },
     { id: 'chat',        room: 'buddy.html',     text: 'speak. seal the exchange.' },
     { id: 'games',       room: 'games.html',      text: 'play one booth. keep the result.' },
-    { id: 'abstract',    room: 'abstract.html',   text: 'cut one pair apart.' },
     { id: 'learn',       room: 'learn.html',      text: 'read one page. answer it.' },
-    { id: 'methodology', room: 'methodology.html', text: 'read one method. use it once.' },
     { id: 'themes',      room: 'themes.html',     text: 'repaint one room.' },
     { id: 'satchel',     room: 'satchel.html',     text: 'annotate one kept item.' },
     { id: 'relation',    room: 'desktop.html',    text: 'bind one artifact. name the verb.' }

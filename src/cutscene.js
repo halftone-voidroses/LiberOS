@@ -50,6 +50,15 @@
     }
   }
 
+  function tick() {
+    if (REDUCED) return;
+    if (window.Liber && window.Liber.sound) {
+      try { window.Liber.sound.play('tick'); } catch (e) {}
+    }
+  }
+
+  var REDUCED = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
   function el(id) { return document.getElementById(id); }
 
   function clearBox() {
@@ -178,10 +187,10 @@
     box.dataset.act = 'ritual';
     box.innerHTML =
       '<div class="cutscene-box ritual-box">' +
-        '<div class="cutscene-line ritual-line"></div>' +
+        '<div class="ritual-stack"></div>' +
       '</div>';
     stage.appendChild(box);
-    var lineEl = box.querySelector('.ritual-line');
+    var stackEl = box.querySelector('.ritual-stack');
     var dead = false;
     function alive() { return !dead && document.body.contains(box); }
     function finish() {
@@ -200,10 +209,12 @@
       var s = SUMMON[i];
       var g = flameEls[i];
       if (g) g.classList.add('lit');
-      if (lineEl) {
-        lineEl.textContent = s.line;
-        lineEl.classList.remove('is-glow', 'is-flames', 'is-shake', 'is-shake-more');
-        lineEl.classList.add('is-' + s.fx);
+      if (stackEl) {
+        var fallen = document.createElement('div');
+        fallen.className = 'cutscene-line ritual-line ritual-fall is-' + s.fx;
+        fallen.textContent = s.line;
+        stackEl.appendChild(fallen);
+        tick();
       }
       setGlow(true);
       if (s.fx === 'shake' || s.fx === 'shake-more') {

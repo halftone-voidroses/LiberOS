@@ -5,7 +5,7 @@
 // Voices sourced from src/features/<app>/PERSONA.md. file://-safe, no fetch.
 // Cast note: ruby keeps the garden (she took the librarian's carving);
 // insightful inquiry keeps the dreams room (iris mappa's carving); riason
-// keeps both the satchel ledger and the methodology folio; wanderlust took
+// keeps the satchel ledger; wanderlust took
 // the themes room when iris mappa left.
 window.LIBER_DATA = window.LIBER_DATA || {};
 window.LIBER_DATA.personas = {
@@ -41,14 +41,6 @@ window.LIBER_DATA.personas = {
     material: 'black wax, sealed; faint flame flicker',
     cursor: "url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><circle cx='12' cy='14' r='7' fill='none' stroke='%234a4050' stroke-width='3'/><circle cx='12' cy='14' r='7' fill='none' stroke='%232a2030'/><path d='M12 2c1.5 2 1.5 3.5 0 5c-1.5-1.5-1.5-3 0-5z' fill='%23aa3030'/></svg>\") 12 14, auto"
   },
-  abstract: {
-    id: 'abstract',
-    name: 'entity404',
-    opinion: 'no warmth here. only process. bring a pair.',
-    accent: '#00ff66',
-    material: 'phosphor glass, green bloom',
-    cursor: "url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M2 2h4v4h4v4h4v4h4v4h4v4h-6v-2h-2v-2h-2v-2h-2v-2h-2v-2H4V8H2z' fill='%2300ff66' stroke='%23002010'/></svg>\") 2 2, auto"
-  },
   games: {
     id: 'games',
     name: 'whimsy wow',
@@ -72,14 +64,6 @@ window.LIBER_DATA.personas = {
     accent: '#aa3030',
     material: 'index card, ink-stamped corner',
     cursor: "url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M3 21L9 9l12-6-6 12z' fill='%233a2818' stroke='%231a0e08'/><path d='M3 21l8-8' stroke='%23e8d8a8' stroke-width='1.2'/><circle cx='12' cy='12' r='1.2' fill='%23e8d8a8'/></svg>\") 3 21, auto"
-  },
-  methodology: {
-    id: 'methodology',
-    name: 'riason',
-    opinion: 'a method is a promise made to the margin. read slowly.',
-    accent: '#aa3030',
-    material: 'folio broadsheet, wax seal',
-    cursor: "url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><rect x='10.75' y='2' width='2.5' height='9' fill='%236a4a20'/><circle cx='12' cy='16' r='6' fill='%23aa3030' stroke='%236a1a10'/><circle cx='12' cy='16' r='3' fill='none' stroke='%23d8b890'/></svg>\") 12 16, auto"
   },
   garden: {
     id: 'garden',

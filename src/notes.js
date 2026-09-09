@@ -25,7 +25,7 @@
   function allParents() {
     var s = st() ? st().get() : {};
     var out = [];
-    var kinds = ['divination', 'games', 'learn', 'abstract', 'sea', 'garden', 'dreams', 'methodology', 'buddy'];
+    var kinds = ['divination', 'games', 'learn', 'sea', 'garden', 'dreams', 'buddy'];
     for (var k = 0; k < kinds.length; k++) {
       var arr = s[kinds[k]] || [];
       for (var i = 0; i < arr.length; i++) {

@@ -10,7 +10,7 @@
   // thresholds mirror src/shadow.js). Static per load — the loop itself is
   // unchanged; absence never thins the room.
   const PATINA_TIERS = [2, 6, 12];
-  const ARTIFACT_KINDS = ['divination', 'iching', 'games', 'sea', 'buddy', 'abstract', 'methodology', 'learn', 'council'];
+  const ARTIFACT_KINDS = ['divination', 'iching', 'games', 'sea', 'buddy', 'learn', 'council'];
   const particles = [];
   let canvas, ctx, raf, count = BASE_COUNT, last = 0;
 

@@ -1,0 +1,225 @@
+/* ============================================================================
+   faq.css — the "?" beside the monitor (desktop only)
+   A pixel-art "?" toggle lives in the room's black space, right of the
+   machine. Opening it reveals a question list; each question expands its
+   answer below it. Visual language borrows abstract's phosphor idiom
+   (DOS-green bloom + blink) on hover — entity404's ghost on the glass.
+   Scoped to .faq-* (one selector owner). VT323 self-hosted in room.css.
+   ============================================================================ */
+
+:root {
+  --faq-amber: #e8c890;      /* idle glyph + borders (working value) */
+  --faq-amber-dim: rgba(232, 200, 144, 0.45);
+  --faq-phos: #00ff66;       /* abstract phosphor green for hover (working value) */
+  --faq-ink: #d8c8a8;        /* answer text (working value) */
+  --faq-panel: rgba(8, 5, 3, 0.92);
+}
+
+/* The toggle — fixed in the black space right of the machine. */
+.faq-toggle {
+  position: fixed;
+  right: max(14px, 2vw);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 60;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  background: rgba(10, 5, 3, 0.85);
+  border: 1px solid var(--faq-amber-dim);
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--faq-amber);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.faq-toggle svg {
+  width: 34px;
+  height: 34px;
+  shape-rendering: crispEdges;
+}
+
+/* Abstract hover language: phosphor bloom + blink. */
+.faq-toggle:hover,
+.faq-toggle:focus-visible,
+.faq-toggle[aria-expanded="true"] {
+  color: var(--faq-phos);
+  border-color: var(--faq-phos);
+  box-shadow: 0 0 14px rgba(0, 255, 102, 0.45), inset 0 0 8px rgba(0, 255, 102, 0.15);
+  outline: none;
+}
+
+.faq-toggle:hover svg,
+.faq-toggle[aria-expanded="true"] svg {
+  animation: phos-blink 1.1s steps(1) infinite;
+}
+
+.faq-toggle:focus-visible {
+  outline: 2px solid var(--faq-phos);
+  outline-offset: 2px;
+}
+
+/* The panel — an overlay card in the black space. */
+.faq-panel {
+  position: fixed;
+  right: max(14px, 2vw);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 60;
+  width: min(330px, calc(100vw - 24px));
+  max-height: 74vh;
+  overflow-y: auto;
+  background: var(--faq-panel);
+  border: 1px solid var(--faq-amber-dim);
+  border-radius: 6px;
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.85), inset 0 0 30px rgba(0, 0, 0, 0.6);
+  padding: 12px 14px 14px;
+  font-family: 'VT323', 'Courier New', monospace;
+}
+
+.faq-panel[hidden] {
+  display: none;
+}
+
+.faq-head {
+  font-size: 1rem;
+  letter-spacing: 0.25em;
+  text-transform: lowercase;
+  color: var(--faq-amber);
+  border-bottom: 1px dotted var(--faq-amber-dim);
+  padding-bottom: 6px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.faq-close {
+  background: none;
+  border: none;
+  color: var(--faq-amber-dim);
+  font-family: inherit;
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 2px;
+}
+
+.faq-close:hover {
+  color: var(--faq-phos);
+}
+
+/* Accordion items. */
+.faq-item {
+  border-bottom: 1px dotted rgba(232, 200, 144, 0.2);
+}
+
+.faq-q {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  font-family: inherit;
+  font-size: 1.15rem;
+  line-height: 1.3;
+  color: var(--faq-amber);
+  padding: 8px 4px;
+  cursor: pointer;
+}
+
+.faq-q:hover {
+  color: var(--faq-phos);
+  text-shadow: 0 0 8px rgba(0, 255, 102, 0.6);
+}
+
+.faq-q::before {
+  content: '> ';
+  color: var(--faq-amber-dim);
+}
+
+.faq-q:hover::before {
+  color: var(--faq-phos);
+}
+
+.faq-a {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.25s ease-out;
+}
+
+.faq-item.open > .faq-a {
+  grid-template-rows: 1fr;
+}
+
+.faq-a-inner {
+  overflow: hidden;
+  font-size: 1.05rem;
+  line-height: 1.45;
+  color: var(--faq-ink);
+}
+
+.faq-a-inner p {
+  margin: 0 0 8px 18px;
+}
+
+.faq-a-inner em {
+  color: #ffd86a;
+}
+
+/* Nested app submenu. */
+.faq-sub {
+  margin: 0 0 8px 28px;
+}
+
+.faq-sub .faq-q {
+  font-size: 1.05rem;
+  padding: 5px 4px;
+}
+
+/* Thin amber scrollbar (house pattern). */
+.faq-panel::-webkit-scrollbar { width: 8px; }
+.faq-panel::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.4); border-radius: 4px; }
+.faq-panel::-webkit-scrollbar-thumb { background: #6a5a30; border-radius: 4px; }
+.faq-panel::-webkit-scrollbar-thumb:hover { filter: brightness(1.3); }
+.faq-panel { scrollbar-width: thin; scrollbar-color: #6a5a30 rgba(0, 0, 0, 0.4); }
+
+/* Narrow viewports: the machine fills the room, so the toggle docks to
+   the bottom-right corner and the panel becomes a bottom sheet. */
+@media (max-width: 760px) {
+  .faq-toggle {
+    top: auto;
+    bottom: 12px;
+    transform: none;
+    width: 44px;
+    height: 44px;
+  }
+  .faq-toggle svg {
+    width: 28px;
+    height: 28px;
+  }
+  .faq-panel {
+    top: auto;
+    bottom: 64px;
+    transform: none;
+    right: 12px;
+    left: 12px;
+    width: auto;
+    max-height: 56vh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq-toggle,
+  .faq-q,
+  .faq-a {
+    transition: none;
+  }
+  .faq-toggle:hover svg,
+  .faq-toggle[aria-expanded="true"] svg {
+    animation: none;
+  }
+}

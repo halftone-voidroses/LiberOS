@@ -5,7 +5,7 @@
 //
 // API: window.Liber.sound = { init, play(kind), setEnabled(bool), isEnabled() }
 // Kinds: 'click' (button press) · 'thunk' (heavy / destructive) ·
-//        'chime' (artifact saved / kept).
+//        'chime' (artifact saved / kept) · 'tick' (faint ritual line-fall).
 // The context is created lazily and resumes on the first user gesture
 // (autoplay-safe). Every path is guarded: a missing or blocked
 // AudioContext can never break the room. The press sound is delegated —
@@ -146,6 +146,22 @@
     }
   }
 
+  // tick — a faint line-fall tick for the summoning ritual: one soft
+  // high blip, barely there, gone in 50 ms. Never leads the room.
+  function tick(c) {
+    var t = c.currentTime;
+    var osc = c.createOscillator();
+    var g = c.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(660, t);
+    osc.frequency.exponentialRampToValueAtTime(520, t + 0.03);
+    g.gain.setValueAtTime(0.035, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.05);
+    osc.connect(g).connect(c.destination);
+    osc.start(t);
+    osc.stop(t + 0.06);
+  }
+
   // ── public surface ──────────────────────────────────────────────────
 
   function play(kind) {
@@ -159,6 +175,7 @@
     try {
       if (kind === 'thunk') thunk(c);
       else if (kind === 'chime') chime(c);
+      else if (kind === 'tick') tick(c);
       else click(c);
     } catch (e) { /* never break the room for a sound */ }
   }

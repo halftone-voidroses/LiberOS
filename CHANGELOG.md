@@ -1,5 +1,13 @@
 # LiberOS changelog
 
+## 2.3.0 — questions beside the monitor, rooms removed
+### New
+- Desktop: a pixel-art "?" in the black space right of the monitor opens a question list; each question expands its answer below it, with the apps as a nested submenu. Hover speaks abstract's phosphor language (green bloom + blink).
+- Summoning ritual: the four lines now fall from above one at a time, centered and pink, each landing with a faint tick; flames, glow, and shakes unchanged.
+### Removed
+- Methodology room deleted (page, feature, dial tile, walkthrough, prompts). Abstract room deleted, its phosphor idiom kept for the "?" hover. Themes room no longer plays a first-visit walkthrough.
+- Dial tile "wax" renamed to "chat" (buddy page was already titled Chat). Old abstract/methodology artifacts in existing saves still display in the satchel, constellation, and slot summaries; they no longer generate prompts or tiers.
+
 ## 2.2.0 — buddy room, designed scrolls, resolution hardening
 
 ### New

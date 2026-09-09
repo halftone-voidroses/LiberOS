@@ -1,6 +1,6 @@
 // citations.data.js — runtime mirror of data/citations.json (file://-safe, no fetch).
 // Generated from citations.json — keep in sync (see AGENTS.md data conventions).
-// WS6: the citations traveller. Rendered verbatim by learn/methodology panels.
+// WS6: the citations traveller. Rendered verbatim by learn panels.
 window.LIBER_DATA = window.LIBER_DATA || {};
 window.LIBER_DATA.citations = {
   "_source": "extracted from archive/yep/LiberReference/index.html lines 2646-2690 (Further Reading) plus in-text attributions in the Education section (lines 2564-2643). claimedFor maps each source to the parts of the workbook that rest on it, per the author's own section text.",

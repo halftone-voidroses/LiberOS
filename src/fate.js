@@ -138,7 +138,7 @@
     var st = (window.Liber && window.Liber.state) || null;
     var s = st ? st.get() : {};
     var kept = 0;
-    var kinds = ['satchel', 'garden', 'dreams', 'divination', 'learn', 'abstract', 'methodology', 'buddy'];
+    var kinds = ['satchel', 'garden', 'dreams', 'divination', 'learn', 'buddy'];
     for (var i = 0; i < kinds.length; i++) {
       if (Array.isArray(s[kinds[i]])) kept += s[kinds[i]].length;
     }
