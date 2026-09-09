@@ -44,7 +44,7 @@ window.LIBER_DATA.personas = {
   games: {
     id: 'games',
     name: 'whimsy wow',
-    opinion: 'step right up! every booth pays out in satchel-weight.',
+    opinion: 'step right up! every game pays out in satchel-weight.',
     accent: '#d4af37',
     material: 'painted marquee wood, bulb studs',
     cursor: "url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><circle cx='12' cy='10' r='7' fill='%23ffe080' stroke='%23d4af37' stroke-width='1.5'/><path d='M10 8c0-2 1-3 2-4' stroke='%23fff6d0' fill='none' stroke-width='1.5' stroke-linecap='round'/><path d='M9 17h6v3h-6z' fill='%23d4af37' stroke='%23aa6000'/></svg>\") 12 10, auto"
