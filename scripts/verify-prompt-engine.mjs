@@ -41,8 +41,8 @@ for (const f of ['src/state.js', 'data/tarot.data.js', 'data/prompt-templates.da
 const L = sandbox.window.Liber;
 check('engine registers window.Liber.prompts', !!L.prompts && typeof L.prompts.compose === 'function');
 
-const sigil = { id: 'sigil-1', intention: 'my fear of inadequacy', ts: Date.now() };
-L.state.set({ sigils: [sigil] });
+const sigil = { id: 'sigil-1', kind: 'stone', intention: 'my fear of inadequacy', ts: Date.now() };
+L.state.set({ buddy: [sigil] });
 const card = L.state.addArtifact('divination', { name: 'the emperor', key: 'a line drawn and held', n: 4, g: '♂' });
 L.state.addArtifact('divination', { name: 'the tower', key: 'the structure, broken', n: 16, g: '⚡' });
 
@@ -51,7 +51,7 @@ const rel = { from: card.id, verb: 'protects' };
 const a = L.prompts.compose(rel);
 const b = L.prompts.compose(rel);
 check('deterministic: same relation → same text', a && b && a.text === b.text, a && a.text);
-check('compose resolves slots', a && typeof a.text === 'string' && a.text.length > 0 && !/\{|\}/.test(a.text) && a.text.includes('my fear of inadequacy'), a && a.text);
+check('compose resolves slots', a && typeof a.text === 'string' && a.text.length > 0 && !/\{|\}/.test(a.text) && a.text.includes('fear of inadequacy'), a && a.text);
 
 // (b) verb gating: protects never picks a template gated to another family
 const gatedIds = new Set(['threatens-aim', 'threatens-warning', 'mirror-look', 'mirror-away', 'carries-weight', 'carries-putdown', 'refuses-door', 'refuses-speak']);
@@ -63,7 +63,7 @@ for (const c of otherCards) {
 }
 check('verb gating: protects → only protect/any templates', gateOk);
 const generic = L.prompts.compose({ from: card.id, verb: 'reminds me of tuesdays' });
-check('unknown verb falls back to generic templates', generic && (generic.templateId.startsWith('any-')), generic && generic.templateId);
+check('unknown verb falls back to generic templates', generic && (generic.templateId.startsWith('any-') || generic.templateId.startsWith('tag-')), generic && generic.templateId);
 
 // (c) no unresolved slot tokens across every relation × every template family
 const verbs = ['protects', 'threatens me', 'mirrors', 'carries', 'refuses', 'relates to'];

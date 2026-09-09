@@ -465,6 +465,40 @@ function loadGhost(bitmapDataUrl) {
     var s = (window.Liber && window.Liber.state && window.Liber.state.get()) || {};
     return ((s.buddy || []).filter(function (e) { return e && e.kind === 'stone'; }));
   }
+  function buddyTags() {
+    var st = (window.Liber && window.Liber.state) || null;
+    if (st && st.BUDDY_TAGS) return st.BUDDY_TAGS;
+    return ['shadow', 'anima', 'animus', 'persona', 'self', 'ego', 'trickster', 'wise old', 'great mother', 'puer', 'senex', 'hero'];
+  }
+  function buildTagGrid(selected) {
+    var grid = document.getElementById('sigil-tags-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    var tags = buddyTags();
+    var sel = selected || [];
+    for (var i = 0; i < tags.length; i++) {
+      (function (t) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'sigil-tag' + (sel.indexOf(t) >= 0 ? ' on' : '');
+        b.textContent = t;
+        b.setAttribute('aria-pressed', sel.indexOf(t) >= 0 ? 'true' : 'false');
+        b.addEventListener('click', function () {
+          var on = b.classList.toggle('on');
+          b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
+        grid.appendChild(b);
+      })(tags[i]);
+    }
+  }
+  function selectedTags() {
+    var out = [];
+    var grid = document.getElementById('sigil-tags-grid');
+    if (!grid) return out;
+    var btns = grid.querySelectorAll('.sigil-tag.on');
+    for (var i = 0; i < btns.length; i++) out.push(btns[i].textContent);
+    return out;
+  }
   function setStone(arr) {
     var st = (window.Liber && window.Liber.state) || null;
     if (!st) return;
@@ -481,6 +515,7 @@ function loadGhost(bitmapDataUrl) {
       var arr = getStone();
       var intention = document.querySelector('.sigil-input').innerText;
       var bitmap = snapshotBitmap();
+      var tags = selectedTags();
       if (replaceMode && currentId) {
         for (var i = 0; i < arr.length; i++) {
           if (arr[i].id === currentId) {
@@ -488,7 +523,8 @@ function loadGhost(bitmapDataUrl) {
               intention: intention,
               element: activeElement,
               ts: Date.now(),
-              bitmap: bitmap || arr[i].bitmap || null
+              bitmap: bitmap || arr[i].bitmap || null,
+              tags: tags
             });
             setStone(arr);
             signedUI();
@@ -505,7 +541,8 @@ function loadGhost(bitmapDataUrl) {
         element: activeElement,
         ts: Date.now(),
         annotation: '',
-        bitmap: bitmap
+        bitmap: bitmap,
+        tags: tags
       });
       setStone(arr);
       signedUI();
@@ -535,6 +572,7 @@ function loadGhost(bitmapDataUrl) {
     setActive(sigil.element || 'earth');
     var input = document.querySelector('.sigil-input');
     if (input) input.innerText = sigil.intention || '';
+    buildTagGrid(Array.isArray(sigil.tags) ? sigil.tags : []);
     var title = document.querySelector('.sigil-title');
     if (title) title.textContent = 'BUDDY · re-open the stone';
     var sub = document.querySelector('.sigil-subtitle');
@@ -559,6 +597,7 @@ function loadGhost(bitmapDataUrl) {
     } else {
       setActive('earth');
       initCanvas();
+      buildTagGrid([]);
     }
 
     var btns = document.querySelectorAll('.sigil-element');

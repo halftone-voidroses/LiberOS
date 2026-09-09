@@ -170,6 +170,25 @@
   margin-top: 40px;
   line-height: 1.6;
 }
+.satchel-netline {
+  font-size: 0.875rem;
+  font-style: italic;
+  color: #6a4a20;
+  text-align: center;
+  letter-spacing: 0.06em;
+  border-bottom: 1px dotted rgba(80, 50, 20, 0.3);
+  padding-bottom: 6px;
+  margin-bottom: 6px;
+}
+.satchel-sect {
+  font-size: 0.875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #6a3010;
+  margin: 10px 0 2px;
+  border-bottom: 1px solid rgba(80, 50, 20, 0.25);
+  padding-bottom: 2px;
+}
 
 .satchel-body {
   flex: 1;

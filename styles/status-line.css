@@ -15,7 +15,7 @@
 .status-line {
   position: absolute;
   bottom: calc(26% + 6px);
-  left: 14px;
+  right: 14px;
   z-index: 30;
   padding: 5px 16px 6px 14px;
   background: linear-gradient(180deg, #2a1410 0%, #140808 100%);

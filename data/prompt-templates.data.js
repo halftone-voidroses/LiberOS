@@ -255,6 +255,37 @@ window.LIBER_DATA.promptTemplates = {
         "artifact"
       ],
       "text": "{buddy} watched you make {artifact}. ask it what it saw that you did not."
+    },
+    {
+      "id": "tag-carry",
+      "verbs": ["any"],
+      "slots": ["buddy", "tags", "artifact"],
+      "text": "{buddy} carries {tags}. what does {artifact} ask of that carrying?"
+    },
+    {
+      "id": "tag-meet",
+      "verbs": ["any"],
+      "slots": ["buddy", "artifact", "tagphrase"],
+      "text": "{buddy} meets {artifact} {tagphrase}. which one speaks first?"
+    },
+    {
+      "id": "tag-road",
+      "verbs": ["any"],
+      "minBuddy": 1,
+      "slots": ["buddy", "tagphrase", "interpretation"],
+      "text": "{buddy} walks toward wholeness {tagphrase}. what has {interpretation} brought to the road?"
+    },
+    {
+      "id": "tag-name",
+      "verbs": ["any"],
+      "slots": ["buddy", "tags"],
+      "text": "you named {buddy}, and it holds {tags}. what part of you answered to that name today?"
+    },
+    {
+      "id": "tag-verb",
+      "verbs": ["protect", "carry", "mirror", "threat", "refuse"],
+      "slots": ["buddy", "verb", "tags"],
+      "text": "{buddy} {verb} this as {tags}. what does the keeping protect, and what does it refuse?"
     }
   ]
 };

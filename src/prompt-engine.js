@@ -114,9 +114,35 @@
   }
 
   function buddyName(s) {
+    var st = state();
+    var raw = '';
     var sig = (((s && s.buddy) || []).filter(function (e) { return e && e.kind === 'stone'; }))[0];
     var intent = sig && typeof sig.intention === 'string' ? sig.intention.trim() : '';
-    return intent || 'your buddy';
+    raw = intent || 'your buddy';
+    try {
+      if (st && st.displayBuddyName) return st.displayBuddyName(raw);
+    } catch (e) {}
+    return raw || 'your buddy';
+  }
+
+  function buddyTags(s) {
+    try {
+      var st = state();
+      if (st && st.getBuddyTags) {
+        var t = st.getBuddyTags();
+        if (t && t.length) return t;
+      }
+    } catch (e) {}
+    var sig2 = (((s && s.buddy) || []).filter(function (e) { return e && e.kind === 'stone'; }))[0];
+    if (sig2 && Array.isArray(sig2.tags) && sig2.tags.length) return sig2.tags.slice();
+    return [];
+  }
+
+  function tagPhrase(s) {
+    var tags = buddyTags(s);
+    if (!tags.length) return '';
+    if (tags.length === 1) return 'as ' + tags[0];
+    return 'as ' + tags.slice(0, -1).join(', ') + ' and ' + tags[tags.length - 1];
   }
 
   function intention(s) {
@@ -157,6 +183,8 @@
     var card = cardFor(entry);
     var fragments = (card && card.upright && card.upright.length) ? card.upright.slice() : [];
     var artifactLabel = (entry && (entry.name || entry.title)) || 'this artifact';
+    var tags = buddyTags(s);
+    var tagP = tagPhrase(s);
 
     var slots = {
       interpretation: fragments.length ? fragments : [artifactLabel],
@@ -164,11 +192,17 @@
       artifact: [artifactLabel],
       verb: [relation.verb || 'relates to'],
       intention: [intention(s)],
+      tags: [tags.length ? tags.join(', ') : 'the unmarked'],
+      tagphrase: [tagP || 'in its own shape'],
     };
 
     var template = pick(rng, candidates);
     var text = fillSlots(template.text, slots, rng);
     if (unresolvedTokens(text)) return null;
+    text = text.charAt(0).toUpperCase() + text.slice(1);
+    text = text.replace(/([.?!]\s+)([a-z])/g, function (m, p1, p2) { return p1 + p2.toUpperCase(); });
+    text = text.replace(/\s+/g, ' ').trim();
+    if (!/[.?!]$/.test(text)) text += '.';
 
     return {
       id: 'prompt-' + hashSeed(seedStr + '|' + template.id).toString(36),
@@ -199,15 +233,16 @@
     var existing = s.prompts || [];
     var seen = {};
     for (var i = 0; i < existing.length; i++) {
-      seen[existing[i].relationFrom + '|' + existing[i].verb] = true;
+      seen[existing[i].relationFrom + '|' + existing[i].verb + '|' + (existing[i].relationTo || 'buddy')] = true;
     }
     var fresh = [];
     for (var j = 0; j < relations.length; j++) {
       var rel = relations[j];
-      var key = rel.from + '|' + (rel.verb || 'relates to');
+      var key = rel.from + '|' + (rel.verb || 'relates to') + '|' + (rel.to || 'buddy');
       if (seen[key]) continue;
       var prompt = compose(rel);
       if (!prompt) continue;
+      prompt.relationTo = rel.to || 'buddy';
       fresh.push(prompt);
       seen[key] = true;
     }

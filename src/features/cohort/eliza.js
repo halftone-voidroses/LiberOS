@@ -357,6 +357,230 @@
         'they are gathered because you gathered them. what would they say of you tonight?'
       ] },
 
+    { keep: true, re: /individuation/,
+      replies: [
+        'individuation is the slow gathering of everything you refused to be. where in that gathering do you stand tonight — at the door, or in the middle of the room?',
+        'the work is wholeness, not perfection. what part of you is still waiting to be let in?',
+        'you named the long road. what has it asked you to lay down so far — and what will it ask next?'
+      ] },
+
+    { keep: true, re: /(?:^|\s)(?:shadow)\b/,
+      replies: [
+        'the shadow is the part you did not wish to be, and it keeps your appointment whether you keep it or not. what has yours been doing while you looked away?',
+        'what you refuse in yourself arrives dressed as other people. whose face has it been wearing lately?',
+        'turn and ask it what it wants. the pursuit ends at the turning — what would yours say if it stopped running?'
+      ] },
+
+    { keep: true, re: /anima/,
+      replies: [
+        'she is the inner other — relatedness, feeling, the life of the inward hours. what quality does she carry that your days make no room for?',
+        'when she appears as lover, stranger, or guide, she wears your own unlived feeling. who did you mistake her for first?',
+        'the anima asks to be related to, not solved. what would change if you courted her instead of questioning her?'
+      ] },
+
+    { keep: true, re: /animus/,
+      replies: [
+        'he is the inner other in his ordering shape — spirit, meaning, the voice that argues in crowds. which of his opinions is loudest in you right now?',
+        'the animus arrives as conviction before it arrives as counsel. whose certainty have you borrowed without trying it on?',
+        'ask what he protects. often he guards a feeling that was never allowed to speak.'
+      ] },
+
+    { keep: true, re: /persona/,
+      replies: [
+        'the mask is necessary — the danger is mistaking it for the face. which role were you wearing when the day went wrong?',
+        'who were you performing for today? the audience names the mask.',
+        'what remains when the uniform comes off? the dream of nakedness knows — and it is usually kinder than the fear of it.'
+      ] },
+
+    { keep: true, re: /(?:^|\s)(?:self|the self|wholeness|whole)\b/,
+      replies: [
+        'the Self is the whole the ego circles but never occupies — mandala, child, treasure, walled city. what image of wholeness keeps returning to you?',
+        'you speak of the totality. what small, daily thing would be different if you lived as though it were true?',
+        'the centre holds without your permission. what would it mean to rest there instead of ruling from the edge?'
+      ] },
+
+    { keep: true, re: /(?:^|\s)(?:ego)\b/,
+      replies: [
+        'the ego is the candlelit floor, not the whole house. what has it been pretending to govern that it cannot?',
+        'where has the grip been too tight — and what loosened the last time you let go?',
+        'the fall corrects the height. what inflation is due for gravity?'
+      ] },
+
+    { keep: true, re: /trickster/,
+      replies: [
+        'the trickster arrives when solemnity has become a cage. what rule of yours most deserves to be broken beautifully?',
+        'mercurius overturns the table so the game can restart. what were you taking too seriously to see clearly?',
+        'you were fooled — good. what did the foolishness reveal that wisdom kept hidden?'
+      ] },
+
+    { keep: true, re: /(?:wise old|senex|old man|mentor|sage)\b/,
+      replies: [
+        'the old one comes when your own knowing runs out. what counsel did he give — write it exactly, without improving it?',
+        'meaning arrives in an old coat. where in the waking life are you asking others to know what only you can know?',
+        'the senex keeps time slowly. what in you is ripening that hurry would spoil?'
+      ] },
+
+    { keep: true, re: /(?:great mother|mother archetype|devouring mother)\b/,
+      replies: [
+        'she feeds and buries with the same hands. did she nourish or swallow in your telling?',
+        'the vessel, the womb, the matrix — what in you is gestating, and is the ground around it tended or trampled?',
+        'what did the mother give that you still live on — and what withheld thing do you still circle?'
+      ] },
+
+    { keep: true, re: /(?:puer|divine child|inner child|eternal youth)\b/,
+      replies: [
+        'the child is the beginning that arrives whole. what have you begun that you keep measuring by the wrong age?',
+        'who guards it? small things need guardians, not critics.',
+        'wonder is a discipline. what did the child want before the world explained it away?'
+      ] },
+
+    { keep: true, re: /(?:hero|heroine|hero'?s journey)\b/,
+      replies: [
+        'the hero goes out, is broken, and returns with something for the town. where on that road are you — departure, ordeal, or return?',
+        'what dragon is actually a guardian? the shape of the foe is the shape of the gift.',
+        'victory no one can use is decoration. what would be worth bringing back?'
+      ] },
+
+    { keep: true, re: /(?:mandala|circle|ouroboros|labyrinth|centre|center)\b/,
+      replies: [
+        'the circle that holds its centre is the whole drawn small. was yours complete, broken, or still being drawn?',
+        'circumambulate rather than dissect: walk around it once more and say what changes.',
+        'the centre is a place to rest, not a problem to solve. what would resting there feel like?'
+      ] },
+
+    { keep: true, re: /(?:archetype|archetypal|myth|fairy tale|mythology)\b/,
+      replies: [
+        'the old stories are the psyche\'s case notes. which tale does your situation most resemble — and who are you in it?',
+        'myth tells the same report at a larger scale. what does the larger telling make visible that the small one hides?',
+        'von franz read tales the way physicians read pulses. what repeats in yours? the repeat is the diagnosis.'
+      ] },
+
+    { keep: true, re: /(?:complex|triggered|possessed|it took over|i wasn\'t myself)\b/,
+      replies: [
+        'a complex is a splinter with its own weather — it acts while you watch. what sets yours off, precisely? name the hour, the place, the sentence.',
+        'when it takes the chair, who leaves the room? describe the moment the hands stop being yours.',
+        'feeling-toned, autonomous, older than the occasion: what age were you the first time it spoke?'
+      ] },
+
+    { keep: true, re: /(?:projection|projecting|i hate in (?:him|her|them))\b/,
+      replies: [
+        'what irritates in another is often the unowned part knocking. what quality in them is yours, disowned?',
+        'withdraw it gently: what remains of them when you take back what is yours?',
+        'the hook must fit the fish. what in you is shaped exactly like their offence?'
+      ] },
+
+    { keep: true, re: /(?:active imagination|talk to it|dialogue|let it answer|visualize|visualise)\b/,
+      replies: [
+        'then give it ink: let the image answer in its own words, and write them down without correcting. what does it say first?',
+        'stay with the figure — do not interpret it away. what does it want from you, in its own voice?',
+        'the transcendent function is born of sustained attention. what happens if you ask once more instead of concluding?'
+      ] },
+
+    { keep: true, re: /(?:synchronicity|coincidence|meaningful|omen|signs?)\b/,
+      replies: [
+        'the meaningful coincidence is the world rhyming. what were you carrying when the rhyme arrived?',
+        'frisson is the instrument — the skin knows before the mind consents. what touched you, exactly, and where?',
+        'omens repeat what lessons repeat. what has happened three times now that you keep calling accident?'
+      ] },
+
+    { keep: true, re: /(?:dreamt|dreamed|a dream|my dream|nightmare)\b/,
+      replies: [
+        'bring it here the way you would carry water — carefully, without spilling. what was the strangest image, the one that embarrasses you?',
+        'the dream compensates the day: what one-sidedness in your waking hours might it be answering?',
+        'if the dream were wax, what shape would you press into it — and what would it press back?'
+      ] },
+
+    { keep: true, re: /(?:symbol|symbols|symbolic|what does .* mean)\b/,
+      replies: [
+        'a symbol is the best possible expression of something not yet known — never a code with one key. what does it mean to you first, before the books?',
+        'circle it rather than crack it: what myth, memory, and bodily feeling gather around this image?',
+        'the symbol chose you. stay with it until it is exhausted — what has it not yet said?'
+      ] },
+
+    { keep: true, re: /(?:water|ocean|sea|river|flood|drown)\b/,
+      replies: [
+        'water is the unconscious in fluid form. were you swimming, standing, or being carried? the posture is the position.',
+        'clear or muddy? the state of the water is the state of what carries you.',
+        'what has been rising slowly, the way water rises before anyone calls it a flood?'
+      ] },
+
+    { keep: true, re: /(?:house|attic|basement|cellar|stairs|room)\b/,
+      replies: [
+        'the house is the floor plan of the self. which room did the dream offer — and which door did you not open?',
+        'attics keep the interests, cellars keep the heat. what is stored on each of your floors?',
+        'an unexplored room is an unlived part. what would it take to move in?'
+      ] },
+
+    { keep: true, re: /(?:snake|serpent|cobra|python)\b/,
+      replies: [
+        'the serpent is ancient and ambivalent — medicine and danger in one coil. is yours healing on the staff, or waiting in the grass?',
+        'what instinct has been coiled while you decided whether to call it danger or medicine?',
+        'shedding comes before growing. what skin is overdue?'
+      ] },
+
+    { keep: true, re: /(?:chased|chasing|pursued|pursuer|stalker|followed)\b/,
+      replies: [
+        'the pursuer is the refused part keeping its appointment. if you stopped and asked what it wants — what would it answer?',
+        'whose face did you hope it would not wear? begin there.',
+        'in the old tales the pursuer becomes a guide once faced. what guidance might yours carry?'
+      ] },
+
+    { keep: true, re: /(?:falling|fell|plummet|dropped)\b/,
+      replies: [
+        'falling is gravity correcting an inflation. what height were you holding that the hands could no longer keep?',
+        'the body knows how to land. what would a gentler descent require you to release on the way down?',
+        'where did you stop being the one who decides the height?'
+      ] },
+
+    { keep: true, re: /(?:flying|flew|floating|levitat|hover)\b/,
+      replies: [
+        'flight is spirit unfastened — release, or escape? what would be visible from up there that the ground hides?',
+        'did it feel earned or stolen? the psyche keeps ledgers, and the wings remember.',
+        'icarus is the caution folded into every ascent: what height is yours, truly?'
+      ] },
+
+    { keep: true, re: /(?:death|dying|corpse|funeral|grave|coffin)\b/,
+      replies: [
+        'death in the inner life is rarely an ending of the body — it is a season closing. what has already ended that you are still hosting?',
+        'the nigredo comes before the colour returns. what blackening is underway, and what might it be preparing?',
+        'who attended the ending? witnesses name what comes next.'
+      ] },
+
+    { keep: true, re: /(?:fire|burning|flame|ashes|ember)\b/,
+      replies: [
+        'fire separates rather than merely destroys: what burned was finished. what stood untouched in the ash?',
+        'is this the hearth you tend, or the wildfire walking through you? the tending differs entirely.',
+        'the phoenix keeps its address in the ash. what renewal is the heat announcing?'
+      ] },
+
+    { keep: true, re: /(?:forest|woods|jungle|tree|garden|mountain)\b/,
+      replies: [
+        'the green places are where transformation happens off the map. did you enter on purpose? that changes the genre entirely.',
+        'the density measures the distance from the known. how far in did you agree to go?',
+        'what did you go in looking for — and what found you instead?'
+      ] },
+
+    { keep: true, re: /(?:mirror|reflection|naked|nude|exposed)\b/,
+      replies: [
+        'the mirror refuses the mask: what it shows is not the persona\'s face. did you look? not looking is also a finding.',
+        'exposure dreams stage what remains when the uniform is off — usually less frightening than the fear of it. whose eyes were on you?',
+        'which role was taken, and what stood underneath it?'
+      ] },
+
+    { keep: true, re: /(?:mandala|treasure|gold|jewel|ring|wedding|crown|philosopher)\b/,
+      replies: [
+        'treasure dreams report value located in what the day calls dirt. where exactly was it found? the undignified place is the teaching.',
+        'the ring is a bond without endpoints: which opposites in you are being asked to hold together?',
+        'did you keep it, share it, or doubt it? the handling is the verdict on your own worth.'
+      ] },
+
+    { keep: true, re: /(?:bird|fish|wolf|horse|cat|dog|bear|lion|animal)\b/,
+      replies: [
+        'the animal is instinct with a face. which beast was it, exactly — species before feeling, behaviour before meaning?',
+        'did it come to you, or did you follow it? the direction decides who leads.',
+        'what does this creature know about living that you have been trying to think your way around?'
+      ] },
+
     { keep: false, re: /what do you (?:do|want|know)|why are you here/,
       replies: [
         'i keep. that is all i do — listen, and seal. what shall i keep of yours?',

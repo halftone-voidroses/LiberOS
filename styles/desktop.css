@@ -397,7 +397,7 @@
 
 .settings-cog {
   position: absolute;
-  left: 28px;
+  right: 28px;
   /* D0003 WS1: lifted clear of the status line below (was 26%+22px — the
      gear's bottom teeth cut through the first characters of the status
      text at 1280×800, reading as clipped). */

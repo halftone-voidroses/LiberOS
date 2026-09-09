@@ -934,6 +934,42 @@
   border-left: 1px solid #6a5228;
   background: linear-gradient(180deg, rgba(20, 14, 6, 0.6) 0%, rgba(10, 7, 3, 0.6) 100%);
 }
+.sigil-tags {
+  padding: 8px 12px 4px;
+}
+.sigil-tags-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 6px;
+  max-height: 118px;
+  overflow-y: auto;
+}
+.sigil-tag {
+  background: linear-gradient(180deg, #241a0c 0%, #120c04 100%);
+  border: 1px solid #6a5228;
+  border-radius: 2px;
+  color: #c8a878;
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 0.82rem;
+  padding: 3px 9px;
+  cursor: pointer;
+}
+.sigil-tag.on {
+  border-color: #e8c890;
+  color: #ffe8b8;
+  box-shadow: 0 0 8px rgba(232, 200, 144, 0.45);
+}
+.sigil-tag:focus-visible { outline: 2px solid #e8c890; outline-offset: 1px; }
+.sigil-tags-hint {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 0.8rem;
+  color: #8a7050;
+  margin-top: 6px;
+  line-height: 1.4;
+}
 .sigil-rail .sigil-intention {
   padding: 10px 12px 4px;
 }

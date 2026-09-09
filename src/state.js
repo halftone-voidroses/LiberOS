@@ -45,7 +45,7 @@
   function load() {
     try {
       var raw = localStorage.getItem(KEY);
-      if (!raw) raw = localStorage.getItem(LEGACY_KEY);
+      if (!raw && slot === 'keep') raw = localStorage.getItem(LEGACY_KEY);
       if (!raw) return Object.assign({}, DEFAULT);
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed.cohort) && (!Array.isArray(parsed.buddy) || parsed.buddy.length === 0)) {
@@ -180,10 +180,11 @@
     return entry;
   }
 
-  function bindRelation(fromId, verb) {
+  function bindRelation(fromId, verb, toId) {
+    var to = toId || 'buddy';
     var relations = (state.relations || []).slice();
-    if (relations.some(function (r) { return r.from === fromId && r.verb === verb; })) return null;
-    var rel = { from: fromId, to: 'buddy', verb: verb || 'relates to', ts: Date.now() };
+    if (relations.some(function (r) { return r.from === fromId && r.verb === verb && ((r.to || 'buddy') === to); })) return null;
+    var rel = { from: fromId, to: to, verb: verb || 'relates to', ts: Date.now() };
     relations.push(rel);
     state = Object.assign({}, state, { relations: relations });
     save(state);
@@ -191,11 +192,108 @@
     return rel;
   }
 
-  function unbindRelation(fromId) {
-    state.relations = (state.relations || []).filter(function (r) { return r.from !== fromId; });
+  function unbindRelation(fromId, toId) {
+    if (toId) {
+      state.relations = (state.relations || []).filter(function (r) { return !(r.from === fromId && (r.to || 'buddy') === toId); });
+    } else {
+      state.relations = (state.relations || []).filter(function (r) { return r.from !== fromId; });
+    }
     state = Object.assign({}, state);
     save(state);
     emit('change', state);
+  }
+
+  // Relation margin notes — the satchel writes here; the ledger reads here.
+  function setRelationNote(fromId, note) {
+    var relations = (state.relations || []).slice();
+    var touched = false;
+    for (var i = 0; i < relations.length; i++) {
+      if (relations[i].from === fromId) {
+        relations[i] = Object.assign({}, relations[i], { note: String(note || '') });
+        touched = true;
+      }
+    }
+    if (!touched) return null;
+    state = Object.assign({}, state, { relations: relations });
+    save(state);
+    emit('change', state);
+    return true;
+  }
+
+  function childrenOf(artifactId) {
+    return (state.relations || []).filter(function (r) { return (r.to || 'buddy') === artifactId; });
+  }
+
+  // ── buddy tags + name sanitization ──────────────────────────────────
+  // Tags: Jungian individuation concepts chosen when the stone is named.
+  // Stored on the stone entry as tags:[]. Sanitization strips leading
+  // ownership/wish prefixes so prompts can speak grammatically:
+  // "My animus" -> core "animus", display "your animus".
+  var BUDDY_TAGS = ['shadow', 'anima', 'animus', 'persona', 'self', 'ego',
+    'trickster', 'wise old', 'great mother', 'puer', 'senex', 'hero',
+    'maiden', 'mother', 'father', 'child', 'sage', 'ruler', 'creator',
+    'lover', 'jester', 'caregiver', 'explorer', 'rebel', 'magician',
+    'innocent', 'orphan', 'warrior', 'syzygy', 'individuation'];
+
+  function sanitizeBuddyCore(raw) {
+    var t = String(raw == null ? '' : raw).replace(/\s+/g, ' ').trim();
+    if (!t) return '';
+    var low = t.toLowerCase();
+    var prefixes = ['i want my ', 'i want a ', 'i want the ', 'i want ',
+      'i wish for my ', 'i wish for ', 'i wish ', 'i need my ', 'i need ',
+      'my own ', 'my ', 'a ', 'an ', 'the ', "i'm ", 'i am ', 'i feel ',
+      'being ', 'to be '];
+    var changed = true;
+    while (changed) {
+      changed = false;
+      for (var i = 0; i < prefixes.length; i++) {
+        if (low.indexOf(prefixes[i]) === 0) {
+          t = t.slice(prefixes[i].length).replace(/^\s+/, '');
+          low = t.toLowerCase();
+          changed = true;
+          break;
+        }
+      }
+    }
+    return t.trim();
+  }
+
+  function displayBuddyName(raw) {
+    var core = sanitizeBuddyCore(raw);
+    if (!core) return 'your buddy';
+    // Short noun-like cores get a possessive; long intention sentences stay.
+    var words = core.split(/\s+/);
+    if (core.length <= 32 && words.length <= 3) {
+      if (/^your\s+/i.test(core) || /^our\s+/i.test(core)) return core;
+      return 'your ' + core;
+    }
+    return core;
+  }
+
+  function getBuddyTags() {
+    var stones = (state.buddy || []).filter(function (e) { return e && e.kind === 'stone'; });
+    if (!stones.length) return [];
+    return Array.isArray(stones[0].tags) ? stones[0].tags.slice() : [];
+  }
+
+  function setBuddyTags(tags) {
+    var all = (state.buddy || []).slice();
+    var idx = -1;
+    for (var i = 0; i < all.length; i++) {
+      if (all[i] && all[i].kind === 'stone') { idx = i; break; }
+    }
+    if (idx < 0) return null;
+    var clean = [];
+    for (var j = 0; j < (tags || []).length; j++) {
+      var t = String(tags[j] || '').toLowerCase().trim();
+      if (t && BUDDY_TAGS.indexOf(t) >= 0 && clean.indexOf(t) < 0) clean.push(t);
+      else if (t && BUDDY_TAGS.indexOf(t) < 0 && t.length <= 24 && clean.indexOf(t) < 0 && /^[a-z][a-z \-']*$/.test(t)) clean.push(t);
+    }
+    all[idx] = Object.assign({}, all[idx], { tags: clean });
+    state = Object.assign({}, state, { buddy: all });
+    save(state);
+    emit('change', state);
+    return clean;
   }
 
   function releaseArtifact(kind, id) {
@@ -237,5 +335,5 @@
     window.location.reload();
   }
 
-  global.Liber.state = { get, set, on, reset, addArtifact, updateArtifact, bindRelation, unbindRelation, releaseArtifact, replaceSigil, getSlot, setSlot };
+  global.Liber.state = { get, set, on, reset, addArtifact, updateArtifact, bindRelation, unbindRelation, releaseArtifact, replaceSigil, getSlot, setSlot, setRelationNote, childrenOf, sanitizeBuddyCore, displayBuddyName, getBuddyTags, setBuddyTags, BUDDY_TAGS };
 })(window);

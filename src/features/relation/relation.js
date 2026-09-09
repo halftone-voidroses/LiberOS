@@ -131,7 +131,10 @@
         var art = artifactName(rel.from, artifacts);
         var name = art ? art.name : 'an artifact released';
         var chip = art ? art.chip : 'gone';
-        rows += '<div class="relation-row" data-from="' + esc(rel.from) + '">'
+        var toId = rel.to || 'buddy';
+        var toArt = toId === 'buddy' ? null : artifactName(toId, artifacts);
+        var toName = toId === 'buddy' ? 'the buddy' : (toArt ? toArt.name : 'an artifact');
+        rows += '<div class="relation-row" data-from="' + esc(rel.from) + '" data-to="' + esc(toId) + '">'
               +   '<div class="relation-row-main">'
               +     '<span class="relation-row-artifact">' + esc(name) + '</span>'
               +     '<span class="relation-row-chip">' + esc(chip) + '</span>'
@@ -141,11 +144,11 @@
               +     '<span class="relation-row-ring" aria-hidden="true">—o—</span>'
               +     '<input class="relation-verb-input" list="verb-families" value="' + esc(verbOf(rel)) + '" aria-label="re-word the verb" spellcheck="false"/>'
               +     '<span class="relation-row-ring" aria-hidden="true">o—</span>'
-              +     '<span class="relation-row-to">the buddy</span>'
+              +     '<span class="relation-row-to">' + esc(toName) + '</span>'
               +   '</div>'
               +   '<div class="relation-row-foot">'
               +     '<span class="relation-row-date">bound ' + fmtDate(rel.ts) + '</span>'
-              +     '<button class="relation-release" type="button" data-from="' + esc(rel.from) + '">release the ring</button>'
+              +     '<button class="relation-release" type="button" data-from="' + esc(rel.from) + '" data-to="' + esc(toId) + '">release the ring</button>'
               +   '</div>'
               + '</div>';
       }
@@ -191,7 +194,10 @@
         if (row) row.classList.add('cracking');
         if (window.Liber.sound) window.Liber.sound.play('thunk');
         setTimeout(function () {
-          window.Liber.state.unbindRelation(btn.getAttribute('data-from'));
+          var to = btn.getAttribute('data-to') || undefined;
+          if (to && to !== 'buddy') window.Liber.state.unbindRelation(btn.getAttribute('data-from'), to);
+          else if (to === 'buddy') window.Liber.state.unbindRelation(btn.getAttribute('data-from'), 'buddy');
+          else window.Liber.state.unbindRelation(btn.getAttribute('data-from'));
           render();
         }, 320);
       });
@@ -205,24 +211,25 @@
     var row = inp.closest('.relation-row');
     if (!row) return;
     var from = row.getAttribute('data-from');
+    var to = row.getAttribute('data-to') || 'buddy';
     var fresh = String(inp.value || '').trim();
     var relations = getState().relations || [];
     var rel = null;
     for (var i = 0; i < relations.length; i++) {
-      if (relations[i].from === from) { rel = relations[i]; break; }
+      if (relations[i].from === from && (relations[i].to || 'buddy') === to) { rel = relations[i]; break; }
     }
     if (!rel) { render(); return; }
     var current = verbOf(rel);
     if (!fresh || fresh === current) { inp.value = current; render(); return; }
 
     var boundTs = rel.ts;
-    window.Liber.state.unbindRelation(from);
-    var made = window.Liber.state.bindRelation(from, fresh);
+    window.Liber.state.unbindRelation(from, to);
+    var made = window.Liber.state.bindRelation(from, fresh, to);
     if (made && boundTs && made.ts !== boundTs) {
       var all = getState().relations || [];
       var patched = [];
       for (var p = 0; p < all.length; p++) {
-        if (all[p].from === from && all[p].ts === made.ts) {
+        if (all[p].from === from && (all[p].to || 'buddy') === to && all[p].ts === made.ts) {
           patched.push(Object.assign({}, all[p], { ts: boundTs }));
         } else {
           patched.push(all[p]);

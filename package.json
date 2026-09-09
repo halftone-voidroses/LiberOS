@@ -1,6 +1,6 @@
 {
   "name": "liber-os",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "private": true,
   "description": "Liber.OS — a haunted CRT operating system in a dark room. Art therapy tool bridging perennial psychology, archetypes, and shadow work. Offline, no build step, no framework.",
   "scripts": {

@@ -323,6 +323,49 @@
     var kept = isKept(id);
     b.textContent = kept ? 'kept in the book' : 'keep to the book';
     b.disabled = kept;
+    var row = el('dreams-keep-row');
+    if (row) row.hidden = !kept;
+    if (kept) paintKeepAttach();
+  }
+
+  function satchelIdForDream(id) {
+    if (!state()) return null;
+    var satchel = state().get().satchel || [];
+    for (var i = 0; i < satchel.length; i++) {
+      if (satchel[i] && satchel[i].kind === 'dream' && satchel[i].ref === id) return satchel[i].id;
+    }
+    return null;
+  }
+
+  function removeKeep(id) {
+    if (!state() || !id) return;
+    var sid = satchelIdForDream(id);
+    if (sid) {
+      state().releaseArtifact('satchel', sid);
+      state().unbindRelation(sid);
+    }
+    if (global.Liber && global.Liber.sound) global.Liber.sound.play('thunk');
+    syncKeepLabel(id);
+  }
+
+  function paintKeepAttach() {
+    var sel = el('dreams-keep-attach');
+    if (!sel || !state()) return;
+    if (sel.options.length > 1) return;
+    var s = state().get() || {};
+    var kinds = ['divination', 'games', 'learn', 'abstract', 'sea', 'garden', 'methodology', 'buddy', 'dreams'];
+    for (var k = 0; k < kinds.length; k++) {
+      var arr = s[kinds[k]] || [];
+      for (var i = 0; i < arr.length; i++) {
+        if (!arr[i] || !arr[i].id) continue;
+        if (kinds[k] === 'dreams' && arr[i].id === currentId) continue;
+        var label = arr[i].name || arr[i].title || arr[i].topic || arr[i].label || (arr[i].text || '').slice(0, 28) || arr[i].intention || kinds[k];
+        var o = document.createElement('option');
+        o.value = arr[i].id;
+        o.textContent = String(label).slice(0, 30) + ' (' + kinds[k] + ')';
+        sel.appendChild(o);
+      }
+    }
   }
 
   function isPlanted(id) {
@@ -473,6 +516,18 @@
     // the reading's own keep action — same mirror, one deliberate click
     var readKeep = el('dreams-read-keep');
     if (readKeep) readKeep.addEventListener('click', function () { keepToBook(currentId); });
+    var keepDel = el('dreams-keep-delete');
+    if (keepDel) keepDel.addEventListener('click', function () { removeKeep(currentId); });
+    var keepAttach = el('dreams-keep-attach');
+    if (keepAttach) keepAttach.addEventListener('change', function () {
+      var target = keepAttach.value;
+      if (!target || !currentId || !state()) return;
+      var sid = satchelIdForDream(currentId) || currentId;
+      try { state().unbindRelation(sid, target); } catch (e) {}
+      state().bindRelation(sid, 'attached', target);
+      if (global.Liber && global.Liber.sound) global.Liber.sound.play('chime');
+      keepAttach.value = '';
+    });
     var readPlant = el('dreams-read-plant');
     if (readPlant) readPlant.addEventListener('click', function () { plantToGarden(currentId); });
 

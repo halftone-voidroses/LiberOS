@@ -917,6 +917,28 @@
   border-color: rgba(111, 90, 160, 0.25);
   cursor: default;
 }
+.dreams-keep-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+.dreams-keep-row[hidden] { display: none; }
+.dreams-keep-attach {
+  font-family: var(--dreams-mono, 'Courier New', monospace);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  color: var(--dreams-ink-soft, #6a5f52);
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.dreams-keep-attach select {
+  font-family: inherit;
+  font-size: 0.78rem;
+  max-width: 220px;
+}
 
 .dreams-entry-row {
   display: grid;

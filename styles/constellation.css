@@ -251,3 +251,34 @@
   border-radius: 2px;
 }
 .constellation-mini-open:hover { background: rgba(74, 138, 170, 0.15); }
+.constellation-mini-satchel {
+  background: transparent;
+  border: 1px solid #aa7838;
+  color: #d8c090;
+  font-family: 'VT323', monospace;
+  font-size: 0.95rem;
+  padding: 4px 12px;
+  cursor: pointer;
+  border-radius: 2px;
+}
+.constellation-mini-satchel:hover { background: rgba(170, 120, 56, 0.15); }
+.constellation-mini-bind-label {
+  font-family: 'VT323', monospace;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  color: rgba(200, 184, 144, 0.7);
+}
+.constellation-mini-target {
+  flex: 1;
+  background: #050208;
+  border: 1px solid #4a1a2a;
+  color: #c8a8b8;
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 0.9rem;
+  padding: 4px 6px;
+  border-radius: 2px;
+  max-width: 70%;
+}
+.constellation-mini-target:focus { border-color: #ff69b4; }
+.constellation-satellite { pointer-events: auto; }

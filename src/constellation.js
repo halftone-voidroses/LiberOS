@@ -55,7 +55,24 @@
     for (var p = 0; p < gd.length; p++) all.push({ kind: 'garden', label: gd[p].name || 'a planted seed', data: gd[p] });
     var dr = s.dreams || [];
     for (var dr2 = 0; dr2 < dr.length; dr2++) all.push({ kind: 'dreams', label: dr[dr2].title || 'a recorded dream', data: dr[dr2] });
+    var mt = s.methodology || [];
+    for (var mt2 = 0; mt2 < mt.length; mt2++) all.push({ kind: 'methodology', label: mt[mt2].topic || mt[mt2].name || 'method', data: mt[mt2] });
     return all;
+  }
+
+  function findAnyById(id) {
+    var s = getState();
+    var kinds = ['buddy', 'divination', 'games', 'learn', 'abstract', 'sea', 'garden', 'dreams', 'methodology', 'council', 'satchel', 'iching'];
+    for (var k = 0; k < kinds.length; k++) {
+      var arr = s[kinds[k]] || [];
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i] && arr[i].id === id) {
+          var label = arr[i].name || arr[i].title || arr[i].topic || arr[i].label || (arr[i].text || '').slice(0, 24) || kinds[k];
+          return { kind: kinds[k], label: label, data: arr[i] };
+        }
+      }
+    }
+    return null;
   }
 
   function relationsFor(fromId) {
@@ -78,8 +95,9 @@
   function drawSig(s) {
     return [stoneOf(s.buddy).length, sealedOf(s.buddy).length, s.divination.length, s.games.length,
       s.learn.length, s.abstract.length, s.sea.length, s.garden.length, s.dreams.length,
+      (s.methodology || []).length, (s.satchel || []).length,
       s.relations.length, s.tutorialDone ? 1 : 0].join('|')
-      + ':' + (s.relations || []).map(function (r) { return r.from + '>' + r.verb; }).join(',');
+      + ':' + (s.relations || []).map(function (r) { return r.from + '>' + (r.to || 'buddy') + '>' + r.verb; }).join(',');
   }
 
   function render() {
@@ -132,7 +150,7 @@
     var boundIndices = [];
     for (var i = 0; i < artifacts.length; i++) {
       var artId = artifacts[i].data && artifacts[i].data.id ? artifacts[i].data.id : null;
-      if (artId && relationsFor(artId).length > 0) boundIndices.push(i);
+      if (artId && relationsFor(artId).some(function (r) { return (r.to || 'buddy') === 'buddy'; })) boundIndices.push(i);
     }
 
     // WS5 competence made visible: as the relation web grows, every edge
@@ -144,6 +162,7 @@
 
     for (var rr = 0; rr < relations.length; rr++) {
       var rel = relations[rr];
+      if ((rel.to || 'buddy') !== 'buddy') continue;
       var aIdx = artifacts.findIndex(function (a) { return a.data && a.data.id === rel.from; });
       if (aIdx < 0) continue;
       var ap = positionFor(aIdx, artifacts.length, cx, cy, orbitR, orbitR * 0.7);
@@ -167,6 +186,18 @@
       var lbl = (art.label || '').toString();
       if (lbl.length > 18) lbl = lbl.substring(0, 16) + '..';
       html += '<text x="' + p.x + '" y="' + (p.y - 14) + '" text-anchor="middle" fill="#c8b890" font-size="7" font-family="serif" font-style="italic" style="pointer-events: none;">' + lbl + '</text>';
+      var kids = (s.relations || []).filter(function (r) { return (r.to || 'buddy') === id; });
+      if (kids.length) {
+        html += '<circle cx="' + p.x + '" cy="' + p.y + '" r="16" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="0.7" stroke-dasharray="2 3" style="pointer-events:none;"/>';
+        for (var ki = 0; ki < kids.length; ki++) {
+          var ka = (ki / Math.max(kids.length, 1)) * Math.PI * 2 - Math.PI / 2;
+          var kx = p.x + Math.cos(ka) * 16, ky = p.y + Math.sin(ka) * 16;
+          var kid = findAnyById(kids[ki].from);
+          var kidLabel = kid ? kid.label : 'kept';
+          var kidId = kids[ki].from;
+          html += '<circle class="constellation-artifact constellation-satellite" data-artifact-id="' + kidId + '" cx="' + kx.toFixed(1) + '" cy="' + ky.toFixed(1) + '" r="4.5" fill="' + pal.color + '" fill-opacity="0.95" stroke="#fff" stroke-width="0.5" style="cursor: pointer; filter: drop-shadow(0 0 4px ' + pal.glow + ');"><title>' + kidLabel.replace(/"/g, '') + '</title></circle>';
+        }
+      }
     }
 
     html += '</g>';
@@ -196,6 +227,7 @@
           for (var q = 0; q < artifacts.length; q++) {
             if (artifacts[q].data && artifacts[q].data.id === id) { found = artifacts[q]; break; }
           }
+          if (!found) found = findAnyById(id);
           if (found) openMini(found);
         });
       })(artEls[ai]);
@@ -211,7 +243,8 @@
 
   function roomFor(kind, data) {
     if (kind === 'buddy') return (data && data.kind === 'stone') ? 'sigil.html' : 'buddy.html';
-    var pages = { divination: 'divination.html', games: 'games.html', learn: 'learn.html', abstract: 'abstract.html', sea: 'sea.html', garden: 'garden.html', dreams: 'dreams.html' };
+    var pages = { divination: 'divination.html', games: 'games.html', learn: 'learn.html', abstract: 'abstract.html', sea: 'sea.html', garden: 'garden.html', dreams: 'dreams.html', methodology: 'methodology.html', satchel: 'satchel.html' };
+    if (kind === 'satchel') return 'satchel.html';
     return pages[kind] || 'desktop.html';
   }
 
@@ -221,11 +254,35 @@
     if (kind === 'buddy') return d.confession || d.intention || d.name || '';
     if (kind === 'dreams') return ((d.title ? d.title + ' — ' : '') + (d.text || d.dream || '')).trim();
     if (kind === 'divination') return [d.question, d.reading, d.name].filter(Boolean).join(' — ');
-    if (kind === 'games') return d.result || d.name || '';
+    if (kind === 'games') return (d.result && d.result.lines) || d.result || d.name || '';
     if (kind === 'garden') return d.name || '';
     if (kind === 'learn') return d.topic || '';
     if (kind === 'abstract') return d.label || '';
-    return '';
+    if (kind === 'methodology') return d.topic || d.name || '';
+    if (kind === 'satchel') return d.text || d.excerpt || d.name || '';
+    if (kind === 'council') return d.name || d.text || '';
+    return d.name || d.title || d.text || '';
+  }
+
+  function paintTargets(selfId) {
+    var sel = document.getElementById('constellation-mini-target');
+    if (!sel) return;
+    sel.innerHTML = '';
+    var optB = document.createElement('option');
+    optB.value = 'buddy';
+    optB.textContent = 'the buddy';
+    sel.appendChild(optB);
+    var arts = allArtifacts();
+    for (var i = 0; i < arts.length; i++) {
+      var a = arts[i];
+      if (!a.data || !a.data.id || a.data.id === selfId) continue;
+      var o = document.createElement('option');
+      o.value = a.data.id;
+      var l = (a.label || a.kind || 'artifact').toString();
+      if (l.length > 28) l = l.slice(0, 26) + '..';
+      o.textContent = l + ' (' + a.kind + ')';
+      sel.appendChild(o);
+    }
   }
 
   function openMini(artifact) {
@@ -234,10 +291,29 @@
     if (miniLabel) miniLabel.textContent = artifact.label || artifact.data && artifact.data.name || 'artifact';
     if (miniText) miniText.textContent = contentOf(artifact.kind, artifact.data);
     if (miniOpen) miniOpen.onclick = function () { window.location.href = roomFor(artifact.kind, artifact.data); };
+    var satBtn = document.getElementById('constellation-mini-satchel');
+    if (satBtn) satBtn.onclick = function () {
+      var aid = artifact.data && artifact.data.id ? artifact.data.id : '';
+      window.location.href = 'satchel.html' + (aid ? '#' + aid : '');
+    };
     var existing = relationsFor(artifact.data.id);
+    var buddyRel = null;
+    for (var e = 0; e < existing.length; e++) {
+      if ((existing[e].to || 'buddy') === 'buddy') { buddyRel = existing[e]; break; }
+    }
     if (miniVerb) {
-      miniVerb.value = existing.length ? (existing[0].verb || '') : '';
+      miniVerb.value = buddyRel ? (buddyRel.verb || '') : (existing.length ? (existing[0].verb || '') : '');
       miniVerb.setAttribute('aria-label', 'how does this relate?');
+    }
+    paintTargets(artifact.data.id);
+    var otherRel = null;
+    for (var f = 0; f < existing.length; f++) {
+      if ((existing[f].to || 'buddy') !== 'buddy') { otherRel = existing[f]; break; }
+    }
+    var tsel = document.getElementById('constellation-mini-target');
+    if (tsel && otherRel) {
+      try { tsel.value = otherRel.to; } catch (e2) {}
+      if (miniVerb && !buddyRel) miniVerb.value = otherRel.verb || '';
     }
     mini.removeAttribute('inert');
     mini.classList.add('open');
@@ -254,9 +330,13 @@
   function saveMini() {
     if (!selectedArtifact) return;
     var verb = (miniVerb && miniVerb.value || '').trim() || 'relates to';
+    var tsel = document.getElementById('constellation-mini-target');
+    var target = tsel ? tsel.value : 'buddy';
+    if (!target) target = 'buddy';
     if (window.Liber && window.Liber.state) {
-      window.Liber.state.unbindRelation(selectedArtifact.data.id);
-      window.Liber.state.bindRelation(selectedArtifact.data.id, verb);
+      window.Liber.state.unbindRelation(selectedArtifact.data.id, target);
+      window.Liber.state.bindRelation(selectedArtifact.data.id, verb, target);
+      if (miniSave) miniSave.textContent = target === 'buddy' ? 'bind to buddy' : 'bind to artifact';
     }
     if (window.Liber && window.Liber.sound) window.Liber.sound.play('chime');
     closeMini();
@@ -274,6 +354,11 @@
     if (window.Liber && window.Liber.state) {
       if (window.Liber.state.releaseArtifact) window.Liber.state.releaseArtifact(kind, id);
       if (window.Liber.state.unbindRelation) window.Liber.state.unbindRelation(id);
+      try {
+        var st = window.Liber.state.get() || {};
+        var rels = (st.relations || []).filter(function (r) { return (r.to || 'buddy') !== id; });
+        window.Liber.state.set({ relations: rels });
+      } catch (e) {}
     }
     if (window.Liber && window.Liber.sound) window.Liber.sound.play('thunk');
     closeMini();

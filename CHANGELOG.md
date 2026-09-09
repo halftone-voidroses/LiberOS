@@ -1,5 +1,25 @@
 # LiberOS changelog
 
+## 2.1.0 — satchel web, orbits, dreams, elizabeth, tags
+
+### New
+- Satchel: grouped lists for sigils, all artifact kinds, knots, and satchel keeps — every entry opens with a margin note that saves (stones keep annotation, others keep satchel notes, knots keep relation notes). Deep-linkable via satchel.html#id.
+- Desktop: mini-menu gains Open in Satchel + bind-to picker (the buddy or any artifact). Artifact-to-artifact binds draw a smaller secondary orbit of satellites around the parent.
+- Kept notes: desktop scratch notes and dream keeps are clickable — delete, satchel status, and attach-to-artifact (attaching draws the secondary orbit).
+- Buddy tags: casting stone offers Jungian individuation tags (shadow, anima, animus, persona, self, trickster, wise old, great mother, puer, senex, hero, and more). Names sanitize internally (My animus → your animus) and prompts use grammatical display names plus tag-aware templates.
+- Prompt engine: sanitized buddy grammar (capitalized, punctuated), tag slots ({tags}, {tagphrase}), five new tag-aware templates, per-target dedupe for artifact binds.
+- Dreams: symbol bank grows from 27 to 67 — stairs, tunnel, wall, crossroads, border, mandala, king, star, tree, garden, monster, darkness, wound, filth, corpse, seducer, wise woman, warrior, androgyne, mother, father, cave, river, return, cocoon, phoenix, trickster, angel, air, earth, sky, wolf, horse, cat, dog, book, ouroboros, phone, coin. Original matches unchanged (additive only).
+- ELIZABETH (buddy + cohort): 30+ new rules for individuation, shadow, anima/animus, persona, Self, ego, trickster, senex, great mother, puer, hero, mandala, myth, complexes, projection, active imagination, synchronicity, dreams, symbols, and the full element/animal register.
+- Layout: settings cog + status line move to the right edge; scratch notes widen on the left.
+- Slots: legacy fallback now keep-slot only, so empty play/show slots start clean instead of inheriting the old room.
+
+### Fixed
+- Relation ledger shows true targets (buddy or artifact name) and re-words/releases per knot without touching sibling binds.
+- Releasing an artifact also clears incoming satellite binds pointing at it.
+
+### Proven
+- Target: smoke green + verify scripts green before 2.1.0 tag.
+
 ## 2.0.1 — stabilize the batch
 
 Bugfix release over the post-2.0.0 batch. No new features.
