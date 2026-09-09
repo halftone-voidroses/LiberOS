@@ -20,7 +20,6 @@
     { id: 'learn',       name: 'learn'       },
     { id: 'garden',      name: 'garden'      },
     { id: 'dreams',      name: 'dreams'      },
-    { id: 'relation',    name: 'relation'    },
     { id: 'trash',       name: 'trash'       },
   ];
 
@@ -180,8 +179,6 @@
                    mark: '<path d="M2.2 5.2 l0 0.01 M2.2 7.8 l0 0.01 M9.8 2.2 l0 0.01" shape-rendering="geometricPrecision" fill="none" stroke="currentColor" stroke-width="0.6" stroke-linecap="round" opacity="0.45"/>' },
     themes:      { acc: '#d4af37', glow: 'rgba(212,175,55,0.42)', svg: '<path d="M1 1h4v4H1zM7 1h4v4H7zM1 7h4v1H1zM1 10h4v1H1zM1 8h1v2H1zM4 8h1v2H4zM7 7h3v1H7zM7 8h4v2H7zM7 10h4v1H7z"/>',
                    mark: '<path d="M2.6 5.6 l0 0.01 M5.4 5.2 l0 0.01 M8.6 5.8 l0 0.01" shape-rendering="geometricPrecision" fill="none" stroke="currentColor" stroke-width="0.55" stroke-linecap="round" opacity="0.45"/>' },
-    relation:    { acc: '#c8a04a', glow: 'rgba(200,160,74,0.42)', svg: '<path d="M1 3h5v1H1zM1 7h5v1H1zM1 4h1v3H1zM5 4h1v3H5zM6 3h5v1H6zM6 7h5v1H6zM6 4h1v3H6zM10 4h1v3h-1z"/>',
-                   mark: '<path d="M5.6 4.2 q0.9 1.8 0 3.6" shape-rendering="geometricPrecision" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.4"/>' },
     trash:       { acc: '#a88858', glow: 'rgba(168,136,88,0.42)', svg: '<path d="M3 7h6v1H3zM2 8h8v1H2zM1 9h10v1H1zM4 5h1v1H4zM7 4h1v1H7zM9 6h1v1H9z"/>',
                    mark: '<path d="M3.2 2.4 l0 0.01 M6.4 1.6 l0 0.01 M9 3 l0 0.01" shape-rendering="geometricPrecision" fill="none" stroke="currentColor" stroke-width="0.5" stroke-linecap="round" opacity="0.4"/>' }
   };
@@ -199,7 +196,6 @@
     garden:      { color: '#e8a05a', round: '50%' },
     dreams:      { color: '#b39ddb', round: '50%' },
     themes:      { color: '#d4af37', round: '0%' },
-    relation:    { color: '#c8a04a', round: '50%' },
     trash:       { color: '#8a6840', round: '0%' }
   };
 

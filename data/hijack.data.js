@@ -43,12 +43,6 @@ window.LIBER_DATA.hijack = {
     { voice: 'riason', line: 'booth results save to your satchel.', target: null },
     { voice: 'riason', line: 'these are the booths. play one.', target: 'games-grid', glow: true }
   ] },
-  relation: { flag: 'walkRelation', steps: [
-    { voice: 'riason', line: 'every kept thing waits here unbound. touch one.', target: 'relation-unbound' },
-    { voice: 'riason', line: 'give it a verb. protects, carries — the word is the work.', target: 'relation-ledger' },
-    { voice: 'riason', line: 'bound artifacts show their verbs here.', target: null },
-    { voice: 'riason', line: 'this is where bindings happen. pick an item, give it a verb.', target: 'relation-ledger', glow: true }
-  ] },
   trash: { flag: 'walkTrash', steps: [
     { voice: 'riason', line: 'what you bury lands here. nothing is gone, only buried.', target: 'trash-dig-list' },
     { voice: 'riason', line: 'bury to release, dig to restore. mind the labels.', target: 'trash-bury-buddy' },

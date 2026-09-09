@@ -22,11 +22,11 @@
     { id: 'learn',       room: 'learn.html',      text: 'read one page. answer it.' },
     { id: 'themes',      room: 'themes.html',     text: 'repaint one room.' },
     { id: 'satchel',     room: 'satchel.html',     text: 'annotate one kept item.' },
-    { id: 'relation',    room: 'desktop.html',    text: 'bind one artifact. name the verb.' }
+    { id: 'desktop',     room: 'desktop.html',     text: 'bind one artifact. name the verb.' }
   ];
 
   // Anything in the book set drags the checklist toward the kept things.
-  var BOOK_IDS = ['satchel', 'relation'];
+  var BOOK_IDS = ['satchel'];
 
   var container = null;
 

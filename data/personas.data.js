@@ -89,14 +89,6 @@ window.LIBER_DATA.personas = {
     material: 'pigment tile mosaic',
     cursor: "url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M12 2 c3 5 7 8 7 13 a7 7 0 1 1 -14 0 c0 -5 4 -8 7 -13 z' fill='%23ff69b4' stroke='%23aa3a6a' stroke-width='1.2'/><circle cx='12' cy='14' r='2' fill='%23ffd86a'/></svg>\") 12 12, auto"
   },
-  relation: {
-    id: 'relation',
-    name: 'e-lizabeth',
-    opinion: 'nothing here stands alone. count the links.',
-    accent: '#aa8a3a',
-    material: 'iron ring + chain links',
-    cursor: "url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><circle cx='9' cy='9' r='5.5' fill='none' stroke='%234a4050' stroke-width='3'/><circle cx='9' cy='9' r='5.5' fill='none' stroke='%232a2030'/><path d='M13 13l4 4a3 3 0 1 0 4-4l-4-4' fill='none' stroke='%23aa8a3a' stroke-width='2'/></svg>\") 9 9, auto"
-  },
   trash: {
     id: 'trash',
     name: 'ravaging pete',

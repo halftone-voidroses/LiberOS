@@ -14,7 +14,6 @@ window.LIBER_DATA.fate = {
   games:       { voice: 'whimsy wow', lines: ['step right up! the tools keep, the games release.', 'tipp sits at the floor. start there if it is loud.'] },
   divination:  { voice: 'arcana', lines: ['the deck is still. ask.', 'the chalk answers. you read.'] },
   learn:       { voice: 'the mad scribe', lines: ['one drawer a visit. the † marks what is cited.', 'dated, stamped, filed. bring your own pencil.'] },
-  relation:    { voice: 'e-lizabeth', lines: ['touch one kept thing. give it a verb.', 'nothing here stands alone. count the links.'] },
   themes:      { voice: 'wanderlust', lines: ['repaint the room. do not blame the mirror.', 'this room wears my paint now.'] },
   trash:       { voice: 'ravaging pete', lines: ['what you bury, i keep.', 'the soil forgets nothing, friend.'] },
   settings:    { voice: 'riason', lines: ['the doors stay labelled. the light stays humane.', 'wipe returns everything to loam. nothing else does.'] }

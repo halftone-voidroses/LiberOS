@@ -478,13 +478,6 @@
     linear-gradient(180deg, #141010 0%, #0a0605 100%);
   border-color: #6a5a40;
 }
-.dial-option[data-id="relation"] {
-  background:
-    radial-gradient(circle 2px at 30% 70%, rgba(200, 160, 74, 0.45) 0%, rgba(0, 0, 0, 0) 100%),
-    radial-gradient(circle 2px at 70% 70%, rgba(200, 160, 74, 0.45) 0%, rgba(0, 0, 0, 0) 100%),
-    linear-gradient(180deg, #161210 0%, #0a0805 100%);
-  border-color: #6a5a30;
-}
 .dial-option[data-id="trash"] {
   background:
     radial-gradient(circle 2.5px at 25% 40%, rgba(138, 104, 64, 0.4) 0%, rgba(0, 0, 0, 0) 100%),

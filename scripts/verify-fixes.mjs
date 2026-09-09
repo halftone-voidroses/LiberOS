@@ -179,7 +179,7 @@ check('booth stage is scrollable and bottom booth is clickable', m2.scrollable &
 
 // ─── M1: no dev-spec text in riason panels ────────────────────────────
 console.log('M1 — riason panels')
-const pages = ['about', 'cohort', 'divination', 'games', 'learn', 'relation', 'satchel', 'sea', 'settings', 'sigil', 'themes', 'trash'];
+const pages = ['about', 'cohort', 'divination', 'games', 'learn', 'satchel', 'sea', 'settings', 'sigil', 'themes', 'trash'];
 let devText = [];
 for (const p of pages) {
   await page.goto(BASE + '/' + p + '.html', { waitUntil: 'domcontentloaded' });
