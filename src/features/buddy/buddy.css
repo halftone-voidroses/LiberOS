@@ -1,503 +1,209 @@
-/* buddy.css — E-Lizabeth. Candle-wax, dark wood, red velvet, gothic arch.
-   This file is COMPLETELY INDEPENDENT. No imports, no shared variables (covenant Q.1). */
+/* buddy.css — LiberChat. A terminal window with an IRC user list: names
+   on the left quarter, the conversation on the right three quarters.
+   Phosphor-on-black, per-user name colours, MSN-style grouped lines.
+   This file is COMPLETELY INDEPENDENT. No imports, no shared variables. */
 
 .buddy-app {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(ellipse at 50% 30%, rgba(180, 30, 30, 0.15) 0%, rgba(0,0,0,0) 60%),
-    linear-gradient(180deg, #0a0408 0%, #1a0a0a 100%);
+  background: #050507;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  font-family: 'EB Garamond', 'Garamond', 'Times New Roman', serif;
-  color: #d8b890;
+  font-family: 'VT323', 'Courier New', monospace;
+  color: #c8bcb0;
 }
 
-.buddy-arch {
-  position: relative;
-  width: 86%;
-  height: 92%;
+.chat-window {
+  width: 90%;
+  height: 88%;
+  display: flex;
   background:
-    repeating-linear-gradient(0deg, rgba(180, 30, 30, 0.04) 0px, rgba(180, 30, 30, 0.04) 1px, transparent 1px, transparent 6px),
-    linear-gradient(180deg, #4a0a14 0%, #2a0a0a 50%, #1a0a0a 100%);
-  border-radius: 100% 100% 4px 4px / 22% 22% 4px 4px;
-  border: 2px solid #6a2a18;
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.022) 0px, rgba(255,255,255,0.022) 1px, transparent 1px, transparent 3px),
+    linear-gradient(180deg, #0c0c10 0%, #070709 100%);
+  border: 1px solid #3a3a44;
   box-shadow:
-    inset 0 0 0 1px #2a0a08,
-    inset 0 0 40px rgba(0,0,0,0.8),
-    inset 0 0 100px rgba(180, 30, 30, 0.15),
-    0 0 30px rgba(0,0,0,0.7);
-  padding: 30px 16px 16px;
+    inset 0 0 0 1px #000,
+    inset 0 0 40px rgba(0, 0, 0, 0.8),
+    0 0 30px rgba(0, 0, 0, 0.7);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* ── the user list, left quarter ── */
+
+.chat-users {
+  width: 25%;
+  min-width: 130px;
+  flex-shrink: 0;
+  border-right: 1px solid #2a2a32;
+  background: rgba(0, 0, 0, 0.45);
+  padding: 10px 8px;
+  overflow-y: auto;
+}
+
+.chat-users-head {
+  font-size: 1rem;
+  letter-spacing: 0.25em;
+  color: #6a6a76;
+  border-bottom: 1px solid #2a2a32;
+  padding-bottom: 6px;
+  margin-bottom: 8px;
+}
+
+.chat-user {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  gap: 8px;
+  width: 100%;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  color: #c8bcb0;
+  font-family: inherit;
+  font-size: 1.2rem;
+  text-align: left;
+  padding: 6px 8px;
+  cursor: pointer;
 }
 
-.buddy-arch-top {
-  position: absolute;
-  top: 12px; left: 50%;
-  transform: translateX(-50%);
-  font-size: 0.6rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: #8a4a30;
-  font-style: italic;
+.chat-user:hover { background: rgba(255, 255, 255, 0.05); }
+
+.chat-user.current {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: #3a3a44;
 }
 
-.buddy-arch::before {
-  content: '';
-  position: absolute;
-  top: 4px; left: 4px; right: 4px;
+.chat-user .dot {
+  width: 8px;
   height: 8px;
-  background: linear-gradient(180deg, #6a2a18 0%, #4a0a14 100%);
-  border-radius: 100% 100% 0 0 / 100% 100% 0 0;
-  border: 1px solid #8a4a30;
-  border-bottom: none;
-}
-
-.buddy-arch::after {
-  content: '';
-  position: absolute;
-  top: 12px; left: 8px; right: 8px;
-  height: 6px;
-  background:
-    radial-gradient(circle 2px at 12px 4px, rgba(212, 175, 106, 0.5) 0%, rgba(212, 175, 106, 0) 70%),
-    radial-gradient(circle 2px at 32px 4px, rgba(212, 175, 106, 0.4) 0%, rgba(212, 175, 106, 0) 70%),
-    radial-gradient(circle 2px at 52px 4px, rgba(212, 175, 106, 0.5) 0%, rgba(212, 175, 106, 0) 70%),
-    radial-gradient(circle 2px at 72px 4px, rgba(212, 175, 106, 0.4) 0%, rgba(212, 175, 106, 0) 70%);
-  background-size: 84px 6px;
-  background-repeat: repeat-x;
-}
-
-.buddy-flame {
-  position: absolute;
-  top: -2px;
-  width: 12px; height: 22px;
-  background: radial-gradient(ellipse at 50% 80%, rgba(255, 220, 120, 0.9) 0%, rgba(255, 140, 40, 0.6) 50%, rgba(0,0,0,0) 80%);
-  border-radius: 50% 50% 30% 30% / 60% 60% 40% 40%;
-  filter: blur(1px);
-  animation: buddy-flicker 1.5s ease-in-out infinite;
-}
-
-.buddy-flame-1 { left: 18%; animation-delay: 0s; }
-.buddy-flame-2 { left: 50%; transform: translateX(-50%); animation-delay: 0.3s; }
-.buddy-flame-3 { right: 18%; animation-delay: 0.6s; }
-
-@keyframes buddy-flicker {
-  0%, 100% { opacity: 0.9; transform: scale(1); }
-  50%      { opacity: 1.0; transform: scale(1.05); }
-}
-
-/* WS4 motion pass: the flames are ambient — still under reduced motion. */
-@media (prefers-reduced-motion: reduce) {
-  .buddy-flame { animation: none; opacity: 0.95; }
-}
-
-.buddy-arch-body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  flex: 1;
-  min-height: 0;
-}
-
-.buddy-header {
-  text-align: center;
-  border-bottom: 1px solid #6a2a18;
-  padding-bottom: 8px;
-  margin-bottom: 10px;
-  width: 100%;
+  border-radius: 50%;
+  background: var(--who, #888);
+  box-shadow: 0 0 6px var(--who, #888);
   flex-shrink: 0;
 }
 
-.buddy-title {
-  font-size: 1.2rem;
-  font-variant: small-caps;
-  letter-spacing: 0.3em;
-  color: #d8a070;
-  font-weight: 700;
-  text-shadow: 0 0 8px rgba(216, 160, 112, 0.4);
+.chat-user.locked { opacity: 0.45; cursor: default; }
+.chat-user.locked .dot { background: #444; box-shadow: none; }
+
+.chat-user .unread {
+  margin-left: auto;
+  min-width: 20px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  font-size: 1rem;
+  background: #c04a58;
+  color: #fff;
+  border-radius: 10px;
+  padding: 0 5px;
 }
 
-.buddy-sub {
-  font-size: 0.65rem;
-  font-style: italic;
-  color: #8a4a30;
-  margin-top: 2px;
-  letter-spacing: 0.05em;
-}
+/* ── the conversation, right three quarters ── */
 
-.buddy-transcript {
+.chat-main {
   flex: 1;
-  width: 100%;
-  min-height: 0;
-  overflow-y: auto;
-  padding: 4px 0;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
 }
 
-.buddy-turn {
-  background: rgba(216, 160, 112, 0.06);
-  border-left: 2px solid #8a4a30;
-  padding: 6px 10px;
+.chat-topic {
+  font-size: 1.05rem;
+  letter-spacing: 0.12em;
+  color: #8a8a96;
+  border-bottom: 1px solid #2a2a32;
+  padding: 8px 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.buddy-turn-you {
-  border-left: none;
-  border-right: 2px solid #6a2a18;
-  background: rgba(106, 42, 24, 0.14);
-  text-align: right;
-  align-self: flex-end;
-  max-width: 88%;
-}
-
-.buddy-turn-eliza {
-  max-width: 92%;
-}
-
-.buddy-arch-body[data-side="you"] .buddy-transcript {
-  background: linear-gradient(105deg, rgba(216, 160, 112, 0) 40%, rgba(216, 140, 80, 0.1) 100%);
-  transition: background 0.8s ease;
-}
-
-.buddy-arch-body[data-side="eliza"] .buddy-transcript {
-  background: linear-gradient(255deg, rgba(216, 160, 112, 0) 40%, rgba(150, 170, 200, 0.1) 100%);
-  transition: background 0.8s ease;
-}
-
-.buddy-turn-name {
-  font-size: 0.9rem;
-  font-variant: small-caps;
-  letter-spacing: 0.1em;
-  color: #d8a070;
-  font-weight: 700;
-}
-
-.buddy-turn-you .buddy-turn-name { color: #a87858; }
-
-.buddy-turn-text {
-  font-size: 1rem;
-  font-style: italic;
-  color: #d8b890;
-  margin-top: 2px;
+.chat-log {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 16px;
+  font-size: 1.25rem;
   line-height: 1.45;
 }
 
-.buddy-turn-you .buddy-turn-text { color: #b89878; }
+.chat-line { margin: 2px 0 8px; word-wrap: break-word; }
 
-.buddy-note {
+.chat-line .who {
+  color: var(--who, #c8bcb0);
+  text-shadow: 0 0 8px var(--who-glow, transparent);
+}
+
+.chat-line .when {
+  color: #55555f;
+  font-size: 1rem;
+  margin-left: 8px;
+}
+
+.chat-line .what { color: #d8d0c4; }
+
+.chat-line.sys { color: #6a6a76; font-style: italic; }
+.chat-line.sys .what { color: #6a6a76; }
+
+.chat-note {
   text-align: center;
-  font-size: 0.875rem;
-  font-variant: small-caps;
-  letter-spacing: 0.3em;
-  color: rgba(216, 160, 112, 0.65);
-  padding: 2px 0;
-}
-.buddy-turn { opacity: 0.66; transition: opacity 0.7s ease; }
-.buddy-turn:last-child { opacity: 1; box-shadow: 0 0 16px rgba(216, 140, 80, 0.16); }
-@media (prefers-reduced-motion: reduce) {
-  .buddy-turn { transition: none; }
-}
-
-.buddy-sealrow {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  padding: 2px 0 0;
-}
-
-/* the seal: a drop of wax pressed over the exchange (D0004 bevel, wax palette) */
-.buddy-seal {
-  background: radial-gradient(ellipse at 50% 30%, #8a3a20 0%, #6a2a18 45%, #4a0a14 100%);
-  border: 2px solid #8a4a30;
-  color: #f0c890;
-  font-family: inherit;
-  font-size: 1rem;
-  font-variant: small-caps;
-  letter-spacing: 0.22em;
-  padding: 4px 18px;
-  cursor: pointer;
-  border-radius: 2px;
-  transition: transform 0.12s, filter 0.12s;
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
-}
-
-.buddy-seal:hover:not([disabled]) {
-  filter: brightness(1.15);
-  box-shadow: 0 0 14px rgba(216, 160, 112, 0.35);
-}
-
-.buddy-seal:active:not([disabled]) {
-  transform: translateY(1px);
-  filter: brightness(0.92);
-}
-
-.buddy-seal[disabled] {
-  opacity: 0.45;
-  cursor: default;
-  filter: saturate(0.6);
-}
-
-.buddy-confess {
-  width: 100%;
-  border-top: 1px solid #6a2a18;
-  padding-top: 8px;
-  margin-top: 6px;
-}
-
-/* D0003: the input, its label, and the buttons are the app's working text — 16px floor. */
-.buddy-confess-label {
-  font-size: 1rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: #8a4a30;
-  font-style: italic;
-  margin-bottom: 3px;
-}
-
-.buddy-inputrow {
-  display: flex;
-  gap: 6px;
-  align-items: stretch;
-}
-
-.buddy-input {
-  flex: 1;
-  min-width: 0;
-  background: rgba(0,0,0,0.3);
-  border: 1px solid #6a2a18;
-  color: #d8b890;
-  font-family: inherit;
-  font-style: italic;
-  font-size: 1rem;
-  padding: 4px 8px;
-  outline: none;
-  box-sizing: border-box;
-}
-
-.buddy-input:focus {
-  border-color: #8a4a30;
-  background: rgba(0,0,0,0.5);
-}
-
-.buddy-input::placeholder {
-  color: #5a3a20;
-  font-style: italic;
-}
-
-.buddy-send {
-  background: linear-gradient(180deg, #6a2a18 0%, #4a0a14 100%);
-  border: 1px solid #8a4a30;
-  color: #d8a070;
-  font-family: inherit;
-  font-size: 1rem;
-  font-variant: small-caps;
-  letter-spacing: 0.2em;
-  padding: 4px 14px;
-  cursor: pointer;
-  transition: transform 0.12s, filter 0.12s;
-}
-
-.buddy-send:hover {
-  background: linear-gradient(180deg, #8a3a20 0%, #6a0a14 100%);
-  color: #f0c890;
-  box-shadow: 0 0 8px rgba(216, 160, 112, 0.4);
-}
-
-/* buddy help + raison (per-persona, gothic-arch / candle-wax palette) */
-
-.buddy-help {
-  position: absolute;
-  top: 14px;
-  right: 40px;
-  z-index: 5;
-  width: 22px;
-  height: 22px;
-  background: linear-gradient(180deg, rgba(20, 20, 20, 0.6) 0%, rgba(0, 0, 0, 0.7) 100%);
-  border: 1px solid #6a2a18;
-  color: #8a4a30;
-  font-family: 'VT323', Georgia, 'Times New Roman', Times, serif;
-  font-size: 0.95rem;
-  font-style: italic;
-  line-height: 1;
-  cursor: pointer;
-  padding: 0;
-  border-radius: 2px;
-  transition: all 0.15s;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.18),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.5),
-    0 1px 0 rgba(0, 0, 0, 0.5),
-    0 2px 4px rgba(0, 0, 0, 0.6);
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
-  transition: transform 0.08s, filter 0.15s, box-shadow 0.08s;
-}
-.buddy-help:hover {
-  filter: brightness(1.25);
-}
-.buddy-help:active {
-  transform: translateY(1px);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.18),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
-    0 0 0 rgba(0, 0, 0, 0.5);
-}
-
-
-.buddy-help:hover {
-  background: rgba(216, 160, 112, 0.1);
-  color: #d8a070;
-  border-color: #8a4a30;
-}
-
-.buddy-exit {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  z-index: 5;
-  width: 22px;
-  height: 22px;
-  background: linear-gradient(180deg, rgba(20, 20, 20, 0.6) 0%, rgba(0, 0, 0, 0.7) 100%);
-  border: 1px solid #6a2a18;
-  color: #8a4a30;
-  font-family: inherit;
-  font-size: 0.95rem;
-  font-style: italic;
-  line-height: 1;
-  cursor: pointer;
-  padding: 0;
-  border-radius: 2px;
-  transition: all 0.15s;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.18),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.5),
-    0 1px 0 rgba(0, 0, 0, 0.5),
-    0 2px 4px rgba(0, 0, 0, 0.6);
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
-  transition: transform 0.08s, filter 0.15s, box-shadow 0.08s;
-}
-.buddy-exit:hover {
-  filter: brightness(1.25);
-}
-.buddy-exit:active {
-  transform: translateY(1px);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.18),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
-    0 0 0 rgba(0, 0, 0, 0.5);
-}
-
-
-.buddy-exit:hover {
-  background: rgba(216, 160, 112, 0.1);
-  color: #d8a070;
-  border-color: #8a4a30;
-}
-
-.buddy-raison {
-  position: absolute;
-  inset: 0;
-  background: rgba(10, 4, 8, 0.88);
-  z-index: 50;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s;
-}
-
-.buddy-raison.open {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.buddy-raison-inner {
-  width: 78%;
-  max-width: 420px;
-  background: linear-gradient(180deg, #4a0a14 0%, #1a0a0a 100%);
-  border: 1px solid #6a2a18;
-  box-shadow:
-    inset 0 0 0 1px #2a0a08,
-    inset 0 0 24px rgba(0, 0, 0, 0.7),
-    0 0 30px rgba(216, 160, 112, 0.2);
-  padding: 18px 22px;
-  font-style: italic;
-  color: #d8b890;
-  letter-spacing: 0.03em;
-}
-
-.buddy-raison-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #6a2a18;
-  padding-bottom: 8px;
-  margin-bottom: 10px;
-}
-
-.buddy-raison-name {
-  font-size: 0.875rem;
-  color: #d8a070;
-  text-transform: lowercase;
-  letter-spacing: 0.25em;
-  font-weight: 700;
-  font-family: 'EB Garamond', 'Garamond', 'Times New Roman', serif;
-}
-
-.buddy-raison-close {
-  background: none;
-  border: 1px solid #6a2a18;
-  color: #8a4a30;
-  font-family: inherit;
-  font-size: 0.85rem;
-  line-height: 1;
-  width: 20px;
-  height: 20px;
-  padding: 0;
-  cursor: pointer;
-  border-radius: 2px;
-}
-
-.buddy-raison-close:hover {
-  background: rgba(216, 160, 112, 0.1);
-  color: #d8a070;
-}
-
-.buddy-raison-body {
-  font-size: 1rem;
-  line-height: 1.55;
-}
-
-.buddy-raison-body em {
-  color: #f0c890;
-  font-style: normal;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  font-size: 1rem;
-  font-weight: 700;
-}
-
-.buddy-raison-foot {
-  margin-top: 12px;
-  padding-top: 8px;
-  border-top: 1px solid #6a2a18;
-  font-size: 0.875rem;
-  color: #8a4a30;
-  text-align: right;
+  color: #8a6a40;
+  font-size: 1.1rem;
+  margin: 8px 0;
   letter-spacing: 0.1em;
 }
 
-/* P0: how-this-room-works sheet — same grammar as the raison overlay. */
+.chat-inputrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-top: 1px solid #2a2a32;
+  padding: 10px 12px;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.chat-prompt { color: #6a6a76; font-size: 1.25rem; }
+
+.chat-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #f0e8d8;
+  font-family: inherit;
+  font-size: 1.25rem;
+  caret-color: #e8c890;
+}
+
+.chat-send,
+.chat-seal {
+  font-family: inherit;
+  font-size: 1.15rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #3a3a44;
+  color: #c8bcb0;
+  border-radius: 3px;
+  padding: 4px 14px;
+  cursor: pointer;
+}
+
+.chat-send:hover,
+.chat-seal:hover:not(:disabled) {
+  border-color: #e8c890;
+  color: #f0e8d8;
+}
+
+.chat-seal:disabled { opacity: 0.35; cursor: default; }
+
+/* ── raison + how overlays (house pattern, terminal palette) ── */
+
+.buddy-raison,
 .buddy-how {
   position: absolute;
   inset: 0;
-  background: rgba(10, 4, 8, 0.88);
+  background: rgba(5, 5, 8, 0.88);
   z-index: 50;
   display: flex;
   align-items: center;
@@ -506,96 +212,80 @@
   pointer-events: none;
   transition: opacity 0.2s;
 }
+
+.buddy-raison.open,
 .buddy-how.open {
   opacity: 1;
   pointer-events: auto;
 }
+
+.buddy-raison-inner,
 .buddy-how-inner {
   width: 78%;
-  max-width: 420px;
-  background: linear-gradient(180deg, #4a0a14 0%, #1a0a0a 100%);
-  border: 1px solid #6a2a18;
-  box-shadow:
-    inset 0 0 0 1px #2a0a08,
-    inset 0 0 24px rgba(0, 0, 0, 0.7),
-    0 0 30px rgba(216, 160, 112, 0.2);
+  max-width: 440px;
+  background: linear-gradient(180deg, #101014 0%, #0a0a0d 100%);
+  border: 1px solid #3a3a44;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
   padding: 18px 22px;
-  font-style: italic;
-  color: #d8b890;
-  letter-spacing: 0.03em;
+  color: #c8bcb0;
+  font-size: 1.2rem;
+  line-height: 1.5;
 }
+
+.buddy-raison-head,
 .buddy-how-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #6a2a18;
+  border-bottom: 1px solid #2a2a32;
   padding-bottom: 8px;
   margin-bottom: 10px;
 }
+
+.buddy-raison-name,
 .buddy-how-name {
-  font-size: 0.875rem;
-  color: #d8a070;
-  text-transform: lowercase;
-  letter-spacing: 0.25em;
-  font-weight: 700;
-  font-family: 'EB Garamond', 'Garamond', 'Times New Roman', serif;
-}
-.buddy-how-close {
-  background: none;
-  border: 1px solid #6a2a18;
-  color: #8a4a30;
-  font-family: inherit;
-  font-size: 0.85rem;
-  line-height: 1;
-  width: 20px;
-  height: 20px;
-  padding: 0;
-  cursor: pointer;
-  border-radius: 2px;
-}
-.buddy-how-close:hover {
-  background: rgba(216, 160, 112, 0.1);
-  color: #d8a070;
-}
-.buddy-how-body p {
-  margin: 0 0 8px;
   font-size: 1rem;
-  line-height: 1.55;
-}
-.buddy-how-wander {
-  color: #f0c890;
-  font-style: normal;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  font-weight: 700;
-}
-.buddy-how-foot {
-  margin-top: 12px;
-  padding-top: 8px;
-  border-top: 1px solid #6a2a18;
-  text-align: right;
-}
-.buddy-how-note {
-  background: none;
-  border: 1px solid #6a2a18;
-  color: #d8a070;
-  font-family: inherit;
-  font-size: 0.85rem;
-  letter-spacing: 0.1em;
-  padding: 6px 12px;
-  cursor: pointer;
-  border-radius: 2px;
-}
-.buddy-how-note:hover {
-  background: rgba(216, 160, 112, 0.1);
-}
-.buddy-how-note:focus-visible,
-.buddy-how-close:focus-visible {
-  outline: 2px solid #e8c890;
-  outline-offset: 2px;
+  letter-spacing: 0.25em;
+  color: #8a8a96;
 }
 
-/* ─── window titlebar (WS3, plan 2026-09-04 §4.3) — the wax-sealed frame ─── */
+.buddy-raison-close,
+.buddy-how-close {
+  background: none;
+  border: 1px solid #3a3a44;
+  color: #8a8a96;
+  font-family: inherit;
+  font-size: 1rem;
+  width: 22px;
+  height: 22px;
+  line-height: 1;
+  padding: 0;
+  cursor: pointer;
+}
+
+.buddy-raison-close:hover,
+.buddy-how-close:hover { color: #f0e8d8; border-color: #e8c890; }
+
+.buddy-how-body p { margin: 0 0 8px; }
+.buddy-how-wander { color: #e8c890; }
+.buddy-how-foot { margin-top: 10px; text-align: right; }
+
+.buddy-how-note {
+  font-family: inherit;
+  font-size: 1.1rem;
+  background: none;
+  border: 1px solid #3a3a44;
+  color: #8a8a96;
+  border-radius: 3px;
+  padding: 4px 12px;
+  cursor: pointer;
+}
+
+.buddy-how-note:hover { color: #f0e8d8; border-color: #e8c890; }
+
+.buddy-raison-body em { color: #e8c890; }
+
+/* ─── window titlebar + cursor + scrollbars (house kept) ─── */
 
 .buddy-titlebar {
   position: absolute;
@@ -609,129 +299,58 @@
   gap: 12px;
   padding: 0 76px 0 14px;
   overflow: hidden;
-  background:
-    radial-gradient(ellipse at 24% 0%, rgba(140, 40, 40, 0.22) 0%, rgba(140, 40, 40, 0) 55%),
-    linear-gradient(180deg, #1c0c10 0%, #0e0606 70%, #080303 100%);
-  border-bottom: 2px solid #4a0a14;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 220, 200, 0.1),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.7),
-    0 2px 8px rgba(120, 20, 20, 0.3);
-  font-family: 'EB Garamond', 'Garamond', 'Times New Roman', serif;
-  color: #d8b088;
+  background: linear-gradient(180deg, #17171c 0%, #0e0e12 100%);
+  border-bottom: 1px solid #3a3a44;
+  font-family: 'VT323', 'Courier New', monospace;
+  color: #c8bcb0;
 }
 
 .buddy-titlebar-name {
   flex-shrink: 0;
-  font-size: 1.05rem;
-  font-weight: 700;
-  letter-spacing: 0.28em;
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.8);
+  font-size: 1.2rem;
+  letter-spacing: 0.22em;
+  color: #e8c890;
 }
 
 .buddy-titlebar-sub {
-  font-size: 1rem;
-  font-style: italic;
-  color: #b08868;
+  font-size: 1.1rem;
+  color: #8a8a96;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.7);
 }
 
-.buddy-titlebar .buddy-help,
-.buddy-titlebar .buddy-exit {
+.buddy-help,
+.buddy-exit {
+  position: absolute;
   top: 50%;
-  bottom: auto;
   transform: translateY(-50%);
-}
-.buddy-titlebar .buddy-help { right: 36px; }
-.buddy-titlebar .buddy-exit { right: 8px; }
-.buddy-titlebar .buddy-help, .buddy-titlebar .buddy-exit {
   width: 40px;
   height: 40px;
-  line-height: 38px;
-  text-align: center;
-  font-size: 1.15rem;
-  top: 50%;
-  filter: brightness(1.4);
+  background: none;
+  border: none;
+  color: #8a8a96;
+  font-family: inherit;
+  font-size: 1.3rem;
+  cursor: pointer;
 }
+
 .buddy-titlebar .buddy-help { right: 56px; }
 .buddy-titlebar .buddy-exit { right: 8px; }
+.buddy-help:hover, .buddy-exit:hover { color: #f0e8d8; }
 .buddy-help:focus-visible, .buddy-exit:focus-visible {
   outline: 2px solid #e8c890;
   outline-offset: 2px;
 }
-.buddy-titlebar .buddy-help:active,
-.buddy-titlebar .buddy-exit:active {
-  transform: translateY(calc(-50% + 1px));
-}
 
-/* open room for the sealed frame (machine.css sets [data-state] inset: 0) */
 .buddy-app { top: 36px; }
 
-/* ─── WS4: e-lizabeth's cursor (register: data/personas.data.js).
-   A black wax ring with its one red drip; standard arrow fallback. ─── */
-.buddy-app,
-.buddy-titlebar {
-  cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><circle cx='12' cy='14' r='7' fill='none' stroke='%234a4050' stroke-width='3'/><circle cx='12' cy='14' r='7' fill='none' stroke='%232a2030'/><path d='M12 2c1.5 2 1.5 3.5 0 5c-1.5-1.5-1.5-3 0-5z' fill='%23aa3030'/></svg>") 12 14, auto;
-}
-.buddy-app button,
-.buddy-titlebar button { cursor: inherit; }
+.chat-log::-webkit-scrollbar, .chat-users::-webkit-scrollbar { width: 8px; }
+.chat-log::-webkit-scrollbar-track, .chat-users::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.4); }
+.chat-log::-webkit-scrollbar-thumb, .chat-users::-webkit-scrollbar-thumb { background: #3a3a44; border-radius: 4px; }
+.chat-log::-webkit-scrollbar-thumb:hover, .chat-users::-webkit-scrollbar-thumb:hover { filter: brightness(1.4); }
+.chat-log, .chat-users { scrollbar-width: thin; scrollbar-color: #3a3a44 rgba(0, 0, 0, 0.4); }
 
-/* ─── WS4: pressed-bevel + focus (D0004 recipe, wax palette) ─── */
-.buddy-send,
-.buddy-seal,
-.buddy-raison-close {
-  box-shadow:
-    inset 0 1px 0 rgba(240, 200, 144, 0.25),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.6),
-    0 2px 0 #060202,
-    0 3px 4px rgba(0, 0, 0, 0.5);
-}
-.buddy-send:active,
-.buddy-seal:active:not([disabled]),
-.buddy-raison-close:active {
-  transform: translateY(1px);
-  filter: brightness(0.92);
-  box-shadow:
-    inset 0 1px 0 rgba(240, 200, 144, 0.18),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.6),
-    0 0 0 #060202,
-    0 1px 2px rgba(0, 0, 0, 0.5);
-}
-.buddy-send:focus-visible,
-.buddy-seal:focus-visible,
-.buddy-help:focus-visible,
-.buddy-exit:focus-visible,
-.buddy-raison-close:focus-visible {
-  outline: 2px solid #d8a070;
-  outline-offset: 2px;
-}
-
-/* ─── WS4: hover-revelation — a thumbprint pressed in the wax
-   above the arch, visible only to the one who leans in. ─── */
-.buddy-seal-mark {
-  position: absolute;
-  top: 40px;
-  right: 12%;
-  width: 22px;
-  height: 28px;
-  border-radius: 50%;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.9s ease;
-  background:
-    radial-gradient(ellipse 8px 11px at 50% 50%, rgba(0, 0, 0, 0) 42%, rgba(216, 160, 112, 0.4) 46%, rgba(0, 0, 0, 0) 52%),
-    radial-gradient(ellipse 12px 16px at 50% 50%, rgba(0, 0, 0, 0) 44%, rgba(216, 160, 112, 0.36) 48%, rgba(0, 0, 0, 0) 55%),
-    radial-gradient(ellipse 5px 7px at 50% 50%, rgba(216, 160, 112, 0.45) 0%, rgba(216, 160, 112, 0) 70%);
-}
-.buddy-arch:hover .buddy-seal-mark { opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
-  .buddy-seal-mark { transition: none; }
+  .chat-window { transition: none; }
 }
-.buddy-app ::-webkit-scrollbar, .buddy-app::-webkit-scrollbar { width: 10px; height: 10px; }
-.buddy-app ::-webkit-scrollbar-track, .buddy-app::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.35); border-radius: 6px; }
-.buddy-app ::-webkit-scrollbar-thumb, .buddy-app::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #c04a58 0%, #3a0e14 100%); border-radius: 6px; border: 2px solid rgba(0, 0, 0, 0.45); }
-.buddy-app ::-webkit-scrollbar-thumb:hover { filter: brightness(1.25); }
-.buddy-app, .buddy-app * { scrollbar-width: thin; scrollbar-color: #c04a58 rgba(0, 0, 0, 0.35); }

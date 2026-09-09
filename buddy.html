@@ -65,10 +65,9 @@
                     <button class="buddy-how-close" type="button" id="buddy-how-close" aria-label="close">×</button>
                   </div>
                   <div class="buddy-how-body">
-                    <p class="buddy-how-wander">speak, and it is kept.</p>
-                    <p>two exchanges, then the wax can hold them. sealed lines orbit the desktop. enter speaks, esc leaves.</p>
-                    <p>a thoughtform, if you want the technical term — a kept image that answers back.</p>
-                    <p class="buddy-how-trust">the wax keeps what you bring. it does not keep you.</p>
+                    <p class="buddy-how-wander">this is LiberChat. pick a name on the left and talk.</p>
+                    <p>two exchanges, then the chat can be sealed. sealed lines orbit the desktop. enter speaks, esc leaves.</p>
+                    <p>the buddy answers from its word-hoard, not from a mind — talk plainly and it answers plainly.</p>
                   </div>
                   <div class="buddy-how-foot">
                     <button type="button" class="buddy-how-note" id="buddy-how-note">riason's first-step note</button>
@@ -76,34 +75,17 @@
                 </div>
               </div>
 
-              <div class="buddy-arch">
-                <div class="buddy-arch-top"></div>
-                <div class="buddy-seal-mark" aria-hidden="true"></div>
-                <div class="buddy-arch-body">
-
-                  <div class="buddy-flame buddy-flame-1"></div>
-                  <div class="buddy-flame buddy-flame-2"></div>
-                  <div class="buddy-flame buddy-flame-3"></div>
-
-                  <div class="buddy-header">
-                    <div class="buddy-title">The Buddy Forge</div>
-                    <div class="buddy-sub">— as above so below —</div>
+              <div class="chat-window">
+                <div class="chat-users" id="chat-users" aria-label="who is here"></div>
+                <div class="chat-main">
+                  <div class="chat-topic" id="chat-topic">LiberChat — say hello.</div>
+                  <div class="chat-log" id="chat-log" aria-live="polite"></div>
+                  <div class="chat-inputrow">
+                    <span class="chat-prompt">you&gt;</span>
+                    <input class="chat-input" id="chat-input" type="text" aria-label="say something" spellcheck="false" autocomplete="off"/>
+                    <button class="chat-send" id="chat-send" type="button">send</button>
+                    <button class="chat-seal" id="chat-seal" type="button" title="two exchanges at least, then the chat can be sealed" disabled>seal</button>
                   </div>
-
-                  <div class="buddy-transcript" id="buddy-transcript" aria-live="polite"></div>
-
-                  <div class="buddy-sealrow">
-                    <button class="buddy-seal" id="buddy-seal" type="button" title="two exchanges at least, then the wax can hold them" disabled>seal this exchange</button>
-                  </div>
-
-                  <div class="buddy-confess">
-                    <div class="buddy-confess-label">Buddy - a stone in the hand</div>
-                    <div class="buddy-inputrow">
-                      <input class="buddy-input" id="buddy-input" type="text" aria-label="speak into the stone" spellcheck="false" autocomplete="off"/>
-                      <button class="buddy-send" id="buddy-send" type="button">Intention - speak into the stone</button>
-                    </div>
-                  </div>
-
                 </div>
               </div>
 
@@ -125,7 +107,8 @@
   <script src="src/fate.js"></script>
   <script src="data/hijack.data.js"></script>
   <script src="src/hijack.js"></script>
-  <script src="src/features/buddy/eliza.js"></script>
+  <script src="src/features/buddy/aiml.js"></script>
+  <script src="src/features/buddy/buddy.aiml.js"></script>
   <script src="src/features/buddy/buddy.js"></script>
 </body>
 </html>
