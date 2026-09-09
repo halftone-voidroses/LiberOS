@@ -13,18 +13,18 @@
   'use strict';
 
   var POOL = [
-    { id: 'divination',  room: 'divination.html', text: 'draw one tarot card' },
-    { id: 'dreams',      room: 'dreams.html',     text: 'write down one dream' },
-    { id: 'garden',      room: 'garden.html',     text: 'work on the gem' },
-    { id: 'sea',         room: 'sea.html',        text: 'release one line into the sea' },
-    { id: 'chat',        room: 'buddy.html',     text: 'talk to the buddy and seal it' },
-    { id: 'games',       room: 'games.html',      text: 'play one booth game' },
-    { id: 'abstract',    room: 'abstract.html',   text: 'cut apart one pair' },
-    { id: 'learn',       room: 'learn.html',      text: 'read one workbook page' },
-    { id: 'methodology', room: 'methodology.html', text: 'read one methodology page' },
-    { id: 'themes',      room: 'themes.html',     text: 'try a new room color' },
-    { id: 'satchel',     room: 'satchel.html',     text: 'write a note on one kept item' },
-    { id: 'relation',    room: 'desktop.html',    text: 'give one kept item a verb' }
+    { id: 'divination',  room: 'divination.html', text: 'draw one card. keep it.' },
+    { id: 'dreams',      room: 'dreams.html',     text: 'write one dream down.' },
+    { id: 'garden',      room: 'garden.html',     text: 'tend one seed.' },
+    { id: 'sea',         room: 'sea.html',        text: 'release one line. let it go.' },
+    { id: 'chat',        room: 'buddy.html',     text: 'speak. seal the exchange.' },
+    { id: 'games',       room: 'games.html',      text: 'play one booth. keep the result.' },
+    { id: 'abstract',    room: 'abstract.html',   text: 'cut one pair apart.' },
+    { id: 'learn',       room: 'learn.html',      text: 'read one page. answer it.' },
+    { id: 'methodology', room: 'methodology.html', text: 'read one method. use it once.' },
+    { id: 'themes',      room: 'themes.html',     text: 'repaint one room.' },
+    { id: 'satchel',     room: 'satchel.html',     text: 'annotate one kept item.' },
+    { id: 'relation',    room: 'desktop.html',    text: 'bind one artifact. name the verb.' }
   ];
 
   // Anything in the book set drags the checklist toward the kept things.
@@ -102,7 +102,7 @@
     container.className = 'daily-floor';
     container.id = 'daily-floor';
     container.setAttribute('role', 'group');
-    container.setAttribute('aria-label', "Todays Tasks");
+    container.setAttribute('aria-label', "Today: do one");
     var stage = document.getElementById('desktop');
     stage.appendChild(container);
   }
@@ -117,7 +117,7 @@
     container.innerHTML = '';
     var head = document.createElement('div');
     head.className = 'daily-floor-head';
-    head.textContent = "Todays Tasks";
+      head.textContent = "today: do one";
     container.appendChild(head);
 
     works.forEach(function (w) {
@@ -150,7 +150,7 @@
 
     var foot = document.createElement('div');
     foot.className = 'daily-floor-foot';
-    foot.textContent = 'optional tasks. ticking is private.';
+    foot.textContent = 'optional. ticks stay here.';
     container.appendChild(foot);
   }
 

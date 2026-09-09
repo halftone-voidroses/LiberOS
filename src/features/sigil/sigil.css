@@ -929,7 +929,7 @@
   flex-direction: column;
 }
 .sigil-rail {
-  flex: 1 1 0;
+  flex: 0 0 242px;
   min-width: 0;
   min-height: 0;
   display: flex;
@@ -937,6 +937,46 @@
   overflow: hidden;
   border-left: 1px solid #6a5228;
   background: linear-gradient(180deg, rgba(20, 14, 6, 0.6) 0%, rgba(10, 7, 3, 0.6) 100%);
+}
+.sigil-left {
+  flex: 0 0 128px;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-right: 1px solid #6a5228;
+  background: linear-gradient(180deg, rgba(20, 14, 6, 0.6) 0%, rgba(10, 7, 3, 0.6) 100%);
+  padding: 10px 8px 6px;
+}
+.sigil-left .sigil-label { margin-bottom: 6px; }
+.sigil-left .sigil-palette {
+  display: flex;
+  flex-direction: column;
+  border-top: none;
+  padding: 0;
+  background: none;
+  overflow: hidden;
+  min-height: 0;
+}
+.sigil-left .sigil-palette-tray {
+  display: grid;
+  grid-template-columns: repeat(4, 20px);
+  justify-content: center;
+  gap: 6px;
+  overflow: hidden;
+  padding: 2px;
+  flex: none;
+  min-width: 0;
+  align-content: flex-start;
+}
+.sigil-left .sigil-ink-name {
+  margin: 6px 0 0;
+  font-size: 0.72rem;
+  line-height: 1.3;
+  min-height: 2em;
+  text-align: center;
+  white-space: normal;
 }
 .sigil-tags {
   padding: 6px 12px 2px;
