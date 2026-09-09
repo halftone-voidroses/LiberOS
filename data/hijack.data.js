@@ -44,10 +44,10 @@ window.LIBER_DATA.hijack = {
     { voice: 'riason', line: 'this is the garden. finish the gem in front of you.', target: 'garden-gem-new', glow: true }
   ] },
   games: { flag: 'walkGames', steps: [
-    { voice: 'riason', line: 'nine booths, two tents. the tools keep to your book — the games keep nothing but the minute.', target: 'games-grid' },
-    { voice: 'riason', line: 'tipp sits pinned at the floor. start there if it is loud.', target: 'games-tipp-open' },
-    { voice: 'riason', line: 'booth results save to your satchel.', target: null },
-    { voice: 'riason', line: 'these are the booths. play one.', target: 'games-grid', glow: true }
+    { voice: 'riason', line: 'Five games, every one keeps. Pick one on the left.', target: 'games-grid' },
+    { voice: 'riason', line: 'The pitch tells you what it does. Read it first.', target: 'games-desc' },
+    { voice: 'riason', line: 'Play it on the right. Keep what you made.', target: 'games-stage' },
+    { voice: 'riason', line: 'This is Whimsy\u2019s tent. Everything kept lands in the satchel.', target: 'games-grid', glow: true }
   ] },
   trash: { flag: 'walkTrash', steps: [
     { voice: 'riason', line: 'what you bury lands here. nothing is gone, only buried.', target: 'trash-dig-list' },

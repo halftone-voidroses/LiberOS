@@ -1,156 +1,70 @@
-// games.js — Whimsy Wow. Two tents: DBT tools (faithful, kept) and
-// pure play (distracting, kept nowhere). No shared imports (covenant Q.1).
-// The Leadbeater ink library below mirrors the casting stone's palette
-// on purpose — same design language, her material. (Duplicated, not
-// imported: the covenant forbids shared imports between personas.)
-// Each booth is a square that opens a small play window in place.
-// Each play session auto-saves its result to satchel via
-// state.addArtifact('satchel', ...) and the booth itself shows up on
-// the desktop.
+// games.js — Whimsy Wow. Five honest games under one tent; everything
+// kept. Left third: the games + the barker's pitch. Right: the stage.
+// Results save to games + satchel with a polaroid shot. No shared imports.
 
 (function () {
   var grid = document.getElementById('games-grid');
+  var descBox = document.getElementById('games-desc');
   var stage = document.getElementById('games-stage');
 
-  var BOOTHS = [
-    { id: 'tip',         wing: 'dbt tools', heat: 5, name: 'TIPP',                glyph: '✦', desc: 'temperature, intense exercise, paced breath, progressive relaxation.' },
-    { id: 'emotion',     wing: 'dbt tools', heat: 3, name: 'emotion wheel',       glyph: '◉', desc: 'pick a wedge. name the weight. colour it. keep it.' },
-    { id: 'boundary',    wing: 'dbt tools', heat: 2, name: 'boundary shield',     glyph: '◈', desc: 'draw the line. name what stays out.' },
-    { id: 'relcircle',   wing: 'dbt tools', heat: 2, name: 'relationship circle', glyph: '◎', desc: 'who stands close? place them honestly.' },
-    { id: 'thermometer', wing: 'dbt tools', heat: 3, name: 'thermometer',       glyph: '°', desc: 'name it. colour it. watch the level.' },
-    { id: 'sandplay',    wing: 'dbt tools', heat: 2, name: 'sandplay',          glyph: '▦', desc: 'deal three toys. place them. say one line. (Punnett 2020 · Freedle 2025)' },
-    { id: 'mandala',     wing: 'pure play', heat: 1, name: 'mandala',             glyph: '◯', desc: 'trace the lines. ground the attention.' },
-    { id: 'static',      wing: 'pure play', heat: 1, name: 'static stare',        glyph: '▓', desc: 'stare into the noise. press when something surfaces.' },
-    { id: 'candle',      wing: 'pure play', heat: 1, name: 'candle watch',        glyph: '◍', desc: 'shelter the flame. keep it lit.' }
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  var GAMES = [
+    { id: 'wheel', name: 'emotion wheel', glyph: '◉',
+      pitch: 'Step right up! The wheel knows twelve feelings and your arm knows the truth. Throw a dart, land on one — no dodging! Then pick the color it feels like and watch it flood the tent. Three darts, three honest answers. Keep the prettiest.' },
+    { id: 'mask', name: 'communication mask', glyph: '◭',
+      pitch: 'Everybody wears one — here is yours to paint! Left side: what you FEEL inside. Right side: what you SHOW the world. Same face, two truths. Paint it loud, then keep it.' },
+    { id: 'shield', name: 'boundaries shield', glyph: '◈',
+      pitch: 'Four quarters, four boundaries: body, heart, clock, and mind. Color in how strong each wall is right now — bright means solid, dark means needs work. Your shield, your rules!' },
+    { id: 'circles', name: 'relationship circles', glyph: '◎',
+      pitch: 'Three rings: closest, friends, distant. Write the names where they actually belong — not where they wish they belonged. An honest seating chart. Keep it.' },
+    { id: 'sand', name: 'powder tent', glyph: '▦',
+      pitch: 'Liber powder! Pour sand, splash water, strike fire — it all falls and flows like the real stuff. Build a little world out of grains, then keep a picture before it settles.' }
   ];
 
-  var WING_SCOPE = {
-    'dbt tools': 'faithful tools — what you finish here is kept to your satchel. small local acts: one booth, one breath, one kept line. (Kast 2024)',
-    'pure play': 'distractions, no ledger — nothing is kept here.'
-  };
+  var current = null;
 
-  var activeWing = null;
-
-  function wingList() {
-    var out = [], seen = {};
-    for (var i = 0; i < BOOTHS.length; i++) {
-      if (!seen[BOOTHS[i].wing]) { seen[BOOTHS[i].wing] = 1; out.push(BOOTHS[i].wing); }
-    }
-    return out;
-  }
-
-  function buildBooths() {
+  function buildPicker() {
     if (!grid) return;
     grid.innerHTML = '';
-    var ws = wingList();
-    if (!activeWing || ws.indexOf(activeWing) < 0) activeWing = ws[0];
-    var head = document.getElementById('games-head');
-    if (!head) {
-      head = document.createElement('div');
-      head.id = 'games-head';
-      head.className = 'games-head';
-      grid.parentNode.insertBefore(head, grid);
-    }
-    head.innerHTML = '';
-    if (ws.length > 1) {
-      var tabs = document.createElement('div');
-      tabs.className = 'games-tabs';
-      ws.forEach(function (w) {
-        var t = document.createElement('button');
-        t.type = 'button';
-        t.className = 'games-tab' + (w === activeWing ? ' on' : '');
-        t.textContent = w;
-        t.setAttribute('aria-label', w + ' booths');
-        t.addEventListener('click', function () { activeWing = w; buildBooths(); });
-        tabs.appendChild(t);
-      });
-      head.appendChild(tabs);
-    }
-    if (WING_SCOPE[activeWing]) {
-      var wsc = document.createElement('div');
-      wsc.className = 'games-wing-scope';
-      wsc.textContent = WING_SCOPE[activeWing];
-      head.appendChild(wsc);
-    }
-    for (var i = 0; i < BOOTHS.length; i++) {
-      (function (b) {
-        if (b.wing !== activeWing) return;
-        var div = document.createElement('div');
-        div.className = 'games-booth';
-        div.setAttribute('data-game', b.id);
-        var heat = '';
-        for (var hd = 0; hd < 5; hd++) {
-          heat += '<i class="' + (hd < (b.heat || 1) ? 'on' : '') + '"></i>';
-        }
-        div.innerHTML =
-          '<div class="games-booth-glyph">' + b.glyph + '</div>' +
-          '<div class="games-booth-name">' + b.name + '</div>' +
-          '<div class="games-booth-desc">' + b.desc + '</div>' +
-          '<div class="games-heat" aria-hidden="true">' + heat + '</div>';
-        div.addEventListener('click', function () { openPlay(b); });
+    for (var i = 0; i < GAMES.length; i++) {
+      (function (g) {
+        var div = document.createElement('button');
+        div.type = 'button';
+        div.className = 'games-booth' + (current && current.id === g.id ? ' current' : '');
+        div.setAttribute('data-game', g.id);
+        div.innerHTML = '<span class="games-booth-glyph">' + g.glyph + '</span>'
+          + '<span class="games-booth-name">' + esc(g.name) + '</span>';
+        div.addEventListener('click', function () { selectGame(g); });
         grid.appendChild(div);
-      })(BOOTHS[i]);
+      })(GAMES[i]);
     }
   }
 
-  // WS5 personal bests — per booth, local, private (no leaderboards, no
-  // comparisons). A booth earns a best only where a score exists. dir:
-  // 'high' = bigger is the record, 'low' = smaller is.
+  function paintDesc(g) {
+    if (!descBox) return;
+    descBox.innerHTML = '<div class="games-desc-name">' + esc(g.name) + '</div><div>' + esc(g.pitch) + '</div>';
+  }
+
+  function selectGame(g) {
+    current = g;
+    buildPicker();
+    paintDesc(g);
+    openPlay(g);
+  }
+
+  function byId(id) {
+    for (var i = 0; i < GAMES.length; i++) if (GAMES[i].id === id) return GAMES[i];
+    return null;
+  }
+
+  // ── personal bests (kept: scripts/verify-gamification.mjs pins this) ──
+
   var BEST_OF = {
     tip: { key: 'ice', label: 'ice held', dir: 'high' },
   };
-
-  var INKS = [
-    { name: 'High Spirituality', hex: '#B4B4D2' },
-    { name: 'Religious Feeling, tinged with Fear', hex: '#2E2E6E' },
-    { name: 'Sympathy', hex: '#79B879' },
-    { name: 'Adaptability', hex: '#7A7A3C' },
-    { name: 'Selfishness', hex: '#6B5B4B' },
-    { name: 'Devotion mixed with Affection', hex: '#9FA8C2' },
-    { name: 'Highest Intellect', hex: '#F2F200' },
-    { name: 'Love for Humanity', hex: '#BE8FBE' },
-    { name: 'Jealousy', hex: '#6B4A2E' },
-    { name: 'Avarice', hex: '#8C8C8C' },
-    { name: 'Devotion to a Noble Ideal', hex: '#6E92D6' },
-    { name: 'Strong Intellect', hex: '#E09320' },
-    { name: 'Unselfish Affection', hex: '#E28292' },
-    { name: 'Deceit', hex: '#8A9077' },
-    { name: 'Anger', hex: '#C02424' },
-    { name: 'Pure Religious Feeling', hex: '#2440C4' },
-    { name: 'Low type of Intellect', hex: '#A06224' },
-    { name: 'Selfish Affection', hex: '#4E2424' },
-    { name: 'Fear', hex: '#B2B2C2' },
-    { name: 'Sensuality', hex: '#92605C' },
-    { name: 'Selfish Religious Feeling', hex: '#121A24' },
-    { name: 'Pride', hex: '#E04414' },
-    { name: 'Pure Affection', hex: '#E22424' },
-    { name: 'Depression', hex: '#3B3448' },
-    { name: 'Malice', hex: '#0B0B0B' }
-  ];
-
-  function inkTray(hostId, onPick) {
-    var host = document.getElementById(hostId);
-    if (!host) return -1;
-    host.innerHTML = '';
-    for (var i = 0; i < INKS.length; i++) {
-      (function (n) {
-        var b = document.createElement('button');
-        b.type = 'button';
-        b.className = 'games-ink' + (n === 0 ? ' on' : '');
-        b.style.background = INKS[n].hex;
-        b.title = INKS[n].name;
-        b.setAttribute('aria-label', 'ink: ' + INKS[n].name);
-        b.addEventListener('click', function () {
-          var sibs = host.querySelectorAll('.games-ink');
-          for (var k = 0; k < sibs.length; k++) sibs[k].classList.remove('on');
-          b.classList.add('on');
-          onPick(n);
-        });
-        host.appendChild(b);
-      })(i);
-    }
-    return 0;
-  }
 
   function recordBest(boothId, value) {
     if (!window.Liber || !window.Liber.state) return null;
@@ -158,37 +72,43 @@
     if (!metric || typeof value !== 'number' || isNaN(value) || value <= 0) return null;
     var bests = Object.assign({}, window.Liber.state.get().bests || {});
     var prev = typeof bests[boothId] === 'number' ? bests[boothId] : null;
-    var better = prev === null || (metric.dir === 'high' ? value > prev : value < prev);
+    var better = prev === null || (metric.dir === 'high' ? value > prev : prev < value);
     if (!better) return { newBest: false, value: value, best: prev, label: metric.label };
     bests[boothId] = value;
     window.Liber.state.set({ bests: bests });
     return { newBest: true, value: value, best: value, label: metric.label };
   }
 
-  function whimsyLine(best) {
-    return '<div class="games-best">★ a new house record — ' + best.value + 's ' + best.label +
-      '! the bulbs flare for you. ★</div>';
+  // ── saving ────────────────────────────────────────────────────────────
+
+  function thumb(srcCanvas, w) {
+    try {
+      w = w || 160;
+      var scale = w / srcCanvas.width;
+      var c = document.createElement('canvas');
+      c.width = w;
+      c.height = Math.max(1, Math.round(srcCanvas.height * scale));
+      var ctx = c.getContext('2d');
+      ctx.fillStyle = '#101010';
+      ctx.fillRect(0, 0, c.width, c.height);
+      ctx.drawImage(srcCanvas, 0, 0, c.width, c.height);
+      return c.toDataURL('image/jpeg', 0.72);
+    } catch (e) { return null; }
   }
 
-  function closeStage() {
-    if (!stage) return;
-    stage.innerHTML = '';
-    stage.classList.remove('open');
-    stage.setAttribute('inert', '');
-  }
-
-  function saveToDesktopAndSatchel(b, result) {
-    if (!window.Liber || !window.Liber.state) return { best: null };
+  function saveToDesktopAndSatchel(b, result, shot) {
+    if (!window.Liber || !window.Liber.state) return;
+    var payload = { kind: b.id, name: b.name, glyph: b.glyph, result: result, ts: Date.now() };
+    if (shot) payload.shot = shot;
     if (window.Liber.state.addArtifact) {
-      window.Liber.state.addArtifact('games', { kind: b.id, name: b.name, glyph: b.glyph, result: result, ts: Date.now() });
+      window.Liber.state.addArtifact('games', payload);
     }
     if (window.Liber.state.addArtifact) {
-      window.Liber.state.addArtifact('satchel', { kind: 'game', ref: b.id, name: b.name, result: result, ts: Date.now() });
+      var mirror = { kind: 'game', ref: b.id, name: b.name, result: result, ts: Date.now() };
+      if (shot) mirror.shot = shot;
+      window.Liber.state.addArtifact('satchel', mirror);
     }
-    if (window.Liber.sound) window.Liber.sound.play('chime');
-    var metric = BEST_OF[b.id];
-    var best = metric ? recordBest(b.id, result[metric.key]) : null;
-    return { best: best };
+    if (window.Liber.sound) { try { window.Liber.sound.play('chime'); } catch (e) {} }
   }
 
   function promptSave(b, summary, doSave, doDiscard) {
@@ -196,7 +116,7 @@
     var body = document.getElementById('games-save-prompt-body');
     if (!prompt) { doSave(); return; }
     pendingPayload = { summary: summary, doSave: doSave, doDiscard: doDiscard };
-    if (body) body.innerHTML = 'booth: <em>' + b.name + '</em>. ' + summary;
+    if (body) body.innerHTML = 'booth: <em>' + esc(b.name) + '</em>. ' + summary;
     prompt.classList.add('open');
     prompt.removeAttribute('inert');
   }
@@ -211,14 +131,21 @@
     pendingPayload = null;
   }
 
+  function closeStage() {
+    if (!stage) return;
+    if (stage._teardown) { try { stage._teardown(); } catch (e) {} stage._teardown = null; }
+    stage.innerHTML = '';
+    stage.setAttribute('inert', '');
+  }
+
   function openPlay(b) {
     if (!stage) return;
-    stage.classList.add('open');
+    closeStage();
     stage.removeAttribute('inert');
     var html = '<div class="games-stage-inner">';
     html += '<div class="games-stage-head">';
     html += '<span class="games-stage-glyph">' + b.glyph + '</span>';
-    html += '<span class="games-stage-name">' + b.name + '</span>';
+    html += '<span class="games-stage-name">' + esc(b.name) + '</span>';
     html += '<button type="button" class="games-stage-close" id="games-stage-close" aria-label="close">×</button>';
     html += '</div>';
     html += '<div class="games-stage-body" id="games-stage-body"></div>';
@@ -233,720 +160,613 @@
 
   function renderPlay(b, body) {
     body.innerHTML = '';
-    if (b.id === 'tip') {
-      body.innerHTML =
-        '<div class="games-prompt">TIPP — temperature, intense exercise, paced breath, progressive relaxation. hold the ice: 30 seconds.</div>' +
-        '<div class="games-tip-thermo"><div class="games-tip-thermo-fill" id="tip-fill"></div></div>' +
-        '<div class="games-tip-row">' +
-          '<button type="button" class="games-action" id="tip-ice">face in ice</button>' +
-          '<button type="button" class="games-action" id="tip-breath">paced breath 4-4-6</button>' +
-          '<button type="button" class="games-action" id="tip-relax">tense / release</button>' +
-        '</div>' +
-        '<div class="games-tip-meter">distress <span id="tip-distress">6</span>/10</div>' +
-        '<div class="games-tip-log" id="tip-log">begin.</div>' +
-        '<div class="games-actions"><button type="button" class="games-action" id="tip-save">save what happened</button></div>';
-      var distress = 6;
-      var log = document.getElementById('tip-log');
-      function tipLog(s) { if (log) log.textContent = s; }
-      var fill = document.getElementById('tip-fill');
-      function setFill(pct) { if (fill) fill.style.width = pct + '%'; }
-      function sync() {
-        var d = document.getElementById('tip-distress'); if (d) d.textContent = distress;
+    if (b.id === 'wheel') return playWheel(b, body);
+    if (b.id === 'mask') return playPaint(b, body, 'mask');
+    if (b.id === 'shield') return playPaint(b, body, 'shield');
+    if (b.id === 'circles') return playPaint(b, body, 'circles');
+    if (b.id === 'sand') return playSand(b, body);
+  }
+
+  function thunk() {
+    if (window.Liber && window.Liber.sound) { try { window.Liber.sound.play('thunk'); } catch (e) {} }
+  }
+
+  // ── emotion wheel ─────────────────────────────────────────────────────
+
+  var WHEEL_EMOTIONS = [
+    { name: 'Anger', hex: '#C02424' },
+    { name: 'Fear', hex: '#B2B2C2' },
+    { name: 'Pride', hex: '#E04414' },
+    { name: 'Pure Affection', hex: '#E22424' },
+    { name: 'Depression', hex: '#3B3448' },
+    { name: 'Sympathy', hex: '#79B879' },
+    { name: 'Jealousy', hex: '#6B4A2E' },
+    { name: 'Highest Intellect', hex: '#F2F200' },
+    { name: 'Love for Humanity', hex: '#BE8FBE' },
+    { name: 'Adaptability', hex: '#7A7A3C' },
+    { name: 'Sensuality', hex: '#92605C' },
+    { name: 'Devotion', hex: '#6E92D6' }
+  ];
+
+  var WHEEL_COLORS = ['#C02424', '#E09320', '#F2F200', '#79B879', '#2a8a8a', '#4a6ad4', '#7a3aaa', '#BE8FBE'];
+
+  function polar(r, a) {
+    return [150 + r * Math.cos(a), 150 + r * Math.sin(a)];
+  }
+
+  function wedgePath(i, n) {
+    var a0 = (i / n) * Math.PI * 2 - Math.PI / 2;
+    var a1 = ((i + 1) / n) * Math.PI * 2 - Math.PI / 2;
+    var p0 = polar(140, a0), p1 = polar(140, a1);
+    return 'M150 150 L' + p0[0].toFixed(1) + ' ' + p0[1].toFixed(1)
+      + ' A140 140 0 0 1 ' + p1[0].toFixed(1) + ' ' + p1[1].toFixed(1) + ' Z';
+  }
+
+  function playWheel(b, body) {
+    var n = WHEEL_EMOTIONS.length;
+    var svg = '<svg id="wheel-svg" viewBox="0 0 300 300" role="img" aria-label="emotion dartboard">';
+    for (var i = 0; i < n; i++) {
+      var e = WHEEL_EMOTIONS[i];
+      var mid = ((i + 0.5) / n) * Math.PI * 2 - Math.PI / 2;
+      var lp = polar(108, mid);
+      svg += '<path d="' + wedgePath(i, n) + '" fill="' + e.hex + '" stroke="#0a0a0a" stroke-width="2" data-wedge="' + i + '"/>'
+        + '<text x="' + lp[0].toFixed(1) + '" y="' + lp[1].toFixed(1) + '" text-anchor="middle" dominant-baseline="middle"'
+        + ' font-size="10" fill="#f0e8d8" transform="rotate(' + ((mid * 180 / Math.PI) + 90).toFixed(1) + ' ' + lp[0].toFixed(1) + ' ' + lp[1].toFixed(1) + ')">'
+        + esc(e.name.split(' ')[0]) + '</text>';
+    }
+    svg += '<circle cx="150" cy="150" r="16" fill="#d4af37" stroke="#0a0a0a" stroke-width="2"/></svg>';
+
+    body.innerHTML =
+      '<div class="wheel-wrap" id="wheel-wrap">' + svg
+      + '<div class="wheel-dart" id="wheel-dart" aria-hidden="true">'
+      + '<svg viewBox="0 0 34 34" width="34" height="34"><path d="M17 2 L21 20 L17 26 L13 20 Z" fill="#e8c890" stroke="#5a3a10"/><circle cx="17" cy="8" r="2.5" fill="#c02424"/></svg>'
+      + '</div><div class="wheel-seep" id="wheel-seep" aria-hidden="true"></div></div>'
+      + '<div class="wheel-hint" id="wheel-hint">click the wheel to throw a dart.</div>'
+      + '<div class="wheel-colors" id="wheel-colors" hidden></div>'
+      + '<div class="games-actions">'
+      + '<button type="button" class="games-action" id="wheel-again" hidden>another dart</button>'
+      + '<button type="button" class="games-action" id="wheel-keep" disabled>keep it</button>'
+      + '</div>'
+      + '<div class="games-result" id="wheel-result"></div>';
+
+    var wrap = document.getElementById('wheel-wrap');
+    var dart = document.getElementById('wheel-dart');
+    var seep = document.getElementById('wheel-seep');
+    var colors = document.getElementById('wheel-colors');
+    var hint = document.getElementById('wheel-hint');
+    var again = document.getElementById('wheel-again');
+    var keep = document.getElementById('wheel-keep');
+    var result = document.getElementById('wheel-result');
+    var thrown = null;   // { emotion, x, y (fractions), color }
+    var darts = [];
+
+    function dartXY(evt) {
+      var r = wrap.getBoundingClientRect();
+      return { x: (evt.clientX - r.left) / r.width, y: (evt.clientY - r.top) / r.height };
+    }
+
+    wrap.addEventListener('mousemove', function (e) {
+      if (!dart || thrown) return;
+      var p = dartXY(e);
+      dart.style.transform = 'translate(' + (p.x * wrap.clientWidth).toFixed(1) + 'px,' + (p.y * wrap.clientHeight).toFixed(1) + 'px)';
+    });
+    wrap.addEventListener('mouseleave', function () {
+      if (dart && !thrown) dart.style.transform = 'translate(-40px,-40px)';
+    });
+
+    function wedgeAt(x, y) {
+      var dx = x - 0.5, dy = y - 0.5;
+      var a = Math.atan2(dy, dx) + Math.PI / 2;
+      if (a < 0) a += Math.PI * 2;
+      var i = Math.floor(a / (Math.PI * 2) * n) % n;
+      if (Math.sqrt(dx * dx + dy * dy) > 0.47) return -1;
+      return i;
+    }
+
+    wrap.addEventListener('click', function (e) {
+      if (thrown) return;
+      var p = dartXY(e);
+      var wi = wedgeAt(p.x, p.y);
+      if (wi < 0) { if (hint) hint.textContent = 'off the board! aim inside the wheel.'; return; }
+      var emo = WHEEL_EMOTIONS[wi];
+      thrown = { emotion: emo.name, hex: emo.hex, x: p.x, y: p.y, color: null };
+      if (dart) {
+        dart.style.transform = 'translate(' + (p.x * wrap.clientWidth).toFixed(1) + 'px,' + (p.y * wrap.clientHeight).toFixed(1) + 'px)';
       }
-      var ice = document.getElementById('tip-ice');
-      var breath = document.getElementById('tip-breath');
-      var relax = document.getElementById('tip-relax');
-      var iceTimer = null, iceT = 0;
-      if (ice) ice.addEventListener('click', function () {
-        if (iceTimer) { clearInterval(iceTimer); iceTimer = null; tipLog('ice: aborted.'); return; }
-        iceT = 0; setFill(0); tipLog('ice: 0/30s — hold.');
-        iceTimer = setInterval(function () {
-          iceT++;
-          setFill((iceT / 30) * 100);
-          if (iceT >= 30) { clearInterval(iceTimer); iceTimer = null; distress = Math.max(0, distress - 2); sync(); tipLog('ice: 30s held. distress ' + distress + '.'); }
-        }, 1000);
-      });
-      var breathPhases = ['in 4', 'hold 4', 'out 6', 'hold 4'];
-      var breathT = 0, breathI = null;
-      if (breath) breath.addEventListener('click', function () {
-        if (breathI) { clearInterval(breathI); breathI = null; tipLog('breath: stopped.'); return; }
-        breathT = 0;
-        breathI = setInterval(function () {
-          tipLog('breath: ' + breathPhases[breathT % 4]);
-          breathT++;
-          if (breathT % 8 === 0) { distress = Math.max(0, distress - 1); sync(); }
-        }, 2000);
-      });
-      var relaxI = null, relaxT = 0;
-      if (relax) relax.addEventListener('click', function () {
-        if (relaxI) { clearInterval(relaxI); relaxI = null; tipLog('relax: stopped.'); return; }
-        relaxT = 0;
-        relaxI = setInterval(function () {
-          tipLog('relax: ' + (relaxT % 2 === 0 ? 'tense 5s' : 'release 5s'));
-          relaxT++;
-          if (relaxT % 4 === 0) { distress = Math.max(0, distress - 1); sync(); }
-        }, 2500);
-      });
-      var s = document.getElementById('tip-save');
-      if (s) s.addEventListener('click', function () {
-        promptSave(b, 'TIPP done. distress: ' + distress + '/10.', function () {
-          var saved = saveToDesktopAndSatchel(b, { type: 'tip', distress: distress, ice: iceT });
-          var bestHtml = (saved.best && saved.best.newBest) ? whimsyLine(saved.best) : '';
-          body.innerHTML = '<div class="games-result">— saved · distress ' + distress + '/10 —</div>' + bestHtml;
-        }, function () {
-          body.innerHTML = '<div class="games-result">— discarded —</div>';
-        });
-      });
-    } else if (b.id === 'emotion') {
-      var EMW = ['joy', 'trust', 'fear', 'surprise', 'sadness', 'disgust', 'anger', 'anticipation'];
-      var emState = { wedge: -1, intensity: 3, ink: 0, colored: {} };
-      body.innerHTML =
-        '<div class="games-prompt">pick a wedge. name the weight. colour it. keep the wheel.</div>' +
-        '<svg class="games-emwheel" id="emwheel" viewBox="0 0 200 200" role="img" aria-label="emotion wheel"></svg>' +
-        '<div class="games-emrow"><button type="button" class="games-action" id="em-minus" aria-label="lower intensity">−</button>' +
-        '<span class="games-em-intensity">intensity · <span id="em-num">3</span>/5</span>' +
-        '<button type="button" class="games-action" id="em-plus" aria-label="raise intensity">+</button></div>' +
-        '<div class="games-inks" id="em-inks" role="group" aria-label="inks"></div>' +
-        '<div class="games-actions"><button type="button" class="games-action" id="em-keep">keep the wheel</button></div>';
-      var emSvg = document.getElementById('emwheel');
-      var emNS = 'http://www.w3.org/2000/svg';
-      function emArc(i) {
-        var a0 = (i / 8) * Math.PI * 2 - Math.PI / 2, a1 = ((i + 1) / 8) * Math.PI * 2 - Math.PI / 2;
-        var cx = 100, cy = 100, r0 = 34, r1 = 94;
-        function pt(r, a) { return (cx + r * Math.cos(a)).toFixed(1) + ',' + (cy + r * Math.sin(a)).toFixed(1); }
-        return 'M' + pt(r0, a0) + 'L' + pt(r1, a0) + 'A' + r1 + ',' + r1 + ' 0 0 1 ' + pt(r1, a1) +
-          'L' + pt(r0, a1) + 'A' + r0 + ',' + r0 + ' 0 0 0 ' + pt(r0, a0) + 'Z';
-      }
-      var emPaths = [];
-      for (var ei = 0; ei < 8; ei++) {
-        (function (n) {
-          var p = document.createElementNS(emNS, 'path');
-          p.setAttribute('d', emArc(n));
-          p.setAttribute('class', 'games-emwedge');
-          var title = document.createElementNS(emNS, 'title');
-          title.textContent = EMW[n];
-          p.appendChild(title);
-          p.addEventListener('click', function () { emState.wedge = n; paintEmWheel(); });
-          emSvg.appendChild(p);
-          emPaths.push(p);
-          var mid = ((n + 0.5) / 8) * Math.PI * 2 - Math.PI / 2;
-          var t = document.createElementNS(emNS, 'text');
-          t.setAttribute('x', (100 + 64 * Math.cos(mid)).toFixed(1));
-          t.setAttribute('y', (100 + 64 * Math.sin(mid)).toFixed(1));
-          t.setAttribute('class', 'games-emlabel');
-          t.setAttribute('text-anchor', 'middle');
-          t.textContent = EMW[n];
-          emSvg.appendChild(t);
-        })(ei);
-      }
-      function paintEmWheel() {
-        for (var k = 0; k < emPaths.length; k++) {
-          var cc = emState.colored[k];
-          emPaths[k].setAttribute('fill', cc ? cc.color : 'none');
-          emPaths[k].setAttribute('fill-opacity', cc ? (0.35 + cc.intensity * 0.13) : 1);
-          emPaths[k].classList.toggle('picked', k === emState.wedge);
-        }
-        var nn = document.getElementById('em-num');
-        if (nn) nn.textContent = emState.intensity;
-      }
-      paintEmWheel();
-      var emMinus = document.getElementById('em-minus');
-      var emPlus = document.getElementById('em-plus');
-      if (emMinus) emMinus.addEventListener('click', function () {
-        emState.intensity = Math.max(1, emState.intensity - 1); paintEmWheel();
-      });
-      if (emPlus) emPlus.addEventListener('click', function () {
-        emState.intensity = Math.min(5, emState.intensity + 1); paintEmWheel();
-      });
-      inkTray('em-inks', function (n) {
-        emState.ink = n;
-        if (emState.wedge >= 0) {
-          emState.colored[emState.wedge] = { emotion: EMW[emState.wedge], intensity: emState.intensity, color: INKS[n].hex, ink: INKS[n].name };
-          paintEmWheel();
-        }
-      });
-      var emKeep = document.getElementById('em-keep');
-      if (emKeep) emKeep.addEventListener('click', function () {
-        var feels = Object.keys(emState.colored).map(function (k) { return emState.colored[k]; });
-        if (!feels.length) {
-          body.innerHTML = '<div class="games-result">— colour at least one wedge first —</div>';
-          return;
-        }
-        promptSave(b, feels.length + ' feeling' + (feels.length === 1 ? '' : 's') + ' weighed.', function () {
-          saveToDesktopAndSatchel(b, { type: 'emwheel', feelings: feels });
-          body.innerHTML = '<div class="games-result">— wheel kept · ' + feels.length + ' weighed —</div>';
-        }, function () { body.innerHTML = '<div class="games-result">— discarded —</div>'; });
-      });
-    } else if (b.id === 'boundary') {
-      var bdState = { ink: 7 };
-      body.innerHTML =
-        '<div class="games-prompt">three rings. what holds at each one.</div>' +
-        '<svg class="games-shield" viewBox="0 0 200 200" role="img" aria-label="boundary shield"></svg>' +
-        '<label class="games-field"><span>at my center…</span><input type="text" class="games-input" id="bd-core" maxlength="80" /></label>' +
-        '<label class="games-field"><span>at my edge…</span><input type="text" class="games-input" id="bd-edge" maxlength="80" /></label>' +
-        '<label class="games-field"><span>outside stays…</span><input type="text" class="games-input" id="bd-out" maxlength="80" /></label>' +
-        '<div class="games-inks" id="bd-inks" role="group" aria-label="inks"></div>' +
-        '<div class="games-actions"><button type="button" class="games-action" id="bd-keep">seal the shield</button></div>';
-      var bdSvgNS = 'http://www.w3.org/2000/svg';
-      var bdSvg = body.querySelector('.games-shield');
-      function bdCircle(r, cls) {
-        var c = document.createElementNS(bdSvgNS, 'circle');
-        c.setAttribute('cx', '100'); c.setAttribute('cy', '100'); c.setAttribute('r', String(r));
-        c.setAttribute('class', cls);
-        bdSvg.appendChild(c);
-        return c;
-      }
-      bdCircle(88, 'games-shield-outer');
-      var bdRing = bdCircle(60, 'games-shield-ring');
-      bdCircle(30, 'games-shield-core');
-      var bdMe = document.createElementNS(bdSvgNS, 'text');
-      bdMe.setAttribute('x', '100'); bdMe.setAttribute('y', '104');
-      bdMe.setAttribute('text-anchor', 'middle');
-      bdMe.setAttribute('class', 'games-shield-me');
-      bdMe.textContent = 'me';
-      bdSvg.appendChild(bdMe);
-      function paintShield() {
-        if (bdRing) bdRing.setAttribute('stroke', INKS[bdState.ink].hex);
-      }
-      inkTray('bd-inks', function (n) { bdState.ink = n; paintShield(); });
-      paintShield();
-      var bdKeep = document.getElementById('bd-keep');
-      if (bdKeep) bdKeep.addEventListener('click', function () {
-        function val(id) {
-          var el = document.getElementById(id);
-          return el ? el.value.trim() : '';
-        }
-        var lines = [val('bd-core'), val('bd-edge'), val('bd-out')];
-        if (!lines[0] && !lines[1] && !lines[2]) {
-          body.innerHTML = '<div class="games-result">— write at least one line first —</div>';
-          return;
-        }
-        var ink = INKS[bdState.ink];
-        promptSave(b, 'a shield, sealed in ' + ink.name.toLowerCase() + '.', function () {
-          saveToDesktopAndSatchel(b, { type: 'boundary', lines: lines, color: ink.hex, ink: ink.name });
-          body.innerHTML = '<div class="games-result">— shield sealed —</div>';
-        }, function () { body.innerHTML = '<div class="games-result">— discarded —</div>'; });
-      });
-    } else if (b.id === 'relcircle') {
-      var rcFigures = [];
-      body.innerHTML =
-        '<div class="games-prompt">who stands close? place them honestly. tap a figure to move it outward.</div>' +
-        '<svg class="games-relcircle" viewBox="0 0 200 200" role="img" aria-label="relationship circle">' +
-          '<circle cx="100" cy="100" r="88" class="games-rc-ring"/>' +
-          '<circle cx="100" cy="100" r="60" class="games-rc-ring"/>' +
-          '<circle cx="100" cy="100" r="32" class="games-rc-ring"/>' +
-          '<text x="100" y="104" text-anchor="middle" class="games-rc-me">you</text>' +
-          '<g id="relcircle-dots"></g>' +
-        '</svg>' +
-        '<div class="games-rc-legend" id="rc-legend">— no one placed yet —</div>' +
-        '<div class="games-actions"><input type="text" class="games-input" id="rc-name" maxlength="24" aria-label="their name" />' +
-        '<button type="button" class="games-action" id="rc-add">place them</button></div>' +
-        '<div class="games-actions"><button type="button" class="games-action" id="rc-keep">keep the circle</button></div>';
-      var rcNS = 'http://www.w3.org/2000/svg';
-      var rcNames = ['inner', 'middle', 'outer'];
-      function paintDots() {
-        var g = document.getElementById('relcircle-dots');
-        var legend = document.getElementById('rc-legend');
-        if (legend) {
-          legend.textContent = rcFigures.length
-            ? rcFigures.map(function (f) { return f.name + ' — ' + rcNames[f.ring]; }).join(' · ')
-            : '— no one placed yet —';
-        }
-        if (!g) return;
-        g.innerHTML = '';
-        var radii = [32, 60, 88];
-        for (var i = 0; i < rcFigures.length; i++) {
-          (function (f, k) {
-            var a = (k / Math.max(rcFigures.length, 1)) * Math.PI * 2 - Math.PI / 2;
-            var r = radii[f.ring] || 88;
-            var c = document.createElementNS(rcNS, 'circle');
-            c.setAttribute('cx', (100 + r * Math.cos(a)).toFixed(1));
-            c.setAttribute('cy', (100 + r * Math.sin(a)).toFixed(1));
-            c.setAttribute('r', '9');
-            c.setAttribute('class', 'games-rc-dot');
-            var t = document.createElementNS(rcNS, 'title');
-            t.textContent = f.name;
-            c.appendChild(t);
-            c.addEventListener('click', function () { f.ring = (f.ring + 1) % 3; paintDots(); });
-            g.appendChild(c);
-          })(rcFigures[i], i);
-        }
-      }
-      paintDots();
-      var rcAdd = document.getElementById('rc-add');
-      if (rcAdd) rcAdd.addEventListener('click', function () {
-        var inp = document.getElementById('rc-name');
-        var name = inp ? inp.value.trim() : '';
-        if (!name) return;
-        rcFigures.push({ name: name, ring: 1 });
-        if (inp) inp.value = '';
-        paintDots();
-      });
-      var rcKeep = document.getElementById('rc-keep');
-      if (rcKeep) rcKeep.addEventListener('click', function () {
-        if (!rcFigures.length) {
-          body.innerHTML = '<div class="games-result">— place at least one figure first —</div>';
-          return;
-        }
-        promptSave(b, rcFigures.length + ' placed close.', function () {
-          saveToDesktopAndSatchel(b, { type: 'relcircle', figures: rcFigures.slice() });
-          body.innerHTML = '<div class="games-result">— circle kept · ' + rcFigures.length + ' placed —</div>';
-        }, function () { body.innerHTML = '<div class="games-result">— discarded —</div>'; });
-      });
-    } else if (b.id === 'thermometer') {
-      var DEALT = ['grief', 'anger', 'tenderness', 'dread', 'relief', 'shame', 'wonder', 'loneliness'];
-      var thState = { ink: 0, level: 5, dealt: false };
-      body.innerHTML =
-        '<div class="games-prompt">name it. colour it. watch the level.</div>' +
-        '<div class="games-thermo-art">' +
-          '<svg class="games-thermo-svg" viewBox="0 0 80 220" aria-hidden="true">' +
-            '<rect x="30" y="10" width="20" height="150" rx="10" class="games-thermo-tube"/>' +
-            '<rect x="33" y="157" width="14" height="3" rx="1.5" class="games-thermo-fill" id="thermo-fill-art"/>' +
-            '<circle cx="40" cy="182" r="26" class="games-thermo-bulb"/>' +
-            '<circle cx="40" cy="182" r="26" class="games-thermo-bulbfill" id="thermo-bulb-art"/>' +
-          '</svg>' +
-          '<div class="games-thermo-side">' +
-            '<input type="text" class="games-input" id="thermo-emo" maxlength="40" aria-label="the emotion" />' +
-            '<button type="button" class="games-action" id="thermo-deal">deal me one</button>' +
-            '<input type="range" class="games-thermo-range" id="thermo-level" min="1" max="10" value="5" aria-label="intensity" />' +
-            '<div class="games-thermo-readout">level · <span id="thermo-num">5</span>/10</div>' +
-          '</div>' +
-        '</div>' +
-        '<div class="games-inks" id="thermo-inks" role="group" aria-label="inks"></div>' +
-        '<div class="games-actions"><button type="button" class="games-action" id="thermo-keep">keep the reading</button></div>';
-      function paintThermo() {
-        var lvl = thState.level;
-        var h = Math.max(3, 150 * lvl / 10);
-        var fill = document.getElementById('thermo-fill-art');
-        var bulb = document.getElementById('thermo-bulb-art');
-        var col = INKS[thState.ink].hex;
-        if (fill) { fill.setAttribute('y', (160 - h).toFixed(1)); fill.setAttribute('height', h.toFixed(1)); fill.setAttribute('fill', col); }
-        if (bulb) bulb.setAttribute('fill', col);
-        var nn = document.getElementById('thermo-num');
-        if (nn) nn.textContent = lvl;
-      }
-      var thRange = document.getElementById('thermo-level');
-      if (thRange) thRange.addEventListener('input', function () {
-        thState.level = parseInt(thRange.value, 10) || 5;
-        paintThermo();
-      });
-      inkTray('thermo-inks', function (n) { thState.ink = n; paintThermo(); });
-      paintThermo();
-      var thDeal = document.getElementById('thermo-deal');
-      if (thDeal) thDeal.addEventListener('click', function () {
-        var emo = document.getElementById('thermo-emo');
-        var pick = DEALT[Math.floor(Math.random() * DEALT.length)];
-        if (emo) emo.value = pick;
-        thState.dealt = true;
-      });
-      var thKeep = document.getElementById('thermo-keep');
-      if (thKeep) thKeep.addEventListener('click', function () {
-        var emoEl = document.getElementById('thermo-emo');
-        var emo = emoEl ? emoEl.value.trim() : '';
-        if (!emo) {
-          body.innerHTML = '<div class="games-result">— name it first —</div>';
-          return;
-        }
-        var ink = INKS[thState.ink];
-        promptSave(b, emo + ' at ' + thState.level + '/10, coloured ' + ink.name.toLowerCase() + '.', function () {
-          saveToDesktopAndSatchel(b, { type: 'thermometer', emotion: emo, intensity: thState.level, color: ink.hex, ink: ink.name, dealt: thState.dealt });
-          body.innerHTML = '<div class="games-result">— kept · ' + emo + ' at ' + thState.level + ' —</div>';
-        }, function () { body.innerHTML = '<div class="games-result">— discarded —</div>'; });
-      });
-    } else if (b.id === 'mandala') {
-      body.innerHTML =
-        '<div class="games-prompt">trace the mandala. follow the line. one breath in, one breath out.</div>' +
-        '<canvas class="games-mandala" id="mandala-canvas" width="320" height="320"></canvas>' +
-        '<div class="games-actions">' +
-          '<button type="button" class="games-action" id="mandala-traced">i traced it</button>' +
-          '<button type="button" class="games-action" id="mandala-reset">start over</button>' +
-        '</div>';
-      var mCan = document.getElementById('mandala-canvas');
-      if (mCan) {
-        var mctx = mCan.getContext('2d');
-        var cx = 160, cy = 160;
-        for (var r2 = 16; r2 < 160; r2 += 24) {
-          mctx.beginPath(); mctx.arc(cx, cy, r2, 0, Math.PI * 2);
-          mctx.strokeStyle = 'rgba(255, 215, 100, 0.4)';
-          mctx.lineWidth = 1.4; mctx.stroke();
-        }
-        for (var a2 = 0; a2 < 12; a2++) {
-          var ang = (a2 / 12) * Math.PI * 2;
-          mctx.beginPath();
-          mctx.moveTo(cx, cy);
-          mctx.lineTo(cx + Math.cos(ang) * 150, cy + Math.sin(ang) * 150);
-          mctx.strokeStyle = 'rgba(255, 215, 100, 0.25)';
-          mctx.lineWidth = 1; mctx.stroke();
-        }
-        mctx.fillStyle = 'rgba(255, 215, 100, 0.6)';
-        mctx.beginPath(); mctx.arc(cx, cy, 4, 0, Math.PI * 2); mctx.fill();
-      }
-      var mTraced = document.getElementById('mandala-traced');
-      if (mTraced) mTraced.addEventListener('click', function () {
-        body.innerHTML = '<div class="games-result">— mandala traced —</div>';
-        if (window.Liber && window.Liber.sound) window.Liber.sound.play('chime');
-      });
-    } else if (b.id === 'static') {
-      body.innerHTML =
-        '<div class="games-prompt">stare into the noise. press when something surfaces.</div>' +
-        '<canvas class="games-static" id="static-canvas" width="300" height="180"></canvas>' +
-        '<div class="games-actions"><button type="button" class="games-action" id="static-see">i see something</button>' +
-        '<button type="button" class="games-action" id="static-again">still looking</button></div>' +
-        '<div class="games-static-line" id="static-line">the noise keeps what you bring it.</div>';
-      var scv = document.getElementById('static-canvas');
-      var sctx = scv ? scv.getContext('2d') : null;
-      var sSeed = Math.floor(Math.random() * 100000) + 1;
-      var sShape = null;
-      var sLines = ['the noise keeps what you bring it.', 'something looked back. politely.', 'a shape, almost.', 'the void, buffering.'];
-      function sRand() {
-        sSeed = (sSeed * 1103515245 + 12345) & 0x7fffffff;
-        return sSeed / 0x7fffffff;
-      }
-      function drawStaticShape() {
-        if (!sctx || !sShape) return;
-        sctx.strokeStyle = 'rgba(212, 175, 55, 0.85)';
-        sctx.lineWidth = 2;
-        sctx.beginPath();
-        if (sShape.kind === 0) {
-          sctx.arc(sShape.x, sShape.y, 22, 0, Math.PI * 2);
-        } else if (sShape.kind === 1) {
-          sctx.moveTo(sShape.x, sShape.y - 24);
-          sctx.lineTo(sShape.x + 22, sShape.y + 18);
-          sctx.lineTo(sShape.x - 22, sShape.y + 18);
-          sctx.closePath();
-        } else {
-          sctx.moveTo(sShape.x - 20, sShape.y);
-          sctx.lineTo(sShape.x + 20, sShape.y);
-          sctx.moveTo(sShape.x, sShape.y - 20);
-          sctx.lineTo(sShape.x, sShape.y + 20);
-        }
-        sctx.stroke();
-      }
-      function noiseFrame() {
-        if (!scv || !document.body.contains(scv)) return;
-        var img = sctx.createImageData(scv.width, scv.height);
-        var d = img.data;
-        for (var i = 0; i < d.length; i += 4) {
-          var v = Math.floor(sRand() * 70) + 8;
-          d[i] = v + 20; d[i + 1] = v + 8; d[i + 2] = v; d[i + 3] = 255;
-        }
-        sctx.putImageData(img, 0, 0);
-        drawStaticShape();
-        requestAnimationFrame(noiseFrame);
-      }
-      if (sctx) noiseFrame();
-      var sSee = document.getElementById('static-see');
-      var sAgain = document.getElementById('static-again');
-      var sLine = document.getElementById('static-line');
-      if (sSee) sSee.addEventListener('click', function () {
-        sShape = { kind: Math.floor(sRand() * 3), x: 60 + sRand() * 180, y: 40 + sRand() * 100 };
-        if (sLine) sLine.textContent = sLines[Math.floor(sRand() * sLines.length)];
-      });
-      if (sAgain) sAgain.addEventListener('click', function () {
-        sShape = null;
-        if (sLine) sLine.textContent = 'the noise keeps what you bring it.';
-      });
-    } else if (b.id === 'candle') {
-      body.innerHTML =
-        '<div class="games-prompt">shelter the flame. keep it lit.</div>' +
-        '<div class="games-candle-wrap"><div class="games-flame" id="candle-flame"></div>' +
-        '<div class="games-gust" id="candle-gust">the wind is calm.</div></div>' +
-        '<div class="games-candle-life"><div class="games-candle-fill" id="candle-fill"></div></div>' +
-        '<div class="games-actions"><button type="button" class="games-action" id="candle-hold">hold to shelter</button></div>' +
-        '<div class="games-result" id="candle-line" hidden></div>';
-      var cFlame = document.getElementById('candle-flame');
-      var cGust = document.getElementById('candle-gust');
-      var cFill = document.getElementById('candle-fill');
-      var cHold = document.getElementById('candle-hold');
-      var cLine = document.getElementById('candle-line');
-      var cLife = 100, cSheltered = false, cOver = false, gusting = false, cElapsed = 0;
-      var cSeed = Math.floor(Math.random() * 100000) + 1;
-      function cRand() {
-        cSeed = (cSeed * 1103515245 + 12345) & 0x7fffffff;
-        return cSeed / 0x7fffffff;
-      }
-      function paintCandle() {
-        if (cFill) cFill.style.width = Math.max(0, cLife) + '%';
-        if (cFlame) cFlame.classList.toggle('blown', gusting && !cSheltered);
-        if (cGust) cGust.textContent = gusting ? 'gust! hold steady.' : 'the wind is calm.';
-      }
-      if (cHold) {
-        cHold.addEventListener('pointerdown', function () { cSheltered = true; });
-        cHold.addEventListener('pointerup', function () { cSheltered = false; });
-        cHold.addEventListener('pointerleave', function () { cSheltered = false; });
-        cHold.addEventListener('click', function () {
-          if (cOver) {
-            cLife = 100; cOver = false; cElapsed = 0; gusting = false;
-            cHold.textContent = 'hold to shelter';
-            if (cLine) cLine.hidden = true;
-            paintCandle();
-          }
+      thunk();
+      if (hint) hint.textContent = emo.name + ' — now pick the color it feels like.';
+      if (colors) {
+        colors.innerHTML = '';
+        colors.hidden = false;
+        WHEEL_COLORS.forEach(function (c) {
+          var cb = document.createElement('button');
+          cb.type = 'button';
+          cb.className = 'wheel-color';
+          cb.style.background = c;
+          cb.setAttribute('aria-label', 'color ' + c);
+          cb.addEventListener('click', function () { flood(c); });
+          colors.appendChild(cb);
         });
       }
-      var cTimer = setInterval(function () {
-        if (!cHold || !document.body.contains(cHold)) { clearInterval(cTimer); return; }
-        if (cOver) return;
-        cElapsed += 0.5;
-        if (!gusting && cRand() < 0.16) gusting = true;
-        if (gusting && cRand() < 0.3) gusting = false;
-        if (gusting && !cSheltered) cLife -= 8;
-        else cLife = Math.min(100, cLife + 2);
-        paintCandle();
-        if (cLife <= 0) {
-          cOver = true;
-          cLife = 0;
-          paintCandle();
-          if (cLine) { cLine.textContent = '— out. the dark is patient. —'; cLine.hidden = false; }
-          if (cHold) cHold.textContent = 'relight';
-        } else if (cElapsed >= 30) {
-          cOver = true;
-          if (cLine) { cLine.textContent = '— the flame holds. so do you. —'; cLine.hidden = false; }
-          if (cHold) cHold.textContent = 'relight';
-          if (window.Liber && window.Liber.sound) window.Liber.sound.play('chime');
-        }
-      }, 500);
-      paintCandle();
-    } else if (b.id === 'sandplay') {
-      var PHASES = [
-        { name: 'deal', hint: 'three toys dealt. the tray never arrives empty.' },
-        { name: 'place', hint: 'drag each toy where it wants to stand.' },
-        { name: 'line', hint: 'one line per toy. speech follows the hands.' },
-        { name: 'tend', hint: 'rake, mound, or mist. the sand keeps what the hands do.' },
-        { name: 'witness', hint: 'look once more. the scene is the sentence.' },
-        { name: 'keep', hint: 'keep it to the book, or smooth the sand and begin again.' },
-        { name: 'release', hint: 'the tray empties. nothing is owed.' }
-      ];
-      function sandHash(str) {
-        var h = 1779033703 ^ str.length, i;
-        for (i = 0; i < str.length; i++) { h = Math.imul(h ^ str.charCodeAt(i), 3432918353); h = (h << 13) | (h >>> 19); }
-        return (h ^= h >>> 16) >>> 0;
+    });
+
+    function flood(color) {
+      if (!thrown || thrown.color) return;
+      thrown.color = color;
+      if (seep) {
+        var wpx = wrap.clientWidth;
+        seep.style.left = (thrown.x * 100) + '%';
+        seep.style.top = (thrown.y * 100) + '%';
+        seep.style.width = seep.style.height = (wpx * 2.4) + 'px';
+        seep.style.background = 'radial-gradient(circle, ' + color + ' 0%, ' + color + '55 45%, transparent 72%)';
+        void seep.offsetWidth;
+        seep.classList.add('go');
       }
-      function sandRnd(seed) {
-        var a = seed >>> 0;
-        return function () {
-          a = (a + 0x6D2B79F5) | 0;
-          var t = Math.imul(a ^ (a >>> 15), 1 | a);
-          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-        };
-      }
-      function sandDeal() {
-        var st = (window.Liber && window.Liber.state) ? window.Liber.state.get() : {};
-        function lastOf(arr) { return (Array.isArray(arr) && arr.length) ? arr[arr.length - 1] : null; }
-        var pool = [];
-        var dv = lastOf(st.divination);
-        if (dv) pool.push({ toy: 'tower', label: String(dv.name || dv.title || 'card').slice(0, 18), glyph: '\u265C' });
-        if (lastOf(st.buddy)) pool.push({ toy: 'buddy', label: 'buddy', glyph: '\u25CF' });
-        if (lastOf(st.garden)) pool.push({ toy: 'flower', label: 'garden', glyph: '\u273F' });
-        if (lastOf(st.dreams)) pool.push({ toy: 'moon', label: 'dream', glyph: '\u263D' });
-        if (lastOf(st.sea)) pool.push({ toy: 'wave', label: 'sea', glyph: '\u301C' });
-        var fb = [
-          { toy: 'stone', label: 'stone', glyph: '\u2B22' }, { toy: 'shell', label: 'shell', glyph: '\u25CD' },
-          { toy: 'key', label: 'key', glyph: '\u26B7' }, { toy: 'star', label: 'star', glyph: '\u2605' },
-          { toy: 'boat', label: 'boat', glyph: '\u26F5' }
-        ];
-        var d = new Date();
-        var rng = sandRnd(sandHash('sand|' + d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate()));
-        var i, k;
-        for (i = pool.length - 1; i > 0; i--) { k = Math.floor(rng() * (i + 1)); var tmp = pool[i]; pool[i] = pool[k]; pool[k] = tmp; }
-        var out = pool.slice(0, 3);
-        for (i = 0; out.length < 3 && i < fb.length; i++) {
-          var dup = false, j;
-          for (j = 0; j < out.length; j++) { if (out[j].toy === fb[i].toy) dup = true; }
-          if (!dup) out.push(fb[i]);
-        }
-        var n = 0;
-        return out.map(function (t) { t.x = null; t.y = null; t.line = ''; t.n = (n++); return t; });
-      }
-      var sandToys = sandDeal();
-      var sandMounds = [];
-      var sandPhase = 0;
-      var sandTool = 'place';
-      function esc(s) {
-        return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-      }
-      body.innerHTML =
-        '<div class="games-prompt">sandplay — deal three toys. place them. say one line. (Punnett 2020 · Freedle 2025)</div>' +
-        '<div class="sand-phase" id="sand-phase"></div>' +
-        '<div class="sand-hint" id="sand-hint"></div>' +
-        '<div class="sand-shelf" id="sand-shelf" aria-label="toy shelf"></div>' +
-        '<div class="sand-tray" id="sand-tray" aria-label="sand tray"></div>' +
-        '<div class="sand-tools">' +
-          '<button type="button" class="games-action" id="sand-rake">rake</button>' +
-          '<button type="button" class="games-action" id="sand-mound">mound</button>' +
-          '<button type="button" class="games-action" id="sand-mist">mist</button>' +
-          '<button type="button" class="games-action" id="sand-next">next</button>' +
-        '</div>' +
-        '<div class="sand-lines" id="sand-lines"></div>' +
-        '<div class="games-actions"><button type="button" class="games-action" id="sand-keep">keep the scene</button></div>';
-      var sandTray = document.getElementById('sand-tray');
-      var sandShelf = document.getElementById('sand-shelf');
-      function paintPhase() {
-        var ph = document.getElementById('sand-phase');
-        var hint = document.getElementById('sand-hint');
-        if (ph) {
-          var html = '', i;
-          for (i = 0; i < PHASES.length; i++) html += '<i class="' + (i <= sandPhase ? 'on' : '') + '"></i>';
-          html += '<span>' + PHASES[sandPhase].name + ' · ' + (sandPhase + 1) + '/7</span>';
-          ph.innerHTML = html;
-        }
-        if (hint) hint.textContent = PHASES[sandPhase].hint;
-      }
-      function paintShelf() {
-        if (!sandShelf) return;
-        sandShelf.innerHTML = '';
-        sandToys.forEach(function (t) {
-          if (t.x !== null) return;
-          var el = document.createElement('div');
-          el.className = 'sand-toy shelf';
-          el.setAttribute('data-n', t.n);
-          el.innerHTML = '<span class="g">' + t.glyph + '</span><span class="l">' + esc(t.label) + '</span>';
-          bindToyDrag(el, t);
-          sandShelf.appendChild(el);
-        });
-      }
-      function paintTray() {
-        if (!sandTray) return;
-        var keeps = sandTray.querySelectorAll('.sand-toy');
-        var i;
-        for (i = keeps.length - 1; i >= 0; i--) keeps[i].parentNode.removeChild(keeps[i]);
-        var mounds = sandTray.querySelectorAll('.sand-mound');
-        for (i = mounds.length - 1; i >= 0; i--) mounds[i].parentNode.removeChild(mounds[i]);
-        sandMounds.forEach(function (m) {
-          var md = document.createElement('div');
-          md.className = 'sand-mound';
-          md.style.left = m.x + '%';
-          md.style.top = m.y + '%';
-          sandTray.appendChild(md);
-        });
-        sandToys.forEach(function (t) {
-          if (t.x === null) return;
-          var el = document.createElement('div');
-          el.className = 'sand-toy placed';
-          el.setAttribute('data-n', t.n);
-          el.style.left = t.x + '%';
-          el.style.top = t.y + '%';
-          el.innerHTML = '<span class="g">' + t.glyph + '</span><span class="l">' + esc(t.label) + '</span>';
-          bindToyDrag(el, t);
-          sandTray.appendChild(el);
-        });
-      }
-      function paintLines() {
-        var host = document.getElementById('sand-lines');
-        if (!host) return;
-        host.innerHTML = '';
-        sandToys.forEach(function (t) {
-          if (t.x === null) return;
-          var row = document.createElement('div');
-          row.className = 'sand-line';
-          row.innerHTML = '<label>' + esc(t.label) + ' says</label>';
-          var inp = document.createElement('input');
-          inp.type = 'text';
-          inp.value = t.line;
-          inp.setAttribute('aria-label', 'one line for ' + t.label);
-          inp.setAttribute('maxlength', '140');
-          inp.addEventListener('input', function () { t.line = inp.value; });
-          row.appendChild(inp);
-          host.appendChild(row);
-        });
-      }
-      function paintSand() { paintPhase(); paintShelf(); paintTray(); paintLines(); }
-      function trayPos(e) {
-        var r = sandTray.getBoundingClientRect();
-        var x = ((e.clientX - r.left) / r.width) * 100;
-        var y = ((e.clientY - r.top) / r.height) * 100;
-        return { x: Math.max(4, Math.min(96, x)), y: Math.max(8, Math.min(92, y)) };
-      }
-      function bindToyDrag(el, t) {
-        el.addEventListener('pointerdown', function (e) {
-          e.preventDefault();
-          try { el.setPointerCapture(e.pointerId); } catch (err) {}
-          function move(ev) {
-            if (!sandTray) return;
-            var r = sandTray.getBoundingClientRect();
-            var x = (((ev.clientX - r.left) / r.width) * 100).toFixed(1);
-            var y = (((ev.clientY - r.top) / r.height) * 100).toFixed(1);
-            el.style.left = x + '%';
-            el.style.top = y + '%';
-          }
-          function up(ev) {
-            el.removeEventListener('pointermove', move);
-            el.removeEventListener('pointerup', up);
-            el.removeEventListener('pointercancel', up);
-            if (!sandTray) return;
-            var r = sandTray.getBoundingClientRect();
-            var inside = ev.clientX >= r.left && ev.clientX <= r.right && ev.clientY >= r.top && ev.clientY <= r.bottom;
-            if (inside) {
-              var p = trayPos(ev);
-              t.x = p.x; t.y = p.y;
-              if (window.Liber && window.Liber.sound) window.Liber.sound.play('click');
-            }
-            paintSand();
-          }
-          el.addEventListener('pointermove', move);
-          el.addEventListener('pointerup', up);
-          el.addEventListener('pointercancel', up);
-        });
-      }
-      function markTool(btn, name) {
-        var ids = ['sand-rake', 'sand-mound', 'sand-mist'];
-        ids.forEach(function (id) {
-          var el = document.getElementById(id);
-          if (el) el.classList.toggle('on', id === btn && sandTool === name);
-        });
-      }
-      var rakeBtn = document.getElementById('sand-rake');
-      var moundBtn = document.getElementById('sand-mound');
-      var mistBtn = document.getElementById('sand-mist');
-      var nextBtn = document.getElementById('sand-next');
-      if (rakeBtn) rakeBtn.addEventListener('click', function () {
-        sandTool = (sandTool === 'rake') ? 'place' : 'rake';
-        if (sandTool === 'rake') {
-          sandToys.forEach(function (t) { t.x = null; t.y = null; });
-          sandMounds = [];
-          paintSand();
-        }
-        markTool('sand-rake', 'rake');
-      });
-      if (moundBtn) moundBtn.addEventListener('click', function () {
-        sandTool = (sandTool === 'mound') ? 'place' : 'mound';
-        markTool('sand-mound', 'mound');
-      });
-      if (mistBtn) mistBtn.addEventListener('click', function () {
-        sandMounds = [];
-        sandTool = 'place';
-        markTool('', '');
-        paintSand();
-      });
-      if (sandTray) sandTray.addEventListener('pointerdown', function (e) {
-        if (sandTool !== 'mound') return;
-        if (e.target !== sandTray) return;
-        var p = trayPos(e);
-        sandMounds.push(p);
-        if (window.Liber && window.Liber.sound) window.Liber.sound.play('click');
-        paintTray();
-      });
-      if (nextBtn) nextBtn.addEventListener('click', function () {
-        if (sandPhase < PHASES.length - 1) { sandPhase++; paintPhase(); }
-      });
-      var keepBtn = document.getElementById('sand-keep');
-      if (keepBtn) keepBtn.addEventListener('click', function () {
-        var placed = sandToys.filter(function (t) { return t.x !== null; });
-        var lined = placed.filter(function (t) { return t.line.trim() !== ''; }).length;
-        promptSave(b, placed.length + ' toys placed, ' + lined + ' lines said.', function () {
-          var saved = saveToDesktopAndSatchel(b, { type: 'sandplay', toys: placed.map(function (t) { return { toy: t.toy, label: t.label, x: t.x, y: t.y, line: t.line }; }), mounds: sandMounds.length, phase: PHASES[sandPhase].name });
-          var bestHtml = (saved.best && saved.best.newBest) ? whimsyLine(saved.best) : '';
-          body.innerHTML = '<div class="games-result">— kept · ' + placed.length + ' toys, ' + lined + ' lines —</div>' + bestHtml;
-        }, function () {
-          body.innerHTML = '<div class="games-result">— smoothed over —</div>';
-        });
-      });
-      paintSand();
+      if (dart) dart.classList.add('dropped');
+      darts.push({ emotion: thrown.emotion, color: color });
+      if (result) result.textContent = 'dart ' + darts.length + ': ' + thrown.emotion + ' in ' + color + '.';
+      if (hint) hint.textContent = 'the color seeps out. throw another, or keep it.';
+      if (again) again.hidden = false;
+      if (keep) keep.disabled = false;
+      thunk();
+    }
+
+    if (again) again.addEventListener('click', function () {
+      thrown = null;
+      if (seep) { seep.classList.remove('go'); }
+      if (dart) { dart.classList.remove('dropped'); dart.style.transform = 'translate(-40px,-40px)'; }
+      if (colors) colors.hidden = true;
+      if (hint) hint.textContent = 'click the wheel to throw a dart.';
+    });
+
+    if (keep) keep.addEventListener('click', function () {
+      if (!darts.length) return;
+      var last = darts[darts.length - 1];
+      var shot = wheelShot(last);
+      promptSave(b, 'result: ' + darts.length + ' dart' + (darts.length === 1 ? '' : 's') + ', last landed ' + last.emotion + ' in ' + last.color + '.', function () {
+        saveToDesktopAndSatchel(b, { darts: darts }, shot);
+        if (result) result.textContent = 'kept. the tent remembers.';
+      }, null);
+    });
+
+    function wheelShot(last) {
+      try {
+        var c = document.createElement('canvas');
+        c.width = 160; c.height = 160;
+        var ctx = c.getContext('2d');
+        ctx.fillStyle = '#1a0008';
+        ctx.fillRect(0, 0, 160, 160);
+        var g = ctx.createRadialGradient(80, 80, 4, 80, 80, 90);
+        g.addColorStop(0, last.color);
+        g.addColorStop(1, '#1a0008');
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, 160, 160);
+        ctx.fillStyle = '#f0e8d8';
+        ctx.font = 'italic 15px Georgia';
+        ctx.textAlign = 'center';
+        ctx.fillText(last.emotion, 80, 84, 150);
+        return c.toDataURL('image/jpeg', 0.72);
+      } catch (e) { return null; }
     }
   }
 
+  // ── paint games: mask / shield / circles ──────────────────────────────
+
+  var PAINT_COLORS = ['#c02424', '#e09320', '#e8c832', '#3a8a3a', '#2a5aaa', '#6a3aaa', '#c86aa8', '#f0e8d8'];
+  var PAINT_SIZES = [3, 7, 13];
+
+  function playPaint(b, body, kind) {
+    var names = kind === 'circles' ? { a: '', b: '', c: '' } : null;
+    body.innerHTML =
+      '<div class="paint-stack">'
+      + '<canvas class="paint-tpl" id="paint-tpl" width="480" height="360"></canvas>'
+      + '<canvas class="paint-top" id="paint-top" width="480" height="360"></canvas>'
+      + '</div>'
+      + (kind === 'circles'
+        ? '<div class="paint-names">'
+          + '<input id="paint-name-a" maxlength="24" aria-label="closest" placeholder="closest"/>'
+          + '<input id="paint-name-b" maxlength="24" aria-label="friends" placeholder="friends"/>'
+          + '<input id="paint-name-c" maxlength="24" aria-label="distant" placeholder="distant"/>'
+          + '</div>' : '')
+      + '<div class="paint-bar" id="paint-bar"></div>'
+      + '<div class="games-actions">'
+      + '<button type="button" class="games-action" id="paint-clear">wipe it</button>'
+      + '<button type="button" class="games-action" id="paint-keep">keep it</button>'
+      + '</div>'
+      + '<div class="games-result" id="paint-result"></div>';
+
+    var tpl = document.getElementById('paint-tpl');
+    var top = document.getElementById('paint-top');
+    var tctx = tpl.getContext('2d');
+    var pctx = top.getContext('2d');
+    var color = PAINT_COLORS[0];
+    var size = PAINT_SIZES[1];
+    var strokes = 0;
+
+    function drawTemplate() {
+      tctx.clearRect(0, 0, 480, 360);
+      tctx.strokeStyle = '#4a3828';
+      tctx.fillStyle = '#4a3828';
+      tctx.lineWidth = 3;
+      tctx.font = 'italic 17px Georgia';
+      tctx.textAlign = 'center';
+      if (kind === 'mask') {
+        tctx.beginPath();
+        tctx.ellipse(240, 185, 130, 155, 0, 0, Math.PI * 2);
+        tctx.stroke();
+        tctx.beginPath();
+        tctx.moveTo(240, 30); tctx.lineTo(240, 340);
+        tctx.stroke();
+        tctx.fillText('FEELINGS', 165, 60);
+        tctx.fillText('PRESENTATION', 315, 60);
+      } else if (kind === 'shield') {
+        tctx.beginPath();
+        tctx.moveTo(240, 30);
+        tctx.lineTo(370, 80); tctx.lineTo(370, 210);
+        tctx.quadraticCurveTo(370, 300, 240, 340);
+        tctx.quadraticCurveTo(110, 300, 110, 210);
+        tctx.lineTo(110, 80);
+        tctx.closePath();
+        tctx.stroke();
+        tctx.beginPath();
+        tctx.moveTo(240, 30); tctx.lineTo(240, 340);
+        tctx.moveTo(110, 185); tctx.lineTo(370, 185);
+        tctx.stroke();
+        tctx.fillText('physical', 175, 120);
+        tctx.fillText('emotional', 305, 120);
+        tctx.fillText('time-related', 175, 250);
+        tctx.fillText('mental', 305, 250);
+      } else {
+        tctx.beginPath(); tctx.arc(240, 185, 55, 0, Math.PI * 2); tctx.stroke();
+        tctx.beginPath(); tctx.arc(240, 185, 105, 0, Math.PI * 2); tctx.stroke();
+        tctx.beginPath(); tctx.arc(240, 185, 150, 0, Math.PI * 2); tctx.stroke();
+        tctx.fillText('closest', 240, 100);
+        tctx.fillText('friends', 240, 60);
+        tctx.fillText('distant', 240, 28);
+        if (names.a) { tctx.fillText(names.a.slice(0, 20), 240, 190); }
+        if (names.b) { tctx.fillText(names.b.slice(0, 20), 330, 150); }
+        if (names.c) { tctx.fillText(names.c.slice(0, 20), 150, 300); }
+      }
+    }
+    drawTemplate();
+
+    if (names) {
+      ['a', 'b', 'c'].forEach(function (k) {
+        var inp = document.getElementById('paint-name-' + k);
+        if (inp) inp.addEventListener('input', function () { names[k] = inp.value; drawTemplate(); });
+      });
+    }
+
+    var bar = document.getElementById('paint-bar');
+    PAINT_COLORS.forEach(function (c, i) {
+      var sw = document.createElement('button');
+      sw.type = 'button';
+      sw.className = 'paint-swatch' + (i === 0 ? ' on' : '');
+      sw.style.background = c;
+      sw.setAttribute('aria-label', 'paint ' + c);
+      sw.addEventListener('click', function () {
+        color = c;
+        var sibs = bar.querySelectorAll('.paint-swatch');
+        for (var k = 0; k < sibs.length; k++) sibs[k].classList.remove('on');
+        sw.classList.add('on');
+      });
+      bar.appendChild(sw);
+    });
+    PAINT_SIZES.forEach(function (sz, i) {
+      var zb = document.createElement('button');
+      zb.type = 'button';
+      zb.className = 'paint-size' + (i === 1 ? ' on' : '');
+      zb.textContent = ['fine', 'hand', 'mop'][i];
+      zb.addEventListener('click', function () {
+        size = sz;
+        var sibs = bar.querySelectorAll('.paint-size');
+        for (var k = 0; k < sibs.length; k++) sibs[k].classList.remove('on');
+        zb.classList.add('on');
+      });
+      bar.appendChild(zb);
+    });
+
+    function pos(e) {
+      var r = top.getBoundingClientRect();
+      return { x: (e.clientX - r.left) * (480 / r.width), y: (e.clientY - r.top) * (360 / r.height) };
+    }
+    var painting = false;
+    function strokeTo(p) {
+      pctx.strokeStyle = color;
+      pctx.lineWidth = size;
+      pctx.lineCap = 'round';
+      pctx.lineJoin = 'round';
+      pctx.lineTo(p.x, p.y);
+      pctx.stroke();
+      strokes++;
+    }
+    top.addEventListener('pointerdown', function (e) {
+      e.preventDefault();
+      painting = true;
+      try { top.setPointerCapture(e.pointerId); } catch (err) {}
+      var p = pos(e);
+      pctx.beginPath();
+      pctx.moveTo(p.x, p.y);
+      strokeTo(p);
+    });
+    top.addEventListener('pointermove', function (e) {
+      if (!painting) return;
+      strokeTo(pos(e));
+    });
+    function stopPaint() {
+      if (!painting) return;
+      painting = false;
+      try { pctx.beginPath(); } catch (e) {}
+    }
+    top.addEventListener('pointerup', stopPaint);
+    top.addEventListener('pointercancel', stopPaint);
+    top.addEventListener('pointerleave', stopPaint);
+
+    var clear = document.getElementById('paint-clear');
+    if (clear) clear.addEventListener('click', function () {
+      pctx.clearRect(0, 0, 480, 360);
+      strokes = 0;
+    });
+
+    var keepBtn = document.getElementById('paint-keep');
+    var result = document.getElementById('paint-result');
+    if (keepBtn) keepBtn.addEventListener('click', function () {
+      if (!strokes) {
+        if (result) result.textContent = 'paint something first — the canvas is still clean.';
+        return;
+      }
+      var merged = document.createElement('canvas');
+      merged.width = 480; merged.height = 360;
+      var mctx = merged.getContext('2d');
+      mctx.fillStyle = '#e8dcc0';
+      mctx.fillRect(0, 0, 480, 360);
+      mctx.drawImage(tpl, 0, 0);
+      mctx.drawImage(top, 0, 0);
+      var shot = thumb(merged);
+      var summary = kind === 'circles' && (names.a || names.b || names.c)
+        ? 'result: ' + strokes + ' strokes; closest: ' + (names.a || '—') + ', friends: ' + (names.b || '—') + ', distant: ' + (names.c || '—') + '.'
+        : 'result: ' + strokes + ' strokes of paint.';
+      promptSave(b, summary, function () {
+        saveToDesktopAndSatchel(b, { strokes: strokes, names: names }, shot);
+        if (result) result.textContent = 'kept. the tent remembers.';
+      }, null);
+    });
+  }
+
+  // ── powder tent ───────────────────────────────────────────────────────
+
+  var SAND_W = 120, SAND_H = 150, SAND_CELL = 3;
+  var SAND_EMPTY = 0, SAND_WALL = 1, SAND_SAND = 2, SAND_WATER = 3, SAND_FIRE = 4;
+  var SAND_COLORS = {
+    1: [[122, 110, 96]],
+    2: [[216, 170, 80], [226, 180, 92], [206, 158, 70]],
+    3: [[64, 130, 200], [74, 142, 210], [56, 118, 188]],
+    4: [[255, 120, 40], [255, 160, 60], [240, 90, 30]]
+  };
+
+  function playSand(b, body) {
+    body.innerHTML =
+      '<div class="sand-wrap">'
+      + '<canvas class="sand-canvas" id="sand-canvas" width="' + (SAND_W * SAND_CELL) + '" height="' + (SAND_H * SAND_CELL) + '"></canvas>'
+      + '<div class="sand-bar" id="sand-bar"></div>'
+      + '<div class="sand-hint">pour, splash, strike. the tent keeps a picture when you keep it.</div>'
+      + '<div class="games-actions" style="justify-content:center">'
+      + '<button type="button" class="games-action" id="sand-clear">sweep it</button>'
+      + '<button type="button" class="games-action" id="sand-keep">keep it</button>'
+      + '</div>'
+      + '<div class="games-result" id="sand-result"></div>'
+      + '</div>';
+
+    var cv = document.getElementById('sand-canvas');
+    var ctx = cv.getContext('2d');
+    var gridArr = new Uint8Array(SAND_W * SAND_H);
+    var colArr = new Uint8Array(SAND_W * SAND_H);
+    var lifeArr = new Int16Array(SAND_W * SAND_H);
+    var EL = [
+      { id: SAND_SAND, name: 'sand' },
+      { id: SAND_WATER, name: 'water' },
+      { id: SAND_FIRE, name: 'fire' },
+      { id: SAND_WALL, name: 'wall' },
+      { id: -1, name: 'erase' }
+    ];
+    var el = SAND_SAND;
+    var brush = 2;
+    var pouring = false;
+    var strokes = 0;
+    var used = {};
+    var frame = 0;
+    var raf = 0;
+    var img = ctx.createImageData(cv.width, cv.height);
+
+    function at(x, y) {
+      if (x < 0 || y < 0 || x >= SAND_W || y >= SAND_H) return -1;
+      return gridArr[y * SAND_W + x];
+    }
+    function setAt(x, y, v, c, life) {
+      if (x < 0 || y < 0 || x >= SAND_W || y >= SAND_H) return;
+      gridArr[y * SAND_W + x] = v;
+      colArr[y * SAND_W + x] = c || 0;
+      lifeArr[y * SAND_W + x] = life || 0;
+    }
+    function swapCells(x1, y1, x2, y2) {
+      var i1 = y1 * SAND_W + x1, i2 = y2 * SAND_W + x2;
+      var t = gridArr[i1]; gridArr[i1] = gridArr[i2]; gridArr[i2] = t;
+      t = colArr[i1]; colArr[i1] = colArr[i2]; colArr[i2] = t;
+      t = lifeArr[i1]; lifeArr[i1] = lifeArr[i2]; lifeArr[i2] = t;
+    }
+
+    function pour(cx, cy) {
+      for (var dy = -brush; dy <= brush; dy++) {
+        for (var dx = -brush; dx <= brush; dx++) {
+          if (dx * dx + dy * dy > brush * brush + 1) continue;
+          var x = cx + dx, y = cy + dy;
+          if (x < 0 || y < 0 || x >= SAND_W || y >= SAND_H) continue;
+          if (el === -1) {
+            setAt(x, y, SAND_EMPTY, 0, 0);
+          } else if (gridArr[y * SAND_W + x] === SAND_EMPTY) {
+            var pal = SAND_COLORS[el].length;
+            var pick = Math.abs((x * 31 + y * 17 + frame) % pal);
+            setAt(x, y, el, pick, el === SAND_FIRE ? 4 + (Math.abs(x + y + frame) % 4) : 0);
+          }
+        }
+      }
+      strokes++;
+      if (el > 0) used[el] = true;
+    }
+
+    function cellPos(e) {
+      var r = cv.getBoundingClientRect();
+      return {
+        x: Math.floor((e.clientX - r.left) * (SAND_W / r.width)),
+        y: Math.floor((e.clientY - r.top) * (SAND_H / r.height))
+      };
+    }
+    cv.addEventListener('pointerdown', function (e) {
+      e.preventDefault();
+      pouring = true;
+      try { cv.setPointerCapture(e.pointerId); } catch (err) {}
+      var p = cellPos(e);
+      pour(p.x, p.y);
+    });
+    cv.addEventListener('pointermove', function (e) {
+      if (!pouring) return;
+      var p = cellPos(e);
+      pour(p.x, p.y);
+    });
+    function stopPour() { pouring = false; }
+    cv.addEventListener('pointerup', stopPour);
+    cv.addEventListener('pointercancel', stopPour);
+    cv.addEventListener('pointerleave', stopPour);
+
+    var bar = document.getElementById('sand-bar');
+    EL.forEach(function (o) {
+      var eb = document.createElement('button');
+      eb.type = 'button';
+      eb.className = 'sand-el' + (o.id === el ? ' on' : '');
+      eb.textContent = o.name;
+      eb.addEventListener('click', function () {
+        el = o.id;
+        var sibs = bar.querySelectorAll('.sand-el');
+        for (var k = 0; k < sibs.length; k++) sibs[k].classList.remove('on');
+        eb.classList.add('on');
+      });
+      bar.appendChild(eb);
+    });
+
+    function step() {
+      frame++;
+      var dir = (frame % 2 === 0) ? 1 : -1;
+      for (var y = SAND_H - 1; y >= 0; y--) {
+        for (var xi = 0; xi < SAND_W; xi++) {
+          var x = dir === 1 ? xi : (SAND_W - 1 - xi);
+          var v = gridArr[y * SAND_W + x];
+          if (v === SAND_EMPTY || v === SAND_WALL) continue;
+          if (v === SAND_SAND) {
+            if (at(x, y + 1) === SAND_EMPTY || at(x, y + 1) === SAND_WATER) swapCells(x, y, x, y + 1);
+            else if (at(x - dir, y + 1) === SAND_EMPTY || at(x - dir, y + 1) === SAND_WATER) swapCells(x, y, x - dir, y + 1);
+            else if (at(x + dir, y + 1) === SAND_EMPTY || at(x + dir, y + 1) === SAND_WATER) swapCells(x, y, x + dir, y + 1);
+          } else if (v === SAND_WATER) {
+            if (at(x, y + 1) === SAND_EMPTY) swapCells(x, y, x, y + 1);
+            else if (at(x - dir, y + 1) === SAND_EMPTY) swapCells(x, y, x - dir, y + 1);
+            else if (at(x + dir, y + 1) === SAND_EMPTY) swapCells(x, y, x + dir, y + 1);
+            else if (at(x - dir, y) === SAND_EMPTY) swapCells(x, y, x - dir, y);
+            else if (at(x + dir, y) === SAND_EMPTY) swapCells(x, y, x + dir, y);
+            // fire + water: both hiss out
+            var nb = [at(x, y - 1), at(x, y + 1), at(x - 1, y), at(x + 1, y)];
+            for (var f = 0; f < nb.length; f++) {
+              if (nb[f] === SAND_FIRE) { setAt(x, y, SAND_EMPTY, 0, 0); break; }
+            }
+          } else if (v === SAND_FIRE) {
+            var i = y * SAND_W + x;
+            lifeArr[i]--;
+            if (lifeArr[i] <= 0) { setAt(x, y, SAND_EMPTY, 0, 0); continue; }
+            if (at(x, y - 1) === SAND_WATER || at(x - 1, y) === SAND_WATER || at(x + 1, y) === SAND_WATER) {
+              setAt(x, y, SAND_EMPTY, 0, 0);
+              continue;
+            }
+            if (at(x, y - 1) === SAND_EMPTY) swapCells(x, y, x, y - 1);
+            else if (at(x - dir, y - 1) === SAND_EMPTY) swapCells(x, y, x - dir, y - 1);
+            else if (at(x + dir, y - 1) === SAND_EMPTY) swapCells(x, y, x + dir, y - 1);
+          }
+        }
+      }
+    }
+
+    function paint() {
+      var px = img.data;
+      var p = 0;
+      for (var y = 0; y < SAND_H; y++) {
+        for (var x = 0; x < SAND_W; x++) {
+          var v = gridArr[y * SAND_W + x];
+          var rC = 10, gC = 8, bC = 5;
+          if (v !== SAND_EMPTY) {
+            var pal = SAND_COLORS[v] || [[200, 200, 200]];
+            var cc = pal[colArr[y * SAND_W + x] % pal.length];
+            rC = cc[0]; gC = cc[1]; bC = cc[2];
+          }
+          for (var sy = 0; sy < SAND_CELL; sy++) {
+            for (var sx = 0; sx < SAND_CELL; sx++) {
+              var o = (((y * SAND_CELL + sy) * cv.width) + (x * SAND_CELL + sx)) * 4;
+              px[o] = rC; px[o + 1] = gC; px[o + 2] = bC; px[o + 3] = 255;
+            }
+          }
+          p++;
+        }
+      }
+      ctx.putImageData(img, 0, 0);
+    }
+
+    function loop() {
+      if (!document.body.contains(cv)) return;
+      step();
+      paint();
+      raf = requestAnimationFrame(loop);
+    }
+    raf = requestAnimationFrame(loop);
+    if (stage) {
+      stage._teardown = function () {
+        try { cancelAnimationFrame(raf); } catch (e) {}
+      };
+    }
+
+    var clear = document.getElementById('sand-clear');
+    if (clear) clear.addEventListener('click', function () {
+      gridArr = new Uint8Array(SAND_W * SAND_H);
+      colArr = new Uint8Array(SAND_W * SAND_H);
+      lifeArr = new Int16Array(SAND_W * SAND_H);
+      strokes = 0;
+      used = {};
+    });
+
+    var keepBtn = document.getElementById('sand-keep');
+    var result = document.getElementById('sand-result');
+    if (keepBtn) keepBtn.addEventListener('click', function () {
+      if (!strokes) {
+        if (result) result.textContent = 'pour something first — the tent is still empty.';
+        return;
+      }
+      var shot = thumb(cv);
+      var names = [];
+      if (used[SAND_SAND]) names.push('sand');
+      if (used[SAND_WATER]) names.push('water');
+      if (used[SAND_FIRE]) names.push('fire');
+      if (used[SAND_WALL]) names.push('wall');
+      promptSave(b, 'result: a powder world of ' + (names.join(', ') || 'dust') + '.', function () {
+        saveToDesktopAndSatchel(b, { strokes: strokes, elements: names }, shot);
+        if (result) result.textContent = 'kept. the tent remembers.';
+      }, null);
+    });
+  }
+
+  // ── first-visit demo: the tutorial passes through games on its way to
+  // the bind. Open the wheel, throw one dart through the Cursor's hands,
+  // keep it, and move on. Every step falls through to advance().
+
   document.addEventListener('DOMContentLoaded', function () {
-    buildBooths();
+    buildPicker();
+    if (descBox && !descBox.querySelector('.games-desc-name')) {
+      descBox.innerHTML = '<div class="games-desc-name">pick a game, friend.</div><div>five games under one tent — the pitch is on the left, the play is on the right.</div>';
+    }
 
     (function tutorialBooth() {
       var tst = (window.Liber && window.Liber.state) || null;
@@ -960,24 +780,30 @@
         window.location.href = 'desktop.html';
       }
       setTimeout(function () {
-        var booth = document.querySelector('.games-booth[data-game="thermometer"]');
+        var booth = document.querySelector('.games-booth[data-game="wheel"]');
         if (!booth) { advance(); return; }
         window.Cursor.clickEl(booth, 700).then(function () {
           setTimeout(function () {
-            var trig = document.getElementById('thermo-emo');
-            if (!trig) { advance(); return; }
-            window.Cursor.typeText(trig, 'the long day', 45).then(function () {
-              var save = document.getElementById('thermo-keep');
-              if (!save) { advance(); return; }
-              window.Cursor.clickEl(save, 500).then(function () {
-                setTimeout(function () {
-                  var keep = document.getElementById('games-save-prompt-keep');
-                  if (!keep) { advance(); return; }
-                  window.Cursor.clickEl(keep, 400).then(function () {
-                    setTimeout(advance, 1000);
-                  });
-                }, 700);
-              });
+            var wheel = document.getElementById('wheel-svg');
+            if (!wheel) { advance(); return; }
+            window.Cursor.clickEl(wheel, 400).then(function () {
+              setTimeout(function () {
+                var swatch = document.querySelector('#wheel-colors .wheel-color');
+                if (!swatch) { advance(); return; }
+                window.Cursor.clickEl(swatch, 400).then(function () {
+                  setTimeout(function () {
+                    var keep = document.getElementById('games-save-prompt-keep');
+                    var kb = document.getElementById('wheel-keep');
+                    if (kb) kb.click();
+                    setTimeout(function () {
+                      if (!keep) { advance(); return; }
+                      window.Cursor.clickEl(keep, 400).then(function () {
+                        setTimeout(advance, 1000);
+                      });
+                    }, 700);
+                  }, 700);
+                });
+              }, 900);
             });
           }, 700);
         });
@@ -989,25 +815,18 @@
       if (history.length > 1) history.back(); else location.href = 'desktop.html';
     });
 
-    var tippOpen = document.getElementById('games-tipp-open');
-    if (tippOpen) tippOpen.addEventListener('click', function () {
-      for (var i = 0; i < BOOTHS.length; i++) {
-        if (BOOTHS[i].id === 'tip') { openPlay(BOOTHS[i]); break; }
-      }
-    });
-
     var helpBtn = document.getElementById('games-help');
-    var riason = document.getElementById('games-raison');
-    var riasonClose = document.getElementById('games-raison-close');
-    function openRiason() {
-      if (riason) { riason.classList.add('open'); riason.removeAttribute('inert'); }
+    var raison = document.getElementById('games-raison');
+    var raisonClose = document.getElementById('games-raison-close');
+    function openRaison() {
+      if (raison) { raison.classList.add('open'); raison.removeAttribute('inert'); }
     }
-    function closeRiason() {
-      if (riason) { riason.classList.remove('open'); riason.setAttribute('inert', ''); }
+    function closeRaison() {
+      if (raison) { raison.classList.remove('open'); raison.setAttribute('inert', ''); }
     }
-    if (helpBtn) helpBtn.addEventListener('click', openRiason);
-    if (riasonClose) riasonClose.addEventListener('click', closeRiason);
-    if (riason) riason.addEventListener('click', function (e) { if (e.target === riason) closeRiason(); });
+    if (helpBtn) helpBtn.addEventListener('click', openRaison);
+    if (raisonClose) raisonClose.addEventListener('click', closeRaison);
+    if (raison) raison.addEventListener('click', function (e) { if (e.target === raison) closeRaison(); });
 
     var prompt = document.getElementById('games-save-prompt');
     var keepBtn = document.getElementById('games-save-prompt-keep');

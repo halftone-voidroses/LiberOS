@@ -234,43 +234,36 @@ sassert(castState.intent.includes('putting'), 'intention should persist')
 console.log(`   cast: ${JSON.stringify(castState)}`)
 await shot('smoke-05-manual-cast')
 
-console.log('13b. Sandplay booth: deal, drag, line, keep')
+console.log('13b. Emotion wheel: throw a dart, flood a color, keep')
 await page.goto(BASE + '/games.html', { waitUntil: 'networkidle' })
 await page.waitForTimeout(500)
 await dismissHijack()
-await page.click('.games-booth[data-game="sandplay"]')
+await page.click('.games-booth[data-game="wheel"]')
 await page.waitForTimeout(500)
-const shelfCount = await page.evaluate(() => document.querySelectorAll('#sand-shelf .sand-toy').length)
-sassert(shelfCount === 3, 'three toys dealt, got ' + shelfCount)
-const toyBox = await page.evaluate(() => {
-  const r = document.querySelector('#sand-shelf .sand-toy').getBoundingClientRect()
+const wheelBox = await page.evaluate(() => {
+  const r = document.getElementById('wheel-svg').getBoundingClientRect()
   return { x: r.x, y: r.y, width: r.width, height: r.height }
 })
-const trayBox = await page.evaluate(() => {
-  const r = document.getElementById('sand-tray').getBoundingClientRect()
-  return { x: r.x, y: r.y, width: r.width, height: r.height }
-})
-await page.mouse.move(toyBox.x + toyBox.width / 2, toyBox.y + toyBox.height / 2)
-await page.mouse.down()
-await page.mouse.move(trayBox.x + trayBox.width / 2, trayBox.y + trayBox.height / 2, { steps: 12 })
-await page.mouse.up()
-await page.waitForTimeout(400)
-const placedCount = await page.evaluate(() => document.querySelectorAll('#sand-tray .sand-toy').length)
-sassert(placedCount === 1, 'one toy placed, got ' + placedCount)
-await page.fill('#sand-lines input', 'the tower stands where the day fell')
-await page.click('#sand-keep')
+await page.mouse.click(wheelBox.x + wheelBox.width * 0.62, wheelBox.y + wheelBox.height * 0.3)
+await page.waitForTimeout(500)
+const dartLanded = await page.evaluate(() => document.querySelectorAll('#wheel-colors .wheel-color').length)
+sassert(dartLanded === 8, 'eight colors offered after the throw, got ' + dartLanded)
+await page.click('#wheel-colors .wheel-color')
+await page.waitForTimeout(1200)
+await page.click('#wheel-keep')
 await page.waitForTimeout(400)
 await page.click('#games-save-prompt-keep')
 await page.waitForTimeout(400)
-const sandSaved = await page.evaluate(() => {
+const wheelSaved = await page.evaluate(() => {
   var s = (window.Liber && window.Liber.state && window.Liber.state.get()) || {}
-  const g = (s.games || []).filter(a => a.kind === 'sandplay')
-  const st = (s.satchel || []).filter(a => a.ref === 'sandplay')
-  return { games: g.length, satchel: st.length, lines: ((g[0] || {}).result || {}).toys }
+  const g = (s.games || []).filter(a => a.kind === 'wheel')
+  const st = (s.satchel || []).filter(a => a.ref === 'wheel')
+  return { games: g.length, satchel: st.length, emotion: ((g[0] || {}).result || {}).darts, shot: !!((g[0] || {}).shot) }
 })
-sassert(sandSaved.games === 1 && sandSaved.satchel === 1, 'sandplay kept to games + satchel: ' + JSON.stringify(sandSaved))
-console.log(`   sandplay: ${JSON.stringify({ games: sandSaved.games, satchel: sandSaved.satchel })}`)
-await shot('smoke-05b-sandplay')
+sassert(wheelSaved.games === 1 && wheelSaved.satchel === 1, 'wheel kept to games + satchel: ' + JSON.stringify(wheelSaved))
+sassert(wheelSaved.emotion && wheelSaved.emotion.length === 1 && wheelSaved.shot, 'dart + polaroid kept: ' + JSON.stringify(wheelSaved))
+console.log(`   wheel: ${JSON.stringify({ games: wheelSaved.games, satchel: wheelSaved.satchel })}`)
+await shot('smoke-05b-wheel')
 
 console.log('14. Return to desktop -> artifact orbits the sigil')
 await page.goto(BASE + '/desktop.html', { waitUntil: 'networkidle' })
