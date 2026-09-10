@@ -62,6 +62,7 @@
       categories: def.aiml.categories,
       fallback: def.aiml.fallback,
       greetings: def.aiml.greetings,
+      askName: def.aiml.askName,
       defaults: def.aiml.defaults,
       meta: { name: def.name },
       preds: predsFor(id),

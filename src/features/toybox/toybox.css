@@ -1,0 +1,71 @@
+/* toybox.css — Pip's room. Pinewood amber, tin red, sawdust calm.
+   The sign says everything; the chrome stays out of the way. */
+.toybox-titlebar {
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 36px; z-index: 8;
+  display: flex; align-items: center; gap: 12px;
+  padding: 0 76px 0 14px;
+  background: linear-gradient(180deg, #2a1a0c, #1a1008);
+  border-bottom: 2px solid #8a5a28;
+  font-variant: small-caps; letter-spacing: 0.2em; color: #d88a3c;
+}
+.toybox-app { padding-top: 44px; }
+.toybox-titlebar-sub { font-style: italic; letter-spacing: 0.05em; color: #a88050; font-size: 0.9rem; }
+.toybox-help, .toybox-exit {
+  margin-left: auto; background: none; border: 1px solid #5a3a1a;
+  color: #d88a3c; border-radius: 4px; cursor: pointer; padding: 0 8px;
+}
+.toybox-exit { margin-left: 0; }
+.toybox-app { padding: 14px 18px 22px; }
+.toybox-sign {
+  text-align: center; font-style: italic; color: #e8c890;
+  padding: 6px; letter-spacing: 0.1em; font-size: 1.2rem;
+}
+/* the shelf: jars in a row on pinewood */
+.toybox-shelf {
+  background: linear-gradient(180deg, #3a2412, #2a180a);
+  border: 1px solid #5a3a1a; border-radius: 4px;
+  padding: 8px; margin-bottom: 10px;
+}
+.toybox-jars { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.toybox-jar {
+  font-family: 'Courier New', monospace; font-size: 0.8rem; letter-spacing: 0.1em;
+  color: var(--jc); border: 1px solid var(--jc); background: rgba(0,0,0,0.4);
+  border-radius: 10px; padding: 2px 12px; cursor: pointer;
+}
+.toybox-jar.on { background: rgba(216,138,60,0.25); color: #fff0d0; }
+/* the pit: one sand sim with movable props */
+.toybox-pit {
+  position: relative; width: 280px; max-width: 100%; margin: 0 auto;
+  background: linear-gradient(180deg, #0a0805 0%, #141008 100%);
+  border: 2px solid #5a3a1a; border-radius: 4px; overflow: hidden;
+  touch-action: none;
+}
+.toybox-canvas { display: block; width: 100%; height: auto; cursor: crosshair; touch-action: none; }
+.toy {
+  position: absolute; width: 46px; height: 46px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; cursor: grab; user-select: none; touch-action: none;
+  background: rgba(20, 12, 6, 0.75); border: 1px solid #6a4a20; z-index: 2;
+}
+.toy.held { cursor: grabbing; border-color: #ffd86a; }
+#toy-crab { left: 12px; bottom: 12px; color: #c05038; text-shadow: 0 0 8px rgba(192,80,56,0.8); }
+#toy-shell { right: 12px; bottom: 12px; color: #e8c890; }
+.toybox-actions { display: flex; gap: 8px; justify-content: center; margin-top: 10px; }
+.toybox-action {
+  font-family: inherit; font-size: 0.95rem;
+  background: rgba(216,138,60,0.12); border: 1px solid #6a4a20;
+  color: #ffe6c4; border-radius: 14px; padding: 4px 20px; cursor: pointer;
+}
+.toybox-action:hover { border-color: #ffd86a; }
+.toybox-result { color: #a89070; font-style: italic; text-align: center; margin-top: 8px; min-height: 1.2em; }
+.toybox-raison { display: none; }
+.toybox-raison.open { display: block; }
+.toybox-raison-inner {
+  border: 1px solid #5a3a1a; border-radius: 6px; background: #100a04;
+  padding: 12px 16px; margin-bottom: 12px;
+}
+.toybox-raison-head { display: flex; justify-content: space-between; align-items: baseline; }
+.toybox-raison-name { font-variant: small-caps; letter-spacing: 0.2em; color: #d88a3c; }
+.toybox-raison-close { background: none; border: 1px solid #5a3a1a; color: #d88a3c; border-radius: 4px; cursor: pointer; }
+.toybox-raison-body { font-style: italic; line-height: 1.6; color: #e8dcc0; }

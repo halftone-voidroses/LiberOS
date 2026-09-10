@@ -96,5 +96,13 @@ window.LIBER_DATA.personas = {
     accent: '#8a6840',
     material: 'die-cut rubble, gravel edge',
     cursor: "url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M4 14l3-6 5-3 6 3 2 6-4 5-8 1z' fill='%235a4028' stroke='%232a1f15' stroke-width='1.5'/><path d='M7 8l5-3 2 3-4 4z' fill='%236a4c30'/><circle cx='9' cy='15' r='1' fill='%232a1f15'/><circle cx='14' cy='16' r='1.2' fill='%232a1f15'/></svg>\") 12 12, auto"
+  },
+  toybox: {
+    id: 'toybox',
+    name: 'pip',
+    opinion: 'touch it. it does something. the box is open.',
+    accent: '#d88a3c',
+    material: 'pinewood shavings, tin painted red',
+    cursor: "url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M3 8h18v3H3zM4 11h2v8H4zM18 11h2v8h-2zM6 19h12v2H6z' fill='%23d88a3c' stroke='%235a3418' stroke-width='1.2'/></svg>\") 12 12, auto"
   }
 };

@@ -1,5 +1,16 @@
 # LiberOS changelog
 
+## 2.5.0 — Pip's toybox, native powder, chat asks your name
+### New
+- Pip's toybox room, built natively: the full powder engine (sand, water,
+  fire, oil, salt, seed, steam, sprouts, wall) with element jars, a
+  draggable crab that walks piles flat and a shell that plows (terrain
+  restored on lift). Keeps save to games + satchel with polaroids.
+- No walkthrough by design — the sign says everything.
+### Changed
+- Wrapper product name is back to LiberOS; the shell is bare again
+  (a sidecar experiment came and went — the tent lives in the page now).
+
 ## 2.4.0 — letters, LiberChat, new games, garden rework
 ### New
 - Summoning ritual: each line now rains letter by letter with landing sounds, in a brighter palette (white-pink, gold, violet, near-white).

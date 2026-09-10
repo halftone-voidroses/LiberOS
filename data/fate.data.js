@@ -12,6 +12,7 @@ window.LIBER_DATA.fate = {
   garden:      { voice: 'ruby', lines: ['grow slow. fill the stone, plant it below.', 'what is tended in patience flowers in its own colour.'] },
   dreams:      { voice: 'insightful inquiry', lines: ['i am not certain. bring the dream anyway.', 'a symbol, a weight, a question. never a verdict.'] },
   games:       { voice: 'whimsy wow', lines: ['step right up! five games, and every one keeps.', 'pick one on the left. the pitch tells the rest.'] },
+  toybox:      { voice: 'pip', lines: ['touch it. it does something.', 'the box is open. put your hands in.'] },
   divination:  { voice: 'arcana', lines: ['the deck is still. ask.', 'the chalk answers. you read.'] },
   learn:       { voice: 'the mad scribe', lines: ['one drawer a visit. the † marks what is cited.', 'dated, stamped, filed. bring your own pencil.'] },
   themes:      { voice: 'wanderlust', lines: ['repaint the room. do not blame the mirror.', 'this room wears my paint now.'] },

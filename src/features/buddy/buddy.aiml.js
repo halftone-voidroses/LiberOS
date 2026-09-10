@@ -18,6 +18,7 @@ window.LiberAIML.buddy = {
     'I kept your words warm while you were gone. What is alive in you right now?',
     'Checking in — the wax remembers you. What surfaced today?'
   ],
+  askName: 'Before we begin — what should I call you? Give me a name and the wax will keep it.',
   fallback: [
     'Say that again, slower. I want to keep the exact shape of it.',
     'Mm. And what does that have to do with your intention?',

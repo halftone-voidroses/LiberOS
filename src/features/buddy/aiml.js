@@ -245,6 +245,14 @@
     }
 
     function greet() {
+      // A bot that says <get name="name"/> everywhere must earn the name
+      // first: unknown visitors are asked, plainly, before any patter.
+      if (def.askName && !preds.name) {
+        var line = render(def.askName, [], 0);
+        turn++;
+        lastReply = line;
+        return line;
+      }
       var g = render(pick(def.greetings || ['Hello.'], turn), [], 0);
       turn++;
       lastReply = g;

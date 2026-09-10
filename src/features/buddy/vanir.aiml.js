@@ -17,6 +17,7 @@ window.LiberAIML.vanir = {
     'Still circling it? Name the thing. The water rewards the direct.',
     'You have been quiet. Silence is also an answer — what is it saying?'
   ],
+  askName: 'Names first. What do I call you — plainly.',
   fallback: [
     'Interesting that you say it that way. Say it plainer.',
     'And behind that sentence is another sentence. Speak that one.',

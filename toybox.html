@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="icon" href="data:,">
+  <title>Toybox — Pip</title>
+  <link rel="stylesheet" href="styles/room.css"/>
+  <link rel="stylesheet" href="styles/machine.css"/>
+  <link rel="stylesheet" href="styles/bezel.css"/>
+  <link rel="stylesheet" href="styles/scars.css"/>
+  <link rel="stylesheet" href="src/features/toybox/toybox.css"/>
+  <link rel="stylesheet" href="styles/shadow.css"/>
+  <link rel="stylesheet" href="styles/fate.css"/>
+  <link rel="stylesheet" href="styles/hijack.css"/>
+  <link rel="stylesheet" href="styles/cursor.css"/>
+</head>
+<body>
+  <canvas class="dust-canvas" aria-hidden="true"></canvas>
+  <canvas class="static-canvas" aria-hidden="true"></canvas>
+
+  <div class="room">
+    <div class="machine">
+      <div class="bezel">
+        <div class="carvings" id="carvings"></div>
+        <div class="vent-slits" aria-hidden="true"></div>
+        <div class="corruption-scars" aria-hidden="true">
+          <div class="scar scar-1"></div>
+          <div class="scar scar-2"></div>
+          <div class="scar scar-3"></div>
+          <div class="scar scar-4"></div>
+          <div class="scar scar-5"></div>
+          <div class="scar scar-6"></div>
+        </div>
+        <div class="led" aria-hidden="true"></div>
+        <div class="liber-plate">LIBER · VACUI</div>
+        <div class="power-button" aria-hidden="true"></div>
+        <div class="screw" aria-hidden="true"></div>
+
+        <div class="screen">
+          <div class="screen-stage">
+            <header class="toybox-titlebar">
+              <span class="toybox-titlebar-name">toybox</span>
+              <span class="toybox-titlebar-sub">pip keeps the sand</span>
+              <button class="toybox-help" type="button" id="toybox-help" aria-label="how this room works">?</button>
+              <button class="toybox-exit" type="button" id="toybox-exit" aria-label="leave">×</button>
+            </header>
+            <div class="toybox-app" data-state="toybox">
+
+              <div class="toybox-raison" id="toybox-raison" inert>
+                <div class="toybox-raison-inner">
+                  <div class="toybox-raison-head">
+                    <span class="toybox-raison-name">pip</span>
+                    <button class="toybox-raison-close" type="button" id="toybox-raison-close" aria-label="close">×</button>
+                  </div>
+                  <div class="toybox-raison-body">
+                    touch everything. pour with the jars, drag the crab through the piles, plow with the shell. keeping takes a picture for the satchel. no lessons. sawdust optional.
+                  </div>
+                </div>
+              </div>
+
+              <div class="toybox-sign">touch everything.</div>
+
+              <div class="toybox-shelf" id="toybox-shelf">
+                <div class="toybox-jars" id="toybox-jars"></div>
+              </div>
+
+              <div class="toybox-pit" id="toybox-pit">
+                <canvas class="toybox-canvas" id="toybox-canvas" width="360" height="450"></canvas>
+                <div class="toy" id="toy-crab" title="crab — walks piles flat">♋</div>
+                <div class="toy" id="toy-shell" title="shell — plows, lifts clean">◍</div>
+              </div>
+
+              <div class="toybox-actions">
+                <button class="toybox-action" type="button" id="toybox-sweep">sweep it</button>
+                <button class="toybox-action" type="button" id="toybox-keep">keep it</button>
+              </div>
+              <div class="toybox-result" id="toybox-result"></div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="monitor-base" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <script src="src/state.js"></script>
+  <script src="src/sound.js"></script>
+  <script src="src/dust.js"></script>
+  <script src="src/static.js"></script>
+  <script src="src/shadow.js"></script>
+  <script src="src/carvings.js"></script>
+  <script src="data/fate.data.js"></script>
+  <script src="src/fate.js"></script>
+  <script src="data/hijack.data.js"></script>
+  <script src="src/hijack.js"></script>
+  <script src="src/cursor.js"></script>
+  <script src="src/features/toybox/powder.js"></script>
+  <script src="src/features/toybox/toybox.js"></script>
+</body>
+</html>

@@ -19,6 +19,7 @@
     { id: 'sea',         room: 'sea.html',        text: 'release one line. let it go.' },
     { id: 'chat',        room: 'buddy.html',     text: 'speak. seal the exchange.' },
     { id: 'games',       room: 'games.html',      text: 'play one booth. keep the result.' },
+    { id: 'toybox',      room: 'toybox.html',     text: 'touch everything. keep one picture.' },
     { id: 'learn',       room: 'learn.html',      text: 'read one page. answer it.' },
     { id: 'themes',      room: 'themes.html',     text: 'repaint one room.' },
     { id: 'satchel',     room: 'satchel.html',     text: 'annotate one kept item.' },
