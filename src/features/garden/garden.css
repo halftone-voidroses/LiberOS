@@ -266,15 +266,19 @@
   aspect-ratio: 5 / 4;
 }
 
-/* facets get their fill inline from the state; the ink lines stay put */
+/* facets get their fill inline from the state; outlines stay legible on the
+   dark canvas — cream lines with a soft ruby glow, never ink-on-black */
 .garden-facet {
-  stroke: var(--garden-ink);
+  stroke: var(--garden-cream);
   stroke-width: 1.6;
   stroke-linejoin: round;
   cursor: pointer;
+  filter: drop-shadow(0 0 2px rgba(181, 118, 60, 0.55));
 }
 .garden-facet.settled {
-  stroke-width: 1;
+  stroke: var(--garden-ink);
+  stroke-width: 1.4;
+  filter: none;
   animation: garden-settle 0.9s ease-out; /* one soft brightening as a facet finds its shade */
 }
 

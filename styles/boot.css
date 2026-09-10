@@ -85,23 +85,172 @@
   cursor: not-allowed;
 }
 
-.state-boot .boot-letter {
-  max-width: 34rem;
-  max-height: 38vh;
+.state-boot .boot-rect { position: relative; }
+
+.state-boot .boot-sub {
+  margin: 0 0 1em;
+  font-style: italic;
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+  color: #d8a0a0;
+}
+
+.state-boot .boot-warning-open {
+  margin-bottom: 0.9em;
+  padding: 0.55em 1.3em;
+  background: transparent;
+  border: 2px solid #5a0000;
+  color: #d8a0a0;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.state-boot .boot-warning-open:hover,
+.state-boot .boot-warning-open:focus {
+  background: #5a0000;
+  color: #ff8080;
+  border-color: #aa0000;
+  outline: none;
+}
+
+.state-boot .boot-status {
+  margin: 0 0 1.1em;
+  font-style: italic;
+  font-size: clamp(0.85rem, 1.4vw, 1rem);
+  color: #8a6060;
+}
+
+.state-boot .boot-help {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #3a0000;
+  border: 2px solid #5a0000;
+  color: #d8a0a0;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.state-boot .boot-help:hover,
+.state-boot .boot-help:focus {
+  background: #5a0000;
+  color: #ff8080;
+  border-color: #aa0000;
+  outline: none;
+}
+.state-boot .boot-help:focus-visible,
+.state-boot .boot-warning-open:focus-visible,
+.state-boot .boot-start:focus-visible {
+  outline: 2px solid #ff8080;
+  outline-offset: 2px;
+}
+
+/* ─── the warning screen — a ?-style panel above the computer ─── */
+.boot-warning {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.78);
+}
+.boot-warning.open { display: flex; }
+
+.boot-warning-card {
+  width: min(560px, 94vw);
+  max-height: 88vh;
+  overflow-y: auto;
+  background: linear-gradient(180deg, #4a0000 0%, #2a0000 100%);
+  border: 2px solid #5a0000;
+  box-shadow:
+    inset 0 0 0 1px #3a0000,
+    inset 0 0 40px rgba(0, 0, 0, 0.55),
+    0 0 40px rgba(0, 0, 0, 0.8);
+  padding: 18px 22px 16px;
+  font-family: 'Times New Roman', Times, serif;
+  color: #d8a0a0;
+}
+
+.boot-warning-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #5a0000;
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+
+.boot-warning-title {
+  font-size: 1.1rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #ff8080;
+  font-weight: 700;
+}
+
+.boot-warning-close {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: transparent;
+  border: 2px solid #5a0000;
+  color: #d8a0a0;
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.boot-warning-close:hover,
+.boot-warning-close:focus {
+  background: #5a0000;
+  color: #fff;
+  outline: none;
+}
+.boot-warning-close:focus-visible {
+  outline: 2px solid #ff8080;
+  outline-offset: 2px;
+}
+
+.boot-warning .boot-letter {
+  max-height: 46vh;
   overflow-y: auto;
   text-align: left;
-  font-size: clamp(0.85rem, 1.4vw, 1rem);
+  font-size: clamp(0.9rem, 1.5vw, 1.05rem);
   line-height: 1.55;
-  color: #d8a0a0;
+  color: #e8b8b8;
   background: rgba(0, 0, 0, 0.35);
   border: 1px solid #5a0000;
   padding: 1em 1.2em;
-  margin-bottom: 1.2em;
+  margin-bottom: 1em;
 }
+.boot-warning .boot-letter p { margin: 0 0 0.8em; }
+.boot-warning .boot-letter p:last-child { margin-bottom: 0; }
+.boot-warning .boot-letter a { color: #ff8080; }
 
-.state-boot .boot-letter p { margin: 0 0 0.8em; }
-.state-boot .boot-letter p:last-child { margin-bottom: 0; }
-.state-boot .boot-letter a { color: #ff8080; }
+.boot-warning .boot-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6em;
+  font-size: clamp(0.95rem, 1.6vw, 1.1rem);
+  color: #f0c0c0;
+  cursor: pointer;
+  user-select: none;
+}
+.boot-warning .boot-consent input {
+  width: 1.2em;
+  height: 1.2em;
+  flex-shrink: 0;
+  margin-top: 0.15em;
+  accent-color: #aa0000;
+}
 
 .state-boot .boot-consent {
   display: flex;

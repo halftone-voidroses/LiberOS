@@ -1,5 +1,31 @@
 # LiberOS changelog
 
+## 2.7.0 — OST soundscape, working sound controls, learn fix, readable ruby, warning screen
+### New
+- File-based OST: the five studio movements in `assets/music/` loop per
+  room — wanderlust ritual for the tutorial summoning, riason part for
+  hijack tours, buddy creation for the buddy room, vanir for the sea, main
+  theme everywhere else. Crossfaded, silence until first gesture, offline.
+- Music volume slider in Settings SOUND (0–100, persisted, with a
+  now-playing line). Bed/motif steps scale the OST audibly now.
+- Boot warning is its own screen above the computer, ?-style: opens on
+  first visit, reopens from the boot ? button or "read the warning", Esc
+  and backdrop close it, consent inside enables enter.
+### Fixed
+- Learn page blank: unescaped apostrophe in card 24 (`pip's`) killed the
+  whole script — escaped, all 25 drawers render, citations open.
+- Dead sound toggles: settings never loaded `soundscape.js`, so room
+  tone/bed/motif changed state with no audible effect — the script is
+  included and every control answers (sound toggle chimes on re-enable).
+- Ruby's gem outline unreadable (dark ink on dark canvas): empty facets
+  now draw cream with a soft ruby glow; settled facets take ink lines on
+  their fills. Draft-on-paper rendering untouched.
+### Proven
+- Targeted headless checks green (learn 25 drawers + cite slip, slider
+  persists + toggles flip, overlay flow, 17 gem facets with cream stroke,
+  per-room track picks). Full smoke blocked by a pre-existing environment
+  stall (pristine 2.6.1 trips it too; machine under memory pressure).
+
 ## 2.6.1 — desktop legibility: orbit labels, all-rooms hint, threshold marks
 ### Fixed
 - Constellation orbit labels read at last: numbers at 9px bold, kept names

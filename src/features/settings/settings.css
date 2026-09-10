@@ -100,6 +100,32 @@
   margin-top: 4px;
 }
 
+.settings-music {
+  display: block;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #8a6a40;
+  font-weight: 700;
+  margin: 8px 0 4px;
+}
+.settings-music span { color: #e8c890; }
+#settings-music {
+  width: 100%;
+  accent-color: #c89060;
+  margin: 0 0 4px;
+}
+#settings-music:focus-visible {
+  outline: 2px solid #c89060;
+  outline-offset: 2px;
+}
+.settings-now {
+  font-size: 0.7rem;
+  color: #8a6a40;
+  font-style: italic;
+  letter-spacing: 0.05em;
+  margin-bottom: 2px;
+}
 .settings-hint {
   font-size: 0.7rem;
   color: #6a4a30;

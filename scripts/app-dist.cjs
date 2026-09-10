@@ -15,7 +15,7 @@ const crypto = require('crypto');
 
 const ROOT = path.join(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
-const DIRS = ['src', 'styles', 'data', 'fonts'];
+const DIRS = ['src', 'styles', 'data', 'fonts', 'assets'];
 
 function rmrf(p) {
   if (!fs.existsSync(p)) return;

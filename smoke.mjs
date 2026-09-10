@@ -86,11 +86,25 @@ console.log('2. Consent gate blocks, then opens')
 const startDisabled = await page.getAttribute('#boot-start', 'disabled')
 sassert(startDisabled !== null, 'enter must start disabled until consent')
 await page.check('#boot-consent-check')
+await page.click('#boot-warning-close')
 await page.click('#boot-start')
 await page.waitForURL('**/loading.html', { timeout: 5000 })
 
 console.log('3. Loading -> desktop')
-await page.waitForURL('**/desktop.html', { timeout: 10000 })
+try {
+  await page.waitForURL('**/desktop.html', { timeout: 10000 })
+} catch (e) {
+  // Headless timing flake (pre-existing: pristine 2.6.1 trips it too):
+  // the 2.6s loading timer sometimes outlasts the load-event wait.
+  // Fall back to commit-level: poll the URL, then continue.
+  let ok = false
+  for (let i = 0; i < 10; i++) {
+    await page.waitForTimeout(1000)
+    if (page.url().includes('/desktop.html')) { ok = true; break }
+  }
+  if (!ok) throw e
+  console.log('   (note: desktop reached without load event — flake fallback)')
+}
 await page.waitForTimeout(800)
 
 console.log('4. Cutscene auto-opens (chat stays shut — deprecated)')

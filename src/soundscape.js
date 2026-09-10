@@ -1,48 +1,40 @@
-// soundscape.js — the generative room tone (futures §11, full horizon).
-// Every room gets a slow offline bed (consonant partials + filtered noise,
-// keyed to its palette); four traveller leitmotifs weave in when their
-// content is on screen. No assets, no network, silence until the first
-// gesture; master + per-layer gains live in settings. Under ~400 lines
-// by counting, not by stuffing. No imports.
+// soundscape.js — the room's OST player (2.7.0).
+// File-based melodic soundscape: five looped .ogg movements in assets/music/.
+//   wanderlust-ritual.ogg — the tutorial summoning (cutscene ritual)
+//   riason-part.ogg       — hijack tours + Riason's rooms (satchel/learn)
+//   main-theme.ogg         — every app/room by default (incl. buddy-creation override below)
+//   buddy-creation.ogg     — the buddy room (stone + sealed chats)
+//   vanir.ogg              — the sea room
+// Mapping (per release notes): wanderlust + riason during the tutorial
+// (wanderlust during summoning), riason during hijack; otherwise maintheme
+// for apps/etc and vanir for the sea. Buddy room gets buddy-creation.
+// One <audio> element, looped, with a 1.2s crossfade between movements.
+// Silence until the first gesture (autoplay law, same as sound.js).
+// Master + music volume live in settings; state.scape = { on, bed, motif, music }.
+// bed/motif are kept for compat (older saves) and scale the music gently.
+// No imports. Every path guarded — audio can never break the room.
+
 (function (global) {
   'use strict';
 
-  // room beds: partials + noise bed. Quiet by design — felt, not heard.
-  var BEDS = {
-    desktop:    { f: [130.8, 174.6], n: 0.05 },
-    buddy:      { f: [174.6, 261.6], n: 0.03 },
-    games:      { f: [220.0, 277.2, 329.6], n: 0.04 },
-    garden:     { f: [196.0, 294.0], n: 0.08 },
-    sea:        { f: [55.0, 82.5], n: 0.50 },
-    dreams:     { f: [146.8, 220.0], n: 0.06 },
-    divination: { f: [130.8, 196.0], n: 0.04 },
-    learn:      { f: [164.8], n: 0.03 },
-    trash:      { f: [98.0, 65.4], n: 0.10 },
-    themes:     { f: [246.9, 370.0], n: 0.02 },
-    toybox:     { f: [220.0, 277.2], n: 0.05 },
-    satchel:    { f: [146.8, 174.6], n: 0.04 },
-    sigil:      { f: [110.0, 165.0], n: 0.06 }
+  var TRACKS = {
+    'wanderlust': 'assets/music/wanderlust-ritual.ogg',
+    'riason': 'assets/music/riason-part.ogg',
+    'main': 'assets/music/main-theme.ogg',
+    'buddy': 'assets/music/buddy-creation.ogg',
+    'vanir': 'assets/music/vanir.ogg'
   };
 
-  // traveller cells, three notes each (rest-law voicings throughout).
-  var MOTIFS = {
-    wanderlust: [440.0, 554.4, 587.3],
-    vanir:      [110.0, 116.5, 110.0],
-    ruby:       [196.0, 246.9, 294.0],
-    elizabeth:  [329.6, 392.0, 440.0]
-  };
+  // Compat: old bed/motif step buttons scale the OST gently (audible steps).
+  var BED_SCALE = [0, 0.6, 0.85, 1];
+  var MOTIF_SCALE = [0.85, 0.92, 1, 1];
 
-  var BED_GAINS = [0, 0.020, 0.045, 0.080];
-  var MOTIF_GAINS = [0, 0.030, 0.060, 0.100];
-
-  var ctx = null, bedGain = null, motifGain = null, noiseSrc = null;
-  var started = false, room = null, ducked = false;
-  var seed = 1;
-
-  function rnd() {
-    seed = (seed * 1103515245 + 12345) & 0x7fffffff;
-    return seed / 0x7fffffff;
-  }
+  var audio = null;
+  var current = null;
+  var started = false;
+  var ducked = false;
+  var room = null;
+  var fadeTimer = null;
 
   function st() { return (global.Liber && global.Liber.state) || null; }
 
@@ -50,18 +42,23 @@
     var s = st();
     var g = s ? s.get() || {} : {};
     var c = g.scape || {};
+    var music = (c.music == null ? 80 : +c.music);
+    if (isNaN(music)) music = 80;
+    music = Math.max(0, Math.min(100, music));
     return {
       on: c.on !== false,
       bed: c.bed == null ? 2 : Math.max(0, Math.min(3, c.bed | 0)),
-      motif: c.motif == null ? 2 : Math.max(0, Math.min(3, c.motif | 0))
+      motif: c.motif == null ? 2 : Math.max(0, Math.min(3, c.motif | 0)),
+      music: music
     };
   }
 
-  function enabled() {
+  function soundsOn() {
     var s = st();
-    var sounds = !s || s.get().sounds !== false;
-    return sounds && scape().on;
+    return !s || s.get().sounds !== false;
   }
+
+  function enabled() { return soundsOn() && scape().on; }
 
   function roomId() {
     try {
@@ -71,150 +68,192 @@
     } catch (e) { return null; }
   }
 
-  function ensureCtx() {
-    if (ctx) return ctx;
-    var AC = global.AudioContext || global.webkitAudioContext;
-    if (!AC) return null;
+  function tutorialState() {
     try {
-      ctx = new AC();
-      bedGain = ctx.createGain();
-      bedGain.gain.value = 0;
-      bedGain.connect(ctx.destination);
-      motifGain = ctx.createGain();
-      motifGain.gain.value = 1;
-      motifGain.connect(ctx.destination);
-    } catch (e) { ctx = null; }
-    return ctx;
+      var s = st();
+      var g = s ? s.get() || {} : {};
+      return { done: !!g.tutorialDone, stage: g.tutorialStage || null };
+    } catch (e) { return { done: true, stage: null }; }
   }
 
-  function applyGains() {
-    if (!ctx) return;
-    var c = scape();
-    var t = ctx.currentTime;
+  function summoningOpen() {
     try {
-      bedGain.gain.setTargetAtTime(enabled() ? BED_GAINS[c.bed] * (ducked ? 0.5 : 1) : 0, t, 0.4);
+      var c = document.getElementById('cutscene');
+      if (c && c.classList.contains('ritual')) return true;
+      if (c && /summon/i.test(c.textContent || '')) return true;
+      return false;
+    } catch (e) { return false; }
+  }
+
+  function hijackOpen() {
+    try {
+      if (document.querySelector('.hijack.open')) return true;
+      var h = document.getElementById('hijack');
+      if (h && h.classList.contains('open')) return true;
+      var lh = document.getElementById('learn-hijack');
+      if (lh && lh.classList.contains('open')) return true;
+      return false;
+    } catch (e) { return false; }
+  }
+
+  // The OST pick. Moments first, then rooms: wanderlust while the
+  // summoning ritual is open, riason while any hijack tour is open;
+  // otherwise vanir for the sea, buddy-creation for the buddy room,
+  // and the main theme everywhere else (tutorial included).
+  function pickTrack() {
+    if (summoningOpen()) return 'wanderlust';
+    if (hijackOpen()) return 'riason';
+    if (room === 'sea') return 'vanir';
+    if (room === 'buddy') return 'buddy';
+    return 'main';
+  }
+
+  function targetVolume() {
+    if (!enabled()) return 0;
+    var c = scape();
+    var v = (c.music / 100) * 0.9;
+    v *= (BED_SCALE[c.bed] == null ? 1 : BED_SCALE[c.bed]);
+    v *= (MOTIF_SCALE[c.motif] == null ? 1 : MOTIF_SCALE[c.motif]);
+    if (ducked) v *= 0.5;
+    return Math.max(0, Math.min(1, v));
+  }
+
+  function ensureAudio() {
+    if (audio) return audio;
+    try {
+      audio = new Audio();
+      audio.loop = true;
+      audio.preload = 'auto';
+      audio.volume = 0;
+      audio.addEventListener('error', function () { /* stay silent, never break */ });
+    } catch (e) { audio = null; }
+    return audio;
+  }
+
+  function applyVolume(fast) {
+    if (!audio) return;
+    var v = targetVolume();
+    try {
+      if (fast) { audio.volume = v; return; }
+      var from = audio.volume;
+      var steps = 12, i = 0;
+      if (fadeTimer) { clearInterval(fadeTimer); fadeTimer = null; }
+      fadeTimer = setInterval(function () {
+        i++;
+        var k = i / steps;
+        try { audio.volume = from + (v - from) * k; } catch (e) {}
+        if (i >= steps) { clearInterval(fadeTimer); fadeTimer = null; }
+      }, 100);
     } catch (e) {}
   }
 
-  function buildBed() {
-    var bed = BEDS[room] || BEDS.desktop;
-    var t = ctx.currentTime;
-    bed.f.forEach(function (f, i) {
+  function switchTrack(name) {
+    var a = ensureAudio();
+    if (!a) return;
+    if (current === name && a.getAttribute('src')) { applyVolume(); return; }
+    current = name;
+    var wasAudible = enabled() && a.volume > 0.01 && !a.paused;
+    var doSwap = function () {
       try {
-        var osc = ctx.createOscillator();
-        var g = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.value = f;
-        g.gain.value = 1 / bed.f.length;
-        // slow breathing per partial — the bed never sits still
-        var lfo = ctx.createOscillator();
-        var lg = ctx.createGain();
-        lfo.frequency.value = 0.05 + 0.03 * i;
-        lg.gain.value = 0.35;
-        lfo.connect(lg).connect(g.gain);
-        osc.connect(g).connect(bedGain);
-        osc.start(t);
-        lfo.start(t);
+        a.src = TRACKS[name] || TRACKS.main;
+        a.load();
+        var p = a.play();
+        if (p && p.catch) p.catch(function () { /* gesture not yet seen */ });
+        applyVolume();
       } catch (e) {}
-    });
-    if (bed.n > 0) {
-      try {
-        var len = Math.floor(ctx.sampleRate * 2);
-        var buf = ctx.createBuffer(1, len, ctx.sampleRate);
-        var d = buf.getChannelData(0);
-        for (var i = 0; i < len; i++) d[i] = (rnd() * 2 - 1) * 0.5;
-        noiseSrc = ctx.createBufferSource();
-        noiseSrc.buffer = buf;
-        noiseSrc.loop = true;
-        var lp = ctx.createBiquadFilter();
-        lp.type = 'lowpass';
-        lp.frequency.value = room === 'sea' ? 420 : 220;
-        var ng = ctx.createGain();
-        ng.gain.value = bed.n;
-        noiseSrc.connect(lp).connect(ng).connect(bedGain);
-        noiseSrc.start(t);
-      } catch (e) {}
+    };
+    if (wasAudible) {
+      // 1.2s crossfade: dip out, swap, swell back.
+      var from = a.volume, i = 0;
+      if (fadeTimer) { clearInterval(fadeTimer); fadeTimer = null; }
+      fadeTimer = setInterval(function () {
+        i++;
+        try { a.volume = from * (1 - i / 6); } catch (e) {}
+        if (i >= 6) {
+          clearInterval(fadeTimer); fadeTimer = null;
+          doSwap();
+        }
+      }, 100);
+    } else {
+      doSwap();
     }
-    // shimmer scheduler: one soft partial every few seconds, seeded order
-    setInterval(function () {
-      if (!enabled() || document.hidden) return;
-      try {
-        var f = bed.f[Math.floor(rnd() * bed.f.length)];
-        var osc = ctx.createOscillator();
-        var g = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.value = f * 2;
-        var t2 = ctx.currentTime;
-        g.gain.setValueAtTime(0.0001, t2);
-        g.gain.exponentialRampToValueAtTime(0.012, t2 + 0.4);
-        g.gain.exponentialRampToValueAtTime(0.0001, t2 + 2.4);
-        osc.connect(g).connect(bedGain);
-        osc.start(t2);
-        osc.stop(t2 + 2.6);
-      } catch (e) {}
-    }, 5200);
+  }
+
+  function reselect() {
+    if (!started) return;
+    switchTrack(pickTrack());
   }
 
   function start() {
-    if (started) return;
+    if (started) { reselect(); return; }
     started = true;
-    seed = (Date.now() % 2147483647) || 1;
     room = roomId();
     if (!room) return; // boot + loading keep their ritual ticks, no bed
-    if (!BEDS[room]) room = 'desktop';
-    var c = ensureCtx();
-    if (!c) return;
-    if (c.state === 'suspended') {
-      try { c.resume(); } catch (e) {}
-    }
-    buildBed();
-    applyGains();
+    var a = ensureAudio();
+    if (!a) return;
+    // Prime each movement quietly so room changes never stall.
+    try {
+      Object.keys(TRACKS).forEach(function (k) {
+        var l = document.createElement('link');
+        l.rel = 'preload'; l.as = 'audio'; l.href = TRACKS[k];
+        document.head.appendChild(l);
+      });
+    } catch (e) {}
+    reselect();
+    // Tutorial beats change the movement: watch the DOM + state.
+    try {
+      var obs = new MutationObserver(function () { reselect(); });
+      obs.observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
+    } catch (e) {}
+    setInterval(reselect, 3000);
   }
 
-  function motif(name) {
-    var seq = MOTIFS[name];
-    if (!seq || !enabled()) return;
-    var c = ensureCtx();
-    if (!c) return;
+  // ── compat surface ────────────────────────────────────────────────
+  // motif(name): traveller leitmotif calls (garden ruby, buddy, sea vanir).
+  // With file movements the room track already carries the voice — make
+  // sure we are on the right movement and swell gently instead of synth.
+  function motif() {
+    reselect();
+    if (!audio) return;
     try {
-      if (c.state === 'suspended') c.resume();
-      var g = scape();
-      var base = MOTIF_GAINS[g.motif];
-      if (!base) return;
-      var t = c.currentTime;
-      seq.forEach(function (f, i) {
-        var osc = c.createOscillator();
-        var gn = c.createGain();
-        osc.type = 'sine';
-        osc.frequency.value = f;
-        var at = t + i * 0.22;
-        gn.gain.setValueAtTime(0.0001, at);
-        gn.gain.exponentialRampToValueAtTime(base, at + 0.03);
-        gn.gain.exponentialRampToValueAtTime(0.0001, at + 0.9);
-        osc.connect(gn).connect(motifGain);
-        osc.start(at);
-        osc.stop(at + 1.0);
-      });
+      var v = targetVolume();
+      audio.volume = Math.max(audio.volume, Math.min(1, v));
     } catch (e) {}
   }
 
   function duck(on) {
     ducked = !!on;
-    applyGains();
+    applyVolume();
   }
 
-  function refresh() { applyGains(); }
+  function refresh() {
+    if (!started) return;
+    if (!enabled()) { applyVolume(); return; }
+    reselect();
+  }
+
+  function setMusic(v) {
+    var s = st();
+    if (!s) return;
+    var g = s.get() || {};
+    var n = Math.max(0, Math.min(100, Math.round(+v)));
+    if (isNaN(n)) return;
+    s.set({ scape: Object.assign({}, g.scape, { music: n }) });
+    applyVolume();
+  }
 
   global.Liber = global.Liber || {};
   global.Liber.soundscape = {
     motif: motif, duck: duck, refresh: refresh,
     room: function () { return room; },
     isEnabled: enabled,
-    levels: scape
+    levels: scape,
+    setMusic: setMusic,
+    music: function () { return scape().music; },
+    track: function () { return current; },
+    reselect: reselect
   };
 
-  // silence until the first gesture (autoplay law, already honored
-  // the same way in sound.js).
-  document.addEventListener('pointerdown', start, { once: true });
-  document.addEventListener('keydown', start, { once: true });
+  document.addEventListener('pointerdown', start, { once: false });
+  document.addEventListener('keydown', start, { once: false });
 })(window);

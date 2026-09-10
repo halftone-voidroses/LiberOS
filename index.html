@@ -38,19 +38,11 @@
           <div class="screen-stage">
             <div class="state-boot" data-state="boot">
               <div class="boot-rect">
+                <button class="boot-help" type="button" id="boot-help" aria-label="read the warning">?</button>
                 <h1 class="boot-title">Liber.OS</h1>
-                <div class="boot-letter" id="boot-letter">
-                  <p>Hi there!</p>
-                  <p>My name is RAT, and this is my project. Before you get started there are a few fourth wall breaks I want to get out of the way for safety reasons.</p>
-                  <p>This is an art therapy tool! Like a workbook you might pick up in a self help section, it’s research-backed but I am just a university student making this for fun and to help others. You should not use it as a replacement for therapy, and if you are in crisis you should call a crisis line, not use this tool for any reason.</p>
-                  <p>Secondly, this tool is based on IFS and “Amplification” a concept in analytical psychology. It is contraindicated (could make worse) situations where people are suffering from immediate, unprocessed trauma or have C-PTSD and exploring other “parts” of the identity could be harmful.</p>
-                  <p>If you have feedback for this, please send me an email here:<br/><a href="mailto:libervacui@gmail.com">libervacui@gmail.com</a></p>
-                  <p>Thanks for trying out my tool!</p>
-                </div>
-                <label class="boot-consent" for="boot-consent-check">
-                  <input type="checkbox" id="boot-consent-check"/>
-                  <span>I understand the risks, and wish to proceed</span>
-                </label>
+                <p class="boot-sub">an art therapy workbook — read the warning first.</p>
+                <button class="boot-warning-open" id="boot-warning-open" type="button">read the warning</button>
+                <p class="boot-status" id="boot-status">the warning is unread.</p>
                 <button class="boot-start" id="boot-start" type="button" disabled>enter</button>
               </div>
             </div>
@@ -58,6 +50,27 @@
         </div>
       </div>
       <div class="monitor-base" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <div class="boot-warning" id="boot-warning" inert>
+    <div class="boot-warning-card" role="dialog" aria-modal="true" aria-labelledby="boot-warning-title">
+      <div class="boot-warning-head">
+        <span class="boot-warning-title" id="boot-warning-title">before you enter</span>
+        <button class="boot-warning-close" type="button" id="boot-warning-close" aria-label="close warning">×</button>
+      </div>
+      <div class="boot-letter" id="boot-letter">
+        <p>Hi there!</p>
+        <p>My name is RAT, and this is my project. Before you get started there are a few fourth wall breaks I want to get out of the way for safety reasons.</p>
+        <p>This is an art therapy tool! Like a workbook you might pick up in a self help section, it’s research-backed but I am just a university student making this for fun and to help others. You should not use it as a replacement for therapy, and if you are in crisis you should call a crisis line, not use this tool for any reason.</p>
+        <p>Secondly, this tool is based on IFS and “Amplification” a concept in analytical psychology. It is contraindicated (could make worse) situations where people are suffering from immediate, unprocessed trauma or have C-PTSD and exploring other “parts” of the identity could be harmful.</p>
+        <p>If you have feedback for this, please send me an email here:<br/><a href="mailto:libervacui@gmail.com">libervacui@gmail.com</a></p>
+        <p>Thanks for trying out my tool!</p>
+      </div>
+      <label class="boot-consent" for="boot-consent-check">
+        <input type="checkbox" id="boot-consent-check"/>
+        <span>I understand the risks, and wish to proceed</span>
+      </label>
     </div>
   </div>
 
@@ -72,9 +85,29 @@
       var KEY = 'liber_vacui_consent';
       var box = document.getElementById('boot-consent-check');
       var btn = document.getElementById('boot-start');
-      function sync() { if (btn) btn.disabled = !(box && box.checked); }
+      var overlay = document.getElementById('boot-warning');
+      var status = document.getElementById('boot-status');
+      function sync() {
+        var ok = !!(box && box.checked);
+        if (btn) btn.disabled = !ok;
+        if (status) status.textContent = ok ? 'understood — you may enter.' : 'the warning is unread.';
+      }
+      function openWarning() {
+        if (!overlay) return;
+        overlay.classList.add('open');
+        overlay.removeAttribute('inert');
+        var close = document.getElementById('boot-warning-close');
+        if (close) close.focus();
+      }
+      function closeWarning() {
+        if (!overlay) return;
+        overlay.classList.remove('open');
+        overlay.setAttribute('inert', '');
+        var opener = document.getElementById('boot-warning-open');
+        if (opener) opener.focus();
+      }
       try {
-        if (box && btn && localStorage.getItem(KEY)) { box.checked = true; }
+        if (box && localStorage.getItem(KEY)) { box.checked = true; }
       } catch (e) {}
       if (box) box.addEventListener('change', function () {
         try {
@@ -84,6 +117,16 @@
         sync();
       });
       sync();
+      var opener = document.getElementById('boot-warning-open');
+      var help = document.getElementById('boot-help');
+      var close = document.getElementById('boot-warning-close');
+      if (opener) opener.addEventListener('click', openWarning);
+      if (help) help.addEventListener('click', openWarning);
+      if (close) close.addEventListener('click', closeWarning);
+      if (overlay) overlay.addEventListener('click', function (e) { if (e.target === overlay) closeWarning(); });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && overlay && overlay.classList.contains('open')) closeWarning();
+      });
       if (btn) btn.addEventListener('click', function () {
         if (btn.disabled) return;
         if (window.Liber && window.Liber.state) {
@@ -91,6 +134,10 @@
         }
         window.location.href = 'loading.html';
       });
+      // First visit: the warning opens above the machine, like a ? panel.
+      try {
+        if (!localStorage.getItem(KEY)) openWarning();
+      } catch (e) { openWarning(); }
     })();
   </script>
 </body>

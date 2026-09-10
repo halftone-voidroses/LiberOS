@@ -71,7 +71,10 @@
                   <button class="settings-btn" id="settings-scape" type="button">room tone: on</button>
                   <button class="settings-btn" id="settings-bed" type="button">bed: 2</button>
                   <button class="settings-btn" id="settings-motif" type="button">motifs: 2</button>
-                  <div class="settings-hint">the machine clicks when touched. it can hold its breath. each room hums its own bed; travellers answer in three notes.</div>
+                  <label class="settings-music" for="settings-music">music <span id="settings-music-val">80</span></label>
+                  <input id="settings-music" type="range" min="0" max="100" step="1" value="80" aria-label="music volume"/>
+                  <div class="settings-now" id="settings-now">now playing: —</div>
+                  <div class="settings-hint">the machine clicks when touched. each room plays its own movement — wanderlust for the summoning, riason for the tours, vanir for the sea, the theme everywhere else. touch anything once; the browser keeps music silent until then.</div>
                 </div>
 
                 <div class="settings-section">
@@ -102,6 +105,7 @@
 
   <script src="src/state.js"></script>
   <script src="src/sound.js"></script>
+  <script src="src/soundscape.js"></script>
   <script src="src/dust.js"></script>
   <script src="src/static.js"></script>
   <script src="src/carvings.js"></script>

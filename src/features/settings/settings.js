@@ -34,12 +34,18 @@
   }
 
   function toggleSound() {
+    var nowOn = true;
     if (window.Liber && window.Liber.sound) {
-      window.Liber.sound.setEnabled(!window.Liber.sound.isEnabled());
+      nowOn = !window.Liber.sound.isEnabled();
+      window.Liber.sound.setEnabled(nowOn);
     }
     renderSound();
     if (window.Liber && window.Liber.soundscape) {
       try { window.Liber.soundscape.refresh(); } catch (e) {}
+    }
+    // Audible confirmation: the toggle itself answers when sound is on.
+    if (nowOn && window.Liber && window.Liber.sound) {
+      try { window.Liber.sound.play('chime'); } catch (e) {}
     }
   }
 
@@ -47,10 +53,13 @@
     var st = (window.Liber && window.Liber.state) || null;
     var g = st ? st.get() || {} : {};
     var c = g.scape || {};
+    var music = (c.music == null ? 80 : +c.music);
+    if (isNaN(music)) music = 80;
     return {
       on: c.on !== false,
       bed: c.bed == null ? 2 : Math.max(0, Math.min(3, c.bed | 0)),
-      motif: c.motif == null ? 2 : Math.max(0, Math.min(3, c.motif | 0))
+      motif: c.motif == null ? 2 : Math.max(0, Math.min(3, c.motif | 0)),
+      music: Math.max(0, Math.min(100, music))
     };
   }
 
@@ -65,6 +74,14 @@
     }
   }
 
+  var TRACK_LABELS = {
+    wanderlust: 'wanderlust ritual (summoning)',
+    riason: 'riason part (tour)',
+    main: 'main theme',
+    buddy: 'buddy creation',
+    vanir: 'vanir (sea)'
+  };
+
   function renderScape() {
     var c = scapeLevels();
     var t = document.getElementById('settings-scape');
@@ -73,6 +90,26 @@
     if (t) t.textContent = 'room tone: ' + (c.on ? 'on' : 'off');
     if (b) b.textContent = 'bed: ' + c.bed;
     if (m) m.textContent = 'motifs: ' + c.motif;
+    var slider = document.getElementById('settings-music');
+    var val = document.getElementById('settings-music-val');
+    if (slider && document.activeElement !== slider) slider.value = String(c.music);
+    if (val) val.textContent = String(c.music);
+    var now = document.getElementById('settings-now');
+    if (now) {
+      var track = null;
+      try { track = (window.Liber && window.Liber.soundscape && window.Liber.soundscape.track) ? window.Liber.soundscape.track() : null; } catch (e) { track = null; }
+      now.textContent = 'now playing: ' + (track && TRACK_LABELS[track] ? TRACK_LABELS[track] : '—');
+    }
+  }
+
+  function setMusic(v) {
+    if (window.Liber && window.Liber.soundscape && window.Liber.soundscape.setMusic) {
+      try { window.Liber.soundscape.setMusic(v); } catch (e) {}
+    } else {
+      setScape({ music: Math.max(0, Math.min(100, Math.round(+v))) });
+      return;
+    }
+    renderScape();
   }
 
   function replay() {
@@ -175,8 +212,17 @@
       var c3 = scapeLevels();
       setScape({ motif: (c3.motif + 1) % 4 });
     });
+    var slider = document.getElementById('settings-music');
+    if (slider) {
+      slider.addEventListener('input', function () { setMusic(slider.value); });
+      slider.addEventListener('change', function () { setMusic(slider.value); });
+    }
     if (w) w.addEventListener('click', wipe);
     if (b) b.addEventListener('click', back);
+    // The OST starts on first gesture; refresh the "now playing" line then.
+    document.addEventListener('pointerdown', function () { setTimeout(renderScape, 600); });
+    document.addEventListener('keydown', function () { setTimeout(renderScape, 600); });
+    setTimeout(renderScape, 1500);
     var slotBtns = document.querySelectorAll('[data-slot]');
     for (var si = 0; si < slotBtns.length; si++) {
       (function (btn) {
