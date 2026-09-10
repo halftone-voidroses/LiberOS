@@ -32,8 +32,8 @@ jobs:
         shell: pwsh
         run: |
           $cfg = Get-Content src-tauri/tauri.conf.json -Raw
-          $cfg = $cfg -replace '"targets": \["app", "dmg"\]', '"targets": ["nsis", "msi"]'
-          if ($cfg -notmatch '"nsis"') { throw 'bundle targets not found in tauri.conf.json' }
+          $cfg = $cfg -replace '"targets": \[.*?\]', '"targets": ["nsis", "msi"]'
+          if ($cfg -notmatch '"targets": \["nsis", "msi"\]') { throw 'bundle target rewrite failed' }
           Set-Content src-tauri/tauri.conf.json $cfg
 
       - name: Build installer
