@@ -1,15 +1,15 @@
-// twelve-works.js — the twelve works (desktop.html only). A 12-segment bar
-// above the constellation: one segment per traveller. A segment lights when
-// you first make something in that traveller's app; the travellers witnessed
-// it. Unlit segments suggest a research-backed art-therapy prompt on
-// hover/focus (docs/gamification.md mechanic 3, reskinned as lore); lit
-// segments show the work line + count, and clicking one GENERATES a
-// research-backed prompt from your own room — the traveller's prompt bank
-// grounded in your latest artifact here, its declared verb, and your
-// buddy's intention (src/prompt-engine.js compose, seeded per click).
-// Everything is hover-gated or click-called — no popups, no XP, no guilt
-// (docs/gamification.md anti-goals).
-// Derived only: reads state, writes nothing. Newly-lit segments fire their
+// twelve-works.js — the twelve works (desktop.html only). No bar: each
+// work lives in its bezel carving. A carving lights in its traveller's
+// accent when you first make something in their app; the travellers
+// witnessed it. Unlit carvings suggest a research-backed art-therapy
+// prompt on hover/focus (docs/gamification.md mechanic 3, reskinned as
+// lore); lit carvings show the work line + count, and clicking one
+// GENERATES a research-backed prompt from your own room — the traveller's
+// prompt bank grounded in your latest artifact here, its declared verb,
+// and your buddy's intention (src/prompt-engine.js compose, seeded per
+// click). Everything is hover-gated or click-called — no popups, no XP,
+// no guilt (docs/gamification.md anti-goals).
+// Derived only: reads state, writes nothing. Newly-lit carvings fire their
 // tier's prompt once per visit via the existing liber:prompt CustomEvent
 // (rendered by src/prompt-surface.js); the once-cap is in-memory, the same
 // per-visit shape as src/gamification.js ambient. First render is the
@@ -43,23 +43,17 @@
     'philosophical-pataphysical': 'philosophy, filed as ancestry — argument, not a tested claim.'
   };
 
-  // Carving-style marks, one per traveller (stroke follows the persona
-  // accent via currentColor). Held here, the codebase's pattern: every
-  // module keeps its own inline SVGs (see dial.js, carvings.js).
-  var GLYPHS = {
-    sigil:       '<rect x="4" y="4" width="12" height="12" rx="1" fill="none"/><circle cx="10" cy="10" r="2.6" fill="none"/>',
-    garden:      '<circle cx="10" cy="7" r="2.4" fill="none"/><path d="M10 9.5 v6 M10 12 q-2.4 0.4 -3 -1.6 M10 13 q2.4 0.4 3 -1.6" fill="none"/>',
-    satchel:     '<path d="M5 8 h10 v8 h-10 z" fill="none"/><path d="M8 8 v-2 a2 2 0 0 1 4 0 v2" fill="none"/>',
-    sea:         '<path d="M3 9 q2.5 -2.5 5 0 t5 0 t4 0" fill="none"/><path d="M3 13 q2.5 -2.5 5 0 t5 0 t4 0" fill="none"/>',
-    buddy:      '<circle cx="10" cy="12" r="5" fill="none"/><path d="M10 3 c1.6 2 1.6 3.2 0 4.6 c-1.6 -1.4 -1.6 -2.6 0 -4.6 z" fill="currentColor" fill-opacity="0.35" stroke="none"/>',
-    abstract:    '<rect x="4" y="4" width="12" height="12" fill="none"/><path d="M7 10 h6 m-3 -3 v6" fill="none"/>',
-    games:       '<circle cx="10" cy="8" r="4.5" fill="none"/><path d="M8 13.5 h4 v3 h-4 z" fill="none"/>',
-    divination:  '<rect x="6" y="3" width="8" height="13" rx="1" fill="none"/><path d="M10 7 v5 m-2.5 -2.5 h5" fill="none"/>',
-    learn:       '<rect x="4" y="4" width="12" height="12" fill="none"/><path d="M4 8 h12 m-12 4 h12 m-12 4 h8" fill="none"/>',
-    methodology: '<rect x="4" y="3" width="12" height="14" fill="none"/><circle cx="10" cy="13" r="2.5" fill="none"/><path d="M7 6.5 h6" fill="none"/>',
-    dreams:      '<path d="M12.5 4 a5.2 5.2 0 1 0 2.6 8.4 a5.6 5.6 0 0 1 -2.6 -8.4 z M15 4 h1 v1 h-1 z M16 6 h1 v1 h-1 z" fill="none"/>',
-    relation:    '<circle cx="7" cy="10" r="3.5" fill="none"/><circle cx="13" cy="10" r="3.5" fill="none"/>',
-    trash:       '<path d="M14 4 a4 4 0 0 1 -4 4 l-4 4 m4 -4 h3" fill="none"/>'
+  // Bezel carving → witnessed work. Each pairing is documented where it
+  // comes from: ruby's thread and inquiry's compass are named in the
+  // personas cast note; learn/hole-punch and relation/grate in the
+  // carvings' own theme comments; the rest are material rhymes
+  // (stone↔stone room, candle↔sea, bell↔buddy, bulb↔games marquee,
+  // tower↔cards, nib↔ledger binds, glyph↔ghost room, hook↔burials).
+  var CARVING_WORK = {
+    stone: 'sigil', thread: 'garden', candle: 'sea', bell: 'buddy',
+    glyph: 'abstract', bulb: 'games', 'tower-rev': 'divination',
+    'hole-punch': 'learn', nib: 'relation', compass: 'dreams',
+    grate: 'methodology', hook: 'trash'
   };
 
   function state() {
@@ -163,7 +157,7 @@
       }));
     } catch (e) { /* the room never breaks for a prompt */ }
 
-    // the traveller says it at the bar, in their own accent, citation ready
+    // the traveller says it at the carving, in their own accent, citation ready
     if (tip) {
       openTip(id);
       tip.innerHTML = '<p class="tw-line tw-prompt">'
@@ -178,16 +172,15 @@
     }
   }
 
-  // ── the bar + the beside-each-tier line ───────────────────────────────
+  // ── the carvings + the beside-each-tier line ────────────────────────
 
-  var container = null;
-  var bar = null;
   var tip = null;
   var segments = {};
   var activeId = null;
   var hideTimer = null;
   var tipSig = null;
   var prevLit = null; // null until the first render — the baseline never fires
+  var bound = false;
 
   function persona(id) { return PERSONAS[id] || {}; }
 
@@ -207,52 +200,49 @@
     el.style.setProperty('--wa-glow', accent + '66');
   }
 
-  function buildBar() {
-    container = document.createElement('div');
-    container.className = 'twelve-works';
-    container.id = 'twelve-works';
-    container.setAttribute('role', 'group');
-    container.setAttribute('aria-label', 'the twelve works — one per traveller');
-
+  // The works live in the bezel carvings now (user request — the top bar
+  // is gone). Same twelve, same tiers, same prompts; only the scholar's
+  // shelf moved onto the machine's skin. carvings.js renders first
+  // (earlier script tag); retry a few frames in case it hasn't.
+  function bindCarvings(tries) {
+    tries = tries == null ? 30 : tries;
+    var found = false;
+    for (var carving in CARVING_WORK) {
+      if (!Object.prototype.hasOwnProperty.call(CARVING_WORK, carving)) continue;
+      var id = CARVING_WORK[carving];
+      var el = document.querySelector('.carving[data-id="' + carving + '"]');
+      if (!el) continue;
+      found = true;
+      (function (workId, node) {
+        node.classList.add('has-work');
+        node.tabIndex = 0;
+        node.setAttribute('role', 'button');
+        accentVars(node, workId);
+        node.addEventListener('mouseenter', function () { openTip(workId); });
+        node.addEventListener('mouseleave', scheduleHide);
+        node.addEventListener('focus', function () { openTip(workId); });
+        node.addEventListener('focusout', function (e) {
+          if (!tip || !tip.contains(e.relatedTarget)) hideTip();
+        });
+        node.addEventListener('click', function () { generateFor(workId); });
+        node.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); generateFor(workId); }
+          if (e.key === 'Escape') { hideTip(); node.blur(); }
+        });
+        segments[workId] = node;
+      })(id, el);
+    }
+    if (!found && tries > 0) {
+      requestAnimationFrame(function () { bindCarvings(tries - 1); });
+      return;
+    }
     tip = document.createElement('div');
     tip.className = 'twelve-works-tip';
     tip.hidden = true;
-    container.appendChild(tip);
-
-    bar = document.createElement('div');
-    bar.className = 'twelve-works-bar';
-    container.appendChild(bar);
-
-    for (var i = 0; i < ORDER.length; i++) {
-      (function (id) {
-        var seg = document.createElement('div');
-        seg.className = 'twelve-work';
-        seg.dataset.id = id;
-        seg.tabIndex = 0;
-        seg.setAttribute('role', 'img');
-        accentVars(seg, id);
-        seg.innerHTML = '<svg viewBox="0 0 20 20" aria-hidden="true">' + (GLYPHS[id] || '') + '</svg>';
-        seg.addEventListener('mouseenter', function () { openTip(id); });
-        seg.addEventListener('mouseleave', scheduleHide);
-        seg.addEventListener('focus', function () { openTip(id); });
-        seg.addEventListener('focusout', function (e) {
-          if (!tip || !tip.contains(e.relatedTarget)) hideTip();
-        });
-        seg.addEventListener('click', function () { generateFor(id); });
-        seg.addEventListener('keydown', function (e) {
-          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); generateFor(id); }
-          if (e.key === 'Escape') { hideTip(); seg.blur(); }
-        });
-        bar.appendChild(seg);
-        segments[id] = seg;
-      })(ORDER[i]);
-    }
-
-    tip.addEventListener('mouseenter', cancelHide);
-    tip.addEventListener('mouseleave', scheduleHide);
-
-    var stage = document.getElementById('desktop');
-    stage.appendChild(container);
+    tip.addEventListener('click', onTipClick);
+    document.body.appendChild(tip);
+    bound = true;
+    render();
   }
 
   function cancelHide() {
@@ -265,18 +255,30 @@
   }
 
   function openTip(id) {
+    if (!tip) return;
     cancelHide();
     activeId = id;
     accentVars(tip, id);
     tip.hidden = false;      // visible before measuring (hidden → width 0)
-    fillTip(id);    // clamp above the bar: keep the tip inside the container's span
-    var seg = segments[id];
-    if (seg) {
-      var left = seg.offsetLeft + seg.offsetWidth / 2 - tip.offsetWidth / 2;
-      var max = container.clientWidth - tip.offsetWidth;
-      tip.style.left = Math.max(0, Math.min(left, max)) + 'px';
-      var anchor = seg.offsetLeft + seg.offsetWidth / 2 - parseFloat(tip.style.left);
-      tip.style.setProperty('--tw-anchor', Math.max(14, Math.min(anchor, tip.offsetWidth - 14)) + 'px');
+    tip.classList.remove('above');
+    fillTip(id);
+    // anchor beside the carving: below it when it sits high, above it when
+    // it sits low; clamped to the viewport with room to spare.
+    var node = segments[id];
+    if (node) {
+      var r = node.getBoundingClientRect();
+      var tw = tip.offsetWidth, th = tip.offsetHeight;
+      var cx = r.left + r.width / 2;
+      var left = Math.max(12, Math.min(cx - tw / 2, window.innerWidth - tw - 12));
+      var top = r.bottom + 10;
+      if (top + th > window.innerHeight - 12) {
+        top = Math.max(12, r.top - th - 10);
+        tip.classList.add('above');
+      }
+      tip.style.left = left + 'px';
+      tip.style.top = top + 'px';
+      var anchor = Math.max(14, Math.min(cx - left, tw - 14));
+      tip.style.setProperty('--tw-anchor', anchor + 'px');
     }
   }
 
@@ -347,7 +349,7 @@
 
   function render() {
     var st = state();
-    if (!st || !bar) return;
+    if (!st || !bound) return;
     var s = st.get();
     var lit = litMap(s);
 
@@ -355,7 +357,7 @@
       var id = ORDER[i];
       var seg = segments[id];
       if (!seg) continue;
-      seg.classList.toggle('lit', !!lit[id]);
+      seg.classList.toggle('tw-lit', !!lit[id]);
       seg.setAttribute('aria-label', ariaFor(id, !!lit[id]));
     }
 
@@ -379,13 +381,11 @@
   function init() {
     if (!document.getElementById('desktop')) return; // desktop-only surface
     if (!WORK_BY_ID.sigil) return;                   // data missing — stay quiet
-    buildBar();
-    tip.addEventListener('click', onTipClick);
+    bindCarvings();
 
     var st = state();
     if (st && st.on) st.on('change', render);
     window.addEventListener('pageshow', render); // bfcache restore: resync like constellation.js
-    render();
   }
 
   window.Liber = window.Liber || {};

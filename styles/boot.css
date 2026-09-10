@@ -79,3 +79,43 @@
   background: #aa0000;
   color: #2a0000;
 }
+
+.state-boot .boot-start:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.state-boot .boot-letter {
+  max-width: 34rem;
+  max-height: 38vh;
+  overflow-y: auto;
+  text-align: left;
+  font-size: clamp(0.85rem, 1.4vw, 1rem);
+  line-height: 1.55;
+  color: #d8a0a0;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid #5a0000;
+  padding: 1em 1.2em;
+  margin-bottom: 1.2em;
+}
+
+.state-boot .boot-letter p { margin: 0 0 0.8em; }
+.state-boot .boot-letter p:last-child { margin-bottom: 0; }
+.state-boot .boot-letter a { color: #ff8080; }
+
+.state-boot .boot-consent {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  margin-bottom: 1.2em;
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+  color: #d8a0a0;
+  cursor: pointer;
+  user-select: none;
+}
+
+.state-boot .boot-consent input {
+  width: 1.1em;
+  height: 1.1em;
+  accent-color: #aa0000;
+}

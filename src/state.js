@@ -41,6 +41,9 @@
     bests: {},               // per-booth personal bests { boothId: value } (WS5)
     ambient: null,           // per-visit ambient prompt bookkeeping { seed, fired: [] }
     chat: null,              // LiberChat: { unread: {Buddy: n}, unlocked: [], pred: {}, lastBuddyMsg: 0, inbox: [] }
+    affinity: null,          // relationship-kept scores per traveller { whimsy: n, ... }
+    unlocks: null,           // affinity unlocks { toybox: true, ... }
+    unlocksSeen: null,       // invite lines already shown [ids]
   };
 
   function load() {

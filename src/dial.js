@@ -131,7 +131,12 @@
       var s = window.Liber.state.get() || {};
       var visited = s.visited || {};
       visited[v.id] = Date.now();
-      window.Liber.state.set({ visited: visited });
+      var patch = { visited: visited };
+      // Ruby's thimble pot grows while you are elsewhere: every room
+      // visit waters it. Derived idleness, never a grind.
+      var th = s.thimble || { visits: 0, base: 0, harvested: 0 };
+      patch.thimble = { visits: (th.visits || 0) + 1, base: th.base || 0, harvested: th.harvested || 0 };
+      window.Liber.state.set(patch);
     }
     window.location.href = v.id + '.html';
   }

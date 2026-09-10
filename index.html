@@ -39,7 +39,19 @@
             <div class="state-boot" data-state="boot">
               <div class="boot-rect">
                 <h1 class="boot-title">Liber.OS</h1>
-                <button class="boot-start" id="boot-start" type="button">enter</button>
+                <div class="boot-letter" id="boot-letter">
+                  <p>Hi there!</p>
+                  <p>My name is RAT, and this is my project. Before you get started there are a few fourth wall breaks I want to get out of the way for safety reasons.</p>
+                  <p>This is an art therapy tool! Like a workbook you might pick up in a self help section, it’s research-backed but I am just a university student making this for fun and to help others. You should not use it as a replacement for therapy, and if you are in crisis you should call a crisis line, not use this tool for any reason.</p>
+                  <p>Secondly, this tool is based on IFS and “Amplification” a concept in analytical psychology. It is contraindicated (could make worse) situations where people are suffering from immediate, unprocessed trauma or have C-PTSD and exploring other “parts” of the identity could be harmful.</p>
+                  <p>If you have feedback for this, please send me an email here:<br/><a href="mailto:libervacui@gmail.com">libervacui@gmail.com</a></p>
+                  <p>Thanks for trying out my tool!</p>
+                </div>
+                <label class="boot-consent" for="boot-consent-check">
+                  <input type="checkbox" id="boot-consent-check"/>
+                  <span>I understand the risks, and wish to proceed</span>
+                </label>
+                <button class="boot-start" id="boot-start" type="button" disabled>enter</button>
               </div>
             </div>
           </div>
@@ -56,12 +68,30 @@
   <script src="src/shadow.js"></script>
   <script src="src/carvings.js"></script>
   <script>
-    document.getElementById('boot-start').addEventListener('click', function () {
-      if (window.Liber && window.Liber.state) {
-        window.Liber.state.set({ state: 'loading' });
-      }
-      window.location.href = 'loading.html';
-    });
+    (function () {
+      var KEY = 'liber_vacui_consent';
+      var box = document.getElementById('boot-consent-check');
+      var btn = document.getElementById('boot-start');
+      function sync() { if (btn) btn.disabled = !(box && box.checked); }
+      try {
+        if (box && btn && localStorage.getItem(KEY)) { box.checked = true; }
+      } catch (e) {}
+      if (box) box.addEventListener('change', function () {
+        try {
+          if (box.checked) localStorage.setItem(KEY, '1');
+          else localStorage.removeItem(KEY);
+        } catch (e) {}
+        sync();
+      });
+      sync();
+      if (btn) btn.addEventListener('click', function () {
+        if (btn.disabled) return;
+        if (window.Liber && window.Liber.state) {
+          window.Liber.state.set({ state: 'loading' });
+        }
+        window.location.href = 'loading.html';
+      });
+    })();
   </script>
 </body>
 </html>

@@ -1,6 +1,21 @@
 # LiberOS changelog
 
-## 2.5.0 — Pip's toybox, native powder, chat asks your name
+## 2.6.0 — consent gate, affinity unlocks, finished chat, glyph works, three booths, weaver, soundscape
+### New
+- Boot consent gate: RAT's letter with a checkbox; enter stays disabled
+  until checked, once per device, wipe re-arms it.
+- Affinity unlocks: kept work opens rooms through relationships — tide pool
+  (vanir, releases), ink storm (sealed chats), thimble garden (plantings),
+  constellation weaver (binds). Invites arrive once, in-voice, never as grind.
+- LiberChat finished: typing shimmer, transcript export, name asked before
+  any patter.
+- Twelve works live in the bezel carvings now: tier glow, prompt tips, same
+  grounded prompts. The top bar is gone.
+- Three booths under the tent: tide pool, ink storm, thimble garden (petals
+  for every paint box). Weaver: the desktop constellation plays — pluck an
+  orbit, drag to re-tie.
+- Soundscape: generative beds per room, four traveller leitmotifs, gains in
+  settings. Silence until the first gesture, always.
 ### New
 - Pip's toybox room, built natively: the full powder engine (sand, water,
   fire, oil, salt, seed, steam, sprouts, wall) with element jars, a

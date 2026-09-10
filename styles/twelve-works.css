@@ -1,95 +1,29 @@
 /* ============================================================================
-   twelve-works.css — the twelve works bar (shell chrome, not persona CSS:
-   same family as dial.css / status-line.css). A 12-segment frieze above the
-   constellation: one segment per traveller, unlit ghost until you first make
-   something in their app. Beside-each-tier content lives in the hover/focus
-   line above the bar. Persona colours arrive as --wa / --wa-dim / --wa-glow,
-   set per segment from data/personas.data.js by src/twelve-works.js — the
-   register stays the single source (no hexes duplicated here).
+   twelve-works.css — the twelve works live in the bezel carvings now (no
+   bar: user request). A carving with witnessed work glows in its
+   traveller's accent; the beside-each-tier tip opens beside the carving,
+   fixed to the viewport. Shell chrome, not persona CSS: same family as
+   dial.css / status-line.css. Persona colours arrive as --wa / --wa-dim /
+   --wa-glow, set per carving from data/personas.data.js by
+   src/twelve-works.js — the register stays the single source.
    ============================================================================ */
 
-.twelve-works {
-  position: absolute;
-  /* On the very top of the monitor screen (user request). Left margin
-     clears the stage edge; right margin clears the radial clock (top 12 /
-     right 16 / 96 wide) and the repeat-? (top 14 / right 40). The
-     beside-line opens BELOW the bar — no room above at this height. */
-  top: 10px;
-  left: 24px;
-  right: 148px;
-  z-index: 20;
-  pointer-events: none;
+/* a witnessed carving warms in its traveller's accent (composes with the
+   theme .active glow — different hue, same skin) */
+.carving.has-work { cursor: pointer; pointer-events: auto; }
+
+.carving.has-work:hover,
+.carving.has-work:focus {
+  color: rgba(200, 168, 120, 0.8);
 }
 
-/* Pre-tutorial the screen belongs to the big ? and wanderlust only. */
-.state-desktop:not(.tutorial-done) .twelve-works { display: none; }
-
-.twelve-works-bar {
-  display: flex;
-  gap: 3px;
-  height: 22px;
+.carving.tw-lit {
+  color: var(--wa, #c8a878);
+  filter: drop-shadow(0 0 3px var(--wa-glow, rgba(200, 168, 120, 0.4)))
+    drop-shadow(0 0 7px var(--wa-glow, rgba(200, 168, 120, 0.4)));
 }
 
-/* One segment per traveller. Unlit: an outline ghost of their material.
-   Lit: their material fills and the carving-glyph glows, subtly. */
-.twelve-work {
-  flex: 1 1 0;
-  pointer-events: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--wa-dim, rgba(200, 168, 120, 0.42));
-  border-radius: 2px;
-  background: linear-gradient(180deg, rgba(255, 240, 210, 0.05) 0%, rgba(0, 0, 0, 0.22) 100%);
-  opacity: 0.62;
-  transition: opacity 0.3s ease, box-shadow 0.3s ease;
-  cursor: default;
-}
-
-/* the notch anchors the beside-line to the hovered tier (JS sets --tw-anchor) */
-.twelve-works-tip::after {
-  content: '';
-  position: absolute;
-  top: -6px;
-  left: var(--tw-anchor, 50%);
-  margin-left: -6px;
-  border: 6px solid transparent;
-  border-bottom-color: #4a2818;
-}
-
-.twelve-work svg {
-  width: 13px;
-  height: 13px;
-  stroke: var(--wa, #c8a878);
-  stroke-width: 1.4;
-  fill: none;
-}
-
-.twelve-work.lit {
-  opacity: 1;
-  border-color: var(--wa, #c8a878);
-  background:
-    linear-gradient(180deg, rgba(255, 240, 210, 0.18) 0%, rgba(0, 0, 0, 0.28) 100%),
-    var(--wa, #c8a878);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 240, 210, 0.3),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.35),
-    0 0 9px var(--wa-glow, rgba(200, 168, 120, 0.4));
-}
-
-.twelve-work.lit svg {
-  stroke: #fff6e0;
-  filter: drop-shadow(0 0 3px var(--wa, #c8a878));
-}
-
-/* the ghost warms when inspected — hover or keyboard focus, same reveal */
-.twelve-work:hover,
-.twelve-work:focus {
-  opacity: 0.9;
-  box-shadow: 0 0 8px var(--wa-glow, rgba(200, 168, 120, 0.35));
-}
-
-.twelve-work:focus-visible {
+.carving.has-work:focus-visible {
   outline: 2px solid var(--wa, #c8a878);
   outline-offset: 2px;
 }
@@ -97,10 +31,7 @@
 /* ── the beside-each-tier line (hover/focus gated; never proactive) ───── */
 
 .twelve-works-tip {
-  position: absolute;
-  /* the bar hugs the monitor top — the beside-line opens BELOW it */
-  top: calc(100% + 6px);
-  left: 0;
+  position: fixed;
   max-width: 600px;
   display: flex;
   flex-direction: column;
@@ -116,9 +47,27 @@
   font-size: 1rem;
   line-height: 1.35;
   color: rgba(214, 186, 148, 0.95);
-  pointer-events: auto;
-  z-index: 21;
+  z-index: 60;
   transition: opacity 0.2s ease;
+}
+
+/* the notch anchors the beside-line to the witnessed carving (JS sets
+   --tw-anchor); flipped when the tip opens above low carvings */
+.twelve-works-tip::after {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: var(--tw-anchor, 50%);
+  margin-left: -6px;
+  border: 6px solid transparent;
+  border-bottom-color: #4a2818;
+}
+
+.twelve-works-tip.above::after {
+  top: auto;
+  bottom: -6px;
+  border-bottom-color: transparent;
+  border-top-color: #4a2818;
 }
 
 .twelve-works-tip[hidden] { display: none; }
@@ -207,7 +156,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .twelve-work,
+  .carving.has-work,
+  .carving.tw-lit,
   .twelve-works-tip,
   .twelve-works-fn { transition: none; }
 }

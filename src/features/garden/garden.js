@@ -334,6 +334,9 @@
       shot: shot,
       bloom: null
     });
+    if (window.Liber && window.Liber.soundscape) {
+      try { window.Liber.soundscape.motif('ruby'); } catch (e) {}
+    }
     closeDraft('planted in the bed. a new empty stone waits below.');
     scrambleGem();
     renderBed();

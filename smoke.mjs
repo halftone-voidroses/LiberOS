@@ -82,7 +82,10 @@ const bootTitle = await page.textContent('.boot-title')
 sassert(bootTitle.toLowerCase().includes('liber'), 'boot title missing')
 console.log(`   boot title: "${bootTitle}"`)
 
-console.log('2. Click [ start ]')
+console.log('2. Consent gate blocks, then opens')
+const startDisabled = await page.getAttribute('#boot-start', 'disabled')
+sassert(startDisabled !== null, 'enter must start disabled until consent')
+await page.check('#boot-consent-check')
 await page.click('#boot-start')
 await page.waitForURL('**/loading.html', { timeout: 5000 })
 

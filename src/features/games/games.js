@@ -21,8 +21,38 @@
     { id: 'circles', name: 'relationship circles', glyph: '◎',
       pitch: 'Three rings: closest, friends, distant. Write the names where they actually belong — not where they wish they belonged. An honest seating chart. Keep it.' },
     { id: 'sand', name: 'powder tent', glyph: '▦',
-      pitch: 'Liber powder! Pour sand, splash water, strike fire — it all falls and flows like the real stuff. Build a little world out of grains, then keep a picture before it settles.' }
+      pitch: 'Liber powder! Pour sand, splash water, strike fire — it all falls and flows like the real stuff. Build a little world out of grains, then keep a picture before it settles.' },
+    { id: 'tidepool', name: 'tide pool', glyph: '≋', unlock: 'tidepool',
+      pitch: 'Vanir’s pool, down in the deep. Drop a feeling while the tide is high and it floats; drop it low and it strands, waiting. The pool decides the pacing — you decide the honesty. No winning.',
+      hint: '??? — the deep opens to those who release.' },
+    { id: 'inkstorm', name: 'ink storm', glyph: '≣', unlock: 'inkstorm',
+      pitch: 'Entity404’s terminal. Glyphs rain; type the word to execute it. Missed words simply dissolve — no failing here. The storm slows when you struggle, and tells you so, kindly.',
+      hint: '??? — static gathers where words are sealed.' },
+    { id: 'thimble', name: 'thimble garden', glyph: '❀', unlock: 'thimble',
+      pitch: 'Ruby’s thimble pot. It grows while you are elsewhere in the OS — visit rooms, come back, find leaves. Harvest grants a petal for every paint box and a pressed flower for the book.',
+      hint: '??? — ruby watches patient gardeners.' }
   ];
+
+  var WHO_NAME = { whimsy: 'whimsy wow', vanir: 'vanir', ruby: 'ruby', elizabeth: 'e-lizabeth', riason: 'riason' };
+
+  function affinity() { return (window.Liber && window.Liber.affinity) || null; }
+
+  function isUnlocked(g) {
+    if (!g.unlock) return true;
+    var a = affinity();
+    try { return a ? !!a.unlocked(g.unlock) : false; } catch (e) { return false; }
+  }
+
+  // invite lines, shown once each in the barker's voice-box
+  function inviteLines() {
+    var a = affinity();
+    if (!a) return [];
+    try {
+      var inv = a.invites() || [];
+      inv.forEach(function (u) { try { a.seen(u.id); } catch (e) {} });
+      return inv;
+    } catch (e) { return []; }
+  }
 
   var current = null;
 
@@ -31,12 +61,13 @@
     grid.innerHTML = '';
     for (var i = 0; i < GAMES.length; i++) {
       (function (g) {
+        var locked = !isUnlocked(g);
         var div = document.createElement('button');
         div.type = 'button';
-        div.className = 'games-booth' + (current && current.id === g.id ? ' current' : '');
+        div.className = 'games-booth' + (current && current.id === g.id ? ' current' : '') + (locked ? ' locked' : '');
         div.setAttribute('data-game', g.id);
-        div.innerHTML = '<span class="games-booth-glyph">' + g.glyph + '</span>'
-          + '<span class="games-booth-name">' + esc(g.name) + '</span>';
+        div.innerHTML = '<span class="games-booth-glyph">' + (locked ? '?' : g.glyph) + '</span>'
+          + '<span class="games-booth-name">' + esc(locked ? '???' : g.name) + '</span>';
         div.addEventListener('click', function () { selectGame(g); });
         grid.appendChild(div);
       })(GAMES[i]);
@@ -45,12 +76,32 @@
 
   function paintDesc(g) {
     if (!descBox) return;
-    descBox.innerHTML = '<div class="games-desc-name">' + esc(g.name) + '</div><div>' + esc(g.pitch) + '</div>';
+    var html = '';
+    inviteLines().forEach(function (u) {
+      html += '<div class="games-invite"><span class="games-invite-who">' + esc(WHO_NAME[u.who] || u.who) + '</span> ' + esc(u.invite) + '</div>';
+    });
+    html += '<div class="games-desc-name">' + esc(g.name) + '</div><div>' + esc(g.pitch) + '</div>';
+    descBox.innerHTML = html;
+  }
+
+  function paintLocked(g) {
+    if (descBox) {
+      descBox.innerHTML = '<div class="games-desc-name">???</div><div>' + esc(g.hint || 'not yet. keep playing.') + '</div>';
+    }
+    if (stage) {
+      closeStage();
+      stage.removeAttribute('inert');
+      stage.innerHTML = '<div class="games-stage-inner"><div class="games-locked">'
+        + '<span class="games-locked-glyph">?</span>'
+        + '<div>' + esc(g.hint || 'not yet. keep playing.') + '</div>'
+        + '</div></div>';
+    }
   }
 
   function selectGame(g) {
     current = g;
     buildPicker();
+    if (!isUnlocked(g)) { paintLocked(g); return; }
     paintDesc(g);
     openPlay(g);
   }
@@ -165,6 +216,9 @@
     if (b.id === 'shield') return playPaint(b, body, 'shield');
     if (b.id === 'circles') return playPaint(b, body, 'circles');
     if (b.id === 'sand') return playSand(b, body);
+    if (b.id === 'tidepool') return playTide(b, body);
+    if (b.id === 'inkstorm') return playStorm(b, body);
+    if (b.id === 'thimble') return playThimble(b, body);
   }
 
   function thunk() {
@@ -438,7 +492,14 @@
     }
 
     var bar = document.getElementById('paint-bar');
-    PAINT_COLORS.forEach(function (c, i) {
+    var petalColors = PAINT_COLORS.slice();
+    try {
+      var gs = (window.Liber && window.Liber.state && window.Liber.state.get()) || {};
+      (gs.palette || []).forEach(function (p) {
+        if (petalColors.indexOf(p) < 0) petalColors.push(p);
+      });
+    } catch (e) {}
+    petalColors.forEach(function (c, i) {
       var sw = document.createElement('button');
       sw.type = 'button';
       sw.className = 'paint-swatch' + (i === 0 ? ' on' : '');
@@ -758,6 +819,392 @@
     });
   }
 
+  // ── tide pool: Vanir's game ───────────────────────────────────────
+  // A rock pool on a slow timer. Drop a feeling at high tide and it
+  // floats; at low tide it strands. Release lets the floaters out.
+  // No winning — the pool decides the pacing, you decide the honesty.
+
+  function playTide(b, body) {
+    body.innerHTML =
+      '<div class="tide-wrap">'
+      + '<canvas class="tide-canvas" id="tide-canvas" width="480" height="360"></canvas>'
+      + '<div class="tide-row"><input id="tide-input" maxlength="40" aria-label="drop a feeling" placeholder="a feeling"/>'
+      + '<button type="button" class="games-action" id="tide-drop">drop it</button></div>'
+      + '<div class="tide-hint" id="tide-hint">drop a feeling. high tide floats it, low tide strands it.</div>'
+      + '<div class="games-actions" style="justify-content:center">'
+      + '<button type="button" class="games-action" id="tide-release">release</button>'
+      + '<button type="button" class="games-action" id="tide-keep">keep it</button>'
+      + '</div>'
+      + '<div class="games-result" id="tide-result"></div>'
+      + '</div>';
+
+    var cv = document.getElementById('tide-canvas');
+    var ctx = cv.getContext('2d');
+    var t0 = Date.now();
+    var PERIOD = 75000;
+    var items = [];
+    var dropped = 0, released = 0;
+    var lastTurn = 1;
+    var raf = 0;
+
+    function tide() { return Math.sin(((Date.now() - t0) / PERIOD) * Math.PI * 2); }
+    function waterline() { return 150 + 95 * tide(); }
+    function tideWord() {
+      var s = tide();
+      if (s > 0.5) return 'high';
+      if (s < -0.5) return 'low';
+      return Math.cos(((Date.now() - t0) / PERIOD) * Math.PI * 2) > 0 ? 'flowing' : 'ebbing';
+    }
+
+    function drop() {
+      var inp = document.getElementById('tide-input');
+      var text = inp ? inp.value.trim().slice(0, 40) : '';
+      if (!text) return;
+      if (inp) inp.value = '';
+      var high = tide() > -0.1;
+      items.push({ text: text, floating: high, x: 60 + ((dropped * 97) % 360), born: Date.now() });
+      dropped++;
+      thunk();
+    }
+
+    function paint() {
+      var now = Date.now();
+      var wl = waterline();
+      ctx.fillStyle = '#0a0805';
+      ctx.fillRect(0, 0, 480, 360);
+      // sand bed
+      ctx.fillStyle = '#2a1c0e';
+      ctx.fillRect(0, 320, 480, 40);
+      // water
+      var grd = ctx.createLinearGradient(0, wl - 40, 0, 360);
+      grd.addColorStop(0, 'rgba(74,138,200,0.12)');
+      grd.addColorStop(1, 'rgba(74,138,200,0.55)');
+      ctx.fillStyle = grd;
+      ctx.fillRect(0, wl, 480, 360 - wl);
+      ctx.strokeStyle = 'rgba(140,190,230,0.8)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      for (var x = 0; x <= 480; x += 16) {
+        var y = wl + 4 * Math.sin(x / 40 + now / 900);
+        if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+      // night tides glow faintly teal
+      var hour = new Date().getHours();
+      var night = hour < 5 || hour >= 21;
+      // feelings
+      ctx.font = 'italic 14px Georgia';
+      ctx.textAlign = 'center';
+      for (var i = items.length - 1; i >= 0; i--) {
+        var it = items[i];
+        var alpha = it.alpha == null ? 1 : it.alpha;
+        if (it.floating) {
+          var by = wl - 16 + 5 * Math.sin(now / 600 + i * 1.7);
+          ctx.fillStyle = night
+            ? 'rgba(120,220,210,' + alpha + ')'
+            : 'rgba(232,220,192,' + alpha + ')';
+          ctx.fillText(it.text, it.x, by);
+          if (it.leaving) {
+            it.alpha = alpha - 0.03;
+            it.x += 1.2;
+            if (it.alpha <= 0) { items.splice(i, 1); released++; }
+          }
+        } else {
+          var pulse = 0.65 + 0.25 * Math.sin(now / 500 + i);
+          ctx.fillStyle = 'rgba(200,170,130,' + (alpha * pulse) + ')';
+          ctx.fillText(it.text, it.x, 300);
+        }
+      }
+      // tide-turn bell
+      var turn = tide() >= 0 ? 1 : -1;
+      if (turn !== lastTurn) {
+        lastTurn = turn;
+        if (window.Liber && window.Liber.sound) { try { window.Liber.sound.play('tick'); } catch (e) {} }
+      }
+    }
+
+    function loop() {
+      if (!document.body.contains(cv)) return;
+      paint();
+      raf = requestAnimationFrame(loop);
+    }
+    raf = requestAnimationFrame(loop);
+    if (stage) {
+      stage._teardown = function () {
+        try { cancelAnimationFrame(raf); } catch (e) {}
+      };
+    }
+
+    var dropBtn = document.getElementById('tide-drop');
+    var inp = document.getElementById('tide-input');
+    if (dropBtn) dropBtn.addEventListener('click', drop);
+    if (inp) inp.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); drop(); }
+    });
+    var rel = document.getElementById('tide-release');
+    if (rel) rel.addEventListener('click', function () {
+      var any = false;
+      items.forEach(function (it) { if (it.floating && !it.leaving) { it.leaving = true; any = true; } });
+      var result = document.getElementById('tide-result');
+      if (!any && result) result.textContent = 'nothing floats right now. wait for the tide, or drop at low water and sit with it.';
+      else thunk();
+    });
+    var keepBtn = document.getElementById('tide-keep');
+    var result2 = document.getElementById('tide-result');
+    if (keepBtn) keepBtn.addEventListener('click', function () {
+      if (!dropped) {
+        if (result2) result2.textContent = 'drop a feeling first — the pool is still empty.';
+        return;
+      }
+      var shot = thumb(cv);
+      var tw = tideWord();
+      promptSave(b, 'result: a pool at ' + tw + ' tide, ' + released + ' released.', function () {
+        saveToDesktopAndSatchel(b, { dropped: dropped, released: released, tide: tw }, shot);
+        if (result2) result2.textContent = 'kept. the tent remembers.';
+      }, null);
+    });
+  }
+
+  // ── ink storm: Entity404's game ─────────────────────────────────────
+  // A terminal rains glyphs; type the shown word to "execute" it. Missed
+  // words dissolve — zero fail state. The storm slows when you struggle
+  // and tells you so, kindly.
+
+  var STORM_WORDS = ['tide', 'wax', 'ember', 'moth', 'loam', 'bell', 'reed', 'ash', 'owl', 'fern', 'dune', 'wren', 'moss', 'tallow', 'silt', 'hush'];
+
+  function playStorm(b, body) {
+    body.innerHTML =
+      '<div class="storm-wrap">'
+      + '<canvas class="storm-canvas" id="storm-canvas" width="480" height="360"></canvas>'
+      + '<div class="storm-buffer" id="storm-buffer" aria-hidden="true">_</div>'
+      + '<div class="storm-hint" id="storm-hint">type the falling word to execute it.</div>'
+      + '<div class="games-actions" style="justify-content:center">'
+      + '<button type="button" class="games-action" id="storm-keep">keep it</button>'
+      + '</div>'
+      + '<div class="games-result" id="storm-result"></div>'
+      + '</div>';
+
+    var cv = document.getElementById('storm-canvas');
+    var ctx = cv.getContext('2d');
+    var bufEl = document.getElementById('storm-buffer');
+    var hintEl = document.getElementById('storm-hint');
+    var words = [];
+    var buffer = '';
+    var spawned = 0;
+    var executed = 0, missed = 0, missStreak = 0;
+    var speed = 0.9;
+    var lastSpawn = 0;
+    var spawnMs = 2600;
+    var slowedNote = false;
+    var raf = 0;
+    var flashes = [];
+
+    function spawn(now) {
+      var cols = 6;
+      words.push({
+        text: STORM_WORDS[spawned % STORM_WORDS.length],
+        x: 40 + ((spawned * 89) % 400),
+        y: -12,
+        hit: false
+      });
+      spawned++;
+      lastSpawn = now;
+    }
+
+    function paint(now) {
+      ctx.fillStyle = '#020204';
+      ctx.fillRect(0, 0, 480, 360);
+      ctx.textAlign = 'left';
+      for (var i = words.length - 1; i >= 0; i--) {
+        var w = words[i];
+        w.y += speed;
+        if (w.y > 348) {
+          words.splice(i, 1);
+          missed++;
+          missStreak++;
+          if (missStreak >= 3 && speed > 0.35) {
+            speed = Math.max(0.35, speed - 0.12);
+            spawnMs = Math.min(6000, spawnMs * 1.1);
+            if (!slowedNote && hintEl) {
+              slowedNote = true;
+              hintEl.textContent = 'the storm slows for you. no hurry at all.';
+            }
+          }
+          continue;
+        }
+        var glow = w.hit ? 1 : 0.75;
+        ctx.font = '15px "Courier New", monospace';
+        ctx.fillStyle = w.hit ? 'rgba(255,255,255,' + glow + ')' : 'rgba(120,200,150,' + glow + ')';
+        ctx.fillText(w.text, w.x, w.y);
+        // phosphor trail
+        ctx.fillStyle = 'rgba(120,200,150,0.25)';
+        ctx.fillText(w.text, w.x, w.y - 16);
+      }
+      for (var f = flashes.length - 1; f >= 0; f--) {
+        flashes[f].a -= 0.06;
+        if (flashes[f].a <= 0) { flashes.splice(f, 1); continue; }
+        ctx.fillStyle = 'rgba(255,255,255,' + flashes[f].a + ')';
+        ctx.font = '15px "Courier New", monospace';
+        ctx.fillText(flashes[f].text, flashes[f].x, flashes[f].y);
+      }
+      if (bufEl) bufEl.textContent = '>' + (buffer || '') + '_';
+    }
+
+    function loop(now) {
+      if (!document.body.contains(cv)) return;
+      if (!lastSpawn) lastSpawn = now;
+      if (now - lastSpawn > spawnMs) spawn(now);
+      paint(now);
+      raf = requestAnimationFrame(loop);
+    }
+    raf = requestAnimationFrame(loop);
+
+    function onKey(e) {
+      if (!document.body.contains(cv)) return;
+      if (e.key === 'Backspace') { buffer = buffer.slice(0, -1); return; }
+      if (e.key.length !== 1 || !/[a-z]/i.test(e.key)) return;
+      buffer = (buffer + e.key.toLowerCase()).slice(-12);
+      for (var i = 0; i < words.length; i++) {
+        if (words[i].text === buffer) {
+          flashes.push({ text: words[i].text, x: words[i].x, y: words[i].y, a: 1 });
+          words.splice(i, 1);
+          buffer = '';
+          executed++;
+          missStreak = 0;
+          if (window.Liber && window.Liber.sound) { try { window.Liber.sound.play('tink'); } catch (err) {} }
+          break;
+        }
+      }
+    }
+    document.addEventListener('keydown', onKey);
+    if (stage) {
+      stage._teardown = function () {
+        try { cancelAnimationFrame(raf); } catch (e) {}
+        try { document.removeEventListener('keydown', onKey); } catch (e2) {}
+      };
+    }
+
+    var keepBtn = document.getElementById('storm-keep');
+    var result = document.getElementById('storm-result');
+    if (keepBtn) keepBtn.addEventListener('click', function () {
+      var total = executed + missed;
+      if (!total) {
+        if (result) result.textContent = 'let it rain a little first — the static is still gathering.';
+        return;
+      }
+      var shot = thumb(cv);
+      var ratio = executed / total;
+      var weather = ratio > 0.8
+        ? 'a clear night, ' + executed + ' lightning words'
+        : ratio > 0.4
+          ? 'steady drizzle, ' + executed + ' lightning words'
+          : 'a heavy storm, ' + executed + ' lightning words. nothing lost.';
+      promptSave(b, 'result: ' + weather + '.', function () {
+        saveToDesktopAndSatchel(b, { executed: executed, missed: missed, weather: weather }, shot);
+        if (result) result.textContent = 'kept. the tent remembers.';
+      }, null);
+    });
+  }
+
+  // ── thimble garden: Ruby's idle game ────────────────────────────────
+  // A thimble pot grows while you are elsewhere: one leaf per three rooms
+  // visited, capped at five. Harvest presses a flower and grants a petal
+  // to every paint box. Zero interaction required — pure ambient reward.
+
+  var THIMBLE_PETALS = ['#e08ab0', '#9ac8e8', '#c8e89a', '#e8d89a', '#d8a8e8'];
+
+  function thimbleState() {
+    var s = (window.Liber && window.Liber.state && window.Liber.state.get()) || {};
+    return s.thimble || { visits: 0, base: 0, harvested: 0 };
+  }
+  function thimbleStage(t) {
+    return Math.max(0, Math.min(5, Math.floor(((t.visits || 0) - (t.base || 0)) / 3)));
+  }
+
+  function playThimble(b, body) {
+    body.innerHTML =
+      '<div class="thimble-wrap">'
+      + '<canvas class="thimble-canvas" id="thimble-canvas" width="480" height="360"></canvas>'
+      + '<div class="thimble-hint" id="thimble-hint">it grows while you are elsewhere. visit rooms, come back.</div>'
+      + '<div class="games-actions" style="justify-content:center">'
+      + '<button type="button" class="games-action" id="thimble-harvest">harvest</button>'
+      + '</div>'
+      + '<div class="games-result" id="thimble-result"></div>'
+      + '</div>';
+
+    var cv = document.getElementById('thimble-canvas');
+    var ctx = cv.getContext('2d');
+    var result = document.getElementById('thimble-result');
+    var hint = document.getElementById('thimble-hint');
+
+    function draw() {
+      var t = thimbleState();
+      var stage = thimbleStage(t);
+      ctx.fillStyle = '#0d0805';
+      ctx.fillRect(0, 0, 480, 360);
+      // thimble pot
+      ctx.fillStyle = '#8a8a92';
+      ctx.beginPath();
+      ctx.moveTo(200, 220); ctx.lineTo(280, 220); ctx.lineTo(268, 300); ctx.lineTo(212, 300);
+      ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#3a2412';
+      ctx.fillRect(196, 210, 88, 14);
+      // leaves by stage
+      ctx.strokeStyle = '#3a8a3a';
+      ctx.fillStyle = '#3a8a3a';
+      ctx.lineWidth = 3;
+      for (var i = 0; i < stage; i++) {
+        var side = i % 2 === 0 ? -1 : 1;
+        var y = 200 - Math.floor(i / 2) * 34;
+        ctx.beginPath();
+        ctx.ellipse(240 + side * (20 + (i % 2) * 8), y, 22, 9, side * 0.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      if (stage >= 5) {
+        // bloom + dew sparkle
+        ctx.fillStyle = '#e08ab0';
+        ctx.beginPath(); ctx.arc(240, 96, 12, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#fff';
+        ctx.beginPath(); ctx.arc(236, 92, 3, 0, Math.PI * 2); ctx.fill();
+      }
+      ctx.fillStyle = '#a89070';
+      ctx.font = 'italic 14px Georgia';
+      ctx.textAlign = 'center';
+      ctx.fillText(stage === 0 ? 'an empty thimble. go elsewhere.' : stage + (stage === 1 ? ' leaf.' : ' leaves.'), 240, 336);
+      if (hint) {
+        hint.textContent = stage === 0
+          ? 'it grows while you are elsewhere. visit rooms, come back.'
+          : 'dew sparkles. harvest when ready — or let it keep growing.';
+      }
+    }
+    draw();
+
+    var harvest = document.getElementById('thimble-harvest');
+    if (harvest) harvest.addEventListener('click', function () {
+      var st = (window.Liber && window.Liber.state) || null;
+      if (!st) return;
+      var t = thimbleState();
+      var stage = thimbleStage(t);
+      if (!stage) {
+        if (result) result.textContent = 'nothing to harvest yet — go live a little, then return.';
+        return;
+      }
+      var shot = thumb(cv);
+      var petal = THIMBLE_PETALS[(t.harvested || 0) % THIMBLE_PETALS.length];
+      promptSave(b, 'result: ' + stage + ' leaves pressed, one ' + petal + ' petal for the paint boxes.', function () {
+        saveToDesktopAndSatchel(b, { leaves: stage, harvested: (t.harvested || 0) + 1, petal: petal }, shot);
+        try {
+          var g = st.get() || {};
+          var pal = Array.isArray(g.palette) ? g.palette.slice() : [];
+          if (pal.indexOf(petal) < 0) pal.push(petal);
+          st.set({ palette: pal, thimble: { visits: t.visits || 0, base: t.visits || 0, harvested: (t.harvested || 0) + 1 } });
+        } catch (e) {}
+        if (result) result.textContent = 'kept. a petal drifts to every paint box.';
+        draw();
+      }, null);
+    });
+  }
+
   // ── first-visit demo: the tutorial passes through games on its way to
   // the bind. Open the wheel, throw one dart through the Cursor's hands,
   // keep it, and move on. Every step falls through to advance().
@@ -765,7 +1212,7 @@
   document.addEventListener('DOMContentLoaded', function () {
     buildPicker();
     if (descBox && !descBox.querySelector('.games-desc-name')) {
-      descBox.innerHTML = '<div class="games-desc-name">pick a game, friend.</div><div>five games under one tent — the pitch is on the left, the play is on the right.</div>';
+      descBox.innerHTML = '<div class="games-desc-name">pick a game, friend.</div><div>eight games under one tent — the pitch is on the left, the play is on the right. some open as you play.</div>';
     }
 
     (function tutorialBooth() {

@@ -88,6 +88,15 @@
   var selectedArtifact = null;
   var lastSig = null;
 
+  // ── constellation weaver: the desktop as instrument ─────────────
+  // Unlocked through riason (five binds). Toggle the web playable:
+  // pluck an orbit and it hums its verb; drag one artifact onto
+  // another to re-tie the knot (same bind engine, spatial UI — the
+  // verb stays editable afterwards in the mini-menu). Binds are real
+  // and signposted as edits: this is the only game that writes.
+  var weaving = false;
+  var WEAVE_SCALE = [196.0, 220.0, 246.9, 293.7, 329.6, 392.0];
+
   // The orbit is a CSS animation on the rendered <g> — rebuilding the SVG
   // restarts it from zero. Cycling the dial writes `visited` on every press,
   // which reset the orbit each time (user report). Skip the rebuild unless
@@ -97,7 +106,8 @@
       s.learn.length, s.abstract.length, s.sea.length, s.garden.length, s.dreams.length,
       (s.methodology || []).length, (s.satchel || []).length,
       s.relations.length, s.tutorialDone ? 1 : 0].join('|')
-      + ':' + (s.relations || []).map(function (r) { return r.from + '>' + (r.to || 'buddy') + '>' + r.verb; }).join(',');
+      + ':' + (s.relations || []).map(function (r) { return r.from + '>' + (r.to || 'buddy') + '>' + r.verb; }).join(',')
+      + ':' + JSON.stringify(s.unlocks || {}) + ':' + (s.unlocksSeen || []).join(',');
   }
 
   function render() {
@@ -105,6 +115,7 @@
     var sig = drawSig(s);
     if (sig === lastSig) return;
     lastSig = sig;
+    ensureWeaverUI();
     var sigils = stoneOf(s.buddy);
     var artifacts = allArtifacts();
     var relations = s.relations || [];
@@ -214,14 +225,67 @@
       html += '<text x="' + cx + '" y="14" text-anchor="middle" fill="rgba(200,184,144,0.4)" font-size="7" font-family="serif" font-style="italic">— draw a card, play a game, graduate a lesson. they will appear here. —</text>';
     }
 
+  function svgPoint(e) {
+    var r = svg.getBoundingClientRect();
+    return { x: (e.clientX - r.left) * (600 / r.width), y: (e.clientY - r.top) * (400 / r.height) };
+  }
+
     svg.innerHTML = html;
 
+    ensureWeaverUI();
     var sigilEl = document.getElementById('constellation-sigil');
     if (sigilEl) sigilEl.addEventListener('click', openSigilApp);
     var artEls = svg.querySelectorAll('.constellation-artifact');
     for (var ai = 0; ai < artEls.length; ai++) {
       (function (el) {
+        var downPos = null, downId = null, dragLine = null, dragging = false;
+        el.addEventListener('pointerdown', function (e) {
+          if (!weaving) return;
+          downPos = svgPoint(e);
+          downId = el.getAttribute('data-artifact-id');
+          dragging = false;
+          try { el.setPointerCapture(e.pointerId); } catch (err) {}
+        });
+        el.addEventListener('pointermove', function (e) {
+          if (!weaving || !downPos) return;
+          var p = svgPoint(e);
+          if (!dragging && Math.hypot(p.x - downPos.x, p.y - downPos.y) > 8) {
+            dragging = true;
+            dragLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            dragLine.setAttribute('stroke', 'rgba(232,200,144,0.9)');
+            dragLine.setAttribute('stroke-width', '1.2');
+            dragLine.setAttribute('x1', downPos.x); dragLine.setAttribute('y1', downPos.y);
+            dragLine.setAttribute('x2', p.x); dragLine.setAttribute('y2', p.y);
+            svg.appendChild(dragLine);
+          } else if (dragging && dragLine) {
+            dragLine.setAttribute('x2', p.x); dragLine.setAttribute('y2', p.y);
+          }
+        });
+        var endWeave = function (e) {
+          if (!weaving || !downPos) { downPos = null; return; }
+          var wasDrag = dragging;
+          var fromId = downId;
+          if (dragLine && dragLine.parentNode) dragLine.parentNode.removeChild(dragLine);
+          dragLine = null; downPos = null; dragging = false;
+          if (!wasDrag) { pluck(el, fromId); return; }
+          var target = null;
+          try {
+            var t = document.elementFromPoint(e.clientX, e.clientY);
+            var node = t && t.closest ? t.closest('.constellation-artifact') : null;
+            if (node && node !== el) target = node.getAttribute('data-artifact-id');
+          } catch (err2) {}
+          if (target && window.Liber && window.Liber.state && window.Liber.state.bindRelation) {
+            try {
+              window.Liber.state.bindRelation(fromId, 'relates to', target);
+              if (window.Liber.sound) window.Liber.sound.play('chime');
+              shootingStar(fromId, target);
+            } catch (err3) {}
+          }
+        };
+        el.addEventListener('pointerup', endWeave);
+        el.addEventListener('pointercancel', endWeave);
         el.addEventListener('click', function () {
+          if (weaving) return;
           var id = el.getAttribute('data-artifact-id');
           var found = null;
           for (var q = 0; q < artifacts.length; q++) {
@@ -283,6 +347,149 @@
       o.textContent = l + ' (' + a.kind + ')';
       sel.appendChild(o);
     }
+  }
+
+  function affinityOk() {
+    try {
+      var a = window.Liber && window.Liber.affinity;
+      return a ? !!a.unlocked('weaver') : false;
+    } catch (e) { return false; }
+  }
+
+  function weaverInvite() {
+    try {
+      var a2 = window.Liber && window.Liber.affinity;
+      if (!a2) return null;
+      var inv = a2.invites() || [];
+      for (var i = 0; i < inv.length; i++) {
+        if (inv[i].id === 'weaver') return inv[i];
+      }
+    } catch (e2) {}
+    return null;
+  }
+
+  function weaverNote(text, who, sticky, inviteId) {
+    var host = document.getElementById('desktop');
+    if (!host) return null;
+    var note = document.createElement('div');
+    note.className = 'weaver-note';
+    var w = document.createElement('span');
+    w.className = 'weaver-note-who';
+    w.textContent = who || 'riason';
+    var m = document.createElement('span');
+    m.textContent = text;
+    var x = document.createElement('button');
+    x.type = 'button';
+    x.className = 'weaver-note-x';
+    x.textContent = '×';
+    x.setAttribute('aria-label', 'dismiss');
+    x.addEventListener('click', function () {
+      if (inviteId) {
+        try { window.Liber.affinity.seen(inviteId); } catch (e) {}
+      }
+      if (note.parentNode) note.parentNode.removeChild(note);
+    });
+    note.appendChild(w);
+    note.appendChild(m);
+    note.appendChild(x);
+    host.appendChild(note);
+    if (!sticky) {
+      setTimeout(function () {
+        if (note.parentNode) note.parentNode.removeChild(note);
+      }, 6000);
+    }
+    return note;
+  }
+
+  function ensureWeaverUI() {
+    var host = document.getElementById('desktop');
+    if (!host) return;
+    var inv = weaverInvite();
+    if (inv && !document.getElementById('weaver-note')) {
+      var n = weaverNote(inv.invite, 'riason', true, 'weaver');
+      if (n) n.id = 'weaver-note';
+    }
+    var t = document.getElementById('weaver-toggle');
+    if (!t) {
+      t = document.createElement('button');
+      t.type = 'button';
+      t.className = 'weaver-toggle';
+      t.id = 'weaver-toggle';
+      t.addEventListener('click', toggleWeave);
+      host.appendChild(t);
+    }
+    t.textContent = weaving ? 'stop weaving' : 'weave';
+    t.classList.toggle('on', weaving);
+  }
+
+  function toggleWeave() {
+    if (!affinityOk()) {
+      weaverNote('bind more of the web first — the web must be tight enough to play.', 'riason', false, null);
+      return;
+    }
+    weaving = !weaving;
+    ensureWeaverUI();
+    if (window.Liber && window.Liber.sound) {
+      try { window.Liber.sound.play(weaving ? 'chime' : 'click'); } catch (e) {}
+    }
+  }
+
+  function verbFor(id) {
+    try {
+      var rels = relationsFor(id) || [];
+      if (rels.length) return rels[rels.length - 1].verb || 'relates to';
+    } catch (e) {}
+    return 'unbound';
+  }
+
+  function freqFor(verb) {
+    var h = 0;
+    for (var i = 0; i < verb.length; i++) h = ((h * 31) + verb.charCodeAt(i)) >>> 0;
+    return WEAVE_SCALE[h % WEAVE_SCALE.length];
+  }
+
+  function pluck(el, id) {
+    if (window.Liber && window.Liber.sound && window.Liber.sound.tone) {
+      try { window.Liber.sound.tone(freqFor(verbFor(id)), 0.7, 0.07); } catch (e) {}
+    }
+    try {
+      var r0 = parseFloat(el.getAttribute('r') || '9');
+      var t0 = null;
+      var anim = function (t) {
+        if (!t0) t0 = t;
+        var k = (t - t0) / 350;
+        if (k >= 1 || !document.body.contains(el)) { el.setAttribute('r', r0); return; }
+        el.setAttribute('r', r0 + 7 * Math.sin(k * Math.PI));
+        requestAnimationFrame(anim);
+      };
+      requestAnimationFrame(anim);
+    } catch (err) {}
+  }
+
+  function shootingStar(fromId, toId) {
+    try {
+      var a = svg.querySelector('.constellation-artifact[data-artifact-id="' + fromId + '"]');
+      var b = svg.querySelector('.constellation-artifact[data-artifact-id="' + toId + '"]');
+      if (!a || !b) return;
+      var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', a.getAttribute('cx')); line.setAttribute('y1', a.getAttribute('cy'));
+      line.setAttribute('x2', b.getAttribute('cx')); line.setAttribute('y2', b.getAttribute('cy'));
+      line.setAttribute('stroke', 'rgba(255,240,210,0.95)');
+      line.setAttribute('stroke-width', '1.4');
+      svg.appendChild(line);
+      var t0 = null;
+      var fade = function (t) {
+        if (!t0) t0 = t;
+        var k = (t - t0) / 700;
+        if (k >= 1 || !line.parentNode) {
+          if (line.parentNode) line.parentNode.removeChild(line);
+          return;
+        }
+        line.setAttribute('opacity', 1 - k);
+        requestAnimationFrame(fade);
+      };
+      requestAnimationFrame(fade);
+    } catch (e) {}
   }
 
   function openMini(artifact) {

@@ -160,6 +160,9 @@
         window.Liber.state.addArtifact('sea', { text: text, intensity: intensity });
       }
       if (window.Liber && window.Liber.sound) window.Liber.sound.play('thunk');
+      if (window.Liber && window.Liber.soundscape) {
+        try { window.Liber.soundscape.motif('vanir'); } catch (e) {}
+      }
 
       setTimeout(function () {
         carried.classList.add('dissolving');

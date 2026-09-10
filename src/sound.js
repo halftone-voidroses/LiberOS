@@ -179,6 +179,37 @@
     osc.stop(t + 0.07);
   }
 
+  // tone — one soft sine for instruments (weaver plucks, wheel chords,
+  // motif cells). Freq in Hz, clamped to the rest law (nothing leads
+  // above ~600 Hz); every path guarded like the rest.
+  function tone(c, freq, dur, gain) {
+    var t = c.currentTime;
+    var f = Math.max(55, Math.min(620, +freq || 220));
+    var d = Math.max(0.1, Math.min(2.5, +dur || 0.5));
+    var g0 = Math.max(0.001, Math.min(0.2, gain == null ? 0.06 : +gain));
+    var osc = c.createOscillator();
+    var g = c.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = f;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(g0, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+    osc.connect(g).connect(c.destination);
+    osc.start(t);
+    osc.stop(t + d + 0.05);
+  }
+
+  function playTone(freq, dur, gain) {
+    if (!isEnabled()) return;
+    var c = ensureCtx();
+    if (!c) return;
+    if (c.state === 'suspended') {
+      resume();
+      if (c.state === 'suspended') return;
+    }
+    try { tone(c, freq, dur, gain); } catch (e) { /* never break the room */ }
+  }
+
   // ── public surface ──────────────────────────────────────────────────
 
   function play(kind) {
@@ -204,7 +235,7 @@
   }
 
   global.Liber = global.Liber || {};
-  global.Liber.sound = { init: init, play: play, setEnabled: setEnabled, isEnabled: isEnabled };
+  global.Liber.sound = { init: init, play: play, tone: playTone, setEnabled: setEnabled, isEnabled: isEnabled };
 
   // Delegated press sound — every button in the OS clicks when pressed.
   document.addEventListener('click', function (e) {

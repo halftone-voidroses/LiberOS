@@ -22,6 +22,7 @@
     }
 
     renderSound();
+    renderScape();
   }
 
   // WS4: mute toggle — the `sounds` flag lives in state.js DEFAULT.
@@ -37,6 +38,41 @@
       window.Liber.sound.setEnabled(!window.Liber.sound.isEnabled());
     }
     renderSound();
+    if (window.Liber && window.Liber.soundscape) {
+      try { window.Liber.soundscape.refresh(); } catch (e) {}
+    }
+  }
+
+  function scapeLevels() {
+    var st = (window.Liber && window.Liber.state) || null;
+    var g = st ? st.get() || {} : {};
+    var c = g.scape || {};
+    return {
+      on: c.on !== false,
+      bed: c.bed == null ? 2 : Math.max(0, Math.min(3, c.bed | 0)),
+      motif: c.motif == null ? 2 : Math.max(0, Math.min(3, c.motif | 0))
+    };
+  }
+
+  function setScape(patch) {
+    var st = (window.Liber && window.Liber.state) || null;
+    if (!st) return;
+    var g = st.get() || {};
+    st.set({ scape: Object.assign({}, g.scape, patch) });
+    renderScape();
+    if (window.Liber && window.Liber.soundscape) {
+      try { window.Liber.soundscape.refresh(); } catch (e) {}
+    }
+  }
+
+  function renderScape() {
+    var c = scapeLevels();
+    var t = document.getElementById('settings-scape');
+    var b = document.getElementById('settings-bed');
+    var m = document.getElementById('settings-motif');
+    if (t) t.textContent = 'room tone: ' + (c.on ? 'on' : 'off');
+    if (b) b.textContent = 'bed: ' + c.bed;
+    if (m) m.textContent = 'motifs: ' + c.motif;
   }
 
   function replay() {
@@ -72,6 +108,7 @@
     wipeArmed = false;
     if (btn) btn.textContent = 'wipe the room';
     if (window.Liber && window.Liber.state) window.Liber.state.reset();
+    try { localStorage.removeItem('liber_vacui_consent'); } catch (e) {}
     if (window.Liber && window.Liber.sound) window.Liber.sound.play('thunk');
     renderState();
   }
@@ -123,6 +160,21 @@
     if (r) r.addEventListener('click', replay);
     if (s) s.addEventListener('click', toggleShadow);
     if (sd) sd.addEventListener('click', toggleSound);
+    var sc = document.getElementById('settings-scape');
+    var bd = document.getElementById('settings-bed');
+    var mo = document.getElementById('settings-motif');
+    if (sc) sc.addEventListener('click', function () {
+      var c = scapeLevels();
+      setScape({ on: !c.on });
+    });
+    if (bd) bd.addEventListener('click', function () {
+      var c2 = scapeLevels();
+      setScape({ bed: (c2.bed + 1) % 4 });
+    });
+    if (mo) mo.addEventListener('click', function () {
+      var c3 = scapeLevels();
+      setScape({ motif: (c3.motif + 1) % 4 });
+    });
     if (w) w.addEventListener('click', wipe);
     if (b) b.addEventListener('click', back);
     var slotBtns = document.querySelectorAll('[data-slot]');

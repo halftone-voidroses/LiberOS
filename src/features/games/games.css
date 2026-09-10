@@ -1,5 +1,5 @@
 /* games.css — Whimsy Wow. Velvet tent, gold-leaf, marquee bulbs. Loud.
-   Left third: the five games + the barker's pitch. Right: the stage.
+   Left third: the eight games + the barker's pitch. Right: the stage.
    This file is COMPLETELY INDEPENDENT. No imports, no shared variables. */
 
 .games-app {
@@ -645,3 +645,42 @@
   .wheel-seep { transition: none; }
   .wheel-dart { transition: none; }
 }
+
+/* locked booths + invite lines (affinity unlocks, futures §17) */
+.games-booth.locked { opacity: 0.55; }
+.games-booth.locked .games-booth-name { font-style: italic; }
+.games-locked {
+  text-align: center; font-style: italic; color: #e8c890;
+  padding: 60px 30px; line-height: 1.7;
+}
+.games-locked-glyph { font-size: 2.4rem; display: block; margin-bottom: 12px; color: #8a6a3a; }
+.games-invite {
+  border: 1px solid #6a4a20; border-radius: 6px;
+  background: rgba(212, 175, 55, 0.08);
+  padding: 8px 12px; margin-bottom: 10px; font-style: italic;
+}
+.games-invite-who { font-variant: small-caps; letter-spacing: 0.15em; color: #ffd86a; }
+
+/* tide pool */
+.tide-wrap { text-align: center; }
+.tide-canvas { max-width: 100%; border: 1px solid #2a4a5a; border-radius: 4px; }
+.tide-row { display: flex; gap: 8px; justify-content: center; margin: 8px 0; }
+.tide-row input {
+  background: #0a0805; border: 1px solid #4a6a7a; color: #e8dcc0;
+  border-radius: 12px; padding: 4px 14px; font: inherit; width: 220px;
+}
+.tide-hint { color: #a89070; font-style: italic; font-size: 0.9rem; }
+
+/* ink storm */
+.storm-wrap { text-align: center; }
+.storm-canvas { max-width: 100%; border: 1px solid #2a4a2a; border-radius: 4px; }
+.storm-buffer {
+  font-family: 'Courier New', monospace; color: #78c896;
+  min-height: 1.4em; margin-top: 6px;
+}
+.storm-hint { color: #a89070; font-style: italic; font-size: 0.9rem; }
+
+/* thimble garden */
+.thimble-wrap { text-align: center; }
+.thimble-canvas { max-width: 100%; border: 1px solid #5a3a1a; border-radius: 4px; }
+.thimble-hint { color: #a89070; font-style: italic; font-size: 0.9rem; }

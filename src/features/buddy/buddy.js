@@ -195,15 +195,68 @@
     var text = input.value.trim();
     if (!text) return;
     input.value = '';
-    u.turns.push({ who: 'you', text: text });
     appendLine('you', text);
     var reply = '';
     try { reply = u.bot.respond(text); } catch (e) { reply = '…'; }
-    u.turns.push({ who: uid, text: reply });
-    u.exchanges++;
-    appendLine(uid, reply);
-    if (sealBtn) sealBtn.disabled = u.exchanges < 2;
-    try { if (input) input.focus(); } catch (e) {}
+    // typing shimmer: they're composing. The pause derives from the turn
+    // count, never a dice roll — no Math.random in perceived behavior.
+    var shimmer = showShimmer(uid);
+    var wait = 700 + ((u.turns.length * 137 + text.length * 31) % 500);
+    setTimeout(function () {
+      hideShimmer(shimmer);
+      // delivered late: still the same exchange, appended where it belongs
+      u.turns.push({ who: 'you', text: text });
+      u.turns.push({ who: uid, text: reply });
+      u.exchanges++;
+      if (currentId === uid) {
+        appendLine(uid, reply);
+        if (sealBtn) sealBtn.disabled = u.exchanges < 2;
+      }
+      if (window.Liber && window.Liber.soundscape) {
+        try { window.Liber.soundscape.motif(uid === 'vanir' ? 'vanir' : 'elizabeth'); } catch (e) {}
+      }
+      try { if (input) input.focus(); } catch (e) {}
+    }, wait);
+  }
+
+  // export: the whole transcript, sealed as one artifact — what was said
+  // here, verbatim, for the satchel to keep.
+  function exportTranscript() {
+    var u = active();
+    if (!u || !u.turns.length) return;
+    var lines = [];
+    for (var i = 0; i < u.turns.length; i++) {
+      var t = u.turns[i];
+      lines.push((t.who === 'you' ? 'you' : u.def.name) + ': ' + t.text);
+    }
+    var confession = lines.join(' / ');
+    if (confession.length > 1200) confession = confession.substring(0, 1200) + '...';
+    var first = '';
+    for (var k = 0; k < u.turns.length; k++) {
+      if (u.turns[k].who === 'you') { first = u.turns[k].text; break; }
+    }
+    var name = first || ('with ' + u.def.name);
+    if (name.length > 30) name = name.substring(0, 30) + '...';
+    if (window.Liber && window.Liber.state && window.Liber.state.addArtifact) {
+      window.Liber.state.addArtifact('buddy', { kind: 'sealed', name: name, confession: confession, exported: true });
+    }
+    if (window.Liber && window.Liber.sound) { try { window.Liber.sound.play('chime'); } catch (e) {} }
+    appendNote('— transcript exported —');
+  }
+
+  function showShimmer(uid) {
+    if (!logEl) return null;
+    var u = users[uid];
+    var line = document.createElement('div');
+    line.className = 'chat-shimmer';
+    line.textContent = (u ? u.def.name : 'them') + ' is composing…';
+    logEl.appendChild(line);
+    logEl.scrollTop = logEl.scrollHeight;
+    return line;
+  }
+
+  function hideShimmer(line) {
+    if (line && line.parentNode) line.parentNode.removeChild(line);
   }
 
   // the sealed artifact keeps the old buddy shape — name + confession —
@@ -349,8 +402,21 @@
       input.addEventListener('keydown', function (e) {
         if (e.key === 'Enter') { e.preventDefault(); send(); }
       });
+      // the bed ducks while you type — the reply lands in the clear
+      input.addEventListener('focus', function () {
+        if (window.Liber && window.Liber.soundscape) {
+          try { window.Liber.soundscape.duck(true); } catch (e) {}
+        }
+      });
+      input.addEventListener('blur', function () {
+        if (window.Liber && window.Liber.soundscape) {
+          try { window.Liber.soundscape.duck(false); } catch (e) {}
+        }
+      });
     }
     if (sealBtn) sealBtn.addEventListener('click', seal);
+    var exportBtn = document.getElementById('chat-export');
+    if (exportBtn) exportBtn.addEventListener('click', exportTranscript);
 
     var exit = document.getElementById('buddy-exit');
     if (exit) exit.addEventListener('click', function () {

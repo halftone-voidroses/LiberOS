@@ -178,7 +178,8 @@
 }
 
 .chat-send,
-.chat-seal {
+.chat-seal,
+.chat-export {
   font-family: inherit;
   font-size: 1.15rem;
   background: rgba(255, 255, 255, 0.05);
@@ -190,7 +191,8 @@
 }
 
 .chat-send:hover,
-.chat-seal:hover:not(:disabled) {
+.chat-seal:hover:not(:disabled),
+.chat-export:hover {
   border-color: #e8c890;
   color: #f0e8d8;
 }
@@ -353,4 +355,20 @@
 
 @media (prefers-reduced-motion: reduce) {
   .chat-window { transition: none; }
+}
+
+.chat-shimmer {
+  font-style: italic;
+  color: #8a7a5a;
+  padding: 2px 0 2px 8px;
+  animation: chat-shimmer-pulse 1.1s ease-in-out infinite;
+}
+
+@keyframes chat-shimmer-pulse {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-shimmer { animation: none; opacity: 0.8; }
 }
