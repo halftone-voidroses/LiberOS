@@ -33,6 +33,11 @@
   function getState() {
     return (window.Liber && window.Liber.state && window.Liber.state.get()) || {};
   }
+  // Escape kept names into SVG text/title nodes — names are user-written
+  // and interpolated raw below; this keeps a < in a name from eating the web.
+  function esc(s) {
+    return (s == null ? '' : String(s)).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
   function stoneOf(list) { return (list || []).filter(function (e) { return e && e.kind === 'stone'; }); }
   function sealedOf(list) { return (list || []).filter(function (e) { return !e || e.kind !== 'stone'; }); }
 
@@ -123,6 +128,7 @@
     if (!s.tutorialDone) {
       if (empty) {
         empty.style.display = '';
+        empty.setAttribute('data-empty-state', 'pre');
         empty.innerHTML = '— make a buddy first —<div class="constellation-empty-sub">open buddy on the dial.</div>';
       }
       svg.innerHTML = '';
@@ -131,22 +137,28 @@
     if (sigils.length === 0) {
       if (empty) {
         empty.style.display = '';
+        empty.setAttribute('data-empty-state', 'cast');
         var sealedWait = sealedOf(s.buddy).length;
         empty.innerHTML = '— cast the buddy first —<div class="constellation-empty-sub">open the buddy from the dial.</div>'
           + (sealedWait > 0 ? '<div class="constellation-empty-sub">' + sealedWait + ' sealed chat' + (sealedWait === 1 ? '' : 's') + ' saved.</div>' : '');
       }
-      svg.innerHTML = '';
+      // Threshold mark: the room acknowledges the crossing — a faint unlit ★
+      // outline at the center where the stone will land. Same void, plus a candle.
+      svg.innerHTML = '<text x="300" y="216" text-anchor="middle" fill="none" stroke="rgba(255,200,100,0.28)" stroke-width="1.2" font-size="48" style="pointer-events:none;">★</text>';
       return;
     }
     if (empty) {
       if (artifacts.length === 0) {
         empty.style.display = '';
+        empty.setAttribute('data-empty-state', 'buddy');
         empty.innerHTML = '— buddy made —<div class="constellation-empty-sub">save one thing: a card, a line, a seed.</div>';
       } else if (relations.length === 0) {
         empty.style.display = '';
+        empty.setAttribute('data-empty-state', 'bind');
         empty.innerHTML = '— something saved —<div class="constellation-empty-sub">give it a verb to bind it to your buddy.</div>';
       } else {
         empty.style.display = 'none';
+        empty.setAttribute('data-empty-state', 'bound');
       }
     }
 
@@ -182,8 +194,13 @@
       var my = (ap.y + sigilPos.y) / 2;
       html += '<line x1="' + ap.x + '" y1="' + ap.y + '" x2="' + sigilPos.x + '" y2="' + sigilPos.y + '" stroke="rgba(255,105,180,' + edgeOpacity + ')" stroke-width="' + edgeWidth + '" stroke-dasharray="4 5"/>';
       if (verb && verb !== 'relates to') {
-        html += '<text x="' + mx + '" y="' + (my - 4) + '" text-anchor="middle" fill="rgba(255,200,220,0.7)" font-size="6.5" font-style="italic" font-family="Georgia, serif" style="pointer-events: none;">' + verb + '</text>';
+        html += '<text x="' + mx + '" y="' + (my - 4) + '" text-anchor="middle" fill="rgba(255,205,225,0.92)" font-size="9" font-family="Georgia, serif" stroke="rgba(10,5,8,0.85)" stroke-width="2.5" paint-order="stroke" style="pointer-events: none;">' + esc(verb) + '</text>';
       }
+    }
+
+    if (relations.length === 0 && artifacts.length > 0) {
+      var fp0 = positionFor(0, artifacts.length, cx, cy, orbitR, orbitR * 0.7);
+      html += '<line x1="' + fp0.x + '" y1="' + fp0.y + '" x2="' + sigilPos.x + '" y2="' + sigilPos.y + '" stroke="rgba(255,105,180,0.35)" stroke-width="1.2" stroke-dasharray="3 6" style="pointer-events:none;"/>';
     }
 
     for (var bi = 0; bi < artifacts.length; bi++) {
@@ -192,11 +209,17 @@
       var pal = ARTIFACT_PALETTE[bi % ARTIFACT_PALETTE.length];
       var id = art.data && art.data.id ? art.data.id : 'a' + bi;
       var isBound = boundIndices.indexOf(bi) !== -1;
-      html += '<circle class="constellation-artifact" data-artifact-id="' + id + '" cx="' + p.x + '" cy="' + p.y + '" r="9" fill="' + pal.color + '" fill-opacity="' + (isBound ? '1.0' : '0.55') + '" stroke="#fff" stroke-width="0.6" style="cursor: pointer; filter: drop-shadow(0 0 5px ' + pal.glow + ');"/>';
-      html += '<text x="' + p.x + '" y="' + (p.y + 3) + '" text-anchor="middle" fill="#1a0a05" font-size="8" font-weight="700" style="pointer-events: none;">' + (bi + 1) + '</text>';
-      var lbl = (art.label || '').toString();
+      var fullLbl = (art.label || '').toString();
+      var lbl = fullLbl;
       if (lbl.length > 18) lbl = lbl.substring(0, 16) + '..';
-      html += '<text x="' + p.x + '" y="' + (p.y - 14) + '" text-anchor="middle" fill="#c8b890" font-size="7" font-family="serif" font-style="italic" style="pointer-events: none;">' + lbl + '</text>';
+      var pillW = Math.max(22, lbl.length * 5.6 + 12);
+      var pillY = p.y + 13;
+      html += '<g><title>' + esc(fullLbl || ('artifact ' + (bi + 1))) + '</title>';
+      html += '<circle class="constellation-artifact" data-artifact-id="' + id + '" cx="' + p.x + '" cy="' + p.y + '" r="9" fill="' + pal.color + '" fill-opacity="' + (isBound ? '1.0' : '0.55') + '" stroke="#fff" stroke-width="0.6" style="cursor: pointer; filter: drop-shadow(0 0 5px ' + pal.glow + ');"/>';
+      html += '<text x="' + p.x + '" y="' + (p.y + 3) + '" text-anchor="middle" fill="#1a0a05" font-size="9" font-weight="700" style="pointer-events: none;">' + (bi + 1) + '</text>';
+      html += '<rect x="' + (p.x - pillW / 2).toFixed(1) + '" y="' + pillY.toFixed(1) + '" width="' + pillW.toFixed(1) + '" height="15" rx="7.5" fill="rgba(10,5,8,0.82)" stroke="rgba(200,184,144,0.25)" stroke-width="0.6" style="pointer-events: none;"/>';
+      html += '<text x="' + p.x + '" y="' + (pillY + 11).toFixed(1) + '" text-anchor="middle" fill="#e8dcc0" font-size="9" font-family="Georgia, serif" style="pointer-events: none;">' + esc(lbl) + '</text>';
+      html += '</g>';
       var kids = (s.relations || []).filter(function (r) { return (r.to || 'buddy') === id; });
       if (kids.length) {
         html += '<circle cx="' + p.x + '" cy="' + p.y + '" r="16" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="0.7" stroke-dasharray="2 3" style="pointer-events:none;"/>';
@@ -206,12 +229,16 @@
           var kid = findAnyById(kids[ki].from);
           var kidLabel = kid ? kid.label : 'kept';
           var kidId = kids[ki].from;
-          html += '<circle class="constellation-artifact constellation-satellite" data-artifact-id="' + kidId + '" cx="' + kx.toFixed(1) + '" cy="' + ky.toFixed(1) + '" r="4.5" fill="' + pal.color + '" fill-opacity="0.95" stroke="#fff" stroke-width="0.5" style="cursor: pointer; filter: drop-shadow(0 0 4px ' + pal.glow + ');"><title>' + kidLabel.replace(/"/g, '') + '</title></circle>';
+          html += '<circle class="constellation-artifact constellation-satellite" data-artifact-id="' + kidId + '" cx="' + kx.toFixed(1) + '" cy="' + ky.toFixed(1) + '" r="4.5" fill="' + pal.color + '" fill-opacity="0.95" stroke="#fff" stroke-width="0.5" style="cursor: pointer; filter: drop-shadow(0 0 4px ' + pal.glow + ');"><title>' + esc(kidLabel) + '</title></circle>';
         }
       }
     }
 
     html += '</g>';
+
+    if (sigils.length > 0 && relations.length === 0) {
+      html += '<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + orbitR + '" ry="' + (orbitR * 0.7) + '" fill="none" stroke="rgba(200,184,144,0.3)" stroke-width="1" stroke-dasharray="5 6" style="pointer-events:none;"/>';
+    }
 
     html += '<circle class="constellation-sigil-halo" cx="' + sigilPos.x + '" cy="' + sigilPos.y + '" r="' + (sigilR + 14) + '" fill="none" stroke="rgba(255,200,100,0.3)" stroke-width="1.5" stroke-dasharray="2 6"/>';
     html += '<circle class="constellation-sigil" id="constellation-sigil" cx="' + sigilPos.x + '" cy="' + sigilPos.y + '" r="' + sigilR + '" fill="rgba(255,200,100,0.95)" stroke="#fff" stroke-width="0.8" style="cursor: pointer; filter: drop-shadow(0 0 10px rgba(255,200,100,0.8));"/>';

@@ -234,7 +234,8 @@ function renderOption(v, pos, sigilLocked, visitedMap) {
     btn.innerHTML = '<span class="phos-label">' + v.name + '</span>'
       + '<span class="dial-glyph"><svg viewBox="0 0 12 12" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true">' + b.svg + (b.mark || '') + '</svg></span>'
       + badgeHtml
-      + motesHtml;
+      + motesHtml
+      + (pos === 'active' ? '<span class="dial-all-hint" title="all rooms (or press ↓)">··· all rooms</span>' : '');
     var p = PERSONAS[v.id];
     if (p && p.cursor && !(v.id === 'sigil' && sigilLocked)) {
       btn.style.cursor = p.cursor;
@@ -252,6 +253,11 @@ function renderOption(v, pos, sigilLocked, visitedMap) {
       }
     });
     if (pos === 'active') {
+      var hint = btn.querySelector('.dial-all-hint');
+      if (hint) hint.addEventListener('click', function (e) {
+        e.stopPropagation();
+        openIndex();
+      });
       btn.addEventListener('pointerdown', function () {
         if (holdTimer) clearTimeout(holdTimer);
         holdTimer = setTimeout(function () {

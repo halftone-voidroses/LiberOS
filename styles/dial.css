@@ -165,6 +165,25 @@
   filter: drop-shadow(0 0 7px var(--glow, rgba(200, 168, 120, 0.8)));
 }
 
+/* The scented door: the full index always existed (600ms hold on the
+   active tile) but nothing said so. A persistent faint line under the
+   active tile opens it on click. Carousel untouched — one door, no grid. */
+.dial-all-hint {
+  display: block;
+  margin-top: 3px;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 14px;
+  letter-spacing: 0.18em;
+  color: rgba(200, 168, 120, 0.5);
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.dial-all-hint:hover {
+  color: #f0d090;
+  text-shadow: 0 0 8px rgba(200, 168, 120, 0.6);
+}
+
 .dial-option.active::before,
 .dial-option.active::after {
   content: '‹';

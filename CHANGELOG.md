@@ -1,5 +1,27 @@
 # LiberOS changelog
 
+## 2.6.1 — desktop legibility: orbit labels, all-rooms hint, threshold marks
+### Fixed
+- Constellation orbit labels read at last: numbers at 9px bold, kept names
+  at 9px upright on a dark pill below the dot (was 7px italic above it);
+  full names survive truncation in hover titles; verb edges rise from 6.5px
+  italic to 9px upright with a dark outline. Kept names are also escaped
+  into the SVG now (user-written `<` can't eat the web).
+- Dial shows a persistent `··· all rooms` hint under the active tile
+  (VT323 14px, faint) that opens the full index on click — the 600ms-hold
+  door finally has a signpost. Carousel untouched.
+- Empty states keep their words but gain threshold marks: cast-first shows
+  a faint unlit ★ outline, buddy-made adds the lit ★ with an empty dashed
+  orbit, first-bind draws one ghost edge. Same void, plus the room
+  acknowledging each crossing.
+### Changed
+- Desktop functional text goes upright: constellation invitations and the
+  mini-menu (preview, verb input, bind picker) drop italics for 16px roman;
+  italics stay for flavour (header counts, buddy caption) only.
+### Proven
+- Full smoke green, zero page/console errors; orbit pills, ghost marks, and
+  the all-rooms index verified in seeded desktop states at 1280×800.
+
 ## 2.6.0 — consent gate, affinity unlocks, finished chat, glyph works, three booths, weaver, soundscape
 ### New
 - Boot consent gate: RAT's letter with a checkbox; enter stays disabled
