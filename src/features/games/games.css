@@ -1,83 +1,135 @@
-/* games.css — Whimsy Wow. Velvet tent, gold-leaf, marquee bulbs. Loud.
-   Left third: the eight games + the barker's pitch. Right: the stage.
-   This file is COMPLETELY INDEPENDENT. No imports, no shared variables. */
+/* games.css — Whimsy Wow's marquee tent. Velvet, gold-leaf, chasing bulbs. Loud.
+   Left third: the eight booths + the barker's ticket-stub pitch. Right: the curtained stage.
+   This file is COMPLETELY INDEPENDENT. No imports, no shared variables.
+
+   Covenant notes (read before touching):
+   - Every class games.js emits is styled below; an unstyled JS node is a defect.
+     Checklist lives at the end of this file.
+   - Skull rule: wheel svg, sand canvas, paint canvases are dressed AROUND
+     (outlines, glows, backdrops) — never reflowed. Outlines, not borders.
+   - Exactly two keyframe motions (marquee roll + bulb chase), GPU props only.
+     prefers-reduced-motion kills both. Hover/active states use instant
+     shadow swaps, no transforms, no transitions on layout props.
+   - NO sans-serif in this room. Everything is Georgia/Times serif, except
+     .storm-buffer which is Entity404's phosphor terminal (monospace, deliberate).
+   - Touch targets are never shrunk: all controls are >= 32px. */
 
 .games-app {
+  --velvet: #2a0a14;
+  --velvet-deep: #1a0008;
+  --curtain: #4a0a1a;
+  --carnival: #aa1018;
+  --carnival-bright: #e0483c;
+  --gold: #d4af37;
+  --gold-dim: #8a6a20;
+  --gold-pale: #ffd86a;
+  --cream: #f4e8d2;
+  --cream-dim: rgba(244, 232, 210, 0.72);
+  --ink: #4a0a12;
+  --serif: Georgia, 'Times New Roman', Times, serif;
+
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at 50% 50%, #4a0a1a 0%, #1a0008 100%);
+    radial-gradient(ellipse at 50% 42%, #4a0a1a 0%, #1a0008 78%);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  font-family: 'Times New Roman', Times, serif;
-  color: #f0d090;
+  font-family: var(--serif);
+  color: var(--cream);
 }
+
+/* ── the tent: striped canvas, gold-trim frame ── */
 
 .games-tent {
   width: 94%;
   height: 92%;
   position: relative;
   background:
-    radial-gradient(ellipse at 50% 0%, rgba(180, 30, 60, 0.4) 0%, rgba(80, 10, 30, 0) 60%),
-    linear-gradient(180deg, #2a0810 0%, #4a0a1a 50%, #2a0810 100%);
-  border: 3px solid #d4af37;
+    repeating-linear-gradient(90deg, rgba(170, 16, 24, 0.10) 0 34px, rgba(0, 0, 0, 0) 34px 68px),
+    radial-gradient(ellipse at 50% 0%, rgba(200, 40, 70, 0.35) 0%, rgba(80, 10, 30, 0) 58%),
+    linear-gradient(180deg, #2a0810 0%, #4a0a1a 52%, #2a0810 100%);
+  border: 3px solid var(--gold);
   border-radius: 8px;
   box-shadow:
-    inset 0 0 0 1px #8a6a20,
-    inset 0 0 40px rgba(0, 0, 0, 0.6),
-    0 0 30px rgba(180, 30, 60, 0.3);
+    inset 0 0 0 1px var(--gold-dim),
+    inset 0 1px 0 rgba(255, 240, 200, 0.25),
+    inset 0 0 46px rgba(0, 0, 0, 0.62),
+    0 0 34px rgba(180, 30, 60, 0.35);
   padding: 30px 14px 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+/* ── chasing marquee bulbs (WS7: chase, not blink).
+     Dim base bulbs painted on the row; one bright overlay strip slides
+     exactly one period (48px) in hard steps, so the light RUNS along
+     the row. Transform-only: GPU. Seamless because 48px == one period. ── */
+
 .games-bulbs {
   position: absolute;
   left: 8px; right: 8px;
-  display: flex;
-  justify-content: space-between;
+  height: 14px;
   z-index: 5;
   pointer-events: none;
+  overflow: hidden;
+  background-image:
+    radial-gradient(circle 4px at 12px 50%, rgba(255, 236, 170, 0.35) 0%, rgba(255, 200, 80, 0.14) 55%, rgba(255, 170, 30, 0) 75%);
+  background-size: 24px 14px;
+  background-repeat: repeat-x;
+  background-position: left center;
 }
 .games-bulbs-top { top: 6px; }
 .games-bulbs-bottom { bottom: 6px; }
 
-.games-bulbs {
+.games-bulbs::before {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0;
+  left: -48px; right: 0;
   background-image:
-    radial-gradient(circle 7px at 50% 50%, rgba(255, 240, 180, 0.95) 0%, rgba(255, 200, 80, 0.55) 45%, rgba(255, 170, 30, 0) 75%),
-    radial-gradient(circle 5px, #ffe080 0%, #ffaa20 60%, #aa6000 100%);
-  background-size: 96px 12px, 24px 12px;
-  background-repeat: repeat-x, repeat-x;
-  background-position: left center, left center;
-  height: 12px;
-  filter: drop-shadow(0 0 4px rgba(255, 200, 80, 0.8));
-  animation: games-bulbs-chase 0.8s steps(4, end) infinite;
+    radial-gradient(circle 5px at 12px 50%, rgba(255, 246, 205, 1) 0%, rgba(255, 205, 90, 0.75) 48%, rgba(255, 170, 30, 0) 76%);
+  background-size: 48px 14px;
+  background-repeat: repeat-x;
+  background-position: left center;
+  filter: drop-shadow(0 0 5px rgba(255, 200, 80, 0.85));
+  animation: games-bulbs-chase 0.9s steps(2, end) infinite;
 }
 
 @keyframes games-bulbs-chase {
-  0%   { background-position: 0 center, 0 center; }
-  100% { background-position: 96px center, 0 center; }
+  from { transform: translateX(0); }
+  to   { transform: translateX(48px); }
 }
+
+/* ── marquee ticker + prize ticket.
+     The ticket sits under the marquee; hovering the marquee slides the
+     prize out (brightens + lifts). The reveal is the existing behavior,
+     kept and gilt. ── */
 
 .games-marquee {
   width: 100%;
-  background: #d4af37;
-  color: #1a0008;
-  border: 1px solid #8a6a20;
+  background: linear-gradient(180deg, #e8c85c 0%, var(--gold) 45%, #a8842a 100%);
+  color: var(--velvet-deep);
+  border: 1px solid var(--gold-dim);
+  border-radius: 3px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 248, 220, 0.7),
+    inset 0 -2px 0 rgba(90, 60, 10, 0.55),
+    0 2px 8px rgba(0, 0, 0, 0.5);
   overflow: hidden;
   white-space: nowrap;
   font-weight: 700;
   letter-spacing: 0.2em;
-  padding: 2px 0;
-  margin-bottom: 4px;
+  padding: 3px 0;
+  margin-bottom: 5px;
+  cursor: default;
 }
 
 .games-marquee-text {
   display: inline-block;
-  animation: games-marquee-roll 14s linear infinite;
+  animation: games-marquee-roll 16s linear infinite;
 }
 
 @keyframes games-marquee-roll {
@@ -87,23 +139,37 @@
 
 .games-ticket {
   font-style: italic;
-  color: rgba(240, 208, 144, 0.7);
+  color: var(--cream-dim);
   font-size: 0.9rem;
+  letter-spacing: 0.12em;
   margin-bottom: 2px;
+  padding: 1px 14px 3px;
+  border-bottom: 1px dashed transparent;
+  transition: color 0.15s ease, text-shadow 0.15s ease, border-color 0.15s ease;
+}
+.games-marquee:hover + .games-ticket,
+.games-ticket:hover {
+  color: var(--gold-pale);
+  text-shadow: 0 0 10px rgba(255, 200, 80, 0.75);
+  border-bottom-color: rgba(212, 175, 55, 0.6);
 }
 
 .games-title {
   font-size: 1.6rem;
   font-weight: 900;
   letter-spacing: 0.25em;
-  color: #ffd86a;
-  text-shadow: 0 0 12px rgba(255, 180, 60, 0.6);
+  color: var(--gold-pale);
+  text-shadow:
+    0 1px 0 #5a3c08,
+    0 2px 0 #3a2606,
+    0 0 16px rgba(255, 180, 60, 0.55);
 }
 
 .games-sub {
   font-style: italic;
-  color: rgba(240, 208, 144, 0.85);
+  color: var(--cream-dim);
   margin-bottom: 8px;
+  letter-spacing: 0.06em;
 }
 
 /* ── the shell: picker left, stage right ── */
@@ -134,26 +200,66 @@
   max-height: 46%;
 }
 
+/* ── booth plaques. Per-game character comes from --ba (accent), set by
+     data-game below — the JS already writes data-game on every booth. ── */
+
 .games-booth {
-  border: 2px solid #8a6a20;
+  --ba: #d4af37;
+  font-family: inherit;
+  text-align: left;
+  border: 2px solid var(--gold-dim);
   border-radius: 6px;
-  background: linear-gradient(180deg, rgba(212, 175, 55, 0.12) 0%, rgba(0, 0, 0, 0.25) 100%);
+  background: linear-gradient(180deg, rgba(212, 175, 55, 0.14) 0%, rgba(0, 0, 0, 0.30) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 240, 200, 0.22),
+    inset 3px 0 0 var(--ba),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.45);
   padding: 6px 10px;
+  min-height: 46px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
 }
 
-.games-booth:hover { border-color: #ffd86a; }
+.games-booth:hover { border-color: var(--gold-pale); }
+.games-booth:hover .games-booth-name { color: #fff0d0; }
 
 .games-booth.current {
-  border-color: #ffd86a;
-  background: linear-gradient(180deg, rgba(212, 175, 55, 0.28) 0%, rgba(0, 0, 0, 0.2) 100%);
-  box-shadow: 0 0 12px rgba(255, 200, 80, 0.35);
+  border-color: var(--gold-pale);
+  background: linear-gradient(180deg, rgba(212, 175, 55, 0.30) 0%, rgba(0, 0, 0, 0.22) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 248, 220, 0.5),
+    inset 3px 0 0 var(--ba),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.4),
+    0 0 14px rgba(255, 200, 80, 0.4);
 }
 
-.games-booth-glyph { font-size: 1.4rem; }
+/* per-booth character: one accent each, medallion ring + plaque edge */
+.games-booth[data-game="wheel"]    { --ba: #ffd86a; }
+.games-booth[data-game="mask"]     { --ba: #e0483c; }
+.games-booth[data-game="shield"]   { --ba: #7fa8d8; }
+.games-booth[data-game="circles"]  { --ba: #7fc8a8; }
+.games-booth[data-game="sand"]     { --ba: #e0a84c; }
+.games-booth[data-game="tidepool"] { --ba: #5fb8c8; }
+.games-booth[data-game="inkstorm"] { --ba: #9a7fd4; }
+.games-booth[data-game="thimble"]  { --ba: #e08ab0; }
+
+.games-booth-glyph {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  line-height: 1;
+  color: var(--cream);
+  border: 2px solid var(--ba);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(255, 240, 200, 0.28) 0%, rgba(0, 0, 0, 0.45) 70%);
+  box-shadow: 0 0 10px -2px var(--ba);
+}
 
 .games-booth-name {
   font-weight: 700;
@@ -162,36 +268,87 @@
   font-size: 1rem;
 }
 
+/* locked booths: veiled, dashed, no accent — the ??? stays mysterious */
+.games-booth.locked {
+  --ba: #6a5a48;
+  opacity: 0.62;
+  border-style: dashed;
+  cursor: pointer;
+}
+.games-booth.locked .games-booth-name { font-style: italic; color: #c8b490; }
+.games-booth.locked .games-booth-glyph {
+  border-style: dashed;
+  color: #8a7a5c;
+  box-shadow: none;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+/* ── ticket-stub pitch panel: bulb-cream paper, maroon ink, punched notches ── */
+
 .games-desc {
   flex: 1;
   overflow-y: auto;
-  margin-top: 8px;
-  border: 1px dashed rgba(212, 175, 55, 0.5);
-  border-radius: 6px;
-  padding: 8px 10px;
+  position: relative;
+  margin-top: 10px;
+  background:
+    radial-gradient(circle 7px at 0 50%, var(--velvet) 0 6px, rgba(0, 0, 0, 0) 7px),
+    radial-gradient(circle 7px at 100% 50%, var(--velvet) 0 6px, rgba(0, 0, 0, 0) 7px),
+    linear-gradient(180deg, #f8ecd4 0%, var(--cream) 60%, #e2d0a8 100%);
+  background-repeat: no-repeat;
+  border: 1px dashed rgba(138, 106, 32, 0.9);
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: 3px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+  padding: 10px 14px;
   font-style: italic;
   font-size: 1rem;
-  line-height: 1.45;
-  color: #f0d090;
+  line-height: 1.5;
+  color: var(--ink);
 }
 
 .games-desc-name {
-  font-weight: 700;
+  font-weight: 900;
   font-style: normal;
-  letter-spacing: 0.1em;
-  color: #ffd86a;
-  margin-bottom: 4px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--carnival);
+  border-bottom: 1px dashed rgba(170, 16, 24, 0.5);
+  padding-bottom: 4px;
+  margin-bottom: 6px;
 }
 
-/* ── the stage ── */
+.games-invite {
+  border: 1px solid rgba(170, 16, 24, 0.55);
+  border-radius: 4px;
+  background: rgba(170, 16, 24, 0.08);
+  color: var(--ink);
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  font-style: italic;
+}
+.games-invite-who {
+  font-variant: small-caps;
+  letter-spacing: 0.15em;
+  font-style: normal;
+  font-weight: 700;
+  color: #7a5a10;
+}
+
+/* ── the curtained stage: gold proscenium, velvet drapes at the wings.
+     Drapes are background layers only — canvas/sgv geometry untouched. ── */
 
 .games-stage {
   flex: 1;
   min-width: 0;
   position: relative;
-  border: 2px solid #8a6a20;
+  border: 3px solid var(--gold);
   border-radius: 6px;
   background: rgba(0, 0, 0, 0.45);
+  box-shadow:
+    inset 0 0 0 1px var(--gold-dim),
+    inset 0 0 34px rgba(0, 0, 0, 0.7),
+    0 0 22px rgba(212, 175, 55, 0.22);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -206,36 +363,55 @@
   min-height: 0;
 }
 
+/* proscenium bar: velvet valance over a gold rule */
 .games-stage-head {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 10px;
-  border-bottom: 1px solid rgba(212, 175, 55, 0.4);
+  padding: 7px 10px;
+  background:
+    radial-gradient(circle 9px at 12px -4px, rgba(0, 0, 0, 0.55) 8px, rgba(0, 0, 0, 0) 9px),
+    linear-gradient(180deg, #5a1220 0%, #2a0810 100%);
+  background-size: 28px 100%, 100% 100%;
+  border-bottom: 2px solid var(--gold);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
 }
 
-.games-stage-glyph { font-size: 1.3rem; }
+.games-stage-glyph {
+  font-size: 1.3rem;
+  color: var(--gold-pale);
+  text-shadow: 0 0 8px rgba(255, 200, 80, 0.6);
+}
 
 .games-stage-name {
   font-weight: 700;
   letter-spacing: 0.12em;
-  color: #ffd86a;
+  color: var(--gold-pale);
+  text-shadow: 0 1px 0 #000;
   flex: 1;
 }
 
 .games-stage-close {
-  background: none;
-  border: 1px solid #8a6a20;
-  color: #f0d090;
-  border-radius: 3px;
-  width: 26px;
-  height: 26px;
+  font-family: inherit;
+  background: linear-gradient(180deg, rgba(212, 175, 55, 0.35) 0%, rgba(0, 0, 0, 0.45) 100%);
+  border: 1px solid var(--gold-dim);
+  color: var(--cream);
+  border-radius: 4px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 240, 200, 0.4),
+    0 2px 0 rgba(0, 0, 0, 0.5);
+  width: 32px;
+  height: 32px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 1.1rem;
   line-height: 1;
+  padding: 0;
 }
 
-.games-stage-close:hover { border-color: #ffd86a; color: #fff0d0; }
+.games-stage-close:hover { border-color: var(--gold-pale); color: #fff0d0; }
+.games-stage-close:active {
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.6);
+}
 
 .games-stage-body {
   flex: 1;
@@ -243,42 +419,67 @@
   overflow: auto;
   padding: 10px;
   position: relative;
+  background:
+    linear-gradient(90deg, #3a0a16 0, #5a1220 12px, rgba(90, 18, 32, 0) 30px),
+    linear-gradient(270deg, #3a0a16 0, #5a1220 12px, rgba(90, 18, 32, 0) 30px),
+    radial-gradient(ellipse at 50% 40%, rgba(120, 20, 40, 0.22) 0%, rgba(0, 0, 0, 0) 65%),
+    #140309;
 }
 
+/* pressed-bevel midway buttons */
 .games-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
 
 .games-action {
   font-family: inherit;
   font-size: 1rem;
   font-weight: 700;
-  background: linear-gradient(180deg, rgba(212, 175, 55, 0.25) 0%, rgba(0, 0, 0, 0.3) 100%);
-  border: 2px solid #8a6a20;
+  letter-spacing: 0.06em;
+  background: linear-gradient(180deg, rgba(212, 175, 55, 0.32) 0%, rgba(60, 20, 8, 0.55) 100%);
+  border: 2px solid var(--gold-dim);
   color: #ffe6a8;
   border-radius: 20px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 240, 200, 0.5),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.45),
+    0 2px 0 rgba(0, 0, 0, 0.55);
   padding: 6px 18px;
+  min-height: 34px;
   cursor: pointer;
 }
 
-.games-action:hover { border-color: #ffd86a; color: #fff0d0; }
-.games-action:disabled { opacity: 0.4; cursor: default; }
+.games-action:hover { border-color: var(--gold-pale); color: #fff0d0; }
+.games-action:active {
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6);
+}
+.games-action:disabled { opacity: 0.4; cursor: default; box-shadow: none; }
 
 .games-result {
   font-style: italic;
   color: #ffe6a8;
   margin-top: 8px;
   line-height: 1.5;
+  border-left: 3px solid var(--gold);
+  padding-left: 10px;
 }
 
-/* ── emotion wheel ── */
+/* ── emotion wheel. Dressing only: gilt ring backdrop + framed svg.
+     The svg geometry is JS-built — not reflowed, only glow-framed. ── */
 
 .wheel-wrap {
   position: relative;
   width: min(100%, 330px);
   margin: 0 auto;
   cursor: none;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.16) 0%, rgba(212, 175, 55, 0) 68%);
+  border-radius: 50%;
 }
 
-.wheel-wrap svg { width: 100%; height: auto; display: block; }
+.wheel-wrap svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 0 14px rgba(212, 175, 55, 0.35));
+}
 
 .wheel-dart {
   position: absolute;
@@ -317,31 +518,39 @@
   height: 34px;
   border-radius: 50%;
   border: 2px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.55);
   cursor: pointer;
   padding: 0;
 }
 
-.wheel-color:hover { transform: scale(1.15); }
+.wheel-color:hover { border-color: #fff; }
+.wheel-color:active { box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.6); }
 
 .wheel-hint {
   text-align: center;
   font-style: italic;
-  color: rgba(240, 208, 144, 0.85);
+  color: var(--cream-dim);
   margin-top: 6px;
 }
 
-/* ── paint games (mask / shield / circles) ── */
+/* ── paint games (mask / shield / circles). The two stacked canvases keep
+     their exact geometry; the stack gets a gilt frame via outline + glow
+     (outlines never reflow layout). ── */
 
 .paint-stack {
   position: relative;
   width: min(100%, 480px);
   margin: 0 auto;
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 2px;
+  box-shadow: 0 0 18px rgba(212, 175, 55, 0.30), 0 4px 14px rgba(0, 0, 0, 0.6);
 }
 
 .paint-stack canvas { width: 100%; height: auto; display: block; }
 
 .paint-tpl {
-  border-radius: 4px;
+  border-radius: 2px;
   background: #e8dcc0;
 }
 
@@ -355,35 +564,45 @@
 .paint-bar {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   flex-wrap: wrap;
   justify-content: center;
-  margin-top: 8px;
+  margin-top: 10px;
 }
 
 .paint-swatch {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   border: 2px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.55);
   cursor: pointer;
   padding: 0;
 }
 
-.paint-swatch.on { border-color: #fff; box-shadow: 0 0 8px rgba(255, 255, 255, 0.7); }
+.paint-swatch.on {
+  border-color: #fff;
+  box-shadow: 0 0 10px rgba(255, 240, 200, 0.8), 0 2px 0 rgba(0, 0, 0, 0.55);
+}
+.paint-swatch:active { box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.6); }
 
 .paint-size {
   font-family: inherit;
-  background: none;
-  border: 1px solid #8a6a20;
-  color: #f0d090;
+  background: linear-gradient(180deg, rgba(212, 175, 55, 0.20) 0%, rgba(0, 0, 0, 0.35) 100%);
+  border: 1px solid var(--gold-dim);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 240, 200, 0.35),
+    0 2px 0 rgba(0, 0, 0, 0.5);
+  color: var(--cream);
   border-radius: 12px;
   padding: 3px 12px;
+  min-height: 32px;
   cursor: pointer;
   font-size: 0.95rem;
 }
 
-.paint-size.on { border-color: #ffd86a; color: #fff0d0; }
+.paint-size.on { border-color: var(--gold-pale); color: #fff0d0; }
+.paint-size:active { box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.6); }
 
 .paint-names {
   display: flex;
@@ -396,21 +615,25 @@
 .paint-names input {
   font-family: inherit;
   font-size: 0.95rem;
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid #8a6a20;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--gold-dim);
   color: #ffe6a8;
   border-radius: 4px;
   padding: 4px 8px;
+  min-height: 32px;
   width: 130px;
 }
+.paint-names input:focus { border-color: var(--gold-pale); outline: none; }
 
-/* ── sand game ── */
+/* ── powder tent. Sand canvas keeps its pixel geometry; gilt outline frames it. ── */
 
 .sand-wrap { text-align: center; }
 
 .sand-canvas {
-  border: 2px solid #8a6a20;
-  border-radius: 4px;
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: 2px;
+  box-shadow: 0 0 18px rgba(212, 175, 55, 0.28), 0 4px 14px rgba(0, 0, 0, 0.6);
   background: #0a0805;
   cursor: crosshair;
   touch-action: none;
@@ -423,30 +646,94 @@
   gap: 6px;
   justify-content: center;
   flex-wrap: wrap;
-  margin-top: 8px;
+  margin-top: 10px;
 }
 
 .sand-el {
   font-family: inherit;
   font-size: 0.95rem;
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid #8a6a20;
-  color: #f0d090;
+  background: linear-gradient(180deg, rgba(212, 175, 55, 0.18) 0%, rgba(0, 0, 0, 0.4) 100%);
+  border: 1px solid var(--gold-dim);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 240, 200, 0.3),
+    0 2px 0 rgba(0, 0, 0, 0.5);
+  color: var(--cream);
   border-radius: 12px;
   padding: 4px 14px;
+  min-height: 32px;
   cursor: pointer;
 }
 
-.sand-el.on { border-color: #ffd86a; color: #fff0d0; }
+.sand-el.on { border-color: var(--gold-pale); color: #fff0d0; }
+.sand-el:active { box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.6); }
 
 .sand-hint {
   font-style: italic;
-  color: rgba(240, 208, 144, 0.8);
+  color: var(--cream-dim);
   margin-top: 6px;
   font-size: 0.95rem;
 }
 
-/* ── keep prompt, raison, titlebar, scrollbars (house kept) ── */
+/* ── tide pool: Vanir's water. Sea-glass frame, dark well input. ── */
+.tide-wrap { text-align: center; }
+.tide-canvas {
+  max-width: 100%;
+  outline: 2px solid #5fb8c8;
+  outline-offset: 2px;
+  border-radius: 2px;
+  box-shadow: 0 0 18px rgba(95, 184, 200, 0.30), 0 4px 14px rgba(0, 0, 0, 0.6);
+}
+.tide-row { display: flex; gap: 8px; justify-content: center; margin: 10px 0; flex-wrap: wrap; }
+.tide-row input {
+  background: #0a0805;
+  border: 1px solid #4a6a7a;
+  color: #e8dcc0;
+  border-radius: 12px;
+  padding: 4px 14px;
+  min-height: 32px;
+  font: inherit;
+  width: 220px;
+}
+.tide-row input:focus { border-color: #5fb8c8; outline: none; }
+.tide-hint { color: var(--cream-dim); font-style: italic; font-size: 0.95rem; }
+
+/* ── ink storm: Entity404's terminal. Phosphor well; buffer stays
+     monospace — the terminal's voice, not a sans. ── */
+.storm-wrap { text-align: center; }
+.storm-canvas {
+  max-width: 100%;
+  outline: 2px solid #6a8a6a;
+  outline-offset: 2px;
+  border-radius: 2px;
+  box-shadow: 0 0 18px rgba(120, 200, 150, 0.28), 0 4px 14px rgba(0, 0, 0, 0.6);
+}
+.storm-buffer {
+  font-family: 'Courier New', Courier, monospace;
+  color: #78c896;
+  text-shadow: 0 0 8px rgba(120, 200, 150, 0.6);
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(120, 200, 150, 0.35);
+  border-radius: 4px;
+  min-height: 1.4em;
+  margin-top: 8px;
+  padding: 2px 8px;
+  display: inline-block;
+  min-width: 120px;
+}
+.storm-hint { color: var(--cream-dim); font-style: italic; font-size: 0.95rem; margin-top: 6px; }
+
+/* ── thimble garden: Ruby's pot. Petal-pink frame. ── */
+.thimble-wrap { text-align: center; }
+.thimble-canvas {
+  max-width: 100%;
+  outline: 2px solid #c86a92;
+  outline-offset: 2px;
+  border-radius: 2px;
+  box-shadow: 0 0 18px rgba(224, 138, 176, 0.30), 0 4px 14px rgba(0, 0, 0, 0.6);
+}
+.thimble-hint { color: var(--cream-dim); font-style: italic; font-size: 0.95rem; margin-top: 6px; }
+
+/* ── keep prompt: the barker's velvet plaque with a gilt double frame ── */
 
 .games-save-prompt {
   position: absolute;
@@ -455,7 +742,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(10, 2, 6, 0.8);
+  background: rgba(10, 2, 6, 0.82);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s;
@@ -466,21 +753,38 @@
 .games-save-prompt-inner {
   width: 80%;
   max-width: 380px;
-  background: linear-gradient(180deg, #2a0a12 0%, #14040a 100%);
-  border: 2px solid #d4af37;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(200, 40, 70, 0.30) 0%, rgba(0, 0, 0, 0) 60%),
+    linear-gradient(180deg, #3a0d16 0%, #14040a 100%);
+  border: 2px solid var(--gold);
+  outline: 1px solid var(--gold-dim);
+  outline-offset: 3px;
   border-radius: 6px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 240, 200, 0.25),
+    0 0 26px rgba(212, 175, 55, 0.30),
+    0 8px 24px rgba(0, 0, 0, 0.7);
   padding: 16px 20px;
   text-align: center;
 }
 
 .games-save-prompt-head {
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  color: #ffd86a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   margin-bottom: 8px;
 }
 
-.games-save-prompt-body { font-style: italic; margin-bottom: 12px; }
+.games-save-prompt-name {
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--gold-pale);
+  text-shadow: 0 1px 0 #000, 0 0 10px rgba(255, 200, 80, 0.5);
+}
+
+.games-save-prompt-body { font-style: italic; margin-bottom: 12px; color: var(--cream); }
+.games-save-prompt-body em { color: var(--gold-pale); }
 
 .games-save-prompt-actions { display: flex; gap: 10px; justify-content: center; }
 
@@ -489,16 +793,33 @@
 .games-save-prompt-close {
   font-family: inherit;
   font-size: 1rem;
-  background: none;
-  border: 1px solid #8a6a20;
+  background: linear-gradient(180deg, rgba(212, 175, 55, 0.30) 0%, rgba(0, 0, 0, 0.45) 100%);
+  border: 1px solid var(--gold-dim);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 240, 200, 0.4),
+    0 2px 0 rgba(0, 0, 0, 0.55);
   color: #ffe6a8;
   border-radius: 16px;
   padding: 5px 18px;
+  min-width: 32px;
+  min-height: 34px;
   cursor: pointer;
 }
 
+.games-save-prompt-keep {
+  border-color: var(--gold-pale);
+  border-width: 2px;
+  color: #fff0d0;
+}
+
 .games-save-prompt-keep:hover,
-.games-save-prompt-discard:hover { border-color: #ffd86a; }
+.games-save-prompt-discard:hover,
+.games-save-prompt-close:hover { border-color: var(--gold-pale); color: #fff0d0; }
+.games-save-prompt-keep:active,
+.games-save-prompt-discard:active,
+.games-save-prompt-close:active { box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6); }
+
+/* ── raison playbill: cream paper, maroon ink ── */
 
 .games-raison {
   position: absolute;
@@ -518,66 +839,59 @@
 .games-raison-inner {
   width: 78%;
   max-width: 420px;
-  background: linear-gradient(180deg, #2a0a12 0%, #14040a 100%);
-  border: 1px solid #d4af37;
+  background: linear-gradient(180deg, #f8ecd4 0%, var(--cream) 60%, #e2d0a8 100%);
+  border: 2px solid var(--gold);
+  outline: 1px solid var(--gold-dim);
+  outline-offset: 3px;
+  border-radius: 3px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
   padding: 18px 22px;
   font-style: italic;
-  color: #f0d090;
+  color: var(--ink);
 }
 
 .games-raison-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #8a6a20;
+  border-bottom: 1px dashed rgba(170, 16, 24, 0.5);
   padding-bottom: 8px;
   margin-bottom: 10px;
 }
 
 .games-raison-name {
   font-size: 0.875rem;
+  font-style: normal;
   letter-spacing: 0.25em;
-  color: #ffd86a;
-  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--carnival);
+  font-weight: 900;
 }
 
 .games-raison-close {
-  background: none;
-  border: 1px solid #8a6a20;
-  color: #f0d090;
-  width: 20px;
-  height: 20px;
+  font-family: inherit;
+  background: linear-gradient(180deg, #5a1220 0%, #2a0810 100%);
+  border: 1px solid var(--gold-dim);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 240, 200, 0.3),
+    0 2px 0 rgba(0, 0, 0, 0.5);
+  color: var(--cream);
+  border-radius: 4px;
+  width: 32px;
+  height: 32px;
   cursor: pointer;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   line-height: 1;
   padding: 0;
 }
 
-.games-raison-close:hover { border-color: #ffd86a; }
+.games-raison-close:hover { border-color: var(--gold-pale); }
+.games-raison-close:active { box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.6); }
 
 .games-raison-body { line-height: 1.55; }
 
-.games-help,
-.games-exit {
-  position: absolute;
-  top: 14px;
-  z-index: 5;
-  width: 22px;
-  height: 22px;
-  background: linear-gradient(180deg, rgba(20, 20, 20, 0.6) 0%, rgba(0, 0, 0, 0.7) 100%);
-  border: 1px solid #8a6a20;
-  color: #f0d090;
-  font-family: 'VT323', Georgia, serif;
-  font-size: 0.95rem;
-  line-height: 1;
-  cursor: pointer;
-  padding: 0;
-  border-radius: 2px;
-}
-
-.games-help { right: 40px; }
-.games-exit { right: 14px; }
-.games-help:hover, .games-exit:hover { border-color: #ffd86a; }
+/* ── titlebar in the barker's voice: velvet rail, gilt rule, brass keys.
+     Copy untouched — the loudness is all tailoring. ── */
 
 .games-titlebar {
   position: absolute;
@@ -591,24 +905,63 @@
   gap: 12px;
   padding: 0 76px 0 14px;
   overflow: hidden;
-  background: linear-gradient(180deg, #2a0a12 0%, #14040a 100%);
-  border-bottom: 2px solid #d4af37;
-  color: #f0d090;
+  background: linear-gradient(180deg, #5a1220 0%, #2a0810 70%, #1a0008 100%);
+  border-bottom: 2px solid var(--gold);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 240, 200, 0.22);
+  color: var(--cream);
 }
 
 .games-titlebar-name {
   font-size: 1.05rem;
-  font-weight: 700;
+  font-weight: 900;
   letter-spacing: 0.2em;
-  color: #ffd86a;
+  text-transform: uppercase;
+  color: var(--gold-pale);
+  text-shadow: 0 1px 0 #000, 0 0 12px rgba(255, 200, 80, 0.55);
   flex-shrink: 0;
 }
 
 .games-titlebar-sub {
   font-style: italic;
+  color: var(--cream-dim);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.games-help,
+.games-exit {
+  position: absolute;
+  top: 14px;
+  z-index: 5;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(180deg, rgba(212, 175, 55, 0.30) 0%, rgba(0, 0, 0, 0.55) 100%);
+  border: 1px solid var(--gold-dim);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 240, 200, 0.35),
+    0 2px 0 rgba(0, 0, 0, 0.5);
+  color: var(--cream);
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 0.95rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 4px;
+}
+
+.games-help { right: 50px; }
+.games-exit { right: 12px; }
+.games-help:hover, .games-exit:hover { border-color: var(--gold-pale); color: #fff0d0; }
+.games-help:active, .games-exit:active { box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.6); }
+.games-save-prompt-close { min-width: 32px; min-height: 32px; }
+.games-help:focus-visible, .games-exit:focus-visible,
+.games-raison-close:focus-visible, .games-save-prompt-close:focus-visible,
+.games-booth:focus-visible, .games-action:focus-visible,
+.sand-el:focus-visible, .paint-size:focus-visible, .paint-swatch:focus-visible,
+.wheel-color:focus-visible, .games-stage-close:focus-visible {
+  outline: 2px solid var(--gold-pale);
+  outline-offset: 2px;
 }
 
 .games-titlebar .games-help,
@@ -618,7 +971,7 @@
   width: 40px;
   height: 40px;
   font-size: 1.15rem;
-  line-height: 38px;
+  line-height: 1;
   text-align: center;
 }
 
@@ -635,52 +988,57 @@
 
 .games-barker {
   font-style: italic;
-  color: rgba(240, 208, 144, 0.7);
-  margin-top: 6px;
+  color: var(--cream-dim);
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px dashed rgba(212, 175, 55, 0.4);
   font-size: 0.95rem;
+  letter-spacing: 0.05em;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .games-bulbs, .games-marquee-text { animation: none; }
+  .games-bulbs::before, .games-marquee-text { animation: none; }
+  .games-ticket { transition: none; }
   .wheel-seep { transition: none; }
   .wheel-dart { transition: none; }
 }
 
-/* locked booths + invite lines (affinity unlocks, futures §17) */
-.games-booth.locked { opacity: 0.55; }
+/* locked stage + invite lines (affinity unlocks, futures §17) */
+.games-booth.locked { opacity: 0.62; }
 .games-booth.locked .games-booth-name { font-style: italic; }
 .games-locked {
-  text-align: center; font-style: italic; color: #e8c890;
-  padding: 60px 30px; line-height: 1.7;
+  text-align: center;
+  font-style: italic;
+  color: #e8c890;
+  padding: 60px 30px;
+  line-height: 1.7;
+  background: radial-gradient(ellipse at 50% 30%, rgba(212, 175, 55, 0.10) 0%, rgba(0, 0, 0, 0) 60%);
 }
-.games-locked-glyph { font-size: 2.4rem; display: block; margin-bottom: 12px; color: #8a6a3a; }
-.games-invite {
-  border: 1px solid #6a4a20; border-radius: 6px;
-  background: rgba(212, 175, 55, 0.08);
-  padding: 8px 12px; margin-bottom: 10px; font-style: italic;
+.games-locked-glyph {
+  font-size: 2.4rem;
+  display: block;
+  margin-bottom: 12px;
+  color: #8a6a3a;
+  text-shadow: 0 0 12px rgba(212, 175, 55, 0.35);
 }
-.games-invite-who { font-variant: small-caps; letter-spacing: 0.15em; color: #ffd86a; }
 
-/* tide pool */
-.tide-wrap { text-align: center; }
-.tide-canvas { max-width: 100%; border: 1px solid #2a4a5a; border-radius: 4px; }
-.tide-row { display: flex; gap: 8px; justify-content: center; margin: 8px 0; }
-.tide-row input {
-  background: #0a0805; border: 1px solid #4a6a7a; color: #e8dcc0;
-  border-radius: 12px; padding: 4px 14px; font: inherit; width: 220px;
-}
-.tide-hint { color: #a89070; font-style: italic; font-size: 0.9rem; }
-
-/* ink storm */
-.storm-wrap { text-align: center; }
-.storm-canvas { max-width: 100%; border: 1px solid #2a4a2a; border-radius: 4px; }
-.storm-buffer {
-  font-family: 'Courier New', monospace; color: #78c896;
-  min-height: 1.4em; margin-top: 6px;
-}
-.storm-hint { color: #a89070; font-style: italic; font-size: 0.9rem; }
-
-/* thimble garden */
-.thimble-wrap { text-align: center; }
-.thimble-canvas { max-width: 100%; border: 1px solid #5a3a1a; border-radius: 4px; }
-.thimble-hint { color: #a89070; font-style: italic; font-size: 0.9rem; }
+/* ── JS-emitted class checklist (every one styled above — verify by grep):
+   games-app · games-tent · games-bulbs (+ -top/-bottom, ::before chase)
+   games-marquee · games-marquee-text · games-ticket (hover reveal kept)
+   games-title · games-sub · games-shell · games-side · games-grid
+   games-booth (+ .current, .locked, [data-game] ×8) · games-booth-glyph
+   games-booth-name · games-desc (+ -name) · games-invite (+ -who)
+   games-stage (+ [hidden]/[inert]) · games-stage-inner/-head/-glyph/-name/
+   -close/-body · games-actions · games-action · games-result
+   wheel-wrap · wheel-dart (+ .dropped) · wheel-seep (+ .go) · wheel-colors
+   wheel-color · wheel-hint
+   paint-stack · paint-tpl · paint-top · paint-bar · paint-swatch (+ .on)
+   paint-size (+ .on) · paint-names (+ input)
+   sand-wrap · sand-canvas · sand-bar · sand-el (+ .on) · sand-hint
+   tide-wrap · tide-canvas · tide-row (+ input) · tide-hint
+   storm-wrap · storm-canvas · storm-buffer · storm-hint
+   thimble-wrap · thimble-canvas · thimble-hint
+   games-save-prompt (+ .open) · -inner/-head/-name/-close/-body/-actions/
+   -keep/-discard · games-raison (+ .open) · -inner/-head/-name/-close/-body
+   games-titlebar (+ -name/-sub) · games-help · games-exit · games-barker
+   games-locked (+ -glyph) ── */

@@ -689,12 +689,12 @@
   top: 50%;
   transform: translateY(-50%);
   z-index: 5;
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   font-family: var(--dreams-mono);
   font-size: 1.3rem;
   font-weight: 700;
-  line-height: 28px;
+  line-height: 30px;
   text-align: center;
   cursor: pointer;
   padding: 0;
@@ -707,8 +707,8 @@
     0 2px 4px rgba(0, 0, 0, 0.5);
   transition: filter var(--dreams-fade), transform var(--dreams-fade);
 }
-.dreams-help { right: 44px; }
-.dreams-exit { right: 8px; }
+.dreams-help { right: 50px; }
+.dreams-exit { right: 12px; }
 .dreams-help, .dreams-exit {
   width: 40px;
   height: 40px;
@@ -795,8 +795,9 @@
   color: var(--dreams-purple);
   font-family: inherit;
   font-size: 1rem;
-  width: 22px;
-  height: 22px;
+  line-height: 30px;
+  width: 32px;
+  height: 32px;
   cursor: pointer;
   padding: 0;
   border-radius: 2px;

@@ -17,7 +17,7 @@
   bottom: calc(26% + 6px);
   right: 14px;
   z-index: 30;
-  padding: 5px 16px 6px 14px;
+  padding: 7px 18px 8px 16px;
   background: linear-gradient(180deg, #2a1410 0%, #140808 100%);
   border: 1px solid #4a2818;
   border-radius: 3px;
@@ -27,8 +27,8 @@
     0 2px 0 rgba(0, 0, 0, 0.35),
     0 3px 6px rgba(0, 0, 0, 0.45);
   font-family: 'VT323', 'Courier New', Courier, monospace;
-  /* WS1/D0003 caption floor kept: 0.875rem = 14px. */
-  font-size: 0.875rem;
+  /* D0003 readability floor: 1rem = 16px. */
+  font-size: 1rem;
   color: rgba(214, 138, 138, 0.95);
   text-shadow: 0 0 4px rgba(200, 80, 80, 0.4);
   pointer-events: none;

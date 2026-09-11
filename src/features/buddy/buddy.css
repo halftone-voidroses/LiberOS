@@ -258,15 +258,20 @@
   color: #8a8a96;
   font-family: inherit;
   font-size: 1rem;
-  width: 22px;
-  height: 22px;
-  line-height: 1;
+  width: 32px;
+  height: 32px;
+  line-height: 30px;
   padding: 0;
   cursor: pointer;
 }
 
 .buddy-raison-close:hover,
 .buddy-how-close:hover { color: #f0e8d8; border-color: #e8c890; }
+.buddy-raison-close:focus-visible,
+.buddy-how-close:focus-visible {
+  outline: 2px solid #e8c890;
+  outline-offset: 2px;
+}
 
 .buddy-how-body p { margin: 0 0 8px; }
 .buddy-how-wander { color: #e8c890; }

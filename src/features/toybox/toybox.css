@@ -1,71 +1,245 @@
-/* toybox.css — Pip's room. Pinewood amber, tin red, sawdust calm.
-   The sign says everything; the chrome stays out of the way. */
+/* toybox.css — Pip's room. Sawdust-floored workshop, pine + tin.
+   Standalone: no imports, no shared sheets. JS contract (toybox.js):
+   .toybox-jar + .on (built per jar, --jc set inline), .toy + .held,
+   .toybox-raison + .open, #toy-crab/#toy-shell 46px drag geometry,
+   canvas painted by powder.js — dress AROUND it, never its internals. */
+.toybox-app {
+  --pine-hi: #8a5a28;
+  --pine-lo: #1a1008;
+  --amber: #d88a3c;
+  --cream: #e8c890;
+  --tin: #c05038;
+  --glow: #ffd86a;
+  position: relative;
+  padding: 50px 18px 22px;
+  color: var(--cream);
+  background:
+    radial-gradient(120% 40% at 50% 0%, rgba(216, 138, 60, 0.14), transparent 60%),
+    repeating-linear-gradient(93deg, rgba(0, 0, 0, 0.16) 0 2px, transparent 2px 7px),
+    linear-gradient(180deg, #241407 0%, #1a0f06 55%, #120b04 100%);
+  border-radius: 0 0 6px 6px;
+  overflow: hidden;
+}
+/* sawdust drift: additive HTML node, texture only, never intercepts touch */
+.toybox-sawdust {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: 0.5;
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 78%, rgba(232, 200, 144, 0.5), transparent 60%),
+    radial-gradient(1px 1px at 32% 88%, rgba(216, 138, 60, 0.45), transparent 60%),
+    radial-gradient(2px 1px at 58% 82%, rgba(232, 200, 144, 0.35), transparent 60%),
+    radial-gradient(1px 1px at 76% 90%, rgba(255, 216, 106, 0.4), transparent 60%),
+    radial-gradient(1.5px 1.5px at 90% 76%, rgba(232, 200, 144, 0.4), transparent 60%);
+}
+/* keep content above the sawdust drift */
+.toybox-sign, .toybox-shelf, .toybox-pit, .toybox-actions, .toybox-result { position: relative; z-index: 1; }
+
+/* titlebar in Pip's hand: a pine tag, handwritten, slightly crooked */
 .toybox-titlebar {
   position: absolute;
   top: 0; left: 0; right: 0; height: 36px; z-index: 8;
-  display: flex; align-items: center; gap: 12px;
+  display: flex; align-items: center; gap: 10px;
   padding: 0 76px 0 14px;
-  background: linear-gradient(180deg, #2a1a0c, #1a1008);
-  border-bottom: 2px solid #8a5a28;
-  font-variant: small-caps; letter-spacing: 0.2em; color: #d88a3c;
+  background: linear-gradient(180deg, #31200e, #1a1008);
+  border-bottom: 2px solid var(--pine-hi);
+  box-shadow: 0 1px 0 rgba(255, 216, 106, 0.18), 0 4px 10px rgba(0, 0, 0, 0.5);
+  color: var(--amber);
 }
-.toybox-app { padding-top: 44px; }
-.toybox-titlebar-sub { font-style: italic; letter-spacing: 0.05em; color: #a88050; font-size: 0.9rem; }
+.toybox-titlebar-name {
+  font-family: 'Segoe Print', 'Bradley Hand', 'Chalkboard SE', cursive;
+  font-size: 1.05rem; letter-spacing: 0.06em;
+  transform: rotate(-1.2deg);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.6), 0 0 12px rgba(216, 138, 60, 0.35);
+}
+.toybox-titlebar-sub {
+  font-family: 'Segoe Print', 'Bradley Hand', 'Chalkboard SE', cursive;
+  font-style: italic; font-size: 0.85rem; letter-spacing: 0.04em; color: #a88050;
+  transform: rotate(-0.6deg);
+}
 .toybox-help, .toybox-exit {
-  margin-left: auto; background: none; border: 1px solid #5a3a1a;
-  color: #d88a3c; border-radius: 4px; cursor: pointer; padding: 0 8px;
+  margin-left: auto; background: linear-gradient(180deg, #2a1a0c, #170d05);
+  border: 1px solid #5a3a1a; color: var(--amber);
+  border-radius: 6px; cursor: pointer; padding: 0 8px;
+  min-width: 32px; min-height: 32px; line-height: 30px; font-size: 1rem;
+  box-shadow: 0 1px 0 rgba(255, 216, 106, 0.15), 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 .toybox-exit { margin-left: 0; }
-.toybox-app { padding: 14px 18px 22px; }
-.toybox-sign {
-  text-align: center; font-style: italic; color: #e8c890;
-  padding: 6px; letter-spacing: 0.1em; font-size: 1.2rem;
+.toybox-help:active, .toybox-exit:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
 }
-/* the shelf: jars in a row on pinewood */
+
+/* the sign moment: a hung pine tag on two nails */
+.toybox-sign {
+  position: relative;
+  width: fit-content; max-width: 100%; margin: 2px auto 12px; padding: 6px 26px 8px;
+  font-family: 'Segoe Print', 'Bradley Hand', 'Chalkboard SE', cursive;
+  font-style: italic; font-size: 1.35rem; letter-spacing: 0.04em;
+  color: #ffe6c4; text-align: center;
+  background: linear-gradient(180deg, #3a2412, #241407);
+  border: 1px solid var(--pine-hi); border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 216, 106, 0.25);
+  transform: rotate(-0.8deg);
+  text-shadow: 0 0 14px rgba(216, 138, 60, 0.5), 0 1px 0 rgba(0, 0, 0, 0.7);
+}
+.toybox-sign::before, .toybox-sign::after {
+  content: ''; position: absolute; top: 50%; width: 7px; height: 7px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ffe6c4, #8a5a28 70%);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  transform: translateY(-50%);
+}
+.toybox-sign::before { left: 9px; }
+.toybox-sign::after { right: 9px; }
+
+/* the shelf: warm pine plank, jars glowing in their own element color */
 .toybox-shelf {
-  background: linear-gradient(180deg, #3a2412, #2a180a);
-  border: 1px solid #5a3a1a; border-radius: 4px;
-  padding: 8px; margin-bottom: 10px;
+  background: linear-gradient(180deg, #4a2e14 0%, #3a2412 30%, #2a180a 100%);
+  border: 1px solid #5a3a1a; border-radius: 8px 8px 10px 10px;
+  box-shadow: inset 0 1px 0 rgba(255, 216, 106, 0.28), inset 0 -6px 10px rgba(0, 0, 0, 0.45), 0 3px 8px rgba(0, 0, 0, 0.5);
+  padding: 10px 10px 6px; margin-bottom: 12px;
 }
 .toybox-jars { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
 .toybox-jar {
   font-family: 'Courier New', monospace; font-size: 0.8rem; letter-spacing: 0.1em;
-  color: var(--jc); border: 1px solid var(--jc); background: rgba(0,0,0,0.4);
-  border-radius: 10px; padding: 2px 12px; cursor: pointer;
+  color: var(--jc); border: 1px solid var(--jc); background: rgba(0, 0, 0, 0.45);
+  border-radius: 10px 10px 12px 12px; padding: 2px 12px; cursor: pointer;
+  min-height: 32px;
+  box-shadow: 0 0 8px -3px var(--jc), inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 2px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 0 8px var(--jc);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
-.toybox-jar.on { background: rgba(216,138,60,0.25); color: #fff0d0; }
-/* the pit: one sand sim with movable props */
+.toybox-jar:hover { transform: translateY(-1px); box-shadow: 0 0 12px -2px var(--jc), inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 3px 6px rgba(0, 0, 0, 0.5); }
+.toybox-jar:active { transform: translateY(1px); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.65), 0 0 6px -3px var(--jc); }
+.toybox-jar.on {
+  background: rgba(216, 138, 60, 0.25);
+  background: color-mix(in srgb, var(--jc) 30%, #1a1008);
+  color: #fff0d0; text-shadow: 0 0 10px var(--jc), 0 1px 0 rgba(0, 0, 0, 0.7);
+  box-shadow: 0 0 16px -2px var(--jc), inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 3px 8px rgba(0, 0, 0, 0.55);
+  transform: translateY(-1px);
+}
+/* shelf front lip: additive node, the plank's worn edge */
+.toybox-shelf-lip {
+  height: 6px; margin: 8px -10px -6px; border-radius: 0 0 9px 9px;
+  background: linear-gradient(180deg, rgba(255, 216, 106, 0.35), rgba(0, 0, 0, 0.5)), linear-gradient(180deg, #5a3a1a, #2a180a);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+/* the pit: a wooden sand-tray frame around powder.js canvas.
+   Frame is border (2px, unchanged box) + outline/shadow so the
+   280px pit box and toy drag geometry never move. */
 .toybox-pit {
   position: relative; width: 280px; max-width: 100%; margin: 0 auto;
   background: linear-gradient(180deg, #0a0805 0%, #141008 100%);
-  border: 2px solid #5a3a1a; border-radius: 4px; overflow: hidden;
+  border: 2px solid #6a4a20; border-radius: 8px; overflow: hidden;
   touch-action: none;
+  outline: 5px solid #2a180a;
+  outline-offset: -1px;
+  box-shadow: 0 0 0 6px #4a2e14, 0 0 0 7px #1a1008, 0 8px 20px rgba(0, 0, 0, 0.65), inset 0 0 24px rgba(0, 0, 0, 0.7);
 }
-.toybox-canvas { display: block; width: 100%; height: auto; cursor: crosshair; touch-action: none; }
+.toybox-canvas { display: block; width: 100%; height: auto; cursor: crosshair; touch-action: none; image-rendering: pixelated; }
+/* tray glass glare: additive node, light only, never intercepts touch */
+.toybox-tray-shine {
+  position: absolute; inset: 0; z-index: 3; pointer-events: none; border-radius: 6px;
+  background:
+    linear-gradient(115deg, rgba(255, 240, 208, 0.09) 0%, transparent 28%),
+    radial-gradient(120% 30% at 50% 0%, rgba(255, 216, 106, 0.1), transparent 60%),
+    radial-gradient(130% 40% at 50% 115%, rgba(0, 0, 0, 0.4), transparent 60%);
+}
+
+/* toys: weight and shine, same glyphs, same 46px drag geometry.
+   Border stays 1px so getBoundingClientRect() still reads 46. */
 .toy {
   position: absolute; width: 46px; height: 46px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   font-size: 1.4rem; cursor: grab; user-select: none; touch-action: none;
-  background: rgba(20, 12, 6, 0.75); border: 1px solid #6a4a20; z-index: 2;
+  background: radial-gradient(circle at 32% 28%, #3a2412, #140c06 72%);
+  border: 1px solid #6a4a20; z-index: 2;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.65), inset 0 1px 2px rgba(255, 230, 196, 0.35), inset 0 -3px 6px rgba(0, 0, 0, 0.6);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
-.toy.held { cursor: grabbing; border-color: #ffd86a; }
-#toy-crab { left: 12px; bottom: 12px; color: #c05038; text-shadow: 0 0 8px rgba(192,80,56,0.8); }
-#toy-shell { right: 12px; bottom: 12px; color: #e8c890; }
-.toybox-actions { display: flex; gap: 8px; justify-content: center; margin-top: 10px; }
+.toy::after {
+  content: ''; position: absolute; top: 5px; left: 8px; width: 14px; height: 9px; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 246, 224, 0.55), transparent);
+  pointer-events: none;
+}
+.toy.held {
+  cursor: grabbing; border-color: var(--glow);
+  transform: scale(1.08);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.7), 0 0 14px rgba(255, 216, 106, 0.45), inset 0 1px 2px rgba(255, 230, 196, 0.4);
+}
+/* base perches: byte-identical positions, sizes untouched by design */
+#toy-crab { left: 12px; bottom: 12px; color: #e06848; text-shadow: 0 0 8px rgba(192, 80, 56, 0.9), 0 1px 0 rgba(0, 0, 0, 0.8); }
+#toy-shell { right: 12px; bottom: 12px; color: #ffe6c4; text-shadow: 0 0 10px rgba(232, 200, 144, 0.8), 0 1px 0 rgba(0, 0, 0, 0.8); }
+
+/* proud sweep/keep: tin-and-pine buttons with a real pressed bevel */
+.toybox-actions { display: flex; gap: 10px; justify-content: center; margin-top: 14px; }
 .toybox-action {
-  font-family: inherit; font-size: 0.95rem;
-  background: rgba(216,138,60,0.12); border: 1px solid #6a4a20;
-  color: #ffe6c4; border-radius: 14px; padding: 4px 20px; cursor: pointer;
+  font-family: inherit; font-size: 0.95rem; letter-spacing: 0.04em;
+  background: linear-gradient(180deg, #4a2b12, #2a180a);
+  border: 1px solid #8a5a28;
+  color: #ffe6c4; border-radius: 14px; padding: 4px 22px; cursor: pointer;
+  min-height: 32px;
+  box-shadow: 0 2px 0 #120b04, 0 4px 8px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 216, 106, 0.35);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.7);
 }
-.toybox-action:hover { border-color: #ffd86a; }
-.toybox-result { color: #a89070; font-style: italic; text-align: center; margin-top: 8px; min-height: 1.2em; }
+.toybox-action:hover { border-color: var(--glow); box-shadow: 0 2px 0 #120b04, 0 4px 10px rgba(0, 0, 0, 0.6), 0 0 12px rgba(255, 216, 106, 0.3), inset 0 1px 0 rgba(255, 216, 106, 0.4); }
+.toybox-action:active {
+  transform: translateY(2px);
+  box-shadow: 0 0 0 #120b04, inset 0 2px 6px rgba(0, 0, 0, 0.7);
+}
+#toybox-keep { border-color: var(--tin); box-shadow: 0 2px 0 #3a0f08, 0 4px 8px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 200, 170, 0.35); }
+#toybox-keep:hover { border-color: #ff8a60; box-shadow: 0 2px 0 #3a0f08, 0 4px 10px rgba(0, 0, 0, 0.6), 0 0 12px rgba(224, 90, 32, 0.4), inset 0 1px 0 rgba(255, 200, 170, 0.4); }
+#toybox-keep:active { transform: translateY(2px); box-shadow: 0 0 0 #3a0f08, inset 0 2px 6px rgba(0, 0, 0, 0.7); }
+
+/* result line: chalk on pine */
+.toybox-result {
+  color: #c8a878; font-style: italic; text-align: center;
+  margin-top: 10px; min-height: 1.2em; font-size: 0.92rem;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.7);
+}
+
+/* raison: an in-room card laid over the workbench, backdrop click closes */
 .toybox-raison { display: none; }
-.toybox-raison.open { display: block; }
-.toybox-raison-inner {
-  border: 1px solid #5a3a1a; border-radius: 6px; background: #100a04;
-  padding: 12px 16px; margin-bottom: 12px;
+.toybox-raison.open {
+  display: flex; align-items: flex-start; justify-content: center;
+  position: absolute; inset: 36px 0 0 0; z-index: 6;
+  padding: 18px 20px;
+  background: rgba(10, 6, 3, 0.72);
+  backdrop-filter: blur(1px);
 }
-.toybox-raison-head { display: flex; justify-content: space-between; align-items: baseline; }
-.toybox-raison-name { font-variant: small-caps; letter-spacing: 0.2em; color: #d88a3c; }
-.toybox-raison-close { background: none; border: 1px solid #5a3a1a; color: #d88a3c; border-radius: 4px; cursor: pointer; }
+.toybox-raison-inner {
+  width: min(300px, 100%);
+  border: 1px solid #8a5a28; border-radius: 10px;
+  background: linear-gradient(180deg, #241407, #120b04);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 216, 106, 0.3);
+  padding: 12px 16px 14px; margin-bottom: 12px;
+  transform: rotate(-0.5deg);
+}
+.toybox-raison-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.toybox-raison-name { font-variant: small-caps; letter-spacing: 0.2em; color: var(--amber); }
+.toybox-raison-close {
+  background: linear-gradient(180deg, #2a1a0c, #170d05);
+  border: 1px solid #5a3a1a; color: var(--amber); border-radius: 6px; cursor: pointer;
+  min-width: 32px; min-height: 32px; line-height: 30px;
+  box-shadow: 0 1px 0 rgba(255, 216, 106, 0.15), 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+.toybox-raison-close:active { transform: translateY(1px); box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6); }
 .toybox-raison-body { font-style: italic; line-height: 1.6; color: #e8dcc0; }
+
+/* focus stays visible on sawdust */
+.toybox-help:focus-visible, .toybox-exit:focus-visible,
+.toybox-raison-close:focus-visible, .toybox-jar:focus-visible,
+.toybox-action:focus-visible {
+  outline: 2px solid var(--glow);
+  outline-offset: 2px;
+}
+
+/* two motions only (jar lift, toy lift — transform/opacity, GPU);
+   reduced-motion visitors get stillness */
+@media (prefers-reduced-motion: reduce) {
+  .toybox-jar, .toy, .toybox-action,
+  .toybox-titlebar-name, .toybox-titlebar-sub, .toybox-sign,
+  .toybox-raison-inner {
+    transition: none;
+    transform: none;
+  }
+}

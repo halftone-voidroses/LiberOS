@@ -1,5 +1,38 @@
 # LiberOS changelog
 
+## 2.8.0 — final: gorgeous rooms, honest tours, readable chrome
+### New
+- Games tent rebuilt as a lit marquee: eight gilt booth plaques with
+  per-game accents, cream ticket-stub pitch, curtained stage, chasing
+  bulbs (not blinking), pressed-bevel buttons. Every game byte-identical.
+- Toybox rebuilt as Pip's workshop: pine shelf with glowing element
+  jars, framed sand-tray with glass glare, weighty crab/shell toys,
+  bevelled sweep/keep. Mechanics byte-identical.
+- CI smoke gate: pushes and PRs run the data/prompt/gamification
+  verifiers plus verify-fixes (blocking); full 21-step smoke reports
+  with screenshots without blocking on its known timing flake.
+### Fixed
+- Riason machine skin never painted: apply-theme emits `theme-riason`
+  but machine.css only defined `theme-raison` — selector renamed.
+- Dial cycling wiped visit history (`cycle()` replaced the visited map;
+  `visit()` merged) — cycle now merges; last-entered-app memory kept.
+- Desktop null-guard: `drawSig` read `.length` off unguarded state
+  arrays — a corrupt save crashed render before paint; guarded.
+- Tour copy now factual: buddy tour dropped phantom multiplayer users
+  (on-device LiberChat: buddy + vanir bot), games tour says eight
+  booths (was five — stale since the 2.6.0 booth additions).
+### Changed
+- Chrome hit floors: every help/exit/close target is ≥32×32px in its
+  room's own palette, focus rings kept or added.
+- Readability floors: settings, boot/consent, and status-line
+  functional text is ≥16px; panels given room, nothing clips.
+### Proven
+- verify-data + verify-prompt-engine green. verify-gamification shows
+  the same 5 pre-existing failures as pristine 2.7.2 (cohort-louder DOM
+  checks + edge thickening — environment/harness, untouched by 2.8.0).
+  Full smoke runs report-only in CI until the hijack-overlay stall is
+  owned.
+
 ## 2.7.2 — final: starter quests, two-knob sound, whole-system themes
 ### New
 - Starting quests: before the tutorial is done the desktop checklist

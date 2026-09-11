@@ -9,8 +9,8 @@ window.LIBER_DATA = window.LIBER_DATA || {};
 window.LIBER_DATA.hijack = {
   buddy: { flag: 'walkBuddy', steps: [
     { voice: 'riason', line: 'Welcome to LiberChat, this allows you to talk to your buddy.', target: 'chat-users' },
-    { voice: 'riason', line: 'I\u2019m not sure who that other user is, but perhaps when you use this more more people will show up..', target: 'chat-log' },
-    { voice: 'riason', line: 'Just find them on the left and say hello. The conversation stays on this device \u2014 nothing you say leaves the room.', target: 'chat-input', glow: true }
+    { voice: 'riason', line: 'The middle keeps the log of what is said.', target: 'chat-log' },
+    { voice: 'riason', line: 'Your buddy is on the left — say hello. The conversation stays on this device \u2014 nothing you say leaves the room.', target: 'chat-input', glow: true }
   ] },  satchel: { flag: 'walkSatchel', steps: [
     { voice: 'riason', line: 'Welcome to the satchel, my handiwork. Hem hem.', target: 'satchel-drawers' },
     { voice: 'riason', line: 'Anyway, when you save relations, buddies, or set relations they get logged in the satchel, and you are able to write notes about them.', target: 'satchel-list' },
@@ -42,7 +42,7 @@ window.LIBER_DATA.hijack = {
     { voice: 'riason', line: 'I like Ruby\u2019s app, its really easy. You don\u2019t need me here, I am going to go color in the void..', target: 'garden-plots', glow: true }
   ] },
   games: { flag: 'walkGames', steps: [
-    { voice: 'riason', line: 'Five games, every one keeps. Pick one on the left.', target: 'games-grid' },
+    { voice: 'riason', line: 'Eight booths, every one keeps. Pick one on the left.', target: 'games-grid' },
     { voice: 'riason', line: 'The pitch tells you what it does. Read it first.', target: 'games-desc' },
     { voice: 'riason', line: 'Play it on the right. Keep what you made.', target: 'games-stage' },
     { voice: 'riason', line: 'This is Whimsy\u2019s tent. Everything kept lands in the satchel.', target: 'games-grid', glow: true }

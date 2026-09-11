@@ -413,8 +413,9 @@
   color: #d8b890;
   font-family: inherit;
   font-size: 1rem;
-  width: 22px;
-  height: 22px;
+  line-height: 30px;
+  width: 32px;
+  height: 32px;
   cursor: pointer;
   padding: 0;
   border-radius: 2px;
@@ -651,8 +652,9 @@
   color: #6a4028;
   font-family: inherit;
   font-size: 1rem;
-  width: 22px;
-  height: 22px;
+  line-height: 30px;
+  width: 32px;
+  height: 32px;
   cursor: pointer;
   padding: 0;
   border-radius: 2px;

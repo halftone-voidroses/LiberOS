@@ -107,8 +107,8 @@
   // which reset the orbit each time (user report). Skip the rebuild unless
   // something the drawing actually depends on changed.
   function drawSig(s) {
-    return [stoneOf(s.buddy).length, sealedOf(s.buddy).length, s.divination.length, s.games.length,
-      s.learn.length, s.abstract.length, s.sea.length, s.garden.length, s.dreams.length,
+    return [stoneOf(s.buddy).length, sealedOf(s.buddy).length, (s.divination || []).length, (s.games || []).length,
+      (s.learn || []).length, (s.abstract || []).length, (s.sea || []).length, (s.garden || []).length, (s.dreams || []).length,
       (s.methodology || []).length, (s.satchel || []).length,
       s.relations.length, s.tutorialDone ? 1 : 0].join('|')
       + ':' + (s.relations || []).map(function (r) { return r.from + '>' + (r.to || 'buddy') + '>' + r.verb; }).join(',')

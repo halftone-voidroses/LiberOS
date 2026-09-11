@@ -90,7 +90,7 @@
 .state-boot .boot-sub {
   margin: 0 0 1em;
   font-style: italic;
-  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+  font-size: clamp(1rem, 1.5vw, 1.1rem);
   color: #d8a0a0;
 }
 
@@ -101,7 +101,7 @@
   border: 2px solid #5a0000;
   color: #d8a0a0;
   font-family: 'Times New Roman', Times, serif;
-  font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
   letter-spacing: 0.12em;
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
@@ -117,7 +117,7 @@
 .state-boot .boot-status {
   margin: 0 0 1.1em;
   font-style: italic;
-  font-size: clamp(0.85rem, 1.4vw, 1rem);
+  font-size: clamp(1rem, 1.4vw, 1rem);
   color: #8a6060;
 }
 
@@ -198,14 +198,14 @@
 }
 
 .boot-warning-close {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background: transparent;
   border: 2px solid #5a0000;
   color: #d8a0a0;
   font-size: 1.2rem;
-  line-height: 1;
+  line-height: 30px;
   cursor: pointer;
 }
 .boot-warning-close:hover,
@@ -220,10 +220,10 @@
 }
 
 .boot-warning .boot-letter {
-  max-height: 46vh;
+  max-height: 50vh;
   overflow-y: auto;
   text-align: left;
-  font-size: clamp(0.9rem, 1.5vw, 1.05rem);
+  font-size: clamp(1rem, 1.5vw, 1.05rem);
   line-height: 1.55;
   color: #e8b8b8;
   background: rgba(0, 0, 0, 0.35);
@@ -239,7 +239,7 @@
   display: flex;
   align-items: flex-start;
   gap: 0.6em;
-  font-size: clamp(0.95rem, 1.6vw, 1.1rem);
+  font-size: clamp(1rem, 1.6vw, 1.1rem);
   color: #f0c0c0;
   cursor: pointer;
   user-select: none;
@@ -257,7 +257,7 @@
   align-items: center;
   gap: 0.6em;
   margin-bottom: 1.2em;
-  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+  font-size: clamp(1rem, 1.5vw, 1.1rem);
   color: #d8a0a0;
   cursor: pointer;
   user-select: none;

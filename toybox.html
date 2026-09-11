@@ -46,6 +46,7 @@
               <button class="toybox-exit" type="button" id="toybox-exit" aria-label="leave">×</button>
             </header>
             <div class="toybox-app" data-state="toybox">
+              <div class="toybox-sawdust" aria-hidden="true"></div>
 
               <div class="toybox-raison" id="toybox-raison" inert>
                 <div class="toybox-raison-inner">
@@ -63,12 +64,14 @@
 
               <div class="toybox-shelf" id="toybox-shelf">
                 <div class="toybox-jars" id="toybox-jars"></div>
+                <div class="toybox-shelf-lip" aria-hidden="true"></div>
               </div>
 
               <div class="toybox-pit" id="toybox-pit">
                 <canvas class="toybox-canvas" id="toybox-canvas" width="360" height="450"></canvas>
                 <div class="toy" id="toy-crab" title="crab — walks piles flat">♋</div>
                 <div class="toy" id="toy-shell" title="shell — plows, lifts clean">◍</div>
+                <div class="toybox-tray-shine" aria-hidden="true"></div>
               </div>
 
               <div class="toybox-actions">

@@ -150,16 +150,16 @@
 .themes-help {
   position: absolute;
   top: 14px;
-  right: 40px;
+  right: 50px;
   z-index: 5;
-  width: 22px;
-  height: 22px;
+  width: 32px;
+  height: 32px;
   background: linear-gradient(180deg, rgba(20, 20, 20, 0.6) 0%, rgba(0, 0, 0, 0.7) 100%);
   border: 1px solid #3a1a08;
   color: #8a6a40;
   font-family: 'VT323', Georgia, 'Times New Roman', Times, serif;
   font-size: 0.95rem;
-  line-height: 1;
+  line-height: 30px;
   cursor: pointer;
   padding: 0;
   border-radius: 2px;
@@ -193,16 +193,16 @@
 .themes-exit {
   position: absolute;
   top: 14px;
-  right: 14px;
+  right: 12px;
   z-index: 5;
-  width: 22px;
-  height: 22px;
+  width: 32px;
+  height: 32px;
   background: linear-gradient(180deg, rgba(20, 20, 20, 0.6) 0%, rgba(0, 0, 0, 0.7) 100%);
   border: 1px solid #3a1a08;
   color: #8a6a40;
   font-family: 'VT323', 'Courier New', monospace;
   font-size: 1.05rem;
-  line-height: 1;
+  line-height: 30px;
   cursor: pointer;
   padding: 0;
   border-radius: 2px;
@@ -290,9 +290,9 @@
   color: #8a6a40;
   font-family: 'VT323', 'Courier New', monospace;
   font-size: 0.95rem;
-  line-height: 1;
-  width: 20px;
-  height: 20px;
+  line-height: 30px;
+  width: 32px;
+  height: 32px;
   padding: 0;
   cursor: pointer;
   border-radius: 2px;

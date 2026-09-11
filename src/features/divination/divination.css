@@ -323,8 +323,9 @@
   color: #d8b89c;
   font-family: inherit;
   font-size: 1rem;
-  width: 22px;
-  height: 22px;
+  line-height: 30px;
+  width: 32px;
+  height: 32px;
   cursor: pointer;
   padding: 0;
   border-radius: 2px;
@@ -479,8 +480,9 @@
   color: #d8b89c;
   font-family: inherit;
   font-size: 1rem;
-  width: 22px;
-  height: 22px;
+  line-height: 30px;
+  width: 32px;
+  height: 32px;
   cursor: pointer;
   padding: 0;
   border-radius: 2px;
@@ -510,17 +512,17 @@
 .divination-help {
   position: absolute;
   top: 14px;
-  right: 40px;
+  right: 50px;
   z-index: 5;
-  width: 22px;
-  height: 22px;
+  width: 32px;
+  height: 32px;
   background: linear-gradient(180deg, rgba(20, 20, 20, 0.6) 0%, rgba(0, 0, 0, 0.7) 100%);
   border: 1px solid rgba(244, 232, 210, 0.35);
   color: #d8b89c;
   font-family: 'VT323', Georgia, 'Times New Roman', Times, serif;
   font-size: 0.95rem;
   font-style: italic;
-  line-height: 1;
+  line-height: 30px;
   cursor: pointer;
   padding: 0;
   border-radius: 2px;
@@ -553,17 +555,17 @@
 .divination-exit {
   position: absolute;
   top: 14px;
-  right: 14px;
+  right: 12px;
   z-index: 5;
-  width: 22px;
-  height: 22px;
+  width: 32px;
+  height: 32px;
   background: linear-gradient(180deg, rgba(20, 20, 20, 0.6) 0%, rgba(0, 0, 0, 0.7) 100%);
   border: 1px solid rgba(244, 232, 210, 0.35);
   color: #d8b89c;
   font-family: 'VT323', 'Courier New', monospace;
   font-size: 1.05rem;
   font-style: italic;
-  line-height: 1;
+  line-height: 30px;
   cursor: pointer;
   padding: 0;
   border-radius: 2px;

@@ -80,19 +80,19 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   border: 1px solid var(--garden-thread);
   background: transparent;
   color: var(--garden-cream);
   font-family: inherit;
   font-size: 0.85rem;
-  line-height: 1;
+  line-height: 30px;
   cursor: pointer;
 }
-.garden-help { right: 36px; }
-.garden-exit { right: 8px; }
+.garden-help { right: 50px; }
+.garden-exit { right: 12px; }
 .garden-help, .garden-exit {
   width: 40px;
   height: 40px;
@@ -150,14 +150,14 @@
 }
 
 .garden-raison-close {
-  width: 22px;
-  height: 22px;
+  width: 32px;
+  height: 32px;
   border: 1px solid var(--garden-thread);
   border-radius: 50%;
   background: transparent;
   color: var(--garden-cream);
   font-family: inherit;
-  line-height: 1;
+  line-height: 30px;
   cursor: pointer;
 }
 .garden-raison-close:hover { background: rgba(181, 118, 60, 0.25); }
@@ -589,15 +589,15 @@
 }
 
 .garden-stage-close {
-  width: 22px;
-  height: 22px;
+  width: 32px;
+  height: 32px;
   flex-shrink: 0;
   border: 1px solid var(--garden-thread);
   border-radius: 50%;
   background: transparent;
   color: var(--garden-cream);
   font-family: inherit;
-  line-height: 1;
+  line-height: 30px;
   cursor: pointer;
 }
 .garden-stage-close:hover { background: rgba(181, 118, 60, 0.25); }

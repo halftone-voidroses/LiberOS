@@ -122,7 +122,10 @@
     selectedIdx = (selectedIdx + delta + VISITORS.length) % VISITORS.length;
     render();
     if (window.Liber && window.Liber.state) {
-      window.Liber.state.set({ visited: { [VISITORS[selectedIdx].id]: Date.now() } });
+      var s = window.Liber.state.get() || {};
+      var visited = Object.assign({}, s.visited);
+      visited[VISITORS[selectedIdx].id] = Date.now();
+      window.Liber.state.set({ visited: visited });
     }
   }
 
