@@ -1,5 +1,19 @@
 # LiberOS changelog
 
+## 2.7.2 — final: starter quests, two-knob sound, whole-system themes
+### New
+- Starting quests: before the tutorial is done the desktop checklist
+  assigns draw a buddy, set a relation, chat to your buddy; afterwards
+  the seeded dailies resume.
+- Whole-system themes: the theme class now paints every room (was
+  desktop-only), a blend veil grades all app content to the theme's cast,
+  and a wash tints the void around the machine. Bezel, plate, scars and
+  screen glass as before; corrupted stays untouched.
+### Changed
+- Settings SOUND is two knobs: sound-fx mute plus the music volume
+  slider. Room-tone/bed/motif buttons are gone; muting fx no longer
+  silences the music.
+
 ## 2.7.1 — one song throughout
 ### Changed
 - The room plays a single looped song everywhere: the main theme. No

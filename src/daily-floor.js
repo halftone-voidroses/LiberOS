@@ -67,9 +67,25 @@
     return { date: todayKey(), done: [] };
   }
 
+  var STARTER = [
+    { id: 'draw-buddy',    room: 'sigil.html',   text: 'draw a buddy.' },
+    { id: 'set-relation',  room: 'desktop.html', text: 'set a relation.' },
+    { id: 'chat-buddy',    room: 'buddy.html',   text: 'chat to your buddy.' }
+  ];
+
+  function starterNeeded() {
+    try {
+      var st = state();
+      var s = st ? st.get() : null;
+      return !s || !s.tutorialDone;
+    } catch (e) { return false; }
+  }
+
   // Three works per day: at least one from the book set, the rest from the
   // whole pool. Seeded by the date, so the same day draws the same three.
+  // Before the tutorial is done the room assigns the starting three instead.
   function pickWorks(dateKey) {
+    if (starterNeeded()) return STARTER.slice();
     var rng = mulberry32(hashSeed('daily-floor|' + dateKey));
     var book = POOL.filter(function (p) { return BOOK_IDS.indexOf(p.id) !== -1; });
     var rest = POOL.filter(function (p) { return BOOK_IDS.indexOf(p.id) === -1; });

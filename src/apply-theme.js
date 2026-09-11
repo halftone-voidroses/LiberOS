@@ -10,12 +10,22 @@
     'ravaging', 'royalty', 'clean', 'shadow', 'mono', 'gold'];
 
   function paint() {
-    var machine = document.querySelector('.machine');
-    if (!machine) return;
     var s = (window.Liber && window.Liber.state && window.Liber.state.get()) || {};
     var theme = s.theme || 'corrupted';
-    for (var i = 0; i < IDS.length; i++) machine.classList.remove('theme-' + IDS[i]);
-    machine.classList.add('theme-' + theme);
+    if (IDS.indexOf(theme) < 0) theme = 'corrupted';
+    try { document.body.setAttribute('data-theme', theme); } catch (e) {}
+    var machine = document.querySelector('.machine');
+    if (machine) {
+      for (var i = 0; i < IDS.length; i++) machine.classList.remove('theme-' + IDS[i]);
+      machine.classList.add('theme-' + theme);
+    }
+    var screen = document.querySelector('.screen');
+    if (screen && !screen.querySelector('.theme-grade')) {
+      var grade = document.createElement('div');
+      grade.className = 'theme-grade';
+      grade.setAttribute('aria-hidden', 'true');
+      screen.appendChild(grade);
+    }
   }
 
   function init() {

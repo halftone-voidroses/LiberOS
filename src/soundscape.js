@@ -40,12 +40,7 @@
     };
   }
 
-  function soundsOn() {
-    var s = st();
-    return !s || s.get().sounds !== false;
-  }
-
-  function enabled() { return soundsOn() && scape().on; }
+  function enabled() { return scape().on; }
 
   function roomId() {
     try {

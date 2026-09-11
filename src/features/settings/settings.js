@@ -25,12 +25,11 @@
     renderScape();
   }
 
-  // WS4: mute toggle — the `sounds` flag lives in state.js DEFAULT.
   function renderSound() {
     var b = document.getElementById('settings-sound');
     if (!b) return;
     var on = (window.Liber && window.Liber.sound) ? window.Liber.sound.isEnabled() : true;
-    b.textContent = 'sound: ' + (on ? 'on' : 'off');
+    b.textContent = 'sound fx: ' + (on ? 'on' : 'off');
   }
 
   function toggleSound() {
@@ -40,10 +39,6 @@
       window.Liber.sound.setEnabled(nowOn);
     }
     renderSound();
-    if (window.Liber && window.Liber.soundscape) {
-      try { window.Liber.soundscape.refresh(); } catch (e) {}
-    }
-    // Audible confirmation: the toggle itself answers when sound is on.
     if (nowOn && window.Liber && window.Liber.sound) {
       try { window.Liber.sound.play('chime'); } catch (e) {}
     }
@@ -80,12 +75,6 @@
 
   function renderScape() {
     var c = scapeLevels();
-    var t = document.getElementById('settings-scape');
-    var b = document.getElementById('settings-bed');
-    var m = document.getElementById('settings-motif');
-    if (t) t.textContent = 'room tone: ' + (c.on ? 'on' : 'off');
-    if (b) b.textContent = 'bed: ' + c.bed;
-    if (m) m.textContent = 'motifs: ' + c.motif;
     var slider = document.getElementById('settings-music');
     var val = document.getElementById('settings-music-val');
     if (slider && document.activeElement !== slider) slider.value = String(c.music);
@@ -193,21 +182,6 @@
     if (r) r.addEventListener('click', replay);
     if (s) s.addEventListener('click', toggleShadow);
     if (sd) sd.addEventListener('click', toggleSound);
-    var sc = document.getElementById('settings-scape');
-    var bd = document.getElementById('settings-bed');
-    var mo = document.getElementById('settings-motif');
-    if (sc) sc.addEventListener('click', function () {
-      var c = scapeLevels();
-      setScape({ on: !c.on });
-    });
-    if (bd) bd.addEventListener('click', function () {
-      var c2 = scapeLevels();
-      setScape({ bed: (c2.bed + 1) % 4 });
-    });
-    if (mo) mo.addEventListener('click', function () {
-      var c3 = scapeLevels();
-      setScape({ motif: (c3.motif + 1) % 4 });
-    });
     var slider = document.getElementById('settings-music');
     if (slider) {
       slider.addEventListener('input', function () { setMusic(slider.value); });

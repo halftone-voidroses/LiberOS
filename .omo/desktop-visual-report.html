@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LiberOS Desktop — A Visual Reading From Inside the Room</title>
+<style>
+:root{
+  --bg:#060302; --panel:#140907; --panel2:#1d0e0a; --line:#4a2818;
+  --gold:#c8a878; --cream:#e8dcc0; --muted:#a89070; --dim:#7a684e;
+  --pink:#ff9ec6; --rose:#ff69b4; --amber:#ffd86a; --teal:#2a8a8a;
+  --serif:Georgia,"Times New Roman",serif; --mono:"VT323","SF Mono",Menlo,monospace;
+}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--cream);font-family:var(--serif);line-height:1.65}
+.wrap{max-width:920px;margin:0 auto;padding:32px 22px 90px}
+.hero{border:1px solid var(--line);border-radius:14px;padding:38px 34px;background:linear-gradient(180deg,#1e0e08,#0a0403)}
+.kicker{font-family:var(--mono);font-size:15px;letter-spacing:.24em;color:var(--gold);text-transform:lowercase}
+h1{font-weight:400;font-size:clamp(30px,5vw,50px);line-height:1.08;margin:.35em 0 .2em}
+h1 em{color:var(--pink);font-style:italic}
+.sub{font-style:italic;color:var(--muted);font-size:18px;max-width:60ch}
+.meta{font-family:var(--mono);font-size:14px;color:var(--dim);margin-top:14px;display:flex;gap:14px;flex-wrap:wrap}
+.scores{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:24px 0 0}
+.score{border:1px solid var(--line);border-radius:10px;padding:12px;background:#100604}
+.score b{font-size:30px;font-weight:400;font-family:var(--serif)}
+.score span{display:block;font-family:var(--mono);font-size:14px;color:var(--muted);letter-spacing:.08em}
+.bar{height:6px;background:#2b1410;border-radius:99px;margin-top:8px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--gold)}
+nav.toc{margin:22px 0;border:1px solid var(--line);border-radius:10px;padding:12px 18px;background:var(--panel);font-size:15px}
+nav.toc a{color:var(--gold)}
+h2{font-weight:400;font-size:24px;margin:52px 0 4px;letter-spacing:.02em}
+h2 .n{font-family:var(--mono);font-size:14px;color:var(--gold);margin-right:10px;letter-spacing:.2em}
+.lede{font-style:italic;color:var(--muted);font-size:17px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px} @media(max-width:760px){.grid{grid-template-columns:1fr}}
+.card{border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:16px}
+.card h3{margin:0 0 6px;font-size:16px}
+.card p{margin:8px 0;font-size:15px;color:#ddcba6}
+.tag{font-family:var(--mono);font-size:13px;letter-spacing:.1em;border:1px solid var(--line);border-radius:99px;padding:2px 10px;display:inline-block;margin-right:6px;text-transform:lowercase}
+.crit{color:#ff7a7a;border-color:#5a2222} .major{color:var(--amber);border-color:#5a4a20} .minor{color:var(--muted)} .good{color:#9ed09e;border-color:#25402a}
+code{font-family:var(--mono);font-size:13.5px;background:#241109;padding:1px 6px;border-radius:6px;color:var(--gold)}
+.stack{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:14px 0;font-family:var(--mono);font-size:14px}
+.stack div{padding:10px 16px;border-bottom:1px solid var(--line)} .stack div:last-child{border-bottom:none}
+.stack b{color:var(--gold);font-weight:400}
+.evid{background:#0a0403;border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-family:var(--mono);font-size:13.5px;color:var(--muted);margin:10px 0}
+table{width:100%;border-collapse:collapse;font-size:15px;margin:12px 0}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:13px;letter-spacing:.14em;color:var(--gold);text-transform:lowercase}
+footer{margin-top:56px;color:var(--dim);font-size:14px;border-top:1px solid var(--line);padding-top:18px;font-family:var(--mono)}
+.verdict{border:1px solid var(--gold);border-radius:12px;padding:18px;background:#1c1006;margin-top:18px;font-size:16px}
+.f{border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:18px;margin:14px 0}
+.f h3{margin:0 0 4px;font-size:18px}
+.f .why{color:var(--muted);font-size:15px}
+.f .fix{margin:10px 0 0 18px;font-size:15px;color:var(--muted)} .f .fix li{margin:4px 0}
+.f .fix b{color:var(--cream);font-weight:400}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="hero">
+<div class="kicker">liber.os · desktop · a reading from inside the room</div>
+<h1>The desktop is not a launcher.<br>It is <em>an altar that remembers.</em></h1>
+<p class="sub">Old critiques scored this screen like a dashboard — legibility 4.5, affordance 5.0 — and missed what it is trying to be. This report reads the desktop on its own terms: a haunted CRT in a dark room where kept things orbit a buddy-stone, relations are verbs, and presence etches the plastic. Judged that way, the desktop is 80% there. The remaining 20% is where the visuals quietly betray the ritual.</p>
+<div class="meta"><span>date: 2026-09-10</span><span>build: 2.6.0 · Desktop/LiberOS</span><span>scope: desktop.html + its shell only</span><span>method: full code read, no delegates</span></div>
+<div class="scores">
+<div class="score"><b>9.0</b><span>ritual coherence</span><div class="bar"><i style="width:90%"></i></div></div>
+<div class="score"><b>8.5</b><span>material honesty</span><div class="bar"><i style="width:85%"></i></div></div>
+<div class="score"><b>6.0</b><span>first-visit orientation</span><div class="bar"><i style="width:60%"></i></div></div>
+<div class="score"><b>6.5</b><span>constellation legibility</span><div class="bar"><i style="width:65%"></i></div></div>
+<div class="score"><b>5.5</b><span>dial discoverability</span><div class="bar"><i style="width:55%"></i></div></div>
+<div class="score"><b>8.0</b><span>restraint / motion</span><div class="bar"><i style="width:80%"></i></div></div>
+</div>
+</div>
+
+<nav class="toc">contents: <a href="#vision">1 · what the system believes</a> · <a href="#stack">2 · the desktop stack</a> · <a href="#states">3 · four desktops</a> · <a href="#right">4 · what is visually right</a> · <a href="#friction">5 · where visuals fight the vision</a> · <a href="#moves">6 · moves that keep the faith</a></nav>
+
+<h2 id="vision"><span class="n">01</span>What the system believes</h2>
+<p class="lede">You cannot critique the desktop until you accept its cosmology. I read it whole before judging a pixel.</p>
+<p>LiberOS is a haunted operating system in a dark room: one beige CRT (<code>machine.css</code> — <code>#e8dcc0</code> plastic, brass ring, pilot-flame LED, 12 carved visitors on the bezel) sitting in black void with dust, static at 4% opacity, vignette, and whispers drifting behind the monitor (<code>room.css</code>). Everything persists in <code>localStorage</code> per slot — no account, no cloud. The state file says it plainly: buddy, relations, divination, games, learn, sea, garden, dreams, satchel, graveyard (<code>src/state.js:16-46</code>).</p>
+<p>There are <strong>11 visitors</strong>, each with a material, an accent, an opinion, and a cursor (<code>data/personas.data.js</code>): mistress physius chisels stone; riason indexes vellum; vanir breathes wet slate; e-lizabeth seals black wax; whimsy wow paints marquee wood; arcana chalks felt; the mad scribe stamps cards; ruby embroiders canvas; insightful inquiry wears cotton gloves; wanderlust lays pigment mosaic; ravaging pete keeps rubble; pip leaves pinewood shavings. The dial speaks each room's phosphor color and glyph. The bezel carvings glow red when their visitor is present. Presence etches patina into the plastic (<code>bezel.css:76-78</code>), wax pools under the LED (<code>machine.css:230-232</code>), the sigil overlay gains opacity with buddy tiers (<code>desktop.css:44-46</code>).</p>
+<p>The desktop's job in this cosmology is specific: <strong>it is the relational graph, not the app grid.</strong> The buddy-stone is the hub (<code>★</code>, gold, center). Every kept artifact orbits it whether or not it is bound (<code>src/constellation.js:2-5</code>). Binding is a verb typed by hand — protects, carries, holds, witnesses, guards — defaulting to the humble <code>relates to</code>. Edges thicken as the web grows (<code>constellation.js:169-170</code>: <code>1.6 + min(relations,8)*0.45</code>). Competence made visible. The dial below is a pilgrimage instrument, not a menu: three tiles visible (prev / active / next), cycling with wooden arrows, opinions rising on hover in each traveller's voice. The status line bottom-right cycles four covenant phrases every 12 seconds and leaks each one into the room as a whisper. Nothing grinds; invites arrive once, in-voice (<code>CHANGELOG 2.6.0</code>).</p>
+<p>My opinion: this is a genuine vision, consistently executed. The old critique treated faintness as a bug and emptiness as a dead end. Both are doctrines here — the room whispers, it never shouts; the void waits, it never begs. The critique below honors that and only flags where the visuals break faith with it.</p>
+
+<h2 id="stack"><span class="n">02</span>The desktop stack, as built</h2>
+<p class="lede">Seven layers. Each one earns its place. Two of them crowd each other.</p>
+<div class="stack">
+<div><b>room</b> — fixed black void · dust canvas z1 · whispers z2 · machine z10 · static overlay z50 4% · vignette z99 · <code>room.css</code></div>
+<div><b>machine</b> — <code>min(72vw, 1100px, (100vh-96px)*4/3)</code> · 4/3 beige body · brass-ring screen · LED flame + wax mound · scars · 12 carvings · <code>machine.css / bezel.css / scars.css</code></div>
+<div><b>screen</b> — <code>#2a0000</code> maroon void · curvature shade · 40s glass-glare crossing · <code>machine.css:102-176</code></div>
+<div><b>constellation</b> — absolute top, bottom 26% · SVG 600×400 at 92% · empty invitation top 118px · orbit group 60s · <code>constellation.css / constellation.js</code></div>
+<div><b>voice layer</b> — prompt-line bottom 26%+52px italic Georgia pink · status plate bottom 26%+6px right 14px VT323 · <code>desktop.css:622 / status-line.css</code></div>
+<div><b>dial</b> — bottom 26% band · 116px phosphor plaques · active pops −30%, glyph 17→36px · wooden triangles · hold-600ms index · <code>dial.css / dial.js</code></div>
+<div><b>chrome</b> — settings cog right 28px bottom 26%+40px, 12s spin · weaver toggle · mini-menu 60%/360px center · flaming-Q · <code>desktop.css</code></div>
+</div>
+<p>The stack is disciplined: z-order reads room (1) → machine (10) → constellation (6 within screen) → dial (10) → cog/status (12/30) → prompt (40) → weaver note (31) → mini (32). The one collision the authors already fought was cog-vs-status (comment at <code>desktop.css:401-403</code> records lifting the cog 18px after teeth clipped status text at 1280×800). That care shows. What remains is subtler: the constellation's center and the empty invitation both want the top of the screen, and the dial's opinion line rises into the same air the prompt-line breathes in.</p>
+
+<h2 id="states"><span class="n">03</span>Four desktops, not one</h2>
+<p class="lede">The file renders four different rooms across a life. Critiquing "the desktop" as a single screenshot misses the arc.</p>
+<table><tr><th>state</th><th>what you see</th><th>what it means</th></tr>
+<tr><td><b>pre-tutorial</b></td><td>giant flaming <code>?</code> (180–280px black italic Times, pink/yellow screen-blend flames, 1.6s flicker) + tutorial window 70%/360px EB Garamond italic + empty constellation line</td><td>wanderlust summoning. Correct: one god, one door. The flames are the only element allowed to shout.</td></tr>
+<tr><td><b>cast-buddy-first</b></td><td><code>— cast the buddy first — / open the buddy from the dial.</code> (+ sealed-chat count if any) · empty SVG · dial visible</td><td>The void names its price. Guidance is circular (dial teaches dial) but honest — the stone must come first because everything orbits it.</td></tr>
+<tr><td><b>buddy-made, nothing saved</b></td><td><code>— buddy made — / save one thing: a card, a line, a seed.</code> · gold ★ center + halo · count line</td><td>The altar is lit and empty. Best line in the sequence — concrete, three examples, no poetry.</td></tr>
+<tr><td><b>the web</b></td><td>numbered dots on 600×400 orbit, verb labels on edges, <code>— N artifacts, M bound —</code>, satellites at r16, mini-menu on click, weaver toggle after 5 binds</td><td>The instrument. Edges thicken with care; orbits pause on hover; pluck hums its verb. The room playing back your keeping.</td></tr>
+</table>
+<p>All four empty-state strings live in <code>constellation.js:124-151</code> and they are well-written — each names the next physical action. My structural note: all four render in the same slot (top 118px, same italic, same faintness), so progress through them has no spatial or tonal marker. The words change; the room does not acknowledge that <em>you</em> changed.</p>
+
+<h2 id="right"><span class="n">04</span>What is visually right — defend these</h2>
+<div class="grid">
+<div class="card"><h3><span class="tag good">keep</span>Phosphor tiles with hands inside</h3><p>Each dial plaque burns its traveller's color (<code>--acc/--glow</code> per id, <code>dial.js:167-192</code>) over a hybrid tile-back — stone speckle for sigil, marquee bulbs for games, foam edge for sea, mosaic conic for themes (<code>dial.css:418-488</code>). Fixed 116px footprint so cycling never shifts edges. Active tile lifts −30% with glyph 17→36px. Identity without reskinning geometry. This is the system's best component.</p></div>
+<div class="card"><h3><span class="tag good">keep</span>Edges that thicken with care</h3><p><code>edgeWidth = 1.6 + min(relations,8)*0.45</code>, opacity to 0.9. Your web literally draws itself surer as you tend it. No badge, no XP bar — the graph is the progress. Paired with patina tiers and wax mound, presence has three quiet witnesses.</p></div>
+<div class="card"><h3><span class="tag good">keep</span>The whisper economy</h3><p>Status phrases 12s, fade 400ms, lowercase VT323 14px on a screwed nameplate; every phrase dispatched as <code>liber:whisper</code> drifting 11s behind the monitor at 6–8% opacity, blurred 0.8px. The machine talks to the room, not at you. Buddy-voice shift to crimson at tier 1 is exactly as loud as it should be.</p></div>
+<div class="card"><h3><span class="tag good">keep</span>Static restraint</h3><p>Sigil overlay gains opacity/scale in steps (8→18%), never animates (<code>desktop.css:40-46</code> comments: decorative only, carries no information). Patina/verdigris crossfade over 2.4s. Glass glare crosses once per 40s for 8s. Everything ambient honors <code>prefers-reduced-motion</code>. A haunted machine that knows not to startle.</p></div>
+<div class="card"><h3><span class="tag good">keep</span>Mini-menu verbs</h3><p>Click artifact → <code>— artifact —</code> card: free verb field with 10-family datalist, bind-to picker (buddy or any artifact), four actions (bind / open in room / open in satchel / release). Binding artifact-to-artifact draws satellite orbits — the only place the graph goes two levels deep. Small, centered, pink-bordered. Correct density for a consecration gesture.</p></div>
+<div class="card"><h3><span class="tag good">keep</span>The receding god</h3><p>Pre-tutorial <code>?</code> fills 22vw; post-tutorial it becomes a 28px corner mark, opacity 0.85 (<code>desktop.css:116-155</code>). Wanderlust arrives as weather and leaves as a tool. Few onboarding designs understand that the guide must shrink. This one does.</p></div>
+</div>
+
+<h2 id="friction"><span class="n">05</span>Where the visuals fight the vision</h2>
+<p class="lede">Not usability complaints — places where the rendering undercuts what the system says it believes.</p>
+
+<div class="f"><h3><span class="tag crit">critical</span> The orbit labels are too small to be read as keeping</h3>
+<p>Artifact dots are <code>r=9</code> with number <code>font-size 8</code> and name <code>font-size 7</code> serif italic inside a 600×400 viewBox scaled to 92% of a ~700px screen (<code>constellation.js:195-199</code>). Effective cap-height lands near 5px. Verb labels on edges are 6.5px Georgia. Truncation at 18 chars. These are the names of kept things — the system's most sacred text — set smaller than any other copy on the desktop, including the status plate (14px) and dial labels (16–20px).</p>
+<p class="why">Why it matters to the vision: the constellation claims "everything kept is kept once, index it well" (riason). Illegible labels make keeping feel archival rather than present. The patina says the room remembers; the type says it mumbles.</p>
+<div class="evid">evidence: src/constellation.js:195-199 · styles/constellation.css:14-22 · compare .status-line 0.875rem / .phos-label 1rem</div>
+<ul class="fix"><li><b>Gentlest fix:</b> floor orbit labels at 9px SVG (≈11px effective), numbers at 9 bold; move names below dots with dark pill behind; keep truncation but add full name to mini title. No layout change — only the sacred text gets its size back.</li></ul>
+</div>
+
+<div class="f"><h3><span class="tag crit">critical</span> The dial hides 8 of 11 rooms with no scent of the hidden</h3>
+<p>Only prev/active/next render (<code>dial.js:149-154</code>). The full index exists but opens only on 600ms hold of the active tile (<code>dial.js:257-261</code>) — no hint, no affordance, keyboard ArrowDown only when focus is inside the dial. Arrows are border-triangles with a 13px extended hit area, no labels. First visit: the constellation says "open the buddy from the dial" while the dial may be showing games/toybox/divination — buddy up to 5 cycles away, each cycle writing <code>visited</code> timestamps as a side effect.</p>
+<p class="why">Why it matters: the dial's doctrine is pilgrimage — arrive in order, be surprised. But pilgrimage needs signposts. Currently the room asks a newcomer to wander a carousel to find the one stone everything else depends on.</p>
+<div class="evid">evidence: src/dial.js:27-29 hold-to-open · :120-127 cycle writes visited · styles/dial.css:245-283 arrows</div>
+<ul class="fix"><li><b>Gentlest fix:</b> keep 3-tile carousel; add a persistent <code>··· all rooms</code> hint under the active tile (VT323 14px, faint) that opens the index on click. Do not add a grid, do not paginate — one scented door to the whole cast.</li></ul>
+</div>
+
+<div class="f"><h3><span class="tag major">major</span> Empty states change words, not the room</h3>
+<p>Four beautifully written invitations share one slot, one style, one position (<code>constellation-empty</code> top 118px, Georgia italic 16px, 0.85/0.8 opacity). No marker distinguishes "you have not begun" from "your buddy waits" from "your web has begun". The SVG stays literally empty (<code>svg.innerHTML=''</code>) through the first two states — the altar shows nothing of what is coming, not even a ghost of the orbit.</p>
+<p class="why">The void-waiting doctrine is right; undifferentiated waiting is not. Ritual marks thresholds — a candle lit, a cloth unfolded.</p>
+<div class="evid">evidence: src/constellation.js:123-151 · styles/constellation.css:24-45</div>
+<ul class="fix"><li><b>Gentlest fix:</b> keep the void; add one threshold mark per state — pre-tutorial: flames (already); cast-first: faint unlit ★ outline center; buddy-made: ★ lit + empty orbit ring dashed; first-bind: ring gains its first edge. Same words, plus the room acknowledging you crossed.</li></ul>
+</div>
+
+<div class="f"><h3><span class="tag major">major</span> Opinion line and prompt line share one breath of air</h3>
+<p>Hovering a dial tile raises <code>.dial-opinion</code> (bottom 76% of dial band, VT323 16px, persona accent name + opinion) while the prompt engine may show <code>.prompt-line</code> (bottom 26%+52px, Georgia italic 16px pink) — both centered, both one line, zones overlapping by ~20px on short windows. Two voices (traveller opinion vs. ambient prompt) can stack into a single visual sentence neither authored.</p>
+<div class="evid">evidence: styles/dial.css:291-307 · styles/desktop.css:622-645</div>
+<ul class="fix"><li><b>Gentlest fix:</b> dock opinions to the dial (keep) and lift prompt-line 24px with a max-width 60% + slightly smaller 15px. No color change — separation by altitude, not voice.</li></ul>
+</div>
+
+<div class="f"><h3><span class="tag major">major</span> Satellite dots fall below the touch floor</h3>
+<p>Second-level binds render at <code>r=4.5</code> with 0.5px stroke (<code>constellation.js:209</code>) — ~9px diameter targets on desktop, ~6px effective on small screens, no padding, hover glow only. The weaver's drag-to-retie needs a press-and-hold on exactly these dots; orbit rotation (60s) moves them mid-gesture (pauses on hover of the group, not of the dot).</p>
+<div class="evid">evidence: src/constellation.js:200-211 orbit · :94-102 animation · :244-284 weave drag</div>
+<ul class="fix"><li><b>Gentlest fix:</b> keep visual r=4.5; add transparent <code>r=10</code> hit circle per satellite; pause that artifact's orbit while its mini is open. The eye keeps delicacy; the hand gets dignity.</li></ul>
+</div>
+
+<div class="f"><h3><span class="tag minor">minor</span> Cog, status, weaver: three quiet things in one corner</h3>
+<p>Settings cog (right 28px, bottom 26%+40px), status plate (right 14px, bottom 26%+6px), weaver toggle (right 18px, bottom 64px) triangulate within ~80px. Each is well-made; together they read as one fussy corner. The weaver toggle is also the only rounded pill (<code>border-radius 14px</code>, small-caps) among phosphor plaques and brass plates — a fourth material in a system of three.</p>
+<div class="evid">evidence: styles/desktop.css:398-417 cog · :699-714 weaver · styles/status-line.css:15-36</div>
+<ul class="fix"><li><b>Gentlest fix:</b> restyle weaver toggle as a phosphor plaque (square 6px, VT323, <code>--acc #aa7838</code> riason voice — it is her game) and dock it left of the cog. Corner becomes a shelf, not a pile.</li></ul>
+</div>
+
+<div class="f"><h3><span class="tag minor">minor</span> Seven ambient loops share the desktop's breath</h3>
+<p>Orbit 60s + motes 3.6s + flames 1.6/2.2s (pre) + LED flicker 0.9s &amp; breathe 5.6s + glare 40s + whisper drift 11s + dust/static canvases. Individually calm; together the desktop never fully exhales. The reduced-motion gates are exemplary (every loop has one), but there is no full-motion dimmer for users who keep motion yet want the altar still.</p>
+<div class="evid">evidence: desktop.css:103-107,433-440 · machine.css:171-211 · room.css:100-118,173-177</div>
+<ul class="fix"><li><b>Gentlest fix:</b> tie dust/static/whisper density to the existing <code>sound</code> or a new <code>stillness</code> toggle in settings — "the machine holds its breath" already exists as copy. One switch, doctrine-shaped.</li></ul>
+</div>
+
+<h2 id="moves"><span class="n">06</span>Moves that keep the faith, in order</h2>
+<table><tr><th>p</th><th>move</th><th>where</th><th>what it restores</th></tr>
+<tr><td>P0</td><td>Orbit label floor (9px SVG) + pill behind names; full name in mini title</td><td><code>constellation.js:195-199</code></td><td>kept things legible as kept things</td></tr>
+<tr><td>P0</td><td><code>··· all rooms</code> hint opening the existing index (no new UI idiom)</td><td><code>dial.js:62-73</code> + one line of CSS</td><td>pilgrimage with signposts</td></tr>
+<tr><td>P1</td><td>Threshold marks: unlit ★ → lit ★ + dashed ring → first edge</td><td><code>constellation.js:123-151</code></td><td>waiting that acknowledges crossing</td></tr>
+<tr><td>P1</td><td>Satellite hit circles r=10; pause orbit while mini open</td><td><code>constellation.js:200-211</code></td><td>small sacred things, touchable</td></tr>
+<tr><td>P1</td><td>Prompt-line +24px, max-width 60%; opinions stay docked</td><td><code>desktop.css:622</code>, <code>dial.css:291</code></td><td>two voices, no longer one sentence</td></tr>
+<tr><td>P2</td><td>Weaver toggle as riason phosphor plaque, docked left of cog</td><td><code>desktop.css:699</code></td><td>corner shelf, one material language</td></tr>
+<tr><td>P2</td><td><code>stillness</code> toggle gating dust/static/whispers density</td><td><code>settings</code> + <code>room.css</code></td><td>an altar that can hold its breath</td></tr>
+</table>
+
+<div class="verdict"><b>Verdict from inside the room:</b> the desktop understands what it is — the only screen in the OS that does not belong to a visitor, because it belongs to the keeping itself. Its phosphor, wax, dust, and verbs cohere. Do not redesign it. Give its smallest sacred text back its size, scent its hidden rooms, and let the void mark the crossings. Everything else is already listening.</div>
+
+<footer>method — read in full, this session, no delegates: desktop.html · styles/{desktop,dial,constellation,room,machine,bezel,status-line}.css · src/{dial,constellation,status-line,state}.js · data/personas.data.js · CHANGELOG 2.6.0. images referenced by path (shots/pitch-shots/desktop-pre|post.png · screenshots/smoke-05-constellation.png) — open beside this file. scores are judgment against the system's own doctrine, not generic heuristics.<br>liber.os is listening. — filed 2026-09-10 · single self-contained .html, zero external requests</footer>
+
+</div>
+</body>
+</html>

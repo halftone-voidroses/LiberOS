@@ -573,3 +573,65 @@
   background: #12081e;
   box-shadow: inset 0 0 60px rgba(0,0,0,0.55), 0 0 22px rgba(150, 90, 220, 0.3);
 }
+
+/* ============================================================================
+   Whole-system grading — the theme reaches past the bezel. apply-theme.js
+   (included on every page) stamps body[data-theme] and mounts one
+   .theme-grade veil inside .screen: a single blend quad over all app
+   content, so every room takes the theme's cast without touching any app
+   stylesheet. Blend-only, never filter: fixed-position overlays inside
+   apps keep working. A second wash tints the void around the machine.
+   corrupted is the base look — no veil, no wash.
+   ============================================================================ */
+
+.theme-grade {
+  position: absolute;
+  inset: 0;
+  z-index: 400;
+  pointer-events: none;
+  display: none;
+  background: transparent;
+}
+
+body[data-theme="wanderlust"] .theme-grade { display: block; background: rgba(255, 158, 207, 0.30); mix-blend-mode: color; }
+body[data-theme="riason"] .theme-grade { display: block; background: rgba(127, 168, 224, 0.28); mix-blend-mode: color; }
+body[data-theme="physius"] .theme-grade { display: block; background: rgba(200, 128, 60, 0.24); mix-blend-mode: color; }
+body[data-theme="whimsy"] .theme-grade { display: block; background: rgba(240, 190, 90, 0.24); mix-blend-mode: color; }
+body[data-theme="vanir"] .theme-grade { display: block; background: rgba(42, 154, 154, 0.30); mix-blend-mode: color; }
+body[data-theme="entity404"] .theme-grade { display: block; background: rgba(48, 208, 96, 0.28); mix-blend-mode: color; }
+body[data-theme="arcana"] .theme-grade { display: block; background: rgba(232, 228, 218, 0.22); mix-blend-mode: color; }
+body[data-theme="librarian"] .theme-grade { display: block; background: rgba(200, 152, 88, 0.26); mix-blend-mode: color; }
+body[data-theme="elizabeth"] .theme-grade { display: block; background: rgba(212, 175, 55, 0.26); mix-blend-mode: color; }
+body[data-theme="iris"] .theme-grade { display: block; background: rgba(216, 204, 176, 0.24); mix-blend-mode: color; }
+body[data-theme="ravaging"] .theme-grade { display: block; background: rgba(160, 96, 56, 0.28); mix-blend-mode: color; }
+body[data-theme="royalty"] .theme-grade { display: block; background: rgba(144, 64, 192, 0.28); mix-blend-mode: color; }
+body[data-theme="clean"] .theme-grade { display: block; background: rgba(255, 244, 224, 0.12); mix-blend-mode: normal; }
+body[data-theme="shadow"] .theme-grade { display: block; background: rgba(0, 0, 0, 0.30); mix-blend-mode: normal; }
+body[data-theme="mono"] .theme-grade { display: block; background: rgba(128, 128, 128, 0.60); mix-blend-mode: saturation; }
+body[data-theme="gold"] .theme-grade { display: block; background: rgba(232, 184, 48, 0.26); mix-blend-mode: color; }
+
+.room::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: transparent;
+}
+
+body[data-theme="wanderlust"] .room::after { background: radial-gradient(ellipse at 50% 45%, rgba(232, 120, 170, 0.16) 0%, rgba(0,0,0,0) 60%); }
+body[data-theme="riason"] .room::after { background: radial-gradient(ellipse at 50% 45%, rgba(120, 160, 220, 0.15) 0%, rgba(0,0,0,0) 60%); }
+body[data-theme="physius"] .room::after { background: radial-gradient(ellipse at 50% 45%, rgba(200, 130, 60, 0.14) 0%, rgba(0,0,0,0) 60%); }
+body[data-theme="whimsy"] .room::after { background: radial-gradient(ellipse at 50% 45%, rgba(240, 190, 90, 0.14) 0%, rgba(0,0,0,0) 60%); }
+body[data-theme="vanir"] .room::after { background: radial-gradient(ellipse at 50% 45%, rgba(40, 150, 150, 0.16) 0%, rgba(0,0,0,0) 60%); }
+body[data-theme="entity404"] .room::after { background: radial-gradient(ellipse at 50% 45%, rgba(40, 200, 90, 0.14) 0%, rgba(0,0,0,0) 60%); }
+body[data-theme="arcana"] .room::after { background: radial-gradient(ellipse at 50% 45%, rgba(220, 215, 200, 0.10) 0%, rgba(0,0,0,0) 60%); }
+body[data-theme="librarian"] .room::after { background: radial-gradient(ellipse at 50% 45%, rgba(200, 150, 80, 0.13) 0%, rgba(0,0,0,0) 60%); }
+body[data-theme="elizabeth"] .room::after { background: radial-gradient(ellipse at 50% 45%, rgba(212, 175, 55, 0.13) 0%, rgba(0,0,0,0) 60%); }
+body[data-theme="iris"] .room::after { background: radial-gradient(ellipse at 50% 45%, rgba(210, 195, 165, 0.10) 0%, rgba(0,0,0,0) 60%); }
+body[data-theme="ravaging"] .room::after { background: radial-gradient(ellipse at 50% 45%, rgba(165, 100, 50, 0.14) 0%, rgba(0,0,0,0) 60%); }
+body[data-theme="royalty"] .room::after { background: radial-gradient(ellipse at 50% 45%, rgba(140, 80, 210, 0.16) 0%, rgba(0,0,0,0) 60%); }
+body[data-theme="clean"] .room::after { background: radial-gradient(ellipse at 50% 45%, rgba(240, 235, 220, 0.08) 0%, rgba(0,0,0,0) 60%); }
+body[data-theme="shadow"] .room::after { background: radial-gradient(ellipse at 50% 45%, rgba(0, 0, 0, 0.35) 0%, rgba(0,0,0,0) 60%); }
+body[data-theme="mono"] .room::after { background: radial-gradient(ellipse at 50% 45%, rgba(160, 160, 160, 0.07) 0%, rgba(0,0,0,0) 60%); }
+body[data-theme="gold"] .room::after { background: radial-gradient(ellipse at 50% 45%, rgba(230, 180, 50, 0.14) 0%, rgba(0,0,0,0) 60%); }
