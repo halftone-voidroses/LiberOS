@@ -1,0 +1,53 @@
+name: CI smoke
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install frontend deps
+        run: npm ci
+
+      - name: Data verifiers (no browser)
+        run: |
+          node scripts/verify-data.mjs
+          node scripts/verify-prompt-engine.mjs
+          node scripts/verify-gamification.mjs
+
+      - name: Install Playwright chromium
+        run: npx playwright install --with-deps chromium
+
+      # Full tutorial smoke is timing-sensitive (see CHANGELOG 2.7.0:
+      # pre-existing environment stall trips pristine 2.6.1 too), so it
+      # reports without blocking the gate. verify-fixes is the blocker.
+      - name: Full smoke (report-only)
+        run: npm run smoke
+        continue-on-error: true
+        timeout-minutes: 15
+
+      - name: Regression suite (blocks)
+        run: node scripts/verify-fixes.mjs
+        timeout-minutes: 15
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: smoke-screenshots
+          path: screenshots/
+          if-no-files-found: ignore

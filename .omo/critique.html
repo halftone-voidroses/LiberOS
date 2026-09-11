@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230d0b09'/%3E%3Ccircle cx='8' cy='8' r='4.5' fill='none' stroke='%23c9a059' stroke-width='1.5'/%3E%3C/svg%3E">
-<title>LiberOS — Full-Read Critique</title>
+<title>LiberOS — Full-Read Critique Vol. 2.0</title>
 <style>
   :root {
     --bg: #0d0b09;
@@ -19,10 +19,10 @@
     --med: #c9a059;
     --note: #7fae9b;
     --ok: #8aa88a;
+    --fixed: #8aa88a;
     --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
     --serif: Georgia, "Times New Roman", serif;
   }
-
   * { box-sizing: border-box; }
   html { background: var(--bg); }
   body {
@@ -36,8 +36,6 @@
     line-height: 1.62;
     -webkit-font-smoothing: antialiased;
   }
-
-  /* ── masthead ─────────────────────────────────────────── */
   header.masthead {
     border-bottom: 1px solid var(--rule);
     padding: 56px 0 28px;
@@ -65,11 +63,9 @@
     color: var(--ink-dim);
     margin: 14px 0 0;
   }
-
-  /* ── standings ────────────────────────────────────────── */
   section.standings {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 1px;
     background: var(--rule);
     border: 1px solid var(--rule);
@@ -97,8 +93,7 @@
   .standing.med .n { color: var(--med); }
   .standing.note .n { color: var(--note); }
   .standing.ok .n { color: var(--ok); }
-
-  /* ── prose ────────────────────────────────────────────── */
+  .standing.fixed .n { color: var(--fixed); }
   h2 {
     font-size: 22px;
     font-weight: normal;
@@ -115,10 +110,7 @@
     letter-spacing: 0.2em;
   }
   p { margin: 14px 0; }
-  .lede {
-    font-size: 19px;
-    color: var(--ink);
-  }
+  .lede { font-size: 19px; color: var(--ink); }
   .lede em { color: var(--accent); font-style: normal; }
   .dim { color: var(--ink-dim); }
   code.ev {
@@ -131,8 +123,6 @@
     color: var(--ink);
     white-space: nowrap;
   }
-
-  /* ── filters ──────────────────────────────────────────── */
   .filters {
     display: flex;
     gap: 8px;
@@ -152,18 +142,13 @@
     transition: border-color 160ms ease, color 160ms ease;
   }
   .filters button:hover { border-color: var(--accent-2); color: var(--ink); }
-  .filters button.on {
-    border-color: var(--accent);
-    color: var(--ink);
-  }
+  .filters button.on { border-color: var(--accent); color: var(--ink); }
   .count-line {
     font-family: var(--mono);
     font-size: 11px;
     color: var(--ink-faint);
     margin: 10px 2px 18px;
   }
-
-  /* ── findings ─────────────────────────────────────────── */
   article.finding {
     border: 1px solid var(--rule);
     background: var(--bg-2);
@@ -175,18 +160,10 @@
   article.finding.hi { border-left: 3px solid var(--hi); }
   article.finding.med { border-left: 3px solid var(--med); }
   article.finding.note { border-left: 3px solid var(--note); }
-
-  .f-head {
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-  .f-num {
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--ink-faint);
-  }
+  article.finding.fixed { border-left: 3px solid var(--fixed); }
+  article.finding.retired { opacity: 0.75; border-left: 3px dashed var(--ink-faint); }
+  .f-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .f-num { font-family: var(--mono); font-size: 12px; color: var(--ink-faint); }
   .f-title { font-size: 19px; margin: 0; }
   .sev {
     font-family: var(--mono);
@@ -199,7 +176,15 @@
   .sev.hi { color: var(--hi); border: 1px solid var(--hi); }
   .sev.med { color: var(--med); border: 1px solid var(--med); }
   .sev.note { color: var(--note); border: 1px solid var(--note); }
-
+  .sev.fixed { color: var(--fixed); border: 1px solid var(--fixed); }
+  .sev.retired { color: var(--ink-faint); border: 1px dashed var(--ink-faint); }
+  .f-status {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+  }
   .f-evid {
     margin: 12px 0 0;
     padding: 10px 12px;
@@ -222,11 +207,9 @@
     color: var(--ink-faint);
   }
   .f-evid code { color: var(--ink); }
-
   .f-body { margin: 14px 0 0; font-size: 16px; }
   .f-body p { margin: 8px 0; }
   .f-body .why { color: var(--ink-dim); }
-
   .f-alt {
     margin-top: 12px;
     padding-top: 10px;
@@ -242,7 +225,6 @@
     color: var(--accent-2);
     font-weight: normal;
   }
-
   .f-conf {
     font-family: var(--mono);
     font-size: 11px;
@@ -250,17 +232,8 @@
     display: inline-block;
     margin-top: 12px;
   }
-
-  /* ── strengths ────────────────────────────────────────── */
-  ul.strengths {
-    list-style: none;
-    margin: 18px 0 0;
-    padding: 0;
-  }
-  ul.strengths li {
-    border-bottom: 1px solid var(--rule);
-    padding: 14px 2px;
-  }
+  ul.strengths { list-style: none; margin: 18px 0 0; padding: 0; }
+  ul.strengths li { border-bottom: 1px solid var(--rule); padding: 14px 2px; }
   ul.strengths li:last-child { border-bottom: none; }
   ul.strengths .s-t {
     font-family: var(--mono);
@@ -271,19 +244,8 @@
     display: block;
     margin-bottom: 6px;
   }
-
-  /* ── method / footer ──────────────────────────────────── */
-  table.method {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14.5px;
-    margin: 18px 0;
-  }
-  table.method td {
-    padding: 7px 10px;
-    border-bottom: 1px solid var(--rule);
-    vertical-align: top;
-  }
+  table.method { width: 100%; border-collapse: collapse; font-size: 14.5px; margin: 18px 0; }
+  table.method td { padding: 7px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
   table.method td:first-child {
     font-family: var(--mono);
     font-size: 12px;
@@ -291,7 +253,6 @@
     width: 150px;
     letter-spacing: 0.06em;
   }
-
   footer {
     margin-top: 64px;
     padding-top: 18px;
@@ -301,13 +262,11 @@
     color: var(--ink-faint);
     line-height: 1.8;
   }
-
   @media (max-width: 640px) {
     section.standings { grid-template-columns: repeat(2, 1fr); }
     body { padding: 0 16px 64px; }
     h1 { font-size: 34px; }
   }
-
   @media (prefers-reduced-motion: reduce) {
     .filters button { transition: none; }
   }
@@ -316,63 +275,72 @@
 <body>
 
 <header class="masthead">
-  <p class="kick">LiberOS · Full-Read Critique · Vol. 1.0</p>
-  <h1>The machine is honest.<br>The seams are <span class="tone">not</span>.</h1>
-  <p class="sub">/Users/rosetudor/Desktop/liberos — commit d1e5a9a · read in full, line by line, no delegates</p>
+  <p class="kick">LiberOS · Full-Read Critique · Vol. 2.0</p>
+  <h1>The machine is honest.<br>The seams are <span class="tone">moving targets</span>.</h1>
+  <p class="sub">/Users/rosetudor/Desktop/Liber — 140cdd5 (Release 2.7.2) + working tree · multi-agent audit, three sweeps</p>
 </header>
 
 <section class="standings" id="standings" aria-label="finding counts by severity"></section>
 
 <h2><span class="sec-no">00</span>Verdict</h2>
 <p class="lede">
-  LiberOS reads as a ledger of promises kept. The stated laws — <em>grounding</em>,
-  <em>determinism</em>, <em>one voice</em>, <em>no randomness in anything the user can perceive</em> —
-  are honored exactly where they cost the most. The drift lives at the seams:
-  five artifact registries that quietly disagree, a canonical reading face that never
-  ships, selector forks in the largest stylesheet, and a spec that lost two of its
-  own apps on the way to the build.
+  Vol. 1.0 was written against commit <em>d1e5a9a</em> — a tree that still contained the
+  abstract, methodology, and relation rooms. Those rooms were deleted in 2.3.0/2.4.0, so
+  three of its findings now cite files that do not exist. This volume re-grounds every
+  carried finding against the 2.7.2 tree, retires the dead, and adds what the 2.7.x
+  releases (OST, two-knob sound, whole-system themes, starter quests) actually broke:
+  one skin that never paints, one test suite blocked by its own tour overlay, and a
+  spelling migration that stopped halfway.
 </p>
 <p class="dim">
-  None of what follows breaks the machine. Smoke passes, the verification suite is
-  unusually good, and the determinism discipline holds under test. What follows is
-  the gap between the covenant the project writes for itself and the code that ships —
-  each finding with its evidence, a confidence rating, and the strongest reading
-  <em>against</em> calling it a defect.
+  Four fixes landed in this session (theme-riason skin, Novus→Vacui copy, skill covenant
+  Godot purge, CI smoke workflow) and are recorded as fixed findings with their diffs.
+  Nothing else was touched: the coordinated raison→riason rename and the unused-OST
+  question are proposals, not edits, because each changes behavior or payload the owner
+  should sign off on. verify-data passes; verify-fixes stalls on the hijack overlay in
+  this environment (evidence below); full smoke was not re-run here — CI will run it
+  report-only until the stall is owned.
 </p>
 
 <h2><span class="sec-no">01</span>Findings</h2>
-<p class="dim">Filtered by severity. Evidence first; confidence and the strongest alternative reading after each finding.</p>
+<p class="dim">Filtered by severity. Status after each title: verified (read this session), carried (Vol. 1.0, files confirmed present, lines not re-read), fixed, retired.</p>
 <div class="filters" id="filters" role="group" aria-label="filter findings by severity">
   <button data-f="all" class="on">all</button>
   <button data-f="hi">high</button>
   <button data-f="med">medium</button>
   <button data-f="note">notes</button>
+  <button data-f="fixed">fixed</button>
+  <button data-f="retired">retired</button>
 </div>
 <p class="count-line" id="count-line"></p>
 <main id="findings"></main>
 
 <h2><span class="sec-no">02</span>What is right</h2>
-<p class="dim">A critique that only counts wounds misses the discipline. These are the rules the code actually keeps.</p>
+<p class="dim">Carried from Vol. 1.0 where still true; new entries marked 2.0.</p>
 <ul class="strengths">
   <li>
     <span class="s-t">Grounding is law — enforced</span>
-    <code class="ev">data/twelve-works.data.js:5-7</code> — citations and exercises can only be claimed by the works that provably carry them; trash carries no exercise and no citation, and the verification suite sweeps every raison panel for dev-spec text (<code class="ev">scripts/verify-fixes.mjs</code> M1, 14 pages).
+    <code class="ev">data/twelve-works.data.js:5-7</code> — citations and exercises can only be claimed by the works that provably carry them (carried; file not re-read this session).
   </li>
   <li>
     <span class="s-t">Determinism where outcomes matter</span>
-    Prompt composition is seeded per (relation, salt) and returns identical text (<code class="ev">scripts/verify-prompt-engine.mjs</code> a/d), ambient prompts are planned deterministically per visit, capped at two, gated on relations, and never repeat (<code class="ev">scripts/verify-gamification.mjs</code>). Booth bests are strict high-water marks with junk rejected.
+    Prompt composition seeded per (relation, salt); gamification thresholds presence-based, never streaks (carried; <code class="ev">scripts/verify-prompt-engine.mjs</code> + <code class="ev">verify-gamification.mjs</code> exist, not re-run here — CI runs them).
   </li>
   <li>
-    <span class="s-t">An unusually honest test suite</span>
-    25-step end-to-end smoke walking the entire tutorial with real assertions — including the regression pin that the BIG ? must not auto-open chat (<code class="ev">smoke.mjs:60-65</code>) and the D0001 dial rename (<code class="ev">smoke.mjs:158-161</code>). Gamification tests use 100-day-old timestamps on purpose to prove presence, not streaks, still counts.
+    <span class="s-t">2.0 — data layer green under audit</span>
+    <code class="ev">node scripts/verify-data.mjs</code> → all checks passed this session (tarot 22, hexagrams 64, exercises 19, glossary 16, citations 45).
   </li>
   <li>
-    <span class="s-t">The dist is the source, byte for byte</span>
-    <code class="ev">scripts/app-dist.cjs</code> copies root pages + src/styles/data/fonts and verifies every file with sha256 before exit; presentation/ is deliberately excluded and documented why. The Windows workflow rewrites the Tauri targets to nsis/msi.
+    <span class="s-t">2.0 — theme id migration finished at the source</span>
+    <code class="ev">src/features/themes/themes.js:9</code> + <code class="ev">src/apply-theme.js:10</code> both say <code class="ev">riason</code>; the stale tail (machine.css) was the only lagging file and is fixed.
   </li>
   <li>
-    <span class="s-t">inert, not aria-hidden, for live surfaces</span>
-    Closed interactive containers use the <code class="ev">inert</code> attribute (<code class="ev">scripts/verify-fixes.mjs</code> M4) — focus is truly removed, not just hidden from the tree, which survives the file://-probe build.
+    <span class="s-t">2.0 — release mechanics intact</span>
+    Remote tags <code class="ev">v2.6.0–v2.7.2</code> confirmed via <code class="ev">git ls-remote</code>; <code class="ev">.github/workflows/windows.yml</code> tag→installer→release-attach path re-read and unchanged.
+  </li>
+  <li>
+    <span class="s-t">2.0 — the skill covenant matches reality again</span>
+    <code class="ev">~/.config/opencode/skill/liberos/SKILL.md</code> — zero Godot references after this session (grep exit 1); project facts, read-before-write, and verify sections describe the web + Tauri repo.
   </li>
 </ul>
 
@@ -380,18 +348,17 @@
 <p class="dim">How this critique was produced, so it can be repeated or disputed.</p>
 <table class="method">
   <tbody>
-    <tr><td>subject</td><td>Entire repository at <code class="ev">/Users/rosetudor/Desktop/liberos</code>, branch <code class="ev">main</code>, head <code class="ev">d1e5a9a</code>.</td></tr>
-    <tr><td>coverage</td><td>19 root HTML pages; 20 core <code class="ev">src/*.js</code> modules; 18 feature JS modules; the full data layer incl. runtime mirrors (<code class="ev">data/…</code> and the <code class="ev">*.data.js</code> twins); all 14 <code class="ev">PERSONA.md</code>; 27 stylesheets (11 <code class="ev">styles/</code> + all 16 feature CSS); infra: <code class="ev">serve.cjs</code>, <code class="ev">smoke.mjs</code>, <code class="ev">shoot.mjs</code>, <code class="ev">scripts/*</code> (dist, verify-data, verify-fixes, verify-prompt-engine, verify-gamification), <code class="ev">probe-file-protocol.mjs</code>, <code class="ev">.github/workflows/windows.yml</code>, <code class="ev">package.json</code>, <code class="ev">.gitignore</code>, font inventory.</td></tr>
-    <tr><td>reading rule</td><td>Read directly, in order, nothing skimmed by a delegate. Every finding anchored to <code class="ev">file:line</code> read in this session, rated for confidence, and given its strongest alternative reading.</td></tr>
-    <tr><td>covenant</td><td>Critiqued against the project's own stated rules — the plan ledger (<code class="ev">.omo/plans/2026-09-04-full-pass.md</code>, incl. WS5/WS7), the grounding law in <code class="ev">data/twelve-works.data.js:5-7</code>, the no-random rule written at <code class="ev">src/gamification.js:6-7</code>, <code class="ev">src/daily-floor.js:4-5</code>, <code class="ev">src/prompt-engine.js:5</code> — and the general covenant's one-selector-owner rule.</td></tr>
-    <tr><td>prior sweep</td><td>A verbatim-text sweep of 8 files was already applied and pushed (<code class="ev">d1e5a9a</code>): cohort/satchel/games/divination/methodology HTML, <code class="ev">src/features/dreams/dreams.js:175</code>, <code class="ev">src/dial.js:22</code>, <code class="ev">data/personas.data.js</code>. Smoke passed. Items deliberately left unswept are flagged as a finding rather than silently fixed.</td></tr>
+    <tr><td>subject</td><td>Entire repository at <code class="ev">/Users/rosetudor/Desktop/Liber</code>, branch <code class="ev">main</code>, head <code class="ev">140cdd5</code> (Release 2.7.2) plus the working-tree diff of this session.</td></tr>
+    <tr><td>sweeps</td><td>Pass 1 — delegated: 3 parallel explore agents (recent-2.7.x audit, dead-ref/typo sweep, Godot-stale sweep) + 1 librarian (Tauri v2 + GH Actions patterns). Pass 2 — direct: full reads of <code class="ev">package.json</code>, <code class="ev">windows.yml</code>, <code class="ev">CHANGELOG.md</code>, both <code class="ev">.omo/plans/*.md</code>, <code class="ev">smoke.mjs</code>, <code class="ev">soundscape.js</code>, <code class="ev">settings.js</code>, <code class="ev">apply-theme.js</code>, <code class="ev">carvings.js</code>, <code class="ev">themes.js</code> IDS, <code class="ev">machine.css</code> theme matrix, <code class="ev">wanderlust-script.js</code> tutorial beats. Pass 3 — verification: <code class="ev">verify-data.mjs</code> green, <code class="ev">verify-fixes.mjs</code> stalled (evidence in F07), <code class="ev">node --check</code> on edited JS, grep exit-code proofs for zero-states.</td></tr>
+    <tr><td>chain work</td><td>gh CLI absent → downloaded <code class="ev">gh_2.100.0_macOS_arm64.zip</code> (asset names are .zip on macOS, not .tar.gz), installed to <code class="ev">~/.opencode/bin/gh</code> (on PATH); <code class="ev">gh auth status</code> → not logged in (owner must run <code class="ev">gh auth login</code>); remote tags verified via <code class="ev">git ls-remote</code>; new <code class="ev">.github/workflows/ci.yml</code> gates pushes (data/prompt/gamification verifiers + verify-fixes blocking, full smoke report-only).</td></tr>
+    <tr><td>honesty rule</td><td>Every finding carries a status. <em>Verified</em> = file:line read this session. <em>Carried</em> = Vol. 1.0 finding whose files still exist but whose lines were not re-read — flagged, not asserted. <em>Retired</em> = cited files deleted. No LSP diagnostics: the typescript server is not installed (previously declined) — syntax checked with <code class="ev">node --check</code> instead.</td></tr>
+    <tr><td>prior sweep</td><td>Vol. 1.0 was a verbatim-text sweep at <code class="ev">d1e5a9a</code> against a tree containing abstract/methodology/relation. This session fixed <code class="ev">src/wanderlust-script.js:110</code> (Novus→Vacui, women→woman) and <code class="ev">styles/machine.css:421-430</code> (theme-raison→theme-riason).</td></tr>
   </tbody>
 </table>
 
 <footer>
-  LIBERVACUI1.0 · critique vol.1.0 · produced 2026-09-05 · single self-contained file (inline CSS + JS, zero external requests)<br>
-  This page itself renders on the same Georgia/serif + monospace fallback stacks the app silently falls back to — see finding 02.<br>
-  Move or delete this file freely; it ships nothing (gitignored <code class="ev">.omo/</code>, excluded from <code class="ev">dist/</code>).
+  LIBERVACUI1.0 · critique vol.2.0 · produced 2026-09-11 · single self-contained file (inline CSS + JS, zero external requests)<br>
+  Lives at <code class="ev">.omo/critique.html</code> (there is no root critique.html; the Vol. 1.0 location). Move or delete freely; it ships nothing (gitignored <code class="ev">.omo/</code>, excluded from <code class="ev">dist/</code>).
 </footer>
 
 <script>
@@ -400,277 +367,355 @@
 
   var FINDINGS = [
     {
-      id: 'riason',
-      sev: 'hi',
-      title: 'The misspelled theme lives on: "riason"',
+      id: 'dead-skin',
+      sev: 'fixed',
+      status: 'fixed this session · verified',
+      title: 'The riason machine skin never painted (theme-raison vs theme-riason)',
       evid: [
-        'src/features/themes/themes.js:9 — theme name "riason"',
-        'plan WS7 — spelling standardized to "raison" across the project',
-        'screenshots/fix2-item7-raison-glitch.png — recorded glitch from a prior pass'
+        'src/apply-theme.js:10 — IDS contains \'riason\' → machine gets class theme-riason',
+        'styles/machine.css:421-430 (before fix) — only .machine.theme-raison defined',
+        'grep theme-riason styles/machine.css → zero hits before fix; full matrix otherwise 1:1',
+        'fix: theme-raison → theme-riason (4 selectors, machine.css:421-430)'
       ],
-      body: 'The master theme that everything else tints from is registered under a misspelled id. The plan ledger explicitly standardizes "raison" (WS7), and prior passes fixed the user-facing copy — the ceremonial name now reads correctly in the raison screens, but the runtime id itself still spells the ghost.',
-      why: 'Because the theme id is the key for persistence, anything keyed on the canonical spelling will miss the whole tonal system it powers.',
-      alt: 'The strongest counter-reading: "riason" is the only surviving instance and it is invisible to users — a pure data-hygiene wound, zero behavioral cost. That is exactly why it survives and why it is flagged rather than fixed unilaterally.',
-      conf: 'High — plan WS7 text + file line + prior screenshot all agree.'
+      body: 'The 2.7.x theme-id migration (raison→riason) finished in themes.js and apply-theme.js but never reached machine.css. The riason skin — blue/violet observer bezel, plate letterspacing, screen glow — was dead on arrival: the class the machine wore matched no rule. Every other theme id in IDS has its machine.css block; this was the single mismatch.',
+      why: 'Whole-system themes (2.7.2) was the headline release and one of its skins silently did nothing. The failure mode is invisible — no error, just the default bezel — so nothing could ever report it except a matrix grep.',
+      alt: 'Counter-reading: none serious — a selector typo with a two-line-class fix and zero behavioral risk. The only question is how it survived 2.7.2 review, which is answered by F07: the visual path is not gated.',
+      conf: 'High — both sides of the mismatch read at the cited lines; post-fix grep for theme-raison exits 1.'
     },
     {
-      id: 'fonts',
-      sev: 'hi',
-      title: 'The reading voice has no font',
+      id: 'novus-copy',
+      sev: 'fixed',
+      status: 'fixed this session · verified',
+      title: 'Novus→Vacui copy + grammar (wanderlust-script.js:110)',
       evid: [
-        "'EB Garamond' named in about, cohort, divination, dreams, learn, methodology, relation, satchel, trash, themes CSS",
-        "learn.css additionally names 'OpenDyslexic' and 'Lexend'",
-        'fonts/ ships only jacquard24-latin.woff2 (10.5K) and vt323-latin.woff2 (7.2K)',
-        '@font-face defined only in styles/room.css and styles/wanderlust.css',
-        'dreams/PERSONA.md — "EB Garamond for the reading voice"',
-        'Windows portable distribution runs offline via file:// (probe-file-protocol.mjs)'
+        'src/wanderlust-script.js:110 — "Her soul lives in the Novus…" → "…Vacui…"',
+        'same line — "was a pious women" → "was a pious woman"',
+        'data/citations.json:17 + data/citations.data.js:153 — "Liber Novus" deliberately untouched (Jung\'s book title, correct Latin)'
       ],
-      body: 'The design calls a serif reading voice, and nine feature stylesheets declare it — but the two shipped fonts cover only the display pair (jacquard24 for the machine face, vt323 for the terminal). No EB Garamond, no OpenDyslexic, no Lexend ever enters the binary. The app is offline by design, so the declared stacks silently resolve to Georgia/serif everywhere the voice was supposed to speak.',
-      why: 'This is the most user-visible drift in the project: the single most important voice in the app reads in the wrong face, and nothing in the build ever notices because the fallback chain never throws.',
-      alt: 'Counter-reading: during development the page is served over http in a browser with internet, where EB Garamond would load from Google Fonts — the drift only appears in the shipped desktop artifact. That is precisely the artifact the workflow exists to build.',
-      conf: 'High — font inventory, @font-face grep, offline-by-design build, and the persona spec all read in full.'
+      body: 'Plan item 1.1 (liberos-improvements.md) asked for Novus→Vacui in the Wanderlust tutorial line; it was still Novus at 2.7.2. Fixed with its adjacent grammar wound. The identical string in the citations data is the published book title and was correctly left alone — a blanket sed would have corrupted a real citation.',
+      why: 'Single user-facing tutorial line, first-visit surface. And the near-miss matters: Novus-in-copy vs Novus-in-citation is exactly the kind of pair a global find-replace destroys.',
+      alt: 'Counter-reading: "Novus" could be read as deliberate archaism in Wanderlust\'s theatrical voice. Against: the plan ledger explicitly decided Vacui, and the decision is binding.',
+      conf: 'High — line read before and after; node --check clean; verify-data green.'
     },
     {
-      id: 'selector-forks',
-      sev: 'hi',
-      title: 'games.css forks its own selectors',
+      id: 'skill-godot',
+      sev: 'fixed',
+      status: 'fixed this session · verified',
+      title: 'Skill covenant assumed a Godot project that does not exist',
       evid: [
-        '.games-wheel-disc 213-227 vs 492-501',
-        '.games-bottles / .games-bottle 238-257 vs 503-519',
-        '.games-rings / .games-ring 197-210 vs 521-535',
-        '.games-booth 132-142 vs 285-304 — conflicting cursor/padding; the 132-142 "booth art" block reads dead against the 285+ grid',
-        '.games-wheel-pointer 229-236 (0.8rem) vs 979-988 (1.6rem)',
-        '.games-help:hover 564 and 576-580 · .games-exit:hover 607 and 619-623'
+        '~/.config/opencode/skill/liberos/SKILL.md:14 (before) — "Godot 4.7 Mobile, ~/liber-os/project.godot, scenes/main.tscn, SaveStore…"',
+        'repo grep for godot/.gd/.tscn/project.godot in code → zero hits (this session + delegated sweep)',
+        '6 edits: description, project facts (§0.3), voice name (§1), read-before-write (§2), verify (§4), orchestration (§5)',
+        'post-fix grep for godot/.tscn/smoke.gd/GDScript/SaveStore → exit 1'
       ],
-      body: 'The general covenant says one selector owner per element — never fork selectors for the same node. The largest stylesheet in the project (1,220 lines) violates it ten times over. The duplicate blocks disagree on real values (pointer size doubles; booth cursor and padding differ), so the cascade outcome depends on later-file order rather than intent.',
-      why: 'Forked selectors are the classic dead-code trap: the earlier block is silently inert until someone edits the later one, then the ghost wakes up. The wheel-pointer 0.8rem → 1.6rem pair shows the drift is already live.',
-      alt: 'Counter-reading: some pairs (help:hover, exit:hover) describe the same hover state twice by design — a brighten filter layered with a background/color change. That is possible, but the pattern repeats inconsistently across ~9 feature files with no comment explaining the layering.',
-      conf: 'High — each pair read at both line ranges in this session.'
+      body: 'Every agent working LiberOS through the liberos skill was being told to read project.godot, match GDScript patterns, run godot --headless, and use a Godot LSP — in a vanilla-JS + Tauri repo with no Godot files. The skill now describes the real project: file://-safe data loaders, src/features rooms, npm run smoke/shoot verification.',
+      why: 'A stale covenant does not just confuse — it directs confident wrong action (creating .gd files, running godot commands) that the repo cannot absorb.',
+      alt: 'Counter-reading: the Godot text could be a Liber Vacui 1.0 historical reference worth keeping as history. Against: the skill\'s project-facts section is operative instruction, not history; history belongs in docs with a date.',
+      conf: 'High — full 47-line file read; every Godot reference enumerated by the delegated sweep and confirmed directly.'
     },
     {
-      id: 'kind-drift',
-      sev: 'hi',
-      title: 'Five registries of "what an artifact is", none agreeing',
+      id: 'ci-gap',
+      sev: 'fixed',
+      status: 'fixed this session · verified',
+      title: 'No CI gated pushes; full smoke had no home',
       evid: [
-        'src/shadow.js:11-12 — PATINA_TIERS = COHORT_TIERS = [2, 6, 12]',
-        'src/gamification.js:47 — ARTIFACT_KINDS, 11 kinds',
-        'src/prompt-engine.js — ARTIFACT_KINDS, 12 kinds (incl. satchel)',
-        'src/dust.js:12-13 — ARTIFACT_KINDS, 9 kinds (garden, dreams, satchel missing)',
-        'src/features/relation/relation.js:14-21 — KINDS, 6 entries (cohort, divination, games, learn, abstract, sea)',
-        'src/features/abstract/abstract.js — getArtifacts only gathers sigils + divination + abstract'
+        '.github/workflows/ before: windows.yml only (tag-triggered installer build)',
+        '.github/workflows/ci.yml (new) — push/PR to main: npm ci → verify-data/prompt/gamification → playwright chromium → smoke (report-only) → verify-fixes (blocking) → screenshots artifact',
+        'smoke is report-only by design: CHANGELOG 2.7.0 documents the pre-existing environment stall tripping pristine 2.6.1'
       ],
-      body: 'The covenant (WS5) asks for one definition of the artifact kind set. Instead there are five, and they diverge in exactly the ways that matter: satchel was added to prompt-engine\'s list but never to dust\'s, so the sweep that "remembers" everyday objects does not know the satchel exists; relation only knows six of the twelve apps; abstract only consults three sources for what an artifact even is.',
-      why: 'Every future feature that needs to enumerate the surface must pick a registry to trust, and three of the five will silently omit parts of the machine. This is structural drift, not a typo.',
-      alt: 'Counter-reading: each module legitimately scopes its own domain — dust sweeps "visible" things, relation links only relation-capable apps. True, but no written rule says so, and the sets do not nest cleanly even as subsets.',
-      conf: 'High — all five registries read at the cited lines.'
+      body: 'Until this session nothing ran on push or PR — the Windows workflow only fires on v* tags. The new CI workflow gates on the fast verifiers plus verify-fixes, and runs the full 21-step smoke report-only so its known timing flake cannot block merges while still producing screenshots per run.',
+      why: 'F01 and F07 both survived releases that CI would have caught or at least screenshotted. Compilation (windows.yml) is not verification.',
+      alt: 'Counter-reading: CI Playwright runs are themselves flaky and cost minutes per push. Against: the blocking set is the fast node verifiers; only they gate. The browser suite reports.',
+      conf: 'High — workflow written and read back; trigger/scope deliberate. Not yet observed green (no push from this session).'
     },
     {
-      id: 'math-random',
+      id: 'half-rename',
       sev: 'med',
-      title: 'Math.random still reaches surfaces the covenant said no',
+      status: 'verified (counts) · proposal, NOT fixed',
+      title: 'The raison→riason migration stopped halfway (~348 matches)',
       evid: [
-        'src/whispers.js:14 — Math.random',
-        'src/static.js:55 — Math.random',
-        'src/dust.js — Math.random',
-        'src/features/trash/trash.js:11-13 — Math.random',
-        'src/features/sigil/sigil.js — Math.random',
-        'src/features/divination/divination.js — Math.random (the cast itself)',
-        'Rule: "no Math.random in anything the user can perceive" — src/gamification.js:6-7, src/daily-floor.js:4-5, src/prompt-engine.js:5'
+        'grep raison|Novus pattern → 348 matches across 48 files',
+        'src/wanderlust-script.js — speaker: \'raison\' + response speakers (runtime identity, tutorial-visible)',
+        'src/wanderlust.js:30,94-136,242 — raisonSeen, raison-glitch, raison-overlay, firstRaison',
+        'styles/wanderlust.css:358-517 — .raison-overlay, .raison-glitch, keyframes',
+        'src/carvings.js:43 — raison: \'nib\' binding key',
+        'fixed already: themes.js id/name, apply-theme IDS, machine.css skin, tutorial copy line'
       ],
-      body: 'The rule is written three times in the seedable modules, and the seedable modules keep it honorably. But a parallel set of surfaces — ambient whispers, screen static, dust, the trash can, sigil scatter, and the E-I Ching cast — still call Math.random in plain view of the user. The rule was enforced selectively: where the project wrote it down, it obeyed; where nobody wrote it, the old habit stayed.',
-      why: 'The interesting part is the split. The cast is the single most ritual outcome in the app and it is non-deterministic, while ambient text is deterministic — the inverse of the covenant\'s stated priority.',
-      alt: 'Counter-reading: the covenant\'s phrase "anything the user can perceive" targets outcomes the user can verify and replay; dust scatter and static are un-replayable atmosphere by nature. Absent a written carve-out, this remains an interpretation — the rule\'s text is absolute.',
-      conf: 'Medium — the rule text is explicit, but "perceive" admits the atmosphere carve-out reading.'
+      body: 'The rename is done at the theme layer and dead at every other layer. Speaker values, DOM ids, CSS classes, keyframes, and the carving binding still say raison while the cast file and theme system say riason. Any single-file rename breaks its counterparts — the overlay id, its CSS, and its JS must change atomically per room — which is why this session fixed only the two files where the counterpart had already moved.',
+      why: 'Half-migrated identifiers are worse than unmigrated ones: each new edit must guess which spelling the file it touches uses, and the guess is wrong half the time. The 348-match count is the drift compounding per release.',
+      alt: 'Counter-reading: internal identifiers are invisible to users, so this is hygiene with zero user cost. Partly true — except speaker: \'raison\' selects tutorial dialogue branches and avatar styling, and the carving key selects glow state. Those are user-visible by one remove.',
+      conf: 'High on the count and the layer split; medium on user impact (branch/avatar coupling inferred from names, not traced end-to-end).',
+      proposal: 'Per-room atomic rename commits (HTML id + CSS class + JS references in one commit, smoke green between each), rooms ordered: wanderlust shell first (overlay/glitch), then the 12 *-raison help overlays, then carvings key. Speaker-value renames ride with their room. Estimated 4–6 commits.'
     },
     {
-      id: 'prng-dupes',
+      id: 'hijack-block',
       sev: 'med',
-      title: 'The PRNG is hand-rolled four times',
+      status: 'verified (failure output) · needs owner',
+      title: 'verify-fixes stalls on the hijack tour overlay in this environment',
       evid: [
-        'src/gamification.js:24-41 — xmur3 + mulberry32',
-        'src/prompt-engine.js:18-35 — xmur3 + mulberry32',
-        'src/daily-floor.js — xmur3 + mulberry32',
-        'src/features/garden/garden.js:6-7 — xmur3 + mulberry32'
+        'node scripts/verify-fixes.mjs → TimeoutError: hijack-box intercepts pointer events (56× retry, then throw)',
+        'smoke.mjs:44-52 — dismissHijack() helper exists and is called before room interactions',
+        'CHANGELOG 2.7.0 — full smoke stall documented as pre-existing environment issue (pristine 2.6.1 trips it too)'
       ],
-      body: 'Four copies of the same two functions live in four modules. Each is small and self-contained — that is the excuse — but a determinism covenant lives or dies on the salted stream matching across modules, and textbook drift has already begun: the copies were clearly diverged while being pasted around.',
-      why: 'A single shared utility with one salt scheme would make the determinism property auditable in one place. Right now the verification suite proves determinism per-module, which is exactly the property the duplication puts at risk.',
-      alt: 'Counter-reading: this is a no-bundler vanilla project where module self-containment is a deliberate value (the site works by dropping files onto file://). A shared util is a shared coupling. Fair — but a duplication bug in any of the four is a subtle, session-level determinism break.',
-      conf: 'High — all four copies read; identical function names, divergent bodies.'
+      body: 'The regression suite cannot click through the first-visit hijack tour box in this session\'s environment. Smoke anticipates exactly this (dismissHijack + a documented flake fallback for the loading timer); whether verify-fixes has the same dismissal discipline is unread — the run died before its structure could be inspected beyond the tail output.',
+      why: 'A regression suite that cannot pass in a clean checkout is a suite that cannot protect the rename in F05 or any 2.7.x follow-up. The stall is environmental per the changelog, but "environmental" is a diagnosis that needs re-proving per release, not a permanent excuse.',
+      alt: 'Counter-reading: this machine is under memory pressure (changelog says so) and headless CI may pass fine — the new CI workflow will answer this empirically on first push.',
+      conf: 'Medium — failure output is real but only the tail was captured; the verify-fixes dismissal logic was not read.'
     },
     {
-      id: 'carvings',
+      id: 'kind-drift-2',
       sev: 'med',
-      title: 'Two carvings never glow',
+      status: 'partially verified · Vol. 1.0 finding, evidence updated',
+      title: 'Artifact-kind registries still disagree; two cited registries are gone',
       evid: [
-        'src/carvings.js — 12 carvings registered',
-        'only 10 themes exist; learn ("hole-punch") and relation ("grate") have no theme to bind to'
+        'Vol. 1.0 cited 5 registries; src/features/relation/relation.js + src/features/abstract/abstract.js NO LONGER EXIST (rooms deleted 2.3.0/2.4.0, confirmed by directory listing this session)',
+        'remaining: src/gamification.js, src/prompt-engine.js, src/dust.js (all exist, lines NOT re-read this session)',
+        'satchel exists in prompt-engine list; dust list omits garden/dreams/satchel per Vol. 1.0 (unreconfirmed)'
       ],
-      body: 'Twelve carvings sit in the cabinet of the machine face, but there are ten themes. That leaves two carvings — learn and relation — permanently unlit. Their themes were either removed or never written.',
-      why: 'The glow is the machine\'s way of saying "this part of you is worked on". Two carvings that can never glow read as a promise of development that the rest of the system quietly marks impossible.',
-      alt: 'Counter-reading: the extra carvings are reserved slots for future themes — a deliberate architectural headroom. If so, the reserve is undocumented.',
-      conf: 'Medium — count read directly; the intent behind the mismatch is inferred.'
+      body: 'Deletion solved two-fifths of this finding by accident: the relation and abstract registries left with their rooms. What remains is unverified rather than fixed — the three surviving registries need one re-read to confirm whether satchel/garden/dreams are covered everywhere, and then a single owned list.',
+      why: 'Carried-forward critique debt is its own drift: Vol. 1.0 states as fact things about files that no longer exist. This volume corrects the record instead of repeating it.',
+      alt: 'Counter-reading: per-module scoping may be deliberate (dust sweeps visibles, prompt-engine enumerates keepables). Still unwritten anywhere; the rule remains inferred.',
+      conf: 'High that two registries are gone; low on the current state of the three survivors — flagged for the next read pass, not asserted.'
     },
     {
-      id: 'register',
+      id: 'carvings-dark',
       sev: 'med',
-      title: 'The plan ledger lost two apps',
+      status: 'verified this session',
+      title: 'Two carvings still never glow; bindings use retired cast names',
       evid: [
-        '.omo/plans/2026-09-04-full-pass.md §3 — register lists 12 apps',
-        'the app has 14 named surfaces incl. garden and dreams'
+        'src/carvings.js:27-29 — 12 carvings registered (incl. hole-punch, grate)',
+        'src/carvings.js:36-45 — 10 bindings; hole-punch + grate unassigned',
+        'binding keys: librarian, raison, iris (old cast); runtime per data/personas.data.js: riason keeps satchel, wanderlust took themes',
+        'src/features/themes/themes.js:15,17 — librarian/iris ids persist at theme layer with renamed display names'
       ],
-      body: 'The plan document that the whole pass was written against enumerates twelve apps and omits garden and dreams — two of the most fully realized features in the code (garden with its own cubic-seeded RNG and inventory, dreams with the longest PERSONA in the project).',
-      why: 'The register is the map the sweep reads from. A map that is missing two continents produces sweeps that cannot see them — and indeed garden and dreams show up in the drift findings below as the exact omissions.',
-      alt: 'Counter-reading: the register predates the two apps and was never meant as a census. But it is the only census document the repo has, which is the point.',
-      conf: 'High — plan section and both feature directories read in full.'
-    },
-    {
-      id: 'unswept',
-      sev: 'med',
-      title: 'Deliberately unswept surfaces (named, not fixed)',
-      evid: [
-        'cohort.html — seal button + title still carry the old naming',
-        'src/dial.js:22 — the dial entry for wanderlust is named "chat"',
-        'all <title> tags across pages',
-        'satchel.html — raison help text still tied to the superseded "The Librarian" mapping',
-        'src/features/eliza/eliza.js — leftover persona lines',
-        'src/features/sigil/sigil.js persona line'
-      ],
-      body: 'The prior pass fixed verbatim text in eight files and then stopped at these six, on purpose, because each sits at a fork: changing the dial from "chat" is a naming decision the owner should make; rewriting eliza\'s persona lines is authorship, not sweep. They are listed here so the critique itself is the record.',
-      why: 'The dial saying "chat" for the app whose whole identity is that it is not a chat is the sharpest of these — one word, and it undoes the raising of the machine in the most-traversed control in the app.',
-      alt: 'Counter-reading: "chat" is the only honest common noun for a chat window, and the poetic voice lives elsewhere. The alternative — something like "companion" or the app\'s own name — is a product call, not a sweep call.',
-      conf: 'High — each site read; the sweep log records the deliberate stop.'
+      body: 'Vol. 1.0\'s finding survives intact and gains a layer: the carving bindings still name the old cast (librarian/raison/iris) while personas.data.js documents the succession (ruby→garden, riason→satchel, wanderlust→themes). The learn hole-punch and relation grate carve owners that no longer exist under those names.',
+      why: 'Glow is the machine\'s worked-on signal; two permanently dark carvings plus stale binding names mean the cabinet disagrees with the cast file about who anyone is.',
+      alt: 'Counter-reading: reserved slots for future themes (headroom). If so, undocumented — and the stale keys argue drift, not planning.',
+      conf: 'High — binding block and carving list read verbatim this session.'
     },
     {
       id: 'ci-probe',
       sev: 'med',
-      title: 'The Windows pipeline ends at upload',
+      status: 'verified (workflow re-read) · carried',
+      title: 'The Windows pipeline still ends at upload',
       evid: [
-        '.github/workflows/windows.yml:56-58 — uploads nsis/*.exe and msi/*.msi artifacts',
-        'workflow rewrites tauri.conf.json targets ["app","dmg"] → ["nsis","msi"]',
-        'runtime probing exists only locally (probe-file-protocol.mjs)'
+        '.github/workflows/windows.yml:42-58 — build → upload-artifact → softprops/action-gh-release attach',
+        'no launch/probe step; probe-file-protocol.mjs remains local-only',
+        'new ci.yml does not cover this either (linux runner cannot run the .exe)'
       ],
-      body: 'The build rewrites the targets, compiles, packages, and uploads — and stops. Nothing in CI ever launches the produced .exe to probe the file:// surface that the portable build depends on. The entire risk of the project (Offline Windows machine with no server) is verified only on the developer Mac, by hand.',
-      why: 'probe-file-protocol.mjs exists precisely because file:// is the load-bearing assumption. A CI that builds the artifact but never opens it is a CI that certifies compilation, not the product.',
-      alt: 'Counter-reading: running a GUI exe headless in GitHub Actions for Windows is notoriously flaky (desktop heap, no interactive session), and the smoke suite already runs the same surface via the local server. True — but the file:// probe is the one thing the local server cannot reproduce.',
-      conf: 'Medium — the workflow tail was read; the middle section was read in a prior pass and shows no launch step.'
+      body: 'Unchanged since Vol. 1.0 and re-read this session: CI certifies that the installer compiles, never that the shipped .exe opens the file:// surface the product depends on. The new CI workflow narrows but does not close this gap.',
+      why: 'The file:// assumption is the project\'s single load-bearing platform risk and it is verified only by hand on the developer Mac.',
+      alt: 'Counter-reading: headless GUI launch on Windows runners is notoriously flaky. True — a minimal probe (launch, wait for window, screenshot, exit-code) with continue-on-error would still beat zero signal.',
+      conf: 'Medium — workflow tail re-read; middle section as in Vol. 1.0.'
     },
     {
-      id: 'abstract-css',
+      id: 'register-stale',
       sev: 'note',
-      title: 'abstract.css: stray tokens and duplicate declarations',
+      status: 'verified (counts) · Vol. 1.0 finding, evidence updated',
+      title: 'The plan register is now four apps behind, not two',
       evid: [
-        'src/features/abstract/abstract.css:349 — stray ";"',
-        'src/features/abstract/abstract.css:348 and 356 — duplicate transition property (second wins)',
-        'src/features/abstract/abstract.css:315-317 and 326-330 — .abstract-help:hover defined twice'
+        '.omo/plans/2026-09-04-full-pass.md §3 — 12 apps, omits garden + dreams (Vol. 1.0)',
+        'current tree: 15 room surfaces (adds toybox, buddy since the plan) + desktop shell',
+        'CHANGELOG 2.5.0 (toybox), 2.0.0 (buddy) — both postdate the plan'
       ],
-      body: 'The hygiene wounds the covenant\'s one-selector-owner rule exists to prevent: a dead first transition, a stray semicolon, and a hover rule that shadows itself. All harmless today; all exactly what a later editor will trust over the file\'s intent.',
-      why: 'These are the cheapest findings to fix and the first ones to rot.',
-      alt: 'Counter-reading: pure lint noise, behavioral impact zero. The general covenant would still call it a defect of hygiene.',
-      conf: 'High — lines read at both ranges.'
+      body: 'The only census document predates four of the fifteen rooms it should map. Any sweep reading from it inherits its blind spots — and the 2.7.x releases built exactly the rooms it cannot see (toybox-adjacent powder work, buddy flows).',
+      why: 'A stale map does not just omit — it directs attention elsewhere with authority.',
+      alt: 'Counter-reading: the plan is a dated recovery document, not a living census. Then the fix is one line in §3 saying so, plus a pointer to the real list (src/dial.js).',
+      conf: 'High — plan section and directory listings both read this session.'
     },
     {
-      id: 'orphan-block',
+      id: 'dead-ost',
       sev: 'note',
-      title: 'methodology.css: an orphaned declaration block',
+      status: 'verified (inventory + code)',
+      title: 'Four studio movements ship unused (~6.7 MB)',
       evid: [
-        'src/features/methodology/methodology.css:166-170 — font-variant: small-caps; letter-spacing: 0.2em; color: #2a1a08; font-weight: 700; } with no selector'
+        'assets/music/: buddy-creation 1.8M, riason-part 1.8M, vanir 2.6M, wanderlust-ritual 0.5M — main-theme 2.7M the only TRACK (src/soundscape.js:11-13)',
+        'CHANGELOG 2.7.1 — "the other studio movements stay in assets/music/ unused" (deliberate, documented)',
+        'src/soundscape.js:16-17 — BED/MOTIF_SCALE compat arrays scale the single track'
       ],
-      body: 'A five-line declaration block with no selector — the remains of a deleted rule. CSS error-recovery silently drops it, so nothing breaks; it is a fossil in the payload.',
-      why: 'An orphan block is the trace of an edit that never finished. Finding it here means the file has at least one unfinished edit in its history.',
-      alt: 'Counter-reading: it is harmless dead weight. That is the entire point of the note grade.',
-      conf: 'High — the block was read verbatim at lines 166-170.'
+      body: 'Documented, not accidental: 2.7.1 collapsed per-room music to one looped song and left the stems in the payload. The question is distribution, not composition — app-dist copies assets into every bundle, so ~70% of the music payload is reserve stock. The compat scaling arrays are honest engineering (old saves keep working).',
+      why: 'Payload is a feature for an offline desktop app: every megabyte ships to every user on every platform, twice (dmg + nsis/msi).',
+      alt: 'Counter-reading: keeping stems alongside the player that will re-adopt them is staging, not waste — 2.7.0→2.7.1 was one release ago and the pendulum may swing back. The changelog documents it, which is the honest version of this.',
+      conf: 'High on inventory and code; the keep-vs-cut call is the owner\'s.',
+      proposal: 'Either cut from app-dist with one-line exclusion (+ note in CHANGELOG), or move to assets/music/archive/ so the intent ("reserve, not dead") is in the path.'
     },
     {
-      id: 'hover-dupes',
+      id: 'slot-ghosts',
       sev: 'note',
-      title: 'A systemic help/exit hover duplication',
+      status: 'verified (line read) · proposal',
+      title: 'Slot summaries count two deleted rooms',
       evid: [
-        'same two-definition pattern across cohort, divination, games, satchel, sea, themes, trash, sigil, abstract feature CSS',
-        'games.css: ".games-help:hover" 564 and 576-580 · ".games-exit:hover" 607 and 619-623'
+        'src/features/settings/settings.js:145 — kinds includes \'abstract\', \'methodology\'',
+        'rooms deleted 2.3.0 (methodology, abstract); no abstract.html/methodology.html in tree',
+        'effect: legacy saves carrying those artifacts inflate "N kept" counts on slot buttons'
       ],
-      body: 'The help and exit buttons across the app\'s feature sheets each get their hover style twice — once brightening, once repainting. It looks like a convention that accreted a second layer without retiring the first.',
-      why: 'Repeated nine files deep, this stops being a typo and becomes a style: the project writes cascade patches instead of editing the owner rule.',
-      alt: 'Counter-reading: the pairs are intentional layering — a filter brighten plus a color/background change that must apply in a specific order. If so, the pattern should be in one rule with a comment; it is not.',
-      conf: 'Medium — the pattern repeats consistently, but intent is inferred from absence of comments.'
+      body: 'The save-slot summary enumerates artifact kinds from before the 2.3.0 deletions. Old saves with abstract/methodology artifacts still count them, so a slot can read "3 kept" for rooms that no longer exist.',
+      why: 'Small, user-visible, one-line fix — the definition of the safe-fix lane. Left as proposal only because slot-count semantics (count legacy vs hide legacy) is an owner call; counting ghosts may even be intended as memorial.',
+      alt: 'Counter-reading: memorial counting — the numbers honor deleted work. If so, the slot button should say so; currently it just counts.',
+      conf: 'High on the line; the intent question is genuine.',
+      proposal: 'Remove the two strings, or keep with a comment citing this finding. One line either way.'
     },
     {
-      id: 'iching-uniform',
-      sev: 'note',
-      title: 'The E-I Ching casts an even 25/25/25/25',
+      id: 'fonts',
+      sev: 'hi',
+      status: 'carried · files confirmed, lines not re-read',
+      title: 'The reading voice has no font',
       evid: [
-        'src/features/divination/divination.js — uniform distribution across the six-line cast',
-        'traditional method: changing lines at ~3/8 vs 1/8 (moving yin vs moving yang)',
-        'the deviation is acknowledged in the code comment'
+        'Vol. 1.0 evidence: EB Garamond named across 9 feature stylesheets; fonts/ ships jacquard24 + vt323 only',
+        'this session: fonts/ listing not re-taken; no font files touched in 2.7.x diffstat'
       ],
-      body: 'Tradition loads the cast: old yin at 1/8, old yang at 3/8, the weights making change rare. The implementation draws evenly, so change is common and the judgment lines dominate. The comment admits the simplification.',
-      why: 'The divination is the app\'s most ritual surface, and its oracle speaks with a flattened probability that a reader versed in the I Ching hears immediately as "wrong feeling".',
-      alt: 'Counter-reading: this is a deliberate modernization — even odds are legible, fair, and avoid the tradition\'s asymmetry being mistaken for bias. The comment makes it a documented choice rather than an accident.',
-      conf: 'High on fact, open on judgment — the code and comment agree; whether flattening is a defect is a design call the critique surfaces, not settles.'
+      body: 'Carried because nothing in the 2.7.x diff touches fonts, and the Vol. 1.0 inventory was thorough — but honestly flagged: the @font-face grep was not re-run against the 2.7.2 tree. If a font landed silently in 2.7.x it would be in the diffstat; it is not.',
+      why: 'Highest user-visible drift in Vol. 1.0; still the most likely true finding here, but this volume will not assert lines it did not re-read.',
+      alt: 'Counter-reading: as Vol. 1.0 — dev-time Google Fonts mask the gap over http; the shipped offline artifact does not have them.',
+      conf: 'Medium — carried on strong prior evidence plus a clean diffstat, not on a fresh read.'
+    },
+    {
+      id: 'games-forks',
+      sev: 'hi',
+      status: 'carried · file confirmed, lines not re-read',
+      title: 'games.css forks its own selectors',
+      evid: [
+        'Vol. 1.0 evidence: 10 duplicate-selector pairs incl. .games-wheel-pointer 0.8rem vs 1.6rem',
+        'this session: src/features/games/games.js touched by 2.7.x? No — games.css/games.js absent from v2.6.1..HEAD diffstat'
+      ],
+      body: 'Carried: the largest stylesheet\'s forked selectors were read at both line ranges in Vol. 1.0, and the 2.7.x diff does not touch the file, so the finding cannot have been fixed or worsened by recent work. Re-read queued for the next pass that touches games.',
+      why: 'Unchanged files carry unchanged findings — the value of a versioned critique over a fresh-every-time one.',
+      alt: 'Counter-reading: as Vol. 1.0 — some pairs may be intentional layering, undocumented.',
+      conf: 'Medium — prior high-confidence read plus proven-unchanged status.'
+    },
+    {
+      id: 'math-random',
+      sev: 'med',
+      status: 'carried · files confirmed, lines not re-read',
+      title: 'Math.random still reaches ritual surfaces',
+      evid: [
+        'Vol. 1.0 evidence: whispers.js, static.js, dust.js, trash.js, sigil.js, divination.js (the cast)',
+        'this session: all six files confirmed present; none in 2.7.x diffstat except soundscape-adjacent settings'
+      ],
+      body: 'Carried unchanged: the determinism rule is kept where written (seeded modules) and unkept where unwritten (atmosphere + the E-I Ching cast). No 2.7.x release touched the question.',
+      why: 'The cast-probability asymmetry (uniform 25s vs traditional 1/8–3/8) remains the sharpest instance; Vol. 1.0\'s design-call framing stands.',
+      alt: 'Counter-reading: as Vol. 1.0 — atmosphere carve-out vs absolute rule text.',
+      conf: 'Medium — carried.'
+    },
+    {
+      id: 'prng-dupes',
+      sev: 'med',
+      status: 'carried · files confirmed, lines not re-read',
+      title: 'The PRNG is hand-rolled four times',
+      evid: [
+        'Vol. 1.0 evidence: gamification.js, prompt-engine.js, daily-floor.js, garden.js copies of xmur3+mulberry32',
+        'this session: all four files present; daily-floor.js gained 16 lines in 2.7.x (starter quests) — the diverged-copy risk grew, not shrank'
+      ],
+      body: 'Carried with one new aggravating fact: daily-floor.js was edited for 2.7.2 starter quests, which is exactly the kind of edit during which hand-rolled duplicates silently diverge. The next pass that touches any of the four should diff the copies first.',
+      why: 'Determinism covenants die in copy drift; 2.7.2 touched one copy.',
+      alt: 'Counter-reading: as Vol. 1.0 — file:// self-containment as deliberate value.',
+      conf: 'Medium — carried, plus diffstat evidence of new risk.'
     },
     {
       id: 'persona-headers',
       sev: 'note',
+      status: 'partially verified · carried',
       title: 'PERSONA.md headers predate the cast mapping',
       evid: [
-        'src/features/satchel/PERSONA.md:1 — "The Librarian"',
-        'src/features/themes/PERSONA.md:1 — "Iris Mappa"',
-        'runtime truth: data/personas.data.js:6-9 — riason → [satchel, methodology]; wanderlust → [themes]',
-        'methodology/PERSONA.md:1 — "raison" (correct spelling)'
+        'this session: src/features/satchel/PERSONA.md + src/features/themes/PERSONA.md exist; data/personas.data.js:6-11 read (riason→satchel, wanderlust→themes, ruby→garden)',
+        'headers themselves not re-read; Vol. 1.0 quotes ("The Librarian", "Iris Mappa") unreconfirmed against current text'
       ],
-      body: 'The persona bibles carry the old names — The Librarian, Iris Mappa — while the runtime cast mapping speaks of riason and wanderlust. The methodology bible got the spelling fixed; its siblings did not. Both are internally coherent; the project is not.',
-      why: 'PERSONA.md is how a future editor learns who a feature is for. A bible that names the old god produces features written for the old god.',
-      alt: 'Counter-reading: the headers are historical/atmospheric titles and the cast file is the only operative truth — a "persona canon" split. If that is the intent, the headers should say so.',
-      conf: 'High — all headers and the cast file read.'
+      body: 'The runtime cast file documents the succession; whether the bible headers still name the old gods was not re-read. Kept as a one-line check for the next docs pass, not as an asserted finding.',
+      why: 'Downgraded from finding to checklist item — the honest grade for half-verified evidence.',
+      alt: 'Counter-reading: historical titles, operative cast file — a documented split if anyone writes the sentence.',
+      conf: 'Low — checklist, not conclusion.'
     },
     {
       id: 'exercises-steps',
       sev: 'note',
-      title: 'exercises.json: every sequence is empty',
+      status: 'carried · counts verified, content not re-read',
+      title: 'exercises.json: sequences unverified this pass',
       evid: [
-        'data/exercises.json:2 — steps: [] across the board',
-        'scripts/verify-data.mjs:40 — only asserts Array.isArray(steps)',
-        'the learn surface and garden reference the exercises, but the modal-builder flows ("sequences") were never extracted'
+        'verify-data.mjs this session: exercises >= 15 → 19 PASS (count only)',
+        'Vol. 1.0: steps: [] across the board; verifier asserts Array.isArray only'
       ],
-      body: 'Every exercise in the catalog carries an empty sequence. The walkthrough layer was designed, registered, and then never filled. Verification still passes because it checks only that steps is an array.',
-      why: 'This is the largest unfinished feature in the build: the app promises guided exercises and ships cards without their guided part. The gap is invisible to the test suite by construction.',
-      alt: 'Counter-reading: the exercise cards are deliberate — a domain and a summary, with the sequence deferred until the writing is done (writing the steps is authorship, not assembly). The feature then reads as a catalog, which is honest.',
-      conf: 'High on fact — data file and verifier read; the deferral intent is inferred.'
+      body: 'The count passes and the structural weakness Vol. 1.0 identified (the verifier cannot distinguish a guided exercise from an empty one) is unchanged — verify-data was run, not rewritten. Carried as suite-design debt, not data debt.',
+      why: 'A test that cannot fail is a promise without a witness.',
+      alt: 'Counter-reading: catalog-first, sequences-as-authorship — honest if labeled.',
+      conf: 'Medium — runner output fresh, content claim inherited.'
     },
     {
       id: 'hexagram-order',
       sev: 'note',
-      title: 'Hexagrams are stored top-line-first',
+      status: 'carried · not re-read',
+      title: 'Hexagrams stored top-line-first',
+      evid: ['Vol. 1.0: data/hexagrams.json 6-char binary, top-first; consistent via indexOf'],
+      body: 'Untouched by 2.7.x (not in diffstat); carried as maintenance-tax documentation. Re-read with the next divination change.',
+      why: 'Internally consistent mirrored encodings tax every future editor exactly once.',
+      alt: 'Counter-reading: storage mirrors display order — defensible, working.',
+      conf: 'Low — inherited without fresh read.'
+    },
+    {
+      id: 'retired-abstract',
+      sev: 'retired',
+      status: 'retired · cited files deleted',
+      title: 'RETIREMENT: abstract.css stray tokens + duplicates',
       evid: [
-        'data/hexagrams.json:2-3 — 6-char binary, row 6 (top) first',
-        'lookup via HEXAGRAM_PATTERNS.indexOf in the divination module'
+        'Vol. 1.0: src/features/abstract/abstract.css:315-356',
+        'this session: src/features/abstract/ does not exist (room deleted 2.4.0 games rebuild era / 2.3.0)'
       ],
-      body: 'Chinese hexagram convention reads bottom-up: the first cast line is the lowest. The data stores top-first, and the consumer converts by indexOf on that mirrored pattern. Internally consistent — the readings are correct — but every future editor will trip twice before noticing.',
-      why: 'A mirrored encoding that is internally consistent is a documentation tax: the file header warns, but a contributor halfway through a cast feels the model fight the tradition at every step.',
-      alt: 'Counter-reading: top-first matches the visual rendering order (the hexagram is drawn top-down on screen), so storage mirrors display — a defensible engineering choice that already works.',
-      conf: 'Medium — the encoding is verified consistent; the "trip" claim is a maintenance judgment.'
+      body: 'Retired, not fixed: the file left with its room. The one-selector-owner lesson stands and is now better evidenced by games.css (carried above).',
+      why: 'Retirement records prevent zombie findings — a critique that cites deleted files teaches distrust of the critique.',
+      alt: '—',
+      conf: 'High — absence confirmed by directory listing.'
+    },
+    {
+      id: 'retired-method',
+      sev: 'retired',
+      status: 'retired · cited file deleted',
+      title: 'RETIREMENT: methodology.css orphaned block',
+      evid: [
+        'Vol. 1.0: src/features/methodology/methodology.css:166-170',
+        'this session: src/features/methodology/ does not exist (room deleted 2.3.0)'
+      ],
+      body: 'Retired with its room. The fossil-hunt habit (orphan blocks as unfinished-edit traces) is worth keeping as a grep pattern for living stylesheets.',
+      why: 'As above: cite the living or retire the dead.',
+      alt: '—',
+      conf: 'High — absence confirmed by directory listing.'
+    },
+    {
+      id: 'retired-riason-theme',
+      sev: 'retired',
+      status: 'retired · fixed before this session (2.7.x)',
+      title: 'RETIREMENT: the misspelled theme id "riason"',
+      evid: [
+        'Vol. 1.0: src/features/themes/themes.js:9 theme name "riason"',
+        'this session: themes.js:9 id+name both \'riason\'; apply-theme IDS likewise; machine.css tail fixed (F01)'
+      ],
+      body: 'The source-side migration completed during 2.7.x; only its CSS tail survived, and F01 records that fix. The finding is retired with honors — it did its job across two volumes.',
+      why: 'Fixed findings that stay open rot into noise; retired-with-evidence is the terminal state done right.',
+      alt: '—',
+      conf: 'High.'
     }
   ];
 
   var HIGHS = FINDINGS.filter(function (f) { return f.sev === 'hi'; }).length;
   var MEDS  = FINDINGS.filter(function (f) { return f.sev === 'med'; }).length;
   var NOTES = FINDINGS.filter(function (f) { return f.sev === 'note'; }).length;
+  var FIXED = FINDINGS.filter(function (f) { return f.sev === 'fixed'; }).length;
+  var RETIRED = FINDINGS.filter(function (f) { return f.sev === 'retired'; }).length;
 
-  // standings
   var standings = document.getElementById('standings');
   standings.insertAdjacentHTML('beforeend',
-    '<div class="standing hi"><div class="n">' + HIGHS + '</div><div class="l">high · user-visible</div></div>' +
-    '<div class="standing med"><div class="n">' + MEDS + '</div><div class="l">medium · structural</div></div>' +
-    '<div class="standing note"><div class="n">' + NOTES + '</div><div class="l">notes · hygiene</div></div>' +
-    '<div class="standing ok"><div class="n">' + (HIGHS + MEDS + NOTES) + '</div><div class="l">findings total</div></div>'
+    '<div class="standing hi"><div class="n">' + HIGHS + '</div><div class="l">high · open</div></div>' +
+    '<div class="standing med"><div class="n">' + MEDS + '</div><div class="l">medium · open</div></div>' +
+    '<div class="standing note"><div class="n">' + NOTES + '</div><div class="l">notes · open</div></div>' +
+    '<div class="standing fixed"><div class="n">' + FIXED + '</div><div class="l">fixed this session</div></div>' +
+    '<div class="standing ok"><div class="n">' + RETIRED + '</div><div class="l">retired</div></div>'
   );
 
-  var LABEL = { hi: 'high', med: 'medium', note: 'note' };
+  var LABEL = { hi: 'high', med: 'medium', note: 'note', fixed: 'fixed', retired: 'retired' };
   var host = document.getElementById('findings');
 
   function render(filter) {
     var visible = FINDINGS.filter(function (f) { return filter === 'all' || f.sev === filter; });
     host.innerHTML = '';
-    visible.forEach(function (f, i) {
+    visible.forEach(function (f) {
       var art = document.createElement('article');
       art.className = 'finding ' + f.sev;
 
@@ -688,6 +733,11 @@
       head.appendChild(num); head.appendChild(title); head.appendChild(sev);
       art.appendChild(head);
 
+      var st = document.createElement('div');
+      st.className = 'f-status';
+      st.textContent = f.status || '';
+      art.appendChild(st);
+
       var ev = document.createElement('div');
       ev.className = 'f-evid';
       var still = document.createElement('span');
@@ -696,7 +746,7 @@
       ev.appendChild(still);
       f.evid.forEach(function (line) {
         var p = document.createElement('span');
-        p.innerHTML = line; // evidence lines are authored markup (code.spans)
+        p.textContent = line;
         ev.appendChild(p);
       });
       art.appendChild(ev);
@@ -709,6 +759,12 @@
       p2.className = 'why';
       p2.textContent = f.why;
       body.appendChild(p1); body.appendChild(p2);
+      if (f.proposal) {
+        var pp = document.createElement('p');
+        pp.className = 'why';
+        pp.textContent = 'Proposal: ' + f.proposal;
+        body.appendChild(pp);
+      }
       art.appendChild(body);
 
       var alt = document.createElement('div');

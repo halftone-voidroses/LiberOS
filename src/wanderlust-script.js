@@ -107,7 +107,7 @@
     },
     {
       speaker: 'wanderlust',
-      line: 'The first was Mistress Physius. She practiced the ancient hermetic traditions and was a pious women. Her soul lives in the Novus as the stonecutter, invoke her. Draw your sigil.',
+      line: 'The first was Mistress Physius. She practiced the ancient hermetic traditions and was a pious woman. Her soul lives in the Vacui as the stonecutter, invoke her. Draw your sigil.',
       replies: [
         { text: 'show me the stone.', kind: 'progress',
           response: { speaker: 'wanderlust', line: 'The stone waits. Stones are PATIENT in a way I shall never be. Soon — first the formalities.' } },
