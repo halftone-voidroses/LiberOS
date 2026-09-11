@@ -75,11 +75,7 @@
   }
 
   var TRACK_LABELS = {
-    wanderlust: 'wanderlust ritual (summoning)',
-    riason: 'riason part (tour)',
-    main: 'main theme',
-    buddy: 'buddy creation',
-    vanir: 'vanir (sea)'
+    main: 'main theme'
   };
 
   function renderScape() {

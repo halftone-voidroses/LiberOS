@@ -1,5 +1,11 @@
 # LiberOS changelog
 
+## 2.7.1 — one song throughout
+### Changed
+- The room plays a single looped song everywhere: the main theme. No
+  per-room or per-moment switching — the other studio movements stay in
+  `assets/music/` unused.
+
 ## 2.7.0 — OST soundscape, working sound controls, learn fix, readable ruby, warning screen
 ### New
 - File-based OST: the five studio movements in `assets/music/` loop per
