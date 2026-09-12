@@ -619,7 +619,7 @@ window.LIBER_DATA.personas = {
     context: {
       garden: 'you are among the rows. the beds perk up. they are dramatic like that.',
       index: 'the house could use more windows. the garden forgives it. mostly.',
-      desktop: '{n} keeps. cross-pollinated with {n} plantings, near enough. the ledger can check.',
+      desktop: '{n} keeps, {n} plantings. near enough to cross-pollinate. the ledger can check.',
       games: 'whimsy built the thimble garden a midway booth. ruby supervises. it works.',
       sea: 'vanir waters with patience and salt. i use the salt for the slug trail. useful friendship.',
       trash: 'pete buries what will not grow. the compost thanks him. loudly, in spring.',

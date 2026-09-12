@@ -8,9 +8,8 @@
 window.LIBER_DATA = window.LIBER_DATA || {};
 window.LIBER_DATA.hijack = {
   buddy: { flag: 'walkBuddy', steps: [
-    { voice: 'riason', line: 'Welcome to LiberChat, this allows you to talk to your buddy.', target: 'chat-users' },
-    { voice: 'riason', line: 'The middle keeps the log of what is said.', target: 'chat-log' },
-    { voice: 'riason', line: 'Your buddy is on the left — say hello. The conversation stays on this device \u2014 nothing you say leaves the room.', target: 'chat-input', glow: true }
+    { voice: 'riason', line: 'The wax room retired. e-lizabeth lives in the lamp now — the small light in the corner of every page. Talk to her there; the wax still seals.', target: null },
+    { voice: 'riason', line: 'This page stays as an archive note. The conversation has not been lost, only moved.', target: null }
   ] },  satchel: { flag: 'walkSatchel', steps: [
     { voice: 'riason', line: 'Welcome to the satchel, my handiwork. Hem hem.', target: 'satchel-drawers' },
     { voice: 'riason', line: 'Anyway, when you save relations, buddies, or set relations they get logged in the satchel, and you are able to write notes about them.', target: 'satchel-list' },

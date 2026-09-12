@@ -1,5 +1,33 @@
 # LiberOS changelog
 
+## 2.10.0 — Liberchat: the talking machine
+### Added
+- The lamp sits on every page (18/18). Opening it is a real chatbox with
+  the room's traveller: deterministic, seeded replies from full scripts in
+  `data/personas.data.js` — all 13 personas carry 42–52 written lines across
+  greeting, room-context, hesitation, banter, topic replies, depth recalls,
+  farewells, seal lines, and unlock barks. A header switcher reaches any
+  persona (e-lizabeth included) from any room; the house itself speaks on
+  machine pages.
+- Conversation drives affinity: exchanges persist to `state.chat` and vouch
+  toward thresholds alongside kept-work metrics. The toybox booth is
+  unlockable by conversation alone (6 exchanges with whimsy), per contract.
+- Seal-to-artifact: any conversation presses into a `buddy` wax seal
+  (two-step confirm, `lamp: true`), feeding the inkstorm threshold.
+- The reply core is a single `respond()` — a model-backed responder can
+  replace it later without moving data or UI.
+### Changed
+- `buddy.html` and `cohort.html` retire to archive notes pointing at the
+  lamp; daily-floor and constellation chat entries open the lamp directly.
+- Lamp behaviour honours the room-shell contract (Escape close) and
+  `prefers-reduced-motion`; Enter sends; persona register loads on demand.
+### Proven
+- Acceptance pass on the served app: 17/17 (lamp presence ×14 pages,
+  3-persona conversation, Enter-send, topic match, state persistence, seal
+  artifact, Escape, persona switch, chat-alone unlock + bark, archive
+  notes, house persona). Smoke 21/21, release verifier, whole-site audit
+  0 errors / 0 overflow, dist byte-identical (150 files).
+
 ## 2.9.1 — the midway floor rises: monolith split
 ### Changed
 - The games room monolith (1,472 lines) is now a 426-line room coordinator

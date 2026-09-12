@@ -140,10 +140,12 @@
     var chat = p.chat || {};
     if (!chat.context) return null;
     var s = readState();
-    var n = Array.isArray(s[key]) ? s[key].length : null;
+    var KEPT = ['buddy', 'divination', 'games', 'sea', 'satchel', 'garden', 'dreams', 'iching', 'methodology', 'council'];
+    var n = 0;
+    KEPT.forEach(function (k) { if (Array.isArray(s[k])) n += s[k].length; });
     var line = chat.context[key];
     if (!line) return null;
-    return (n ? line.replace('{n}', String(n)) : line);
+    return line.split('{n}').join(String(n));
   }
 
   // ── the lamp surface ─────────────────────────────────────────────────
@@ -278,7 +280,8 @@
     if (!ui || ui.panel.hidden) return;
     var text = ui.input.value;
     ui.input.value = '';
-    if (!text.trim()) { reply(pick(persona.chat && persona.chat.hesitate, hash(persona.id + ':' + turns.length))); return; }
+    if (!persona || !persona.chat) return;
+    if (!text.trim()) { reply(pick(persona.chat.hesitate, hash(persona.id + ':' + turns.length))); return; }
     line('me', text);
     var n = exchangesFor(persona.id) + 1;
     countExchange(persona.id);
@@ -309,7 +312,8 @@
     sealArmed = false;
     ui.seal.classList.remove('armed');
     ui.seal.textContent = 'seal in wax';
-    var tail = turns.slice(-8).map(function (t) { return (t.who === 'me' ? 'you: ' : persona.name + ': ') + t.text; }).join('\n');
+    var tail = turns.filter(function (t) { return t.text.indexOf('✶') !== 0; }).slice(-8)
+      .map(function (t) { return (t.who === 'me' ? 'you: ' : persona.name + ': ') + t.text; }).join('\n');
     var confession = tail.length > 600 ? tail.substring(tail.length - 600) : tail;
     var s = st();
     if (s && s.addArtifact) {

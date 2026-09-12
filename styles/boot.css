@@ -94,33 +94,6 @@
   color: #d8a0a0;
 }
 
-.state-boot .boot-warning-open {
-  margin-bottom: 0.9em;
-  padding: 0.55em 1.3em;
-  background: transparent;
-  border: 2px solid #5a0000;
-  color: #d8a0a0;
-  font-family: 'Times New Roman', Times, serif;
-  font-size: clamp(1rem, 1.6vw, 1.15rem);
-  letter-spacing: 0.12em;
-  cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-}
-.state-boot .boot-warning-open:hover,
-.state-boot .boot-warning-open:focus {
-  background: #5a0000;
-  color: #ff8080;
-  border-color: #aa0000;
-  outline: none;
-}
-
-.state-boot .boot-status {
-  margin: 0 0 1.1em;
-  font-style: italic;
-  font-size: clamp(1rem, 1.4vw, 1rem);
-  color: #8a6060;
-}
-
 .state-boot .boot-help {
   position: absolute;
   top: 10px;
@@ -146,7 +119,6 @@
   outline: none;
 }
 .state-boot .boot-help:focus-visible,
-.state-boot .boot-warning-open:focus-visible,
 .state-boot .boot-start:focus-visible {
   outline: 2px solid #ff8080;
   outline-offset: 2px;

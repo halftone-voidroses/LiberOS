@@ -57,8 +57,8 @@
           a: '<p>The sea is two things. One, it allows you to release thoughts you might have been holding on to — negative thoughts, thoughts of trauma and harm. Lets say you are really upset, you told your friends you were working on talking less and they all made fun of you. Aww. Open the Sea app and type your bad thoughts, and let them drift away into the ocean. The second part is a breathing tool — breathe along with it and it will help relax you!</p>'
         },
         {
-          q: 'What is Chat?',
-          a: '<p>That is LiberChat — a system that uses <em>offline</em> <em>Classic Chatbot (ELIZA) style responses</em> to mirror the things you say back to it. It has a large context menu and responds to certain phrases, you can say what you want and hope it provides insight.</p>'
+          q: 'What is the lamp?',
+          a: '<p>That is LiberChat — the small lamp in the corner of every page. Open it and the room traveller answers in their own voice; pick any persona from the switcher to talk with someone else (e-lizabeth included). Conversations stay on this device, and any of them can be sealed in wax and kept in the satchel.</p>'
         },
         {
           q: 'What is Learn?',

@@ -40,10 +40,8 @@
               <div class="boot-rect">
                 <button class="boot-help" type="button" id="boot-help" aria-label="read the warning">?</button>
                 <h1 class="boot-title">Liber.OS</h1>
-                <p class="boot-sub">an art therapy workbook — read the warning first.</p>
-                <button class="boot-warning-open" id="boot-warning-open" type="button">read the warning</button>
-                <p class="boot-status" id="boot-status">the warning is unread.</p>
-                <button class="boot-start" id="boot-start" type="button" disabled>enter</button>
+                <p class="boot-sub">an art therapy workbook.</p>
+                <button class="boot-start" id="boot-start" type="button" disabled title="read the warning to unlock">enter</button>
               </div>
             </div>
           </div>
@@ -88,11 +86,8 @@
       var box = document.getElementById('boot-consent-check');
       var btn = document.getElementById('boot-start');
       var overlay = document.getElementById('boot-warning');
-      var status = document.getElementById('boot-status');
       function sync() {
-        var ok = !!(box && box.checked);
-        if (btn) btn.disabled = !ok;
-        if (status) status.textContent = ok ? 'understood — you may enter.' : 'the warning is unread.';
+        if (btn) btn.disabled = !(box && box.checked);
       }
       function openWarning() {
         if (!overlay) return;
@@ -105,8 +100,8 @@
         if (!overlay) return;
         overlay.classList.remove('open');
         overlay.setAttribute('inert', '');
-        var opener = document.getElementById('boot-warning-open');
-        if (opener) opener.focus();
+        var help = document.getElementById('boot-help');
+        if (help) help.focus();
       }
       try {
         if (box && localStorage.getItem(KEY)) { box.checked = true; }
@@ -119,10 +114,8 @@
         sync();
       });
       sync();
-      var opener = document.getElementById('boot-warning-open');
       var help = document.getElementById('boot-help');
       var close = document.getElementById('boot-warning-close');
-      if (opener) opener.addEventListener('click', openWarning);
       if (help) help.addEventListener('click', openWarning);
       if (close) close.addEventListener('click', closeWarning);
       if (overlay) overlay.addEventListener('click', function (e) { if (e.target === overlay) closeWarning(); });
