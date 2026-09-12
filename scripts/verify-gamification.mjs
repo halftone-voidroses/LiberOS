@@ -40,7 +40,7 @@ async function goto(path, wait = 500) {
   // in-page test helpers (page context cannot see node scope)
   await page.evaluate(() => {
     window.__art = (n) => Array.from({ length: n }, (_, i) => ({ id: 'div-' + i, name: 'card ' + i, key: 'a fragment' }));
-    window.__rel = (arts, n) => arts.slice(0, n).map(a => ({ from: a.id, verb: 'protects', to: 'sigil', ts: Date.now() }));
+    window.__rel = (arts, n) => arts.slice(0, n).map(a => ({ from: a.id, verb: 'protects', to: 'buddy', ts: Date.now() }));
   });
 }
 
@@ -85,23 +85,24 @@ check('visits+artifacts >= 12 → patina-3 (6 visits + 6 artifacts)', cls.includ
 const carveFilter = await page.evaluate(() => getComputedStyle(document.querySelector('.carving[data-id="stone"]')).filter);
 check('patina-3 etches the carvings (static filter, not animated)', /sepia/.test(carveFilter), carveFilter);
 
-// ─── mechanic 4: the cohort becomes louder — overlay resolution steps ───
-console.log('cohort louder — overlay resolution + status voice + prompt intimacy')
+// ─── mechanic 4: the buddy becomes louder — overlay resolution steps ───
+console.log('buddy louder — overlay resolution + status voice + prompt intimacy')
 await goto('/desktop.html', 700);
 await page.evaluate(() => {
   const c = document.createElement('canvas'); c.width = c.height = 32;
   const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, 32, 32);
   window.Liber.state.set({
-    sigils: [{ id: 'sigil-1', intention: 'a held breath', bitmap: c.toDataURL() }],
+    buddy: [],
     divination: window.__art(1),
   });
 });
 await page.waitForTimeout(300);
 const baseOp = await page.evaluate(() => parseFloat(getComputedStyle(document.getElementById('sigil-overlay-img')).opacity));
 cls = await machineClasses();
-check('artifacts+relations < 2 → no cohort class, overlay at base 0.08', !/cohort-\d/.test(cls) && Math.abs(baseOp - 0.08) < 0.001, `op=${baseOp} ${String(cls.match(/cohort-\d+/g))}`);
+check('artifacts+relations < 2 → no buddy class, overlay at base 0.08', !/buddy-\d/.test(cls) && Math.abs(baseOp - 0.08) < 0.001, `op=${baseOp} ${String(cls.match(/buddy-\d+/g))}`);
 await page.evaluate(() => {
   window.Liber.state.set({
+    buddy: [{ id: 'sigil-1', kind: 'stone', intention: 'a held breath' }],
     divination: window.__art(2),
     relations: window.__rel(window.__art(2), 2),
   });
@@ -109,7 +110,7 @@ await page.evaluate(() => {
 await page.waitForTimeout(300);
 const midOp = await page.evaluate(() => parseFloat(getComputedStyle(document.getElementById('sigil-overlay-img')).opacity));
 cls = await machineClasses();
-check('artifacts+relations >= 2 → cohort-1, overlay resolution steps up', cls.includes('cohort-1') && midOp > baseOp, `op=${midOp} ${String(cls.match(/cohort-\d+/g))}`);
+check('artifacts+relations >= 2 → buddy-1, overlay resolution steps up', cls.includes('buddy-1') && midOp > baseOp, `op=${midOp} ${String(cls.match(/buddy-\d+/g))}`);
 await page.evaluate(() => {
   window.Liber.state.set({
     divination: window.__art(10),
@@ -119,14 +120,14 @@ await page.evaluate(() => {
 await page.waitForTimeout(300);
 const highOp = await page.evaluate(() => parseFloat(getComputedStyle(document.getElementById('sigil-overlay-img')).opacity));
 cls = await machineClasses();
-check('artifacts+relations >= 12 → cohort-3, overlay brightest', cls.includes('cohort-3') && highOp > midOp, `op=${highOp} ${String(cls.match(/cohort-\d+/g))}`);
+check('artifacts+relations >= 12 → buddy-3, overlay brightest', cls.includes('buddy-3') && highOp > midOp, `op=${highOp} ${String(cls.match(/buddy-\d+/g))}`);
 
-// status line: cohort phrase joins the rotation only past tier 1
+// status line: buddy phrase joins the rotation only past tier 1
 const poolLow = await page.evaluate(() => {
-  window.Liber.state.set({ relations: [], divination: window.__art(1) });
+  window.Liber.state.set({ buddy: [], relations: [], divination: window.__art(1) });
   return window.Liber.statusLine.pool();
 });
-check('low cohort tier: no cohort-voiced phrase in rotation', poolLow.length === 4 && poolLow.every(p => !/cohort/i.test(p)), poolLow.join(' | '));
+check('low buddy tier: no buddy-voiced phrase in rotation', poolLow.length === 4 && poolLow.every(p => !/buddy/i.test(p)), poolLow.join(' | '));
 const poolUp = await page.evaluate(() => {
   window.Liber.state.set({
     divination: window.__art(2),
@@ -134,17 +135,17 @@ const poolUp = await page.evaluate(() => {
   });
   return window.Liber.statusLine.pool();
 });
-check('cohort tier >= 1: one cohort-voiced phrase joins the rotation', poolUp.length === 5 && /cohort/i.test(poolUp[4]), poolUp.join(' | '));
+check('buddy tier >= 1: one buddy-voiced phrase joins the rotation', poolUp.length === 5 && /buddy/i.test(poolUp[4]), poolUp.join(' | '));
 const voice = await page.evaluate(async () => {
   for (let i = 0; i < 12; i++) {
     window.Liber.statusLine.cycle();
     await new Promise(r => setTimeout(r, 500));
     const el = document.querySelector('.status-phrase');
-    if (el.classList.contains('cohort-voice')) return { found: true, text: el.textContent, cls: el.className };
+    if (el.classList.contains('buddy-voice')) return { found: true, text: el.textContent, cls: el.className };
   }
   return { found: false, text: document.querySelector('.status-phrase').textContent };
 });
-check('cohort phrase displays with cohort-voice styling', voice.found && /cohort/i.test(voice.text), JSON.stringify(voice));
+check('buddy phrase displays with buddy-voice styling', voice.found && /buddy/i.test(voice.text), JSON.stringify(voice));
 
 // prompt engine: intimate templates gated by the same tier
 const intimacy = await page.evaluate(() => {
@@ -167,8 +168,13 @@ check('tier >= 2: intimate templates enter the pool', intimacy.atHigh.some(id =>
 
 // ─── mechanic 3: competence visible — relation edges thicken ───────────
 console.log('competence — constellation edges thicken with relation count')
-const edges = await page.evaluate(() => {
-  window.Liber.state.set({ divination: window.__art(10) });
+const edges = await page.evaluate(async () => {
+  window.Liber.state.set({
+    buddy: [{ id: 'sigil-1', kind: 'stone', intention: 'a held breath' }],
+    divination: window.__art(10),
+    tutorialDone: true,
+  });
+  await new Promise(r => setTimeout(r, 80));
   const probe = (n) => {
     window.Liber.state.set({ relations: window.__rel(window.__art(10), n) });
     window.ConstellationRefresh();
@@ -223,14 +229,14 @@ check('pre-tutorial: never suggested', arcPreTutorial.shown === 0 && !arcPreTuto
 console.log('ambient prompts — speak first, rarely')
 await goto('/desktop.html', 700);
 const ambientGated = await page.evaluate(() => {
-  window.Liber.state.set({ tutorialDone: true });
+  window.Liber.state.set({ tutorialDone: true, buddy: [] });
   window.Liber.gamification.ambient.fire();
   return (window.Liber.state.get().ambient || {}).fired || [];
 });
 check('no relations → the machine never speaks first', ambientGated.length === 0, JSON.stringify(ambientGated));
 await page.evaluate(() => {
   window.Liber.state.set({
-    sigils: [{ id: 'sigil-1', intention: 'a held breath' }],
+    buddy: [{ id: 'sigil-1', kind: 'stone', intention: 'a held breath' }],
     divination: window.__art(2),
     relations: window.__rel(window.__art(2), 2),
   });

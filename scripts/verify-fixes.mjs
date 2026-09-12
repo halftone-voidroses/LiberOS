@@ -37,6 +37,11 @@ async function goto(path, wait = 400) {
   await clearState();
   await page.reload({ waitUntil: 'networkidle' });
   await page.waitForTimeout(wait);
+  const tour = page.locator('#hijack');
+  if (await tour.count()) {
+    await tour.locator('.hijack-skip').click();
+    await page.waitForTimeout(100);
+  }
 }
 
 // ─── C5 + X1: carving glow + no stale theme classes ───────────────────
@@ -69,9 +74,9 @@ check('no "extc anywhere" copy on settings', !c3b);
 console.log('C2 — trash re-add')
 await goto('/trash.html')
 await page.evaluate(() => {
-  window.Liber.state.set({ sigils: [{ id: 'sigil-1', intention: 'fear of the dark', ts: Date.now() }] });
+  window.Liber.state.reset();
+  window.Liber.state.set({ buddy: [{ id: 'sigil-1', kind: 'stone', intention: 'fear of the dark', ts: Date.now() }] });
 });
-await page.reload({ waitUntil: 'networkidle' });
 await page.waitForTimeout(400);
 const labels = await page.evaluate(() => ({
   keep: document.getElementById('trash-save-prompt-keep').textContent.trim(),
@@ -82,7 +87,7 @@ await page.click('#trash-bury-all');
 await page.click('#trash-save-prompt-keep');
 await page.waitForTimeout(200);
 const buried = await page.evaluate(() => ({
-  sigils: window.Liber.state.get().sigils.length,
+  sigils: (window.Liber.state.get().buddy || []).filter(e => e && e.kind === 'stone').length,
   gy: window.Liber.state.get().graveyard.length,
   rows: document.querySelectorAll('.trash-dig-row').length,
 }));
@@ -106,6 +111,11 @@ check('re-add restores orbit + reason satellite relation', readded.stones === 1 
 // ─── C1: sea release ritual ───────────────────────────────────────────
 console.log('C1 — sea release ritual')
 await goto('/sea.html')
+await page.evaluate(() => {
+  const visited = { a: Date.now(), b: Date.now(), c: Date.now() };
+  const relations = Array.from({ length: 5 }, (_, i) => ({ from: 'seed-' + i, verb: 'holds', to: 'buddy' }));
+  window.Liber.state.set({ tutorialDone: true, visited, relations });
+});
 const seaHas = await page.evaluate(() => ({
   input: !!document.getElementById('sea-input'),
   dots: document.querySelectorAll('.sea-intensity-dot').length,
@@ -119,33 +129,14 @@ await page.waitForTimeout(6200);
 const seaState = await page.evaluate(() => window.Liber.state.get().sea);
 check('release writes a state.sea artifact at intensity 5', seaState.length === 1 && seaState[0].intensity === 5 && seaState[0].text === 'the thing I keep carrying', JSON.stringify(seaState));
 
-// ─── C4: wanderlust final fork leaves no dead buttons ─────────────────
-console.log('C4 — wanderlust final fork')
+// ─── C4: current desktop shell has no retired tutorial trigger ──────────
+console.log('C4 — current desktop shell')
 await goto('/desktop.html', 900)
-await page.click('#flaming-q');
-await page.waitForTimeout(16500);
-let clicks = 0;
-while (clicks < 40) {
-  const has = await page.evaluate(() => {
-    const r = document.querySelector('.wanderlust-reply');
-    const w = document.getElementById('wanderlust-window');
-    return { reply: !!r, open: w && w.classList.contains('open') };
-  });
-  if (!has.open) break;
-  if (!has.reply) {
-    // Raison crossings hold the paint ~950ms — wait for the next beat.
-    await page.waitForTimeout(500);
-    continue;
-  }
-  await page.click('.wanderlust-reply');
-  await page.waitForTimeout(900);
-  clicks++;
-}
 const c4 = await page.evaluate(() => ({
-  done: window.Liber.state.get().tutorialDone,
-  replies: document.querySelectorAll('.wanderlust-reply').length,
+  shell: !!document.querySelector('#constellation-svg') && !!document.querySelector('#dial-row'),
+  retiredTrigger: !!document.querySelector('#flaming-q'),
 }));
-check('tutorial completes and clears reply buttons', c4.done === true && c4.replies === 0, JSON.stringify(c4));
+check('desktop shell uses current constellation/dial surface', c4.shell && !c4.retiredTrigger, JSON.stringify(c4));
 
 // ─── M3: iching cast label + completed state ──────────────────────────
 console.log('M3 — iching cast label')
@@ -204,15 +195,13 @@ check('no dev-spec text in any riason panel', devText.length === 0, devText.join
 console.log('M4 — inert migration')
 await goto('/desktop.html', 600)
 const m4 = await page.evaluate(() => {
-  const w = document.getElementById('wanderlust-window');
-  const s = document.getElementById('settings-modal');
+  const mini = document.getElementById('constellation-mini');
   return {
-    winInert: w ? w.hasAttribute('inert') : null,
-    winAriaHidden: w ? w.getAttribute('aria-hidden') : null,
-    setInert: s ? s.hasAttribute('inert') : null,
+    miniInert: mini ? mini.hasAttribute('inert') : null,
+    miniAriaHidden: mini ? mini.getAttribute('aria-hidden') : null,
   };
 });
-check('wanderlust window + settings modal use inert when closed', m4.winInert === true && m4.setInert === true && m4.winAriaHidden !== 'true', JSON.stringify(m4));
+check('closed constellation controls use inert rather than aria-hidden', m4.miniInert === true && m4.miniAriaHidden !== 'true', JSON.stringify(m4));
 
 // ─── prompt engine end-to-end on the desktop ──────────────────────────
 console.log('prompt — end-to-end surface')

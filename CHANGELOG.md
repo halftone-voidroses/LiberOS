@@ -1,5 +1,15 @@
 # LiberOS changelog
 
+## 2.8.1 — patch: release-gate audit and trash restore fix
+### Fixed
+- Burying everything no longer restores a cast buddy when an empty sealed
+  group is processed after the cast group.
+- Release verifiers now follow the current buddy presence contract, current
+  desktop shell, current state shapes, and Sea deep-end unlock.
+### Proven
+- Data, prompt-engine, gamification, and fix regression gates pass.
+- Tauri frontend dist is byte-identical to source and `cargo check` passes.
+
 ## 2.8.0 — final: gorgeous rooms, honest tours, readable chrome
 ### New
 - Games tent rebuilt as a lit marquee: eight gilt booth plaques with
@@ -11,6 +21,9 @@
 - CI smoke gate: pushes and PRs run the data/prompt/gamification
   verifiers plus verify-fixes (blocking); full 21-step smoke reports
   with screenshots without blocking on its known timing flake.
+- Verification harness refreshed for the current `buddy-*` presence
+  contract and current buddy-stone state shape; room-tour overlays are
+  dismissed explicitly before control-level regression checks.
 ### Fixed
 - Riason machine skin never painted: apply-theme emits `theme-riason`
   but machine.css only defined `theme-raison` — selector renamed.
@@ -27,11 +40,10 @@
 - Readability floors: settings, boot/consent, and status-line
   functional text is ≥16px; panels given room, nothing clips.
 ### Proven
-- verify-data + verify-prompt-engine green. verify-gamification shows
-  the same 5 pre-existing failures as pristine 2.7.2 (cohort-louder DOM
-  checks + edge thickening — environment/harness, untouched by 2.8.0).
-  Full smoke runs report-only in CI until the hijack-overlay stall is
-  owned.
+- verify-data, verify-prompt-engine, verify-gamification, and verify-fixes
+  are release gates. Full smoke remains report-only in CI because its
+  long tutorial path is timing-sensitive; the blocking regression suite
+  now handles room-tour overlays explicitly.
 
 ## 2.7.2 — final: starter quests, two-knob sound, whole-system themes
 ### New
