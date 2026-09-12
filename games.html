@@ -45,7 +45,7 @@
               <button class="games-help" type="button" id="games-help" aria-label="how this room works">?</button>
               <button class="games-exit" type="button" id="games-exit" aria-label="leave">×</button>
             </header>
-            <div class="games-app" data-state="games">
+            <div class="games-app" data-state="games" data-view="facade">
 
               <div class="games-save-prompt" id="games-save-prompt" inert>
                 <div class="games-save-prompt-inner">
@@ -68,7 +68,7 @@
                     <button class="games-raison-close" type="button" id="games-raison-close" aria-label="close">×</button>
                   </div>
                   <div class="games-raison-body">
-                    eight games under one tent, and every one of them keeps. pick a game on the left, read what it does, play it on the right. some open as you play. no refunds — the barker keeps what the barker keeps.
+                    eight attractions around a dirt midway, and every one of them keeps. Follow the path to the big tent, use the arrows to pan left or right, then pull a floating poster to open that game full-screen in the CRT. No refunds — the barker keeps what the barker keeps.
                   </div>
                   
                 </div>
@@ -76,6 +76,19 @@
 
               <div class="games-bulbs games-bulbs-top"></div>
               <div class="games-bulbs games-bulbs-bottom"></div>
+              <div class="games-entrance" aria-hidden="true">
+                <span class="games-entrance-kicker">THE LIBER MIDWAY</span>
+                <span class="games-entrance-sign">WHIMSY<br><i>WOW'S</i></span>
+                <span class="games-entrance-rule">★ &nbsp; ADMIT ONE &nbsp; ★</span>
+              </div>
+              <div class="games-pennants" aria-hidden="true">
+                <span class="games-pennant games-pennant-left">◆</span>
+                <span class="games-pennant games-pennant-right">◆</span>
+              </div>
+              <div class="games-ground-sign" aria-hidden="true">
+                <span>WHIMSY WOW'S</span>
+                <small>NO REFUNDS · KEEP THE STUB</small>
+              </div>
 
               <div class="games-tent">
                 <div class="games-marquee">
@@ -88,6 +101,11 @@
 
                 <div class="games-shell">
                   <div class="games-side">
+                    <div class="games-camera-controls" aria-label="move along the midway">
+                      <button class="games-pan games-pan-left" id="games-pan-left" type="button" aria-label="show the attraction to the left">◀</button>
+                      <span class="games-camera-caption">MIDWAY / CAMERA</span>
+                      <button class="games-pan games-pan-right" id="games-pan-right" type="button" aria-label="show the attraction to the right">▶</button>
+                    </div>
                     <div class="games-grid" id="games-grid"></div>
                     <div class="games-desc" id="games-desc">
                       <div class="games-desc-name">pick a game, friend.</div>

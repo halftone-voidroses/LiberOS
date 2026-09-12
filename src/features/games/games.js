@@ -1,11 +1,20 @@
-// games.js — Whimsy Wow. Five honest games under one tent; everything
-// kept. Left third: the games + the barker's pitch. Right: the stage.
+// games.js — Whimsy Wow. Eight honest attractions around one midway;
+// everything kept. The camera moves between posters before the stage opens.
 // Results save to games + satchel with a polaroid shot. No shared imports.
 
 (function () {
   var grid = document.getElementById('games-grid');
   var descBox = document.getElementById('games-desc');
   var stage = document.getElementById('games-stage');
+  var app = document.querySelector('.games-app');
+  var panLeft = document.getElementById('games-pan-left');
+  var panRight = document.getElementById('games-pan-right');
+  var cameraIndex = 1;
+  var CAMERA_ORDER = ['mask', 'wheel', 'shield', 'circles', 'sand', 'tidepool', 'inkstorm', 'thimble'];
+
+  function setView(view) {
+    if (app) app.setAttribute('data-view', view);
+  }
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -13,22 +22,30 @@
 
   var GAMES = [
     { id: 'wheel', name: 'emotion wheel', glyph: '◉',
+      material: 'painted wheel · three throws',
       pitch: 'Step right up! The wheel knows twelve feelings and your arm knows the truth. Throw a dart, land on one — no dodging! Then pick the color it feels like and watch it flood the tent. Three darts, three honest answers. Keep the prettiest.' },
     { id: 'mask', name: 'communication mask', glyph: '◭',
+      material: 'split face · two truths',
       pitch: 'Everybody wears one — here is yours to paint! Left side: what you FEEL inside. Right side: what you SHOW the world. Same face, two truths. Paint it loud, then keep it.' },
     { id: 'shield', name: 'boundaries shield', glyph: '◈',
+      material: 'four quarters · your rules',
       pitch: 'Four quarters, four boundaries: body, heart, clock, and mind. Color in how strong each wall is right now — bright means solid, dark means needs work. Your shield, your rules!' },
     { id: 'circles', name: 'relationship circles', glyph: '◎',
+      material: 'three rings · honest seating',
       pitch: 'Three rings: closest, friends, distant. Write the names where they actually belong — not where they wish they belonged. An honest seating chart. Keep it.' },
     { id: 'sand', name: 'powder tent', glyph: '▦',
+      material: 'loose grain · make a world',
       pitch: 'Liber powder! Pour sand, splash water, strike fire — it all falls and flows like the real stuff. Build a little world out of grains, then keep a picture before it settles.' },
     { id: 'tidepool', name: 'tide pool', glyph: '≋', unlock: 'tidepool',
+      material: 'wet slate · the deep opens',
       pitch: 'Vanir’s pool, down in the deep. Drop a feeling while the tide is high and it floats; drop it low and it strands, waiting. The pool decides the pacing — you decide the honesty. No winning.',
       hint: '??? — the deep opens to those who release.' },
     { id: 'inkstorm', name: 'ink storm', glyph: '≣', unlock: 'inkstorm',
+      material: 'phosphor glass · sealed words',
       pitch: 'Entity404’s terminal. Glyphs rain; type the word to execute it. Missed words simply dissolve — no failing here. The storm slows when you struggle, and tells you so, kindly.',
       hint: '??? — static gathers where words are sealed.' },
     { id: 'thimble', name: 'thimble garden', glyph: '❀', unlock: 'thimble',
+      material: 'stitched canvas · patient growth',
       pitch: 'Ruby’s thimble pot. It grows while you are elsewhere in the OS — visit rooms, come back, find leaves. Harvest grants a petal for every paint box and a pressed flower for the book.',
       hint: '??? — ruby watches patient gardeners.' }
   ];
@@ -56,6 +73,27 @@
 
   var current = null;
 
+  function applyCamera() {
+    if (!grid) return;
+    grid.setAttribute('data-camera-index', String(cameraIndex));
+    if (panLeft) panLeft.disabled = cameraIndex === 0;
+    if (panRight) panRight.disabled = cameraIndex === CAMERA_ORDER.length - 1;
+    var buttons = grid.querySelectorAll('.games-booth');
+    for (var i = 0; i < buttons.length; i++) {
+      var boothIndex = CAMERA_ORDER.indexOf(buttons[i].getAttribute('data-game'));
+      var delta = boothIndex - cameraIndex;
+      var position = delta === 0 ? 'center' : (delta === -1 ? 'left' : (delta === 1 ? 'right' : 'off'));
+      buttons[i].setAttribute('data-camera-position', position);
+      buttons[i].setAttribute('aria-hidden', position === 'off' ? 'true' : 'false');
+      buttons[i].tabIndex = position === 'off' ? -1 : 0;
+    }
+  }
+
+  function moveCamera(amount) {
+    cameraIndex = Math.max(0, Math.min(CAMERA_ORDER.length - 1, cameraIndex + amount));
+    applyCamera();
+  }
+
   function buildPicker() {
     if (!grid) return;
     grid.innerHTML = '';
@@ -66,12 +104,19 @@
         div.type = 'button';
         div.className = 'games-booth' + (current && current.id === g.id ? ' current' : '') + (locked ? ' locked' : '');
         div.setAttribute('data-game', g.id);
-        div.innerHTML = '<span class="games-booth-glyph">' + (locked ? '?' : g.glyph) + '</span>'
-          + '<span class="games-booth-name">' + esc(locked ? '???' : g.name) + '</span>';
+        div.setAttribute('data-index', String(i));
+        div.setAttribute('aria-label', (locked ? 'locked booth' : g.name) + (g.material ? ', ' + g.material : ''));
+        div.innerHTML = '<span class="games-booth-scene" aria-hidden="true"></span>'
+          + '<span class="games-booth-poster"><span class="games-booth-number">' + String(i + 1).padStart(2, '0') + '</span>'
+          + '<span class="games-booth-glyph">' + (locked ? '?' : g.glyph) + '</span>'
+          + '<span class="games-booth-copy"><span class="games-booth-name">' + esc(locked ? '???' : g.name) + '</span>'
+          + '<span class="games-booth-material">' + esc(locked ? 'curtain still closed' : g.material) + '</span></span>'
+          + '<span class="games-booth-mark" aria-hidden="true">›</span></span>';
         div.addEventListener('click', function () { selectGame(g); });
         grid.appendChild(div);
       })(GAMES[i]);
     }
+    applyCamera();
   }
 
   function paintDesc(g) {
@@ -91,6 +136,7 @@
     if (stage) {
       closeStage();
       stage.removeAttribute('inert');
+      setView('attraction');
       stage.innerHTML = '<div class="games-stage-inner"><div class="games-locked">'
         + '<span class="games-locked-glyph">?</span>'
         + '<div>' + esc(g.hint || 'not yet. keep playing.') + '</div>'
@@ -187,12 +233,14 @@
     if (stage._teardown) { try { stage._teardown(); } catch (e) {} stage._teardown = null; }
     stage.innerHTML = '';
     stage.setAttribute('inert', '');
+    setView('facade');
   }
 
   function openPlay(b) {
     if (!stage) return;
     closeStage();
     stage.removeAttribute('inert');
+    setView('attraction');
     var html = '<div class="games-stage-inner">';
     html += '<div class="games-stage-head">';
     html += '<span class="games-stage-glyph">' + b.glyph + '</span>';
@@ -1211,8 +1259,10 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     buildPicker();
+    if (panLeft) panLeft.addEventListener('click', function () { moveCamera(-1); });
+    if (panRight) panRight.addEventListener('click', function () { moveCamera(1); });
     if (descBox && !descBox.querySelector('.games-desc-name')) {
-      descBox.innerHTML = '<div class="games-desc-name">pick a game, friend.</div><div>eight games under one tent — the pitch is on the left, the play is on the right. some open as you play.</div>';
+      descBox.innerHTML = '<div class="games-desc-name">pick a game, friend.</div><div>follow the dirt path, pan the midway, and pull a poster when you are ready.</div>';
     }
 
     (function tutorialBooth() {
