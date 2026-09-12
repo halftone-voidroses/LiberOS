@@ -1,5 +1,30 @@
 # LiberOS changelog
 
+## 2.9.1 — the midway floor rises: monolith split
+### Changed
+- The games room monolith (1,472 lines) is now a 426-line room coordinator
+  plus per-booth modules under `src/features/games/booths/`. The coordinator
+  owns the midway shell — camera, picker, stage lifecycle, save prompt,
+  personal bests — while each attraction self-registers onto `LiberBooths`
+  and receives a shared booth context. Adding a booth is one module plus one
+  registry line. Attraction code moved verbatim; behavior byte-for-byte
+  equivalent (smoke 21/21, games audit, room-behavior audit, whole-site
+  audit, dist byte-identical).
+- Games audit camera-walk expectations updated for the nine-booth midway
+  (the TIPP booth had landed after the audit was written).
+### Fixed (from 2.9.0 line, now versioned)
+- TIPP "quiet floor" booth added to the games room, closing the promise the
+  Learn hard-nights page made; Enter now confirms any open save prompt via
+  the shared room-shell contract; tutorial summon pacing slowed and the
+  last in-voice misspelling corrected.
+
+## 2.9.0 — cross-room interaction contract (tagged without a version bump)
+### Added
+- `src/room-shell.js`: shared room overlay contract — Escape/backdrop close,
+  Enter-to-confirm on topmost save prompt, adopted by sigil, games,
+  divination, sea, and the theme picker.
+- `website-report.html`: site-wide pitch report with per-room decks.
+
 ## 2.8.2 — macOS release
 ### Added
 - Native macOS release workflow builds and attaches the Tauri `.dmg` and
