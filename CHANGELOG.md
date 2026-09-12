@@ -1,5 +1,10 @@
 # LiberOS changelog
 
+## 2.8.2 — macOS release
+### Added
+- Native macOS release workflow builds and attaches the Tauri `.dmg` and
+  `.app.tar.gz` bundles to tagged GitHub releases.
+
 ## 2.8.1 — patch: release-gate audit and trash restore fix
 ### Fixed
 - Burying everything no longer restores a cast buddy when an empty sealed
