@@ -41,42 +41,75 @@
           <div class="screen-stage">
             <header class="toybox-titlebar">
               <span class="toybox-titlebar-name">toybox</span>
-              <span class="toybox-titlebar-sub">pip keeps the sand</span>
+              <span class="toybox-titlebar-sub">pip got trapped here — the sink stays</span>
               <button class="toybox-help" type="button" id="toybox-help" aria-label="how this room works">?</button>
               <button class="toybox-exit" type="button" id="toybox-exit" aria-label="leave">×</button>
             </header>
+
             <div class="toybox-app" data-state="toybox">
-              <div class="toybox-sawdust" aria-hidden="true"></div>
+              <!-- the world: damp motes above enamel, window light, one bulb -->
+              <div class="toybox-motes" aria-hidden="true"></div>
+              <div class="sink-window" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+              <div class="sink-bulblight" aria-hidden="true"></div>
+              <div class="sink-leftpipe" aria-hidden="true"></div>
+              <div class="sink-towel" aria-hidden="true"></div>
 
               <div class="toybox-raison" id="toybox-raison" inert>
                 <div class="toybox-raison-inner">
                   <div class="toybox-raison-head">
-                    <span class="toybox-raison-name">pip</span>
+                    <span class="toybox-raison-name">a note left with the toys</span>
                     <button class="toybox-raison-close" type="button" id="toybox-raison-close" aria-label="close">×</button>
                   </div>
                   <div class="toybox-raison-body">
-                    touch everything. pour with the jars, drag the crab through the piles, plow with the shell. keeping takes a picture for the satchel. no lessons. sawdust optional.
+                    touch everything. the jars are ours — we leave them for pip. pour with them, drag the crab through the piles, plow with the shell. the tap stops the world, the plug lets the wet things go. keeping takes a picture for the satchel. no lessons.
                   </div>
                 </div>
               </div>
 
-              <div class="toybox-sign">touch everything.</div>
+              <!-- splashback: tiles, rain window, the tap that runs the world -->
+              <div class="sink-splash">
+                <div class="toybox-sign" aria-label="touch everything.">
+                  <span class="word"><i class="mag">t</i><i class="mag">o</i><i class="mag">u</i><i class="mag">c</i><i class="mag">h</i></span>
+                  <span class="word"><i class="mag">e</i><i class="mag">v</i><i class="mag">e</i><i class="mag">r</i><i class="mag">y</i><i class="mag">t</i><i class="mag">h</i><i class="mag">i</i><i class="mag">n</i><i class="mag">g</i><i class="mag">.</i></span>
+                </div>
+                <div class="tap-assembly" aria-hidden="true">
+                  <i class="tap-pipe"></i><i class="tap-spout"></i><i class="tap-spout-hole"></i>
+                </div>
+                <button class="toybox-action tap-handle" type="button" id="toybox-pause" aria-pressed="false" title="turn the tap — the world runs on it">
+                  <i class="tool-art" aria-hidden="true"></i><span>tap on</span>
+                </button>
+                <div class="sink-scumline" aria-hidden="true"></div>
+              </div>
 
+              <!-- the drip rack: jars other travellers left behind -->
               <div class="toybox-shelf" id="toybox-shelf">
                 <div class="toybox-jars" id="toybox-jars"></div>
                 <div class="toybox-shelf-lip" aria-hidden="true"></div>
               </div>
 
+              <!-- the basin: the whole world pours into it -->
               <div class="toybox-pit" id="toybox-pit">
                 <canvas class="toybox-canvas" id="toybox-canvas" width="360" height="450"></canvas>
-                <div class="toy" id="toy-crab" title="crab — walks piles flat">♋</div>
-                <div class="toy" id="toy-shell" title="shell — plows, lifts clean">◍</div>
                 <div class="toybox-tray-shine" aria-hidden="true"></div>
+                <span class="toy" id="toy-crab" aria-hidden="true">🦀</span>
+                <span class="toy" id="toy-shell" aria-hidden="true">🐚</span>
+                <button class="toybox-action plug" type="button" id="toybox-drain" title="pull the plug — wet things drain away">
+                  <i class="tool-art" aria-hidden="true"></i><span>pull</span>
+                </button>
               </div>
 
+              <!-- a soap dish on the basin rim: the residents the travellers left -->
+              <div class="toybox-crewbar" id="toybox-crew" role="group" aria-label="place a resident">
+                <span class="toybox-crew-label">residents</span>
+                <button class="toybox-crew-btn" type="button" data-crew="crab" title="crab — digs piles flat, sidles around water, flees fire" aria-label="place a crab"></button>
+                <button class="toybox-crew-btn" type="button" data-crew="snail" title="snail — trails slime, shelters from fire, rides oil rafts" aria-label="place a snail"></button>
+                <button class="toybox-crew-btn" type="button" data-crew="duck" title="duck — bobs on water, paddles to seed and eats it" aria-label="place a duck"></button>
+              </div>
+
+              <!-- the towel rail: pip's own two tools -->
               <div class="toybox-actions">
-                <button class="toybox-action" type="button" id="toybox-sweep">sweep it</button>
-                <button class="toybox-action" type="button" id="toybox-keep">keep it</button>
+                <button class="toybox-action tool-broom" type="button" id="toybox-sweep" title="sweep the basin clean — an old toothbrush"><i class="tool-art" aria-hidden="true"></i><span>sweep</span></button>
+                <button class="toybox-action tool-camera" type="button" id="toybox-keep" title="keep the picture — polaroid into the satchel"><i class="tool-art" aria-hidden="true"></i><span>keep</span></button>
               </div>
               <div class="toybox-result" id="toybox-result"></div>
 
@@ -103,6 +136,7 @@
   <script src="src/hijack.js"></script>
   <script src="src/cursor.js"></script>
   <script src="src/features/toybox/powder.js"></script>
+  <script src="src/features/toybox/crew.js"></script>
   <script src="src/features/toybox/toybox.js"></script>
   <script src="src/liberchat-mount.js"></script>
 </body>
