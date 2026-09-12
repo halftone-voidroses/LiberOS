@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>LiberOS — Games & Visual Design Audit</title>
+  <style>
+    :root {
+      --void:#090708; --ink:#f4ead7; --muted:#b9a48b; --dim:#796858;
+      --line:#3a2924; --panel:#171012; --panel-hi:#21151b;
+      --gold:#efc96d; --pink:#ef79aa; --teal:#77d1c8; --red:#e66b5d;
+      --violet:#a995e8; --serif:Georgia,"Times New Roman",serif;
+      --mono:"VT323","SFMono-Regular",monospace;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;background:var(--void)}
+    body{margin:0;color:var(--ink);background:
+      radial-gradient(circle at 80% 0%,#2a1522 0,transparent 35rem),
+      radial-gradient(circle at 0% 35%,#171e23 0,transparent 30rem),var(--void);
+      font:17px/1.65 var(--serif);-webkit-font-smoothing:antialiased}
+    a{color:var(--gold)}
+    .wrap{width:min(1160px,calc(100% - 36px));margin:auto;padding:28px 0 90px}
+    .hero{border:1px solid var(--line);background:linear-gradient(140deg,#23151b,#110c10 60%,#151d20);
+      border-radius:20px;padding:42px clamp(24px,5vw,70px);box-shadow:0 20px 70px #0008}
+    .kicker,.eyebrow,.label{font:14px var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+    h1{font-size:clamp(42px,7vw,82px);line-height:.95;font-weight:400;letter-spacing:-.045em;margin:14px 0 22px}
+    h1 em{color:var(--pink);font-style:normal}
+    .lede{max-width:72ch;font-size:20px;color:var(--muted)}
+    .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:25px;color:var(--dim);font:14px var(--mono)}
+    .pill{border:1px solid var(--line);border-radius:99px;padding:4px 10px}
+    nav{position:sticky;top:0;z-index:3;margin:22px 0;padding:10px 14px;border:1px solid var(--line);
+      border-radius:12px;background:#100c0eea;backdrop-filter:blur(12px);display:flex;gap:17px;flex-wrap:wrap;font:14px var(--mono)}
+    section{margin:66px 0}
+    h2{font-size:34px;line-height:1.1;font-weight:400;margin:0 0 8px}
+    h3{font-size:21px;font-weight:400;margin:0 0 5px}
+    .sub{color:var(--muted);margin-top:0}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .grid.two{grid-template-columns:repeat(2,1fr)}
+    .card{background:linear-gradient(180deg,var(--panel-hi),var(--panel));border:1px solid var(--line);
+      border-radius:14px;padding:20px}
+    .card p{margin:8px 0;color:var(--muted)}
+    .score{font:40px var(--mono);color:var(--gold);line-height:1}
+    .score small{font:15px var(--serif);color:var(--muted)}
+    .bar{height:7px;border-radius:99px;background:#302025;margin:13px 0 2px;overflow:hidden}
+    .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--pink),var(--gold));border-radius:inherit}
+    .tag{display:inline-block;font:13px var(--mono);padding:2px 8px;border:1px solid var(--line);border-radius:99px;margin:4px 4px 0 0}
+    .critical{color:var(--red);border-color:#71382f}.good{color:var(--teal);border-color:#2e6660}
+    .evidence{border-left:3px solid var(--gold);padding:10px 15px;background:#1a1110;color:var(--muted);margin:14px 0}
+    figure{margin:0}.shot{width:100%;display:block;border:1px solid var(--line);border-radius:12px;background:#050405}
+    figcaption{font:13px var(--mono);color:var(--dim);padding-top:8px}
+    .mockup{border:1px solid #715d31;border-radius:16px;background:
+      radial-gradient(circle at 50% 5%,#683347,transparent 35%),#260f1c;padding:16px;min-height:410px}
+    .mock-top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #8a6d3c;padding:4px 5px 12px}
+    .mock-brand{font:20px Georgia;color:var(--gold);letter-spacing:.12em}
+    .mock-sub{font:13px var(--mono);color:#d1b8a7}
+    .booths{display:flex;gap:16px;overflow:auto;padding:28px 2px 18px}
+    .booth{min-width:150px;height:174px;border:1px solid #b98a41;border-radius:8px 8px 12px 12px;padding:48px 10px 10px;
+      background:linear-gradient(160deg,#402035,#180f18);position:relative;box-shadow:0 11px 18px #0008}
+    .booth:after{content:"";position:absolute;left:10px;right:10px;bottom:9px;height:7px;border-top:1px solid #b98a41;border-bottom:1px solid #b98a41;background:#170d13}
+    .booth:before{content:"";position:absolute;left:-1px;right:-1px;top:-18px;height:42px;border:1px solid #d3ae56;border-radius:72% 72% 9px 9px;
+      background:repeating-linear-gradient(90deg,#e66b5d 0 18px,#f0c768 18px 36px);box-shadow:0 5px 0 #24121b,0 8px 12px #0008}
+    .booth.active{border:2px solid var(--pink);box-shadow:0 0 22px #ef79aa55,0 11px 18px #0008}
+    .booth.active:before{background:repeating-linear-gradient(90deg,#ef79aa 0 18px,#ffd47a 18px 36px)}
+    .booth .lamp{position:absolute;top:-5px;left:50%;width:10px;height:10px;border-radius:50%;background:#ffe2a0;box-shadow:0 0 12px #ffd66e;z-index:1}
+    .booth .poster-mini{display:block;height:78px;border:1px solid #d3ae56;border-radius:4px;padding:8px;
+      background:radial-gradient(circle at 35% 30%,#ffd885 0 5%,transparent 6%),linear-gradient(135deg,#2f837f,#1b3035)}
+    .booth:nth-child(2) .poster-mini{background:radial-gradient(circle,#f5bd6b 0 5%,transparent 6%),linear-gradient(135deg,#873f55,#28121d)}
+    .booth:nth-child(3) .poster-mini{background:radial-gradient(circle at 60% 35%,#e991bc 0 6%,transparent 7%),linear-gradient(135deg,#5b4b91,#17122e)}
+    .booth:nth-child(4) .poster-mini{background:radial-gradient(circle at 45% 35%,#80e2cd 0 6%,transparent 7%),linear-gradient(135deg,#286d6e,#112d32)}
+    .booth b{display:block;margin-top:8px;font-size:14px;color:var(--ink)}
+    .booth span{font:11px var(--mono);color:var(--muted)}
+    .mock-stage{display:grid;grid-template-columns:1.1fr .9fr;gap:12px}
+    .poster{min-height:220px;border:1px solid #ba8b43;border-radius:3px;padding:22px;
+      background:
+        linear-gradient(135deg,transparent 0 48%,#d8a84f 49% 50%,transparent 51%),
+        radial-gradient(ellipse at 50% 110%,#e66b5d 0 20%,transparent 21%),#351223;
+      box-shadow:inset 0 0 0 7px #351223,inset 0 0 0 9px #d3ae56;position:relative;overflow:hidden}
+    .poster:before{content:"";position:absolute;inset:15px;border:1px solid #d3ae56;pointer-events:none}
+    .poster h3{font-size:29px;color:#ffe3a0;max-width:75%}.poster .glyph{font-size:55px;color:var(--pink);float:right;text-shadow:0 0 14px #ef79aa}
+    .poster p{font-size:15px;color:#d1b9ab}
+    .play-card{border:1px solid #4e7775;border-radius:11px;padding:16px;background:linear-gradient(145deg,#173b3d,#101a22)}
+    .play-card strong{font:14px var(--mono);color:var(--teal)}
+    .play-card .cta{display:inline-block;border:1px solid var(--gold);padding:7px 13px;margin-top:18px;color:var(--gold);font:14px var(--mono)}
+    .wheel{width:180px;height:180px;border-radius:50%;margin:8px auto;border:10px solid #e9be63;
+      background:conic-gradient(#ee7e9f 0 30deg,#efc96d 30deg 75deg,#77d1c8 75deg 130deg,#9b8cde 130deg 190deg,#e66b5d 190deg 245deg,#d6a9e5 245deg 300deg,#ee7e9f 300deg);
+      box-shadow:0 0 0 5px #361c2a,0 0 35px #efc96d55}
+    .roadmap{counter-reset:step}.roadmap .card{position:relative;padding-left:64px}
+    .roadmap .card:before{counter-increment:step;content:"0" counter(step);position:absolute;left:20px;top:20px;font:27px var(--mono);color:var(--pink)}
+    ul{padding-left:22px;color:var(--muted)}li{margin:7px 0}
+    .callout{border:1px solid var(--gold);border-radius:15px;padding:22px;background:#2b1e11;color:#f4dfac;font-size:19px}
+    code{font:14px var(--mono);color:var(--gold);background:#0c0a0b;padding:2px 5px;border-radius:4px}
+    footer{border-top:1px solid var(--line);padding-top:20px;color:var(--dim);font:14px var(--mono)}
+    @media(max-width:800px){.grid,.grid.two,.mock-stage{grid-template-columns:1fr}.hero{padding:30px 22px}.wrap{width:min(100% - 24px,1160px)}}
+  </style>
+</head>
+<body>
+<main class="wrap">
+  <header class="hero">
+    <div class="kicker">liberOS · product + game design review · 2026-09-11</div>
+    <h1>Make the tent feel like<br><em>a place worth entering.</em></h1>
+    <p class="lede">This is an evidence-based redesign brief for the games suite and the wider visual language. LiberOS already has a rare strength: it feels authored. The next move is not “add more decoration.” It is to make each game a small, legible ritual with a reason to return.</p>
+    <div class="meta"><span class="pill">reference: LiberOS v2.8.1</span><span class="pill">scope: games + emotional tools + navigation</span><span class="pill">recommendation: redesign before adding games</span></div>
+  </header>
+
+  <nav>
+    <a href="#verdict">verdict</a><a href="#evidence">evidence</a><a href="#games">game audit</a>
+    <a href="#mockup">proposed mockup</a><a href="#system">design system</a><a href="#plan">next steps</a>
+  </nav>
+
+  <section id="verdict">
+    <h2>Executive verdict</h2><p class="sub">The tent is a strong wrapper around an under-designed loop.</p>
+    <div class="grid">
+      <article class="card"><div class="score">8.5 <small>/10</small></div><h3>World & voice</h3><p>Whimsy Wow has a clear persona: barker, velvet, gold, ticket-stub language. This is an asset. Keep it.</p><div class="bar"><i style="width:85%"></i></div></article>
+      <article class="card"><div class="score">6.0 <small>/10</small></div><h3>Discoverability</h3><p>Eight vertical booths and a separate stage make the suite feel like a catalogue, not a destination with a first act.</p><div class="bar"><i style="width:60%"></i></div></article>
+      <article class="card"><div class="score">4.5 <small>/10</small></div><h3>Game feel</h3><p>Most activities are reflective worksheets with a coat of paint. The user rarely makes a meaningful choice or learns a new affordance.</p><div class="bar"><i style="width:45%"></i></div></article>
+      <article class="card"><div class="score">7.5 <small>/10</small></div><h3>Persistence</h3><p>Keeping results as artifacts and mirroring them to the satchel is excellent. It gives play a memory.</p><div class="bar"><i style="width:75%"></i></div></article>
+      <article class="card"><div class="score">5.0 <small>/10</small></div><h3>Return value</h3><p>Unlocks exist, but the reasons to replay are mostly “make another result,” not mastery, surprise, collection, or social meaning.</p><div class="bar"><i style="width:50%"></i></div></article>
+      <article class="card"><div class="score">8.0 <small>/10</small></div><h3>Material identity</h3><p>CRT, velvet, bulbs, phosphor and hand-lettered copy create a coherent authored universe. Improve hierarchy, not the premise.</p><div class="bar"><i style="width:80%"></i></div></article>
+    </div>
+    <div class="callout">Core recommendation: turn “eight games under one tent” into <strong>four memorable booths with distinct verbs</strong>, then let the emotional and relational tools become supporting attractions instead of pretending every prompt is a game.</div>
+  </section>
+
+  <section id="evidence">
+    <h2>What the current build says</h2>
+    <p class="sub">The code and the screenshot agree: the presentation is more confident than the interaction design.</p>
+    <div class="grid two">
+      <figure class="card"><img class="shot" src="../screenshots/fix2-games-after.png" alt="Historical Whimsy Wow games screen showing a marquee, gold framed game grid, and a partially visible lower row"><figcaption>Historical lineage screenshot (pre-v2.8.1), retained only to show the tent direction. The working reference for this audit is the v2.8.1 source and release contract, not this old capture.</figcaption></figure>
+      <article class="card">
+        <h3>Strengths worth protecting</h3>
+        <ul><li><span class="tag good">persona</span> The barker voice is specific and ownable.</li><li><span class="tag good">persistence</span> Results can become kept artifacts and satchel entries.</li><li><span class="tag good">progression</span> Tide pool, ink storm, and thimble garden create a reason to visit other rooms.</li><li><span class="tag good">sensory hook</span> Canvas, SVG, marquee bulbs and sound give actions a physical frame.</li></ul>
+        <h3>Problems to solve</h3>
+        <ul><li><span class="tag critical">hierarchy</span> The picker foregrounds names, not the promise or mood of the selected game.</li><li><span class="tag critical">false genre</span> Mask, shield and circles are useful exercises, but “game” sets the wrong expectation.</li><li><span class="tag critical">low agency</span> A click, color choice, and save prompt often exhaust the loop.</li><li><span class="tag">density</span> The CRT viewport makes the suite feel cramped exactly where play needs calm focus.</li></ul>
+      </article>
+    </div>
+  </section>
+
+  <section id="games">
+    <h2>Game-by-game audit</h2>
+    <p class="sub">Use these as redesign briefs, not as reasons to delete the character of the rooms.</p>
+    <div class="grid two">
+      <article class="card"><span class="tag critical">redesign first</span><h3>Emotion wheel → “The Weather Inside”</h3><p>The dartboard is theatrical, but the result is mostly random emotion + color. It can feel like being assigned a mood.</p><p><strong>New loop:</strong> choose a weather front, steer pressure with two trade-offs, then name the forecast. The user authors meaning while the system adds surprise.</p><p><strong>Reward:</strong> a forecast card with a changing sky, a one-line reflection, and a “return in 24 hours” comparison.</p></article>
+      <article class="card"><span class="tag critical">reframe</span><h3>Communication mask → “Signal / Static”</h3><p>Two paint surfaces (“feel” and “show”) are a good metaphor but a thin interaction.</p><p><strong>New loop:</strong> pick a signal to send, add static, then test how three listeners interpret it. The game teaches mismatch through consequence, not explanation.</p><p><strong>Reward:</strong> a reusable phrase card the user can keep in the satchel.</p></article>
+      <article class="card"><span class="tag">deepen</span><h3>Boundaries shield → “The Gatekeeper”</h3><p>Four quarters invite coloring, but “bright means solid” turns a complex boundary into a scoreless self-rating.</p><p><strong>New loop:</strong> face small scenarios, choose open / pause / close, and spend a limited reserve of energy. No “correct” answer; the pattern is the artifact.</p><p><strong>Reward:</strong> a boundary sigil plus one sentence the user wrote.</p></article>
+      <article class="card"><span class="tag">deepen</span><h3>Relationship circles → “Orbit”</h3><p>Typing names into rings is a useful inventory, but it is static and socially under-explained.</p><p><strong>New loop:</strong> place tokens, draw a desired orbit, then compare current / desired distance. Make movement and revision the play.</p><p><strong>Reward:</strong> a constellation fragment that can actually bind to a buddy or artifact.</p></article>
+      <article class="card"><span class="tag good">keep + sharpen</span><h3>Powder tent → “Powderworks”</h3><p>This is the most game-like system: material, transformation, failure without punishment, and a visual trace.</p><p><strong>Improve:</strong> add three authored challenges (bridge, shelter, impossible shape), a camera moment, and a gallery of prior sediments.</p></article>
+      <article class="card"><span class="tag good">keep + deepen</span><h3>Thimble garden → “Little Elsewhere”</h3><p>Idle growth is an excellent LiberOS-native idea because visiting other rooms becomes care.</p><p><strong>Improve:</strong> make growth legible from the desktop, add seasonal mutations, and let harvested flowers alter future poster art.</p></article>
+    </div>
+  </section>
+
+  <section id="mockup">
+    <h2>Proposed visual direction</h2>
+    <p class="sub">A concept mockup: booths are navigational objects, posters explain the fantasy, and the stage earns the user’s attention.</p>
+    <div class="mockup">
+      <div class="mock-top"><div><div class="mock-brand">WHIMSY WOW'S</div><div class="mock-sub">THE TENT OF SMALL WEATHER</div></div><div class="label">ticket 04 · 3 kept</div></div>
+      <div class="booths">
+        <div class="booth active"><i class="lamp"></i><span class="poster-mini"></span><b>weather inside</b><span>feel · steer · name</span></div>
+        <div class="booth"><i class="lamp"></i><span class="poster-mini"></span><b>signal / static</b><span>send · listen · repair</span></div>
+        <div class="booth"><i class="lamp"></i><span class="poster-mini"></span><b>the gatekeeper</b><span>open · pause · close</span></div>
+        <div class="booth"><i class="lamp"></i><span class="poster-mini"></span><b>powderworks</b><span>build · disturb · keep</span></div>
+      </div>
+      <div class="mock-stage">
+        <div class="poster"><span class="glyph">☼</span><div class="label">tonight's attraction</div><h3>The Weather Inside</h3><p>Not a test. Not a diagnosis. A small instrument for noticing what kind of sky you are carrying.</p><div class="tag">3 rounds</div><div class="tag">keeps a forecast</div></div>
+        <div class="play-card"><strong>FIRST ACT · choose a front</strong><div class="wheel"></div><p>Move the brass needle between fronts. The tent responds, then asks what you want to call it.</p><span class="cta">enter the booth →</span></div>
+      </div>
+    </div>
+    <div class="grid two" style="margin-top:14px">
+      <article class="card"><h3>Why booths?</h3><p>They make the tent feel inhabited. Each booth gets a material object, a silhouette, and a short promise. The user can scan horizontally without losing the stage.</p></article>
+      <article class="card"><h3>Why posters?</h3><p>Posters solve the current “what is this?” problem. A poster can communicate mood, duration, agency, and the kept artifact before the user commits.</p></article>
+    </div>
+  </section>
+
+  <section id="system">
+    <h2>Overall visual system</h2>
+    <p class="sub">Prettier should mean more authored relationships, not more ornament.</p>
+    <div class="grid">
+      <article class="card"><h3>1 · One material per attraction</h3><p>Give each game a tactile material: weather glass, newsprint, brass gate, wet sand. Use it in the poster, cursor, result card, and sound.</p></article>
+      <article class="card"><h3>2 · A three-beat screen rhythm</h3><p>Every room should read as <strong>invite → act → keep</strong>. Hide secondary copy until the user has a clear next move.</p></article>
+      <article class="card"><h3>3 · Let the OS remember visibly</h3><p>Kept results should return as posters, constellation fragments, garden mutations, or status-line language. Persistence is the game’s secret weapon.</p></article>
+      <article class="card"><h3>4 · Separate tools from games</h3><p>Call the emotional exercises “instruments” or “booths” in the UI. A game may be playful; a tool may be quiet. Both can belong in the tent.</p></article>
+      <article class="card"><h3>5 · Reduce chrome, increase stage</h3><p>Keep the CRT and marquee frame, but give the selected attraction 60–70% of the usable screen. The current side list competes with the thing being played.</p></article>
+      <article class="card"><h3>6 · Make replay legible</h3><p>Show “last forecast,” “new mutation,” “three posters kept,” or “try a different listener.” A return invitation is better than a generic save prompt.</p></article>
+    </div>
+  </section>
+
+  <section id="plan">
+    <h2>Recommended next steps</h2>
+    <p class="sub">A sequence that improves feel without requiring a rewrite of the whole OS.</p>
+    <div class="grid two roadmap">
+      <article class="card"><h3>Audit the contract</h3><p>Define a shared attraction model: <code>id</code>, persona, verb, duration, input type, result artifact, replay hook, unlock rule. Remove the implicit “every game is a canvas” assumption.</p></article>
+      <article class="card"><h3>Prototype one vertical slice</h3><p>Redesign Emotion Wheel as Weather Inside, including poster, booth, three-beat loop, artifact card, and desktop return hook. Do not redesign all eight at once.</p></article>
+      <article class="card"><h3>Build the shell before content</h3><p>Implement the booths/poster/stage composition with the existing <code>GAMES</code> registry. The shell should support keyboard, reduced motion, locked states, and a deep-linkable attraction.</p></article>
+      <article class="card"><h3>Give results a life outside the room</h3><p>Render kept results in the satchel and constellation with distinct thumbnails and one-line meaning. Validate that a result is still understandable a week later.</p></article>
+      <article class="card"><h3>Playtest for delight, not completion</h3><p>Watch five first-time users. Measure time to first meaningful action, whether they can explain the promise, and whether they voluntarily replay or show the result.</p></article>
+      <article class="card"><h3>Then sharpen the roster</h3><p>Keep Powderworks and Little Elsewhere. Rebuild Weather Inside and Signal / Static next. Reframe Shield and Circles as instruments. Only then decide whether more attractions are needed.</p></article>
+    </div>
+  </section>
+
+  <footer>
+    Prepared against LiberOS <code>v2.8.1</code>: <code>games.html</code>, <code>src/features/games/games.js</code>, <code>src/features/games/games.css</code>, <code>src/features/games/PERSONA.md</code>, and <code>src/dial.js</code>. The historical screenshot is labeled above; this is a design brief and mockup, not a claim that the proposed interaction has shipped.
+  </footer>
+</main>
+</body>
+</html>
