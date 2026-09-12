@@ -1,0 +1,85 @@
+{
+  "defaultRoute": "frontend-dev-design",
+  "strategy": "intelligent-routing",
+  "accounts": [
+    {
+      "name": "opencode-zen-account-1",
+      "envVar": "OPENCODE_ZEN_ACCOUNT_1_CODE",
+      "role": "primary-frontend-free-router"
+    },
+    {
+      "name": "opencode-zen-account-2",
+      "envVar": "OPENCODE_ZEN_ACCOUNT_2_CODE",
+      "role": "secondary-frontend-free-router"
+    },
+    {
+      "name": "opencode-zen-account-3",
+      "envVar": "OPENCODE_ZEN_ACCOUNT_3_CODE",
+      "role": "tertiary-frontend-free-router"
+    }
+  ],
+  "routes": {
+    "frontend-dev-design": {
+      "description": "Best default route for static HTML, CSS, JS, and visual polish in a small frontend workspace.",
+      "primaryProvider": "opencode-zen",
+      "primaryModel": "free-coding-frontend",
+      "fallbackProviders": [
+        "qwen-coder-free",
+        "deepseek-coder-free",
+        "gemma-free"
+      ],
+      "taskHints": [
+        "html",
+        "css",
+        "design",
+        "frontend",
+        "ui",
+        "layout",
+        "web",
+        "visual polish",
+        "accessibility",
+        "component"
+      ],
+      "preferredAccount": "OPENCODE_ZEN_ACCOUNT_1_CODE"
+    },
+    "debug-and-verification": {
+      "description": "Diagnostic routing for tests, smoke checks, and low-level repository quality tracing.",
+      "primaryProvider": "opencode-zen",
+      "primaryModel": "reasoning-debug",
+      "fallbackProviders": [
+        "deepseek-coder-free",
+        "qwen-coder-free"
+      ],
+      "taskHints": [
+        "debug",
+        "error",
+        "trace",
+        "test",
+        "check",
+        "verify",
+        "unit",
+        "lint"
+      ],
+      "preferredAccount": "OPENCODE_ZEN_ACCOUNT_2_CODE"
+    },
+    "docs-and-garden": {
+      "description": "Writing, prose, and garden-story oriented free coding assistance route.",
+      "primaryProvider": "opencode-zen",
+      "primaryModel": "creative-doc-writing",
+      "fallbackProviders": [
+        "gemma-free",
+        "deepseek-coder-free"
+      ],
+      "taskHints": [
+        "docs",
+        "readme",
+        "write",
+        "garden",
+        "essay",
+        "web prose",
+        "copy"
+      ],
+      "preferredAccount": "OPENCODE_ZEN_ACCOUNT_3_CODE"
+    }
+  }
+}
