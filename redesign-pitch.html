@@ -146,6 +146,23 @@ code{font-family:var(--mono);font-size:12px;color:var(--gold);background:#2a130b
 .grave{position:absolute;bottom:0;left:10%;right:10%;height:52px;display:flex;justify-content:space-around;align-items:flex-end}
 .grave i{width:18px;height:30px;border-radius:9px 9px 0 0;background:linear-gradient(180deg,#4a4a44,#2a2a26);display:block}
 .crumbs{position:absolute;inset:0;background:radial-gradient(circle at 20% 80%,rgba(200,170,130,.12) 0 2px,transparent 3px),radial-gradient(circle at 70% 30%,rgba(200,170,130,.1) 0 2px,transparent 3px)}
+/* evolving constellation mock */
+.mock.constella{background:linear-gradient(180deg,#1a1210,#0b0706)}
+.stages{position:absolute;left:4%;right:4%;top:12%;bottom:26%;display:flex;align-items:center;justify-content:space-around}
+.stage{position:relative;width:74px;height:70px;display:grid;place-items:center}
+.stage small{position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:8.5px;letter-spacing:.12em;color:#8a7050;white-space:nowrap}
+.st-stone{grid-area:1/1;width:38px;height:38px;border-radius:46% 54% 52% 48%/52% 46% 54% 48%;background:linear-gradient(145deg,#9a9a8e,#4e4e44)}
+.s1 .st-stone{background:linear-gradient(145deg,#9a9a8e 46%,#6e6258 50%,#4e4e44)}
+.carve{position:absolute;left:50%;top:50%;width:18px;height:2px;background:#3a342c;transform:translate(-50%,-50%) rotate(-24deg);box-shadow:0 5px 0 -0.5px #3a342c88}
+.s2 .st-stone,.s3 .st-stone{background:conic-gradient(from 210deg,#a8a89a 0 40deg,#7a7a6c 40deg 95deg,#5e5e52 95deg 150deg,#8e8e80 150deg 220deg,#6a6a5c 220deg 290deg,#a0a090 290deg 360deg)}
+.ring{position:absolute;left:50%;top:50%;border:1px solid #b8a86a;border-radius:50%}
+.r1{width:58px;height:22px;transform:translate(-50%,-50%) rotate(-18deg)}
+.r2{width:66px;height:30px;transform:translate(-50%,-50%) rotate(22deg);border-color:#8fb8d8}
+.sat{position:absolute;width:5px;height:5px;border-radius:50%}
+.p1{left:calc(50% + 26px);top:calc(50% - 9px);background:#d4af65;box-shadow:0 0 6px #d4af65}
+.p2{left:calc(50% - 30px);top:calc(50% + 12px);background:#8fb8d8;box-shadow:0 0 6px #8fb8d8}
+.s3 .st-stone{box-shadow:0 0 18px rgba(212,175,101,.35)}
+.ghost{position:absolute;left:50%;top:50%;width:46px;height:46px;border:1px dashed #5a5248;border-radius:50%;transform:translate(-50%,-50%);opacity:.6}
 footer{border-top:1px solid var(--line);margin-top:70px;padding-top:18px;color:#887052;font-family:var(--mono);font-size:12px}
 .decision{border:1px solid var(--line);border-radius:12px;background:linear-gradient(180deg,var(--panel2),var(--panel));padding:16px 18px;margin-top:16px}
 .decision strong{color:var(--gold);font-weight:400}
@@ -157,11 +174,11 @@ footer{border-top:1px solid var(--line);margin-top:70px;padding-top:18px;color:#
 <header>
 <div class="kicker">liber.os · redesign pitch v3 · full-scope build briefs</div>
 <h1>Every room at midway quality,<br><em>no exceptions, no corners.</em></h1>
-<p class="lede">Third draft. Cohort retires — every conversation in this machine is an advanced one. The Kitchen Sink becomes a full powder-game simulation with a fully designed creature crew. Ruby's idle garden leaves the midway and becomes the Glasshouse tree. And every pitch now carries a <strong>scope contract</strong>: the explicit deliverables and acceptance bar the build must clear. The midway is the floor, not the ceiling.</p>
+<p class="lede">Third draft. Cohort retires — every conversation in this machine is an advanced one. The Kitchen Sink becomes a full powder-game simulation with a fully designed creature crew. Ruby's idle garden leaves the midway and becomes the Glasshouse tree. And every pitch now carries a <strong>scope contract</strong>: the explicit deliverables and acceptance bar the build must clear. The midway is the floor, not the ceiling. Above all of it, the desktop stops being a launcher: the buddy and every artifact icon <strong>literally grow more complex as relations are set</strong> — the constellation is the state, made visible, changing the moment you bind.</p>
 <div class="meta"><span>v3 · scope contracts bound in</span><span>mocks are live CSS</span><span>days are honest, scope is firm</span></div>
 </header>
 <nav>
-<a href="#covenant">scope covenant</a><a href="#liberchat">liberchat</a><a href="#behindcrt">room behind the crt</a><a href="#rainy">rainy day</a><a href="#sigil">sigil</a><a href="#divination">divination</a><a href="#dreams">dreams</a><a href="#games">games</a><a href="#toybox">toybox</a><a href="#garden">garden + the tree</a><a href="#sea">sea</a><a href="#satchel">satchel</a><a href="#learn">learn</a><a href="#themes">themes</a><a href="#settings">settings</a><a href="#trash">trash</a><a href="#order">order of work</a>
+<a href="#covenant">scope covenant</a><a href="#liberchat">liberchat</a><a href="#behindcrt">room behind the crt</a><a href="#rainy">rainy day</a><a href="#constellation">evolving constellation</a><a href="#sigil">sigil</a><a href="#divination">divination</a><a href="#dreams">dreams</a><a href="#games">games</a><a href="#toybox">toybox</a><a href="#garden">garden + the tree</a><a href="#sea">sea</a><a href="#satchel">satchel</a><a href="#learn">learn</a><a href="#themes">themes</a><a href="#settings">settings</a><a href="#trash">trash</a><a href="#order">order of work</a>
 </nav>
 
 <section id="covenant">
@@ -238,6 +255,35 @@ footer{border-top:1px solid var(--line);margin-top:70px;padding-top:18px;color:#
 <div class="cost"><b>cost</b> ~4.5 days · icon + ten skins + pacing + composition</div>
 </div>
 </div>
+</section>
+
+<section id="constellation">
+<h2><small>SYSTEM 04</small> The Evolving Constellation</h2>
+<p class="roomlede">The desktop is not a launcher. The icons are the state: the buddy and every artifact grow more complex as relations are set, and they change the moment you bind — not on your next visit.</p>
+<div class="approaches">
+<div class="approach wide"><header><h3><span class="roman">I</span>Icons That Remember</h3><span class="verdict v-costly">hefty · the desktop grows</span></header>
+<div class="mock constella"><div class="stages"><div class="stage s0"><span class="st-stone"></span><small>born</small></div><div class="stage s1"><span class="st-stone"></span><span class="carve"></span><small>1 keep</small></div><div class="stage s2"><span class="st-stone"></span><span class="ring r1"></span><span class="sat p1"></span><small>3 relations</small></div><div class="stage s3"><span class="st-stone"></span><span class="ring r1"></span><span class="ring r2"></span><span class="sat p1"></span><span class="sat p2"></span><span class="ghost"></span><small>7+ · crowned</small></div></div><div class="ticker">the altar grows what you bind · it changes the moment you bind it</div></div>
+<div class="body">
+<p>Every icon on the desktop becomes a <strong>procedural render of your state</strong>, drawn in layers: base form → material → earned complexity. Nothing is a fixed PNG; the same data always draws the same icon, so the icon <em>is</em> the data, legible at a glance.</p>
+<ul>
+<li><strong>The buddy stone is born smooth.</strong> Each kept artifact type carves its own mark into it — a dart-wheel for games, a wave for the sea, a star-spread for tarot, a leaf for the garden, a thread for dreams. Relations cut <strong>facets</strong> into the stone (conic planes that catch light); the patina tiers deepen the carving and warm the tint. A heavily-relationed stone looks like a different object than a new one, because it is.</li>
+<li><strong>Artifact glyphs accrue orbits.</strong> One ring per relation; satellites for two-way or annotated relations; inner facets for notes. Set a relation and <strong>both endpoints morph in place</strong> — one earned animation beat, the edge drawing itself between them, no reload. Motion-gated like everything else.</li>
+<li><strong>Edges mature with their relationship:</strong> a fresh relation is rope, an annotated one a brace, a long-lived one a glowing filament. The whole constellation precesses — slow rotation per patina tier — so a lived-in desktop visibly turns.</li>
+<li><strong>Release is not erasure, even optically:</strong> remove a relation and the ring retracts, leaving a faint ghost line on the stone — the icon remembers its former complexity, exactly as the Trash covenant promises.</li>
+</ul>
+</div>
+<div class="scope"><b>scope contract · must ship</b><ul>
+<li>Procedural icon renderer for the buddy stone and all artifact glyphs, layered from real state (artifact types, relation counts, note presence, patina tier) — zero fixed image assets</li>
+<li>At least five distinct stone carve-marks by artifact type; facets from relation count; tint/deepening per patina tier</li>
+<li>Live morph: setting a relation updates both icons in place with one motion-gated beat and an edge draw; unbinding retracts the ring and leaves a ghost line</li>
+<li>Three edge textures (rope → brace → filament) and patina-tier precession; reduced-motion gets static tiers</li>
+<li>Deterministic rendering (same state → same pixels); legible and non-broken at 439px</li>
+<li>Acceptance: Playwright keeps an artifact → stone gains its mark; binds a relation → both icons morph live with rings; unbinds → ghost line; screenshots of stages 0–3 differ; constellation still fully operable at 439px</li>
+</ul></div>
+<div class="cost"><b>cost</b> ~4.5 days · icon renderer + relation/patina hooks on desktop; state and relations already exist</div>
+</div>
+</div>
+<div class="critic-note"><b>why the desktop and not another room</b> — the report already names the constellation the product's moat: "memory you can see." This pitch cashes that in. Every other system feeds it: Liberchat seals feed the stone, the Powder Sink keeps feed marks, the Glasshouse tree hangs fruit in it, the room behind the CRT shelves its volumes. The desktop is where all of it becomes visible at once — and with live morphs, <em>responsive</em> at the exact moment the visitor acts.</div>
 </section>
 
 <section id="sigil">
@@ -479,7 +525,8 @@ footer{border-top:1px solid var(--line);margin-top:70px;padding-top:18px;color:#
 <div class="decision"><strong>2. Liberchat, complete to its scope contract.</strong><p>Lamp, engine, ten+ full personas, buddy + cohort retirement, affinity wiring. The machine learns to talk; everything after uses its voice.</p></div>
 <div class="decision"><strong>3. The Powder Sink and the Glasshouse Tree.</strong><p>The two biggest room builds — the simulation and the idle engine — with their contracts as definition of done. Either one alone is a release-quality headline.</p></div>
 <div class="decision"><strong>4. The Room Behind the CRT, then Rainy Day.</strong><p>The memory palace and the storm, wired together, both bound by contract.</p></div>
-<div class="decision"><strong>5. Rooms in descending visit order.</strong><p>Sigil's stone-and-company, the Felt Table, Dreams fog-to-dusk, the Promenade, then the quiet rooms — each closing its own contract with a Playwright acceptance pass before the next begins.</p></div>
+<div class="decision"><strong>5. The Evolving Constellation.</strong><p>Procedural icons, live morphs, ghost lines — the renderer and its hooks, contract-bound. The desktop is the face of every other system; it should age as they do.</p></div>
+<div class="decision"><strong>6. Rooms in descending visit order.</strong><p>Sigil's stone-and-company, the Felt Table, Dreams fog-to-dusk, the Promenade, then the quiet rooms — each closing its own contract with a Playwright acceptance pass before the next begins.</p></div>
 <div class="decision"><strong>The covenant, restated once more:</strong><p>The midway is the floor. Every contract above is the definition of done for its room. Half a contract is not a shipped room — it is a corner cut, and corners are the one thing this document exists to prevent.</p></div>
 </section>
 
