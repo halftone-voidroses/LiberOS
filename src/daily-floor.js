@@ -17,7 +17,7 @@
     { id: 'dreams',      room: 'dreams.html',     text: 'write one dream down.' },
     { id: 'garden',      room: 'garden.html',     text: 'tend one seed.' },
     { id: 'sea',         room: 'sea.html',        text: 'release one line. let it go.' },
-    { id: 'chat',        room: 'buddy.html',     text: 'speak. seal the exchange.' },
+    { id: 'chat',        room: 'desktop.html#liberchat', text: 'speak. seal the exchange.' },
     { id: 'games',       room: 'games.html',      text: 'play one booth. keep the result.' },
     { id: 'toybox',      room: 'toybox.html',     text: 'touch everything. keep one picture.' },
     { id: 'learn',       room: 'learn.html',      text: 'read one page. answer it.' },
@@ -70,7 +70,7 @@
   var STARTER = [
     { id: 'draw-buddy',    room: 'sigil.html',   text: 'draw a buddy.' },
     { id: 'set-relation',  room: 'desktop.html', text: 'set a relation.' },
-    { id: 'chat-buddy',    room: 'buddy.html',   text: 'chat to your buddy.' }
+    { id: 'chat-buddy',    room: 'desktop.html#liberchat', text: 'talk in the lamp.' }
   ];
 
   function starterNeeded() {

@@ -1,0 +1,279 @@
+/* liberchat.css — Liberchat, the talking machine. One lamp on every page.
+   Material: black phosphor lamp with a wax-red accent; the chatbox is a
+   dark glass panel with cream phosphor text. Scoped under .liberchat-* —
+   no shared stylesheets touched (scope covenant). */
+
+.liberchat-lamp {
+  position: fixed;
+  z-index: 9400;
+  right: 14px;
+  bottom: 14px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50% 50% 46% 46%;
+  border: 1px solid #5a3a20;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 214, 150, 0.85) 0%, rgba(214, 150, 70, 0.5) 45%, rgba(90, 50, 22, 0.25) 78%),
+    #1a0e06;
+  box-shadow:
+    0 0 10px rgba(255, 190, 110, 0.25),
+    inset 0 0 6px rgba(255, 220, 160, 0.35);
+  cursor: pointer;
+  padding: 0;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.liberchat-lamp:hover,
+.liberchat-lamp:focus-visible {
+  box-shadow:
+    0 0 16px rgba(255, 190, 110, 0.45),
+    inset 0 0 8px rgba(255, 220, 160, 0.5);
+  outline: none;
+}
+.liberchat-lamp.lit {
+  box-shadow:
+    0 0 22px rgba(255, 190, 110, 0.55),
+    inset 0 0 10px rgba(255, 226, 170, 0.65);
+}
+
+.liberchat-panel {
+  position: fixed;
+  z-index: 9401;
+  right: 14px;
+  bottom: 50px;
+  width: min(360px, calc(100vw - 28px));
+  max-height: min(480px, calc(100vh - 80px));
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, rgba(16, 12, 9, 0.96), rgba(9, 6, 4, 0.97));
+  border: 1px solid #4a3822;
+  border-radius: 10px;
+  box-shadow:
+    0 12px 34px rgba(0, 0, 0, 0.75),
+    0 0 24px rgba(255, 190, 110, 0.08),
+    inset 0 1px 0 rgba(255, 226, 170, 0.06);
+  overflow: hidden;
+}
+.liberchat-panel[hidden] { display: none; }
+
+.lc-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border-bottom: 1px solid rgba(90, 70, 40, 0.5);
+  background: rgba(30, 20, 12, 0.6);
+}
+.lc-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #d68a3c;
+  box-shadow: 0 0 8px rgba(214, 138, 60, 0.8);
+  flex: none;
+}
+.lc-name {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: #d8c8a4;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lc-close {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border: 1px solid #5a4528;
+  border-radius: 5px;
+  background: rgba(40, 28, 16, 0.8);
+  color: #d8c8a4;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+}
+.lc-close:hover { background: rgba(70, 50, 26, 0.9); }
+
+.lc-log {
+  flex: 1;
+  min-height: 120px;
+  overflow-y: auto;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  scrollbar-width: thin;
+  scrollbar-color: #4a3822 transparent;
+}
+.lc-line {
+  max-width: 86%;
+  padding: 6px 9px;
+  border-radius: 8px;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: #e4d4ae;
+  background: rgba(38, 27, 15, 0.85);
+  border: 1px solid rgba(90, 70, 40, 0.4);
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+.lc-line.me {
+  align-self: flex-end;
+  background: rgba(64, 42, 18, 0.85);
+  border-color: rgba(140, 96, 40, 0.5);
+  color: #f0e2c0;
+}
+.lc-line.lc-guest {
+  border-color: rgba(150, 60, 60, 0.6);
+  color: #e8b0a8;
+  background: rgba(48, 18, 14, 0.9);
+}
+.lc-line.lc-unlock {
+  border-color: rgba(212, 175, 101, 0.55);
+  color: #ecd8a0;
+  background: rgba(58, 44, 16, 0.9);
+}
+.lc-line.lc-typing { opacity: 0.6; font-style: italic; }
+
+.lc-form {
+  display: flex;
+  gap: 6px;
+  padding: 8px 10px;
+  border-top: 1px solid rgba(90, 70, 40, 0.5);
+  background: rgba(24, 16, 10, 0.7);
+}
+.lc-input {
+  flex: 1;
+  min-width: 0;
+  padding: 7px 9px;
+  border: 1px solid #5a4528;
+  border-radius: 7px;
+  background: rgba(10, 7, 4, 0.9);
+  color: #ecdcba;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 13.5px;
+}
+.lc-input:focus { outline: none; border-color: #8a6838; box-shadow: 0 0 0 1px rgba(138, 104, 56, 0.4); }
+.lc-input::placeholder { color: rgba(200, 176, 130, 0.45); font-style: italic; }
+
+.lc-send {
+  padding: 7px 11px;
+  border: 1px solid #6a5228;
+  border-radius: 7px;
+  background: linear-gradient(180deg, #4a3a1c, #2e2410);
+  color: #ecd8a0;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 13px;
+  cursor: pointer;
+}
+.lc-send:hover { background: linear-gradient(180deg, #5c4824, #3a2d14); }
+
+.lc-seal {
+  margin: 0 10px 9px;
+  padding: 6px 10px;
+  border: 1px solid #6a3030;
+  border-radius: 7px;
+  background: rgba(40, 16, 14, 0.85);
+  color: #d8a8a0;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 12.5px;
+  cursor: pointer;
+}
+.lc-seal:hover { background: rgba(62, 24, 20, 0.9); }
+.lc-seal.armed {
+  border-color: #a04848;
+  color: #f0c0b4;
+  background: rgba(80, 28, 22, 0.92);
+  box-shadow: 0 0 10px rgba(180, 70, 60, 0.35);
+}
+
+.lc-sealing {
+  animation: lc-wax-flash 0.9s ease;
+}
+@keyframes lc-wax-flash {
+  0% { box-shadow: 0 0 0 rgba(180, 60, 50, 0); }
+  35% { box-shadow: 0 0 26px rgba(180, 60, 50, 0.45); }
+  100% { box-shadow: 0 0 0 rgba(180, 60, 50, 0); }
+}
+
+/* Reduced motion: no typing beat animation flash, no wax flash */
+@media (prefers-reduced-motion: reduce) {
+  .liberchat-lamp { transition: none; }
+  .lc-sealing { animation: none; }
+}
+
+.lc-who {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border: 1px solid #5a4528;
+  border-radius: 5px;
+  background: rgba(40, 28, 16, 0.8);
+  color: #d8c8a4;
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+}
+.lc-who:hover { background: rgba(70, 50, 26, 0.9); }
+.lc-head { position: relative; }
+.lc-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 8px;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;
+  max-height: 240px;
+  overflow-y: auto;
+  background: rgba(16, 12, 9, 0.98);
+  border: 1px solid #4a3822;
+  border-radius: 8px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.7);
+  padding: 4px;
+}
+.lc-who-item {
+  border: none;
+  background: transparent;
+  color: #d8c8a4;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 13px;
+  text-align: left;
+  padding: 5px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.lc-who-item:hover { background: rgba(64, 42, 18, 0.85); color: #f0e2c0; }
+.lc-who-item.on { color: #ecd8a0; background: rgba(48, 34, 14, 0.9); }
+
+/* Retired chat pages: archive note pointing at the lamp */
+.lc-archive-note {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.55);
+  font-family: 'Times New Roman', Times, serif;
+}
+.lc-archive-note h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: normal;
+  letter-spacing: 0.06em;
+  color: #d8c8a4;
+}
+.lc-archive-note p {
+  margin: 0;
+  max-width: 460px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #a89878;
+}

@@ -3,8 +3,9 @@
 // per traveller derives from exchanges, topics, seals, keeps, releases,
 // binds and notes. When a threshold is crossed the traveller invites you
 // in-character, once, and the unlocked thing appears with its invite line.
-// Thresholds: toybox (whimsy, 1 game kept), tidepool (vanir, 5 releases),
-// weaver (riason, 5 binds), thimble (ruby, 3 plantings), inkstorm
+// Thresholds: toybox (whimsy, 1 game kept OR 6 lamp conversations —
+// demonstrably unlockable by conversation alone), tidepool (vanir, 5
+// releases), weaver (riason, 5 binds), thimble (ruby, 3 plantings), inkstorm
 // (e-lizabeth, 1 sealed chat — Entity404 gatecrashes the seal).
 // No imports. Pure core (createAffinity) + room singleton wiring.
 (function (global) {
@@ -17,7 +18,7 @@
   };
 
   var UNLOCKS = [
-    { id: 'toybox', who: 'whimsy', need: 1, metric: 'games',
+    { id: 'toybox', who: 'whimsy', need: 1, metric: 'games', chatNeed: 6,
       invite: 'my little brother wants to meet you. he is small. be nice.' },
     { id: 'tidepool', who: 'vanir', need: 5, metric: 'releases',
       invite: 'The deep has something for you. Come see.' },
@@ -29,12 +30,26 @@
       invite: '— static clears for one word — type it before it dissolves.' }
   ];
 
+  // liberchat persona id -> traveller key (chat exchanges vouch for their
+  // traveller alongside kept-work metrics).
+  var PERSONA_WHO = {
+    sigil: 'physius', satchel: 'riason', sea: 'vanir', buddy: 'elizabeth',
+    games: 'whimsy', divination: 'arcana', garden: 'ruby', dreams: 'inquiry',
+    learn: 'scribe', trash: 'pete', themes: 'wanderlust', toybox: 'pip'
+  };
+
   function metricsOf(s) {
     s = s || {};
     function len(k) { return Array.isArray(s[k]) ? s[k].length : 0; }
     var notes = 0;
     (s.satchel || []).forEach(function (e) {
       if (e && (e.note || e.annotation)) notes++;
+    });
+    var chats = {};
+    var chat = s.chat || {};
+    Object.keys(chat).forEach(function (p) {
+      var who = PERSONA_WHO[p];
+      if (who) chats[who] = (chats[who] || 0) + (chat[p] || 0);
     });
     return {
       games: len('games'),
@@ -43,7 +58,8 @@
       plantings: len('garden'),
       seals: (s.buddy || []).filter(function (e) { return e && e.kind === 'sealed'; }).length,
       notes: notes,
-      draws: len('divination') + (s.iching || []).length
+      draws: len('divination') + (s.iching || []).length,
+      chats: chats
     };
   }
 
@@ -51,15 +67,15 @@
     s = s || {};
     var aff = Object.assign({}, s.affinity);
     var m = metricsOf(s);
-    aff.whimsy = Math.max(aff.whimsy || 0, m.games);
-    aff.vanir = Math.max(aff.vanir || 0, m.releases);
-    aff.riason = Math.max(aff.riason || 0, m.binds, Math.floor(m.notes / 4));
-    aff.ruby = Math.max(aff.ruby || 0, m.plantings);
-    aff.elizabeth = Math.max(aff.elizabeth || 0, m.seals);
-    aff.arcana = Math.max(aff.arcana || 0, m.draws);
-    aff.inquiry = Math.max(aff.inquiry || 0, Array.isArray(s.dreams) ? s.dreams.length : 0);
+    aff.whimsy = Math.max(aff.whimsy || 0, m.games, m.chats.whimsy || 0);
+    aff.vanir = Math.max(aff.vanir || 0, m.releases, m.chats.vanir || 0);
+    aff.riason = Math.max(aff.riason || 0, m.binds, Math.floor(m.notes / 4), m.chats.riason || 0);
+    aff.ruby = Math.max(aff.ruby || 0, m.plantings, m.chats.ruby || 0);
+    aff.elizabeth = Math.max(aff.elizabeth || 0, m.seals, m.chats.elizabeth || 0);
+    aff.arcana = Math.max(aff.arcana || 0, m.draws, m.chats.arcana || 0);
+    aff.inquiry = Math.max(aff.inquiry || 0, Array.isArray(s.dreams) ? s.dreams.length : 0, m.chats.inquiry || 0);
     aff.physius = Math.max(aff.physius || 0,
-      (s.buddy || []).filter(function (e) { return e && e.kind === 'stone'; }).length);
+      (s.buddy || []).filter(function (e) { return e && e.kind === 'stone'; }).length, m.chats.physius || 0);
     return aff;
   }
 
@@ -71,7 +87,13 @@
       var newly = [];
       UNLOCKS.forEach(function (u) {
         if (unlocked[u.id]) return;
-        if ((m[u.metric] || 0) >= u.need) {
+        var met = (m[u.metric] || 0) >= u.need;
+        if (!met && u.chatNeed) {
+          // conversation-alone path: enough lamp exchanges vouch for you
+          var personaId = Object.keys(PERSONA_WHO).filter(function (p) { return PERSONA_WHO[p] === u.who; })[0];
+          met = ((s.chat || {})[personaId] || 0) >= u.chatNeed;
+        }
+        if (met) {
           unlocked[u.id] = true;
           newly.push(u);
         }
@@ -86,7 +108,7 @@
       var s = readState() || {};
       return !!((s.unlocks || {})[id]);
     }
-    return { check: check, unlocked: unlocked, metrics: metricsOf, affinity: affinityOf, UNLOCKS: UNLOCKS, KIND_WHO: KIND_WHO };
+    return { check: check, unlocked: unlocked, metrics: metricsOf, affinity: affinityOf, UNLOCKS: UNLOCKS, KIND_WHO: KIND_WHO, PERSONA_WHO: PERSONA_WHO };
   }
 
   // room singleton: listens to keeps, checks thresholds, announces invites

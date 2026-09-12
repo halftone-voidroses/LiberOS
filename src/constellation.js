@@ -333,7 +333,7 @@
   var miniOpen = document.getElementById('constellation-mini-open');
 
   function roomFor(kind, data) {
-    if (kind === 'buddy') return (data && data.kind === 'stone') ? 'sigil.html' : 'buddy.html';
+    if (kind === 'buddy') return (data && data.kind === 'stone') ? 'sigil.html' : 'desktop.html#liberchat';
     var pages = { divination: 'divination.html', games: 'games.html', learn: 'learn.html', sea: 'sea.html', garden: 'garden.html', dreams: 'dreams.html', satchel: 'satchel.html' };
     if (kind === 'satchel') return 'satchel.html';
     return pages[kind] || 'desktop.html';
