@@ -1429,6 +1429,8 @@
   .games-ticket { transition: none; }
   .wheel-seep { transition: none; }
   .wheel-dart { transition: none; }
+  .games-app[data-view="facade"] .games-booth { transition: none; }
+  .games-stage:not([inert]) { animation: none; }
 }
 
 /* locked stage + invite lines (affinity unlocks, futures §17) */
@@ -2660,12 +2662,12 @@
     inset: 29% 0 16%;
   }
   .games-app[data-view="facade"] .games-booth[data-camera-position="left"] {
-    left: -6%;
-    width: 34%;
+    left: -12%;
+    width: 30%;
   }
   .games-app[data-view="facade"] .games-booth[data-camera-position="right"] {
-    left: 72%;
-    width: 34%;
+    left: 82%;
+    width: 30%;
   }
   .games-app[data-view="facade"] .games-booth[data-camera-position="center"] {
     left: 20%;
@@ -2688,11 +2690,262 @@
 }
 
 /* The original facade used a :has() grid rule. Keep its compatibility
-   selector from winning over the camera scene above. */
+   selector from winning over the camera scene above. The grid pass and the
+   first facade pass both styled booth boxes (background/border/pseudo
+   invitations); the camera scene owns booth boxes now, so neutralize those
+   dead rules with higher-specificity resets. */
 .games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-grid {
   display: block;
   width: auto;
   height: auto;
   grid-template-columns: none;
   grid-template-rows: none;
+}
+
+/* Camera scene wins over both dead facade layers for booth boxes. */
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth,
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth:first-child,
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth:nth-child(2),
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth:nth-child(3),
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth:nth-child(4),
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth:nth-child(5),
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth:nth-child(6),
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth:nth-child(7),
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth:nth-child(8) {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  width: 34%;
+  height: 88%;
+  min-height: 0;
+  padding: 0;
+  display: block;
+  overflow: visible;
+  grid-column: auto;
+  grid-row: auto;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: stretch;
+  text-align: left;
+  color: inherit;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth[data-camera-position="center"],
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth[data-camera-position="left"],
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth[data-camera-position="right"],
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth[data-camera-position="off"] {
+  background: none;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+}
+
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth[data-camera-position="center"] {
+  left: 27%;
+  width: 46%;
+  top: 0;
+  height: 100%;
+  z-index: 8;
+  transform: translateX(0) scale(1);
+  opacity: 1;
+}
+
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth[data-camera-position="left"] {
+  left: 1%;
+  width: 27%;
+  top: 19%;
+  height: 70%;
+  z-index: 6;
+  transform: translateX(0) scale(0.92) rotate(-2deg);
+  opacity: 0.92;
+}
+
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth[data-camera-position="right"] {
+  left: 72%;
+  width: 27%;
+  top: 19%;
+  height: 70%;
+  z-index: 6;
+  transform: translateX(0) scale(0.92) rotate(2deg);
+  opacity: 0.92;
+}
+
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth[data-camera-position="off"] {
+  left: 50%;
+  width: 22%;
+  top: 31%;
+  height: 50%;
+  z-index: 2;
+  transform: translateX(-50%) scale(0.25);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Dead passes painted ENTER/STEP INSIDE invitations on booth pseudos; the
+   camera scene owns booth ::before/::after as tent hardware. */
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth::before {
+  content: '';
+  position: absolute;
+  z-index: 4;
+  top: 3%;
+  left: 4%;
+  right: 4%;
+  height: 15px;
+  background:
+    repeating-linear-gradient(90deg, #f7dc8b 0 15px, #782f40 15px 29px),
+    linear-gradient(180deg, #f4d987, #8e4a2d);
+  border: 1px solid rgba(252, 224, 137, 0.76);
+  box-shadow: 0 3px 7px rgba(11, 3, 8, 0.58);
+  clip-path: polygon(0 0, 100% 0, 96% 100%, 4% 100%);
+  transform: none;
+  font-size: 0;
+  letter-spacing: normal;
+  color: transparent;
+}
+
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth::after {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  top: 10%;
+  bottom: 9%;
+  left: 4%;
+  right: 4%;
+  border-left: 5px solid rgba(122, 66, 39, 0.9);
+  border-right: 5px solid rgba(122, 66, 39, 0.9);
+  border-bottom: 5px solid rgba(122, 66, 39, 0.9);
+  box-shadow: inset 0 0 0 1px rgba(250, 216, 125, 0.33);
+  pointer-events: none;
+  transform: none;
+  font-size: 0;
+  letter-spacing: normal;
+  color: transparent;
+}
+
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth:first-child::before {
+  height: 15px;
+  background:
+    repeating-linear-gradient(90deg, #f7dc8b 0 15px, #782f40 15px 29px),
+    linear-gradient(180deg, #f4d987, #8e4a2d);
+}
+
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth:first-child::after {
+  content: '';
+  right: 4%;
+  left: 4%;
+  bottom: 9%;
+  transform: none;
+  font-size: 0;
+  color: transparent;
+}
+
+/* Dead passes upsized hero inners; restore camera poster inners. */
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth-number,
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth:first-child .games-booth-number {
+  position: static;
+  top: auto;
+  left: auto;
+  align-self: flex-start;
+  padding: 0;
+  color: rgba(105, 43, 23, 0.72);
+  font-size: 0.68rem;
+}
+
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth-glyph,
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth:first-child .games-booth-glyph {
+  width: 31px;
+  height: 31px;
+  flex-basis: 31px;
+  font-size: 1rem;
+  color: #692b23;
+  border: 2px solid #9a4c2e;
+  border-width: 2px;
+  background: rgba(255, 247, 190, 0.35);
+  box-shadow: none;
+}
+
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth-copy,
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth:first-child .games-booth-copy {
+  align-items: center;
+  gap: 2px;
+}
+
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth-name,
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth:first-child .games-booth-name {
+  margin-top: 0;
+  max-width: 100%;
+  color: #5c251e;
+  font-size: 0.75rem;
+  line-height: 1.05;
+  letter-spacing: 0.08em;
+  text-transform: none;
+  text-align: center;
+}
+
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth-material,
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth:first-child .games-booth-material {
+  max-width: 100%;
+  color: rgba(92, 37, 30, 0.7);
+  font-size: 0.61rem;
+  line-height: 1;
+  white-space: normal;
+  text-align: center;
+}
+
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth-mark,
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth:first-child .games-booth-mark {
+  display: block;
+  position: absolute;
+  right: 9px;
+  bottom: 9px;
+  color: #7e321f;
+  font-size: 1.15rem;
+  opacity: 1;
+}
+
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth[data-camera-position="center"] .games-booth-glyph {
+  width: 56px;
+  height: 56px;
+  flex-basis: 56px;
+  font-size: 1.8rem;
+  border-width: 3px;
+}
+
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth[data-camera-position="center"] .games-booth-name {
+  font-size: clamp(1rem, 2.8vw, 1.55rem);
+  letter-spacing: 0.13em;
+}
+
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth[data-camera-position="center"] .games-booth-material {
+  font-size: 0.75rem;
+}
+
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth.locked {
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth.locked[data-camera-position="off"] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth.locked::after {
+  content: '';
+}
+
+.games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth.locked .games-booth-glyph {
+  border-color: #9a4c2e;
+  color: #692b23;
+}
+
+@media (max-width: 700px) {
+  .games-app[data-view="facade"] .games-shell:has(.games-stage[inert]) .games-booth:nth-child(8) {
+    display: block;
+  }
 }
