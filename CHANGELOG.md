@@ -1,5 +1,27 @@
 # LiberOS changelog
 
+## 2.10.1 — Toybox: the sink-world
+### Changed
+- Pip's room is no longer an app inside the CRT — it is the world. Pip was
+  trapped in this kitchen sink by accident; the other travellers leave toys
+  in the basin. The basin **is** the tray (aspect-true at any size via
+  `fitBasin()`), the tap valve pauses the world, the brass plug drains it,
+  the element jars are left-behind containers on a drip rack, the crew
+  live in a soap dish, and Pip's two tools are a worn broom and a
+  polaroid camera. Wanderlust's grasp never touched this room: enamel,
+  cracked tiles, limescale, rust, one warm bulb on a cord, a rain window,
+  a supply pipe, a hanging towel.
+- The toy crew became fully designed residents with real sim interactions
+  (`src/features/toybox/crew.js`): the crab digs piles flat, sidles around
+  water, flees fire; the snail trails slime, shelters from fire, rides oil
+  rafts; the duck bobs, paddles to seed, eats it. Dispensers and the two
+  draggable toys render the creatures' own pixel-sprite art.
+### Proven
+- Sink acceptance 10/10 on the served app (reactions, crab-flees-fire,
+  pause/drain, crew-in-picture keep, keyboard operable, ~100fps, zero
+  console errors). Smoke 21/21, room-behavior audit clean, release
+  verifier green, dist byte-identical (151 files).
+
 ## 2.10.0 — Liberchat: the talking machine
 ### Added
 - The lamp sits on every page (18/18). Opening it is a real chatbox with
