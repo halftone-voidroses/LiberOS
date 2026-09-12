@@ -167,13 +167,14 @@ const m2 = await page.evaluate(() => {
   const booths = document.getElementById('games-grid');
   if (!booths) return { missing: true };
   const scrollable = booths.scrollHeight >= booths.clientHeight;
-  booths.scrollTop = booths.scrollHeight;
-  const last = booths.lastElementChild;
-  const r = last.getBoundingClientRect();
+  // The midway is a camera, not a scroll list: the clickable booth is the
+  // one at the center stop; off-camera booths are intentionally inert.
+  const center = booths.querySelector('.games-booth[data-camera-position="center"]') || booths.lastElementChild;
+  const r = center.getBoundingClientRect();
   const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
-  return { scrollable, hitInBooth: last.contains(hit), hitClass: hit ? String(hit.className) : null };
+  return { scrollable, hitInBooth: center.contains(hit), hitClass: hit ? String(hit.className) : null };
 });
-check('booth stage is scrollable and bottom booth is clickable', m2.scrollable && m2.hitInBooth, JSON.stringify(m2));
+check('booth stage is scrollable and center booth is clickable', m2.scrollable && m2.hitInBooth, JSON.stringify(m2));
 
 // ─── M1: no dev-spec text in riason panels ────────────────────────────
 console.log('M1 — riason panels')
