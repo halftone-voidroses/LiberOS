@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>LiberOS — Redesign Pitch: Visual Approaches per Room</title>
+<title>LiberOS — Redesign Pitch v2: The Talking Machine &amp; the Room Behind the CRT</title>
 <style>
 :root{--void:#070403;--panel:#160b08;--panel2:#21100b;--line:#5a301b;--cream:#eadfc6;--muted:#b19a78;--gold:#d4af65;--pink:#ff9ec6;--cyan:#7ac0d8;--green:#9ad49a;--ice:#8fd8e8;--red:#ff8585;--serif:Georgia,'Times New Roman',serif;--mono:'Courier New',monospace}
 *{box-sizing:border-box}
@@ -11,9 +11,9 @@ html{scroll-behavior:smooth}
 body{margin:0;background:radial-gradient(circle at 50% 0,#26110a 0,#070403 52rem);color:var(--cream);font-family:var(--serif);line-height:1.6}
 .wrap{max-width:1240px;margin:auto;padding:30px 24px 110px}
 .kicker{font-family:var(--mono);color:var(--gold);font-size:12px;letter-spacing:.28em;text-transform:lowercase}
-h1{font-weight:400;font-size:clamp(32px,5.6vw,60px);line-height:1.05;margin:16px 0 14px}
+h1{font-weight:400;font-size:clamp(32px,5.4vw,58px);line-height:1.05;margin:16px 0 14px}
 h1 em{color:var(--pink);font-style:italic}
-.lede{color:var(--muted);font-size:18px;max-width:76ch}
+.lede{color:var(--muted);font-size:18px;max-width:78ch}
 .meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;font-family:var(--mono);font-size:11px;color:#9e8463}
 .meta span{border:1px solid var(--line);border-radius:99px;padding:4px 12px}
 nav{position:sticky;top:0;z-index:6;background:#0c0504ee;backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:0 0 10px 10px;padding:10px 14px;margin-top:26px;font-family:var(--mono);font-size:12px;line-height:1.9}
@@ -23,105 +23,115 @@ h2 small{font-family:var(--mono);font-size:12px;color:var(--gold);margin-right:1
 .roomlede{color:var(--muted);font-style:italic;margin:6px 0 18px}
 .approaches{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px}
 .approach{border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,var(--panel2),var(--panel));overflow:hidden;display:flex;flex-direction:column}
+.approach.wide{grid-column:1/-1}
 .approach header{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:13px 16px;border-bottom:1px solid #3a1d10}
 .approach h3{margin:0;font-weight:400;font-size:18px}
 .approach h3 .roman{font-family:var(--mono);color:var(--gold);font-size:12px;margin-right:8px}
 .verdict{font-family:var(--mono);font-size:10px;letter-spacing:.08em;border:1px solid currentColor;border-radius:99px;padding:2px 8px;white-space:nowrap}
 .v-bold{color:var(--pink)}.v-quiet{color:var(--cyan)}.v-risky{color:var(--red)}.v-safe{color:var(--green)}.v-costly{color:var(--gold)}
-.mock{height:170px;position:relative;overflow:hidden;border-top:1px solid #000;border-bottom:1px solid var(--line)}
+.mock{height:180px;position:relative;overflow:hidden;border-top:1px solid #000;border-bottom:1px solid var(--line)}
 .approach .body{padding:13px 16px 15px;color:#d9c9a8;font-size:14.5px;flex:1}
+.approach .body ul{margin:8px 0 0;padding-left:18px;color:var(--muted);font-size:13.5px}
 .approach .cost{padding:0 16px 15px;font-family:var(--mono);font-size:11px;color:#9e8463}
 .cost b{color:var(--gold);font-weight:400}
-/* shared mini-furniture */
-.bar{position:absolute;top:0;left:0;right:0;height:16px;display:flex;align-items:center;gap:4px;padding:0 6px}
-.bar i{width:6px;height:6px;border-radius:50%;display:inline-block}
-.dialdemo{position:absolute;left:50%;top:56%;transform:translate(-50%,-50%);display:flex;gap:8px}
-.dialdemo span{width:44px;height:34px;border-radius:6px;border:2px solid #5a301b;display:block}
-.ledge{position:absolute;left:0;right:0;bottom:0;height:34px;border-top:1px solid #5a301b}
-/* approach mock palettes */
+code{font-family:var(--mono);font-size:12px;color:var(--gold);background:#2a130b;padding:2px 5px;border-radius:4px}
+/* mock palettes */
+.mock.liberchat{background:linear-gradient(180deg,#1c0f14,#0c060a)}
+.mock.behindcrt{background:linear-gradient(180deg,#191210,#0a0705)}
+.mock.rainy{background:linear-gradient(180deg,#10161d,#080b10)}
 .mock.sigil-a{background:linear-gradient(180deg,#242424,#101010)}
-.mock.sigil-b{background:linear-gradient(180deg,#1d140c,#0a0605)}
 .mock.sea-a{background:linear-gradient(180deg,#0a1a24,#050b12)}
 .mock.sea-b{background:linear-gradient(180deg,#0c1420,#070a10)}
 .mock.games-a{background:linear-gradient(180deg,#1c0f1e,#0d0610)}
-.mock.games-b{background:linear-gradient(180deg,#241012,#0f0708)}
+.mock.games-rain{background:linear-gradient(180deg,#141a20,#090d12)}
 .mock.div-a{background:linear-gradient(180deg,#2a1014,#12070a)}
-.mock.div-b{background:linear-gradient(180deg,#1a0d20,#0b060f)}
+.mock.dreams-a{background:linear-gradient(180deg,#1a1030,#0b0718)}
+.mock.toybox-a{background:linear-gradient(180deg,#26220e,#121007)}
 .mock.garden-a{background:linear-gradient(180deg,#12211a,#081009)}
 .mock.garden-b{background:linear-gradient(180deg,#1a2412,#0b1007)}
-.mock.dreams-a{background:linear-gradient(180deg,#1a1030,#0b0718)}
-.mock.dreams-b{background:linear-gradient(180deg,#101c30,#080e1a)}
-.mock.buddy-a{background:linear-gradient(180deg,#231316,#100809)}
-.mock.buddy-b{background:linear-gradient(180deg,#101a16,#080f0c)}
-.mock.toybox-a{background:linear-gradient(180deg,#26220e,#121007)}
-.mock.toybox-b{background:linear-gradient(180deg,#1e2310,#0e1008)}
 .mock.satchel-a{background:linear-gradient(180deg,#241c10,#110d07)}
-.mock.satchel-b{background:linear-gradient(180deg,#201713,#0e0a08)}
-.mock.themes-a{background:linear-gradient(180deg,#221226,#100913)}
-.mock.themes-b{background:linear-gradient(180deg,#101a22,#080d12)}
 .mock.learn-a{background:linear-gradient(180deg,#241a0e,#100b06)}
-.mock.learn-b{background:linear-gradient(180deg,#1e1410,#0d0908)}
+.mock.themes-a{background:linear-gradient(180deg,#221226,#100913)}
 .mock.settings-a{background:linear-gradient(180deg,#1c141c,#0d090d)}
-.mock.settings-b{background:linear-gradient(180deg,#141a1c,#090d0e)}
 .mock.trash-a{background:linear-gradient(180deg,#1e1a14,#0d0b08)}
-.mock.trash-b{background:linear-gradient(180deg,#181818,#0a0a0a)}
-/* mock furniture pieces */
+/* mock furniture */
 .window{position:absolute;border:1px solid #6a3a20;border-radius:4px;background:#1a0d08ee}
 .win-title{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:#c9a468;padding:4px 8px;border-bottom:1px solid #6a3a20;text-transform:lowercase}
 .win-body{padding:8px;font-size:11px;color:#e0cba5;line-height:1.5}
+.spot{position:absolute;border-radius:50%;filter:blur(14px);opacity:.5}
+.spot.pink{background:#ff69b4}.spot.cyan{background:#5fb8c8}.spot.ice{background:#8fd8e8}.spot.gold{background:#d4af65}.spot.green{background:#4a8a5a}.spot.purple{background:#7a4aaa}.spot.red{background:#c04a4a}.spot.blue{background:#4a6ad4}.spot.amber{background:#c98a3a}
+.lampwin{position:absolute;right:7%;bottom:14%;width:46%;border:2px solid #8a5a28;border-radius:10px;background:linear-gradient(180deg,#241018,#120810);box-shadow:0 0 26px rgba(255,190,90,.14)}
+.lampwin .lw-head{display:flex;align-items:center;gap:6px;padding:6px 9px;border-bottom:1px solid #6a3a20;font-family:var(--mono);font-size:9.5px;color:#ffd86a;letter-spacing:.1em}
+.lampwin .lw-head i{width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 34% 30%,#fff2c0,#ff9a3a 70%);box-shadow:0 0 8px #ffb04a}
+.lampwin .lw-line{padding:7px 9px;font-size:11.5px;color:#f0dcc0;line-height:1.45}
+.lampwin .lw-line.me{color:#d8b8c8}
+.lampwin .lw-input{margin:7px;border:1px solid #6a3a20;border-radius:6px;background:#0d060a;color:#e8d0a0;font-family:var(--mono);font-size:10px;padding:6px 8px;display:flex;justify-content:space-between}
+.lampwin .lw-input b{color:#8a6a3a;font-weight:400}
+.crtframe{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:56%;height:46%;border:3px solid #4a3a30;border-bottom:0;border-radius:10px 10px 0 0;background:linear-gradient(180deg,#0e2a1e,#0a1a14);box-shadow:0 0 30px rgba(90,220,150,.12)}
+.crtframe::after{content:'';position:absolute;inset:10% 8%;background:radial-gradient(ellipse at 50% 40%,rgba(120,240,170,.25),transparent 70%)}
+.shelf{position:absolute;left:6%;top:14%;width:34%;height:56%;border:2px solid #4a3426;border-radius:2px;background:linear-gradient(180deg,#241a10,#140d08);display:flex;flex-direction:column;justify-content:flex-end;padding:4px;gap:3px}
+.shelf i{height:7px;display:block;border-radius:1px}
+.pool{position:absolute;right:6%;bottom:10%;width:36%;height:30%;border-radius:50%/40%;background:radial-gradient(ellipse at 50% 40%,#1c2a3a,#0a1018 70%);border:2px solid #3a4a5a;box-shadow:0 0 18px rgba(90,160,200,.15) inset}
+.pool::after{content:'';position:absolute;left:22%;top:34%;width:12px;height:8px;border-radius:50%;background:#5a8aaa;opacity:.5}
+.candle{position:absolute;left:47%;bottom:12%;width:8px;height:26px;background:linear-gradient(180deg,#e8dcc0,#b8a880);border-radius:2px}
+.candle::before{content:'';position:absolute;top:-12px;left:1px;width:6px;height:12px;border-radius:50% 50% 40% 40%;background:radial-gradient(circle,#fff0b0,#e89030 70%,transparent);filter:blur(1px)}
+.candle::after{content:'';position:absolute;bottom:-5px;left:-7px;width:22px;height:7px;border-radius:3px;background:#6a4a28}
+.rainicon{position:absolute;left:12%;top:26%;width:54px;height:54px;border-radius:12px;border:2px solid #4a5a6a;background:linear-gradient(180deg,#1a242e,#0d1218);display:grid;place-items:center;font-size:22px;color:#8fb8d8;box-shadow:0 0 16px rgba(120,170,210,.2)}
+.rainicon small{position:absolute;bottom:-16px;font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;color:#7a95a8;white-space:nowrap}
+.raingrid{position:absolute;inset:0;background:repeating-linear-gradient(105deg,rgba(140,180,220,.06) 0 1px,transparent 1px 9px)}
+.critic-note{border:1px solid #3a2418;border-left:3px solid var(--gold);border-radius:0 10px 10px 0;background:#160c08;padding:12px 16px;margin:14px 0;color:var(--muted);font-size:14.5px}
+.critic-note b{color:var(--gold);font-weight:400;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:lowercase}
+/* kept mock furniture from v1 */
+.bar{position:absolute;top:0;left:0;right:0;height:16px;display:flex;align-items:center;gap:4px;padding:0 6px}
+.bar i{width:6px;height:6px;border-radius:50%;display:inline-block}
 .canvas-frame{position:absolute;border:3px solid;border-radius:2px}
 .frame-stone{border-color:#7a7a72;background:linear-gradient(145deg,#3a3a36,#181815)}
-.frame-canvas{border-color:#a46d2b;background:linear-gradient(145deg,#2a1a10,#140b07)}
-.spot{position:absolute;border-radius:50%;filter:blur(14px);opacity:.5}
-.spot.pink{background:#ff69b4}.spot.cyan{background:#5fb8c8}.spot.ice{background:#8fd8e8}.spot.gold{background:#d4af65}.spot.green{background:#4a8a5a}.spot.purple{background:#7a4aaa}.spot.red{background:#c04a4a}.spot.blue{background:#4a6ad4}
+.ticker{position:absolute;left:0;right:0;bottom:0;height:22px;background:#0a0503e8;border-top:1px solid #5a301b;font-family:var(--mono);font-size:10px;color:#b19a78;display:flex;align-items:center;padding:0 10px;letter-spacing:.08em;white-space:nowrap;overflow:hidden}
 .marquee{position:absolute;top:14px;left:8%;right:8%;height:26px;border:2px solid #a46d2b;border-radius:12px;background:linear-gradient(90deg,#3a2418,#a46d2b 48%,#2b1714);display:flex;justify-content:space-around;align-items:center}
 .marquee i{width:5px;height:5px;border-radius:50%;background:#ffd86a;box-shadow:0 0 6px #ffd86a}
-.ticker{position:absolute;left:0;right:0;bottom:0;height:22px;background:#0a0503e8;border-top:1px solid #5a301b;font-family:var(--mono);font-size:10px;color:#b19a78;display:flex;align-items:center;padding:0 10px;letter-spacing:.08em;white-space:nowrap;overflow:hidden}
-.polaroid{position:absolute;width:74px;height:60px;background:#e8dcc0;border-radius:2px;box-shadow:0 4px 10px #0009;transform:rotate(-4deg)}
-.polaroid.r2{transform:rotate(5deg);left:auto}
-.polaroid::after{content:'';position:absolute;inset:7px 7px 14px;background:linear-gradient(145deg,#33424a,#131c22)}
-.certificate{position:absolute;inset:14% 12%;border:2px double #c9a468;background:#f0e6d0;transform:rotate(-1deg)}
-.certificate::after{content:'✦';position:absolute;bottom:-14px;right:14px;font-size:20px;color:#8a2a2a}
-.tile-row{position:absolute;left:10px;right:10px;bottom:12px;display:flex;gap:6px}
-.tile-row i{flex:1;height:22px;border-radius:3px;display:block}
-.tape{position:absolute;width:56px;height:14px;background:#d4c08855;transform:rotate(-6deg);border-left:2px dashed #d4c08888;border-right:2px dashed #d4c08888}
-.crumbs{position:absolute;inset:0;background:radial-gradient(circle at 20% 80%,rgba(200,170,130,.12) 0 2px,transparent 3px),radial-gradient(circle at 70% 30%,rgba(200,170,130,.1) 0 2px,transparent 3px),radial-gradient(circle at 45% 60%,rgba(200,170,130,.08) 0 1px,transparent 2px)}
-.booth{position:absolute;bottom:0;width:56px;height:92px;border:2px solid #a46d2b;border-bottom:0;border-radius:8px 8px 0 0;background:linear-gradient(180deg,#3a2418,#1a0f0a)}
+.marquee.dim{filter:saturate(.55) brightness(.65)}
+.booth{position:absolute;bottom:0;width:56px;height:88px;border:2px solid #a46d2b;border-bottom:0;border-radius:8px 8px 0 0;background:linear-gradient(180deg,#3a2418,#1a0f0a)}
 .booth::before{content:'';position:absolute;top:-12px;left:8px;right:8px;height:9px;border-radius:50% 50% 0 0;background:#7a1f2a}
-.booth::after{content:'';position:absolute;top:14px;left:10px;right:10px;height:44px;background:radial-gradient(circle at 50% 30%,#ffd86a33 0 30%,transparent 31%),linear-gradient(180deg,#241410,#120a06)}
-.booth.b2{left:calc(50% - 28px);transform:translateX(-92px)}
-.booth.b3{left:calc(50% - 28px);transform:translateX(92px)}
+.booth::after{content:'';position:absolute;top:14px;left:10px;right:10px;height:42px;background:radial-gradient(circle at 50% 30%,#ffd86a33 0 30%,transparent 31%),linear-gradient(180deg,#241410,#120a06)}
+.booth.cold::after{background:radial-gradient(circle at 50% 30%,#8fd8e844 0 30%,transparent 31%),linear-gradient(180deg,#10222a,#0a141a)}
 .card{position:absolute;width:46px;height:64px;border-radius:5px;border:1px solid #c9a468}
 .card.fan1{transform:rotate(-14deg) translateX(-34px)}
-.card.fan2{transform:rotate(0deg)}
 .card.fan3{transform:rotate(14deg) translateX(34px)}
-.card.red{background:linear-gradient(160deg,#5a1620,#2a0a10)}
-.card.dark{background:linear-gradient(160deg,#1c2430,#0c1016)}
+.card.hot{background:linear-gradient(160deg,#7a2230,#3a0e16)}
+.card.back{background:linear-gradient(160deg,#2a1a2e,#140a16)}
 .waterline{position:absolute;left:0;right:0;bottom:52px;height:2px;background:linear-gradient(90deg,transparent,#5fb8c8,transparent);box-shadow:0 0 12px #5fb8c8}
 .buoy{position:absolute;bottom:56px;width:14px;height:8px;border-radius:4px;background:#c06a3a}
-.bubbles{position:absolute;inset:0;background:radial-gradient(circle at 30% 20%,rgba(143,216,232,.25) 0 3px,transparent 4px),radial-gradient(circle at 62% 45%,rgba(143,216,232,.2) 0 2px,transparent 3px),radial-gradient(circle at 78% 70%,rgba(143,216,232,.18) 0 3px,transparent 4px)}
+.bubbles{position:absolute;inset:0;background:radial-gradient(circle at 30% 20%,rgba(143,216,232,.25) 0 3px,transparent 4px),radial-gradient(circle at 62% 45%,rgba(143,216,232,.2) 0 2px,transparent 3px)}
+.fogpage{position:absolute;left:12%;top:14%;width:52%;height:68%;background:linear-gradient(180deg,#efe6d2,#d8c9a8);border-radius:2px;color:#3a2a18;font-size:11px;padding:12px 14px;box-shadow:0 6px 16px #0008}
+.fogpage::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent 60%,rgba(200,210,220,.55)),radial-gradient(ellipse at 0% 100%,rgba(190,200,215,.5),transparent 55%)}
+.duskshot{position:absolute;width:70px;height:56px;background:#e8dcc0;border-radius:2px;box-shadow:0 4px 10px #0009;transform:rotate(-4deg)}
+.duskshot::after{content:'';position:absolute;inset:7px 7px 14px;background:linear-gradient(180deg,#2a1a3e,#0e0a18)}
+.sandbox{position:absolute;left:14%;right:14%;top:26%;bottom:20%;border:2px solid #8a6a2a;border-radius:8px;background:linear-gradient(160deg,#3a3020,#1c1810)}
+.toys{position:absolute;left:6%;right:6%;bottom:6px;display:flex;justify-content:space-around}
+.toys span{width:30px;height:26px;border-radius:4px;display:block;position:relative}
+.ty-tap{background:linear-gradient(180deg,#8a8a92,#4a4a52);border-radius:4px 4px 0 0}
+.ty-match{background:linear-gradient(180deg,#a46a3a,#5a3a1a)}
+.ty-salt{background:radial-gradient(circle at 50% 20%,#f0ead8 0 28%,transparent 29%),linear-gradient(180deg,#e8e0cc,#a8a090);border-radius:40% 40% 6px 6px}
+.ty-seed{background:linear-gradient(180deg,#c8b890,#8a7a5a)}
+.ty-ball{background:radial-gradient(circle at 36% 30%,#8ab8d8,#2a3a5a);border-radius:50%}
+.ty-music{background:linear-gradient(180deg,#7a4a8a,#3a1a4a);border-radius:6px}
 .bed-row{position:absolute;bottom:10px;left:8%;right:8%;height:34px;border:1px solid #4a6a3a;border-radius:6px;background:linear-gradient(180deg,#1a2c14,#101c0a);display:flex;align-items:flex-end;justify-content:space-around;padding:0 8px}
 .bed-row i{width:12px;border-radius:3px 3px 0 0;display:block}
 .tabbed{position:absolute;inset:12% 10% 10% 10%}
 .tabbed .tab{position:absolute;top:-12px;height:24px;width:58px;border:1px solid #6a3a20;border-bottom:0;border-radius:6px 6px 0 0;background:#241209;font-family:var(--mono);font-size:9px;color:#c9a468;text-align:center;line-height:24px;letter-spacing:.1em}
-.tabbed .page{position:absolute;inset:0;background:linear-gradient(180deg,#f0e6d0,#d8c9a8);border-radius:2px;color:#3a2a18;font-family:Georgia,serif;font-size:11px;padding:12px 14px}
-.tape-recorder{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);width:64%;border:2px solid #6a3a20;border-radius:8px;background:linear-gradient(180deg,#241209,#140b06);padding:10px 12px;font-family:var(--mono);font-size:10px;color:#c9a468}
-.vu{display:flex;gap:4px;margin-top:8px}
-.vu i{flex:1;height:26px;background:linear-gradient(180deg,#4a8a5a,#1c3a24);border-radius:1px}
-.chat-bubble{position:absolute;max-width:62%;border-radius:10px;padding:7px 10px;font-size:11px;line-height:1.4}
-.chat-bubble.me{right:8%;top:24%;background:#3a1a22;color:#f0d8d8;border-bottom-right-radius:2px}
-.chat-bubble.them{left:8%;top:52%;background:#1c2a20;color:#d0e8d8;border-bottom-left-radius:2px}
-.sandbox{position:absolute;left:14%;right:14%;top:30%;bottom:26%;border:2px solid #8a6a2a;border-radius:8px;background:linear-gradient(160deg,#3a3020,#1c1810)}
-.hex{position:absolute;inset:14% 14%;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.hex i{background:linear-gradient(160deg,#2a3a4a,#101a24);border:1px solid #4a6a8a;border-radius:4px;display:block}
-.carousel{position:absolute;left:0;right:0;top:40%;display:flex;justify-content:center;gap:10px}
-.carousel span{width:40px;height:52px;border-radius:4px;border:2px solid #6a3a20;display:block}
+.tabbed .page{position:absolute;inset:0;background:linear-gradient(180deg,#f0e6d0,#d8c9a8);border-radius:2px;color:#3a2a18;font-size:11px;padding:12px 14px}
+.spine-desk{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);width:64%;height:58%;background:linear-gradient(180deg,#f0e6d0,#cbb890);border-radius:3px;box-shadow:0 8px 22px #000a}
+.spine-desk::before{content:'';position:absolute;left:8%;top:0;bottom:0;width:10px;background:linear-gradient(90deg,#5a3a22,#8a6a42,#3a2414)}
+.spine-desk::after{content:'';position:absolute;right:10px;top:10px;width:26px;height:5px;background:#8a2a2a;border-radius:2px}
+.tile-row{position:absolute;left:10px;right:10px;bottom:12px;display:flex;gap:6px}
+.tile-row i{flex:1;height:22px;border-radius:3px;display:block}
 .switch-row{position:absolute;left:12%;right:12%;top:34%;display:flex;flex-direction:column;gap:8px}
 .switch-row .sw{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;color:#c9a468}
 .switch-row .sw i{width:26px;height:14px;border-radius:8px;background:#4a2a18;position:relative;display:block}
 .switch-row .sw i::after{content:'';position:absolute;right:2px;top:2px;width:10px;height:10px;border-radius:50%;background:#c9a468}
-.grave{position:absolute;bottom:0;left:10%;right:10%;height:56px;display:flex;justify-content:space-around;align-items:flex-end}
+.grave{position:absolute;bottom:0;left:10%;right:10%;height:52px;display:flex;justify-content:space-around;align-items:flex-end}
 .grave i{width:18px;height:30px;border-radius:9px 9px 0 0;background:linear-gradient(180deg,#4a4a44,#2a2a26);display:block}
+.crumbs{position:absolute;inset:0;background:radial-gradient(circle at 20% 80%,rgba(200,170,130,.12) 0 2px,transparent 3px),radial-gradient(circle at 70% 30%,rgba(200,170,130,.1) 0 2px,transparent 3px)}
 footer{border-top:1px solid var(--line);margin-top:70px;padding-top:18px;color:#887052;font-family:var(--mono);font-size:12px}
 .decision{border:1px solid var(--line);border-radius:12px;background:linear-gradient(180deg,var(--panel2),var(--panel));padding:16px 18px;margin-top:16px}
 .decision strong{color:var(--gold);font-weight:400}
@@ -131,257 +141,263 @@ footer{border-top:1px solid var(--line);margin-top:70px;padding-top:18px;color:#
 </head>
 <body><main class="wrap">
 <header>
-<div class="kicker">liber.os · redesign pitch · visual approaches per room</div>
-<h1>One machine, twelve rooms,<br><em>twelve chances to be a place.</em></h1>
-<p class="lede">The last release made the rooms behave. This pitch makes them belong. Every room below gets two or three <strong>hefty</strong> visual directions — full-surface treatments, not skin jobs — each mocked here in CSS so the approach can be judged as design before a line of it is built. Each is written against the covenant: no shared stylesheets across rooms, personality through material, motion respects the visitor.</p>
-<div class="meta"><span>12 rooms · 28 approaches</span><span>mocks are live CSS, not screenshots</span><span>costs are honest, in days</span></div>
+<div class="kicker">liber.os · redesign pitch v2 · reworked to critique</div>
+<h1>The machine learns to talk,<br>and the room behind it <em>learns to remember.</em></h1>
+<p class="lede">Second draft, rebuilt around the critiques. Liberchat grows a real chatbox and becomes the single conversational surface — the buddy folds into it, and talking with travellers is how booths unlock. The room behind the CRT becomes the product's meta-progress surface: a physical space that fills with what you do on the screen it faces. Rainy Day turns the shadow mode into a desktop icon and a machine-wide shadow-work skin. Everything passed over is gone.</p>
+<div class="meta"><span>v2 · critiques applied</span><span>mocks are live CSS</span><span>costs in days, honestly</span></div>
 </header>
 <nav>
-<a href="#sigil">sigil</a><a href="#buddy">chat</a><a href="#cohort">cohort</a><a href="#divination">divination</a><a href="#dreams">dreams</a><a href="#sea">sea</a><a href="#games">games</a><a href="#toybox">toybox</a><a href="#garden">garden</a><a href="#satchel">satchel</a><a href="#learn">learn</a><a href="#themes">themes</a><a href="#settings">settings</a><a href="#trash">trash</a><a href="#system">system-wide</a><a href="#order">order of work</a>
+<a href="#liberchat">liberchat</a><a href="#behindcrt">room behind the crt</a><a href="#rainy">rainy day</a><a href="#sigil">sigil</a><a href="#divination">divination</a><a href="#dreams">dreams</a><a href="#games">games</a><a href="#toybox">toybox</a><a href="#sea">sea</a><a href="#garden">garden</a><a href="#satchel">satchel</a><a href="#learn">learn</a><a href="#themes">themes</a><a href="#settings">settings</a><a href="#trash">trash</a><a href="#cohort">cohort</a><a href="#order">order of work</a>
 </nav>
+
+<section id="liberchat">
+<h2><small>SYSTEM 01</small> Liberchat — the talking machine</h2>
+<p class="roomlede">One lamp on every page. The traveller of whatever room you are in answers — and conversation is not decoration: it is how the machine opens itself.</p>
+<div class="approaches">
+<div class="approach wide"><header><h3><span class="roman">I</span>The Lamp with a Chatbox</h3><span class="verdict v-costly">hefty · flagship</span></header>
+<div class="mock liberchat"><div class="spot pink" style="left:18%;top:20%;width:60px;height:40px;opacity:.35"></div><div class="lampwin"><div class="lw-head"><i></i><span>whimsy wow · games</span></div><div class="lw-line">step RIGHT up. you have the look of someone about to throw a dart at their own feelings.</div><div class="lw-line me">which booth should i even start with?</div><div class="lw-line">the wheel, obviously. tell it grief and pick the color. i'll know if you're honest.</div><div class="lw-input"><span>say something to whimsy…</span><b>enter ⏎</b></div></div></div>
+<div class="body">
+<p><strong>The pitch:</strong> a small phosphor lamp persists on every page, bottom corner. Open it and it is a real chatbox — you type, the room's traveller answers. Not a ticker, not a hint bubble: a conversation with the part who lives in this room.</p>
+<ul>
+<li><strong>Chatbot with depth, not a random line machine.</strong> Each traveller carries a persona script in their own voice (Wanderlust mythic, Riason dry, Vanir tidal, Whimsy barker-loud, Arcana ceremonial). Replies mix: persona flavor, context awareness (what you just did in this room), and gentle questions back. Deterministic engine + seeded prompts first; the surface is built so a model-backed reply can slot in later without UI changes.</li>
+<li><strong>The buddy folds in here.</strong> The current buddy chat room's conversation, history, and sealing become a Liberchat conversation with the buddy-stone persona — available from any page, sealable from the lamp itself. One intuitive place to talk; no second chat UI to learn. The buddy keeps its lamplit circle identity inside the lamp window.</li>
+<li><strong>Talking unlocks.</strong> This is the big one: affinity grows through conversation, not only metrics. Trade three honest exchanges with Whimsy and the next booth's tarp drops; ask Vanir about the deep enough times and the tidepool opens. The existing affinity thresholds stay — conversation depth becomes a first-class metric feeding them, so unlocking feels like being <em>vouched for</em> rather than grinding a counter.</li>
+<li><strong>Presence without nagging.</strong> Closed, the lamp is 26px and silent. It speaks only when spoken to, or when the room has something truly owed (a completed keep, a hesitation — see sigil). <code>aria-live="polite"</code>, fully keyboard-driven, motion-gated.</li>
+</ul>
+</div>
+<div class="cost"><b>cost</b> ~5 days · lamp component + persona script layer + affinity wiring; retires status-line.js and absorbs buddy chat</div>
+</div>
+</div>
+<div class="critic-note"><b>why this shape wins</b> — you asked for chatbot capabilities, traveller-specific rooms, and conversation-driven unlocks in one feature. One lamp, one chatbox, personas per room, and the affinity system feeding unlocks delivers all three without a second chat surface to maintain.</div>
+</section>
+
+<section id="behindcrt">
+<h2><small>SYSTEM 02</small> The Room Behind the CRT</h2>
+<p class="roomlede">The screen shows the OS. Behind it is a room — and the room is where the machine keeps what you did. It fills, deepens, and ages as you work.</p>
+<div class="approaches">
+<div class="approach wide"><header><h3><span class="roman">I</span>The Dark Room That Fills</h3><span class="verdict v-costly">hefty · the memory palace</span></header>
+<div class="mock behindcrt"><div class="shelf"><i style="background:#8a6a42;width:70%"></i><i style="background:#a4855a;width:40%"></i><i style="background:#6a4a2a;width:55%"></i></div><div class="crtframe"></div><div class="pool"></div><div class="candle"></div><div class="ticker">behind the screen · the room keeps what you keep</div></div>
+<div class="body">
+<p><strong>The pitch:</strong> a place the OS never shows you on-screen — the physical room the CRT sits in, seen from behind/side like a stage you were never meant to watch. It is diegetic meta-progress: <strong>the PC itself never changes</strong>, but the room around it accumulates you.</p>
+<ul>
+<li><strong>A bookshelf that populates.</strong> Every satchel keep slides a ledger volume onto the shelf — spines thicken with artifact counts, ribbon markers appear for unreads, and the shelf visibly sags a little as it fills. Browsing the shelf is browsing the book.</li>
+<li><strong>A pool of shadow fluid that rises.</strong> Every sea release, trash burial, and discarded draft feeds a dark pool on the floor — the room literally holds what you put down. It creeps up a stone lip over months. Vanir's deep-unlock is reflected in its tone.</li>
+<li><strong>A candle that burns with your sessions.</strong> Session time melts one candle down; a fresh one is lit on return. Absence changes nothing — the wax is time spent, not time missed. The patina tiers (visits + artifacts) drive dust, wear on the floorboards, and the age of the furniture.</li>
+<li><strong>Room hooks per system, no new UI:</strong> tarot keeps land in a small card box on the desk; relations pin a corkboard with red string; games prizes collect as tin trophies on the CRT's top; the garden seedlings appear in a window box behind the monitor. Each hook is a small CSS/JS surface fed by state that already exists.</li>
+<li><strong>How you see it:</strong> a "look behind" affordance on the desktop (the CRT tilts, or the bezel's shadow parts) plus a settings toggle. It is also the natural home for Rainy Day — the rain falls <em>in the room</em>.</li>
+</ul>
+</div>
+<div class="cost"><b>cost</b> ~6 days · one new scene + per-system hook CSS fed by existing state; patina tiers already computed in shadow.js</div>
+</div>
+</div>
+<div class="critic-note"><b>why this exists</b> — you wanted the system to change with time and patina to update the desktop, and to flesh out the space around the promenade. The room behind the CRT is the single place where all of it lands: every room's output has a physical resting place, the machine visibly ages with use, and the PC stays untouched.</div>
+</section>
+
+<section id="rainy">
+<h2><small>SYSTEM 03</small> Rainy Day — the shadow layer becomes a place</h2>
+<p class="roomlede">The settings toggle becomes a desktop icon: one switch that weathers the whole machine for shadow work.</p>
+<div class="approaches">
+<div class="approach wide"><header><h3><span class="roman">I</span>One Icon, One Storm</h3><span class="verdict v-bold">bold</span></header>
+<div class="mock rainy"><div class="raingrid"></div><div class="rainicon">☂<small>rainy day</small></div><div class="win-title" style="position:absolute;top:8px;left:10px">shadow mode · for the heavy visits</div><div class="ticker">the machine dims itself for you. everything still works. nothing expires.</div></div>
+<div class="body">
+<p><strong>The pitch:</strong> a <strong>desktop icon — "rainy day"</strong> — that toggles the existing <code>shadow-on</code> layer into a full machine weather-state. Not a theme with different colors: a <em>mode for heavy visits</em>, where every room keeps working but presents its shadow-work face.</p>
+<ul>
+<li><strong>Per-app evocative skins</strong> in each room's own stylesheet (covenant holds): the sea goes black-water with rain circles; the games midway runs its rainy-season palette — dull banners, bulbs doubled in wet ground, barkers hushed, machines glowing warmer; the garden grows by lightning-flash; the satchel's desk lamp narrows to a reading cone.</li>
+<li><strong>Copied softer, not darker-for-darkness's-sake:</strong> confirmations slow down, timers stretch, the machine asks "is tonight a keeping night or a releasing one?" once, and stops. Hard-nights helplines surface one click closer in this mode.</li>
+<li><strong>It weathers the room behind the CRT</strong> — rain on the window the machine sits beside, the shadow pool rising faster because you are releasing more. The two systems are one picture.</li>
+<li><strong>Exit is as easy as entry</strong> — the same icon, now shining. The machine never asks why you came, and never makes you explain leaving.</li>
+</ul>
+</div>
+<div class="cost"><b>cost</b> ~4 days · icon + shadow.css deepening + per-room rainy skins; toggle/state already exist</div>
+</div>
+</div>
+</section>
 
 <section id="sigil">
 <h2><small>ROOM 01</small> Casting Stone — sigil</h2>
-<p class="roomlede">Hero action: intention → stroke → save. The stone is the hub of the whole OS; its room should feel like the workshop where the machine's heart was cut.</p>
+<p class="roomlede">Hero action unchanged: intention → stroke → save. The redesign is material and companionship, not new words.</p>
+<div class="critic-note"><b>applied critique</b> — chisel-and-vein kept, but <strong>no design-as-prose</strong>: buttons keep their plain labels ("save", "clear"). The vein behavior and dust are visual only. What replaces the theatrics is companionship: the buddy (through Liberchat) <strong>talks to you while you draw</strong> — comments on the intention you typed, reacts when you choose what the stone carries, and if you hesitate mid-stroke, the lamp offers a small thought. The room stays intuitive; the company does the storytelling.</div>
 <div class="approaches">
-<div class="approach"><header><h3><span class="roman">I</span>The Chisel &amp; the Vein</h3><span class="verdict v-bold">bold</span></header>
-<div class="mock sigil-a"><div class="canvas-frame frame-stone" style="left:32%;top:22%;width:36%;height:58%"></div><div class="spot gold" style="left:58%;top:30%;width:40px;height:40px"></div><div class="win-title" style="position:absolute;top:8px;left:10px">physius · the cutting bench</div></div>
-<div class="body">Treat the drawing surface as literal stone: a chiseled rim cast in real shadow, grain that catches the cursor light, and — the hefty part — <strong>carved veins</strong> that glow faintly copper where the visitor has drawn, as if the mark were cut into rock rather than inked on it. Undo becomes "the vein cools." Save becomes "set the stone." Physius speaks in chisel metaphors; the dust from cutting gathers in a tray under the canvas.</div>
-<div class="cost"><b>cost</b> ~3 days · new canvas layer + grain shader-in-CSS; reuses save flow</div>
-</div>
-<div class="approach"><header><h3><span class="roman">II</span>The Dark Atelier</h3><span class="verdict v-quiet">quiet</span></header>
-<div class="mock sigil-b"><div class="window" style="left:14%;top:18%;width:44%;height:64%"><div class="win-title">physius · atelier</div><div class="win-body">a single candle. the stone waits on the bench.</div></div><div class="spot pink" style="left:70%;top:36%;width:52px;height:52px"></div></div>
-<div class="body">One candle of warm light on a near-black bench; the stone sits in the pool of it and everything else recedes. Tools appear only when the cursor nears the bench edge — a workshop, not a toolbar. The room hums at low frequency; the candle gutters when the visitor hesitates. Quieter than I, but the most atmospheric room in the machine.</div>
-<div class="cost"><b>cost</b> ~2 days · mostly CSS lighting; existing tools restyled in place</div>
-</div>
-</div>
-</section>
-
-<section id="buddy">
-<h2><small>ROOM 02</small> Chat — buddy</h2>
-<p class="roomlede">Hero action: speak to the part, two exchanges, seal. The room must make a deterministic bot feel like a presence without pretending to be a person.</p>
-<div class="approaches">
-<div class="approach"><header><h3><span class="roman">I</span>The Seance Lamp</h3><span class="verdict v-bold">bold</span></header>
-<div class="mock buddy-a"><div class="spot pink" style="left:40%;top:8%;width:120px;height:60px"></div><div class="chat-bubble me">i feel stuck</div><div class="chat-bubble them">stuck is a place. tell me the walls.</div><div class="ticker">the lamp keeps the circle · answers arrive in their own time</div></div>
-<div class="body">The conversation happens inside a <strong>circle of lamplight</strong> on the floor — messages as objects in the circle, the buddy's replies arriving with a slow lamp-sway that makes waiting feel intentional. Replies are unmistakably theirs: wax-seal avatar, their material's texture on the bubble edge. Sealing the transcript becomes lowering the lamp: the room dims, the circle closes, the wax cools. Late replies get a physical excuse ("the lamp considered it") instead of a spinner.</div>
-<div class="cost"><b>cost</b> ~3 days · reply-pending state already exists; new visual layer</div>
-</div>
-<div class="approach"><header><h3><span class="roman">II</span>Correspondence</h3><span class="verdict v-quiet">quiet</span></header>
-<div class="mock buddy-b"><div class="certificate" style="inset:16% 18%;background:linear-gradient(180deg,#22301f,#101a12);border-color:#4a6a3a"></div><div class="chat-bubble them" style="color:#cfe8d0">let me write that down properly.</div></div>
-<div class="body">Letters, not bubbles. Each exchange is a small folio card that slides into view; the buddy's handwriting (a display font) differs from the visitor's typed line. The transcript "seals" into an envelope that visibly joins the constellation. Turns the room from "chat app" into "the part that writes back" — slower, more literary, more in keeping with the Satchel.</div>
-<div class="cost"><b>cost</b> ~2.5 days · transcript rendering restyle; seal flow unchanged</div>
-</div>
-</div>
-</section>
-
-<section id="cohort">
-<h2><small>ROOM 03</small> Cohort — the older forge</h2>
-<p class="roomlede">Hero action: confess, exchange, seal. Deliberately kept as the continuity room; the pitch is dignity, not deprecation.</p>
-<div class="approaches">
-<div class="approach"><header><h3><span class="roman">I</span>The Wax Archive</h3><span class="verdict v-quiet">quiet</span></header>
-<div class="mock buddy-a"><div class="tape-recorder"><b>e-lizabeth · the older forge</b><br>compact exchange, honest wax<div class="vu"><i></i><i style="height:18px"></i><i style="height:12px"></i><i></i></div></div></div>
-<div class="body">Black wax, sealed flame-flicker, a tape-recorder honesty: the room frames itself as the <em>archive desk</em> where the older ritual is kept working. Transcripts scroll like tape logs; the seal is a wax stamp with real depth. A small brass plate reads "the older voice is kept here on purpose." Addresses the plan's ask: label continuity without shame.</div>
-<div class="cost"><b>cost</b> ~2 days · CSS re-skin in cohort's own stylesheet</div>
+<div class="approach wide"><header><h3><span class="roman">I</span>The Chisel &amp; the Vein, with company</h3><span class="verdict v-bold">bold</span></header>
+<div class="mock sigil-a"><div class="canvas-frame frame-stone" style="left:30%;top:20%;width:38%;height:60%"></div><div class="spot gold" style="left:56%;top:28%;width:40px;height:40px"></div><div class="lampwin" style="right:6%;bottom:12%;width:38%"><div class="lw-head"><i></i><span>buddy · while you draw</span></div><div class="lw-line">"carry what is heavy" — that is a lot to ask of one stone. good. it can hold it.</div></div></div>
+<div class="body">The drawing surface becomes literal stone — chiseled rim in real shadow, grain catching cursor light, drawn lines cooling from copper-bright to settled vein. No relabeled controls anywhere. The lamp sits at the bench: it reads the intention field, comments in the buddy's voice as choices are made, and its hesitation-line is the room's only flourish. Dust from cutting gathers in a tray under the canvas (purely visual).</div>
+<div class="cost"><b>cost</b> ~3 days · stone material + vein stroke rendering; commentary is a Liberchat context hook (shared cost with System 01)</div>
 </div>
 </div>
 </section>
 
 <section id="divination">
 <h2><small>ROOM 04</small> Divination</h2>
-<p class="roomlede">Hero action: ask → draw / cast. Structure speaks; the room should feel like a table where the unexpected is welcome.</p>
+<p class="roomlede">Winner by critique: the felt table. One room, one table, two games.</p>
 <div class="approaches">
-<div class="approach"><header><h3><span class="roman">I</span>The Felt Table</h3><span class="verdict v-quiet">quiet</span></header>
-<div class="mock div-a"><div class="card fan1" style="left:50%;top:34%"></div><div class="card fan2" style="left:50%;top:32%;background:linear-gradient(160deg,#7a2230,#3a0e16)"></div><div class="card fan3" style="left:50%;top:34%"></div><div class="win-title" style="position:absolute;bottom:8px;left:10px">arcana · chalk rim · deep red felt</div></div>
-<div class="body">Commit to the séance-parlour card table: deep red felt with a real chalk-dusted rim (reversible chalk marks for the question), cards that <strong>slide from a physical deck</strong> with weight and settle misaligned like real cards do. The I Ching cast shares the same table: coins become chalk circles on the felt. The room stops feeling like two disconnected tools and starts being one table with two games.</div>
-<div class="cost"><b>cost</b> ~3 days · unifies Tarot + I Ching presentation (also closes a report P1)</div>
-</div>
-<div class="approach"><header><h3><span class="roman">II</span>The Observatory</h3><span class="verdict v-risky">risky</span></header>
-<div class="mock div-b"><div class="hex"><i></i><i style="opacity:.4"></i><i></i><i style="opacity:.4"></i><i></i><i></i><i style="opacity:.4"></i><i></i></div><div class="spot purple" style="left:20%;top:20%;width:60px;height:60px"></div></div>
-<div class="body">Lift the room into an orrery: hexagram lines drawn as constellations in a domed dark, tarot spreads as planetary arrangements. Genuinely striking, and the most "haunted CRT" of the options — but it competes with the desktop constellation (the product's crown jewel) and drifts from the tactile table the copy promises. Worth it only if the desktop keeps its own scale.</div>
-<div class="cost"><b>cost</b> ~4 days · new visual language for both draws; watch constellation collision</div>
+<div class="approach wide"><header><h3><span class="roman">I</span>The Felt Table</h3><span class="verdict v-quiet">quiet · winner</span></header>
+<div class="mock div-a"><div class="card fan1 back" style="left:50%;top:32%"></div><div class="card hot" style="left:50%;top:30%"></div><div class="card fan3 back" style="left:50%;top:32%"></div><div class="win-title" style="position:absolute;bottom:8px;left:10px">arcana · chalk rim · deep red felt</div></div>
+<div class="body">Commit fully to the séance-parlour table: deep red felt, a chalk-dusted rim where the question is written in reversible chalk, cards that slide from a physical deck with weight and settle misaligned like real cards. The I Ching cast shares the same felt — coins become chalk circles, lines are drawn in chalk strokes. Tarot and I Ching stop being two disconnected tools and become one table with two games, which also closes the artifact-vocabulary drift the last report flagged.</div>
+<div class="cost"><b>cost</b> ~3 days · unified table presentation for both draws; save flows unchanged</div>
 </div>
 </div>
 </section>
 
 <section id="dreams">
 <h2><small>ROOM 05</small> Dreams</h2>
-<p class="roomlede">Hero action: record before it thins. Writing here is catching something dissolving; the room should make haste feel safe.</p>
+<p class="roomlede">Merged by critique: the fog of catching, the dusk of keeping — one continuous room.</p>
 <div class="approaches">
-<div class="approach"><header><h3><span class="roman">I</span>The Ledger of Fog</h3><span class="verdict v-bold">bold</span></header>
-<div class="mock dreams-a"><div class="window" style="left:12%;top:16%;width:50%;height:66%"><div class="win-title">the dreamer · ledger of fog</div><div class="win-body">write it while it is still wet —</div></div><div class="spot purple" style="left:66%;top:30%;width:56px;height:56px"></div><div class="spot cyan" style="left:74%;top:60%;width:36px;height:36px"></div></div>
-<div class="body">The input is a page that is <strong>still drying</strong>: a faint fog creeps at the screen edges and the page's margins mist over as the visitor types — the room visibly helps them catch the dream before it thins. The reading arrives as marginalia in a second hand. Associations become threads stitched between saved dreams in the ledger view.</div>
-<div class="cost"><b>cost</b> ~3 days · fog layer + marginalia restyle; flows unchanged</div>
-</div>
-<div class="approach"><header><h3><span class="roman">II</span>The Dusk Nursery</h3><span class="verdict v-risky">risky</span></header>
-<div class="mock dreams-b"><div class="polaroid" style="left:14%;top:26%"></div><div class="polaroid r2" style="right:16%;top:40%;left:auto"></div><div class="spot blue" style="left:44%;top:24%;width:70px;height:44px"></div></div>
-<div class="body">Dreams as a shelf of dusk-polaroids: each kept dream develops slowly (blur → focus) and gains a kept image; the ledger is the shelf. Beautiful, but it visualizes outputs more than the act of recording, and the recording is the hero action. Better as a future Satchel view than as this room's spine.</div>
-<div class="cost"><b>cost</b> ~3.5 days · ledger + shelf views; copy tone shifts slightly</div>
-</div>
-</div>
-</section>
-
-<section id="sea">
-<h2><small>ROOM 06</small> Sea</h2>
-<p class="roomlede">Hero action: name → weigh → release. Stillness is the feature; the room must never dramatize the visitor's burden.</p>
-<div class="approaches">
-<div class="approach"><header><h3><span class="roman">I</span>The Tide Clock</h3><span class="verdict v-bold">bold</span></header>
-<div class="mock sea-a"><div class="waterline"></div><div class="buoy" style="left:38%"></div><div class="bubbles"></div><div class="win-title" style="position:absolute;top:8px;left:10px">vanir · the tide decides the pacing</div></div>
-<div class="body">A brass <strong>tide clock</strong> governs the room: releases happen on the water's own schedule, the waterline visibly rises a hair with each kept release, and the room's stillness has a readable mechanism. Vanir's deep-intensity unlock becomes a deeper water tone. The observation ask from the report ("release completion observable without breaking stillness") is answered by the clock's single slow hand, not by confetti.</div>
-<div class="cost"><b>cost</b> ~2.5 days · tide pacing exists; adds clock + waterline state visual</div>
-</div>
-<div class="approach"><header><h3><span class="roman">II</span>Black Water, Small Light</h3><span class="verdict v-quiet">quiet</span></header>
-<div class="mock sea-b"><div class="spot cyan" style="left:48%;top:58%;width:44px;height:22px;opacity:.35"></div><div class="waterline" style="bottom:70%;opacity:.4"></div></div>
-<div class="body">Near-total dark. The visitor's line of text is the only lit thing — a small paper boat that takes the words and drifts out of the light. No meters, no clocks, nothing to read but the release itself. The most disciplined option; risks feeling like "nothing happened" to a first-time visitor, which the tutorial would have to carry.</div>
-<div class="cost"><b>cost</b> ~1.5 days · least work; needs one tutorial beat to explain the boat</div>
+<div class="approach wide"><header><h3><span class="roman">I</span>Fog in, Dusk to Keep</h3><span class="verdict v-bold">bold · merged</span></header>
+<div class="mock dreams-a"><div class="fogpage">it started with a door that —</div><div class="duskshot" style="right:12%;top:24%;left:auto"></div><div class="duskshot" style="right:22%;top:52%;left:auto;transform:rotate(4deg)"></div><div class="spot purple" style="left:70%;top:18%;width:44px;height:34px"></div></div>
+<div class="body">One room, two states of the same material. <strong>Catching:</strong> the input page sits in creeping fog that thickens at the screen edges as the dream thins — the room visibly helps you write before it evaporates. <strong>Keeping:</strong> a saved dream becomes a dusk-polaroid on the shelf, developing slowly from blur to focus; the ledger is the shelf, and associations are threads stitched between the polaroids. The act and the reward are one continuous metaphor: catch it in the fog, watch it develop at dusk.</div>
+<div class="cost"><b>cost</b> ~3.5 days · fog layer + shelf/develop restyle; record → read → associate flows unchanged</div>
 </div>
 </div>
 </section>
 
 <section id="games">
 <h2><small>ROOM 07</small> Games — the midway</h2>
-<p class="roomlede">Hero action: play one booth, keep the picture. Now nine booths including the Quiet Floor; the midway is the site's showcase surface, so this is the largest single spend.</p>
+<p class="roomlede">Nine booths including the Quiet Floor. The promenade is the showcase; Liberchat is the barker-in-residence; Rainy Day is its off-season.</p>
 <div class="approaches">
-<div class="approach"><header><h3><span class="roman">I</span>The Full Promenade</h3><span class="verdict v-costly">hefty · flagship</span></header>
-<div class="mock games-a"><div class="marquee"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="booth b2"></div><div class="booth b3"></div><div class="booth" style="left:calc(50% - 28px)"></div><div class="ticker">step right up · nine attractions · no score, keep the picture</div></div>
-<div class="body">Promote the camera from a sliding strip to a <strong>walkable promenade</strong>: parallax ground, string lights that sag between booths, the visitor's shadow moving with the pan, per-booth barkers that call out <em>only</em> when their booth is centered. The featured Quiet Floor gets the cold-lit floor plate it already has, and entering any booth keeps its stage curtain animation. This is the version the pitch deck screenshots are made from.</div>
-<div class="cost"><b>cost</b> ~5 days · camera layer rework; booth logic untouched (the monolith split should land first)</div>
+<div class="approach wide"><header><h3><span class="roman">I</span>The Full Promenade</h3><span class="verdict v-costly">hefty · flagship</span></header>
+<div class="mock games-a"><div class="marquee"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="booth b2"></div><div class="booth" style="left:calc(50% - 28px)"></div><div class="booth b3 cold"></div><div class="ticker">step right up · nine attractions · whimsy takes requests</div></div>
+<div class="body">The camera becomes a <strong>walkable promenade</strong>: parallax ground, sagging string lights, the visitor's shadow on the boards, barkers calling only when their booth centers. Whimsy Wow lives at the room's mouth <em>through Liberchat</em> — ask her for a recommendation and she walks you to a booth; trade barker-banter and she drops the next tarp (the conversation-unlock hook). The Quiet Floor keeps its cold floor-plate as the featured ninth attraction. The monolith split lands first; this rebuild sits on it.</div>
+<div class="cost"><b>cost</b> ~5 days after the split · camera layer rework; booth logic untouched</div>
 </div>
-<div class="approach"><header><h3><span class="roman">II</span>Rainy-Season Midway</h3><span class="verdict v-bold">bold</span></header>
-<div class="mock games-b"><div class="marquee" style="filter:saturate(.6) brightness(.7)"></div><div class="booth" style="left:18%"></div><div class="booth" style="left:60%"></div><div class="crumbs" style="opacity:.6"></div><div class="ticker">the tents are up. the rain does the drumming.</div></div>
-<div class="body">Same midway, off-season: rain streaks on the "lens," bulbs reflected in wet ground, banners dulled, the barkers quieter — and the machines glow warmer for it. Emotionally deeper than I (the fair kept running anyway) and cheaper, but it trades reach for mood and makes the room less legible as a first stop.</div>
-<div class="cost"><b>cost</b> ~3 days · weather layer + palette shift; camera untouched</div>
+<div class="approach"><header><h3><span class="roman">II</span>Its Rainy-Season Face</h3><span class="verdict v-bold">rainy day skin</span></header>
+<div class="mock games-rain"><div class="raingrid"></div><div class="marquee dim"><i style="background:#8a7a4a;box-shadow:0 0 4px #8a7a4a"></i><i style="background:#8a7a4a;box-shadow:0 0 4px #8a7a4a"></i><i style="background:#8a7a4a;box-shadow:0 0 4px #8a7a4a"></i></div><div class="booth" style="left:24%"></div><div class="booth cold" style="left:58%"></div><div class="ticker">the tents are up. the machines glow warmer for it.</div></div>
+<div class="body">The rainy-season midway from v1 survives — correctly — as the <strong>Games room's Rainy Day skin</strong>, not a standalone pitch: rain on the lens, bulbs doubled in wet boards, banners dulled, Whimsy hushed but warmer. One storm, machine-wide, toggled by the icon.</div>
+<div class="cost"><b>cost</b> counted in Rainy Day · per-room skin in games' own stylesheet</div>
 </div>
 </div>
 </section>
 
 <section id="toybox">
 <h2><small>ROOM 08</small> Toybox</h2>
-<p class="roomlede">Hero action: touch and alter matter. Pure sandbox; the room should feel like the machine letting its hair down.</p>
+<p class="roomlede">The kitchen sink works <em>because</em> it can hold everything the machine ever was — including the games it retired.</p>
 <div class="approaches">
-<div class="approach"><header><h3><span class="roman">I</span>The Kitchen Sink</h3><span class="verdict v-bold">bold</span></header>
-<div class="mock toybox-a"><div class="sandbox"></div><div class="tape" style="left:24%;top:18%"></div><div class="tape" style="right:26%;top:58%;transform:rotate(8deg)"></div></div>
-<div class="body">Frame the sandbox as a <strong>literal kitchen-sink tray</strong> under a warm bulb: tap handles that actually pour water into the sim, a salt cellar, a matchbox, seeds in a paper packet — every material gets a diegetic dispenser instead of a toolbar button. The crab gets a little tin bath. Pointer play stays king, but each dispenser doubles as a large hit target, which quietly answers the accessibility ask.</div>
-<div class="cost"><b>cost</b> ~3 days · dispenser skins over existing material buttons; no sim changes</div>
+<div class="approach wide"><header><h3><span class="roman">I</span>Everything But — the Kitchen Sink</h3><span class="verdict v-bold">bold · expanded</span></header>
+<div class="mock toybox-a"><div class="sandbox"></div><div class="toys"><span class="ty-tap"></span><span class="ty-match"></span><span class="ty-salt"></span><span class="ty-seed"></span><span class="ty-ball"></span><span class="ty-music"></span></div><div class="ticker">tap · matchbox · salt · seeds · the ball · the box — everything but</div></div>
+<div class="body">
+<p>Frame the sandbox as a kitchen-sink tray under a warm bulb, and make the metaphor carry <strong>old-game-style toys</strong> — diegetic dispensers where toolbar buttons used to be:</p>
+<ul>
+<li><strong>Working dispensers for the sim materials:</strong> a tap that actually pours the water, a matchbox you strike for fire, a salt cellar you shake, seed packets you tear. Every dispenser doubles as a large hit target (the accessibility ask, solved by furniture).</li>
+<li><strong>Toy-box classics as new matter:</strong> a <em>fortune-teller ball</em> (ask, shake, one of Arcana's one-liners rises in the liquid), a <em>music box</em> that plays the soundscape's melody and leaves visual ripples, a <em>wind-up diver</em> that swims the water you poured. Small physics toys, each a kept-picture moment like the booths.</li>
+<li><strong>The sink holds the machine's past:</strong> retired tools and legacy booth mechanics return as toys — the earliest wheel becomes a spinning top, old prototypes become bath toys. "Everything but the kitchen sink" becomes literal: the machine's history is in the tray, and Liberchat's Whimsy will tell you what each toy used to be.</li>
+</ul>
 </div>
-<div class="approach"><header><h3><span class="roman">II</span>The Naturalist's Tray</h3><span class="verdict v-quiet">quiet</span></header>
-<div class="mock toybox-b"><div class="tabbed" style="inset:18% 14%"><div class="tab" style="left:6px">sand</div><div class="tab" style="left:70px">water</div><div class="tab" style="left:134px">fire</div><div class="page" style="background:linear-gradient(180deg,#1e2a14,#101808);color:#cfe0b0">specimens, labelled, alive</div></div></div>
-<div class="body">A specimen tray on cork: materials live in labeled cells you press to release, with a naturalist's annotations in the margins. Calmer and more "kept," but it museum-ifies a room whose whole point is mess. Better suited to Learn's drawers if anywhere.</div>
-<div class="cost"><b>cost</b> ~2 days · tray layout; loses some of the room's looseness</div>
+<div class="cost"><b>cost</b> ~4 days · dispenser skins + 3 toy mini-sims; core sand/water sim untouched</div>
+</div>
+</div>
+</section>
+
+<section id="sea">
+<h2><small>ROOM 06</small> Sea</h2>
+<p class="roomlede">Both directions survive the critique; they remain alternatives of stillness.</p>
+<div class="approaches">
+<div class="approach"><header><h3><span class="roman">I</span>The Tide Clock</h3><span class="verdict v-bold">bold</span></header>
+<div class="mock sea-a"><div class="waterline"></div><div class="buoy" style="left:38%"></div><div class="bubbles"></div></div>
+<div class="body">A brass tide clock governs the room; releases happen on the water's schedule, the waterline rises a hair with each release, and completion is observable through the clock's single slow hand — never confetti. The pool behind the CRT mirrors its level.</div>
+<div class="cost"><b>cost</b> ~2.5 days · clock + waterline state visual</div>
+</div>
+<div class="approach"><header><h3><span class="roman">II</span>Black Water, Small Light</h3><span class="verdict v-quiet">quiet</span></header>
+<div class="mock sea-b"><div class="spot cyan" style="left:48%;top:58%;width:44px;height:22px;opacity:.35"></div></div>
+<div class="body">Near-total dark; the typed line is a small paper boat that takes the words and drifts out of the light. The most disciplined option; needs one tutorial beat to explain the boat. Natural pairing with Rainy Day.</div>
+<div class="cost"><b>cost</b> ~1.5 days · least work; one tutorial beat</div>
 </div>
 </div>
 </section>
 
 <section id="garden">
 <h2><small>ROOM 09</small> Garden</h2>
-<p class="roomlede">Hero action: pour → settle → plant. Growth is the cross-room reward; the room is where patience pays visible interest.</p>
 <div class="approaches">
 <div class="approach"><header><h3><span class="roman">I</span>The Glasshouse</h3><span class="verdict v-bold">bold</span></header>
-<div class="mock garden-a"><div class="bed-row"><i style="height:10px;background:#5a8a4a"></i><i style="height:18px;background:#6a9a5a"></i><i style="height:8px;background:#4a7a3a"></i><i style="height:22px;background:#7aaa6a"></i><i style="height:14px;background:#5a8a4a"></i></div><div class="spot green" style="left:44%;top:18%;width:80px;height:40px"></div><div class="win-title" style="position:absolute;top:8px;left:10px">ruby · the glasshouse</div></div>
-<div class="body">Wrap the whole room in a <strong>glasshouse</strong>: panes with condensation that the visitor's cursor wipes, the watering can pouring a visible arc, and the bloom bed as raised loam with roots visible in a glass side-panel — the cross-room payoff (what the garden remembered) made literal. Morning light shifts with real time-of-day, kept subtle and motion-gated.</div>
+<div class="mock garden-a"><div class="bed-row"><i style="height:10px;background:#5a8a4a"></i><i style="height:18px;background:#6a9a5a"></i><i style="height:22px;background:#7aaa6a"></i><i style="height:14px;background:#5a8a4a"></i></div><div class="spot green" style="left:44%;top:16%;width:80px;height:40px"></div></div>
+<div class="body">Panes with condensation the cursor wipes, a watering can with a visible arc, roots visible in a glass side-panel, a window box that also appears behind the CRT in the room. Time-of-day light stays subtle and motion-gated.</div>
 <div class="cost"><b>cost</b> ~3.5 days · glasshouse chrome + root panel; growth logic untouched</div>
 </div>
 <div class="approach"><header><h3><span class="roman">II</span>The Seed Cabinet</h3><span class="verdict v-quiet">quiet</span></header>
 <div class="mock garden-b"><div class="tabbed" style="inset:16% 12%"><div class="tab" style="left:8px">draft</div><div class="tab" style="left:74px">bed</div><div class="page" style="background:linear-gradient(180deg,#e8dcb8,#cbbb92);color:#3a2a18">drafts filed before they are planted</div></div></div>
-<div class="body">Drafts as seed packets filed in a wooden cabinet; planting moves a packet to the bed drawer; the bed is viewed through a slatted lid. Orderly and charming, but it hides the growing — the emotional payload — behind a lid. Take the packet metaphor for the empty-state copy instead.</div>
-<div class="cost"><b>cost</b> ~2 days · filing UI; growth stays hidden (a real cost)</div>
+<div class="body">Drafts as seed packets filed in a cabinet; planting moves a packet to the bed drawer. Kept as the lighter alternative with its known cost: it hides the growing behind a lid. Its packet metaphor feeds the empty-state copy either way.</div>
+<div class="cost"><b>cost</b> ~2 days · filing UI; growth stays hidden</div>
 </div>
 </div>
 </section>
 
 <section id="satchel">
 <h2><small>ROOM 10</small> Satchel — the book</h2>
-<p class="roomlede">Hero action: select → read → note. The book is the product's memory; its room should be the most crafted object in the machine.</p>
 <div class="approaches">
 <div class="approach"><header><h3><span class="roman">I</span>The Reading Desk</h3><span class="verdict v-bold">bold</span></header>
-<div class="mock satchel-a"><div class="tabbed" style="inset:14% 10%"><div class="tab" style="left:10px">buddies</div><div class="tab" style="left:76px">artifacts</div><div class="tab" style="left:146px">relations</div><div class="page">the book of chosen things — <i>marginalia welcome</i></div></div><div class="win-title" style="position:absolute;bottom:6px;right:10px">the librarian</div></div>
-<div class="body">A real reading desk: the book lies open with a visible spine that <strong>thickens as artifacts accumulate</strong> (the patina idea, made physical), ribbon markers for unvisited items, marginalia that appears handwritten in the margin on hover, and brass corner caps that brighten with relation count. The competence-visible WS5 item lands here as pure furniture.</div>
+<div class="mock satchel-a"><div class="spine-desk"></div><div class="ticker">the spine thickens. the ribbons mark the unread.</div></div>
+<div class="body">A real reading desk: visible spine thickening with artifacts, ribbon markers for unvisited items, hover marginalia, brass corner caps brightening with relation count. And the tie that binds: <strong>every kept volume appears on the bookshelf in the room behind the CRT</strong> — the desk curates, the shelf remembers.</div>
 <div class="cost"><b>cost</b> ~3.5 days · desk chrome + spine state; persistence already owned by the book</div>
-</div>
-<div class="approach"><header><h3><span class="roman">II</span>The Card Catalogue</h3><span class="verdict v-quiet">quiet</span></header>
-<div class="mock satchel-b"><div class="crumbs"></div><div class="tabbed" style="inset:20% 14%"><div class="page" style="background:linear-gradient(180deg,#e8d8b0,#cdb684);color:#3a2a18">a · b · c — drawers that whisper</div></div></div>
-<div class="body">Sepia card-catalogue drawers that whisper on close; each artifact is a typed catalogue card. Gorgeous and period-perfect with the librarian, but it flattens relations — the graph is the moat, and drawers hide graphs. Better for the About page's archive voice than the book itself.</div>
-<div class="cost"><b>cost</b> ~2.5 days · catalogue UI; relations need a separate graph view to survive</div>
 </div>
 </div>
 </section>
 
 <section id="learn">
 <h2><small>ROOM 11</small> Learn — the reference shelf</h2>
-<p class="roomlede">Hero action: consult a drawer. Knowledge is reference, not curriculum; citations must read as citations at a glance.</p>
 <div class="approaches">
 <div class="approach"><header><h3><span class="roman">I</span>The Index-Card Wall</h3><span class="verdict v-quiet">quiet</span></header>
-<div class="mock learn-a"><div class="tabbed" style="inset:16% 12%"><div class="tab" style="left:8px">dbt</div><div class="tab" style="left:64px">ifs</div><div class="tab" style="left:120px">jung</div><div class="page" style="background:linear-gradient(180deg,#f2ead4,#d8cba0);color:#3a2a18">a drawer for every thesis, a citation on every claim</div></div></div>
-<div class="body">Every topic becomes an index card in a wall of wooden drawers; pulling a card slides it out with the ink-stamped corner the persona register gives the Scribe. <strong>Citations render as stamped footnotes</strong> — a distinct research voice the report's audit asked to be visible at a glance. The thesis/citation distinction becomes a material one: typed cards for research, handwritten for the house voice.</div>
+<div class="mock learn-a"><div class="tabbed" style="inset:16% 12%"><div class="tab" style="left:8px">dbt</div><div class="tab" style="left:64px">ifs</div><div class="tab" style="left:120px">jung</div><div class="page" style="background:linear-gradient(180deg,#f2ead4,#d8cba0);color:#3a2a18">typed cards for research, handwritten for the house voice</div></div></div>
+<div class="body">Topics as index cards in a wall of drawers; citations render as stamped footnotes — research voice visible at a glance, the Scribe's thesis handwritten beside it. The Quiet Floor's TIPP skills get a card of their own.</div>
 <div class="cost"><b>cost</b> ~2.5 days · drawer restyle + citation stamp component</div>
 </div>
 </div>
 </section>
 
 <section id="themes">
-<h2><small>ROOM 12</small> Themes — iris mappa's studio</h2>
-<p class="roomlede">Hero action: choose a skin. Identity is ambient; the room should make choosing feel like commissioning, not configuring.</p>
+<h2><small>ROOM 12</small> Themes</h2>
 <div class="approaches">
 <div class="approach"><header><h3><span class="roman">I</span>The Pigment Locker</h3><span class="verdict v-bold">bold</span></header>
-<div class="mock themes-a"><div class="tile-row"><i style="background:#7a3aaa"></i><i style="background:#c04a4a"></i><i style="background:#4a8a5a"></i><i style="background:#d4af65"></i><i style="background:#4a6ad4"></i></div><div class="spot pink" style="left:40%;top:20%;width:60px;height:40px"></div><div class="win-title" style="position:absolute;top:8px;left:10px">iris mappa · pigment locker</div></div>
-<div class="body">Skins as <strong>pigment tiles in a mapmaker's locker</strong>: each tile is a material sample big enough to read its texture, hovering shows the tile being lifted, and choosing it slides the whole machine through a wash of that pigment (motion-gated). The long-requested <em>preview before commit</em> becomes native: hover paints the room's edge in the candidate theme before the click lands.</div>
-<div class="cost"><b>cost</b> ~2.5 days · tile UI + hover preview; theme application unchanged</div>
+<div class="mock themes-a"><div class="tile-row"><i style="background:#7a3aaa"></i><i style="background:#c04a4a"></i><i style="background:#4a8a5a"></i><i style="background:#d4af65"></i><i style="background:#4a6ad4"></i></div></div>
+<div class="body">Skins as pigment tiles in a mapmaker's locker; hover paints the room's edge in the candidate theme before the click lands (the long-requested preview), choosing washes the machine through the pigment, motion-gated. Rainy Day appears here too — as a tile with a rain band, so the shadow mode is findable from both rooms.</div>
+<div class="cost"><b>cost</b> ~2.5 days · tile UI + hover preview</div>
 </div>
 </div>
 </section>
 
 <section id="settings">
-<h2><small>ROOM 13</small> Settings — the room's room</h2>
-<p class="roomlede">Hero action: manage the machine. Destructive actions armed twice; honesty is the aesthetic here.</p>
+<h2><small>ROOM 13</small> Settings</h2>
 <div class="approaches">
 <div class="approach"><header><h3><span class="roman">I</span>The Maintenance Panel</h3><span class="verdict v-quiet">quiet</span></header>
-<div class="mock settings-a"><div class="switch-row"><span class="sw"><i></i> sound fx</span><span class="sw"><i></i> soundscape</span><span class="sw"><i></i> reduce motion</span></div><div class="win-title" style="position:absolute;bottom:8px;left:10px">behind the bezel · honestly labelled</div></div>
-<div class="body">Behind-the-bezel honesty: a maintenance panel with real toggle switches, a vacuum-fluorescent display for slot state, and the wipe control as a <strong>physical keyed interlock</strong> (two switches must agree before the lever will move). Slot consequences surface before the reload — the report's ask — as a small display line: "slot B: 3 artifacts will sleep."</div>
-<div class="cost"><b>cost</b> ~2 days · panel re-skin + slot preview line; wipe flow unchanged</div>
+<div class="mock settings-a"><div class="switch-row"><span class="sw"><i></i> sound fx</span><span class="sw"><i></i> rainy day</span><span class="sw"><i></i> the room behind</span></div></div>
+<div class="body">Behind-the-bezel honesty: real toggles, a vacuum-fluorescent slot display ("slot B: 3 artifacts will sleep"), the wipe as a two-switch interlock. Gains two switches: Rainy Day, and "the room behind" on/off. The existing shadow toggle folds into Rainy Day rather than coexisting.</div>
+<div class="cost"><b>cost</b> ~2 days · panel re-skin + slot preview line</div>
 </div>
 </div>
 </section>
 
 <section id="trash">
 <h2><small>ROOM 14</small> Trash — pete's yard</h2>
-<p class="roomlede">Hero action: bury / re-add. Release is not erasure; the graveyard is a garden of a different kind.</p>
 <div class="approaches">
 <div class="approach"><header><h3><span class="roman">I</span>The Rubble Garden</h3><span class="verdict v-bold">bold</span></header>
-<div class="mock trash-a"><div class="grave"><i></i><i style="height:22px"></i><i></i><i style="height:34px"></i><i></i></div><div class="crumbs" style="opacity:.7"></div><div class="win-title" style="position:absolute;top:8px;left:10px">ravaging pete · nothing here is gone</div></div>
-<div class="body">Graves that <strong>grow things</strong>: each buried artifact's plot weathers and, over visits, sprouts — the same patina curve as the garden, in wreckage. Re-adding is a dig with a visible spade and a reason written on a wooden marker that becomes the relation edge. The recovery path ("less hidden than the burial path") is answered by making every grave readable on hover: what lies here, and how to wake it.</div>
-<div class="cost"><b>cost</b> ~3 days · plot weathering + dig flow re-skin; re-add flow unchanged</div>
+<div class="mock trash-a"><div class="crumbs" style="opacity:.7"></div><div class="grave"><i></i><i style="height:22px"></i><i style="height:34px"></i><i></i></div></div>
+<div class="body">Graves that grow things: plots weather and sprout over visits; re-adding is a dig with a reason written on a wooden marker that becomes the relation edge; every grave reads on hover. And what leaches from the graves feeds the shadow pool behind the CRT — Pete's yard and the dark room share a water table.</div>
+<div class="cost"><b>cost</b> ~3 days · plot weathering + dig re-skin; re-add flow unchanged</div>
 </div>
 </div>
 </section>
 
-<section id="system">
-<h2><small>SYSTEM-WIDE</small> Three moves that bind the rooms together</h2>
-<p class="roomlede">These are the approaches that make twelve rooms feel like one machine without sharing a stylesheet.</p>
+<section id="cohort">
+<h2><small>ROOM 03</small> Cohort — the older forge</h2>
+<p class="roomlede">The wax archive is out. What remains is a question only you can settle, so it is pitched as one.</p>
 <div class="approaches">
-<div class="approach"><header><h3><span class="roman">A</span>Liberchat, the companion lamp</h3><span class="verdict v-costly">hefty · new feature</span></header>
-<div class="mock buddy-b"><div class="spot gold" style="right:12%;bottom:18%;left:auto;width:26px;height:26px;opacity:.9"></div><div class="window" style="right:8%;bottom:34%;left:auto;width:44%;height:40%"><div class="win-title">the room speaks</div><div class="win-body">one line, in the voice of wherever you are</div></div></div>
-<div class="body">The plan's dormant centerpiece, pitched properly: a small phosphor lamp that persists across every page and speaks in the current room's traveller's voice — Wanderlust on the desktop, Vanir at the sea, the Scribe in Learn. Not a chatbot: one line of context, a hint when the visitor stalls, silent the rest of the time. Persona data already exists in <code>data/personas.data.js</code>; status-line retires into it.</div>
-<div class="cost"><b>cost</b> ~4 days · one injected component + persona lines; deprecates status-line.js</div>
+<div class="approach"><header><h3><span class="roman">I</span>The Older Voice Moves into the Lamp</h3><span class="verdict v-risky">decision</span></header>
+<div class="mock liberchat"><div class="lampwin" style="right:12%;bottom:22%;width:52%"><div class="lw-head"><i></i><span>e-lizabeth · the older voice</span></div><div class="lw-line">same compact exchange as ever. i kept the wax.</div></div></div>
+<div class="body">Cohort's chat, history, and seal become an <strong>e-lizabeth persona inside Liberchat</strong> — selectable like any traveller, labeled "the older voice." The cohort page retires to a short archive note pointing at the lamp. Continuity is preserved and labeled with dignity (the report's ask), and the machine finally has one chat surface instead of three.</div>
+<div class="cost"><b>cost</b> ~2 days inside the Liberchat build · persona + redirect page</div>
 </div>
-<div class="approach"><header><h3><span class="roman">B</span>The Patina System</h3><span class="verdict v-quiet">quiet</span></header>
-<div class="mock trash-b"><div class="crumbs" style="opacity:.9"></div><div class="grave"><i style="background:linear-gradient(180deg,#5a6a4a,#2a2a26)"></i><i></i></div></div>
-<div class="body">One state curve — <code>patina-1..3</code> from visits + artifacts (already computed in shadow.js) — expressed as material in every room: the stone's grain deepens, the book's spine thickens, the graveyard greens, dust density rises. Rooms opt in with their own CSS; the system owns nothing but the class names. Absence changes nothing; presence accumulates. This is the return-reward the gamification plan wanted, with zero numeric UI.</div>
-<div class="cost"><b>cost</b> ~2.5 days across rooms · state exists; per-room CSS opt-in</div>
-</div>
-<div class="approach"><header><h3><span class="roman">C</span>Time-of-Day Machine</h3><span class="verdict v-risky">risky</span></header>
-<div class="mock dreams-b"><div class="spot gold" style="left:20%;top:14%;width:70px;height:34px;opacity:.3"></div><div class="spot blue" style="right:20%;top:50%;left:auto;width:60px;height:30px;opacity:.25"></div></div>
-<div class="body">The room's lighting answers the hour: candle-amber evenings, grey pre-dawn, full phosphor noon. Powerful atmosphere — and the riskiest item on the page, because it changes the perceived brightness of <em>every</em> surface and multiplies visual QA. If pursued, ship as a settings default with an off switch, never forced.</div>
-<div class="cost"><b>cost</b> ~3 days + QA multiplier · CSS variables per hour-band; opt-out required</div>
+<div class="approach"><header><h3><span class="roman">II</span>Keep the Room, Quietly</h3><span class="verdict v-safe">safe</span></header>
+<div class="mock buddy-a" style="background:linear-gradient(180deg,#181414,#0a0808)"><div class="win-title" style="position:absolute;top:8px;left:10px">cohort · kept as it is</div><div class="ticker">the older forge stays. no redesign this pass.</div></div>
+<div class="body">Cohort stays exactly as shipped — working, labeled, untouched. Nothing is lost; the machine simply keeps two chat surfaces a while longer. A dignity micro-pass (the brass plate: "the older voice is kept here on purpose") is the only spend.</div>
+<div class="cost"><b>cost</b> ~0.5 days · copy only</div>
 </div>
 </div>
 </section>
 
 <section id="order">
-<h2><small>CLOSING</small> Order of work, if the whole pitch is bought</h2>
-<div class="decision"><strong>1. Structure before spectacle.</strong><p>Split the games monolith first — the Promenade and every future booth sit on it. Then the shared shell's confirm-key adoption completes the interaction contract.</p></div>
-<div class="decision"><strong>2. One flagship room at full depth.</strong><p>The Satchel Reading Desk or the Games Promenade — pick one, ship it completely, and let it set the quality bar the other rooms are renovated toward.</p></div>
-<div class="decision"><strong>3. Liberchat, then patina.</strong><p>The companion lamp is the biggest new capability; patina is the cheapest system-wide win. Both bind the rooms without touching their stylesheets.</p></div>
-<div class="decision"><strong>4. Rooms in descending visit order.</strong><p>Sigil and Buddy first (every session passes through them), Divination/Games next, utility rooms last. Time-of-day last of all, and only if the QA budget is real.</p></div>
+<h2><small>CLOSING</small> Order of work, whole pitch bought</h2>
+<div class="decision"><strong>1. Split the games monolith.</strong><p>Every flagship sits on it: the Promenade cannot be built on a 1,400-line coordinator, and future booths keep paying the monolith tax until it is done.</p></div>
+<div class="decision"><strong>2. Liberchat, complete.</strong><p>Lamp + chatbox + persona scripts + affinity wiring + the buddy and cohort fold-ins. This is the machine learning to talk; everything after uses its voice.</p></div>
+<div class="decision"><strong>3. The Room Behind the CRT.</strong><p>Shelf, pool, candle, hooks — fed by state that already exists. Then Rainy Day, which weathers the same room. The two together turn "system changes with time" from an idea into a place.</p></div>
+<div class="decision"><strong>4. Rooms in descending visit order.</strong><p>Sigil's stone-and-company, then the Felt Table, then Dreams fog-to-dusk, Kitchen Sink, Glasshouse, Reading Desk, and the quiet rooms. Flagship-quality one at a time; the promenade renovation lands last and best.</p></div>
 </section>
 
-<footer>filed as the redesign pitch for liber.os · every mock is CSS in this file · the covenant holds: no shared stylesheets, personality through material, motion with consent</footer>
+<footer>redesign pitch v2 · reworked to critique · mocks are CSS in this file · the covenant holds: no shared stylesheets, personality through material, motion with consent</footer>
 </main></body></html>
