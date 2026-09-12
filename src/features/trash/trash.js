@@ -43,6 +43,7 @@
     var now = Date.now();
     for (var i = 0; i < groups.length; i++) {
       var g = groups[i];
+      if (g.entries && g.entries.length === 0) continue;
       if (g.kind === 'sigils') {
         for (var j = 0; j < g.entries.length; j++) {
           graveyard.push({ kind: 'sigils', entry: g.entries[j], buriedAt: now });
