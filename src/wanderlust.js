@@ -306,7 +306,7 @@
         overlay.setAttribute('inert', '');
         cb && cb();
       }, 500);
-    }, 1500);
+    }, 2500); // plan 2026-09-06 §2.1: summoning lines read, not flash
   }
 
   function runSummon(cb) {

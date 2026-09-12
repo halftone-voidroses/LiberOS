@@ -954,6 +954,7 @@ function loadGhost(bitmapDataUrl) {
     if (window.LiberRoomShell) window.LiberRoomShell.bindRoomOverlays({ overlays: [
       { id: 'sigil-save-prompt', close: closeSavePrompt }
     ] });
+    if (window.LiberRoomShell.bindConfirmKey) window.LiberRoomShell.bindConfirmKey(['sigil-save-prompt']);
   });
 
   function describeWork() {

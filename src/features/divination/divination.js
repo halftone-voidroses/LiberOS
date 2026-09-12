@@ -381,6 +381,7 @@
     if (window.LiberRoomShell) window.LiberRoomShell.bindRoomOverlays({ overlays: [
       { id: 'divination-save-prompt', close: closePrompt }
     ] });
+    if (window.LiberRoomShell.bindConfirmKey) window.LiberRoomShell.bindConfirmKey(['divination-save-prompt']);
     if (keepBtn) keepBtn.addEventListener('click', function () {
       if (pendingCard) { reveal(pendingCard); writeCard(pendingCard); if (window.Liber && window.Liber.sound) window.Liber.sound.play('chime'); }
       closePrompt();

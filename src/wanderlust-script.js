@@ -46,7 +46,7 @@
         { text: 'i have been here before.', kind: 'progress',
           response: { speaker: 'wanderlust', line: 'AH — a returner. The dust kept your shape. It does that for very few.' } },
         { text: 'who are you?', kind: 'progress',
-          response: { speaker: 'raison', line: 'raison. i handle onboarding, navigation, the parts of this place with sensible borders—' } }
+          response: { speaker: 'riason', line: 'riason. i handle onboarding, navigation, the parts of this place with sensible borders—' } }
       ]
     },
     {

@@ -540,6 +540,87 @@
 .games-booth[data-game="tidepool"] { --ba: #5fb8c8; }
 .games-booth[data-game="inkstorm"] { --ba: #9a7fd4; }
 .games-booth[data-game="thimble"]  { --ba: #e08ab0; }
+.games-booth[data-game="tipp"]     { --ba: #8fd8e8; }
+
+/* The quiet floor — TIPP. Featured: the floor of the room, not a stall
+   among stalls. Colder bulb light, a snow-line awning, a floor marker. */
+.games-booth.featured {
+  --ba: #8fd8e8;
+}
+.games-booth.featured .games-booth-poster {
+  box-shadow: inset 0 0 0 2px rgba(143, 216, 232, 0.35), 0 0 18px rgba(143, 216, 232, 0.18);
+}
+.games-booth.featured .games-booth-number::before {
+  content: 'the floor · ';
+  color: #8fd8e8;
+}
+
+/* TIPP stage: a cold ladder, one rung unlocked at a time. */
+.tipp-ladder {
+  display: grid;
+  gap: 12px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.tipp-step {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  border: 1px solid rgba(143, 216, 232, 0.35);
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(22, 64, 74, 0.55), rgba(10, 28, 38, 0.55));
+  padding: 14px;
+}
+.tipp-step.locked {
+  opacity: 0.45;
+  filter: saturate(0.4);
+}
+.tipp-step.done {
+  border-color: rgba(143, 216, 232, 0.7);
+  box-shadow: 0 0 14px rgba(143, 216, 232, 0.12) inset;
+}
+.tipp-medallion {
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font: bold 19px 'Courier New', monospace;
+  color: #0a1c26;
+  background: radial-gradient(circle at 34% 30%, #eafcff, #8fd8e8 62%, #3f8ea0);
+  box-shadow: 0 0 12px rgba(143, 216, 232, 0.4);
+}
+.tipp-step-main h4 {
+  margin: 0 0 4px;
+  font-weight: 400;
+  font-size: 17px;
+  color: #dff2f4;
+  letter-spacing: 0.04em;
+}
+.tipp-step-main p {
+  margin: 0 0 8px;
+  color: #b8cfd4;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.tipp-step-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.tipp-rate {
+  color: #9ab8be;
+  font-size: 13px;
+}
+.tipp-rate-hidden {
+  visibility: hidden;
+}
+.tipp-rate input[type="range"] {
+  vertical-align: middle;
+  accent-color: #8fd8e8;
+}
 
 .games-booth-glyph {
   width: 38px;
@@ -2646,6 +2727,31 @@
 
 .games-app[data-view="facade"] .games-booth[data-game="thimble"] .games-booth-poster::before {
   content: 'GROW SOMETHING';
+}
+
+.games-app[data-view="facade"] .games-booth[data-game="tipp"] .games-booth-poster {
+  color: #123a44;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(234, 252, 255, 0.5) 0 3px, transparent 4px),
+    repeating-linear-gradient(180deg, rgba(223, 242, 244, 0.14) 0 2px, transparent 2px 16px),
+    linear-gradient(180deg, #cfeef2, #7fc4d0);
+  border-color: #eafcff;
+  border-style: solid;
+  border-radius: 4px;
+  transform: rotate(-2deg);
+  box-shadow: 0 0 16px rgba(143, 216, 232, 0.25);
+}
+
+.games-app[data-view="facade"] .games-booth[data-game="tipp"] .games-booth-poster::before {
+  content: 'COOL THE WAVE';
+  color: #0e2f38;
+}
+
+.games-app[data-view="facade"] .games-booth[data-game="tipp"] .games-booth-scene {
+  background:
+    repeating-linear-gradient(180deg, rgba(223, 242, 244, 0.1) 0 2px, transparent 2px 22px),
+    radial-gradient(ellipse at 50% 84%, rgba(223, 242, 244, 0.2) 0 24%, transparent 25%),
+    linear-gradient(180deg, #10333e, #16404a 55%, #0a1c26);
 }
 
 .games-app[data-view="facade"] .games-booth[data-game="tidepool"] .games-booth-name,
