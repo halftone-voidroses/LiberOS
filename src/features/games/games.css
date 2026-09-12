@@ -2949,3 +2949,17 @@
     display: block;
   }
 }
+
+/* The camera facade is the last cascade layer, so its motion gate must also
+   live after the camera rules. A reduced-motion visitor gets the same scene,
+   just without the poster glide or hardware drift between stops. */
+@media (prefers-reduced-motion: reduce) {
+  .games-app[data-view="facade"] .games-booth,
+  .games-app[data-view="facade"] .games-booth-scene,
+  .games-app[data-view="facade"] .games-booth-poster {
+    transition: none !important;
+  }
+  .games-app[data-view="facade"] .games-side::before {
+    animation: none !important;
+  }
+}

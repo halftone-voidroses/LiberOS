@@ -125,6 +125,7 @@
   background: rgba(10, 6, 2, 0.72);
 }
 .garden-raison.open { display: flex; }
+.garden-raison[inert] { display: none; }
 
 .garden-raison-inner {
   width: min(440px, 84%);

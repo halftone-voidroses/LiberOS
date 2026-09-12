@@ -573,9 +573,10 @@
     if (riasonClose) riasonClose.addEventListener('click', closeRiason);
     if (riasonEl) riasonEl.addEventListener('click', function (e) { if (e.target === riasonEl) closeRiason(); });
 
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') { closeCite(); closeRiason(); }
-    });
+    if (window.LiberRoomShell) window.LiberRoomShell.bindRoomOverlays({ overlays: [
+      { id: 'dreams-raison', close: closeRiason },
+      { id: 'dreams-cite', close: closeCite }
+    ] });
 
     // the ledger and the open association list follow the state —
     // records, amended associations, and the bfcache re-sync all land here

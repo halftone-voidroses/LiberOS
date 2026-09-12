@@ -316,13 +316,11 @@
     var citeClose = el('learn-cite-close');
     if (citeClose) citeClose.addEventListener('click', closeCite);
     if (citeEl) citeEl.addEventListener('click', function (e) { if (e.target === citeEl) closeCite(); });
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') {
-        closeCite();
-        var hj = el('learn-hijack');
-        if (hj && hj.classList.contains('open')) hijackClose();
-      }
-    });
+    if (window.LiberRoomShell) window.LiberRoomShell.bindRoomOverlays({ overlays: [
+      { id: 'learn-cite', close: closeCite },
+      { id: 'learn-hijack', close: hijackClose },
+      { id: 'learn-raison', close: closeR }
+    ] });
 
     var exit = el('learn-exit');
     if (exit) exit.addEventListener('click', function () {

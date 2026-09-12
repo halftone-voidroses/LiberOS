@@ -56,6 +56,9 @@
     if (helpBtn) helpBtn.addEventListener('click', openRiason);
     if (riasonClose) riasonClose.addEventListener('click', closeRiason);
     if (riason) riason.addEventListener('click', function (e) { if (e.target === riason) closeRiason(); });
+    if (window.LiberRoomShell) window.LiberRoomShell.bindRoomOverlays({ overlays: [
+      { id: 'sea-raison', close: closeRiason }
+    ] });
     if (riason) riason.setAttribute('inert', '');
 
     bindExtcListener();

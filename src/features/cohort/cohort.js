@@ -116,5 +116,8 @@
     if (helpBtn) helpBtn.addEventListener('click', openRaison);
     if (raisonClose) raisonClose.addEventListener('click', closeRaison);
     if (raison) raison.addEventListener('click', function (e) { if (e.target === raison) closeRaison(); });
+    if (window.LiberRoomShell) window.LiberRoomShell.bindRoomOverlays({ overlays: [
+      { id: 'cohort-raison', close: closeRaison }
+    ] });
   });
 })();

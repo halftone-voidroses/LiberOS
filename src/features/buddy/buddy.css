@@ -215,6 +215,10 @@
   transition: opacity 0.2s;
 }
 
+/* The room tutorial is a sibling overlay, not a card inside the raison
+   layer; keep it above the walkthrough so help remains usable on first visit. */
+.buddy-how { z-index: 70; }
+
 .buddy-raison.open,
 .buddy-how.open {
   opacity: 1;

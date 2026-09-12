@@ -137,10 +137,16 @@
       closeStage();
       stage.removeAttribute('inert');
       setView('attraction');
-      stage.innerHTML = '<div class="games-stage-inner"><div class="games-locked">'
+      stage.innerHTML = '<div class="games-stage-inner"><div class="games-stage-head">'
+        + '<span class="games-stage-glyph">?</span>'
+        + '<span class="games-stage-name">???</span>'
+        + '<button type="button" class="games-stage-close" id="games-stage-close" aria-label="close">×</button>'
+        + '</div><div class="games-locked">'
         + '<span class="games-locked-glyph">?</span>'
         + '<div>' + esc(g.hint || 'not yet. keep playing.') + '</div>'
         + '</div></div>';
+      var lockedClose = document.getElementById('games-stage-close');
+      if (lockedClose) lockedClose.addEventListener('click', closeStage);
     }
   }
 
@@ -1324,6 +1330,9 @@
     if (helpBtn) helpBtn.addEventListener('click', openRaison);
     if (raisonClose) raisonClose.addEventListener('click', closeRaison);
     if (raison) raison.addEventListener('click', function (e) { if (e.target === raison) closeRaison(); });
+    if (window.LiberRoomShell) window.LiberRoomShell.bindRoomOverlays({ overlays: [
+      { id: 'games-raison', close: closeRaison }
+    ] });
 
     var prompt = document.getElementById('games-save-prompt');
     var keepBtn = document.getElementById('games-save-prompt-keep');
@@ -1341,6 +1350,9 @@
     });
     if (closeBtn) closeBtn.addEventListener('click', closePrompt);
     if (prompt) prompt.addEventListener('click', function (e) { if (e.target === prompt) closePrompt(); });
+    if (window.LiberRoomShell) window.LiberRoomShell.bindRoomOverlays({ overlays: [
+      { id: 'games-save-prompt', close: closePrompt }
+    ] });
   });
 
   window.Liber = window.Liber || {};

@@ -212,6 +212,7 @@
 
   var pendingCard = null;
   function promptTarotDraw() {
+    if (pendingCard) return;
     if (drawn.length >= DECK.length) return;
     var prompt = el('divination-save-prompt');
     var body = el('divination-save-prompt-body');
@@ -363,6 +364,9 @@
     if (helpBtn) helpBtn.addEventListener('click', openR);
     if (riasonClose) riasonClose.addEventListener('click', closeR);
     if (riason) riason.addEventListener('click', function (e) { if (e.target === riason) closeR(); });
+    if (window.LiberRoomShell) window.LiberRoomShell.bindRoomOverlays({ overlays: [
+      { id: 'divination-raison', close: closeR }
+    ] });
 
     var prompt = el('divination-save-prompt');
     var keepBtn = el('divination-save-prompt-keep');
@@ -374,6 +378,9 @@
       prompt.setAttribute('inert', '');
       pendingCard = null;
     }
+    if (window.LiberRoomShell) window.LiberRoomShell.bindRoomOverlays({ overlays: [
+      { id: 'divination-save-prompt', close: closePrompt }
+    ] });
     if (keepBtn) keepBtn.addEventListener('click', function () {
       if (pendingCard) { reveal(pendingCard); writeCard(pendingCard); if (window.Liber && window.Liber.sound) window.Liber.sound.play('chime'); }
       closePrompt();

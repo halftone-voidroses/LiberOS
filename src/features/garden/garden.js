@@ -882,6 +882,11 @@
     if (helpBtn) helpBtn.addEventListener('click', openRiason);
     if (riasonClose) riasonClose.addEventListener('click', closeRiason);
     if (riason) riason.addEventListener('click', function (e) { if (e.target === riason) closeRiason(); });
+    if (window.LiberRoomShell) window.LiberRoomShell.bindRoomOverlays({ overlays: [
+      { id: 'garden-raison', close: closeRiason },
+      { id: 'garden-draft', close: function () { closeDraft('the draft faded. begin a new gem when ready.'); } },
+      { id: 'garden-stage', close: closeFlower }
+    ] });
 
     var plant = document.getElementById('garden-draft-plant');
     var draftClose = document.getElementById('garden-draft-close');

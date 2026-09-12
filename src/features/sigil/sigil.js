@@ -925,6 +925,9 @@ function loadGhost(bitmapDataUrl) {
     if (riason) riason.addEventListener('click', function (e) {
       if (e.target === riason) closeRiason();
     });
+    if (window.LiberRoomShell) window.LiberRoomShell.bindRoomOverlays({ overlays: [
+      { id: 'sigil-raison', close: closeRiason }
+    ] });
 
     var prompt = document.getElementById('sigil-save-prompt');
     var promptBody = document.getElementById('sigil-save-prompt-body');
@@ -948,6 +951,9 @@ function loadGhost(bitmapDataUrl) {
     if (prompt) prompt.addEventListener('click', function (e) {
       if (e.target === prompt) closeSavePrompt();
     });
+    if (window.LiberRoomShell) window.LiberRoomShell.bindRoomOverlays({ overlays: [
+      { id: 'sigil-save-prompt', close: closeSavePrompt }
+    ] });
   });
 
   function describeWork() {
@@ -969,6 +975,21 @@ function loadGhost(bitmapDataUrl) {
 
   function promptSave() {
     if (document.querySelector('.sigil-veil')) return;
+    var intention = (document.querySelector('.sigil-input') || {}).innerText || '';
+    var hasStrokes = false;
+    if (ctx) {
+      try {
+        var data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+        for (var i = 3; i < data.length; i += 4) {
+          if (data[i] !== 0) { hasStrokes = true; break; }
+        }
+      } catch (e) {}
+    }
+    if (!intention.trim() && !hasStrokes) {
+      var sub = document.querySelector('.sigil-subtitle');
+      if (sub) sub.textContent = 'give the stone an intention or a mark before saving.';
+      return;
+    }
     openSavePrompt(describeWork(), save, discard);
   }
   function promptDiscard() {

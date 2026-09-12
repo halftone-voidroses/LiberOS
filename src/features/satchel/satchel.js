@@ -517,6 +517,9 @@
     if (helpBtn) helpBtn.addEventListener('click', openRaison);
     if (raisonClose) raisonClose.addEventListener('click', closeRaison);
     if (raison) raison.addEventListener('click', function (e) { if (e.target === raison) closeRaison(); });
+    if (window.LiberRoomShell) window.LiberRoomShell.bindRoomOverlays({ overlays: [
+      { id: 'satchel-raison', close: closeRaison }
+    ] });
     if (st()) st().on('change', function () { renderList(); });
     window.addEventListener('hashchange', openHash);
     openHash();

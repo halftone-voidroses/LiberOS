@@ -287,7 +287,9 @@
     if (helpBtn) helpBtn.addEventListener('click', openRaison);
     if (raisonClose) raisonClose.addEventListener('click', closeRaison);
     if (raison) raison.addEventListener('click', function (e) { if (e.target === raison) closeRaison(); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeRaison(); });
+    if (window.LiberRoomShell) window.LiberRoomShell.bindRoomOverlays({ overlays: [
+      { id: 'toybox-raison', close: closeRaison }
+    ] });
 
     requestAnimationFrame(loop);
   });

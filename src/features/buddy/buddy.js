@@ -447,8 +447,9 @@
     if (howNote) howNote.addEventListener('click', function () { closeHow(); openRaison(); });
     if (raisonClose) raisonClose.addEventListener('click', closeRaison);
     if (raison) raison.addEventListener('click', function (e) { if (e.target === raison) closeRaison(); });
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') { closeHow(); closeRaison(); }
-    });
+    if (window.LiberRoomShell) window.LiberRoomShell.bindRoomOverlays({ overlays: [
+      { id: 'buddy-raison', close: closeRaison },
+      { id: 'buddy-how', close: closeHow }
+    ] });
   });
 })();

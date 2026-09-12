@@ -264,15 +264,22 @@
 .dial-arrow {
   position: absolute;
   bottom: 16%;
-  width: 0;
-  height: 0;
-  background: transparent;
-  border-style: solid;
-  border-color: transparent;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(20, 10, 5, 0.56);
+  border: 1px solid rgba(200, 168, 120, 0.55);
+  border-radius: 50%;
+  color: #c8a878;
   cursor: pointer;
   pointer-events: auto;
   z-index: 3;
   padding: 0;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 1.35rem;
+  line-height: 1;
   filter: drop-shadow(0 2px 0 #1a0a05) drop-shadow(0 3px 2px rgba(0, 0, 0, 0.5));
 }
 .dial-arrow::after {
@@ -286,23 +293,25 @@
 
 .dial-arrow.left {
   left: 8%;
-  border-width: 14px 22px 14px 0;
-  border-right-color: #c8a878;
 }
 .dial-arrow.right {
   right: 8%;
-  border-width: 14px 0 14px 22px;
-  border-left-color: #c8a878;
 }
+
+.dial-arrow.left::before { content: '‹'; }
+.dial-arrow.right::before { content: '›'; }
+
 
 .dial-arrow:hover {
+  color: #f0d090;
+  background: rgba(60, 26, 12, 0.76);
+  border-color: #f0d090;
   filter: drop-shadow(0 2px 0 #1a0a05) drop-shadow(0 4px 6px rgba(255, 180, 100, 0.4));
 }
-.dial-arrow.left:hover  { border-right-color: #f0d090; }
-.dial-arrow.right:hover { border-left-color: #f0d090; }
-
 .dial-arrow:active {
   transform: translateY(1px);
+  color: #f0d090;
+  background: rgba(10, 5, 3, 0.82);
   filter: drop-shadow(0 1px 0 #1a0a05) drop-shadow(0 2px 2px rgba(0, 0, 0, 0.5));
 }
 
@@ -425,6 +434,24 @@
 .dial-index-item:focus-visible {
   outline: 2px solid #e8c890;
   outline-offset: 1px;
+}
+
+@media (max-width: 480px) {
+  .dial-option.prev {
+    transform: translateY(12%) scale(0.78);
+  }
+  .dial-option.next {
+    transform: translateY(12%) scale(0.78);
+  }
+  .dial-option.prev:hover {
+    transform: translateY(10%) scale(0.8);
+  }
+  .dial-option.next:hover {
+    transform: translateY(10%) scale(0.8);
+  }
+  .dial-option.active {
+    max-width: 124px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

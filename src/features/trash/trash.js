@@ -254,8 +254,9 @@
     if (helpBtn) helpBtn.addEventListener('click', openRaison);
     if (raisonClose) raisonClose.addEventListener('click', closeRaison);
     if (raison) raison.addEventListener('click', function (e) { if (e.target === raison) closeRaison(); });
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && raison && raison.classList.contains('open')) closeRaison();
-    });
+    if (window.LiberRoomShell) window.LiberRoomShell.bindRoomOverlays({ overlays: [
+      { id: 'trash-raison', close: closeRaison },
+      { id: 'trash-save-prompt', close: closePrompt }
+    ] });
   });
 })();

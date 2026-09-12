@@ -206,6 +206,7 @@
   background: rgba(10, 6, 3, 0.72);
   backdrop-filter: blur(1px);
 }
+.toybox-raison:not(.open) { pointer-events: none; }
 .toybox-raison-inner {
   width: min(300px, 100%);
   border: 1px solid #8a5a28; border-radius: 10px;
