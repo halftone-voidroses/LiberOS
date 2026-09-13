@@ -18,11 +18,11 @@ window.LIBER_DATA.hijack = {
     { voice: 'riason', line: 'That is the whole of it. Three drawers, one page, pens in the corner. The rest you will figure out by using it.', target: null, glow: true }
   ] },
   sea: { flag: 'walkSea', steps: [
-    { voice: 'riason', line: 'This is the sea, if you are holding onto negative thoughts, you can release them here.', target: 'sea-input' },
-    { voice: 'riason', line: 'Type in the thought, and click release. It will appear in the middle of the screen and float away. You can also breathe with it before releasing it, feel yourself get calmer.', target: 'sea-release' },
-    { voice: 'riason', line: 'This will save the thought in your satchel and on the window. But you can release it from there too if you\u2019d like.', target: null },
-    { voice: 'riason', line: 'The power is yours!', target: 'sea-breath-toggle', glow: true },
-    { voice: 'riason', line: 'That is the whole of it. One thought, one breath, one release. Come back whenever you are carrying something.', target: null }
+    { voice: 'riason', line: 'this is the water. what you set on the scale, it takes — and does not keep.', target: 'sea-input' },
+    { voice: 'riason', line: 'name it plain, set its weight, and give it over. it hangs a moment, then the water takes it down at its own pace. the AIR valve keeps the rhythm if you want company while you wait.', target: 'sea-release' },
+    { voice: 'riason', line: 'the clock cuts a mark for each one, and the book keeps the record. the water does not give things back, but it remembers. that is stranger.', target: null },
+    { voice: 'riason', line: 'the valve. slow in, slow out.', target: 'sea-breath-toggle', glow: true },
+    { voice: 'riason', line: 'that is the whole of it. one name, one weight, one release. the water is patient; come back when you carry something.', target: null }
   ] },
   divination: { flag: 'walkDivination', steps: [
     { voice: 'riason', line: 'type the question. one worth being answered.', target: 'divination-input' },

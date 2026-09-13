@@ -53,8 +53,9 @@
                     <button class="sea-raison-close" type="button" id="sea-raison-close" aria-label="close">×</button>
                   </div>
                   <div class="sea-raison-body">
-                    type what you carry, weigh how heavy it sits, and release it. the water takes it and does not keep it. breathe with it first if you like — slow in, slow out. the brass clock takes one mark for each release and the waterline remembers how far you have come; it is still there when you return.
+                    what is carried to the water is set on the scale, then given to it. the water takes it and does not keep it. you will not see it again; that was the agreement, and the tide asks first, always. the air valve keeps the rhythm for those who want it — slow in, slow out. the clock cuts one mark into the tide for every release, and the waterline keeps the level; it is where you left it when you come back.
                   </div>
+                  <div class="sea-raison-foot" aria-hidden="true">STATION COPY · NOT FOR RESALE</div>
                   
                 </div>
               </div>
@@ -67,25 +68,28 @@
 
                 <div class="sea-glimmer" aria-hidden="true"></div>
 
-                <div class="sea-question" id="sea-question">what do you carry to the deep?</div>
-                <div class="sea-question-faint" aria-hidden="true">what do you carry to the deep?</div>
-
                 <div class="sea-carried" id="sea-carried" aria-hidden="true"><span id="sea-carried-text"></span></div>
 
+                <div class="sea-afterword" id="sea-afterword" aria-live="polite"></div>
+
                 <div class="sea-ritual" id="sea-ritual">
+                  <div class="sea-question" id="sea-question">what does the water take from you?</div>
+                  <div class="sea-question-faint" aria-hidden="true">soundings · the lead does not reach bottom</div>
                   <input class="sea-input" id="sea-input" type="text" maxlength="140"
                          autocomplete="off" spellcheck="false" placeholder="name it, plain"
-                         aria-label="what do you carry to the deep"/>
-                  <div class="sea-ritual-label" id="sea-intensity-label">weigh it</div>
+                         aria-label="what does the water take from you"/>
+                  <div class="sea-ritual-label" id="sea-intensity-label">WEIGHT</div>
+                  <div class="sea-scale-no" aria-hidden="true">SCALE Nº 2 · LEAD TO 5 STONE</div>
                   <div class="sea-intensity" id="sea-intensity" role="radiogroup" aria-labelledby="sea-intensity-label">
-                    <button class="sea-intensity-dot" type="button" role="radio" aria-checked="false" tabindex="-1" data-value="1" aria-label="weigh 1">1</button>
-                    <button class="sea-intensity-dot" type="button" role="radio" aria-checked="false" tabindex="-1" data-value="2" aria-label="weigh 2">2</button>
-                    <button class="sea-intensity-dot" type="button" role="radio" aria-checked="true" tabindex="0" data-value="3" aria-label="weigh 3">3</button>
-                    <button class="sea-intensity-dot" type="button" role="radio" aria-checked="false" tabindex="-1" data-value="4" aria-label="weigh 4">4</button>
-                    <button class="sea-intensity-dot" type="button" role="radio" aria-checked="false" tabindex="-1" data-value="5" aria-label="weigh 5">5</button>
+                    <button class="sea-intensity-dot" type="button" role="radio" aria-checked="false" tabindex="-1" data-value="1" aria-label="weight 1">1</button>
+                    <button class="sea-intensity-dot" type="button" role="radio" aria-checked="false" tabindex="-1" data-value="2" aria-label="weight 2">2</button>
+                    <button class="sea-intensity-dot" type="button" role="radio" aria-checked="true" tabindex="0" data-value="3" aria-label="weight 3">3</button>
+                    <button class="sea-intensity-dot" type="button" role="radio" aria-checked="false" tabindex="-1" data-value="4" aria-label="weight 4">4</button>
+                    <button class="sea-intensity-dot" type="button" role="radio" aria-checked="false" tabindex="-1" data-value="5" aria-label="weight 5">5</button>
                   </div>
-                  <button class="sea-release" id="sea-release" type="button" disabled>release</button>
-                  <button class="sea-breath-toggle" id="sea-breath-toggle" type="button" aria-pressed="false">breathe with it</button>
+                  <button class="sea-release" id="sea-release" type="button" disabled>give it over</button>
+                  <button class="sea-breath-toggle" id="sea-breath-toggle" type="button" aria-pressed="false" aria-label="breathe with it">AIR</button>
+                  <div class="sea-breath-arc" aria-hidden="true"><span class="sea-arc-in">IN</span><span class="sea-arc-dot">·</span><span class="sea-arc-out">OUT</span></div>
                   <div class="sea-breath-phase" id="sea-breath-phase" aria-live="polite"></div>
                 </div>
 
@@ -93,15 +97,9 @@
                   <div class="sea-breath-ring" id="sea-breath-ring"></div>
                 </div>
 
-                <div class="sea-gauge">
-                  <div class="sea-gauge-ticks" id="sea-gauge-ticks" aria-hidden="true">
-                    <span class="sea-fathom" data-tick="5">5</span>
-                    <span class="sea-fathom" data-tick="4">4</span>
-                    <span class="sea-fathom" data-tick="3">3</span>
-                    <span class="sea-fathom" data-tick="2">2</span>
-                    <span class="sea-fathom" data-tick="1">1</span>
-                  </div>
-                  <div class="sea-gauge-label">depth</div>
+                <div class="sea-gauge" aria-hidden="true">
+                  <div class="sea-gauge-line"></div>
+                  <div class="sea-gauge-plumb"></div>
                 </div>
 
                 <div class="sea-clock" id="sea-clock">

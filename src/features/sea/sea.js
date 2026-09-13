@@ -9,9 +9,18 @@
   var target = 0;
   var lastMove = Date.now();
 
-  var FADE_MS = 2000;
-  var UNINTERRUPTIBLE_MS = 800;
-  var DISSOLVE_MS = 2600;
+  var FADE_MS = 2400;
+  var UNINTERRUPTIBLE_MS = 900;
+  var DISSOLVE_MS = 11000;
+
+  // The take has one beat plan and two speeds. Reduced motion is not a
+  // shorter journey — it is no journey: the name is set down, read, and
+  // gone, the clock still cuts its mark, the line still surfaces, and the
+  // bench comes back promptly. The taking is the function; the travel is
+  // the flourish. (Covenant: motion with consent — instant state change.)
+
+  // the water does not accept quickly. consent, then taking, then the
+  // long private time under — the room does not rush what it keeps.
 
   // Motion with consent (covenant + affordance contract 8). The draught is
   // flourish, so under reduced motion the layers hold their resting depth
@@ -97,6 +106,7 @@
     var intensityWrap = document.getElementById('sea-intensity');
     var carried = document.getElementById('sea-carried');
     var carriedText = document.getElementById('sea-carried-text');
+    var afterword = document.getElementById('sea-afterword');
     if (!app || !ritual || !input || !releaseBtn || !intensityWrap || !carried || !carriedText) return;
 
     var intensity = 3;
@@ -114,7 +124,7 @@
       var need = Math.max(0, 5 - ((s.relations || []).length));
       var n = document.createElement('div');
       n.className = 'sea-gate-note';
-      n.textContent = need > 0 ? ('the deep end stays shut until the room knows you. ' + need + ' more knot' + (need === 1 ? '' : 's') + '.') : 'the deep end stays shut until the room knows you. return once more.';
+      n.textContent = need > 0 ? ('the deep leads are sealed. ' + need + ' more knot' + (need === 1 ? '' : 's') + ' on the line before the water opens them.') : 'the deep leads are sealed until the room knows you. one more return.';
       ritual.appendChild(n);
       setTimeout(function () { if (n.parentNode) n.parentNode.removeChild(n); }, 2600);
     }
@@ -133,14 +143,10 @@
       paintTicks(intensity);
     }
 
-    function paintTicks(litCount) {
-      var ticks = document.querySelectorAll('#sea-gauge-ticks .sea-fathom');
-      for (var i = 0; i < ticks.length; i++) {
-        var v = parseInt(ticks[i].getAttribute('data-tick'), 10);
-        if (v <= litCount) ticks[i].classList.add('lit');
-        else ticks[i].classList.remove('lit');
-      }
-    }
+    // the fathom gauge retired with its duplicate scale — the weigh dots
+    // remain the single owner of the 1–5, and the dissolving-release lie
+    // (ticks forcing 1→3→5 during the sink) goes with it.
+    function paintTicks() {}
 
     function focusDot(value) {
       var el = intensityWrap.querySelector('.sea-intensity-dot[data-value="' + value + '"]');
@@ -178,12 +184,15 @@
 
     var breathToggle = document.getElementById('sea-breath-toggle');
     var breathPhase = document.getElementById('sea-breath-phase');
+    var breathArc = document.querySelector('.sea-breath-arc');
     var guided = false, guidedTimer = null, guidedT = 0;
     var CYCLE_S = 10, IN_S = 4;
     function paintPhase() {
       if (!breathPhase) return;
-      if (!guided) { breathPhase.textContent = ''; return; }
-      breathPhase.textContent = (guidedT % CYCLE_S) < IN_S ? 'in' : 'out';
+      if (!guided) { breathPhase.textContent = ''; if (breathArc) breathArc.classList.remove('in', 'out'); return; }
+      var isIn = (guidedT % CYCLE_S) < IN_S;
+      breathPhase.textContent = isIn ? 'in' : 'out';
+      if (breathArc) { breathArc.classList.toggle('in', isIn); breathArc.classList.toggle('out', !isIn); }
     }
     function setGuided(on) {
       guided = on;
@@ -216,39 +225,62 @@
       app.classList.add('releasing');
       carriedText.textContent = text;
       carried.classList.add('visible');
-      paintTicks(1);
+      paintTicks();
 
       if (window.Liber && window.Liber.state && window.Liber.state.addArtifact) {
         window.Liber.state.addArtifact('sea', { text: text, intensity: intensity });
       }
       // the clock keeps the release: one engraved mark, one hair of waterline.
-      // Recorded on the click, not on a timer — walking away mid-dissolve must
-      // not lose the memory — and the hand travels the dissolve window.
+      // Recorded on the click, not on a timer — walking away mid-sink must
+      // not lose the memory — and the hand travels the sinking window.
       advanceTide();
       if (window.Liber && window.Liber.sound) window.Liber.sound.play('thunk');
       if (window.Liber && window.Liber.soundscape) {
         try { window.Liber.soundscape.motif('vanir'); } catch (e) {}
       }
 
-      setTimeout(function () {
-        carried.classList.add('dissolving');
-        paintTicks(3);
-      }, FADE_MS + DISSOLVE_MS * 0.4);
+      // the take has three beats, and the last is the longest: the name
+      // hangs where you can still read it, the water draws it down through
+      // the column until the eye loses it and the trench takes it (it goes
+      // under, not out), and then the water says what it says. the trench
+      // is dark again before the room resumes: the water was here before
+      // you and after.
+      var beats = REDUCE
+        ? { sink: 0, gone: 1800, word: 2800, resume: 6400, clear: 9400 }
+        : { sink: FADE_MS,
+            gone: FADE_MS + DISSOLVE_MS,
+            word: FADE_MS + DISSOLVE_MS + 600,
+            resume: FADE_MS + DISSOLVE_MS + 3400,
+            clear: FADE_MS + DISSOLVE_MS + 6800 };
 
       setTimeout(function () {
-        paintTicks(5);
-      }, FADE_MS + DISSOLVE_MS * 0.7);
+        carried.classList.add('sinking');
+      }, beats.sink);
 
       setTimeout(function () {
-        carried.classList.remove('visible', 'dissolving');
+        carried.classList.add('gone');
+      }, beats.gone);
+
+      setTimeout(function () {
+        if (afterword) afterword.textContent = 'the water takes. it does not keep.';
+      }, beats.word);
+
+      setTimeout(function () {
+        carried.classList.remove('visible', 'sinking', 'gone');
         carriedText.textContent = '';
-        app.classList.remove('releasing');
+        app.classList.remove('releasing', 'fed');
         input.value = '';
         intensity = 3;
         paintIntensity();
         releaseBtn.disabled = true;
         releasing = false;
-      }, FADE_MS + DISSOLVE_MS);
+      }, beats.resume);
+
+      // the line outlasts the bench's return: you may begin again while
+      // the water is still finishing what it has to say.
+      setTimeout(function () {
+        if (afterword) afterword.textContent = '';
+      }, beats.clear);
     });
     paintIntensity();
   }
@@ -318,8 +350,8 @@
 
   function tideRead(t) {
     var marks = t.releases % TIDE_MARKS;
-    if (t.releases > 0 && marks === 0) return 'high water · ' + t.releases + ' released';
-    return 'mark ' + marks + ' / ' + TIDE_MARKS + ' · ' + t.releases + ' released';
+    if (t.releases > 0 && marks === 0) return 'high water · ' + t.releases + ' given to the water';
+    return 'mark ' + marks + ' / ' + TIDE_MARKS + ' · ' + t.releases + ' given';
   }
 
   function paintTide(t, instant) {

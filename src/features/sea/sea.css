@@ -4,7 +4,10 @@
 .sea-app {
   position: absolute;
   inset: 0;
-  background: #02060a;
+  /* the station bench lamp: the warm second light, low over the instruments */
+  background:
+    radial-gradient(ellipse 34% 20% at 50% 88%, rgba(212, 175, 55, 0.10) 0%, rgba(0, 0, 0, 0) 70%),
+    #02060a;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -13,21 +16,37 @@
   color: #5a8090;
 }
 
+/* ── the deep, lit by its own two declared lights ──
+   1. the surface light: a lamp-colored glow at the top of the water
+      column, falling as god-rays and a faint caustic pool on the floor
+      of the glass.
+   2. the station bench lamp (on .sea-app) throwing its warm edge onto
+      everything the visitor touches.
+   The trench stays cold and unlit — that is where the releases go. */
 .sea-deep {
   position: relative;
   width: 100%;
   height: 100%;
   background:
-    radial-gradient(ellipse at 50% 100%, rgba(40, 80, 100, 0.25) 0%, rgba(0, 0, 0, 0) 50%),
-    radial-gradient(ellipse at 50% 0%, rgba(20, 40, 50, 0.18) 0%, rgba(0, 0, 0, 0) 50%);
+    radial-gradient(ellipse 62% 30% at 50% -8%, rgba(120, 168, 190, 0.20) 0%, rgba(0, 0, 0, 0) 70%),
+    radial-gradient(ellipse 40% 16% at 50% 96%, rgba(70, 110, 130, 0.12) 0%, rgba(0, 0, 0, 0) 70%),
+    linear-gradient(180deg, #0a1c28 0%, #071220 44%, #040a14 74%, #01040a 100%);
   overflow: hidden;
   cursor: inherit;
 }
 
+/* the god-rays: the surface light, seen from under */
 .sea-vignette {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  z-index: 1;
+  background:
+    repeating-linear-gradient(97deg,
+      rgba(150, 200, 220, 0.05) 0 22px,
+      rgba(0, 0, 0, 0) 22px 74px),
+    radial-gradient(ellipse 46% 60% at 50% -12%, rgba(140, 195, 215, 0.10) 0%, rgba(0, 0, 0, 0) 68%);
+  mix-blend-mode: screen;
 }
 
 .sea-far {
@@ -59,37 +78,41 @@
     linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(20, 50, 45, 0.5) 100%);
 }
 
+/* the question is the bench's heading: it flows with the instruments,
+   yields when a name is carried down, and the soundings line sits under
+   it as the station's own ledger residue. */
 .sea-question {
-  position: absolute;
-  top: 12%;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 1rem;
+  position: relative;
+  font-size: 1.15rem;
   font-style: normal;
-  letter-spacing: 0.05em;
-  color: #d8ecf4;
+  letter-spacing: 0.06em;
+  color: #e6f2f6;
   text-align: center;
   opacity: 1;
   max-width: 70%;
   line-height: 1.6;
+  text-shadow: 0 1px 12px rgba(120, 180, 200, 0.35);
+  transition: opacity 1.2s ease;
 }
 
-/* faint flavor echo of the question — mood only, never the readable line */
+.sea-app.releasing .sea-question { opacity: 0; }
+
+/* the station's ledger residue: soundings, not an echo of the question */
 .sea-question-faint {
-  position: absolute;
-  top: calc(12% + 26px);
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 1rem;
-  font-style: italic;
-  letter-spacing: 0.05em;
-  color: #7a9aac;
+  position: relative;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  color: rgba(212, 175, 55, 0.42);
   text-align: center;
-  opacity: 0.45;
-  max-width: 70%;
-  line-height: 1.6;
+  opacity: 1;
+  max-width: none;
+  white-space: nowrap;
   pointer-events: none;
+  transition: opacity 1.2s ease;
 }
+
+.sea-app.releasing .sea-question-faint { opacity: 0; }
 
 .sea-breath {
   position: absolute;
@@ -101,15 +124,20 @@
   pointer-events: none;
 }
 
-/* S-A brass tide-clock: a single guided ring. transform + opacity only. */
+/* S-A brass tide-clock: a single guided ring. transform + opacity only.
+   Idle, it barely breathes — a stain of light in the water behind the
+   instruments; guided, it leads. */
 .sea-breath-ring {
   position: absolute;
   inset: 0;
-  border: 2px solid rgba(212, 175, 101, 0.55);
+  border: 2px solid rgba(212, 175, 101, 0.28);
   border-radius: 50%;
   box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.6);
-  opacity: 0.55;
+  opacity: 0.32;
   transform: scale(0.72);
+}
+.sea-app.guided .sea-breath-ring {
+  border-color: rgba(212, 175, 101, 0.55);
 }
 
 .sea-app.guided .sea-breath-ring {
@@ -122,40 +150,92 @@
   100% { transform: scale(0.72); opacity: 0.35; }
 }
 
+/* the air valve — a small brass stopcock by the ritual. Engraved AIR on
+   its face; the IN · OUT arc under it is the valve's own gauge, and lights
+   the half the breath is in when the rhythm runs. */
+/* the air valve: a stopcock wheel — spokes cut into the rim, the AIR
+   engraving on the boss. Turning it opens the guided breath. */
 .sea-breath-toggle {
-  background: none;
-  border: 1px solid rgba(212, 175, 101, 0.55);
-  color: #d8ecf4;
-  font-family: inherit;
-  font-size: 1rem;
-  font-style: normal;
-  letter-spacing: 0.1em;
-  padding: 6px 14px;
+  position: relative;
+  width: 56px;
+  height: 56px;
   min-height: 44px;
   min-width: 44px;
+  padding: 0;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(245, 228, 160, 0.32) 0%, rgba(0, 0, 0, 0) 55%),
+    linear-gradient(180deg, #2a2210 0%, #14100a 55%, #0a0805 100%);
+  border: 2px solid #8a6a2a;
+  color: #d8b878;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 1.1rem;
+  font-style: normal;
+  letter-spacing: 0.18em;
+  text-indent: 0.18em;
   cursor: pointer;
-  border-radius: 20px;
+  border-radius: 50%;
+  box-shadow:
+    inset 0 0 0 1px rgba(245, 215, 110, 0.28),
+    inset 0 2px 6px rgba(0, 0, 0, 0.7),
+    0 2px 5px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.8);
+}
+
+.sea-breath-toggle::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background: repeating-conic-gradient(from 8deg, rgba(232, 200, 144, 0.42) 0deg 6deg, rgba(0, 0, 0, 0) 6deg 45deg);
+  -webkit-mask-image: radial-gradient(circle, transparent 50%, #000 56%);
+  mask-image: radial-gradient(circle, transparent 50%, #000 56%);
+  pointer-events: none;
 }
 .sea-breath-toggle:hover {
-  border-color: rgba(232, 200, 144, 0.9);
+  border-color: #d4af65;
   color: #f0e6d0;
 }
 .sea-breath-toggle[aria-pressed="true"] {
-  color: #f0e6d0;
-  border-color: rgba(232, 200, 144, 0.9);
-  background: rgba(212, 175, 101, 0.14);
+  color: #f5e8b0;
+  border-color: #e8c890;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(245, 228, 160, 0.5) 0%, rgba(0, 0, 0, 0) 55%),
+    linear-gradient(180deg, #3a2e14 0%, #1a1409 55%, #0a0805 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(245, 215, 110, 0.55),
+    inset 0 2px 8px rgba(0, 0, 0, 0.65),
+    0 0 12px rgba(212, 175, 55, 0.3);
 }
 .sea-breath-toggle:focus-visible {
   outline: 3px solid #e8c890;
   outline-offset: 2px;
 }
+
+.sea-breath-arc {
+  display: flex;
+  gap: 9px;
+  align-items: baseline;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 0.72rem;
+  font-style: normal;
+  letter-spacing: 0.22em;
+  color: rgba(212, 175, 55, 0.4);
+}
+.sea-breath-arc.in .sea-arc-in {
+  color: #f0e6d0;
+  text-shadow: 0 0 6px rgba(245, 215, 110, 0.55);
+}
+.sea-breath-arc.out .sea-arc-out {
+  color: #f0e6d0;
+  text-shadow: 0 0 6px rgba(245, 215, 110, 0.55);
+}
 .sea-breath-phase {
-  min-height: 1.5em;
+  min-height: 1.2em;
   font-family: ui-monospace, Menlo, Consolas, monospace;
-  font-size: 1rem;
+  font-size: 0.85rem;
   font-style: normal;
   letter-spacing: 0.3em;
-  color: #d8ecf4;
+  color: #b8ccd8;
 }
 
 .sea-gauge {
@@ -169,46 +249,13 @@
   align-items: center;
 }
 
-/* brass tide-clock fathom ticks: 5 engraved marks, lit per release-stage */
-.sea-gauge-ticks {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: center;
-}
-
-.sea-fathom {
+/* the gauge column itself (decorative since the duplicate scale retired) */
+.sea-gauge {
+  position: absolute;
+  left: 18px;
+  top: 22%;
+  bottom: 22%;
   width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  font-size: 1rem;
-  font-style: normal;
-  color: #8a6f3c;
-  background: linear-gradient(180deg, #1a1409 0%, #0a0805 100%);
-  border: 2px solid rgba(212, 175, 101, 0.4);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.8), inset 0 -1px 0 rgba(212, 175, 101, 0.2);
-  opacity: 0.75;
-}
-
-.sea-fathom.lit {
-  color: #0a0805;
-  background: linear-gradient(180deg, #e8c890 0%, #d4af65 60%, #a8823f 100%);
-  border-color: #e8c890;
-  opacity: 1;
-}
-
-.sea-gauge-label {
-  margin-top: 10px;
-  font-size: 1rem;
-  font-style: normal;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: #d8ecf4;
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
 }
 
 /* kelp is set dressing only — frozen, no sway motion (S-A: ≤2 motions) */
@@ -217,10 +264,36 @@
   bottom: 0;
   width: 4px;
   height: 60%;
-  background: linear-gradient(180deg, rgba(40, 80, 60, 0.1) 0%, rgba(40, 80, 60, 0.4) 50%, rgba(20, 50, 40, 0.6) 100%);
+  background: linear-gradient(180deg,
+    rgba(60, 110, 90, 0.0) 0%,
+    rgba(60, 110, 90, 0.34) 50%,
+    rgba(30, 66, 54, 0.62) 100%);
   border-radius: 50% 50% 0 0;
   transform-origin: bottom center;
   filter: blur(0.5px);
+}
+
+/* the sounding line: the gauge retired its duplicate scale and is now
+   what a shore station hangs in the water — a lead line with its plumb
+   at the bottom, reading the trench's dark. */
+.sea-gauge-line {
+  position: absolute;
+  left: 50%;
+  bottom: 18%;
+  width: 2px;
+  height: 34%;
+  background: linear-gradient(180deg, rgba(232, 200, 144, 0.5) 0%, rgba(232, 200, 144, 0.14) 100%);
+}
+.sea-gauge-plumb {
+  position: absolute;
+  left: 50%;
+  bottom: 15.5%;
+  width: 12px;
+  height: 16px;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, #8a6a2a 0%, #3a2c10 60%, #14100a 100%);
+  clip-path: polygon(50% 0, 100% 38%, 50% 100%, 0 38%);
+  box-shadow: 0 0 10px rgba(232, 200, 144, 0.22);
 }
 
 .sea-kelp-1 { left: 15%; height: 50%; transform: rotate(-2deg); }
@@ -328,11 +401,15 @@
   pointer-events: auto;
 }
 
+/* the shore-station log: brass frame, water interior — the tide clock's
+   own material family, so the help speaks from the same instrument bench */
 .sea-raison-inner {
   width: 78%;
   max-width: 420px;
   background: linear-gradient(180deg, #0a1a24 0%, #02060a 100%);
-  border: 1px solid rgba(120, 180, 200, 0.25);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  outline: 1px solid rgba(212, 175, 55, 0.15);
+  outline-offset: 3px;
   box-shadow:
     inset 0 0 0 1px #02060a,
     inset 0 0 24px rgba(0, 0, 0, 0.7),
@@ -347,7 +424,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid rgba(120, 180, 200, 0.2);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.3);
   padding-bottom: 8px;
   margin-bottom: 10px;
 }
@@ -408,18 +485,56 @@
   letter-spacing: 0.1em;
 }
 
-/* the release ritual — bring something, weigh it, let it sink */
-
+/* the release ritual — bring something, weigh it, let it sink.
+   The instrument bench stands centered in the water column; under it, a
+   soft pool of dark (not a panel): the surface light above, the trench
+   below, and the bench holds what the visitor touches. */
 .sea-ritual {
   position: absolute;
-  bottom: 12%;
+  bottom: auto;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -47%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
   z-index: 4;
+}
+
+.sea-ritual .sea-question { max-width: none; white-space: nowrap; }
+
+.sea-ritual::before {
+  content: '';
+  position: absolute;
+  inset: -20px -30px -14px;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(6, 14, 22, 0) 0%, rgba(6, 14, 22, 0.5) 46%, rgba(3, 8, 14, 0.72) 100%);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.22);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.5);
+}
+
+/* the scale: a real pan under the leads, with its own shadow on the bench */
+.sea-intensity {
+  position: relative;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 16px 10px;
+  border-bottom: 2px solid rgba(212, 175, 55, 0.38);
+  border-radius: 0 0 12px 12px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(10, 8, 4, 0.5) 100%);
+}
+
+.sea-intensity::after {
+  content: '';
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  bottom: -8px;
+  height: 9px;
+  background: radial-gradient(ellipse at 50% 0%, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 72%);
+  pointer-events: none;
 }
 
 .sea-app.releasing .sea-ritual {
@@ -427,30 +542,45 @@
   pointer-events: none;
 }
 
+/* the scale's own stamping: WEIGHT is the plate's word, cast in brass;
+   the plate line under it is the maker's residue, not a caption */
 .sea-ritual-label {
   font-size: 1rem;
   font-style: normal;
-  letter-spacing: 0.28em;
-  text-transform: lowercase;
-  color: #d8ecf4;
+  letter-spacing: 0.32em;
+  text-indent: 0.32em;
+  text-transform: uppercase;
+  color: rgba(212, 175, 55, 0.78);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.7);
 }
 
+.sea-scale-no {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  color: rgba(212, 175, 55, 0.4);
+}
+
+/* the water-glass: where the name is written. Brass rule above and below
+   (the scale's own framing), water interior, inner shadow at the top like
+   a filled vial. */
 .sea-input {
   width: 300px;
   max-width: 70vw;
-  background: rgba(6, 18, 26, 0.55);
-  border: 1px solid rgba(212, 175, 101, 0.4);
-  border-bottom-color: rgba(212, 175, 101, 0.7);
-  color: #d8ecf4;
+  background: linear-gradient(180deg, rgba(16, 42, 56, 0.6) 0%, rgba(6, 18, 26, 0.55) 100%);
+  border: none;
+  border-top: 2px solid rgba(212, 175, 55, 0.45);
+  border-bottom: 2px solid rgba(212, 175, 55, 0.65);
+  color: #e6f2f6;
   font-family: 'Georgia', 'Times New Roman', serif;
   font-style: normal;
-  font-size: 1rem;
+  font-size: 1.05rem;
   letter-spacing: 0.04em;
   text-align: center;
-  padding: 7px 10px;
+  padding: 8px 10px;
   border-radius: 2px;
   outline: none;
-  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 6px 14px rgba(0, 0, 0, 0.45);
 }
 
 .sea-input::placeholder {
@@ -462,35 +592,43 @@
   background: rgba(10, 26, 36, 0.65);
 }
 
-.sea-intensity {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-/* brass discs — geometry unique to sea, 44px radio targets */
+/* brass leads — each disc catches the surface light on its upper rim; the
+   seated lead is lit like the fathom marks on the clock */
 .sea-intensity-dot {
+  position: relative;
   width: 44px;
   height: 44px;
   min-width: 44px;
   min-height: 44px;
   border-radius: 50%;
-  border: 2px solid rgba(212, 175, 101, 0.55);
-  background: linear-gradient(180deg, #141007 0%, #060503 100%);
-  color: #8a6f3c;
+  border: 2px solid rgba(196, 158, 82, 0.85);
+  background:
+    radial-gradient(circle at 34% 26%, rgba(232, 200, 144, 0.22) 0%, rgba(0, 0, 0, 0) 52%),
+    linear-gradient(180deg, #1a1409 0%, #0a0805 100%);
+  color: #d8b878;
   font-size: 1rem;
   font-style: normal;
   line-height: 40px;
   text-align: center;
   cursor: pointer;
   padding: 0;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.8), inset 0 -1px 0 rgba(212, 175, 101, 0.25);
+  box-shadow:
+    inset 0 1px 0 rgba(245, 215, 110, 0.3),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.8),
+    0 3px 6px rgba(0, 0, 0, 0.5);
 }
 
 .sea-intensity-dot.on {
-  background: linear-gradient(180deg, #e8c890 0%, #d4af65 60%, #a8823f 100%);
-  border-color: #e8c890;
-  color: #0a0805;
+  background:
+    radial-gradient(circle at 34% 26%, rgba(255, 240, 190, 0.75) 0%, rgba(0, 0, 0, 0) 55%),
+    linear-gradient(180deg, #f0d898 0%, #d4af65 58%, #a8823f 100%);
+  border-color: #f0dca0;
+  color: #14100a;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 248, 220, 0.8),
+    inset 0 -2px 4px rgba(90, 60, 10, 0.55),
+    0 0 16px rgba(232, 200, 144, 0.4),
+    0 3px 6px rgba(0, 0, 0, 0.5);
 }
 
 .sea-intensity-dot.locked {
@@ -500,12 +638,14 @@
 
 .sea-release {
   background: none;
-  border: 1px solid transparent;
+  border: none;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.45);
   color: #d8ecf4;
   font-family: 'Georgia', 'Times New Roman', serif;
   font-style: normal;
   font-size: 1rem;
   letter-spacing: 0.28em;
+  text-indent: 0.28em;
   text-transform: lowercase;
   cursor: pointer;
   padding: 4px 10px;
@@ -515,7 +655,7 @@
 
 .sea-release:not(:disabled):hover {
   color: #f0e6d0;
-  border-color: rgba(212, 175, 101, 0.5);
+  border-bottom-color: rgba(232, 200, 144, 0.9);
 }
 
 .sea-release:disabled {
@@ -523,6 +663,12 @@
   cursor: default;
 }
 
+/* what is carried: the release moment — bigger than the question, lit
+   from the surface above it, going under when the water takes it.
+   The take is the room's one dread beat: it does not fade in place, it
+   LEAVES — down through the light, accelerating as anything sinking does,
+   and the trench it arrives in is a shade of cold the surface never
+   carries. The persona's law: the sea is patient, not kind. */
 .sea-carried {
   position: absolute;
   top: 34%;
@@ -531,9 +677,10 @@
   max-width: 70%;
   text-align: center;
   font-style: normal;
-  font-size: 1rem;
+  font-size: 1.3rem;
   letter-spacing: 0.06em;
-  color: #d8ecf4;
+  color: #e6f2f6;
+  text-shadow: 0 0 18px rgba(140, 195, 215, 0.45), 0 2px 10px rgba(0, 0, 0, 0.6);
   opacity: 0;
   pointer-events: none;
   z-index: 4;
@@ -543,14 +690,100 @@
   opacity: 0.95;
 }
 
-.sea-carried.dissolving {
-  opacity: 0;
-  transform: translateX(-50%) translateY(120px);
+/* the take: 11s, water easing only — no bounce (persona: forbidden).
+   cubic-bezier(0.55, 0, 0.85, 0.45) starts like a thing set down and
+   ends like a thing given up: the acceleration of real sinking.
+   The color thins toward trench-cold as it passes out of the surface
+   light, and the pale word goes down slightly smaller, the way depth
+   takes scale from everything. */
+.sea-carried.sinking {
+  animation: sea-the-take 11s cubic-bezier(0.55, 0, 0.85, 0.45) forwards;
+  color: #9db8c4;
+  text-shadow: 0 0 14px rgba(90, 130, 150, 0.3), 0 2px 8px rgba(0, 0, 0, 0.7);
 }
 
-.sea-app.releasing .sea-question {
+@keyframes sea-the-take {
+  0%   { transform: translateX(-50%) translateY(0);        opacity: 0.95; }
+  14%  { transform: translateX(-50%) translateY(28px);     opacity: 0.9; }
+  40%  { transform: translateX(-50%) translateY(110px);    opacity: 0.72; }
+  72%  { transform: translateX(-50%) translateY(220px);    opacity: 0.4; }
+  92%  { transform: translateX(-50%) translateY(330px);    opacity: 0.16; }
+  100% { transform: translateX(-50%) translateY(430px);    opacity: 0.08; }
+}
+
+/* in the trench the word does not belong to the surface light anymore:
+   it goes the pale of things that turn over down there, and it is seen
+   once, slowly, from very far away. */
+.sea-carried.sinking::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(214, 236, 232, 0.5);
+  box-shadow: 0 0 8px 2px rgba(190, 220, 224, 0.35);
+  opacity: 0;
+  animation: sea-pale-turn 11s cubic-bezier(0.5, 0, 0.85, 0.5) forwards;
+  pointer-events: none;
+}
+
+@keyframes sea-pale-turn {
+  0%, 58%   { opacity: 0; transform: translate(-50%, -50%) scale(0.6); }
+  74%       { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+  88%       { opacity: 0.12; transform: translate(-50%, -50%) scale(1.5); }
+  100%      { opacity: 0; transform: translate(-50%, -50%) scale(1.9); }
+  
+}
+
+/* the trench closes: the name is not left hanging in the water at the
+   animation's last frame. when the descent is done the water has it. */
+.sea-carried.gone {
   opacity: 0;
 }
+
+/* what the water says: one line, arriving after the trench has closed.
+   It does not appear where the name went — the deep is not a speaker —
+   it surfaces near the waterline, brief, then the room resumes. */
+.sea-afterword {
+  position: absolute;
+  left: 50%;
+  top: 21%;
+  transform: translateX(-50%);
+  font-style: italic;
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
+  color: #7ea6b4;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.65);
+  opacity: 0;
+  transition: opacity 2.4s ease;
+  pointer-events: none;
+  z-index: 4;
+  white-space: nowrap;
+}
+
+.sea-afterword:not(:empty) {
+  opacity: 0.8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sea-afterword { transition: none; }
+}
+
+/* what the water says, at the small glass: no room to surface the line
+   beside the clock readout — it rides in the same top band, under it */
+@media (max-width: 439px) {
+  .sea-afterword { top: 16%; font-size: 0.85rem; }
+}
+
+/* the carried moment owns the water column; the bench yields */
+.sea-app.releasing .sea-ritual {
+  opacity: 0;
+  pointer-events: none;
+}
+.sea-app.releasing .sea-question,
+.sea-app.releasing .sea-question-faint { opacity: 0; }
 
 /* ─── window titlebar (WS3, plan 2026-09-04 §4.3) — the wet slate cap ─── */
 
@@ -573,7 +806,8 @@
   box-shadow:
     inset 0 1px 0 rgba(210, 235, 245, 0.25),
     inset 0 -4px 3px -3px rgba(160, 200, 216, 0.35),
-    0 2px 6px rgba(0, 0, 0, 0.5);
+    0 2px 0 rgba(212, 175, 55, 0.25),
+    0 3px 6px rgba(0, 0, 0, 0.5);
   font-family: 'Georgia', 'Times New Roman', serif;
   color: #d8ecf4;
 }
@@ -723,9 +957,9 @@
    this room and this file does not add any. */
 .sea-clock {
   position: absolute;
-  right: 16px;
+  right: 8px;
   top: 22%;
-  width: 74px;
+  width: 130px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -858,10 +1092,16 @@
   background: linear-gradient(0deg, rgba(120, 190, 200, 0.10) 0%, rgba(0, 0, 0, 0) 100%);
 }
 
-/* reduced motion: the clock still keeps time, it just does not travel */
+/* reduced motion: the clock still keeps time, it just does not travel.
+   The take is not a shortened descent — it is no descent at all. The name
+   is set down, read, and gone at once; the mark is still cut, the line
+   still surfaces, the bench still comes back. The taking is the function;
+   the travel is the flourish. */
 @media (prefers-reduced-motion: reduce) {
   .sea-clock-hand,
   .sea-waterline { transition: none; }
+  .sea-carried.sinking,
+  .sea-carried.sinking::after { animation: none; }
 }
 
 /* ─── 439px · the glass is 260×149. The composition restacks into it:
@@ -876,6 +1116,7 @@
 @media (max-width: 439px) {
   .sea-gauge { display: none; }
   .sea-question { display: none; }
+  .sea-question-faint { display: none; }
 
   /* the dial stands down; the readout keeps the memory visible in the
      top band, clear of the ritual below it */
@@ -892,6 +1133,7 @@
 
   .sea-ritual {
     left: 0;
+    top: auto;
     transform: none;
     width: 100%;
     bottom: 2px;
@@ -910,7 +1152,8 @@
   .sea-ritual-label { display: none; }
   .sea-ritual > #sea-intensity { flex: 1 1 100%; }
   .sea-release { letter-spacing: 0.12em; padding: 4px 4px; }
-  .sea-breath-toggle { letter-spacing: 0.04em; padding: 6px 8px; }
+  .sea-breath-toggle { width: 44px; height: 44px; font-size: 0.85rem; }
+  .sea-breath-arc { display: none; }
   .sea-breath-phase:empty { display: none; }
   .sea-gate-note { position: absolute; bottom: 100%; left: 0; right: 0; margin: 0 0 4px; }
 }
