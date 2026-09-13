@@ -155,7 +155,7 @@ window.LIBER_DATA.citations = {
         "the amplification ritual",
         "active imagination as the model for buddy dialogue"
       ],
-      "note": "The amplification section points the reader to Jung's journey through psychosis in the Red Book."
+      "note": "The amplification section points the reader to Jung's confrontation with the unconscious in the Red Book."
     },
     {
       "id": "jung-alchemy-1968",

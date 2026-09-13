@@ -157,8 +157,12 @@
     return null;
   }
 
+  // A day the ledger does not hold, the ledger does not print. Dreams
+  // recorded before the stamps existed keep their row; the stamp stays
+  // empty rather than inventing 1970.
   function fmtDate(ts) {
-    var d = new Date(ts || 0);
+    if (!ts) return '';
+    var d = new Date(ts);
     function p(n) { return (n < 10 ? '0' : '') + n; }
     return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
   }
@@ -181,10 +185,11 @@
       var kept = isKept(d.id);
       var read = !!d.analyzed;
       var state2 = kept ? 'kept in the book' : (read ? 'read' : 'unread');
+      var when = fmtDate(d.ts);
       html += '<div class="dreams-entry-row' + (kept ? ' kept' : '') + (read ? '' : ' unread') + '">'
            + '<button type="button" class="dreams-entry" data-id="' + esc(d.id) + '" aria-label="' + (esc(d.title) || 'an unnamed dream') + ' — open the reading">'
            + '<span class="dreams-entry-title">' + (esc(d.title) || 'an unnamed dream') + '</span>'
-           + '<span class="dreams-entry-date">' + fmtDate(d.ts) + ' · ' + state2 + '</span>'
+           + '<span class="dreams-entry-date">' + (when ? when + ' · ' : '') + state2 + '</span>'
            + '<span class="dreams-entry-preview">' + esc(excerpt(d.text)) + '</span>'
            + '</button>';
       if (d.analyzed && !kept) {
@@ -202,7 +207,11 @@
     // the reading has now had its say — the ledger may offer the book
     if (!d.analyzed && state()) state().updateArtifact('dreams', id, { analyzed: true });
     readTitleEl.textContent = d.title || 'an unnamed dream';
-    readDateEl.textContent = fmtDate(d.ts);
+    var stamp = fmtDate(d.ts);
+    if (readDateEl) {
+      readDateEl.textContent = stamp;
+      readDateEl.hidden = !stamp;
+    }
     readTextEl.textContent = d.text || '';
     readBodyEl.innerHTML = interpret(d.text);
     renderAssoc();

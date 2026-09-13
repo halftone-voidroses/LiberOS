@@ -292,6 +292,51 @@ const rmDev = await page4.evaluate(() => {
 check('reduced motion skips the develop beat', rmDev === 'none', rmDev)
 await ctx4.close()
 
+// ─── 7. the covenant on the copy ─────────────────────────────────────────
+// The room is authored, not captioned. Two covenant clauses are checkable
+// from here: no banned register prints anywhere the room can print, and the
+// ledger never invents a day it was not given.
+console.log('7. the covenant on the copy')
+const BANNED = /\b(explore|discover|embark|journey|begin your|where memories|where stories|a space to|a place to|this is where|here you can|welcome to|crafted with|made with care|designed to|built for|your story|your journey|your memories|your feelings|hold what matters|every feeling|a trace of|the shape of|click to|tap to|scroll to|press to begin|learn more|find out more|get started|try it now)\b/i
+const roomCopy = await page.evaluate(() => {
+  const app = document.querySelector('.dreams-app')
+  return app ? app.innerText.replace(/\s+/g, ' ') : ''
+})
+const roomHit = (roomCopy.match(BANNED) || [])[0] || ''
+check('no banned register prints in the room', !roomHit, roomHit || 'clean')
+
+// the citation slips the room raises come from data/citations.data.js — the
+// margin notes print in this room too, so they answer to the same register
+const citeCopy = await page.evaluate(() => {
+  const data = (window.LIBER_DATA && window.LIBER_DATA.citations && window.LIBER_DATA.citations.citations) || []
+  return data.map(c => [c.topic, c.source, (c.claimedFor || []).join(' '), c.note || ''].join(' ')).join(' ')
+})
+const citeHit = (citeCopy.match(BANNED) || [])[0] || ''
+check('no banned register in the citations the room prints', !citeHit, citeHit || 'clean')
+
+// the seeded dream carries no stamp: the ledger may not invent one
+const stamp = await page.evaluate(() => {
+  const el = document.getElementById('dreams-read-date')
+  const rows = [...document.querySelectorAll('.dreams-entry-date')].map(e => e.textContent.trim())
+  return { plate: el ? el.textContent.trim() : 'missing', hidden: !!(el && el.hidden), rows }
+})
+check('a dream with no stamped day prints no invented day',
+  stamp.plate === '' && stamp.hidden && stamp.rows.length > 0 && stamp.rows.every(r => !/^\d{4}-/.test(r)),
+  JSON.stringify(stamp))
+
+// and a stamped dream still prints the real one, on the card and on the plate
+{
+  const { ctx: ctxS, page: pageS } = await freshPage()
+  await visit(pageS, { dreams: [{ id: 'dream-stamped-1', title: 'a stamped one', text: 'a corridor of locked gates.', analyzed: false, associations: [], ts: 1700000000000 }] })
+  const card = await pageS.evaluate(() => (document.querySelector('.dreams-entry-date') || {}).textContent || '')
+  check('a stamped dream keeps its day on the card', /^2023-11-1[45] \d{2}:\d{2} · unread$/.test(card), card)
+  await clickSel(pageS, '.dreams-entry')
+  await pageS.waitForTimeout(400)
+  const plate = await pageS.evaluate(() => (document.getElementById('dreams-read-date') || {}).textContent || '')
+  check('a stamped dream keeps its day on the plate', /^2023-11-1[45] \d{2}:\d{2}$/.test(plate), plate)
+  await ctxS.close()
+}
+
 await page.setViewportSize({ width: 439, height: 780 })
 await page.waitForTimeout(400)
 const small = await page.evaluate(() => ({
