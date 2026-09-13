@@ -47,9 +47,9 @@
 /* D0003: instruction + tile text are what the user reads/chooses by — 16px floor. */
 .themes-sub {
   font-size: 1rem;
-  font-style: italic;
+  font-style: normal;
   text-align: center;
-  color: #8a6a40;
+  color: #b08a58;
   margin-bottom: 6px;
 }
 
@@ -104,24 +104,25 @@
 .themes-swatch-ravaging      { background: linear-gradient(90deg, #2a1f15 0%, #8a4818 100%); }
 
 .themes-tile-name {
-  font-size: 0.875rem;
+  font-size: 1rem;
+  font-style: normal;
   letter-spacing: 0.15em;
   text-transform: lowercase;
   color: #d4af37;
 }
 
 .themes-tile-blurb {
-  font-size: 0.875rem;
-  font-style: italic;
-  color: #8a6a40;
-  line-height: 1.3;
+  font-size: 1rem;
+  font-style: normal;
+  color: #b08a58;
+  line-height: 1.35;
 }
 
 .themes-tile-opinion {
   font-family: 'EB Garamond', 'Garamond', serif;
-  font-style: italic;
-  font-size: 0.875rem;
-  color: #ff8a8a;
+  font-style: normal;
+  font-size: 1rem;
+  color: #ff9a9a;
   text-shadow: 0 0 4px rgba(255, 138, 138, 0.35);
   margin-top: 4px;
   line-height: 1.35;
@@ -132,9 +133,10 @@
 
 .themes-current {
   text-align: center;
-  font-size: 0.875rem;
+  font-size: 1rem;
+  font-style: normal;
   letter-spacing: 0.2em;
-  color: #6a4a20;
+  color: #8a6a40;
   border-top: 1px dotted #3a1a08;
   padding-top: 6px;
 }
@@ -327,6 +329,32 @@
   text-align: right;
   letter-spacing: 0.1em;
   font-family: 'VT323', 'Courier New', monospace;
+}
+
+/* the locker runs past the glass: a shelf-edge fade with a tin count.
+   the mark drops away once the last tile is in view. */
+.themes-scroll {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  padding: 6px 0 2px;
+  background: linear-gradient(180deg, transparent, rgba(10, 5, 0, 0.9) 55%);
+  color: #d4af37;
+  font-size: 1rem;
+  pointer-events: none;
+}
+.themes-scroll span {
+  display: inline-block;
+  animation: themes-bob 2.2s ease-in-out infinite;
+}
+.themes-scroll.spent { display: none; }
+@keyframes themes-bob {
+  0%, 100% { transform: translateY(0); opacity: 0.9; }
+  50% { transform: translateY(3px); opacity: 0.5; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .themes-scroll span { animation: none; }
 }
 
 /* ─── window titlebar (WS3, plan 2026-09-04 §4.3) — the atlas head strip ─── */

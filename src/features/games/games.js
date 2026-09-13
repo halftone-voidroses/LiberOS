@@ -271,6 +271,24 @@
     setView('facade');
   }
 
+  function stepBack() {
+    closePrompt();
+    closeRaisonSafe();
+    if (stage && !stage.hasAttribute('inert')) {
+      var gid = current ? current.id : null;
+      closeStage();
+      if (gid) {
+        var back = grid && grid.querySelector('.games-booth[data-game="' + gid + '"]');
+        if (back) back.focus();
+      }
+    }
+  }
+
+  function closeRaisonSafe() {
+    var raison = document.getElementById('games-raison');
+    if (raison) { raison.classList.remove('open'); raison.setAttribute('inert', ''); }
+  }
+
   function openPlay(b) {
     if (!stage) return;
     closeStage();
@@ -295,7 +313,7 @@
   function renderPlay(b, body) {
     body.innerHTML = '';
     var fn = window.LiberBooths ? BOOTH_PLAY[b.id] : null;
-    if (fn) return fn(boothCtx, b, body);
+    if (fn) return fn(boothCtx, b, body, b.id);
   }
 
   function thunk() {
@@ -331,6 +349,24 @@
     buildPicker();
     if (panLeft) panLeft.addEventListener('click', function () { moveCamera(-1); });
     if (panRight) panRight.addEventListener('click', function () { moveCamera(1); });
+    Array.prototype.forEach.call(document.querySelectorAll('.games-gate-path'), function (el) {
+      el.addEventListener('click', function () {
+        var g = byId(el.getAttribute('data-goto'));
+        if (g) {
+          selectGame(g);
+          var closeBtn = document.getElementById('games-stage-close');
+          if (closeBtn) closeBtn.focus();
+        }
+      });
+    });
+    document.addEventListener('keydown', function (e) {
+      var t = e.target;
+      var typing = t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable);
+      if (e.key === 'Escape') { stepBack(); return; }
+      if (typing) return;
+      if (e.key === 'ArrowLeft') { e.preventDefault(); moveCamera(-1); }
+      else if (e.key === 'ArrowRight') { e.preventDefault(); moveCamera(1); }
+    });
     if (descBox && !descBox.querySelector('.games-desc-name')) {
       descBox.innerHTML = '<div class="games-desc-name">pick a game, friend.</div><div>follow the dirt path, pan the midway, and pull a poster when you are ready.</div>';
     }

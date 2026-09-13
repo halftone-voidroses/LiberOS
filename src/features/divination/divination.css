@@ -83,8 +83,8 @@
   z-index: 3;
 }
 .divination-rim-note {
-  font-size: 0.58rem; letter-spacing: 0.22em; color: var(--chalk-faint);
-  font-style: italic;
+  font-size: 1rem; letter-spacing: 0.22em; color: var(--chalk);
+  font-style: normal;
 }
 .divination-slate {
   width: min(430px, 62%);
@@ -102,11 +102,12 @@
   width: 100%; border: none; background: transparent; outline: none;
   padding: 9px 14px;
   font-family: 'Segoe Print', 'Bradley Hand', 'Chalkboard SE', cursive;
-  font-size: 0.92rem; color: var(--chalk);
+  font-size: 1rem; font-style: normal; color: var(--chalk);
   caret-color: var(--chalk);
+  text-overflow: clip;
   transition: transform 0.5s ease;
 }
-.divination-input::placeholder { color: rgba(238, 230, 212, 0.32); }
+.divination-input::placeholder { color: rgba(238, 230, 212, 0.8); font-style: normal; opacity: 1; }
 .divination-slate.turned .divination-input { transform: rotate(180deg); }
 
 /* ── the two ways: chalk-lettered tabs ── */
@@ -116,13 +117,13 @@
 }
 .divination-mode {
   border: none; background: transparent; cursor: pointer;
-  font-family: inherit; font-size: 0.82rem; letter-spacing: 0.3em;
+  font-family: inherit; font-size: 1rem; letter-spacing: 0.3em;
   color: var(--chalk-faint);
-  padding: 3px 10px; position: relative;
+  min-height: 44px; padding: 10px 14px; position: relative;
   transition: color 0.25s ease;
 }
 .divination-mode::after {
-  content: ''; position: absolute; left: 8%; right: 8%; bottom: -1px; height: 2px;
+  content: ''; position: absolute; left: 8%; right: 8%; bottom: 4px; height: 2px;
   background: var(--chalk-dim);
   border-radius: 2px;
   transform: scaleX(0);
@@ -130,7 +131,7 @@
   transform-origin: left;
 }
 .divination-mode.active { color: var(--chalk); }
-.divination-mode.active::after { transform: scaleX(1); }
+.divination-mode.active::after { transform: scaleX(1); height: 3px; background: var(--chalk); box-shadow: 0 0 6px rgba(238, 230, 212, 0.35); }
 .divination-mode:hover { color: var(--chalk-dim); }
 
 /* ── the table surface ── */
@@ -203,15 +204,23 @@
 .divination-reading-place {
   position: absolute; right: 9%; top: 22%;
   width: 220px; height: 330px;
-  display: flex; align-items: center; justify-content: center;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+}
+/* the kept record's own number — the book's hand, not the deck's */
+.divination-seed {
+  font-family: 'Segoe Print', 'Bradley Hand', cursive;
+  font-size: 0.72rem; letter-spacing: 0.14em; color: var(--chalk-dim);
+  text-align: center; min-height: 1em; transform: rotate(-1.2deg);
+  max-width: 100%; overflow-wrap: anywhere;
 }
 .divination-chalk-eye {
   position: absolute; inset: -8% -14%;
   width: 128%; height: 116%; opacity: 0.5;
 }
 .divination-card-hint {
-  font-style: italic; font-size: 0.95rem; color: var(--chalk-faint);
+  font-style: normal; font-size: 1rem; color: var(--chalk);
   letter-spacing: 0.08em; transform: rotate(-2deg); text-align: center;
+  max-width: 100%;
 }
 
 /* the drawn card itself: heavy, settled a degree off true */
@@ -248,6 +257,10 @@
 }
 .divination-card-key {
   font-style: italic; font-size: 0.78rem; color: #6a4030; text-align: center;
+}
+.divination-card-lens {
+  font-style: italic; font-size: 0.66rem; line-height: 1.5; color: #7a5a44; text-align: center;
+  padding: 0 6px;
 }
 .divination-card-stamped {
   position: absolute; bottom: 10px; left: 0; right: 0;
@@ -317,7 +330,7 @@
   padding: 10px 26px;
 }
 .divination-hexagram-empty {
-  font-style: italic; color: var(--chalk-faint); font-size: 0.9rem;
+  font-style: normal; color: var(--chalk); font-size: 1rem;
   transform: rotate(-1.6deg); letter-spacing: 0.06em;
 }
 .divination-hexagram-row {
@@ -364,7 +377,16 @@
   color: var(--chalk); margin-bottom: 8px;
 }
 .divination-iching-desc {
+  font-style: normal; font-size: 1rem; line-height: 1.55; color: var(--chalk);
+}
+.divination-iching-num {
+  font-family: 'Segoe Print', 'Bradley Hand', cursive;
+  font-size: 0.72rem; letter-spacing: 0.18em; color: var(--chalk-dim);
+  margin-bottom: 6px;
+}
+.divination-iching-lens {
   font-style: italic; font-size: 0.86rem; line-height: 1.55; color: var(--chalk-dim);
+  margin-top: 8px;
 }
 
 /* ── arcana's edge of the table: the tells ── */
@@ -438,7 +460,7 @@
 }
 .divination-save-prompt-close {
   border: none; background: transparent; color: #5a0a12; font-size: 1.2rem;
-  cursor: pointer; line-height: 1; padding: 2px 6px;
+  cursor: pointer; line-height: 1; min-width: 44px; min-height: 44px; padding: 10px;
 }
 .divination-save-prompt-body {
   min-height: 120px; display: flex; align-items: center; justify-content: center; gap: 16px;
@@ -457,13 +479,14 @@
 .divination-prompt-card-name { font-variant: small-caps; font-size: 0.72rem; letter-spacing: 0.14em; color: #38100a; text-align: center; padding: 0 6px; }
 .divination-prompt-card-read { text-align: left; max-width: 280px; }
 .divination-prompt-card-key { font-style: italic; font-size: 0.86rem; margin-bottom: 8px; color: #4a2818; }
+.divination-prompt-card-lens { font-style: italic; font-size: 0.78rem; line-height: 1.5; margin-bottom: 8px; color: #5a3a28; }
 .divination-prompt-card-q { font-size: 0.78rem; color: #6a4030; }
 .divination-prompt-card-q em { color: #38100a; font-style: normal; }
 .divination-save-prompt-actions { display: flex; gap: 12px; justify-content: center; margin-top: 12px; }
 .divination-save-prompt-keep,
 .divination-save-prompt-discard {
   font-family: inherit; font-variant: small-caps; letter-spacing: 0.24em;
-  font-size: 0.86rem; padding: 7px 26px; cursor: pointer;
+  font-size: 0.86rem; padding: 12px 26px; min-height: 44px; cursor: pointer;
   border-radius: 2px; transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 .divination-save-prompt-keep {
@@ -504,7 +527,7 @@
 }
 .divination-raison-close {
   border: none; background: transparent; color: var(--chalk-dim); font-size: 1.2rem;
-  cursor: pointer; line-height: 1; padding: 2px 6px;
+  cursor: pointer; line-height: 1; min-width: 44px; min-height: 44px; padding: 10px;
 }
 .divination-raison-body {
   font-family: 'Segoe Print', 'Bradley Hand', cursive;
@@ -524,10 +547,11 @@
 .divination-titlebar-sub { font-style: italic; font-size: 0.72rem; color: var(--chalk-faint); letter-spacing: 0.1em; }
 .divination-help, .divination-exit {
   margin-left: auto;
-  width: 26px; height: 26px; border-radius: 50%;
+  min-width: 44px; min-height: 44px; padding: 8px; border-radius: 50%;
   border: 1px solid rgba(238, 230, 212, 0.3);
   background: transparent; color: var(--chalk-dim);
   font-family: inherit; font-size: 0.85rem; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
   transition: background 0.2s ease, color 0.2s ease;
 }
 .divination-exit { margin-left: 0; }
@@ -569,7 +593,7 @@
   .divination-felt { inset: 36px 10px 0; overflow-y: auto; }
   .divination-rim { position: static; flex-direction: column; gap: 3px; padding: 8px 0 0; }
   .divination-slate { width: 92%; }
-  .divination-rim-note { display: none; }
+  .divination-rim-note { font-size: 1rem; }
   .divination-modes { position: static; transform: none; justify-content: center; margin: 8px 0 4px; }
   .divination-table { position: static; inset: auto; padding: 6px 14px 18px; }
 
@@ -600,7 +624,11 @@
   .divination-cast-note { text-align: center; }
   .divination-iching-result { position: static; width: min(340px, 92%); text-align: center; }
   .divination-iching-name { font-size: 0.9rem; }
-  .divination-iching-desc { font-size: 0.7rem; }
+  .divination-iching-desc { font-size: 1rem; }
+  .divination-iching-num { font-size: 0.66rem; }
+  .divination-iching-lens { font-size: 0.78rem; }
+  .divination-card-lens { font-size: 0.58rem; }
+  .divination-seed { font-size: 0.68rem; }
 
   /* the edge tells clear out — the small table needs the room */
   .divination-edge { display: none; }

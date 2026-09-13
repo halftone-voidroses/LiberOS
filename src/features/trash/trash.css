@@ -71,12 +71,12 @@
 
 /* D0003: the sub is a working instruction — 16px floor. */
 .trash-sub {
-  font-style: italic;
+  font-style: normal;
   font-size: 1rem;
   color: #6a4028;
   letter-spacing: 0.18em;
   margin-top: 4px;
-  opacity: 0.8;
+  opacity: 1;
 }
 
 .trash-mid {
@@ -104,9 +104,9 @@
 }
 
 .trash-action-label {
-  font-style: italic;
-  font-size: 0.875rem;
-  color: #6a4028;
+  font-style: normal;
+  font-size: 1rem;
+  color: #4a2810;
   letter-spacing: 0.25em;
   text-transform: lowercase;
   text-align: center;
@@ -118,12 +118,14 @@
   display: block;
   width: 100%;
   margin-bottom: 6px;
+  min-height: 44px;
+  box-sizing: border-box;
   padding: 6px 12px;
   background: linear-gradient(180deg, #f4e8c8 0%, #e0d2a8 60%, #c0a880 100%);
   border: 1px solid #6a4a28;
   color: #2a1810;
   font-family: 'EB Garamond', 'Garamond', serif;
-  font-style: italic;
+  font-style: normal;
   font-size: 1rem;
   letter-spacing: 0.1em;
   cursor: pointer;
@@ -171,10 +173,10 @@
 }
 
 .trash-dig-empty {
-  font-style: italic;
+  font-style: normal;
   font-size: 1rem;
-  color: #6a4028;
-  opacity: 0.7;
+  color: #4a2810;
+  opacity: 1;
   text-align: center;
   letter-spacing: 0.12em;
   padding: 2px 0 4px;
@@ -188,9 +190,9 @@
 }
 
 .trash-dig-label {
-  font-style: italic;
-  font-size: 0.875rem;
-  color: #4a2810;
+  font-style: normal;
+  font-size: 1.0625rem;
+  color: #2a1810;
   letter-spacing: 0.06em;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -642,7 +644,18 @@
   transition: opacity 0.8s ease;
   text-shadow: 0 1px 0 rgba(255, 240, 200, 0.35);
 }
-.trash-window:hover .trash-scratch { opacity: 1; }
+.trash-window:hover .trash-scratch,
+.trash-window:focus-within .trash-scratch { opacity: 1; }
+.trash-window:focus-visible {
+  outline: 2px solid #c8a880;
+  outline-offset: 2px;
+}
+/* the bury-everything interlock: armed is visibly another state */
+.trash-action-hard.armed {
+  background: linear-gradient(180deg, #e8a080 0%, #c06848 60%, #8a3020 100%);
+  color: #fff5d0;
+  box-shadow: 0 0 10px rgba(200, 80, 40, 0.6), 1px 1px 0 #6a4a28;
+}
 .trash-raison {
   position: absolute;
   inset: 0;
@@ -731,9 +744,11 @@
 .trash-why {
   flex: 1;
   min-width: 140px;
+  min-height: 44px;
+  box-sizing: border-box;
   font-family: Georgia, serif;
-  font-style: italic;
-  font-size: 0.95rem;
+  font-style: normal;
+  font-size: 1rem;
   background: rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(168, 136, 88, 0.5);
   color: #e8d8b8;

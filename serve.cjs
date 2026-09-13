@@ -7,7 +7,7 @@ const path = require('path');
 const net = require('net');
 
 const ROOT = __dirname;
-const START_PORT = 8030;
+const START_PORT = Number(process.env.PORT) || 8030;  // PORT env override (parallel worktrees)
 const MIME = {
   '.html': 'text/html; charset=utf-8',
   '.css':  'text/css; charset=utf-8',

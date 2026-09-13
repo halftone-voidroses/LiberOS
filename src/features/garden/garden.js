@@ -169,10 +169,13 @@
     var facets = svgEl('g', { 'class': 'garden-facets' });
     for (var i = 0; i < FACETS.length; i++) {
       (function (f, i) {
-        var g = svgEl('g', { 'class': 'garden-facet', 'data-facet': i });
+        var g = svgEl('g', { 'class': 'garden-facet', 'data-facet': i, tabindex: '0', role: 'button', 'aria-label': 'facet ' + (i + 1) });
         var poly = svgEl('polygon', { points: f.points, fill: gemPaint[i] || 'transparent' });
         g.appendChild(poly);
         g.addEventListener('click', function (e) { facetClick(i, e); });
+        g.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); facetClick(i, e); }
+        });
         facets.appendChild(g);
       })(FACETS[i], i);
     }
@@ -415,6 +418,9 @@
         var row = document.createElement('div');
         row.className = 'garden-plot' + (entry.painted ? ' grown' : '');
         row.setAttribute('data-seed', entry.id);
+        row.setAttribute('tabindex', '0');
+        row.setAttribute('role', 'button');
+        row.setAttribute('aria-label', 'tend ' + (entry.name || 'a seed'));
         var tint = document.createElement('div');
         tint.className = 'garden-plot-tint';
         var learned = entry.bloom && entry.bloom.learned;
@@ -437,6 +443,9 @@
         row.appendChild(meta);
         row.appendChild(tint);
         row.addEventListener('click', function () { openFlower(entry.id); });
+        row.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openFlower(entry.id); }
+        });
         plotsEl.appendChild(row);
       })(list[i]);
     }
@@ -813,17 +822,24 @@
     if (app) app.setAttribute('data-state', room);
     var bed = document.getElementById('garden-room-bed');
     var gem = document.getElementById('garden-room-gem');
+    var tree = document.getElementById('garden-room-tree');
     if (bed) {
       if (room === 'bed') bed.removeAttribute('inert'); else bed.setAttribute('inert', '');
     }
     if (gem) {
       if (room === 'gem') gem.removeAttribute('inert'); else gem.setAttribute('inert', '');
     }
+    if (tree) {
+      if (room === 'tree') tree.removeAttribute('inert'); else tree.setAttribute('inert', '');
+    }
     var tabGem = document.getElementById('garden-tab-gem');
     var tabBed = document.getElementById('garden-tab-bed');
+    var tabTree = document.getElementById('garden-tab-tree');
     if (tabGem) tabGem.classList.toggle('active', room === 'gem');
     if (tabBed) tabBed.classList.toggle('active', room === 'bed');
+    if (tabTree) tabTree.classList.toggle('active', room === 'tree');
     if (room === 'bed') renderBed();
+    if (room === 'tree' && window.Liber && window.Liber.tree) window.Liber.tree.activate();
   }
 
   // the watering can: drag it onto a plot to open the colouring window.
@@ -891,6 +907,8 @@
     var plant = document.getElementById('garden-draft-plant');
     var draftClose = document.getElementById('garden-draft-close');
     if (plant) plant.addEventListener('click', function () { saveDraft(); });
+    var draftLeave = document.getElementById('garden-draft-leave');
+    if (draftLeave) draftLeave.addEventListener('click', function () { closeDraft('left where it lay. begin a new gem when ready.'); });
     var draftName = document.getElementById('garden-draft-name');
     if (draftName) draftName.addEventListener('keydown', function (e) {
       if (e.key === 'Enter') { e.preventDefault(); saveDraft(); }
@@ -923,6 +941,7 @@
     gemSummary: function () {
       return { settled: settledCount(), total: FACETS.length, clicks: pourLedgerCount() };
     },
-    openSeed: openFlower
+    openSeed: openFlower,
+    showRoom: showRoom
   };
 })();

@@ -166,7 +166,7 @@ function playPaint(ctx, b, body, kind) {
   var result = document.getElementById('paint-result');
   if (keepBtn) keepBtn.addEventListener('click', function () {
     if (!strokes) {
-      if (result) result.textContent = 'paint something first — the canvas is still clean.';
+      if (result) result.textContent = 'the canvas is clean. paint a stroke and it stays.';
       return;
     }
     var merged = document.createElement('canvas');

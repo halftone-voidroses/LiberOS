@@ -1,0 +1,358 @@
+/* tree.css — the glasshouse. Ruby's material, her own: glass panes with
+ * condensation you can wipe, a brick sill, a bench the pots have marked, one
+ * warm lamp, a root panel under glass, a striking bed. The tree in its pot is
+ * the slowest resident. The room fits the screen — the other two rooms do,
+ * so this one does. */
+
+/* ─── the third room: visibility rides the app's data-state ─── */
+/* grid rows: glass wall / brick sill / the work. the wall and the stage share
+ * the room's height 1 : 2.2 — the glass yields first, the tree never starves */
+.garden-app[data-state="tree"] .garden-room-tree {
+  display: grid;
+  grid-template-rows: minmax(56px, 1fr) 13px minmax(170px, 2.2fr);
+  row-gap: 6px;
+}
+.garden-tree-window { grid-row: 1; }
+.garden-tree-sill { grid-row: 2; }
+.garden-tree-middle { grid-row: 3; min-height: 0; }
+
+/* ─── the room fills the screen-stage like its siblings: the .garden-room
+       base already sets position:absolute; inset:36px 0 0 0 — only the
+       tree's own material is layered on here ─── */
+.garden-room-tree {
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 16px 12px;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(122, 74, 94, 0.05), transparent 46%),
+    repeating-linear-gradient(90deg, rgba(234, 223, 198, 0.035) 0 1.5px, transparent 1.5px 74px);
+}
+
+/* ─── the window: five panes, mortared bars, brick sill under them.
+       Sized in flex so it yields when the screen is short. ─── */
+.garden-tree-window {
+  position: relative;
+  flex: 0 2 158px; /* the panes yield before the tree does */
+  min-height: 52px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 7px;
+  padding: 8px 8px 0;
+  border: 2px solid #4a3524;
+  border-bottom: 0;
+  border-radius: 8px 8px 0 0;
+  background: linear-gradient(180deg, #1d2a20 0%, #101a13 62%, #0d140f 100%);
+  box-shadow: inset 0 0 34px rgba(154, 212, 154, 0.07);
+}
+.garden-tree-pane {
+  position: relative;
+  border: 1px solid rgba(201, 176, 136, 0.28);
+  background:
+    linear-gradient(160deg, rgba(234, 223, 198, 0.05), rgba(234, 223, 198, 0.012) 55%),
+    linear-gradient(180deg, rgba(154, 212, 154, 0.05), transparent 70%);
+  overflow: hidden;
+}
+/* condensation — real droplets, wipable with the cursor */
+.garden-tree-pane::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle 2.5px at 18% 74%, rgba(220, 235, 220, 0.34) 0 42%, transparent 46%),
+    radial-gradient(circle 1.5px at 34% 30%, rgba(220, 235, 220, 0.26) 0 42%, transparent 46%),
+    radial-gradient(circle 3px at 52% 62%, rgba(220, 235, 220, 0.3) 0 42%, transparent 46%),
+    radial-gradient(circle 1.5px at 63% 22%, rgba(220, 235, 220, 0.22) 0 42%, transparent 46%),
+    radial-gradient(circle 2px at 81% 78%, rgba(220, 235, 220, 0.3) 0 42%, transparent 46%),
+    radial-gradient(circle 1.2px at 90% 38%, rgba(220, 235, 220, 0.2) 0 42%, transparent 46%),
+    radial-gradient(circle 2.2px at 12% 18%, rgba(220, 235, 220, 0.24) 0 42%, transparent 46%),
+    radial-gradient(circle 1.4px at 44% 88%, rgba(220, 235, 220, 0.26) 0 42%, transparent 46%),
+    radial-gradient(circle 2.6px at 72% 50%, rgba(220, 235, 220, 0.28) 0 42%, transparent 46%);
+  transition: opacity 1.4s ease;
+  pointer-events: none;
+}
+.garden-tree-pane.wiped::before { opacity: 0; }
+.garden-tree-pane.wiped { background-color: rgba(220, 235, 220, 0.05); }
+
+/* the world outside the glass: other travellers' windows across the dark,
+   drawn faintly. one window wears a light that is not ruby's. */
+.garden-tree-outside {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 58px 22px at 26% 68%, rgba(138, 154, 107, 0.22), transparent 70%),
+    radial-gradient(ellipse 74px 26px at 74% 74%, rgba(138, 154, 107, 0.16), transparent 70%),
+    radial-gradient(ellipse 12px 9px at 83% 30%, rgba(232, 197, 122, 0.12), transparent 72%),
+    linear-gradient(180deg, transparent 78%, rgba(10, 14, 10, 0.55));
+}
+
+/* brick sill */
+.garden-tree-sill {
+  flex: 0 0 13px;
+  margin: 0 -4px;
+  border: 2px solid #4a3524;
+  border-radius: 3px;
+  background:
+    repeating-linear-gradient(90deg, #6a3a28 0 34px, #5a3020 34px 36px),
+    linear-gradient(180deg, #6a3a28, #4a2818);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* ─── the middle: bench-stage + tree + side panel ─── */
+.garden-tree-middle {
+  display: flex;
+  gap: 14px;
+  min-height: 0;
+}
+
+.garden-tree-stage { flex: 1 1 auto; display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+
+.garden-tree-wrap {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 120px;
+  border: 1.5px solid #4a3524;
+  border-radius: 6px;
+  background:
+    radial-gradient(ellipse 130px 46px at 50% 92%, rgba(58, 36, 18, 0.55), transparent 74%),
+    linear-gradient(180deg, rgba(122, 74, 94, 0.08), transparent 34%),
+    linear-gradient(180deg, #241811, #1a100a 70%, #140c07);
+  overflow: hidden;
+}
+.garden-tree-wrap svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* the lamp: one warm pool over the pot. on at dusk by ruby's habit,
+   off in daylight — the room answers the machine's own clock */
+.garden-tree-lamp {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 2.4s ease;
+  background: radial-gradient(ellipse 190px 130px at 50% 30%, rgba(232, 197, 122, 0.16), transparent 72%);
+}
+.garden-tree-lamp.on { opacity: 1; }
+.garden-tree-lamp.on::after {
+  /* the bulb itself, small and honest, where the pool comes from */
+  content: '';
+  position: absolute;
+  top: 14px; left: 50%;
+  width: 7px; height: 7px;
+  margin-left: -3px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 32%, #fff0c0, #e8a83a 68%, #7a4a10);
+  box-shadow: 0 0 9px 2px rgba(232, 180, 90, 0.4);
+}
+
+/* the striking bed: seedlings wait in wooden flats at the bench edge —
+   scenery inside the stage, never competing for layout. one flat is empty
+   because ruby planted from it and has not refilled it. */
+.garden-tree-beds {
+  position: absolute;
+  left: 10px;
+  bottom: 8px;
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  pointer-events: none;
+}
+.tree-flat {
+  position: relative;
+  width: 74px;
+  height: 24px;
+  border: 1.5px solid #4a3524;
+  border-radius: 2px;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 17px, rgba(36, 29, 22, 0.65) 17px 19px),
+    linear-gradient(180deg, #3a2a18, #241a10);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+}
+.tree-flat i {
+  position: absolute;
+  bottom: 5px;
+  width: 5px; height: 7px;
+  border-radius: 1px 1px 0 0;
+  background: var(--garden-sage, #8a9a6b);
+}
+.tree-flat i::after {
+  content: '';
+  position: absolute;
+  top: -4px; left: 1.5px;
+  width: 2px; height: 4px;
+  background: var(--garden-sage, #8a9a6b);
+}
+.tree-flat.empty i { display: none; }
+.tree-flat.empty::after {
+  content: 'sown out';
+  position: absolute;
+  bottom: 6px; left: 8px;
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 9px;
+  color: rgba(183, 164, 134, 0.55);
+}
+
+/* light bands: sun through the glass lays skewed panes of warmth across
+ * the bench — daylight's answer to the lamp, on the machine's own clock */
+.garden-tree-bands {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 2.4s ease;
+  background:
+    linear-gradient(102deg,
+      transparent 6%, rgba(232, 197, 122, 0.055) 6%, rgba(232, 197, 122, 0.055) 14%, transparent 14%,
+      transparent 22%, rgba(232, 197, 122, 0.075) 22%, rgba(232, 197, 122, 0.075) 34%, transparent 34%,
+      transparent 46%, rgba(232, 197, 122, 0.05) 46%, rgba(232, 197, 122, 0.05) 52%, transparent 52%),
+    radial-gradient(ellipse 90px 40px at 62% 96%, rgba(232, 197, 122, 0.10), transparent 72%);
+  mix-blend-mode: screen;
+}
+.garden-tree-bands.on { opacity: 1; }
+
+/* the bench edge the stage sits on: a lit lip under the ground line */
+.garden-tree-wrap::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 7px;
+  background: linear-gradient(180deg, #6a4a2e, #4a3220);
+  border-top: 1.5px solid #4a3524;
+  pointer-events: none;
+}
+
+/* ─── root panel under glass ─── */
+.garden-tree-roots {
+  flex: 0 1 132px;
+  min-height: 64px;
+  display: flex;
+  flex-direction: column;
+  border: 1.5px solid rgba(201, 176, 136, 0.32);
+  border-radius: 6px;
+  background:
+    linear-gradient(180deg, rgba(234, 223, 198, 0.05), rgba(234, 223, 198, 0.02)),
+    linear-gradient(180deg, #1a2218, #121a12);
+  padding: 8px;
+  gap: 6px;
+  min-height: 0;
+}
+.garden-tree-roots h3 {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: lowercase;
+  color: rgba(201, 176, 136, 0.75);
+}
+.garden-tree-roots svg { flex: 1; width: 100%; min-height: 0; }
+
+/* ─── meta + actions + fruit ledger: one row, always above the fold ─── */
+.garden-tree-foot {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.garden-tree-meta {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-style: normal;
+  font-size: 1rem;
+  color: var(--garden-cream, #ede0c8);
+}
+.garden-tree-actions { display: flex; gap: 8px; align-items: center; }
+
+.garden-tree-note {
+  font-size: 1rem;
+  font-style: normal;
+  color: var(--garden-cream, #ede0c8);
+  text-align: right;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.garden-tree-fruitrow {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  align-items: center;
+  min-height: 20px;
+  font-size: 11.5px;
+  color: var(--garden-cream-dim, #b7a486);
+}
+.tree-fruit-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid rgba(201, 176, 136, 0.3);
+  border-radius: 99px;
+  padding: 2px 9px 2px 5px;
+  background: rgba(20, 12, 7, 0.55);
+}
+.tree-fruit-chip i {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  display: inline-block;
+}
+.tree-fruit-none { opacity: 0.65; font-style: italic; }
+
+/* the stake tag before growth: handwritten, unremarkable */
+.tree-stake-tag {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 11px;
+  fill: rgba(201, 176, 136, 0.66);
+}
+
+/* watering-can arc: one arc of droplets when watered (motion-gated) */
+.garden-tree-pour {
+  position: absolute;
+  pointer-events: none;
+  inset: 0;
+  display: none;
+}
+.garden-tree-pour.on { display: block; }
+.garden-tree-pour i {
+  position: absolute;
+  width: 3px; height: 3px;
+  border-radius: 50%;
+  background: #7ac0e0;
+  animation: tree-drop 0.9s ease-in forwards;
+}
+@keyframes tree-drop {
+  from { transform: translate(0, 0); opacity: 0.9; }
+  to   { transform: translate(26px, 120px); opacity: 0; }
+}
+
+/* the seasonal crown sways once — slow, one beat per visit, motion-gated */
+.garden-tree-wrap.inseason .tree-fruit { animation: tree-sway 5.5s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 0%; }
+@keyframes tree-sway {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(2.4deg); }
+}
+
+/* the stage-turn beat: boughs ease from one size to the next (one shot) */
+.garden-tree-wrap.turning ellipse { transition: none; }
+
+/* ─── reduced motion: the function survives, the flourish does not ─── */
+@media (prefers-reduced-motion: reduce) {
+  .garden-tree-pour i { animation: none; opacity: 0; }
+  .garden-tree-bands { transition: none; }
+  .garden-tree-wrap.inseason .tree-fruit { animation: none; }
+  .garden-tree-pane::before { transition: none; }
+  .garden-tree-lamp { transition: none; }
+}
+
+/* short screens: the room yields continuously — the window and root panel
+ * shrink before the stage ever clips (the CRT screen, not the viewport,
+ * is the real constraint, so no height breakpoints here) */
+
+/* narrow screens: the root panel drops under the stage */
+@media (max-width: 640px) {
+  .garden-tree-middle { flex-direction: column; }
+  .garden-tree-roots { flex: 0 0 96px; }
+  .garden-tree-wrap { min-height: 170px; }
+}

@@ -1,7 +1,6 @@
 // sea.js — Vanir's deep. No shared imports (covenant Q.1).
 
 (function () {
-  var fill = document.getElementById('sea-gauge-fill');
   var deep = document.querySelector('.sea-deep');
   var breath = document.getElementById('sea-breath');
   var farLayer = document.getElementById('sea-far');
@@ -22,7 +21,6 @@
       target = Math.max(target - 0.0005, 0.2);
     }
     depth += (target - depth) * 0.04;
-    if (fill) fill.style.height = (depth * 100) + '%';
     if (farLayer) farLayer.style.transform = 'translateY(' + (-depth * 36).toFixed(1) + 'px)';
     if (nearLayer) {
       nearLayer.style.transform = 'translateY(' + (-depth * 72).toFixed(1) + 'px)';
@@ -103,28 +101,68 @@
       var dots = intensityWrap.querySelectorAll('.sea-intensity-dot');
       for (var i = 0; i < dots.length; i++) {
         var v = parseInt(dots[i].getAttribute('data-value'), 10);
-        if (v === intensity) dots[i].classList.add('on');
+        var selected = (v === intensity);
+        if (selected) dots[i].classList.add('on');
         else dots[i].classList.remove('on');
+        dots[i].setAttribute('aria-checked', selected ? 'true' : 'false');
+        dots[i].tabIndex = selected ? 0 : -1;
         if (v >= 4) dots[i].classList.toggle('locked', !deepOpen());
         else dots[i].classList.remove('locked');
       }
+      paintTicks(intensity);
+    }
+
+    function paintTicks(litCount) {
+      var ticks = document.querySelectorAll('#sea-gauge-ticks .sea-fathom');
+      for (var i = 0; i < ticks.length; i++) {
+        var v = parseInt(ticks[i].getAttribute('data-tick'), 10);
+        if (v <= litCount) ticks[i].classList.add('lit');
+        else ticks[i].classList.remove('lit');
+      }
+    }
+
+    function focusDot(value) {
+      var el = intensityWrap.querySelector('.sea-intensity-dot[data-value="' + value + '"]');
+      if (el) el.focus();
+    }
+
+    function chooseDot(value) {
+      if (releasing) return;
+      if (value >= 4 && !deepOpen()) { gateNote(); return; }
+      intensity = value;
+      paintIntensity();
     }
 
     intensityWrap.addEventListener('click', function (e) {
       var v = intensityFromEvent(e);
-      if (isNaN(v) || releasing) return;
-      if (v >= 4 && !deepOpen()) { gateNote(); return; }
-      intensity = v;
-      paintIntensity();
+      if (isNaN(v)) return;
+      chooseDot(v);
+    });
+
+    intensityWrap.addEventListener('keydown', function (e) {
+      var k = e.key;
+      var move = 0;
+      if (k === 'ArrowRight' || k === 'ArrowDown') move = 1;
+      else if (k === 'ArrowLeft' || k === 'ArrowUp') move = -1;
+      else if (k === 'Home') { e.preventDefault(); chooseDot(1); focusDot(1); return; }
+      else if (k === 'End') { e.preventDefault(); chooseDot(5); focusDot(5); return; }
+      else return;
+      e.preventDefault();
+      var next = intensity + move;
+      if (next < 1) next = 5;
+      if (next > 5) next = 1;
+      chooseDot(next);
+      focusDot(next);
     });
 
     var breathToggle = document.getElementById('sea-breath-toggle');
     var breathPhase = document.getElementById('sea-breath-phase');
     var guided = false, guidedTimer = null, guidedT = 0;
-    var PHASES = ['in…', 'in…', 'in…', 'in…', 'hold…', 'hold…', 'hold…', 'hold…',
-      'out…', 'out…', 'out…', 'out…', 'out…', 'out…'];
+    var CYCLE_S = 10, IN_S = 4;
     function paintPhase() {
-      if (breathPhase) breathPhase.textContent = guided ? PHASES[guidedT % PHASES.length] : '';
+      if (!breathPhase) return;
+      if (!guided) { breathPhase.textContent = ''; return; }
+      breathPhase.textContent = (guidedT % CYCLE_S) < IN_S ? 'in' : 'out';
     }
     function setGuided(on) {
       guided = on;
@@ -155,9 +193,9 @@
       releasing = true;
       releaseBtn.disabled = true;
       app.classList.add('releasing');
-      if (breath) breath.style.setProperty('--sea-amp', ((intensity - 1) / 4).toFixed(2));
       carriedText.textContent = text;
       carried.classList.add('visible');
+      paintTicks(1);
 
       if (window.Liber && window.Liber.state && window.Liber.state.addArtifact) {
         window.Liber.state.addArtifact('sea', { text: text, intensity: intensity });
@@ -169,7 +207,12 @@
 
       setTimeout(function () {
         carried.classList.add('dissolving');
+        paintTicks(3);
       }, FADE_MS + DISSOLVE_MS * 0.4);
+
+      setTimeout(function () {
+        paintTicks(5);
+      }, FADE_MS + DISSOLVE_MS * 0.7);
 
       setTimeout(function () {
         carried.classList.remove('visible', 'dissolving');
@@ -182,6 +225,7 @@
         releasing = false;
       }, FADE_MS + DISSOLVE_MS);
     });
+    paintIntensity();
   }
 
   // Phase 8: secret "extc" listener is scoped to sea.html only.

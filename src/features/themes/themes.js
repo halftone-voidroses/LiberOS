@@ -66,6 +66,20 @@
     build();
     apply(current());
 
+    // the locker overflows the glass: the ▼ drops away at the last tile.
+    var skin = document.querySelector('.themes-skin');
+    var mark = document.getElementById('themes-scroll');
+    function paintMark() {
+      if (!skin || !mark) return;
+      var done = skin.scrollHeight - skin.scrollTop - skin.clientHeight < 8;
+      mark.classList.toggle('spent', done);
+    }
+    if (skin) {
+      skin.addEventListener('scroll', paintMark);
+      window.addEventListener('resize', paintMark);
+      setTimeout(paintMark, 100);
+    }
+
     var exit = document.getElementById('themes-exit');
     if (exit) exit.addEventListener('click', function () {
       if (history.length > 1) history.back(); else location.href = 'desktop.html';

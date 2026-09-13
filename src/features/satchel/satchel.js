@@ -16,6 +16,10 @@
   var popText = document.getElementById('satchel-pop-text');
   var popNote = document.getElementById('satchel-pop-note');
   var exit = document.getElementById('satchel-exit');
+  var findEl = document.getElementById('satchel-find');
+  var slipEl = document.getElementById('satchel-slip');
+  var spineEl = document.getElementById('satchel-spine');
+  var bindingEl = document.querySelector('.satchel-binding');
 
   function st() { return (window.Liber && window.Liber.state) || null; }
   function getS() { return (st() && st().get()) || {}; }
@@ -83,6 +87,64 @@
     if (type === 'satchel') return d.text || d.excerpt || d.name || d.kind || '';
     if (type === 'relation') return '';
     return d.name || d.title || d.text || '';
+  }
+
+  // where a kept thing was made — the slip out of the book goes home
+  var HOME = {
+    stone: ['buddy.html', 'the stone'],
+    buddy: ['buddy.html', 'the lamp'],
+    divination: ['divination.html', 'the felt table'],
+    iching: ['divination.html', 'the felt table'],
+    games: ['games.html', 'the midway'],
+    learn: ['learn.html', 'the shelf'],
+    abstract: ['sigil.html', 'the bench'],
+    sea: ['sea.html', 'the water'],
+    garden: ['garden.html', 'the glasshouse'],
+    dreams: ['dreams.html', 'the fog'],
+    methodology: ['learn.html', 'the shelf'],
+    relation: ['desktop.html', 'the constellation']
+  };
+
+  function slipFor(type) { return HOME[type] || null; }
+
+  function isUnread(type, id) {
+    if (type === 'stone' || type === 'relation' || type === 'buddy') return false;
+    var s = getS();
+    return !((s.read || {})[id]);
+  }
+
+  function markRead(item) {
+    if (!st() || item.type === 'stone' || item.type === 'relation' || item.type === 'buddy') return;
+    var reg = (getS().read || {});
+    if (reg[item.id]) return;
+    reg[item.id] = Date.now();
+    st().set({ read: reg });
+  }
+
+  function unreadCount() {
+    var s = getS();
+    var reg = s.read || {};
+    var n = 0, total = 0;
+    for (var k = 0; k < KINDS.length; k++) {
+      var arr = KINDS[k].get(s);
+      total += arr.length;
+      for (var m = 0; m < arr.length; m++) if (arr[m] && !reg[arr[m].id]) n++;
+    }
+    return { unread: n, total: total };
+  }
+
+  // the spine thickens with keeps; the caps brighten with knots
+  function updateSpine() {
+    var c = unreadCount();
+    if (bindingEl) {
+      var rels = (getS().relations || []).length;
+      bindingEl.setAttribute('data-relations', String(rels === 0 ? 0 : rels < 4 ? 1 : rels < 8 ? 2 : 3));
+    }
+    if (spineEl) {
+      spineEl.style.width = (22 + Math.min(c.total, 40) * 0.45) + 'px';
+      var tally = spineEl.querySelector('.satchel-spine-tally');
+      if (tally) tally.textContent = c.total > 0 ? String(c.total) : '—';
+    }
   }
 
   var tab = 'buddy';
@@ -227,6 +289,20 @@
     return !!(d && ((d.marks && d.marks.length) || d.annotation || d.satchelNote || d.note));
   }
 
+  // the margin note a row confesses on hover: a mark's attached note,
+  // else the opening of the annotation itself.
+  function marginalOf(d) {
+    if (!d) return '';
+    if (d.marks && d.marks.length) {
+      for (var i = 0; i < d.marks.length; i++) {
+        if (d.marks[i] && d.marks[i].note) return String(d.marks[i].note).slice(0, 60);
+      }
+    }
+    var t = d.annotation || d.satchelNote || d.note || '';
+    t = String(t).replace(/\s+/g, ' ').trim();
+    return t.length > 46 ? t.slice(0, 46) + '…' : t;
+  }
+
   function renderTabs() {
     if (!drawers) return;
     var btns = drawers.querySelectorAll('.satchel-tab');
@@ -239,19 +315,32 @@
   function renderList() {
     if (!list) return;
     renderTabs();
+    updateSpine();
+    var needle = (findEl && findEl.value || '').trim().toLowerCase();
     var items = collect(tab);
+    if (needle) {
+      var filtered = [];
+      for (var f = 0; f < items.length; f++) {
+        var itF = items[f];
+        var hay = (itemLabel(itF.type, itF.data) + ' ' + metaOf(itF.type, itF.data) + ' ' + String(bodyOf(itF.type, itF.data) || '')).toLowerCase();
+        if (hay.indexOf(needle) >= 0) filtered.push(itF);
+      }
+      items = filtered;
+    }
     var html = '';
     if (!items.length) {
-      var hint = tab === 'buddy' ? 'make a buddy first.' : (tab === 'relations' ? 'bind an artifact on the desktop first.' : 'save something first.');
+      var hint = tab === 'buddy' ? 'make a buddy first.' : (tab === 'relations' ? 'bind an artifact on the desktop first.' : (needle ? 'nothing answers to that.' : 'save something first.'));
       list.innerHTML = '<div class="satchel-empty">the drawer is empty.<br/>' + hint + '</div>';
       return;
     }
     for (var i = 0; i < items.length; i++) {
       var it = items[i];
+      var ribbon = isUnread(it.type, it.id) ? '<span class="satchel-ribbon" aria-label="unopened"></span>' : '';
       var dot = hasMarks(it.data) ? '<span class="satchel-ann-dot" aria-hidden="true">✎</span>' : '';
+      var marginal = hasMarks(it.data) ? ' data-marginal="' + esc(marginalOf(it.data)) + '"' : '';
       var cur = (current && current.type === it.type && current.id === it.id) ? ' current' : '';
-      html += '<div class="satchel-list-item' + cur + '" data-type="' + esc(it.type) + '" data-id="' + esc(it.id || '') + '" data-i="' + (it.idx == null ? '' : it.idx) + '">'
-            + dot + esc(itemLabel(it.type, it.data))
+      html += '<div class="satchel-list-item' + cur + '" tabindex="0" role="button"' + marginal + ' data-type="' + esc(it.type) + '" data-id="' + esc(it.id || '') + '" data-i="' + (it.idx == null ? '' : it.idx) + '">'
+            + ribbon + dot + esc(itemLabel(it.type, it.data))
             + '<div class="meta">' + esc(metaOf(it.type, it.data)) + '</div></div>';
     }
     list.innerHTML = html;
@@ -259,6 +348,9 @@
     for (var m = 0; m < rows.length; m++) {
       rows[m].addEventListener('click', function () {
         openNote(tab, this.getAttribute('data-type'), this.getAttribute('data-id'), this.getAttribute('data-i'));
+      });
+      rows[m].addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.click(); }
       });
     }
   }
@@ -367,6 +459,12 @@
       else { polaroid.removeAttribute('src'); polaroid.hidden = true; }
     }
     paintEditor(baseTextOf(item), item.data.marks);
+    markRead(item);
+    if (slipEl) {
+      var home = slipFor(item.type);
+      if (home) { slipEl.hidden = false; slipEl.textContent = 'slip out to ' + home[1]; }
+      else slipEl.hidden = true;
+    }
     renderList();
   }
 
@@ -481,6 +579,7 @@
         if (dateEl) dateEl.textContent = '— —';
         if (intentEl) intentEl.textContent = '';
         if (polaroid) { polaroid.removeAttribute('src'); polaroid.hidden = true; }
+        if (slipEl) slipEl.hidden = true;
         if (editor) editor.innerHTML = '';
         renderList();
       });
@@ -503,6 +602,27 @@
     if (exit) exit.addEventListener('click', function () {
       try { if (current) persist(true); } catch (e) {}
       if (history.length > 1) history.back(); else location.href = 'desktop.html';
+    });
+
+    if (slipEl) slipEl.addEventListener('click', function () {
+      if (!current) return;
+      try { persist(true); } catch (e) {}
+      var home = slipFor(current.type);
+      if (home) {
+        if (history.length > 1) history.back(); else location.href = home[0];
+      }
+    });
+
+    if (findEl) {
+      findEl.addEventListener('input', function () { renderList(); });
+      findEl.addEventListener('keydown', function (e) { if (e.key === 'Escape') { findEl.value = ''; renderList(); } });
+    }
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== '/' || e.metaKey || e.ctrlKey || e.altKey) return;
+      var t = e.target;
+      if (t && (t.isContentEditable || /^(INPUT|TEXTAREA)$/.test(t.tagName))) return;
+      e.preventDefault();
+      if (findEl) findEl.focus();
     });
 
     var helpBtn = document.getElementById('satchel-help');

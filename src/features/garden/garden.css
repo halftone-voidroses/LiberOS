@@ -151,8 +151,8 @@
 }
 
 .garden-raison-close {
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   border: 1px solid var(--garden-thread);
   border-radius: 50%;
   background: transparent;
@@ -184,12 +184,14 @@
 .garden-tab {
   border: 1px solid var(--garden-thread-faint);
   background: rgba(38, 26, 16, 0.8);
-  color: var(--garden-cream-dim);
+  color: var(--garden-cream);
   font-family: inherit;
-  font-style: italic;
-  font-size: 0.8rem;
+  font-style: normal;
+  font-size: 1rem;
   letter-spacing: 0.12em;
-  padding: 3px 12px;
+  padding: 6px 14px;
+  min-height: 44px;
+  min-width: 44px;
   border-radius: 10px 10px 0 0;
   cursor: pointer;
 }
@@ -226,10 +228,10 @@
 }
 
 .garden-gem-count {
-  font-size: 0.8rem;
-  font-style: italic;
+  font-size: 1rem;
+  font-style: normal;
   letter-spacing: 0.14em;
-  color: var(--garden-cream-dim);
+  color: var(--garden-cream);
 }
 
 .garden-action {
@@ -237,10 +239,12 @@
   background: rgba(38, 26, 16, 0.9);
   color: var(--garden-cream);
   font-family: inherit;
-  font-style: italic;
-  font-size: 0.85rem;
+  font-style: normal;
+  font-size: 1rem;
   letter-spacing: 0.1em;
-  padding: 4px 14px;
+  padding: 6px 16px;
+  min-height: 44px;
+  min-width: 44px;
   border-radius: 3px;
   cursor: pointer;
   box-shadow:
@@ -341,8 +345,10 @@
 }
 
 .garden-slot {
-  width: 34px;
-  height: 34px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   border-radius: 8px 12px 9px 11px; /* rough chip, hand-cut */
   border: 1px dashed var(--garden-thread-faint);
   background: transparent;
@@ -362,12 +368,12 @@
 .garden-palette-note,
 .garden-gem-note {
   text-align: center;
-  font-size: 0.78rem;
-  font-style: italic;
+  font-size: 1rem;
+  font-style: normal;
   letter-spacing: 0.1em;
-  color: var(--garden-cream-dim);
+  color: var(--garden-cream);
 }
-.garden-gem-note { margin-top: 4px; color: var(--garden-terracotta); }
+.garden-gem-note { margin-top: 4px; color: var(--garden-cream); }
 
 /* ─── the draft panel — what your hands did ─── */
 
@@ -410,9 +416,9 @@
 }
 
 .garden-draft-sub {
-  font-size: 0.82rem;
-  font-style: italic;
-  color: var(--garden-cream-dim);
+  font-size: 1rem;
+  font-style: normal;
+  color: var(--garden-cream);
 }
 
 .garden-draft-view {
@@ -426,9 +432,12 @@
   background: rgba(20, 13, 7, 0.8);
   color: var(--garden-cream);
   font-family: inherit;
-  font-style: italic;
-  font-size: 0.9rem;
-  padding: 5px 10px;
+  font-style: normal;
+  font-size: 1rem;
+  padding: 6px 10px;
+  min-height: 44px;
+  box-sizing: border-box;
+  width: 100%;
 }
 .garden-input::placeholder { color: rgba(183, 164, 134, 0.55); }
 .garden-input:focus { outline: 2px solid var(--garden-terracotta); outline-offset: 1px; }
@@ -530,10 +539,10 @@
 .garden-plot-meta {
   margin-left: auto;
   flex-shrink: 0;
-  font-size: 0.76rem;
-  font-style: italic;
+  font-size: 1rem;
+  font-style: normal;
   letter-spacing: 0.08em;
-  color: var(--garden-cream-dim);
+  color: var(--garden-cream);
 }
 
 /* the bed learns — the pot's thread band re-tints to the flower's scheme */
@@ -590,8 +599,8 @@
 }
 
 .garden-stage-close {
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   flex-shrink: 0;
   border: 1px solid var(--garden-thread);
   border-radius: 50%;
@@ -655,8 +664,8 @@
 }
 
 .garden-fchip {
-  width: 26px;
-  height: 26px;
+  width: 44px;
+  height: 44px;
   border-radius: 7px 10px 8px 9px;
   border: 1px solid var(--garden-ink);
   cursor: pointer;
@@ -783,6 +792,9 @@
 .garden-action:focus-visible,
 .garden-slot:focus-visible,
 .garden-fchip:focus-visible,
+.garden-plot:focus-visible,
+.garden-facet:focus-visible,
+.garden-region:focus-visible,
 .garden-help:focus-visible,
 .garden-exit:focus-visible,
 .garden-raison-close:focus-visible,
@@ -796,6 +808,7 @@
   .garden-butterfly::before,
   .garden-butterfly::after { animation: none; }
   .garden-butterfly { opacity: 0.4; }
+  .garden-facet.settled { animation: none; }
   .garden-bloom-in { animation: garden-bloom-fade 1.6s ease-out both; }
   @keyframes garden-bloom-fade {
     from { opacity: 0; }
@@ -814,7 +827,9 @@
 }
 .garden-subject {
   font-family: Georgia, 'Times New Roman', Times, serif;
-  font-size: 0.92rem;
+  font-size: 1rem;
+  font-style: normal;
+  min-height: 44px;
   letter-spacing: 0.08em;
   color: var(--garden-cream);
   background: transparent;
@@ -854,22 +869,24 @@
 }
 
 .garden-bed-title {
-  font-style: italic;
+  font-style: normal;
   font-size: 1rem;
   color: var(--garden-cream);
   letter-spacing: 0.1em;
 }
 
 .garden-bed-hint {
-  font-style: italic;
-  font-size: 0.85rem;
-  color: var(--garden-cream-dim);
+  font-style: normal;
+  font-size: 1rem;
+  color: var(--garden-cream);
 }
 
 .garden-can {
   margin-left: auto;
   cursor: grab;
-  padding: 2px 6px;
+  padding: 4px 6px;
+  min-width: 44px;
+  min-height: 44px;
   border-radius: 6px;
   touch-action: none;
 }

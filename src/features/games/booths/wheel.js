@@ -47,7 +47,7 @@ function playWheel(ctx, b, body) {
     + '<div class="wheel-dart" id="wheel-dart" aria-hidden="true">'
     + '<svg viewBox="0 0 34 34" width="34" height="34"><path d="M17 2 L21 20 L17 26 L13 20 Z" fill="#e8c890" stroke="#5a3a10"/><circle cx="17" cy="8" r="2.5" fill="#c02424"/></svg>'
     + '</div><div class="wheel-seep" id="wheel-seep" aria-hidden="true"></div></div>'
-    + '<div class="wheel-hint" id="wheel-hint">click the wheel to throw a dart.</div>'
+    + '<div class="wheel-hint" id="wheel-hint">a dart waits. the wheel takes the throw.</div>'
     + '<div class="wheel-colors" id="wheel-colors" hidden></div>'
     + '<div class="games-actions">'
     + '<button type="button" class="games-action" id="wheel-again" hidden>another dart</button>'
@@ -142,7 +142,7 @@ function playWheel(ctx, b, body) {
     if (seep) { seep.classList.remove('go'); }
     if (dart) { dart.classList.remove('dropped'); dart.style.transform = 'translate(-40px,-40px)'; }
     if (colors) colors.hidden = true;
-    if (hint) hint.textContent = 'click the wheel to throw a dart.';
+    if (hint) hint.textContent = 'a dart waits. the wheel takes the throw.';
   });
 
   if (keep) keep.addEventListener('click', function () {

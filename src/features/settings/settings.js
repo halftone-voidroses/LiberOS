@@ -23,6 +23,20 @@
 
     renderSound();
     renderScape();
+    renderCrtRoom();
+  }
+
+  // the room behind the CRT — the same state the scene reads, one owner
+  // (s.crtRoomOn), mirrored here and on the desktop
+  function renderCrtRoom() {
+    var s = (window.Liber && window.Liber.state && window.Liber.state.get()) || {};
+    var b = document.getElementById('settings-crt-room');
+    if (b) b.textContent = s.crtRoomOn ? 'the room behind: shown' : 'the room behind: hidden';
+  }
+
+  function toggleCrtRoom() {
+    if (window.Liber && window.Liber.crtRoom) window.Liber.crtRoom.toggleSettings();
+    renderState();
   }
 
   function renderSound() {
@@ -114,21 +128,50 @@
     renderState();
   }
 
-  var wipeArmed = false, wipeTimer = null;
-  function wipe() {
-    var btn = document.getElementById('settings-wipe');
-    if (!wipeArmed) {
-      wipeArmed = true;
-      if (btn) btn.textContent = 'click again — wipe the room. this cannot be undone.';
-      wipeTimer = setTimeout(function () {
-        wipeArmed = false;
-        if (btn) btn.textContent = 'wipe the room';
-      }, 5000);
-      return;
-    }
+  // the wipe rides a two-switch interlock under a cover: lift the
+  // cover, pull 1, then pull 2. any pause past the count drops it all
+  // back to safe. plain pulls, no questions asked and none answered.
+  var wipeTimer = null;
+  function wipeSafe() {
+    if (wipeTimer) { clearTimeout(wipeTimer); wipeTimer = null; }
+    var cover = document.getElementById('settings-wipe-cover');
+    var box = document.getElementById('settings-wipe-switches');
+    var s1 = document.getElementById('settings-wipe-1');
+    var s2 = document.getElementById('settings-wipe');
+    if (s1) { s1.setAttribute('aria-pressed', 'false'); s1.disabled = true; }
+    if (s2) { s2.setAttribute('aria-pressed', 'false'); s2.disabled = true; }
+    if (box) box.hidden = true;
+    if (cover) cover.setAttribute('aria-expanded', 'false');
+  }
+  function wipeCount() {
     if (wipeTimer) clearTimeout(wipeTimer);
-    wipeArmed = false;
-    if (btn) btn.textContent = 'wipe the room';
+    wipeTimer = setTimeout(wipeSafe, 8000);
+  }
+  function wipeCover() {
+    var cover = document.getElementById('settings-wipe-cover');
+    var box = document.getElementById('settings-wipe-switches');
+    if (!cover || !box) return;
+    var open = box.hidden;
+    if (!open) { wipeSafe(); return; }
+    box.hidden = false;
+    cover.setAttribute('aria-expanded', 'true');
+    var s1 = document.getElementById('settings-wipe-1');
+    if (s1) s1.disabled = false;
+    wipeCount();
+  }
+  function wipePull1() {
+    var s1 = document.getElementById('settings-wipe-1');
+    var s2 = document.getElementById('settings-wipe');
+    if (!s1 || s1.disabled) return;
+    s1.setAttribute('aria-pressed', 'true');
+    s1.disabled = true;
+    if (s2) s2.disabled = false;
+    wipeCount();
+  }
+  function wipePull2() {
+    var s2 = document.getElementById('settings-wipe');
+    if (!s2 || s2.disabled) return;
+    wipeSafe();
     if (window.Liber && window.Liber.state) window.Liber.state.reset();
     try { localStorage.removeItem('liber_vacui_consent'); } catch (e) {}
     if (window.Liber && window.Liber.sound) window.Liber.sound.play('thunk');
@@ -177,17 +220,23 @@
     var r = document.getElementById('settings-replay');
     var s = document.getElementById('settings-shadow');
     var sd = document.getElementById('settings-sound');
+    var cr = document.getElementById('settings-crt-room');
+    var wcover = document.getElementById('settings-wipe-cover');
+    var w1 = document.getElementById('settings-wipe-1');
     var w = document.getElementById('settings-wipe');
     var b = document.getElementById('settings-back');
     if (r) r.addEventListener('click', replay);
     if (s) s.addEventListener('click', toggleShadow);
     if (sd) sd.addEventListener('click', toggleSound);
+    if (cr) cr.addEventListener('click', toggleCrtRoom);
     var slider = document.getElementById('settings-music');
     if (slider) {
       slider.addEventListener('input', function () { setMusic(slider.value); });
       slider.addEventListener('change', function () { setMusic(slider.value); });
     }
-    if (w) w.addEventListener('click', wipe);
+    if (wcover) wcover.addEventListener('click', wipeCover);
+    if (w1) w1.addEventListener('click', wipePull1);
+    if (w) w.addEventListener('click', wipePull2);
     if (b) b.addEventListener('click', back);
     // The OST starts on first gesture; refresh the "now playing" line then.
     document.addEventListener('pointerdown', function () { setTimeout(renderScape, 600); });

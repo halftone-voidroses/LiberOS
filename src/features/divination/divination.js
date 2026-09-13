@@ -3,30 +3,55 @@
 // and land on the same shelf, in the same shape.
 
 (function () {
+  // Deck mirrors data/tarot.json: { id, name, n, g, keywords, upright[] }.
+  // The reading line is upright[0] — the author's own fragment. key is
+  // never read from the card; kept records set key from upright[0].
   var DECK = [
-    { n: 0,  g: 'O', name: 'the fool',         key: 'a step taken without map' },
-    { n: 1,  g: '☽', name: 'the magician',     key: 'will bent into form' },
-    { n: 2,  g: '⚮', name: 'the high priestess', key: 'what is hidden, kept' },
-    { n: 3,  g: '♀', name: 'the empress',      key: 'a body that bears' },
-    { n: 4,  g: '♂', name: 'the emperor',      key: 'a line drawn and held' },
-    { n: 5,  g: '⌘', name: 'the hierophant',   key: 'the old teaching' },
-    { n: 6,  g: '⚥', name: 'the lovers',       key: 'two become a question' },
-    { n: 7,  g: '⚔', name: 'the chariot',      key: 'force, harnessed' },
-    { n: 8,  g: 'Ω', name: 'strength',         key: 'softness against the throat' },
-    { n: 9,  g: '⌬', name: 'the hermit',       key: 'the lamp, the corridor' },
-    { n: 10, g: '☸', name: 'wheel of fortune', key: 'it turns, indifferent' },
-    { n: 11, g: '⚖', name: 'justice',          key: 'the weight, returned' },
-    { n: 12, g: '⚓', name: 'the hanged man',   key: 'let go, downward' },
-    { n: 13, g: '✝', name: 'death',            key: 'an ending, named' },
-    { n: 14, g: '⚗', name: 'temperance',       key: 'two waters, one cup' },
-    { n: 15, g: '⌖', name: 'the devil',        key: 'the chain you did not see' },
-    { n: 16, g: '⚡', name: 'the tower',        key: 'the structure, broken' },
-    { n: 17, g: '★', name: 'the star',         key: 'small light, far' },
-    { n: 18, g: '☾', name: 'the moon',         key: 'things, in water' },
-    { n: 19, g: '☀', name: 'the sun',          key: 'open, burning' },
-    { n: 20, g: '♪', name: 'judgement',        key: 'a sound, far off' },
-    { n: 21, g: 'O', name: 'the world',        key: 'a circle, closed' }
+    { id: 'fool', name: 'the fool', n: 0, g: 'O', keywords: [], upright: ['a step taken without map'] },
+    { id: 'magician', name: 'the magician', n: 1, g: '☽', keywords: [], upright: ['will bent into form'] },
+    { id: 'high-priestess', name: 'the high priestess', n: 2, g: '⚮', keywords: [], upright: ['what is hidden, kept'] },
+    { id: 'empress', name: 'the empress', n: 3, g: '♀', keywords: [], upright: ['a body that bears'] },
+    { id: 'emperor', name: 'the emperor', n: 4, g: '♂', keywords: [], upright: ['a line drawn and held'] },
+    { id: 'hierophant', name: 'the hierophant', n: 5, g: '⌘', keywords: [], upright: ['the old teaching'] },
+    { id: 'lovers', name: 'the lovers', n: 6, g: '⚥', keywords: [], upright: ['two become a question'] },
+    { id: 'chariot', name: 'the chariot', n: 7, g: '⚔', keywords: [], upright: ['force, harnessed'] },
+    { id: 'strength', name: 'strength', n: 8, g: 'Ω', keywords: [], upright: ['softness against the throat'] },
+    { id: 'hermit', name: 'the hermit', n: 9, g: '⌬', keywords: [], upright: ['the lamp, the corridor'] },
+    { id: 'wheel-of-fortune', name: 'wheel of fortune', n: 10, g: '☸', keywords: [], upright: ['it turns, indifferent'] },
+    { id: 'justice', name: 'justice', n: 11, g: '⚖', keywords: [], upright: ['the weight, returned'] },
+    { id: 'hanged-man', name: 'the hanged man', n: 12, g: '⚓', keywords: [], upright: ['let go, downward'] },
+    { id: 'death', name: 'death', n: 13, g: '✝', keywords: [], upright: ['an ending, named'] },
+    { id: 'temperance', name: 'temperance', n: 14, g: '⚗', keywords: [], upright: ['two waters, one cup'] },
+    { id: 'devil', name: 'the devil', n: 15, g: '⌖', keywords: [], upright: ['the chain you did not see'] },
+    { id: 'tower', name: 'the tower', n: 16, g: '⚡', keywords: [], upright: ['the structure, broken'] },
+    { id: 'star', name: 'the star', n: 17, g: '★', keywords: [], upright: ['small light, far'] },
+    { id: 'moon', name: 'the moon', n: 18, g: '☾', keywords: [], upright: ['things, in water'] },
+    { id: 'sun', name: 'the sun', n: 19, g: '☀', keywords: [], upright: ['open, burning'] },
+    { id: 'judgement', name: 'judgement', n: 20, g: '♪', keywords: [], upright: ['a sound, far off'] },
+    { id: 'world', name: 'the world', n: 21, g: 'O', keywords: [], upright: ['a circle, closed'] }
   ];
+
+  // The reading line, everywhere: upright[0]. Falls back to the old key
+  // shape only for saves written before the mirror.
+  function cardReading(card) {
+    if (!card) return '';
+    if (card.upright && card.upright.length) return card.upright[0];
+    return card.key || '';
+  }
+
+  // Second line of the interpret — the workbook lens, diegetic register.
+  // The counsel answers the situation around the question as often as the
+  // sentence; the first telling flatters the daylight. No imperatives.
+  function lensLine() {
+    return 'the situation around the question, asked through you — the first telling flatters the daylight; what it leaves out stays on the felt.';
+  }
+
+  // Hexagram reading line, everywhere: interpretation. Falls back to the
+  // old desc shape only for saves written before the mirror.
+  function hexReading(hex) {
+    if (!hex) return '';
+    return hex.interpretation || hex.desc || '';
+  }
 
   // I Ching — 64 hexagrams. Each line is yin (0) or yang (1); read bottom-up.
   // 6-bit binary: row 6 (top) is the first character.
@@ -126,9 +151,18 @@
     '110110','011011','110010','010011','110011','001100','010101','101010'
   ];
 
+  // Lookup mirrors data/hexagrams.json: { pattern, number, name, interpretation }.
+  // desc is kept as an alias for saves written before the mirror.
   function hexagramForPattern(pat) {
     var idx = HEXAGRAM_PATTERNS.indexOf(pat);
-    return idx >= 0 ? { name: HEXAGRAM_NAMES[idx], desc: HEXAGRAM_DESCRIPTIONS[idx] } : null;
+    if (idx < 0) return null;
+    return {
+      name: HEXAGRAM_NAMES[idx],
+      interpretation: HEXAGRAM_DESCRIPTIONS[idx],
+      desc: HEXAGRAM_DESCRIPTIONS[idx],
+      number: idx + 1,
+      pattern: HEXAGRAM_PATTERNS[idx]
+    };
   }
 
   // ─── state ──────────────────────────────────────────────────────────
@@ -218,10 +252,41 @@
 
   function questionLine() {
     var q = question();
-    return q ? '"' + q + '"' : '(no question — the card came anyway)';
+    return q ? '"' + q + '"' : '(unguided draw)';
+  }
+
+  function seedEl() { return el('divination-seed'); }
+  function ichingSeedEl() { return el('divination-iching-seed'); }
+  function feltEl() { return document.querySelector('.divination-felt'); }
+  // the kept record's own number — the existing book path (Liber.state id),
+  // shown alongside the reading. No new shuffle, no new random.
+  function paintSeed(node, entry) {
+    if (!node) return;
+    if (!entry || !entry.id) { node.textContent = ''; return; }
+    node.textContent = String(entry.id);
   }
 
   // ─── the unified keep prompt ────────────────────────────────────────
+  // Hash-driven so back closes it: open sets #keep, close clears it.
+  var hashLock = false;
+  function setHash(h) {
+    try {
+      if ((location.hash || '') === h) return;
+      hashLock = true;
+      if (!h) history.back();
+      else location.hash = h;
+    } catch (e) { hashLock = false; }
+  }
+  function syncBackground() {
+    var felt = feltEl();
+    if (!felt) return;
+    var prompt = el('divination-save-prompt');
+    var raison = el('divination-raison');
+    var busy = (!!prompt && prompt.classList.contains('open')) ||
+      (!!raison && raison.classList.contains('open'));
+    if (busy) felt.setAttribute('inert', '');
+    else felt.removeAttribute('inert');
+  }
   function openPrompt(bodyHTML) {
     var prompt = el('divination-save-prompt');
     var body = el('divination-save-prompt-body');
@@ -229,12 +294,20 @@
     if (body) body.innerHTML = bodyHTML;
     prompt.classList.add('open');
     prompt.removeAttribute('inert');
+    syncBackground();
+    setHash('#keep');
+    var keep = el('divination-save-prompt-keep');
+    if (keep) { try { keep.focus({ preventScroll: true }); } catch (e) { try { keep.focus(); } catch (f) {} } }
   }
   function closePrompt() {
     var prompt = el('divination-save-prompt');
     if (!prompt) return;
     prompt.classList.remove('open');
     prompt.setAttribute('inert', '');
+    syncBackground();
+    if ((location.hash || '') === '#keep' && !hashLock) {
+      try { history.back(); } catch (e) {}
+    }
   }
 
   function renderCardPrompt(card) {
@@ -245,7 +318,8 @@
       + '<div class="divination-prompt-card-name">' + card.name + '</div>'
       + '</div>'
       + '<div class="divination-prompt-card-read">'
-      + '<div class="divination-prompt-card-key">' + card.key + '</div>'
+      + '<div class="divination-prompt-card-key">' + cardReading(card) + '</div>'
+      + '<div class="divination-prompt-card-lens">' + lensLine() + '</div>'
       + '<div class="divination-prompt-card-q">question: ' + questionLine() + '</div>'
       + '</div>'
       + '</div>';
@@ -261,35 +335,47 @@
           : '<i class="divination-hexagram-seg full"></i><i class="divination-hexagram-seg full"></i>')
         + '</div>';
     }
+    var numLine = 'nº ' + hex.number + ' · ' + hex.pattern;
     return '<div class="divination-prompt-card">'
       + '<div class="divination-prompt-card-face" style="flex-direction:column-reverse;display:flex;gap:5px;justify-content:center">'
       + rows
       + '</div>'
       + '<div class="divination-prompt-card-read">'
-      + '<div class="divination-prompt-card-key">' + hex.name + '</div>'
-      + '<div class="divination-prompt-card-q">' + hex.desc + '</div>'
+      + '<div class="divination-prompt-card-key">' + hex.name + ' — ' + numLine + '</div>'
+      + '<div class="divination-prompt-card-key">' + hexReading(hex) + '</div>'
+      + '<div class="divination-prompt-card-lens">' + lensLine() + '</div>'
       + '<div class="divination-prompt-card-q">question: ' + questionLine() + '</div>'
       + '</div>'
       + '</div>';
   }
 
-  // keep: the same shelf, the same shape of record, for both games
+  // keep: the same shelf, the same shape of record, for both games.
+  // The satchel opens kept divination artifacts as name + reading +
+  // question + seed (bodyOf joins question, reading, name), so reading
+  // must carry the full text — upright[0] / interpretation.
   function keepDraw() {
     if (pendingCard) {
       var card = pendingCard;
-      window.Liber.state.addArtifact('divination', {
-        name: card.name, key: card.key, n: card.n, g: card.g,
-        reading: card.key, question: question(), ts: Date.now()
+      var cardLine = cardReading(card);
+      var entry = window.Liber.state.addArtifact('divination', {
+        name: card.name, key: cardLine, n: card.n, g: card.g,
+        reading: cardLine, question: question(), ts: Date.now()
       });
       revealCard(card);
+      paintSeed(seedEl(), entry);
+      paintSeed(ichingSeedEl(), null);
       play('chime');
     } else if (pendingHex) {
       var hex = hexagramForPattern(pendingHex.pattern);
-      window.Liber.state.addArtifact('divination', {
-        name: hex.name, desc: hex.desc, reading: hex.desc,
+      var hexLine = hexReading(hex);
+      var hexEntry = window.Liber.state.addArtifact('divination', {
+        name: hex.name, desc: hexLine, reading: hexLine,
+        interpretation: hexLine, number: hex.number,
         pattern: pendingHex.pattern, question: question(), ts: Date.now()
       });
-      showHexResult(hex);
+      showHexResult(hex, pendingHex.pattern);
+      paintSeed(ichingSeedEl(), hexEntry);
+      paintSeed(seedEl(), null);
       revealInView(resultEl());
       play('chime');
     }
@@ -336,7 +422,8 @@
     d.innerHTML = '<div class="divination-card-num">' + String(card.n).padStart(2, '0') + ' / 22</div>'
       + '<div class="divination-card-glyph">' + card.g + '</div>'
       + '<div class="divination-card-name">' + card.name + '</div>'
-      + '<div class="divination-card-key">' + card.key + '</div>'
+      + '<div class="divination-card-key">' + cardReading(card) + '</div>'
+      + '<div class="divination-card-lens">' + lensLine() + '</div>'
       + '<div class="divination-card-stamped">— card drawn, on the desktop —</div>';
     area.appendChild(d);
   }
@@ -395,9 +482,13 @@
     openPrompt(renderHexPrompt(hex, pattern));
   }
 
-  function showHexResult(hex) {
+  function showHexResult(hex, pattern) {
+    var pat = pattern || hex.pattern || '';
+    var numLine = (hex.number ? 'nº ' + hex.number + ' · ' : '') + pat;
     if (el('divination-iching-name')) el('divination-iching-name').textContent = hex.name;
-    if (el('divination-iching-desc')) el('divination-iching-desc').textContent = hex.desc;
+    if (el('divination-iching-num')) el('divination-iching-num').textContent = numLine;
+    if (el('divination-iching-desc')) el('divination-iching-desc').textContent = hexReading(hex);
+    if (el('divination-iching-lens')) el('divination-iching-lens').textContent = lensLine();
     if (resultEl()) resultEl().hidden = false;
     if (castBtn()) castBtn().disabled = true;
   }
@@ -414,7 +505,8 @@
   }
 
   // ─── mode switching ─────────────────────────────────────────────────
-  function setMode(next) {
+  function modeBtns() { return Array.prototype.slice.call(document.querySelectorAll('.divination-mode')); }
+  function setMode(next, focusIt) {
     mode = next;
     var tarot = el('divination-tarot');
     var iching = el('divination-iching');
@@ -423,12 +515,33 @@
     if (subEl()) subEl().textContent = next === 'iching'
       ? 'three coins · six lines · bottom first'
       : 'the deck · 22, counted three times';
-    var btns = document.querySelectorAll('.divination-mode');
+    var btns = modeBtns();
     for (var i = 0; i < btns.length; i++) {
       var on = btns[i].dataset.mode === next;
       btns[i].classList.toggle('active', on);
       btns[i].setAttribute('aria-selected', on ? 'true' : 'false');
+      btns[i].tabIndex = on ? 0 : -1;
+      if (on && focusIt) { try { btns[i].focus(); } catch (e) {} }
     }
+  }
+  function wireModeRoving() {
+    var bar = el('divination-modes');
+    if (!bar) return;
+    bar.addEventListener('keydown', function (e) {
+      var k = e.key;
+      if (k !== 'ArrowLeft' && k !== 'ArrowRight' && k !== 'Home' && k !== 'End') return;
+      e.preventDefault();
+      var btns = modeBtns();
+      if (!btns.length) return;
+      var cur = btns.indexOf(document.activeElement);
+      if (cur < 0) cur = (mode === 'iching') ? 1 : 0;
+      var next = cur;
+      if (k === 'ArrowRight') next = (cur + 1) % btns.length;
+      else if (k === 'ArrowLeft') next = (cur - 1 + btns.length) % btns.length;
+      else if (k === 'Home') next = 0;
+      else if (k === 'End') next = btns.length - 1;
+      setMode(btns[next].dataset.mode, true);
+    });
   }
 
   // ─── boot ───────────────────────────────────────────────────────────
@@ -448,6 +561,7 @@
     for (var i = 0; i < modeBtns.length; i++) {
       modeBtns[i].addEventListener('click', function () { setMode(this.dataset.mode); });
     }
+    wireModeRoving();
 
     var cast = castBtn();
     if (cast) cast.addEventListener('click', castLine);
@@ -460,8 +574,24 @@
     var helpBtn = el('divination-help');
     var raison = el('divination-raison');
     var raisonClose = el('divination-raison-close');
-    function openR() { if (raison) { raison.classList.add('open'); raison.removeAttribute('inert'); } }
-    function closeR() { if (raison) { raison.classList.remove('open'); raison.setAttribute('inert', ''); } }
+    var lastFocus = null;
+    function openR() {
+      if (raison) {
+        try { lastFocus = document.activeElement; } catch (e) { lastFocus = null; }
+        raison.classList.add('open'); raison.removeAttribute('inert');
+        syncBackground();
+        if ((location.hash || '') !== '#note') { try { location.hash = '#note'; } catch (e) {} }
+        if (raisonClose) { try { raisonClose.focus(); } catch (e) {} }
+      }
+    }
+    function closeR() {
+      if (raison) {
+        raison.classList.remove('open'); raison.setAttribute('inert', '');
+        syncBackground();
+        if ((location.hash || '') === '#note') { try { history.back(); } catch (e) {} }
+        if (lastFocus && lastFocus.focus) { try { lastFocus.focus({ preventScroll: true }); } catch (e) { try { lastFocus.focus(); } catch (f) {} } }
+      }
+    }
     if (helpBtn) helpBtn.addEventListener('click', openR);
     if (raisonClose) raisonClose.addEventListener('click', closeR);
     if (raison) raison.addEventListener('click', function (e) { if (e.target === raison) closeR(); });
@@ -487,5 +617,14 @@
     if (closeBtn) closeBtn.addEventListener('click', cancelPrompt);
     var promptEl = el('divination-save-prompt');
     if (promptEl) promptEl.addEventListener('click', function (e) { if (e.target === promptEl) cancelPrompt(); });
+    // back-button close: leaving #keep / #note dismisses instead of leaving
+    window.addEventListener('hashchange', function () {
+      if (hashLock) { hashLock = false; return; }
+      var h = location.hash || '';
+      var prompt = el('divination-save-prompt');
+      var raisonEl = el('divination-raison');
+      if (h !== '#keep' && prompt && prompt.classList.contains('open')) cancelPrompt();
+      if (h !== '#note' && raisonEl && raisonEl.classList.contains('open')) closeR();
+    });
   });
 })();

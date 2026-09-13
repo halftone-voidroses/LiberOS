@@ -60,8 +60,8 @@
                 </div>
 
                 <div class="divination-modes" id="divination-modes" role="tablist" aria-label="choose the deck or the coins">
-                  <button type="button" class="divination-mode active" data-mode="tarot" role="tab" aria-selected="true">tarot</button>
-                  <button type="button" class="divination-mode" data-mode="iching" role="tab" aria-selected="false">i ching</button>
+                  <button type="button" class="divination-mode active" data-mode="tarot" role="tab" aria-selected="true" tabindex="0">tarot</button>
+                  <button type="button" class="divination-mode" data-mode="iching" role="tab" aria-selected="false" tabindex="-1">i ching</button>
                 </div>
 
                 <div class="divination-table">
@@ -77,7 +77,8 @@
                     </button>
                     <span class="divination-tally" id="divination-tally" aria-hidden="true"></span>
                     <div class="divination-reading-place" id="divination-card-area">
-                      <div class="divination-card-hint" id="divination-card-hint">the deck is silent. ask.</div>
+                      <div class="divination-card-hint" id="divination-card-hint">unguided draw — take one</div>
+                      <div class="divination-seed" id="divination-seed" aria-live="polite"></div>
                       <svg class="divination-chalk-eye" viewBox="0 0 120 60" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
                         <path d="M8 30 Q60 2 112 30 Q60 58 8 30 Z" fill="none" stroke="rgba(238,230,212,0.4)" stroke-width="2" stroke-linecap="round"/>
                         <circle cx="60" cy="30" r="13" fill="none" stroke="rgba(238,230,212,0.4)" stroke-width="2"/>
@@ -103,7 +104,10 @@
                     </div>
                     <div class="divination-iching-result" id="divination-iching-result" hidden>
                       <div class="divination-iching-name" id="divination-iching-name"></div>
+                      <div class="divination-iching-num" id="divination-iching-num"></div>
                       <div class="divination-iching-desc" id="divination-iching-desc"></div>
+                      <div class="divination-iching-lens" id="divination-iching-lens"></div>
+                      <div class="divination-seed" id="divination-iching-seed" aria-live="polite"></div>
                     </div>
                   </div>
 

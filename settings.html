@@ -8,9 +8,9 @@
   <link rel="stylesheet" href="styles/room.css"/>
   <link rel="stylesheet" href="styles/machine.css"/>
   <link rel="stylesheet" href="styles/bezel.css"/>
-  <link rel="stylesheet" href="styles/scars.css"/>
-  <link rel="stylesheet" href="src/features/settings/settings.css"/>
-  <link rel="stylesheet" href="styles/shadow.css"/>
+  <link rel="stylesheet" href="styles/scars.css"/>  <link rel="stylesheet" href="src/features/settings/settings.css" />
+  <link rel="stylesheet" href="src/features/crt-room/crt-room.css" />
+  <link rel="stylesheet" href="styles/shadow.css" />
   <link rel="stylesheet" href="styles/fate.css"/>
 </head>
 <body>
@@ -66,6 +66,12 @@
                 </div>
 
                 <div class="settings-section">
+                  <div class="settings-section-title">THE ROOM BEHIND</div>
+                  <button class="settings-btn" id="settings-crt-room" type="button">—</button>
+                  <div class="settings-hint">the machine keeps what you keep.</div>
+                </div>
+
+                <div class="settings-section">
                   <div class="settings-section-title">SOUND</div>
                   <button class="settings-btn" id="settings-sound" type="button">sound fx: on</button>
                   <label class="settings-music" for="settings-music">music <span id="settings-music-val">80</span></label>
@@ -82,9 +88,18 @@
 
                 <div class="settings-section">
                   <div class="settings-section-title">STATE</div>
-                  <div class="settings-state" id="settings-state">—</div>
-                  <button class="settings-btn settings-btn-danger" id="settings-wipe" type="button">wipe the room</button>
-                  <div class="settings-hint">all artifacts, the buddy, and the tour will return to loam.</div>
+                  <details class="settings-hatch" id="settings-hatch">
+                    <summary class="settings-hatch-plate">advanced — state of the room</summary>
+                    <div class="settings-state" id="settings-state">—</div>
+                  </details>
+                  <div class="settings-wipe-box" id="settings-wipe-box">
+                    <button class="settings-btn" id="settings-wipe-cover" type="button" aria-expanded="false" aria-controls="settings-wipe-switches">lift the cover</button>
+                    <div class="settings-wipe-switches" id="settings-wipe-switches" hidden>
+                      <button class="settings-btn settings-btn-danger" id="settings-wipe-1" type="button" aria-pressed="false" disabled>pull 1</button>
+                      <button class="settings-btn settings-btn-danger" id="settings-wipe" type="button" aria-pressed="false" disabled>pull 2</button>
+                    </div>
+                  </div>
+                  <div class="settings-hint">wipe returns all artifacts, the buddy, and the tour to loam.</div>
                 </div>
 
                 <div class="settings-footer">
@@ -110,6 +125,7 @@
   <script src="data/fate.data.js"></script>
   <script src="src/fate.js"></script>
   <script src="src/shadow.js"></script>
+  <script src="src/features/crt-room/crt-room.js"></script>
   <script src="src/features/settings/settings.js"></script>
   <script src="src/liberchat-mount.js"></script>
 </body>

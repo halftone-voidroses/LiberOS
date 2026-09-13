@@ -88,9 +88,9 @@
 }
 
 .sigil-subtitle {
-  font-size: 0.75rem;
-  color: #8a8a92;
-  font-style: italic;
+  font-size: 1rem;
+  color: #eadfc6;
+  font-style: normal;
   letter-spacing: 0.08em;
   text-transform: none;
   flex: 1;
@@ -112,6 +112,17 @@
 
 .sigil-ghost-hint.visible {
   display: block;
+}
+
+/* the bench plate — the keyboard path, in the room's own register:
+   upright cream at size, never faint, never italic. */
+.sigil-keys {
+  font-size: 1rem;
+  font-style: normal;
+  color: #eadfc6;
+  text-align: center;
+  letter-spacing: 0.12em;
+  padding: 2px 6px 0;
 }
 
 .sigil-back {
@@ -185,19 +196,19 @@
 }
 
 .sigil-label {
-  font-size: 0.875rem;
-  color: #806040;
+  font-size: 1rem;
+  color: #eadfc6;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   margin-bottom: 4px;
-  font-style: italic;
+  font-style: normal;
 }
 
 .sigil-input {
   min-height: 1.2em;
   font-size: 1rem;
-  font-style: italic;
-  color: #c8b890;
+  font-style: normal;
+  color: #eadfc6;
   outline: none;
   border-bottom: 1px dashed rgba(120, 80, 40, 0.5);
   padding: 2px 0;
@@ -280,25 +291,25 @@
 .sigil-tray-label {
   font-family: Georgia, 'Times New Roman', serif;
   font-variant: small-caps;
-  font-size: 0.8rem;
+  font-size: 1rem;
   letter-spacing: 0.22em;
-  color: #a8823c;
+  color: #eadfc6;
   white-space: nowrap;
 }
 
 .sigil-ink-name {
   font-family: Georgia, 'Times New Roman', serif;
-  font-style: italic;
-  font-size: 0.85rem;
-  color: #d8c090;
+  font-style: normal;
+  font-size: 1rem;
+  color: #eadfc6;
   white-space: nowrap;
   margin-left: auto;
 }
 
 .sigil-palette-tray {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 20px);
-  gap: 5px;
+  grid-template-columns: repeat(auto-fill, 44px);
+  gap: 6px;
   justify-content: start;
   overflow: visible;
   padding: 2px;
@@ -309,8 +320,8 @@
 
 .sigil-swatch {
   flex: 0 0 auto;
-  width: 16px;
-  height: 16px;
+  width: 44px;
+  height: 44px;
   border: 1px solid rgba(0, 0, 0, 0.7);
   outline: 1px solid #5a4a28;
   cursor: pointer;
@@ -330,8 +341,10 @@
 .sigil-tool,
 .sigil-part {
   flex: 0 0 auto;
-  width: 34px;
-  height: 34px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -372,6 +385,11 @@
   cursor: crosshair;
 }
 
+.sigil-canvas-wrap:focus-visible {
+  outline: 2px solid #e8c890;
+  outline-offset: 2px;
+}
+
 .sigil-actions {
   display: flex;
   gap: 6px;
@@ -384,9 +402,11 @@
   flex: 1;
   font-family: 'Times New Roman', Times, serif;
   font-size: 1rem;
+  font-style: normal;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   padding: 8px 12px;
+  min-height: 44px;
   cursor: pointer;
   border-radius: 2px;
   font-weight: 700;
@@ -422,7 +442,7 @@
   background: none;
   border: 1px solid #3a3a44;
   color: #6a6a78;
-  font-style: italic;
+  font-style: normal;
 }
 
 .sigil-discard:hover {
@@ -588,9 +608,9 @@
   color: #806040;
   font-family: inherit;
   font-size: 0.85rem;
-  line-height: 30px;
-  width: 32px;
-  height: 32px;
+  line-height: 42px;
+  width: 44px;
+  height: 44px;
   padding: 0;
   cursor: pointer;
   border-radius: 2px;
@@ -685,9 +705,9 @@
   color: #806040;
   font-family: inherit;
   font-size: 0.85rem;
-  line-height: 30px;
-  width: 32px;
-  height: 32px;
+  line-height: 42px;
+  width: 44px;
+  height: 44px;
   padding: 0;
   cursor: pointer;
   border-radius: 2px;
@@ -720,10 +740,12 @@
   color: #c8b890;
   font-family: 'Times New Roman', Times, serif;
   font-size: 1rem;
-  font-style: italic;
+  font-style: normal;
   letter-spacing: 0.18em;
   text-transform: lowercase;
   padding: 6px 14px;
+  min-height: 44px;
+  min-width: 44px;
   cursor: pointer;
   border-radius: 2px;
   transition: all 0.15s;
@@ -743,7 +765,7 @@
 
 .sigil-save-prompt-discard {
   color: #806040;
-  font-style: italic;
+  font-style: normal;
 }
 
 .sigil-save-prompt-discard:hover {
@@ -764,7 +786,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 0 76px 0 14px;
+  padding: 0 142px 0 14px;
   overflow: hidden;
   background:
     repeating-linear-gradient(48deg, rgba(0, 0, 0, 0.12) 0px, rgba(0, 0, 0, 0.12) 1px, rgba(255, 255, 255, 0.02) 1px, rgba(255, 255, 255, 0.02) 3px),
@@ -806,16 +828,23 @@
 .sigil-titlebar .sigil-help { right: 36px; }
 .sigil-titlebar .sigil-back { right: 8px; }
 .sigil-titlebar .sigil-help, .sigil-titlebar .sigil-back {
-  width: 40px;
-  height: 40px;
-  line-height: 38px;
+  min-width: 44px;
+  height: 44px;
+  line-height: 42px;
   text-align: center;
   font-size: 1.15rem;
   top: 50%;
   filter: brightness(1.4);
 }
-.sigil-titlebar .sigil-help { right: 56px; }
-.sigil-titlebar .sigil-back { right: 8px; }
+.sigil-titlebar .sigil-help { right: 90px; width: 44px; }
+.sigil-titlebar .sigil-back {
+  right: 8px;
+  width: auto;
+  padding: 0 12px;
+  font-size: 1rem;
+  font-style: normal;
+  letter-spacing: 0.12em;
+}
 .sigil-help:focus-visible, .sigil-back:focus-visible {
   outline: 2px solid #e8c890;
   outline-offset: 2px;
@@ -892,6 +921,11 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .sigil-save:active { animation: none; }
+  .sigil-app.saved .sigil-frame,
+  .sigil-app.saved .sigil-input,
+  .sigil-app.saved .sigil-canvas-wrap,
+  .sigil-app.saved .sigil-save,
+  .sigil-app.saved .sigil-discard { transition: none; }
 }
 
 /* ─── WS4: hover-revelation — stone dust gathers in the cracks
@@ -961,18 +995,22 @@
 }
 .sigil-left .sigil-palette-tray {
   display: grid;
-  grid-template-columns: repeat(4, 20px);
+  grid-template-columns: repeat(2, 44px);
   justify-content: center;
   gap: 6px;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding: 2px;
-  flex: none;
+  flex: 1 1 auto;
+  min-height: 0;
   min-width: 0;
   align-content: flex-start;
 }
 .sigil-left .sigil-ink-name {
   margin: 6px 0 0;
-  font-size: 0.72rem;
+  font-size: 1rem;
+  font-style: normal;
+  color: #eadfc6;
   line-height: 1.3;
   min-height: 2em;
   text-align: center;
@@ -990,13 +1028,14 @@
 .sigil-tags-select {
   flex: none;
   max-width: 118px;
+  min-height: 44px;
   background: linear-gradient(180deg, #241a0c 0%, #120c04 100%);
   border: 1px solid #6a5228;
   border-radius: 2px;
-  color: #c8a878;
+  color: #eadfc6;
   font-family: Georgia, serif;
-  font-style: italic;
-  font-size: 0.82rem;
+  font-style: normal;
+  font-size: 1rem;
   padding: 3px 4px;
   cursor: pointer;
 }
@@ -1014,8 +1053,10 @@
   color: #ffe8b8;
   font-family: Georgia, serif;
   font-style: italic;
-  font-size: 0.78rem;
+  font-size: 0.85rem;
   padding: 2px 7px;
+  min-height: 44px;
+  min-width: 44px;
   cursor: pointer;
   box-shadow: 0 0 8px rgba(232, 200, 144, 0.35);
 }

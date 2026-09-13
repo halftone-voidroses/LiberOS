@@ -71,9 +71,15 @@
   font-size: 1rem;
   letter-spacing: 0.1em;
   padding: 8px 14px;
+  min-height: 44px;
+  box-sizing: border-box;
   cursor: pointer;
   transition: all 0.15s;
   margin-right: 6px;
+}
+.settings-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
 }
 
 .settings-btn:hover {
@@ -121,15 +127,15 @@
 }
 .settings-now {
   font-size: 1rem;
-  color: #8a6a40;
-  font-style: italic;
+  color: #b08a58;
+  font-style: normal;
   letter-spacing: 0.05em;
   margin-bottom: 2px;
 }
 .settings-hint {
   font-size: 1rem;
-  color: #6a4a30;
-  font-style: italic;
+  color: #b08a58;
+  font-style: normal;
   margin-top: 4px;
   letter-spacing: 0.05em;
 }
@@ -145,8 +151,8 @@
 
 .settings-state {
   font-size: 1rem;
-  color: #8a6a40;
-  font-style: italic;
+  color: #b08a58;
+  font-style: normal;
   background: rgba(0,0,0,0.3);
   border: 1px solid #4a2a18;
   padding: 4px 8px;
@@ -155,6 +161,59 @@
   font-family: inherit;
   max-height: 120px;
   overflow-y: auto;
+}
+
+/* ─── the advanced hatch: raw state lives behind a plate, shut by default ─── */
+.settings-hatch {
+  border: 1px solid #4a2a18;
+  background: rgba(0,0,0,0.3);
+  margin-bottom: 8px;
+}
+.settings-hatch-plate {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  box-sizing: border-box;
+  padding: 8px 12px;
+  font-size: 1rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #c8b890;
+  cursor: pointer;
+  list-style: none;
+}
+.settings-hatch-plate::-webkit-details-marker { display: none; }
+.settings-hatch-plate::before {
+  content: '▸';
+  margin-right: 10px;
+  color: #8a6a40;
+}
+.settings-hatch[open] .settings-hatch-plate::before { content: '▾'; }
+.settings-hatch-plate:focus-visible {
+  outline: 2px solid #c89060;
+  outline-offset: 2px;
+}
+.settings-hatch .settings-state {
+  border: none;
+  border-top: 1px dotted #4a2a18;
+  margin-bottom: 0;
+}
+
+/* ─── the wipe interlock: cover over two pulls, 1 before 2 ─── */
+.settings-wipe-box {
+  border: 1px dashed #6a2a18;
+  padding: 8px;
+  margin-top: 8px;
+}
+.settings-wipe-switches {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.settings-wipe-switches[hidden] { display: none; }
+.settings-wipe-switches .settings-btn[aria-pressed="true"] {
+  border-color: #e8c890;
+  color: #e8c890;
 }
 
 .settings-footer {

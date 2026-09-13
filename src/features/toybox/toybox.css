@@ -153,7 +153,7 @@
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.8), 0 0 10px rgba(255, 217, 138, 0.2);
 }
 .toybox-titlebar-sub {
-  font-style: italic; font-size: 0.78rem; letter-spacing: 0.04em; color: #7a8a7e;
+  font-style: normal; font-size: 1rem; letter-spacing: 0.04em; color: #9ab0a4;
   transform: rotate(-0.5deg);
 }
 .toybox-help, .toybox-exit {
@@ -267,7 +267,7 @@
   width: 52px; height: 52px; border-radius: 50%;
   padding: 0; border: none; background: transparent; cursor: pointer;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
-  font-family: inherit; font-size: 0.56rem; letter-spacing: 0.08em; color: #9ab0a4;
+  font-family: inherit; font-size: 1rem; letter-spacing: 0.08em; color: #9ab0a4;
 }
 .tap-handle .tool-art {
   display: block; width: 34px; height: 34px; border-radius: 50%;
@@ -344,7 +344,7 @@
 /* brass plaque screwed to the shelf's front face */
 .shelf-plate {
   position: absolute; left: 7px; bottom: 2px; z-index: 1;
-  display: inline-block; font-size: 0.48rem; letter-spacing: 0.14em; line-height: 1.5;
+  display: inline-block; font-size: 1rem; letter-spacing: 0.14em; line-height: 1.5;
   color: #f0e8d0; background: linear-gradient(180deg, #8a7a50, #5a4e30);
   border-radius: 2px; padding: 0 6px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 240, 200, 0.3);
@@ -355,7 +355,8 @@
 .shelf-obj {
   display: flex; flex-direction: column; align-items: center; gap: 1px;
   background: transparent; border: 1px solid transparent; border-radius: 5px;
-  padding: 2px 3px 1px; cursor: pointer; min-width: 38px;
+  padding: 4px 5px 3px; cursor: pointer; min-width: 44px; min-height: 44px;
+  justify-content: flex-end;
   font-family: inherit; color: inherit;
 }
 .shelf-obj:hover, .shelf-obj:focus-visible {
@@ -506,7 +507,8 @@
     radial-gradient(40% 10% at 78% 96%, rgba(138, 74, 40, 0.14), transparent 70%),
     linear-gradient(115deg, rgba(228, 240, 216, 0.07) 0%, transparent 26%);
 }
-.toybox-canvas { display: block; width: 100%; height: 100%; cursor: crosshair; touch-action: none; image-rendering: pixelated; border-radius: 8px 8px 12px 12px; }
+.toybox-canvas { display: block; width: 100%; height: 100%; touch-action: none; image-rendering: pixelated; border-radius: 8px 8px 12px 12px;
+  cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><g transform='rotate(-18 14 14)'><rect x='6' y='14' width='14' height='8' rx='1.5' fill='%23c8a050' stroke='%234a3010'/><rect x='6' y='14' width='14' height='3' fill='%237a3a28'/><rect x='9' y='18' width='8' height='1.4' fill='%234a3010'/></g><path d='M4 12l5-6 3 3-5 6z' fill='%23d8c8a8' stroke='%234a3010'/><circle cx='22' cy='5' r='2' fill='%23ffd98a'/></svg>") 4 12, pointer; }
 .toybox-tray-shine {
   position: absolute; inset: 0; z-index: 3; pointer-events: none; border-radius: inherit;
   background:
@@ -517,9 +519,9 @@
 /* ── the plug: a real brass plug on its chain, in the basin floor ── */
 .toybox-action.plug {
   position: absolute; left: 50%; bottom: 4px; transform: translateX(-50%); z-index: 4;
-  width: 40px; height: 26px; padding: 0; border: none; background: transparent; cursor: pointer;
-  display: flex; align-items: flex-end; justify-content: center;
-  font-family: inherit; font-size: 0.54rem; letter-spacing: 0.1em; color: #9ab0a4;
+  width: 56px; height: 48px; padding: 2px 4px; border: none; background: transparent; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 1px;
+  font-family: inherit; font-size: 1rem; letter-spacing: 0.1em; color: #9ab0a4;
 }
 .toybox-action.plug .tool-art {
   display: block; width: 22px; height: 15px; border-radius: 50% 50% 42% 42% / 62% 62% 38% 38%;
@@ -559,9 +561,16 @@
   border-radius: 2px;
 }
 .toybox-crew-btn {
-  display: flex; align-items: center; justify-content: center;
-  padding: 2px 4px; background: transparent; border: none;
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 1px;
+  padding: 4px 6px; background: transparent; border: none;
+  min-width: 44px; min-height: 44px;
   cursor: grab; font-family: inherit; color: inherit;
+}
+/* the residents' names, chalked on the rim — no guessing by tooltip */
+.toybox-crew-name {
+  font-size: 1rem; letter-spacing: 0.06em; color: #cfd8c8;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.85);
+  line-height: 1.1;
 }
 .toybox-crew-btn:active { cursor: grabbing; }
 .toybox-crew-btn .toybox-crew-art { transition: transform 0.15s ease, filter 0.15s ease; }
@@ -582,9 +591,10 @@
 .toybox-action {
   position: relative;
   display: flex; flex-direction: column; align-items: center; gap: 2px;
-  font-family: inherit; font-size: 0.6rem; letter-spacing: 0.1em;
+  font-family: inherit; font-size: 1rem; letter-spacing: 0.1em;
   background: transparent; border: none; color: #8aa093;
-  cursor: pointer; padding: 2px 3px;
+  cursor: pointer; padding: 4px 6px; min-width: 44px; min-height: 44px;
+  justify-content: flex-end;
 }
 .toybox-action .tool-art {
   display: block;
@@ -621,9 +631,9 @@
 /* ── result: scrawled in soap on the tiles, on the right flank ── */
 .toybox-result {
   position: absolute; bottom: 54px; right: 12px; z-index: 2;
-  width: 26%; text-align: right;
-  color: rgba(228, 240, 216, 0.82); font-style: italic;
-  font-size: 0.66rem; line-height: 1.35; min-height: 1.2em;
+  width: 30%; text-align: right;
+  color: rgba(228, 240, 216, 0.9); font-style: normal;
+  font-size: 1rem; line-height: 1.35; min-height: 1.2em;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.85);
   pointer-events: none;
 }
