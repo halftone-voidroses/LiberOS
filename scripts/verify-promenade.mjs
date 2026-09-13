@@ -1,5 +1,6 @@
 // verify-promenade.mjs — AGENT A's acceptance pass for the Full Promenade
-// (redesign-pitch.html, SYSTEM 06 Games) + thimble retirement.
+// (redesign-pitch.html, SYSTEM 06 Games) + thimble retirement + the
+// Second Sweeping's job II (the facade uncluttered).
 //
 //   1. the walk has a world: three parallax layers slide at three rates
 //      with the camera index, and hold still under reduced motion
@@ -9,6 +10,10 @@
 //   4. the thimble booth is gone from the midway — cleanly
 //   5. the tree keeps its legacy migration (s.thimble → growth)
 //   6. the promenade still walks at 439px, exit and pans reachable
+//   7. job II: the gate board box is retired — the facade carries no box
+//      above the booths; the routes are painted shingles on the dirt;
+//      the pick and the till card are gone; the bark never covers a
+//      poster's name
 //
 // Spawns its own server so it always tests THIS folder.
 // Run: node scripts/verify-promenade.mjs
@@ -154,6 +159,60 @@ const mig = await page2.evaluate(() => {
   return { thimbleKept: !!s.thimble, tree: s.tree || null }
 })
 check('legacy thimble state survives on the save', mig.thimbleKept)
+
+// ─── 7. job II: the facade, uncluttered ─────────────────────────────────
+console.log('3.5 the facade, uncluttered (job II)')
+{
+  // fresh context so nothing above influences the assertions
+  const { ctx: ctxF, page: pageF } = await freshPage()
+  await visit(pageF)
+  const uncluttered = await pageF.evaluate(() => {
+    const rect = sel => { const el = document.querySelector(sel); if (!el) return null; const b = el.getBoundingClientRect(); return { x1: b.x, y1: b.y, x2: b.x + b.width, y2: b.y + b.height } }
+    const hit = (a, b) => a && b && a.x1 < b.x2 && b.x1 < a.x2 && a.y1 < b.y2 && b.y1 < a.y2
+    const bark = rect('#games-bark')
+    const name = rect('.games-booth[data-camera-position="center"] .games-booth-name')
+    const shingles = [...document.querySelectorAll('.games-shingle')]
+    const booth = rect('.games-booth[data-camera-position="center"]')
+    return {
+      boxGone: !document.querySelector('.games-gate, .games-gate-no, .games-gate-rows, .games-gate-path, .games-gate-pick, .games-gate-walk, .games-till-card'),
+      shingles: shingles.length,
+      shingleData: shingles.map(s => s.getAttribute('data-goto')).sort().join(','),
+      shinglesTap: shingles.map(s => Math.min(s.getBoundingClientRect().width, s.getBoundingClientRect().height)),
+      shinglesOverlap: shingles.length === 2 && hit(rect('.games-shingle-quiet'), rect('.games-shingle-curious')),
+      shinglesOnGround: shingles.length === 2 && shingles.every(s => s.getBoundingClientRect().bottom > window.innerHeight * 0.6),
+      barkCoversName: !!(bark && name && hit(bark, name)),
+      barkVisible: !!(bark && bark.height > 10),
+      plate: !!document.querySelector('.games-entrance-plate'),
+      boothBox: booth
+    }
+  })
+  // the pick and till retired by decree: no box, no plaque line, no tally card
+  check('the facade carries no box above the booths (gate board + till retired)', uncluttered.boxGone)
+  check('two painted route shingles stand on the midway ground', uncluttered.shingles === 2 && uncluttered.shinglesOnGround, 'count=' + uncluttered.shingles)
+  check('the shingles route to the quiet floor and the wheel', uncluttered.shingleData === 'tipp,wheel', uncluttered.shingleData)
+  check('the shingles clear each other', !uncluttered.shinglesOverlap)
+  check('the shingles stay 44px touch targets', uncluttered.shinglesTap.every(s => s >= 44), uncluttered.shinglesTap.join(','))
+  check('the barker never covers the centered poster name', !uncluttered.barkCoversName)
+  check('the gate board plate lives on the entrance frame', uncluttered.plate)
+
+  // route signs reachable: keyboard focus walks to a shingle and it opens its booth
+  await pageF.keyboard.press('Tab')
+  let reachable = false, opened = false
+  for (let i = 0; i < 14 && !reachable; i++) {
+    reachable = await pageF.evaluate(() => document.activeElement && document.activeElement.classList.contains('games-shingle'))
+    if (!reachable) await pageF.keyboard.press('Tab')
+  }
+  check('a route shingle is keyboard-reachable', reachable)
+  if (reachable) {
+    await pageF.keyboard.press('Enter')
+    await pageF.waitForTimeout(600)
+    opened = await pageF.evaluate(() => document.querySelector('.games-app').getAttribute('data-view'))
+    check('the shingle opens its attraction', opened === 'attraction', opened)
+    await pageF.keyboard.press('Escape')
+    await pageF.waitForTimeout(500)
+  }
+  await ctxF.close()
+}
 
 // ─── 6. reduced motion holds the world still ────────────────────────────
 console.log('4. reduced motion')

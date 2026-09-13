@@ -414,7 +414,7 @@
 
     if (panLeft) panLeft.addEventListener('click', function () { moveCamera(-1); });
     if (panRight) panRight.addEventListener('click', function () { moveCamera(1); });
-    Array.prototype.forEach.call(document.querySelectorAll('.games-gate-path'), function (el) {
+    Array.prototype.forEach.call(document.querySelectorAll('.games-shingle'), function (el) {
       el.addEventListener('click', function () {
         var g = byId(el.getAttribute('data-goto'));
         if (g) {

@@ -112,6 +112,17 @@
   font-size: 1.5rem;
 }
 
+/* the gate board's own plate, nailed to the entrance frame */
+.games-entrance-plate {
+  display: block;
+  margin-top: 6px;
+  color: rgba(255, 222, 146, 0.6);
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  line-height: 1.5;
+}
+
 /* ── the tent: striped canvas, gold-trim frame ── */
 
 .games-tent {
@@ -220,100 +231,59 @@
   border-bottom-color: rgba(212, 175, 55, 0.6);
 }
 
-/* ── gate board: painted triage nailed over the ticket.
-      Two ways in, one barker's pick. The rest stay stalls below.
-      Sawdust-floor midway grammar: plank board, nailed corners. ── */
+/* ── route shingles: painted boards leaning by the dirt path, the way a
+      real midway routes you. Two ways in, painted on wood, tappable,
+      keyboard-reachable. The rest stay stalls on the walk. ── */
 
-.games-gate {
-  width: 100%;
-  margin: 4px 0 2px;
-  padding: 8px 12px 7px;
-  background:
-    repeating-linear-gradient(0deg, rgba(60, 30, 10, 0.16) 0 2px, transparent 2px 7px),
-    linear-gradient(180deg, #4a2c14 0%, #33200f 60%, #241407 100%);
-  border: 2px solid var(--gold);
-  outline: 1px solid var(--gold-dim);
-  outline-offset: 2px;
-  border-radius: 3px;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 240, 200, 0.25),
-    0 3px 0 rgba(0, 0, 0, 0.5);
-  text-align: center;
-}
-
-.games-gate-no {
-  display: block;
-  color: rgba(255, 222, 146, 0.72);
-  font-family: 'VT323', 'Courier New', monospace;
-  font-size: 0.7rem;
-  letter-spacing: 0.2em;
-  margin-bottom: 6px;
-}
-
-.games-gate-rows {
+.games-routes {
   display: flex;
-  gap: 8px;
+  gap: 12px;
   justify-content: center;
   flex-wrap: wrap;
 }
 
-.games-gate-path {
+.games-shingle {
   font-family: inherit;
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  background: linear-gradient(180deg, rgba(212, 175, 55, 0.32) 0%, rgba(60, 20, 8, 0.55) 100%);
-  border: 2px solid var(--gold-dim);
   color: #ffe6a8;
-  border-radius: 20px;
+  text-align: center;
+  background:
+    repeating-linear-gradient(0deg, rgba(56, 28, 8, 0.2) 0 2px, transparent 2px 9px),
+    linear-gradient(180deg, #5a3a1c 0%, #3a240f 62%, #26160a 100%);
+  border: 2px solid var(--gold-dim);
+  outline: 1px solid rgba(212, 175, 55, 0.35);
+  outline-offset: -5px;
+  border-radius: 2px;
   box-shadow:
-    inset 0 1px 0 rgba(255, 240, 200, 0.5),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.45),
-    0 2px 0 rgba(0, 0, 0, 0.55);
-  padding: 6px 18px;
+    inset 0 1px 0 rgba(255, 240, 200, 0.3),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.45),
+    0 4px 0 rgba(0, 0, 0, 0.5);
+  padding: 6px 18px 7px;
   min-height: 44px;
   cursor: pointer;
 }
 
-.games-gate-path:hover { border-color: var(--gold-pale); color: #fff0d0; }
-.games-gate-path:active {
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6);
-}
-
-.games-gate-pick {
+.games-shingle-who {
   display: block;
-  margin-top: 6px;
-  color: #ffe6a8;
-  font-size: 1rem;
-  line-height: 1.4;
-  letter-spacing: 0.04em;
-}
-
-.games-gate-walk {
-  display: block;
-  margin-top: 4px;
-  color: rgba(255, 222, 146, 0.72);
   font-family: 'VT323', 'Courier New', monospace;
-  font-size: 0.7rem;
-  letter-spacing: 0.18em;
+  font-size: 0.66rem;
+  letter-spacing: 0.24em;
+  color: rgba(255, 222, 146, 0.75);
 }
 
-/* ── till card: grounding tally + the barker's limit, by the till. ── */
+.games-shingle-to {
+  display: block;
+  font-size: 1.02rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #ffe6a8;
+}
 
-.games-till-card {
-  width: 100%;
-  margin: 2px 0 4px;
-  padding: 5px 12px;
-  text-align: center;
-  color: var(--ink);
-  font-size: 1rem;
-  line-height: 1.4;
-  background: linear-gradient(180deg, #f8ecd4 0%, var(--cream) 60%, #e2d0a8 100%);
-  border: 1px dashed rgba(138, 106, 32, 0.9);
-  outline: 2px solid var(--gold);
-  outline-offset: 2px;
-  border-radius: 3px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+.games-shingle:hover { border-color: var(--gold-pale); color: #fff0d0; }
+.games-shingle:active {
+  transform: translateY(2px);
+  box-shadow:
+    inset 0 2px 6px rgba(0, 0, 0, 0.6),
+    0 2px 0 rgba(0, 0, 0, 0.5);
 }
 
 .games-title {
@@ -1522,7 +1492,7 @@
 .games-save-prompt-close { min-width: 44px; min-height: 44px; }
 .games-help:focus-visible, .games-exit:focus-visible,
 .games-raison-close:focus-visible, .games-save-prompt-close:focus-visible,
-.games-booth:focus-visible, .games-action:focus-visible, .games-gate-path:focus-visible,
+.games-booth:focus-visible, .games-action:focus-visible, .games-shingle:focus-visible,
 .sand-el:focus-visible, .paint-size:focus-visible, .paint-swatch:focus-visible,
 .wheel-color:focus-visible, .games-stage-close:focus-visible {
   outline: 2px solid var(--gold-pale);
@@ -1595,7 +1565,7 @@
 /* ── JS-emitted class checklist (every one styled above — verify by grep):
    games-app · games-tent · games-bulbs (+ -top/-bottom, ::before chase)
    games-marquee · games-marquee-text (display only, no roll) · games-ticket (the one hover reveal)
-   games-gate (+ -no/-rows/-path/-pick/-walk) · games-till-card
+   games-routes · games-shingle (+ -quiet/-curious, -who, -to) ·
    games-title · games-sub · games-shell · games-side · games-grid
    games-camera-controls · games-pan (+ -left/-right) · games-camera-caption
    games-pennants (+ -left/-right) · games-ground-sign
@@ -2135,31 +2105,51 @@
   display: none;
 }
 
-.games-app[data-view="facade"] .games-gate {
+/* the shingles stand on the dirt at the walk's edges — compact flank
+   boards on the foreground, clear of the visitor's shadow at center.
+   They lean; they do not hang. */
+.games-app[data-view="facade"] .games-routes {
   position: absolute;
   z-index: 11;
-  top: 12%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(92%, 560px);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: block;
   margin: 0;
-  padding: 6px 10px 5px;
+  padding: 0;
+  pointer-events: none;
 }
 
-.games-app[data-view="facade"] .games-gate-pick {
-  font-size: 0.85rem;
-}
-
-.games-app[data-view="facade"] .games-till-card {
+.games-app[data-view="facade"] .games-shingle {
+  pointer-events: auto;
   position: absolute;
-  z-index: 11;
-  bottom: 6%;
-  left: 50%;
-  transform: translateX(-50%) rotate(-1deg);
-  width: min(90%, 520px);
-  margin: 0;
-  padding: 4px 10px;
-  font-size: 0.85rem;
+  bottom: 0;
+  padding: 3px 10px 4px;
+  white-space: nowrap;
+}
+
+.games-app[data-view="facade"] .games-shingle-quiet {
+  left: 1.5%;
+  transform: rotate(-5deg);
+}
+
+.games-app[data-view="facade"] .games-shingle-curious {
+  right: 1.5%;
+  transform: rotate(4deg);
+}
+
+.games-app[data-view="facade"] .games-shingle:hover,
+.games-app[data-view="facade"] .games-shingle:focus-visible {
+  transform: rotate(0deg) translateY(-2px);
+}
+
+.games-app[data-view="facade"] .games-shingle-who {
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+}
+
+.games-app[data-view="facade"] .games-shingle-to {
+  font-size: 0.8rem;
 }
 
 .games-app[data-view="facade"] .games-shell {
@@ -2639,8 +2629,7 @@
 .games-app[data-view="attraction"] .games-side,
 .games-app[data-view="attraction"] .games-marquee,
 .games-app[data-view="attraction"] .games-ticket,
-.games-app[data-view="attraction"] .games-gate,
-.games-app[data-view="attraction"] .games-till-card,
+.games-app[data-view="attraction"] .games-routes,
 .games-app[data-view="attraction"] .games-barker {
   display: none;
 }
@@ -3128,32 +3117,48 @@
 /* ── 439px: the midway still walks. Gate stacks, till sits above the
       floor line, booths keep 44px pans. ── */
 @media (max-width: 439px) {
-  /* the glass band is ~228px here and must hold gate + booths + till.
-     the gate goes compact: one row of path pills hung at the tent's top
-     rope, so the midway floor below keeps its center clear. */
-  .games-app[data-view="facade"] .games-gate {
-    top: 2%;
-    width: 94%;
-    padding: 4px 8px;
-  }
-  .games-app[data-view="facade"] .games-gate-rows {
+  /* the glass band narrows here: the shingles leave the dirt and go up as
+     one compact row below the entrance sign, so the floor keeps its center. */
+  .games-app[data-view="facade"] .games-routes {
+    top: 20%;
+    bottom: auto;
+    left: 2%;
+    right: 2%;
+    display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     gap: 6px;
+    padding: 0;
   }
-  .games-app[data-view="facade"] .games-gate-path {
+  .games-app[data-view="facade"] .games-shingle {
+    position: static;
     width: auto;
     flex: 1 1 0;
     min-width: 0;
-    min-height: 36px;
-    font-size: 0.68rem;
+    min-height: 44px;
     line-height: 1.15;
-    padding: 4px 8px;
+    padding: 3px 8px 4px;
   }
-  .games-app[data-view="facade"] .games-gate-pick {
-    font-size: 0.62rem;
+  .games-app[data-view="facade"] .games-shingle-quiet,
+  .games-app[data-view="facade"] .games-shingle-curious {
+    transform: none;
   }
-  /* the barker's voice sits between the gate and the till — its own band */
+  .games-app[data-view="facade"] .games-shingle:hover,
+  .games-app[data-view="facade"] .games-shingle:focus-visible {
+    transform: none;
+  }
+  .games-app[data-view="facade"] .games-shingle-to {
+    font-size: 0.68rem;
+  }
+  .games-app[data-view="facade"] .games-shingle-who {
+    font-size: 0.56rem;
+  }
+}
+
+/* ── 439px: the midway still walks. Shingles stay in their compact row,
+      till sits above the floor line, booths keep 44px pans. ── */
+@media (max-width: 439px) {
+  /* the barker's voice sits between the shingles and the till — its own band */
   .games-bark {
     bottom: 24%;
     width: 92%;
@@ -3166,11 +3171,6 @@
   .games-titlebar-name {
     font-size: 0.8rem;
     letter-spacing: 0.12em;
-  }
-  .games-app[data-view="facade"] .games-till-card {
-    bottom: 5%;
-    width: 94%;
-    font-size: 0.8rem;
   }
   .games-app[data-view="facade"] .games-grid {
     inset: 38% 0 18%;
@@ -3287,15 +3287,16 @@
 }
 
 /* the bark itself: the voice-box of the man whose booth you stopped at.
-   VT323 caps like his marquees; arrives with one beat, never stacks. Sits
-   clear of the till card (bottom 6%) by living just above it. */
+   VT323 caps like his marquees; arrives with one beat, never stacks. It
+   hangs above the tent's peak — the poster and its name stay clear. */
 .games-bark {
   position: absolute;
   z-index: 13;
   left: 50%;
-  bottom: 17%;
+  bottom: auto;
+  top: 28%;
   transform: translateX(-50%) translateY(6px);
-  width: min(74%, 560px);
+  width: min(68%, 520px);
   padding: 6px 14px;
   box-sizing: border-box;
   font-family: 'VT323', 'Courier New', monospace;
@@ -3313,7 +3314,7 @@
   transition: opacity 0.35s ease, transform 0.35s ease;
 }
 @media (max-width: 439px) {
-  .games-bark { bottom: 24%; width: 92%; font-size: 0.7rem; }
+  .games-bark { top: 36%; width: 92%; font-size: 0.7rem; }
 }
 .games-bark.speak {
   opacity: 1;
