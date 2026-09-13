@@ -271,13 +271,17 @@
   color: var(--dreams-ink);
 }
 
-/* the ledger — a card drawer, one row per dream (the satchel row grammar) */
-
+/* the ledger — a card drawer: one paper card per dream, lying on the blotter.
+   It sits above the blotter pad (which is absolute), and each card carries a
+   pull-tab on its right edge — the drawer's handle. Unread cards get the
+   cyan live mark: that door is open. */
 .dreams-ledger {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
-  gap: 0;
-  border-top: 1px solid rgba(111, 90, 160, 0.5);
+  gap: 8px;
+  padding-top: 2px;
 }
 
 .dreams-ledger-empty,
@@ -297,27 +301,52 @@
   grid-template-columns: 1fr auto;
   gap: 8px;
   align-items: stretch;
-  border-bottom: 1px dotted rgba(111, 90, 160, 0.4);
 }
 
 .dreams-entry {
+  position: relative;
   display: block;
   text-align: left;
   cursor: pointer;
   font-family: var(--dreams-serif);
   background: linear-gradient(180deg, var(--dreams-paper) 0%, var(--dreams-paper-dim) 100%);
-  border: none;
-  border-left: 3px solid var(--dreams-purple);
-  padding: 9px 12px;
+  border: 1px solid rgba(111, 90, 160, 0.5);
+  border-left: 4px solid var(--dreams-purple);
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  padding: 9px 44px 9px 14px;   /* right room for the pull-tab */
   min-height: 44px;
   color: var(--dreams-ink);
   box-sizing: border-box;
-  transition: background-color var(--dreams-fade), border-color var(--dreams-fade);
+  transition: transform var(--dreams-fade), box-shadow var(--dreams-fade), border-color var(--dreams-fade);
+}
+/* the pull-tab: the thumb that draws the card from the drawer */
+.dreams-entry::after {
+  content: '';
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  width: 9px;
+  height: 24px;
+  transform: translateY(-50%);
+  border-radius: 2px;
+  background: linear-gradient(180deg, var(--dreams-purple) 0%, var(--dreams-purple-deep) 100%);
+  opacity: 0.6;
+  transition: opacity var(--dreams-fade), background var(--dreams-fade);
+}
+.dreams-entry-row.unread .dreams-entry {
+  border-left-color: var(--dreams-cyan);
+}
+.dreams-entry-row.unread .dreams-entry::after {
+  background: linear-gradient(180deg, var(--dreams-cyan) 0%, #4d94c8 100%);
+  opacity: 0.95;
 }
 .dreams-entry:hover {
   border-left-color: var(--dreams-cyan);
-  background: rgba(255, 255, 255, 0.75);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.55), 0 0 10px rgba(138, 202, 255, 0.2);
 }
+.dreams-entry:hover::after { opacity: 1; }
 
 .dreams-entry-title {
   display: block;
@@ -1147,6 +1176,7 @@
   .dreams-raison,
   .dreams-cite,
   .dreams-entry,
+  .dreams-entry::after,
   .dreams-drawer {
     transition: none;
   }

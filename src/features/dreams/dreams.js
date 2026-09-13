@@ -179,9 +179,10 @@
     for (var i = 0; i < arr.length; i++) {
       var d = arr[i];
       var kept = isKept(d.id);
-      var state2 = kept ? 'kept in the book' : (d.analyzed ? 'read' : 'unread');
-      html += '<div class="dreams-entry-row' + (kept ? ' kept' : '') + '">'
-           + '<button type="button" class="dreams-entry" data-id="' + esc(d.id) + '">'
+      var read = !!d.analyzed;
+      var state2 = kept ? 'kept in the book' : (read ? 'read' : 'unread');
+      html += '<div class="dreams-entry-row' + (kept ? ' kept' : '') + (read ? '' : ' unread') + '">'
+           + '<button type="button" class="dreams-entry" data-id="' + esc(d.id) + '" aria-label="' + (esc(d.title) || 'an unnamed dream') + ' — open the reading">'
            + '<span class="dreams-entry-title">' + (esc(d.title) || 'an unnamed dream') + '</span>'
            + '<span class="dreams-entry-date">' + fmtDate(d.ts) + ' · ' + state2 + '</span>'
            + '<span class="dreams-entry-preview">' + esc(excerpt(d.text)) + '</span>'

@@ -155,6 +155,28 @@ const threads = await page.evaluate(() => {
     d: t.length ? [...t].every(p => (p.getAttribute('d') || '').startsWith('M')) : false
   }
 })
+// the drawer reads as cards: each card is the drawer's paper with a
+// pull-tab, and states itself in the row line; a seed dream marked unread
+// carries the cyan live-mark
+{
+  const ctxU = await browser.newContext({ viewport: { width: 1280, height: 800 } })
+  const pageU = await ctxU.newPage()
+  await visit(pageU, { dreams: [{ id: 'dream-unread-1', title: 'an unread one', text: 'a corridor of locked gates.', analyzed: false, associations: [] }] })
+  const drawer = await pageU.evaluate(() => {
+    const rows = [...document.querySelectorAll('.dreams-entry-row')]
+    return {
+      rows: rows.length,
+      unreadMarked: rows.some(r => r.classList.contains('unread')),
+      tabbed: rows.every(r => !!r.querySelector('.dreams-entry')),
+      ariaOpens: rows.every(r => /open the reading/.test(r.querySelector('.dreams-entry').getAttribute('aria-label') || ''))
+    }
+  })
+  check('the ledger is a drawer of cards, not a bare list', drawer.rows >= 1 && drawer.tabbed)
+  check('unread dreams carry the live mark', drawer.unreadMarked)
+  check('each card names what opening does', drawer.ariaOpens)
+  await ctxU.close()
+}
+
 check('one thread per quoted association', threads.threads === threads.cards && threads.cards === 2,
   threads.threads + ' threads / ' + threads.cards + ' cards')
 check('the threads are drawn as real paths', threads.d)
