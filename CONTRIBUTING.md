@@ -2,6 +2,8 @@
 
 One room = one HTML + one CSS + one JS. No exceptions.
 
+**Read `COVENANT.md` first.** It is the room-design law: whose room this is, how it takes the screen, what text is banned, what counts as done. The contract below is the mechanical minimum; the covenant is the standard.
+
 ## The contract
 
 1. **Files.** `yourroom.html` + `src/features/yourroom/yourroom.css` + `src/features/yourroom/yourroom.js`. Copy `garden.html` as the shell template (bezel, screen, titlebar with `?` then `×`).

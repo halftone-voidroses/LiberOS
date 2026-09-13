@@ -41,7 +41,7 @@
           <div class="screen-stage">
             <header class="toybox-titlebar">
               <span class="toybox-titlebar-name">toybox</span>
-              <span class="toybox-titlebar-sub">pip got trapped here — the sink stays</span>
+              <span class="toybox-titlebar-sub">wash basins · no drinking water</span>
               <button class="toybox-help" type="button" id="toybox-help" aria-label="how this room works">?</button>
               <button class="toybox-exit" type="button" id="toybox-exit" aria-label="leave">×</button>
             </header>
@@ -57,20 +57,23 @@
               <div class="toybox-raison" id="toybox-raison" inert>
                 <div class="toybox-raison-inner">
                   <div class="toybox-raison-head">
-                    <span class="toybox-raison-name">a note left with the toys</span>
+                    <span class="toybox-raison-name">for pip</span>
                     <button class="toybox-raison-close" type="button" id="toybox-raison-close" aria-label="close">×</button>
                   </div>
                   <div class="toybox-raison-body">
-                    touch everything. the jars are ours — we leave them for pip. pour with them, drag the crab through the piles, plow with the shell. the tap stops the world, the plug lets the wet things go. keeping takes a picture for the satchel. no lessons.
+                    the boards are ours — what's on them stays for pip, one shelf apiece, labelled so she knows whose is whose. if you open the thunder cell, stand back from the basin. the fourth shelf went over the side with the tide and we do not speak of it. the count is chalked on the tiles.
+                    <span class="raison-sign">— the travellers, seen off by vanir at the trapdoor</span>
                   </div>
                 </div>
               </div>
 
               <!-- splashback: tiles, rain window, the tap that runs the world -->
               <div class="sink-splash">
-                <div class="toybox-sign" aria-label="touch everything.">
-                  <span class="word"><i class="mag">t</i><i class="mag">o</i><i class="mag">u</i><i class="mag">c</i><i class="mag">h</i></span>
-                  <span class="word"><i class="mag">e</i><i class="mag">v</i><i class="mag">e</i><i class="mag">r</i><i class="mag">y</i><i class="mag">t</i><i class="mag">h</i><i class="mag">i</i><i class="mag">n</i><i class="mag">g</i><i class="mag">.</i></span>
+                <div class="sink-tally" aria-hidden="true"><span>day 214</span></div>
+                <div class="toybox-sign" aria-label="pip was here">
+                  <span class="word"><i class="mag">p</i><i class="mag">i</i><i class="mag">p</i></span>
+                  <span class="word"><i class="mag">w</i><i class="mag">a</i><i class="mag">s</i></span>
+                  <span class="word"><i class="mag">h</i><i class="mag">e</i><i class="mag">r</i><i class="mag">e</i></span>
                 </div>
                 <div class="tap-assembly" aria-hidden="true">
                   <i class="tap-pipe"></i><i class="tap-spout"></i><i class="tap-spout-hole"></i>
@@ -81,26 +84,21 @@
                 <div class="sink-scumline" aria-hidden="true"></div>
               </div>
 
-              <!-- the drip rack: jars other travellers left behind -->
-              <div class="toybox-shelf" id="toybox-shelf">
-                <div class="toybox-jars" id="toybox-jars"></div>
-                <div class="toybox-shelf-lip" aria-hidden="true"></div>
-              </div>
+              <!-- the side shelves: objects on boards, one thing per material -->
+              <div class="toybox-flank flank-left" id="toybox-shelf-left" role="group" aria-label="materials, left shelf"></div>
+              <div class="toybox-flank flank-right" id="toybox-shelf-right" role="group" aria-label="materials, right shelf"></div>
 
               <!-- the basin: the whole world pours into it -->
               <div class="toybox-pit" id="toybox-pit">
-                <canvas class="toybox-canvas" id="toybox-canvas" width="360" height="450"></canvas>
+                <canvas class="toybox-canvas" id="toybox-canvas" width="468" height="375"></canvas>
                 <div class="toybox-tray-shine" aria-hidden="true"></div>
-                <span class="toy" id="toy-crab" aria-hidden="true">🦀</span>
-                <span class="toy" id="toy-shell" aria-hidden="true">🐚</span>
                 <button class="toybox-action plug" type="button" id="toybox-drain" title="pull the plug — wet things drain away">
-                  <i class="tool-art" aria-hidden="true"></i><span>pull</span>
+                  <i class="plug-chain" aria-hidden="true"></i><i class="tool-art" aria-hidden="true"></i><span>pull</span>
                 </button>
               </div>
 
-              <!-- a soap dish on the basin rim: the residents the travellers left -->
-              <div class="toybox-crewbar" id="toybox-crew" role="group" aria-label="place a resident">
-                <span class="toybox-crew-label">residents</span>
+              <!-- the residents live on the back rim; drag one into the water -->
+              <div class="toybox-crewbar" id="toybox-crew" role="group" aria-label="residents on the rim">
                 <button class="toybox-crew-btn" type="button" data-crew="crab" title="crab — digs piles flat, sidles around water, flees fire" aria-label="place a crab"></button>
                 <button class="toybox-crew-btn" type="button" data-crew="snail" title="snail — trails slime, shelters from fire, rides oil rafts" aria-label="place a snail"></button>
                 <button class="toybox-crew-btn" type="button" data-crew="duck" title="duck — bobs on water, paddles to seed and eats it" aria-label="place a duck"></button>

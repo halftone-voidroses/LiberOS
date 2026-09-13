@@ -7,43 +7,135 @@
 (function () {
   'use strict';
 
-  var CELL = 3, PW = 360, PH = 450;
-  var GW = 120, GH = 150;
+  var CELL = 3, PW = 468, PH = 375;
+  var GW = 156, GH = 125;
 
-  var JARS = [
-    { id: 2, name: 'sand' },
-    { id: 3, name: 'water' },
-    { id: 4, name: 'fire' },
-    { id: 5, name: 'oil' },
-    { id: 6, name: 'salt' },
-    { id: 7, name: 'seed' },
-    { id: 1, name: 'wall' },
-    { id: -1, name: 'erase' }
+  // the side shelves: one labelled board per traveller, their objects on it.
+  // each thing is drawn as the thing itself; the freight line rides the tooltip.
+  var SHELVES_LEFT = [
+    { giver: 'the house', items: [
+      { id: 2,  label: 'sack',     art: 'sandbag',  title: 'house sweepings · sieve no. 3' },
+      { id: 23, label: 'soap',     art: 'soapbar',  title: 'house tin · cold water only' },
+      { id: 24, label: 'wand',     art: 'wand',     title: 'blown, not poured' },
+      { id: -1, label: 'sponge',   art: 'sponge',   title: 'the sponge · worn to the wire' }
+    ] },
+    { giver: 'ruby', items: [
+      { id: 7,  label: 'packet',   art: 'packet',   title: 'ruby · unlabelled, do not sort' },
+      { id: 10, label: 'plank',    art: 'plank',    title: 'ruby · glasshouse offcut, third pruning' }
+    ] },
+    { giver: 'physius', items: [
+      { id: 6,  label: 'cellar',   art: 'cellar',   title: 'physius · lab grade, reagent 12' },
+      { id: 11, label: 'stone',    art: 'stone',    title: 'physius · casting stone, batch 9' }
+    ] },
+    { giver: 'inquiry', items: [
+      { id: 13, label: 'ice',      art: 'icecube',  title: 'inquiry · kept at −4°, do not warm' },
+      { id: 14, label: 'snow',     art: 'snowdab',  title: 'inquiry · will not keep, opened once' }
+    ] },
+    { giver: 'riason', items: [
+      { id: 15, label: 'hinge',    art: 'hinge',    title: 'riason · corner stock, 3 mm' }
+    ] },
+    { giver: 'whimsy', items: [
+      { id: 17, label: 'ball',     art: 'ball',     title: 'whimsy · lost & found, claimed twice' }
+    ] }
   ];
-  var JAR_COLORS = { 2: '#d8aa50', 3: '#4a8ac8', 4: '#e05a20', 5: '#8a7a2a', 6: '#cfc8bb', 7: '#7a9a3a', 1: '#7a6e60', '-1': '#888' };
+  var SHELVES_RIGHT = [
+    { giver: 'vanir', items: [
+      { id: 3,  label: 'bottle',   art: 'bottle',   title: 'vanir · ballast, drawn at high tide' },
+      { id: 1,  label: 'plate',    art: 'plate',    title: 'vanir · hull plate offcut' }
+    ] },
+    { giver: 'arcana', items: [
+      { id: 4,  label: 'matches',  art: 'matches',  title: 'arcana · matches, struck before reading' },
+      { id: 20, label: 'cell',     art: 'battery',  title: 'arcana · one use only · do not relight after' }
+    ] },
+    { giver: 'pete', items: [
+      { id: 5,  label: 'oil can',  art: 'oilcan',   title: 'pete · lamp cut, 40 lb net' },
+      { id: 16, label: 'keg',      art: 'keg',      title: 'pete · yard grade, keep from the lamp' },
+      { id: 22, label: 'ant tin',  art: 'antfarm',  title: 'pete · live goods, vented' }
+    ] },
+    { giver: 'e-lizabeth', items: [
+      { id: 18, label: 'rocket',   art: 'rocket',   title: 'e-lizabeth · holds the last pour' }
+    ] },
+    { giver: 'the scribe', items: [
+      { id: 19, label: 'fume jar', art: 'jar',      title: 'the scribe · fume jar, marginalia notes' }
+    ] },
+    { giver: 'wanderlust', items: [
+      { id: 21, label: 'spool',    art: 'spool',    title: 'wanderlust · she sends more' }
+    ] },
+    { giver: 'no name on it', items: [
+      { id: 12, label: 'crucible', art: 'crucible', title: 'found tin, no giver · do not shake' }
+    ] }
+  ];
+  // the shelf objects as pixel sprites, same register as the crew and
+  // the powder cells — hand-pixelled, drawn by drawArt at scale 2
+  var PIX = {
+    sandbag: { w: 10, h: 8, pal: { s: '#d8aa50', d: '#9a7838', k: '#8a6828', h: '#ecc878' }, rows: [
+      '....kk....', '...kssk...', '..hssssd..', '.hssssssd.', '.hssssssd.', '.dssssssd.', '..dssssd..', '...dddd...'] },
+    bottle: { w: 8, h: 12, pal: { g: '#2a5a88', w: '#7ab0d8', c: '#4a8ac8' }, rows: [
+      '..gggg..', '..g..g..', '..g..g..', '.gwwwwg.', '.gwccwg.', '.gwccwg.', '.gccccg.', '.gccccg.', '.gccccg.', '.gccccg.', '.gccccg.', 'gggggggg'] },
+    matches: { w: 12, h: 7, pal: { f: '#e05a20', w: '#c8a060', b: '#7a3a28', y: '#e8d0a0', d: '#5a2a1c' }, rows: [
+      '....ff..ff..', '....ww..ww..', '....ww..ww..', 'bbbbbbbbbbbb', 'byyyyyyyyyyb', 'bbbbbbbbbbbb', 'dddddddddddd'] },
+    oilcan: { w: 11, h: 8, pal: { m: '#a89848', s: '#c8b868', o: '#4a4220' }, rows: [
+      '........oo.', '........o..', '..o.mmmmm..', '..mmmmmmm..', '..msssssm..', '..msssssm..', '..msssssm..', '..mmmmmmm..'] },
+    cellar: { w: 10, h: 9, pal: { w: '#e8e4da', s: '#c8c4b8', g: '#8a887c', h: '#f4f0e6' }, rows: [
+      '...hhhh...', '..hhhhhh..', '.gggggggg.', '.gwwwwwwg.', '.gwwwwwwg.', '.gwwwwwwg.', '.gwwwwwwg.', '.gssssssg.', '.gggggggg.'] },
+    packet: { w: 10, h: 11, pal: { l: '#e0d0a8', p: '#c8a86a', g: '#7a9a3a', d: '#a08850' }, rows: [
+      'llllllllll', 'lppppppppl', 'lppppppppl', 'lppggppppl', 'lpggggpppl', 'lppggppppl', 'lppppppppl', 'lppppppppl', 'lppppppppl', 'llllllllll', 'dddddddddd'] },
+    plate: { w: 12, h: 7, pal: { m: '#8a9496', l: '#b8c2c4', s: '#39413f' }, rows: [
+      'llllllllllll', 'lmmmmmmmmmml', 'lmsmmmmmmsml', 'lmmmmmmmmmml', 'lmmmmmmmmmml', 'lmmmmmmmmmml', 'llllllllllll'] },
+    plank: { w: 12, h: 5, pal: { w: '#b8864a', d: '#8a6234', g: '#6a4a28' }, rows: [
+      'wwwwwwwwwwww', 'wwdwwwwwdwww', 'wwwwwwdwwwww', 'wwwwwwwwwwww', 'gggggggggggg'] },
+    stone: { w: 11, h: 7, pal: { l: '#b8b6ac', m: '#9a988f', d: '#6a6860' }, rows: [
+      '..lllll....', '.llllmmm...', 'llllmmmmdd.', 'lmmmmmmmmdd', 'lmmmmmmmddd', '.mmmmmmmddd', '.ddddddddd.'] },
+    crucible: { w: 10, h: 8, pal: { k: '#2a2622', k2: '#4a4440', o: '#ffd070', m: '#e87020' }, rows: [
+      '..ommo....', '.ommmmmo..', '.kkkkkkkk.', '.k222222k.', '.k222222k.', '.k222222k.', '..k2222k..', '..kkkkkk..'] },
+    icecube: { w: 10, h: 8, pal: { i: '#9ad0e0', l: '#d8f0f8', w: '#ffffff', d: '#6eaac8' }, rows: [
+      '.wwwwwwww.', '.wlllllll.', '.wliiiiid.', '.wiiiiiid.', '.wiiiiiid.', '.wiiiiiid.', '.wiiiiiid.', '.dddddddd.'] },
+    snowdab: { w: 11, h: 6, pal: { w: '#ffffff', s: '#e4ecf2', b: '#c8d8e4' }, rows: [
+      '....ww.....', '..wwwwww...', '.wwwwwwww..', 'wwwwwwwwwww', '.bsssssbb..', '..bbbbbb...'] },
+    hinge: { w: 10, h: 6, pal: { m: '#c0c8ce', s: '#586070', d: '#8890a0' }, rows: [
+      'smmm..mmms', 'mmmmmmmmmm', 'smmm..mmms', 'mmmmmmmmmm', 'smmm..mmms', 'dddddddddd'] },
+    keg: { w: 10, h: 10, pal: { s: '#7a5c38', d: '#4a3a24', r: '#3a2e1c' }, rows: [
+      '...dddd...', '..dssssd..', '.dssssssd.', '.rrrrrrrr.', 'dssssssssd', 'dssssssssd', '.rrrrrrrr.', '.dssssssd.', '..dssssd..', '...dddd...'] },
+    ball: { w: 9, h: 8, pal: { p: '#e07a9e', l: '#f2a6c2', d: '#a84a6e', w: '#ffffff' }, rows: [
+      '..llpp...', '.llllpp..', 'llwwppppd', 'llwwpppdd', 'pppppppdd', 'pppppdddd', '.pppdddd.', '..dddd...'] },
+    rocket: { w: 7, h: 10, pal: { n: '#e05a20', c: '#e0c890', r: '#c84a18', f: '#ffd070' }, rows: [
+      '..nnn..', '.nnnnn.', '.nnnnn.', '.ccccc.', '.ccccc.', '.ccccc.', '.ccccc.', 'rr.c.rr', '..fff..', '...f...'] },
+    jar: { w: 9, h: 9, pal: { g: '#6a7a70', m: '#9ad89a', d: '#3c6e46', h: '#8a9a90' }, rows: [
+      '..hhhhh..', '..hhhhh..', '.ggggggg.', '.gmdmmmg.', '.gmmmmmg.', '.gdmmmmg.', '.gmmmdmg.', '.gmmmmmg.', '.ggggggg.'] },
+    battery: { w: 8, h: 10, pal: { y: '#ffe482', k: '#3a3a34', t: '#8a8a80' }, rows: [
+      '...tt...', '.yyyyyy.', 'kkkkkkkk', 'kkkkkyyy', 'kkkkyyyy', 'kkkyykkk', 'kkyykkkk', 'kkkkkkkk', '.yyyyyy.', 'kkkkkkkk'] },
+    spool: { w: 9, h: 9, pal: { h: '#6a5090', t: '#b08ae0', w: '#8a68b0' }, rows: [
+      'hhhhhhhhh', 'httttttth', 'httttttth', 'httttttth', 'wtttttttw', 'httttttth', 'httttttth', 'httttttth', 'hhhhhhhhh'] },
+    antfarm: { w: 12, h: 8, pal: { v: '#c8b088', s: '#a8784a', a: '#241a10', d: '#7a5430' }, rows: [
+      'vvvvvvvvvvvv', 'vvvvvvvvvvvv', 'ssssssssssss', 'ssaassssaass', 'ssssaassssas', 'ssaasssssass', 'ssssssssssss', 'dddddddddddd'] },
+    soapbar: { w: 11, h: 6, pal: { s: '#cce8f0', h: '#eef8fc', d: '#9ec8d8' }, rows: [
+      '.hhhhhhhhh.', 'hsssssssssh', 'hsssssssssd', 'hsssssssssd', '.dsssssssd.', '..ddddddd..'] },
+    wand: { w: 11, h: 8, pal: { b: '#c8e8f4', s: '#9ab8c8' }, rows: [
+      '...bbb.....', '..bb..bb...', '..b....b...', '..bb..bb...', '...bbb.ss..', '.......ss..', '........ss.', '.........ss'] },
+    sponge: { w: 11, h: 7, pal: { y: '#d8c878', d: '#b8a858', h: '#8a7a3a' }, rows: [
+      '.yyyyyyyyy.', 'yyhyyyhyyyh', 'yyyyhyyyyyy', 'yhyyyyhyyyy', 'yyyyyhyyyhy', 'yyyyyyyyyyy', '.ddddddddd.'] }
+  };
+  var JAR_COLORS = {
+    1: '#7a6e60', 2: '#d8aa50', 3: '#4a8ac8', 4: '#e05a20', 5: '#8a7a2a',
+    6: '#cfc8bb', 7: '#7a9a3a', 10: '#a8763f', 11: '#9a988f', 12: '#e87020',
+    13: '#9ad0e0', 14: '#e4ecf2', 15: '#a8b0b8', 16: '#6a655c', 17: '#e07a9e',
+    18: '#e0c890', 19: '#9ad89a', 20: '#ffe482', 21: '#b08ae0', 22: '#8a6038',
+    23: '#aadce8', 24: '#c8e8f4', '-1': '#888'
+  };
 
   var sim = null;
   var crew = null;
   var cv = null, ctx = null, img = null;
   var pit = null, resultEl = null;
   var el = 2, brush = 2, pouring = false;
-  var crewPick = null;   // pending spawn: 'crab' | 'snail' | 'duck'
   var paused = false;
+  var sweepWind = 1, sweepGusts = 0;   // the broom: sweep direction and remaining gusts
+  var crewDrops = 0;                   // keyboard placements cycle the drop spot
+  var draining = 0;                    // frames left in the drain
+  var drainBtn = null;
   var lastTick = 0;
   var CREW_KINDS = ['crab', 'snail', 'duck'];
 
-  // the shell toy: a scallop chip, hand-pixelled (the crab toy reuses the
-  // resident's own sprite — the travellers left toys of the real crew)
-  var SHELL_ART = { w: 9, h: 8, pal: { s: '#e8dcc0', c: '#c8b088', h: '#f4ecd8', d: '#8a7048' }, rows: [
-    '....s....',
-    '...scs...',
-    '..schcs..',
-    '.schhhcs.',
-    'scchhhhcs',
-    'scchhhhcs',
-    '.scccccs.',
-    '..ddddd..'
-  ] };
 
   function drawArt(cv2, art, scale) {
     cv2.width = art.w * scale;
@@ -59,43 +151,112 @@
     }
   }
 
-  // the basin fits the world exactly: largest 4:5 well between the
+  // the drain: wet cells nearest the hole are eaten first, so the rest
+  // visibly slumps in over the pull. steam is a gas — it leaves on its own.
+  function wetCount() {
+    var n = 0;
+    for (var y = 0; y < GH; y++)
+      for (var x = 0; x < GW; x++) {
+        var v = sim.at(x, y);
+        if (v === sim.WATER || v === sim.OIL || v === sim.BUBBLE) n++;
+      }
+    return n;
+  }
+  function drainBite() {
+    var dx = GW >> 1, dy = GH - 3, removed = 0;
+    var WATER = sim.WATER, OIL = sim.OIL, BUBBLE = sim.BUBBLE;
+    function wet(v) { return v === WATER || v === OIL || v === BUBBLE; }
+    // the pull: settled fluid steps toward the hole, so the whole pool
+    // visibly slumps in. falling fluid keeps falling on its own.
+    for (var pass = 0; pass < 2; pass++) {
+      var x0 = pass ? 0 : GW - 2, x1 = pass ? GW - 1 : 1, sx = pass ? 1 : -1;
+      for (var x = x0; x !== x1 + sx; x += sx) {
+        for (var y = GH - 1; y >= 0; y--) {
+          var v = sim.at(x, y);
+          if (!wet(v)) continue;
+          var below = y < GH - 1 ? sim.at(x, y + 1) : 1;
+          if (below === 0) continue;   /* falling — the sim owns it */
+          var step = x < dx ? 1 : (x > dx ? -1 : 0);
+          if (step && sim.at(x + step, y) === 0) {
+            sim.setAt(x + step, y, v, 0, sim.shadeAt(x, y));
+            sim.setAt(x, y, 0, 0, 0);
+          }
+        }
+      }
+    }
+    // the hole: wet cells nearest it are eaten first
+    for (var r = 0; r <= 26 && removed < 12; r++) {
+      for (var oy = -r; oy <= r && removed < 12; oy++) {
+        for (var ox = -r; ox <= r && removed < 12; ox++) {
+          var ax = ox < 0 ? -ox : ox, ay = oy < 0 ? -oy : oy;
+          if (Math.max(ax, ay) !== r) continue;
+          var bx = dx + ox, by = dy + oy;
+          if (bx < 0 || by < 0 || bx >= GW || by >= GH) continue;
+          var wv = sim.at(bx, by);
+          if (wet(wv)) { sim.setAt(bx, by, 0, 0, 0); removed++; }
+        }
+      }
+    }
+  }
+  function finishDrain() {
+    draining = 0;
+    for (var y = 0; y < GH; y++)
+      for (var x = 0; x < GW; x++) {
+        var v = sim.at(x, y);
+        if (v === sim.WATER || v === sim.OIL || v === sim.BUBBLE) sim.setAt(x, y, 0, 0, 0);
+      }
+    if (drainBtn) drainBtn.classList.remove('open');
+    if (resultEl) resultEl.textContent = '';
+  }
+
+  // the basin fits the world exactly: a wide 1.25:1 well between the
   // splashback and the floor line, so the canvas never distorts
   function fitBasin() {
     if (!pit || !pit.parentElement) return;
     var app = pit.parentElement;
     var aw = app.clientWidth, ah = app.clientHeight;
     if (!aw || !ah) return;
-    var topPad = 162;   /* below the splashback + drip rack (118+38=156) */
-    var botPad = 46;
-    app.style.setProperty('--basin-half', '110px');
+    var topPad = 152;   /* below the splashback, on the basin's back rim */
+    var botPad = 64;
+    app.style.setProperty('--basin-half', '160px');
+    app.classList.toggle('compact', aw < 700);
     var availH = ah - topPad - botPad;
-    var availW = aw - 18;
-    if (availH < 150 || availW < 160) {
-      var fw = Math.max(110, Math.min(160, availW));
-      var fh = Math.round(fw * 1.25);
+    var availW = aw - 376;   /* the two flank boards, with their margins */
+    if (availH < 120 || availW < 220) {
+      var fw = Math.max(140, Math.min(240, aw - 268));
+      var fh = Math.round(fw * 0.8);
       app.style.setProperty('--basin-half', Math.round(fw / 2) + 'px');
       pit.style.width = fw + 'px';
       pit.style.height = fh + 'px';
       pit.style.left = Math.round((aw - fw) / 2) + 'px';
-      pit.style.top = Math.max(40, Math.round((ah - fh) / 2)) + 'px';
+      var ft = ah - fh - 44;   /* above the crew bar and the tools */
+      if (ft < 120) ft = Math.max(96, Math.round((ah - fh) * 0.45));
+      pit.style.top = ft + 'px';
       pit.style.transform = 'none';
       return;
     }
-    var w = Math.min(availW, availH * 0.8, 340);
-    w = Math.max(150, Math.round(w));
-    var h = Math.round(w * 1.25);
+    var w = Math.min(availW, availH * 1.25, 470);
+    w = Math.max(200, Math.round(w));
+    var h = Math.round(w * 0.8);
     if (h > availH) {
       h = availH;
-      w = Math.max(120, Math.round(Math.min(w, h * 0.8)));
-      h = Math.round(w * 1.25);
+      w = Math.max(160, Math.round(Math.min(w, h * 1.25)));
+      h = Math.round(w * 0.8);
     }
     app.style.setProperty('--basin-half', Math.round(w / 2) + 'px');
+    var px = Math.round((aw - w) / 2), py = topPad + Math.round((availH - h) / 2);
     pit.style.width = w + 'px';
     pit.style.height = h + 'px';
-    pit.style.left = Math.round((aw - w) / 2) + 'px';
-    pit.style.top = topPad + Math.round((availH - h) / 2) + 'px';
+    pit.style.left = px + 'px';
+    pit.style.top = py + 'px';
     pit.style.transform = 'none';
+    // the residents ledge sits on the basin's back rim
+    var bar = document.getElementById('toybox-crew');
+    if (bar) {
+      bar.style.left = (px + 8) + 'px';
+      bar.style.top = (py - 30) + 'px';
+      bar.style.bottom = 'auto';
+    }
   }
 
   function tick() {
@@ -170,170 +331,149 @@
     crew.draw(ctx, CELL, Date.now() / 100);
   }
 
-  // ── toys: one verb, one sound, zero text ────────────────────────────
 
-  function toyCenter(t) {
-    var pr = pit.getBoundingClientRect();
-    var r = t.getBoundingClientRect();
-    return {
-      x: (r.left + r.width / 2 - pr.left) * (GW / pr.width),
-      y: (r.top + r.height / 2 - pr.top) * (GH / pr.height)
-    };
-  }
-
-  function makeDraggable(node, hooks) {
-    var active = false;
-    function move(e) {
-      if (!active) return;
-      var pr = pit.getBoundingClientRect();
-      var x = e.clientX - pr.left - 23;
-      var y = e.clientY - pr.top - 23;
-      x = Math.max(0, Math.min(pr.width - 46, x));
-      y = Math.max(0, Math.min(pr.height - 46, y));
-      node.style.left = x + 'px';
-      node.style.top = y + 'px';
-      if (hooks && hooks.hold) hooks.hold();
-    }
-    node.addEventListener('pointerdown', function (e) {
-      e.preventDefault();
-      active = true;
-      try { node.setPointerCapture(e.pointerId); } catch (err) {}
-      node.classList.add('held');
-      move(e);
-    });
-    node.addEventListener('pointermove', move);
-    function up() {
-      if (!active) return;
-      active = false;
-      node.classList.remove('held');
-      if (hooks && hooks.release) hooks.release();
-    }
-    node.addEventListener('pointerup', up);
-    node.addEventListener('pointercancel', up);
-  }
-
-  var shellStamped = [];
-
-  function erodeAt(gx, gy, r) {
-    for (var dy = -r; dy <= r; dy++) {
-      for (var dx = -r; dx <= r; dx++) {
-        if (dx * dx + dy * dy > r * r) continue;
-        var x = Math.round(gx + dx), y = Math.round(gy + dy);
-        if (x < 0 || y < 0 || x >= GW || y >= GH) continue;
-        var v = sim.at(x, y);
-        if (v !== 0 && v !== 1) sim.setAt(x, y, 0, 0, 0);
-      }
-    }
-  }
-
-  function wireToys() {
-    var crab = document.getElementById('toy-crab');
-    var shell = document.getElementById('toy-shell');
-    if (!crab || !shell) return;
-    // enamel-chip portraits of the residents themselves
-    try {
-      var spr = window.LiberCrew && window.LiberCrew.SPRITES;
-      if (spr && spr.crab && spr.crab.walk && spr.crab.walk[0]) {
-        var cc = document.createElement('canvas');
-        drawArt(cc, { w: spr.crab.w, h: spr.crab.h, pal: spr.crab.pal, rows: spr.crab.walk[0] }, 3);
-        crab.textContent = '';
-        crab.appendChild(cc);
-      }
-    } catch (e) {}
-    var sc = document.createElement('canvas');
-    drawArt(sc, SHELL_ART, 3);
-    shell.textContent = '';
-    shell.appendChild(sc);
-    makeDraggable(crab, {
-      hold: function () {
-        var g = toyCenter(crab);
-        erodeAt(g.x, g.y, 5);
-        tick();
-      }
-    });
-    makeDraggable(shell, {
-      hold: function () {
-        var g = toyCenter(shell);
-        for (var dy = -2; dy <= 2; dy++) {
-          for (var dx = -2; dx <= 2; dx++) {
-            var x = Math.round(g.x + dx), y = Math.round(g.y + dy);
-            if (x < 0 || y < 0 || x >= GW || y >= GH) continue;
-            if (sim.at(x, y) === 0) {
-              sim.setAt(x, y, 1, 0, 0);
-              shellStamped.push([x, y]);
-            }
-          }
+  function buildShelfBoard(root, groups) {
+    if (!root) return;
+    root.innerHTML = '';
+    groups.forEach(function (g) {
+      var grp = document.createElement('div');
+      grp.className = 'shelf-group';
+      var row = document.createElement('div');
+      row.className = 'shelf-row';
+      g.items.forEach(function (o) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'shelf-obj' + (o.id === el ? ' on' : '');
+        b.title = o.title;
+        b.setAttribute('aria-label', g.giver + ' — ' + o.label);
+        b.style.setProperty('--jc', JAR_COLORS[o.id] || '#c8a878');
+        var artSpec = PIX[o.art];
+        if (artSpec) {
+          var c = document.createElement('canvas');
+          drawArt(c, artSpec, 2);
+          c.className = 'obj-art';
+          b.appendChild(c);
+        } else {
+          var art = document.createElement('i');
+          art.className = 'obj-art obj-' + o.art;
+          art.setAttribute('aria-hidden', 'true');
+          b.appendChild(art);
         }
-        tick();
-      },
-      release: function () {
-        // terrain restored on lift
-        for (var i = 0; i < shellStamped.length; i++) {
-          var c = shellStamped[i];
-          if (sim.at(c[0], c[1]) === 1) sim.setAt(c[0], c[1], 0, 0, 0);
-        }
-        shellStamped = [];
-      }
-    });
-  }
-
-  function buildJars() {
-    var bar = document.getElementById('toybox-jars');
-    if (!bar) return;
-    bar.innerHTML = '';
-    JARS.forEach(function (o) {
-      var b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'toybox-jar' + (o.id === el ? ' on' : '');
-      b.textContent = o.name;
-      b.style.setProperty('--jc', JAR_COLORS[o.id] || '#c8a878');
-      b.addEventListener('click', function () {
-        el = o.id;
-        var sibs = bar.querySelectorAll('.toybox-jar');
-        for (var k = 0; k < sibs.length; k++) sibs[k].classList.remove('on');
-        b.classList.add('on');
+        var nm = document.createElement('span');
+        nm.className = 'obj-label';
+        nm.textContent = o.label;
+        b.appendChild(nm);
+        b.addEventListener('click', function () {
+          el = o.id;
+          var sibs = document.querySelectorAll('.shelf-obj');
+          for (var k = 0; k < sibs.length; k++) sibs[k].classList.remove('on');
+          b.classList.add('on');
+        });
+        row.appendChild(b);
       });
-      bar.appendChild(b);
+      grp.appendChild(row);
+      // the shelf itself: a board jutting from the wall, plaque on its face
+      var board = document.createElement('div');
+      board.className = 'shelf-board';
+      var plate = document.createElement('span');
+      plate.className = 'shelf-plate';
+      plate.textContent = g.giver;
+      board.appendChild(plate);
+      grp.appendChild(board);
+      root.appendChild(grp);
     });
+  }
+  function buildShelves() {
+    buildShelfBoard(document.getElementById('toybox-shelf-left'), SHELVES_LEFT);
+    buildShelfBoard(document.getElementById('toybox-shelf-right'), SHELVES_RIGHT);
   }
 
   function loop() {
     if (document.body.contains(cv) && !document.hidden) {
       if (!paused) {
+        sim.setWind(sweepGusts > 0 ? sweepWind : 0);
+        if (sweepGusts > 0) sweepGusts--;
         sim.step();
         crew.step();
+      }
+      // the plug obeys gravity, not the tap: it drains even when the world
+      // is held still
+      if (draining) {
+        draining--;
+        drainBite();
+        if (!draining || (draining % 15 === 0 && !wetCount())) finishDrain();
       }
       paint();
     }
     requestAnimationFrame(loop);
   }
 
-  function paintCrewButtons() {
+  function paintCrewArt(b, kind) {
+    var sp = window.LiberCrew.SPRITES[kind];
+    if (!sp) return;
+    var c = document.createElement('canvas');
+    c.width = sp.w * 3; c.height = sp.h * 3;
+    var x2 = c.getContext('2d');
+    var frame = sp.walk[0];
+    for (var r = 0; r < sp.h; r++) {
+      for (var q = 0; q < sp.w; q++) {
+        var ch = frame[r][q];
+        if (ch === '.') continue;
+        x2.fillStyle = sp.pal[ch];
+        x2.fillRect(q * 3, r * 3, 3, 3);
+      }
+    }
+    c.className = 'toybox-crew-art';
+    b.textContent = '';
+    b.appendChild(c);
+  }
+
+  // the residents live on the back rim: drag one down into the water.
+  // keyboard path drops it at a cycling spot above the basin floor.
+  function crewGrounded(x, y) {
+    var v = sim.at(x, y + 1);
+    return sim.standable ? (sim.standable(v) || v === sim.SPROUT) : (v === sim.SAND || v === sim.WALL || v === sim.SPROUT);
+  }
+  function dropCrew(kind, gx, gy) {
+    crew.removeAt(gx, gy, 4);   // one resident per spot
+    crew.spawn(kind, gx, Math.max(1, gy));
+    thunk();
+    if (resultEl) resultEl.textContent = 'a ' + kind + ' moves in.';
+  }
+  function wireCrew() {
     var bar = document.getElementById('toybox-crew');
     if (!bar || !window.LiberCrew) return;
-    CREW_KINDS.forEach(function (kind) {
-      var b = bar.querySelector('[data-crew="' + kind + '"]');
-      if (!b) return;
-      var sp = window.LiberCrew.SPRITES[kind];
-      var c = document.createElement('canvas');
-      c.width = sp.w * 3; c.height = sp.h * 3;
-      var x2 = c.getContext('2d');
-      var frame = sp.walk[0];
-      for (var r = 0; r < sp.h; r++) {
-        for (var q = 0; q < sp.w; q++) {
-          var ch = frame[r][q];
-          if (ch === '.') continue;
-          x2.fillStyle = sp.pal[ch];
-          x2.fillRect(q * 3, r * 3, 3, 3);
+    var btns = bar.querySelectorAll('[data-crew]');
+    Array.prototype.forEach.call(btns, function (b) {
+      var kind = b.getAttribute('data-crew');
+      paintCrewArt(b, kind);
+      var dragging = false;
+      b.addEventListener('pointerdown', function (e) {
+        e.preventDefault();
+        dragging = true;
+        b.classList.add('held');
+        try { b.setPointerCapture(e.pointerId); } catch (err) {}
+      });
+      b.addEventListener('pointerup', function (e) {
+        if (!dragging) return;
+        dragging = false;
+        b.classList.remove('held');
+        var pr = pit.getBoundingClientRect();
+        if (e.clientX >= pr.left && e.clientX <= pr.right && e.clientY >= pr.top && e.clientY <= pr.bottom) {
+          var p = cellPos(e);
+          dropCrew(kind, p.x, Math.max(1, p.y - 1));
         }
-      }
-      c.className = 'toybox-crew-art';
-      b.textContent = '';
-      b.appendChild(c);
-      var lbl = document.createElement('span');
-      lbl.className = 'toybox-crew-name';
-      lbl.textContent = kind;
-      b.appendChild(lbl);
+      });
+      b.addEventListener('pointercancel', function () { dragging = false; b.classList.remove('held'); });
+      b.addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        e.preventDefault();
+        var x = Math.round(GW * (0.25 + 0.22 * (crewDrops % 3)));
+        crewDrops++;
+        var y = 2;
+        while (y < GH - 1 && !crewGrounded(x, y)) y++;
+        dropCrew(kind, x, y);
+      });
     });
   }
 
@@ -348,9 +488,8 @@
     ctx = cv.getContext('2d');
     img = ctx.createImageData(PW, PH);
 
-    buildJars();
-    wireToys();
-    paintCrewButtons();
+    buildShelves();
+    wireCrew();
     fitBasin();
     window.addEventListener('resize', fitBasin);
 
@@ -365,7 +504,6 @@
       pouring = true;
       try { cv.setPointerCapture(e.pointerId); } catch (err) {}
       var p = cellPos(e);
-      if (crewPick) { placeCrew(p); pouring = false; return; }
       sim.pour(p.x, p.y, el, brush);
     });
     cv.addEventListener('pointermove', function (e) {
@@ -378,11 +516,12 @@
     cv.addEventListener('pointercancel', stopPour);
     cv.addEventListener('pointerleave', stopPour);
 
+    // the broom: long sweeping strokes push the powder; sweep clears nothing
     var sweep = document.getElementById('toybox-sweep');
     if (sweep) sweep.addEventListener('click', function () {
-      sim.reset();
-      shellStamped = [];
-      if (resultEl) resultEl.textContent = 'clean sand. touch everything.';
+      sweepWind = sweepWind === 1 ? -1 : 1;
+      sweepGusts = 26;
+      if (resultEl) resultEl.textContent = sweepWind === 1 ? 'sweeping right.' : 'sweeping left.';
     });
 
     // pause / drain: the tray obeys, the crew keeps its place
@@ -392,54 +531,21 @@
       var pauseLabel = pauseBtn.querySelector('span');
       if (pauseLabel) pauseLabel.textContent = paused ? 'tap off' : 'tap on';
       pauseBtn.setAttribute('aria-pressed', paused ? 'true' : 'false');
-      if (resultEl) resultEl.textContent = paused ? 'the tap squeaks shut. the world holds its breath.' : 'the tap opens. the world runs.';
+      if (resultEl) resultEl.textContent = paused ? 'the drip stops.' : '';
     });
-    var drainBtn = document.getElementById('toybox-drain');
+    drainBtn = document.getElementById('toybox-drain');
     if (drainBtn) drainBtn.addEventListener('click', function () {
-      for (var y = 0; y < GH; y++) {
-        for (var x = 0; x < GW; x++) {
-          var v = sim.at(x, y);
-          if (v === sim.WATER || v === sim.OIL || v === sim.STEAM) sim.setAt(x, y, 0, 0, 0);
-        }
-      }
-      if (resultEl) resultEl.textContent = 'the plug pulls. the wet things go to the sea.';
+      if (draining) return;
+      draining = 540;   // the pull runs up to nine seconds, then sweeps
+      drainBtn.classList.add('open');
+      if (resultEl) resultEl.textContent = 'the plug pulls.';
     });
-
-    // crew dispensers: pick a resident, click the tray to place it
-    var crewBar = document.getElementById('toybox-crew');
-    if (crewBar) {
-      var crewBtns = crewBar.querySelectorAll('[data-crew]');
-      Array.prototype.forEach.call(crewBtns, function (b) {
-        b.addEventListener('click', function () {
-          var kind = b.getAttribute('data-crew');
-          if (crewPick === kind) {
-            crewPick = null;
-            b.classList.remove('on');
-            if (resultEl) resultEl.textContent = 'crew picker set down.';
-            return;
-          }
-          crewPick = kind;
-          Array.prototype.forEach.call(crewBtns, function (o) { o.classList.remove('on'); });
-          b.classList.add('on');
-          if (resultEl) resultEl.textContent = kind + ' in hand — click the tray to place.';
-        });
-      });
-    }
-    function placeCrew(p) {
-      var kind = crewPick;
-      crewPick = null;
-      Array.prototype.forEach.call(document.querySelectorAll('#toybox-crew [data-crew]'), function (o) { o.classList.remove('on'); });
-      crew.removeAt(p.x, p.y, 4); // one resident per spot
-      crew.spawn(kind, p.x, p.y - 2);
-      thunk();
-      if (resultEl) resultEl.textContent = 'a ' + kind + ' moves in.';
-    }
 
     var keep = document.getElementById('toybox-keep');
     if (keep) keep.addEventListener('click', function () {
       var st = sim.state();
       if (!st.strokes && !crew.count()) {
-        if (resultEl) resultEl.textContent = 'pour something first — the box is still empty.';
+        if (resultEl) resultEl.textContent = 'nothing to keep yet.';
         return;
       }
       paint(); // crew composited into the shot
@@ -448,7 +554,7 @@
       var residents = crew.list().map(function (c) { return c.kind; });
       if (residents.length) names.push(residents.length + ' crew');
       saveKeep(names, shot);
-      if (resultEl) resultEl.textContent = 'kept. pip keeps the picture' + (residents.length ? ' — crew and all.' : '.');
+      if (resultEl) resultEl.textContent = 'kept.';
       thunk();
     });
 

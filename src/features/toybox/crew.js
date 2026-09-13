@@ -183,6 +183,7 @@
       if (x < 1 || y < 1 || x >= W - 1) return false;
       if (y >= H - 1) return true; // tray floor
       var below = at(x, y + 1);
+      if (sim.standable) return sim.standable(below) || below === sim.SPROUT;
       return below === sim.SAND || below === sim.WALL || below === sim.SPROUT;
     }
 

@@ -2,8 +2,9 @@
    the other travellers leave toys in the basin. Wanderlust's grasp never
    touched this room: no gilt, no pine — enamel, limescale, rust, wire, tape,
    one warm bulb. The sink IS the screen. JS contract (toybox.js):
-   .toybox-jar + .on (built per jar, --jc set inline), .toy + .held,
-   .toybox-raison + .open, #toy-crab/#toy-shell 46px drag geometry,
+   .toybox-flank + .shelf-obj (built per material, --jc set inline),
+   .toybox-crewbar [data-crew] drag geometry,
+   .toybox-raison + .open,
    canvas painted by powder.js — dress AROUND it, never its internals. */
 .toybox-app {
   --porc-hi: #a8bcb0;
@@ -286,52 +287,188 @@
 .tap-handle[aria-pressed="true"] span { color: #ffd98a; }
 .tap-handle span { text-shadow: 0 1px 0 rgba(0, 0, 0, 0.8); }
 
-/* ── the drip rack: jars the travellers left behind ── */
-.toybox-shelf {
-  position: absolute; top: 118px; left: 12px; right: 12px; height: 38px; z-index: 2;
-  background: linear-gradient(180deg, #33413a 0%, #26322b 70%, #1c2620 100%);
-  border: 1px solid #3e4c44; border-radius: 4px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(207, 216, 200, 0.14);
-  padding: 3px 8px 0;
+/* ── the flank boards: one labelled shelf per traveller, the objects
+   themselves on them — no labels on the things, names on the boards ── */
+.toybox-flank {
+  position: absolute; top: 114px; bottom: 44px; width: 178px; z-index: 2;
+  overflow-y: auto; overflow-x: hidden; scrollbar-width: none;
+  padding: 7px 10px 22px; display: flex; flex-direction: column; gap: 6px;
 }
-.toybox-jars { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
-.toybox-jar {
-  font-family: inherit; font-size: 0.7rem; letter-spacing: 0.06em;
-  color: var(--jc);
+/* the fade says: the board keeps going past its edge */
+.toybox-flank::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 18px;
+  background: linear-gradient(180deg, transparent, rgba(19, 26, 22, 0.95));
+  pointer-events: none;
+  z-index: 2;
+}
+.toybox-flank::-webkit-scrollbar { display: none; }
+.flank-left { left: 10px; transform: rotate(-0.4deg); }
+.flank-right { right: 10px; transform: rotate(0.4deg); }
+/* the boards: painted planks with two screws at the top */
+.toybox-flank::before {
+  content: ''; position: absolute; inset: 0; border-radius: 3px; z-index: -1;
   background:
-    linear-gradient(100deg, rgba(255, 255, 255, 0.16) 8%, transparent 30%),
-    linear-gradient(180deg, color-mix(in srgb, var(--jc) 22%, #101815), #101815 80%);
-  border: 1px solid color-mix(in srgb, var(--jc) 55%, #26322b);
-  border-radius: 4px 4px 7px 7px;
-  padding: 1px 8px; cursor: pointer;
-  min-height: 29px;
-  box-shadow: 0 0 8px -3px var(--jc), inset 0 -4px 6px rgba(0, 0, 0, 0.4), 0 2px 3px rgba(0, 0, 0, 0.5);
-  text-shadow: 0 0 7px var(--jc);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+    radial-gradient(circle at 8px 8px, #7a8486 0 1.8px, rgba(0, 0, 0, 0.6) 2.2px, transparent 3px),
+    radial-gradient(circle at calc(100% - 8px) 8px, #7a8486 0 1.8px, rgba(0, 0, 0, 0.6) 2.2px, transparent 3px),
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.13) 0 2px, transparent 2px 14px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.32), transparent 12%, transparent 88%, rgba(0, 0, 0, 0.32)),
+    linear-gradient(180deg, #3a4840, #26322b);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(207, 216, 200, 0.16);
 }
-.toybox-jar::before {
-  /* wire handle bent over each jar rim */
-  content: ''; position: absolute; top: -5px; left: 50%; transform: translateX(-50%);
-  width: 12px; height: 6px;
-  border: 1.5px solid var(--wire); border-bottom: none;
-  border-radius: 6px 6px 0 0;
-}
-.toybox-jar { position: relative; }
-.toybox-jar:hover { transform: translateY(-1px); box-shadow: 0 0 11px -2px var(--jc), inset 0 -4px 6px rgba(0, 0, 0, 0.4), 0 3px 5px rgba(0, 0, 0, 0.55); }
-.toybox-jar:active { transform: translateY(1px); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.7), 0 0 6px -3px var(--jc); }
-.toybox-jar.on {
-  background: linear-gradient(100deg, rgba(255, 255, 255, 0.22) 8%, transparent 32%),
-    linear-gradient(180deg, color-mix(in srgb, var(--jc) 44%, #101815), color-mix(in srgb, var(--jc) 16%, #101815) 85%);
-  color: #f4f0e4; text-shadow: 0 0 9px var(--jc), 0 1px 0 rgba(0, 0, 0, 0.7);
-  box-shadow: 0 0 14px -2px var(--jc), inset 0 -4px 6px rgba(0, 0, 0, 0.35), 0 2px 4px rgba(0, 0, 0, 0.55);
-  transform: translateY(-1px);
-}
-.toybox-shelf-lip { display: none; }
+.shelf-group { padding-bottom: 10px; }
 
-/* ── the basin: the whole world pours into it ── */
+/* the shelf itself: a board jutting from the wall — faux 3d, front face
+   carrying the brass plaque, top face catching the bulb light */
+.shelf-board {
+  position: relative; height: 13px; margin: -4px 1px 0; border-radius: 0 0 2px 2px;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.15) 30%, rgba(0, 0, 0, 0.5)),
+    linear-gradient(180deg, #4a3c2c, #332a1e 60%, #211a12);
+  box-shadow:
+    0 4px 6px -2px rgba(0, 0, 0, 0.65),
+    inset 0 2px 0 rgba(228, 240, 216, 0.22),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.6);
+}
+/* the lit top edge — the bulb is up-left */
+.shelf-board::before {
+  content: ''; position: absolute; left: 0; right: 0; top: -2px; height: 2px;
+  background: linear-gradient(90deg, rgba(236, 200, 138, 0.5), rgba(228, 240, 216, 0.16) 55%, rgba(236, 200, 138, 0.3));
+}
+/* under-board shadow on the wall */
+.shelf-board::after {
+  content: ''; position: absolute; left: 3px; right: -2px; top: 100%; height: 7px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.45), transparent);
+  pointer-events: none;
+}
+.shelf-group:last-child { border-bottom: none; padding-bottom: 0; box-shadow: none; }
+/* brass plaque screwed to the shelf's front face */
+.shelf-plate {
+  position: absolute; left: 7px; bottom: 2px; z-index: 1;
+  display: inline-block; font-size: 0.48rem; letter-spacing: 0.14em; line-height: 1.5;
+  color: #f0e8d0; background: linear-gradient(180deg, #8a7a50, #5a4e30);
+  border-radius: 2px; padding: 0 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 240, 200, 0.3);
+}
+/* the objects: one pixel sprite apiece, sitting on the board above */
+.shelf-row { display: flex; flex-wrap: wrap; gap: 2px 3px; align-items: flex-end; padding: 2px 2px 5px; }
+.shelf-row { display: flex; flex-wrap: wrap; gap: 2px; }
+.shelf-obj {
+  display: flex; flex-direction: column; align-items: center; gap: 1px;
+  background: transparent; border: 1px solid transparent; border-radius: 5px;
+  padding: 2px 3px 1px; cursor: pointer; min-width: 38px;
+  font-family: inherit; color: inherit;
+}
+.shelf-obj:hover, .shelf-obj:focus-visible {
+  border-color: rgba(207, 216, 200, 0.3); background: rgba(207, 216, 200, 0.07);
+  outline: none;
+}
+.shelf-obj .obj-art { filter: drop-shadow(0 2px 1px rgba(0, 0, 0, 0.45)); }
+.shelf-obj.on {
+  border-color: var(--jc);
+  background: color-mix(in srgb, var(--jc) 16%, transparent);
+  box-shadow: 0 0 12px -3px var(--jc), inset 0 0 8px -4px var(--jc);
+}
+.obj-label { display: none; }   /* aria-label carries the name */
+.obj-art { display: block; width: 34px; height: 24px; position: relative; }
+
+/* ── the objects: each drawn as the thing itself ── */
+.obj-sandbag {
+  margin: 4px auto 0; width: 28px; height: 18px;
+  border-radius: 38% 38% 44% 44% / 30% 30% 70% 70%;
+  background: repeating-linear-gradient(50deg, rgba(0, 0, 0, 0.14) 0 3px, transparent 3px 7px),
+    radial-gradient(circle at 35% 30%, #ecc878, #d8aa50 55%, #9a7838);
+  box-shadow: inset 0 -3px 4px rgba(0, 0, 0, 0.35);
+}
+.obj-sandbag::before { content: ''; position: absolute; top: -3px; left: 50%; transform: translateX(-50%); width: 10px; height: 6px; border-radius: 3px; background: #8a6828; }
+.obj-bottle {
+  margin: 8px auto 0; width: 17px; height: 18px; border-radius: 4px 4px 6px 6px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.25), transparent 30%),
+    linear-gradient(180deg, rgba(74, 138, 200, 0.35) 0 30%, #4a8ac8 31% 100%);
+  border: 1px solid #2a5a88;
+}
+.obj-bottle::before { content: ''; position: absolute; top: -7px; left: 50%; transform: translateX(-50%); width: 7px; height: 8px; background: #2a5a88; border-radius: 2px 2px 0 0; }
+.obj-matches {
+  margin: 8px auto 0; width: 26px; height: 17px; border-radius: 2px;
+  background: linear-gradient(180deg, #7a3a28 0 70%, #5a2a1c 70% 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.obj-matches::before { content: ''; position: absolute; top: -6px; left: 4px; width: 5px; height: 6px; border-radius: 50% 50% 40% 40%; background: radial-gradient(circle at 40% 30%, #ffd98a, #e05a20); box-shadow: 8px 0 0 #e05a20, 16px 1px 0 #c84a18; }
+.obj-oilcan { margin: 9px auto 0; width: 22px; height: 15px; border-radius: 3px 6px 2px 2px; background: linear-gradient(180deg, #a89848, #6a5e28); position: relative; }
+.obj-oilcan::before { content: ''; position: absolute; top: -5px; right: -8px; width: 12px; height: 4px; background: #6a5e28; border-radius: 2px; transform: rotate(-28deg); }
+.obj-oilcan::after { content: ''; position: absolute; top: -8px; left: 3px; width: 6px; height: 6px; border-radius: 50%; background: #4a4220; }
+.obj-cellar { margin: 10px auto 0; width: 18px; height: 14px; border-radius: 3px 3px 5px 5px; background: linear-gradient(180deg, #e8e4da, #b8b4a8); border: 1px solid #8a887c; }
+.obj-cellar::before { content: ''; position: absolute; top: -6px; left: 1px; right: 1px; height: 7px; border-radius: 8px 8px 2px 2px; background: linear-gradient(180deg, #f4f0e6, #c8c4b8); border: 1px solid #8a887c; border-bottom: none; }
+.obj-packet {
+  margin: 1px auto; width: 20px; height: 24px; border-radius: 2px;
+  background: radial-gradient(circle at 50% 68%, #7a9a3a 0 3px, transparent 4px),
+    repeating-linear-gradient(0deg, transparent 0 4px, rgba(0, 0, 0, 0.06) 4px 5px),
+    linear-gradient(180deg, #c8a86a, #a08850);
+  box-shadow: inset 0 0 0 1px rgba(90, 70, 40, 0.5);
+}
+.obj-plate { margin: 5px auto; width: 22px; height: 16px; border-radius: 2px; background: linear-gradient(180deg, #8a9496, #5a6466); position: relative; }
+.obj-plate::before, .obj-plate::after { content: ''; position: absolute; width: 2.5px; height: 2.5px; border-radius: 50%; background: #39413f; box-shadow: 16px 0 0 #39413f; top: 2px; }
+.obj-plate::after { top: auto; bottom: 2px; }
+.obj-plank { margin: 7px auto; width: 28px; height: 12px; border-radius: 2px; background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.12) 0 1.5px, transparent 1.5px 4px), linear-gradient(180deg, #b8864a, #8a6234); }
+.obj-stone { margin: 5px auto; width: 24px; height: 16px; border-radius: 45% 55% 50% 50% / 60% 60% 40% 40%; background: radial-gradient(circle at 35% 30%, #b8b6ac, #9a988f 55%, #6a6860); }
+.obj-crucible { margin: 8px auto 0; width: 20px; height: 16px; border-radius: 3px 3px 8px 8px; background: linear-gradient(180deg, #4a4440, #2a2622); position: relative; }
+.obj-crucible::before { content: ''; position: absolute; top: -3px; left: -1px; right: -1px; height: 5px; border-radius: 50%; background: radial-gradient(circle at 50% 40%, #ffd070, #e87020 60%, #803010); box-shadow: 0 0 8px rgba(232, 112, 32, 0.6); }
+.obj-icecube { margin: 4px auto; width: 20px; height: 18px; border-radius: 4px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0 18%, transparent 20%), linear-gradient(180deg, rgba(154, 208, 224, 0.9), rgba(110, 170, 200, 0.9)); box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.5); }
+.obj-snowdab { margin: 7px auto 0; width: 24px; height: 13px; border-radius: 50% 50% 20% 20% / 90% 90% 10% 10%; background: radial-gradient(circle at 40% 20%, #ffffff, #e4ecf2 60%, #c8d8e4); }
+.obj-hinge { margin: 8px auto 0; width: 26px; height: 10px; border-radius: 2px; background: linear-gradient(180deg, #c0c8ce, #8890a0); position: relative; }
+.obj-hinge::before { content: ''; position: absolute; left: 50%; top: -2px; width: 6px; height: 14px; border-radius: 3px; transform: translateX(-50%); background: linear-gradient(180deg, #d8dee4, #98a0b0); box-shadow: inset 0 0 0 1px #687080; }
+.obj-keg {
+  margin: 3px auto; width: 20px; height: 19px; border-radius: 5px / 9px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.18), transparent 35%, rgba(0, 0, 0, 0.25) 85%),
+    repeating-linear-gradient(0deg, #7a5c38 0 5px, #4a3a24 5px 7px);
+}
+.obj-ball { margin: 5px auto; width: 17px; height: 17px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #f2a6c2, #e07a9e 55%, #a84a6e); position: relative; }
+.obj-ball::before { content: ''; position: absolute; left: 0; right: 0; top: 6px; height: 3px; background: rgba(255, 255, 255, 0.75); transform: rotate(-18deg); }
+.obj-rocket { margin: 0 auto; width: 8px; height: 22px; border-radius: 4px 4px 2px 2px; background: linear-gradient(180deg, #e05a20 0 22%, #e0c890 22% 88%, #8a6838 88%); position: relative; }
+.obj-rocket::before { content: ''; position: absolute; bottom: -4px; left: -4px; width: 16px; height: 3px; border-radius: 2px; background: #c84a18; }
+.obj-jar {
+  margin: 3px auto 0; width: 18px; height: 20px; border-radius: 3px 3px 6px 6px;
+  background: radial-gradient(60% 50% at 50% 70%, rgba(154, 216, 154, 0.75), transparent 70%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.25), rgba(154, 216, 154, 0.35) 40%, rgba(60, 110, 70, 0.5));
+  border: 1px solid #4a6a54;
+}
+.obj-jar::before { content: ''; position: absolute; top: -5px; left: 2px; right: 2px; height: 5px; border-radius: 2px; background: #6a7a70; }
+.obj-battery { margin: 2px auto; width: 16px; height: 22px; border-radius: 3px; background: repeating-linear-gradient(0deg, #3a3a34 0 4px, #ffe482 4px 11px); position: relative; }
+.obj-battery::before { content: ''; position: absolute; top: -3px; left: 4px; right: 4px; height: 3px; border-radius: 2px 2px 0 0; background: #8a8a80; }
+.obj-battery::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, transparent 42%, #2a2a24 43% 50%, transparent 51% 62%, #2a2a24 63% 70%, transparent 71%); }
+.obj-spool { margin: 4px auto; width: 20px; height: 18px; background: repeating-linear-gradient(0deg, #b08ae0 0 3px, #9a74c8 3px 5px); border-left: 3px solid #6a5090; border-right: 3px solid #6a5090; border-radius: 1px; }
+.obj-antfarm {
+  margin: 5px auto; width: 22px; height: 16px; border-radius: 3px;
+  background: radial-gradient(circle at 6px 8px, #241a10 0 1.5px, transparent 2.5px) 0 0/8px 8px,
+    radial-gradient(circle at 3px 4px, #241a10 0 1.5px, transparent 2.5px) 4px 4px/8px 8px,
+    linear-gradient(180deg, #a8784a, #7a5430);
+}
+.obj-soapbar { margin: 7px auto 0; width: 22px; height: 12px; border-radius: 6px / 8px; background: linear-gradient(180deg, #cce8f0, #9ec8d8); box-shadow: inset 0 -2px 3px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.7); position: relative; }
+.obj-soapbar::before { content: ''; position: absolute; left: 6px; right: 6px; top: 4px; height: 2px; border-radius: 2px; background: rgba(255, 255, 255, 0.6); }
+.obj-wand { margin: 2px auto 0; width: 13px; height: 13px; border-radius: 50%; border: 2.5px solid #c8e8f4; box-shadow: 0 0 6px rgba(200, 232, 244, 0.4); position: relative; }
+.obj-wand::before { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 3px; height: 9px; background: #9ab8c8; border-radius: 1px; }
+.obj-sponge {
+  margin: 6px auto 0; width: 24px; height: 14px; border-radius: 3px;
+  background: radial-gradient(circle at 6px 5px, #8a7a3a 0 1.5px, transparent 2.5px) 0 0/9px 7px,
+    radial-gradient(circle at 4px 3px, #8a7a3a 0 1.5px, transparent 2.5px) 5px 3px/9px 7px,
+    linear-gradient(135deg, #d8c878, #b8a858 75%, #8a7a3a);
+}
+
+/* narrow screens: the boards become two horizontal strips */
+.toybox-app.compact .toybox-flank {
+  flex-direction: row; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden;
+  width: auto; left: 8px; right: 8px; bottom: auto; height: 78px;
+  padding: 4px 8px 14px; gap: 8px; align-items: flex-start;
+}
+.toybox-app.compact .flank-left, .toybox-app.compact .flank-right { transform: none; }
+.toybox-app.compact .flank-left { top: 104px; }
+.toybox-app.compact .flank-right { top: 188px; }
+.toybox-app.compact .shelf-group { border-bottom: none; padding-bottom: 0; padding-right: 10px; border-right: 1px solid rgba(0, 0, 0, 0.42); flex: 0 0 auto; }
+.toybox-app.compact .shelf-row { flex-wrap: nowrap; }
+
+/* ── the basin: wide as the world it holds ── */
 .toybox-pit {
-  position: absolute; top: 158px; bottom: 34px; left: 50%; transform: translateX(-50%);
-  width: 218px; max-width: calc(100% - 22px);
+  position: absolute; top: 186px; bottom: 34px; left: 50%; transform: translateX(-50%);
+  width: 320px; max-width: calc(100% - 22px);
   border: 2px solid #101815; border-radius: 12px 12px 16px 16px;
   touch-action: none;
   background: linear-gradient(180deg, #31423a 0%, #26362e 100%);
@@ -353,11 +490,17 @@
   box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.8), inset 0 -1px 0 rgba(207, 216, 200, 0.12);
   pointer-events: none; z-index: 2;
 }
-/* limescale tears down the porcelain */
+/* the porcelain itself: limescale tears, faint tide rings, the drain hollow,
+   and the speckle of old enamel — the world under the powder */
 .toybox-pit::after {
   content: ''; position: absolute; inset: 0; border-radius: inherit;
   pointer-events: none; z-index: 3;
   background:
+    radial-gradient(7% 9% at 50% calc(100% - 17px), rgba(0, 0, 0, 0.6) 0 42%, rgba(207, 216, 200, 0.16) 46% 56%, transparent 62%),
+    radial-gradient(20% 24px at 50% calc(100% - 17px), transparent 52%, rgba(207, 216, 200, 0.09) 55% 57%, transparent 60%),
+    radial-gradient(28% 36px at 50% calc(100% - 17px), transparent 54%, rgba(207, 216, 200, 0.05) 57% 59%, transparent 62%),
+    radial-gradient(1.5px 1.5px at 12% 30%, rgba(228, 240, 216, 0.2), transparent 60%) 0 0/26px 22px,
+    radial-gradient(1px 1px at 60% 55%, rgba(0, 0, 0, 0.3), transparent 60%) 0 0/31px 27px,
     linear-gradient(100deg, transparent 18%, rgba(207, 216, 200, 0.10) 19% 20%, transparent 21%),
     radial-gradient(30% 12% at 20% 4%, rgba(207, 216, 200, 0.18), transparent 70%),
     radial-gradient(40% 10% at 78% 96%, rgba(138, 74, 40, 0.14), transparent 70%),
@@ -373,7 +516,7 @@
 
 /* ── the plug: a real brass plug on its chain, in the basin floor ── */
 .toybox-action.plug {
-  position: absolute; left: 50%; bottom: 7px; transform: translateX(-50%); z-index: 4;
+  position: absolute; left: 50%; bottom: 4px; transform: translateX(-50%); z-index: 4;
   width: 40px; height: 26px; padding: 0; border: none; background: transparent; cursor: pointer;
   display: flex; align-items: flex-end; justify-content: center;
   font-family: inherit; font-size: 0.54rem; letter-spacing: 0.1em; color: #9ab0a4;
@@ -389,76 +532,45 @@
 .toybox-action.plug:hover .tool-art, .toybox-action.plug:focus-visible .tool-art { transform: translateY(2px); outline: none; }
 .toybox-action.plug:active .tool-art { transform: translateY(5px) scale(0.92); }
 .toybox-action.plug span { text-shadow: 0 1px 0 rgba(0, 0, 0, 0.85); }
+.toybox-action.plug .plug-chain {
+  position: absolute; left: 50%; bottom: 15px; transform: translateX(-50%);
+  width: 3px; height: 0;
+  background: radial-gradient(circle at 50% 25%, #c8a850 0 1.5px, transparent 2px) 0 0 / 3px 4px repeat-y;
+  opacity: 0.9; pointer-events: none;
+}
+.toybox-action.plug.open .tool-art { transform: translateY(-7px); }
+.toybox-action.plug.open .plug-chain { height: 9px; }
 
-/* ── toys: enamel-chip pendants the travellers left, 46px drag geometry ── */
-.toy {
-  position: absolute; width: 46px; height: 46px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  cursor: grab; user-select: none; touch-action: none;
-  background: radial-gradient(circle at 32% 28%, #e8e2d0, #b8b2a0 55%, #6a685c 90%);
-  border: 2px solid #39413f; z-index: 2;
-  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.7), inset 0 2px 3px rgba(255, 255, 255, 0.55), inset 0 -4px 7px rgba(0, 0, 0, 0.35);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-.toy::after {
-  content: ''; position: absolute; top: 2px; left: 50%; transform: translateX(-50%);
-  width: 10px; height: 7px;
-  border: 2px solid var(--wire); border-bottom: none;
-  border-radius: 7px 7px 0 0;
-}
-.toy canvas { display: block; image-rendering: pixelated; border-radius: 0; }
-.toy.held {
-  cursor: grabbing;
-  transform: scale(1.08);
-  box-shadow: 0 7px 15px rgba(0, 0, 0, 0.75), 0 0 13px rgba(255, 217, 138, 0.4), inset 0 2px 3px rgba(255, 255, 255, 0.6);
-}
-#toy-crab { left: 12px; bottom: 12px; }
-#toy-shell { right: 12px; bottom: 12px; }
-
-/* ── the soap dish + towel rail: residents and pip's two tools ── */
 .toybox-crewbar {
-  position: absolute; left: 10px; bottom: 4px; z-index: 3;
-  display: flex; align-items: center; gap: 5px;
-  padding: 3px 9px;
+  position: absolute; left: 10px; bottom: 6px; z-index: 3;
+  display: flex; align-items: flex-end; gap: 7px;
+  padding: 4px 10px 6px;
   background:
-    linear-gradient(180deg, rgba(207, 216, 200, 0.13), rgba(0, 0, 0, 0.25) 70%),
-    linear-gradient(180deg, #39463f, #242e28);
+    linear-gradient(180deg, rgba(207, 216, 200, 0.14), rgba(0, 0, 0, 0.3) 75%),
+    linear-gradient(180deg, #3e4c44, #26322b);
   border: 1px solid #4a5850;
-  border-radius: 10px 12px 4px 4px;
-  box-shadow: inset 0 1px 0 rgba(207, 216, 200, 0.2), 0 3px 6px rgba(0, 0, 0, 0.55);
+  border-radius: 6px 10px 3px 3px;
+  box-shadow: inset 0 1px 0 rgba(207, 216, 200, 0.2), 0 4px 8px rgba(0, 0, 0, 0.6);
 }
 /* soap-dish ribs */
 .toybox-crewbar::before {
-  content: ''; position: absolute; inset: auto 6px 2px 6px; height: 2px;
+  content: ''; position: absolute; inset: auto 8px 2px 8px; height: 2px;
   background: repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.4) 0 3px, transparent 3px 7px);
   border-radius: 2px;
 }
-.toybox-crew-label {
-  font-size: 0.62rem; letter-spacing: 0.12em; color: #8aa093; margin-right: 2px;
-}
 .toybox-crew-btn {
   display: flex; align-items: center; justify-content: center;
-  font-family: inherit;
-  background: radial-gradient(circle at 32% 26%, rgba(228, 240, 216, 0.2), rgba(0, 0, 0, 0) 58%),
-    linear-gradient(180deg, #2e3a33, #1a231e);
-  border: 1px solid #46544c;
-  border-radius: 46% 46% 40% 40%;
-  padding: 2px 7px 3px;
-  cursor: pointer; min-height: 27px;
-  box-shadow: inset 0 1px 0 rgba(207, 216, 200, 0.15), inset 0 -2px 4px rgba(0, 0, 0, 0.5);
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  padding: 2px 4px; background: transparent; border: none;
+  cursor: grab; font-family: inherit; color: inherit;
 }
-.toybox-crew-btn .toybox-crew-name { display: none; }
-.toybox-crew-btn:hover, .toybox-crew-btn:focus-visible {
-  border-color: #7a9a8a;
-  box-shadow: 0 0 9px rgba(138, 176, 154, 0.35), inset 0 1px 0 rgba(207, 216, 200, 0.22);
-  outline: none;
-}
-.toybox-crew-btn.on {
-  border-color: #a8c8b4;
-  background: radial-gradient(circle at 32% 26%, rgba(228, 240, 216, 0.34), rgba(0, 0, 0, 0) 60%),
-    linear-gradient(180deg, #44584c, #2a3830);
-  box-shadow: 0 0 12px rgba(138, 176, 154, 0.45), inset 0 1px 0 rgba(228, 240, 216, 0.3);
+.toybox-crew-btn:active { cursor: grabbing; }
+.toybox-crew-btn .toybox-crew-art { transition: transform 0.15s ease, filter 0.15s ease; }
+.toybox-crew-btn:hover .toybox-crew-art, .toybox-crew-btn:focus-visible .toybox-crew-art { transform: translateY(-2px); }
+.toybox-crew-btn:focus-visible { outline: 2px solid var(--bulb); outline-offset: 2px; }
+.toybox-crew-btn.held { z-index: 5; }
+.toybox-crew-btn.held .toybox-crew-art {
+  transform: scale(1.18) translateY(-3px);
+  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 6px rgba(255, 217, 138, 0.35));
 }
 .toybox-crew-art { display: block; image-rendering: pixelated; }
 
@@ -509,11 +621,33 @@
 /* ── result: scrawled in soap on the tiles, on the right flank ── */
 .toybox-result {
   position: absolute; bottom: 54px; right: 12px; z-index: 2;
-  width: 40%; text-align: right;
+  width: 26%; text-align: right;
   color: rgba(228, 240, 216, 0.82); font-style: italic;
   font-size: 0.66rem; line-height: 1.35; min-height: 1.2em;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.85);
   pointer-events: none;
+}
+
+/* ── pip's chalk tally on the tiles, beside the tap ── */
+.sink-tally {
+  position: absolute; top: 62px; left: 196px; z-index: 2;
+  transform: rotate(-2deg);
+  pointer-events: none;
+}
+.sink-tally span {
+  font-size: 0.72rem; letter-spacing: 0.1em; color: rgba(228, 240, 216, 0.62);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.8);
+}
+.sink-tally::before {
+  content: ''; display: block; width: 44px; height: 3px; margin-bottom: 2px;
+  background: repeating-linear-gradient(90deg, rgba(228, 240, 216, 0.5) 0 2px, transparent 2px 5px);
+  opacity: 0.7;
+}
+
+/* the travellers' sign-off on the note */
+.raison-sign {
+  display: block; margin-top: 9px; text-align: right;
+  font-size: 0.78rem; color: #55503e; transform: rotate(-0.6deg);
 }
 
 /* ── the note pinned behind the tap ── */
@@ -557,7 +691,7 @@
 
 /* focus stays visible in the damp */
 .toybox-help:focus-visible, .toybox-exit:focus-visible,
-.toybox-raison-close:focus-visible, .toybox-jar:focus-visible,
+.toybox-raison-close:focus-visible, .shelf-obj:focus-visible,
 .toybox-action:focus-visible, .toybox-crew-btn:focus-visible {
   outline: 2px solid var(--bulb);
   outline-offset: 2px;
@@ -566,7 +700,8 @@
 /* stillness for reduced-motion visitors */
 @media (prefers-reduced-motion: reduce) {
   .toybox-motes, .tap-spout-hole::after { animation: none; }
-  .toybox-jar, .toy, .toybox-action, .tap-handle .tool-art,
+  .shelf-obj, .toybox-action, .tap-handle .tool-art,
+  .toybox-crew-btn, .toybox-crew-btn .toybox-crew-art,
   .toybox-titlebar-name, .toybox-titlebar-sub,
   .toybox-raison-inner {
     transition: none;

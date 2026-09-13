@@ -20,6 +20,7 @@ LiberOS is a static HTML, CSS, JavaScript, and Tauri desktop project.
 
 ## Project map
 
+- `COVENANT.md` — the room-design law (read before building or changing a room)
 - `src/` — shared JavaScript and room wiring
 - `styles/` — shared styling
 - `data/` — JSON and JavaScript data objects
