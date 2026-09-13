@@ -1,4 +1,6 @@
 // divination.js — Arcana. Tarot (22-card deck) + I Ching (six-line hexagram).
+// One felt table, one keep language: both games go through the same prompt
+// and land on the same shelf, in the same shape.
 
 (function () {
   var DECK = [
@@ -131,33 +133,60 @@
 
   // ─── state ──────────────────────────────────────────────────────────
   var mode = 'tarot';
-  var drawn = [];
-  var ichingLines = []; // 6 entries: 0 = yin, 1 = yang
-  var ichingCastCount = 0;
+  var drawn = [];        // indices currently out of the stack (kept cards)
+  var pendingCard = null;
+  var pendingHex = null; // { pattern, lines } awaiting keep/discard
+  var ichingLines = [];  // 6 entries: { primary: 0|1, changing: bool }
+  var tossing = false;
 
   function el(id) { return document.getElementById(id); }
-  function deckEl() { return el('divination-deck'); }
+  function deckBtn() { return el('divination-draw'); }
   function areaEl() { return el('divination-card-area'); }
+  function hintEl() { return el('divination-card-hint'); }
   function inputEl() { return el('divination-input'); }
-  function drawEl() { return el('divination-draw'); }
-  function ichingInputEl() { return el('iching-input'); }
-  function castEl() { return el('divination-cast'); }
+  function slateEl() { return el('divination-slate'); }
+  function tallyEl() { return el('divination-tally'); }
+  function castBtn() { return el('divination-cast'); }
+  function castNote() { return el('divination-cast-note'); }
   function hexEl() { return el('divination-hexagram'); }
-  function ichingResultEl() { return el('divination-iching-result'); }
-  function ichingNameEl() { return el('divination-iching-name'); }
-  function ichingDescEl() { return el('divination-iching-desc'); }
+  function resultEl() { return el('divination-iching-result'); }
+  function subEl() { return el('divination-sub'); }
 
-  // ─── tarot ──────────────────────────────────────────────────────────
-  function buildDeck() {
-    var d = deckEl();
-    if (!d) return;
-    d.innerHTML = '';
-    for (var i = 0; i < DECK.length; i++) {
-      var c = document.createElement('div');
-      c.className = 'divination-deck-card';
-      c.dataset.n = DECK[i].n;
-      d.appendChild(c);
-    }
+  function play(kind) {
+    if (window.Liber && window.Liber.sound) { try { window.Liber.sound.play(kind); } catch (e) {} }
+  }
+
+  // on the small table the chalked column grows below the fold — bring the
+  // new line into view (reduced-motion visitors get the jump, not the glide)
+  function compactTable() {
+    try { return window.matchMedia('(max-width: 700px), (max-height: 560px)').matches; } catch (e) { return false; }
+  }
+  function revealInView(node) {
+    if (!node || !compactTable()) return;
+    var smooth = true;
+    try { smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+    node.scrollIntoView({ block: 'nearest', behavior: smooth ? 'smooth' : 'auto' });
+  }
+
+  // ─── the slate: one question serves both games; it turns to face the house ──
+  function question() {
+    var q = inputEl() ? inputEl().value : '';
+    return q.trim();
+  }
+  function wireSlate() {
+    var input = inputEl();
+    var slate = slateEl();
+    if (!input || !slate) return;
+    // the chalk turns when you stop writing — it faces the house, not you
+    input.addEventListener('blur', function () { if (input.value.trim()) slate.classList.add('turned'); });
+    input.addEventListener('focus', function () { slate.classList.remove('turned'); });
+  }
+
+  // ─── tarot: a stack with weight ─────────────────────────────────────
+  function updateTally() {
+    if (!tallyEl()) return;
+    var left = DECK.length - drawn.length;
+    tallyEl().textContent = left === DECK.length ? '' : (left + ' remain');
   }
 
   function pickCard() {
@@ -165,38 +194,50 @@
     do { i = Math.floor(Math.random() * DECK.length); }
     while (drawn.indexOf(i) !== -1);
     drawn.push(i);
-    var cards = deckEl().querySelectorAll('.divination-deck-card');
-    if (cards[i]) cards[i].classList.add('drawn');
     return DECK[i];
   }
 
-  function reveal(card) {
-    var cardId = 'card-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
-    areaEl().innerHTML = '<div class="divination-card" data-card-id="' + cardId + '">'
-      + '<div class="divination-card-num">' + String(card.n).padStart(2, '0') + ' / 22</div>'
-      + '<div class="divination-card-glyph">' + card.g + '</div>'
-      + '<div class="divination-card-name">' + card.name + '</div>'
-      + '<div class="divination-card-key">' + card.key + '</div>'
-      + '<div class="divination-card-stamped">— card drawn, on the desktop —</div>'
-      + '</div>';
-  }
-
-  function writeCard(card) {
-    if (window.Liber && window.Liber.state && window.Liber.state.addArtifact) {
-      window.Liber.state.addArtifact('divination', { name: card.name, key: card.key, n: card.n, g: card.g });
+  // the draw: the top card slides from the stack, then the prompt offers it
+  function drawFromStack() {
+    if (pendingCard || pendingHex) return;
+    if (drawn.length >= DECK.length) {
+      if (subEl()) subEl().textContent = 'the deck is out. it was counted three times.';
+      return;
     }
-    if (window.Liber && window.Liber.sound) window.Liber.sound.play('chime');
+    var card = pickCard();
+    play('thunk');
+    var deck = deckBtn();
+    if (deck) {
+      deck.classList.add('drawing');
+      setTimeout(function () { deck.classList.remove('drawing'); }, 380);
+    }
+    pendingCard = card;
+    updateTally();
+    openPrompt(renderCardPrompt(card));
   }
 
-  function describeTarot(card) {
-    var q = (inputEl() && inputEl().value) || '';
-    var qText = q.trim() ? '"' + q.trim() + '"' : '(none)';
-    var cardText = card ? card.name : '(none)';
-    return 'card: <em>' + cardText + '</em>. question: ' + qText + '.';
+  function questionLine() {
+    var q = question();
+    return q ? '"' + q + '"' : '(no question — the card came anyway)';
   }
 
-  // keep/discard window: the whole draw (face + reading) before choosing.
-  function renderPromptCard(card) {
+  // ─── the unified keep prompt ────────────────────────────────────────
+  function openPrompt(bodyHTML) {
+    var prompt = el('divination-save-prompt');
+    var body = el('divination-save-prompt-body');
+    if (!prompt) return;
+    if (body) body.innerHTML = bodyHTML;
+    prompt.classList.add('open');
+    prompt.removeAttribute('inert');
+  }
+  function closePrompt() {
+    var prompt = el('divination-save-prompt');
+    if (!prompt) return;
+    prompt.classList.remove('open');
+    prompt.setAttribute('inert', '');
+  }
+
+  function renderCardPrompt(card) {
     return '<div class="divination-prompt-card">'
       + '<div class="divination-prompt-card-face">'
       + '<div class="divination-prompt-card-num">' + String(card.n).padStart(2, '0') + ' / 22</div>'
@@ -205,151 +246,211 @@
       + '</div>'
       + '<div class="divination-prompt-card-read">'
       + '<div class="divination-prompt-card-key">' + card.key + '</div>'
-      + '<div class="divination-prompt-card-q">' + describeTarot(card) + '</div>'
+      + '<div class="divination-prompt-card-q">question: ' + questionLine() + '</div>'
       + '</div>'
       + '</div>';
   }
 
-  var pendingCard = null;
-  function promptTarotDraw() {
-    if (pendingCard) return;
-    if (drawn.length >= DECK.length) return;
-    var prompt = el('divination-save-prompt');
-    var body = el('divination-save-prompt-body');
-    if (!prompt) { drawTarotNow(); return; }
-    pendingCard = pickCard();
-    if (body) body.innerHTML = renderPromptCard(pendingCard);
-    prompt.classList.add('open');
-    prompt.removeAttribute('inert');
-  }
-
-  function drawTarotNow() {
-    var card = pickCard();
-    reveal(card);
-    writeCard(card);
-  }
-
-  // ─── iching ─────────────────────────────────────────────────────────
-  function castLine() {
-    if (ichingLines.length >= 6) return;
-    // Each cast: roll 3 coins twice — but the rule of thumb is 6/7/8/9
-    // mapping. We approximate: 25% yin (0), 25% yang (1), 25% old yin (2→yang),
-    // 25% old yang (3→yin). The hexagram uses only yin/yang for the primary;
-    // old lines are shown as changing in the secondary reading.
-    var r = Math.floor(Math.random() * 4);
-    var primary, isChanging;
-    if (r === 0)      { primary = 0; isChanging = false; }
-    else if (r === 1) { primary = 1; isChanging = false; }
-    else if (r === 2) { primary = 0; isChanging = true; }
-    else             { primary = 1; isChanging = true; }
-    ichingLines.push({ primary: primary, changing: isChanging });
-    ichingCastCount++;
-    renderHexagram();
-    if (castEl()) {
-      castEl().textContent = ichingLines.length < 6 ? ('cast line ' + (ichingLines.length + 1)) : 'the hexagram stands';
-      castEl().disabled = ichingLines.length >= 6;
+  function renderHexPrompt(hex, pattern) {
+    var rows = '';
+    for (var r = 5; r >= 0; r--) {
+      var yin = pattern[r] === '0';
+      rows += '<div class="divination-hexagram-row' + (yin ? '' : '') + '" style="width:92px;height:8px">'
+        + (yin
+          ? '<i class="divination-hexagram-seg left"></i><i class="divination-hexagram-seg right"></i>'
+          : '<i class="divination-hexagram-seg full"></i><i class="divination-hexagram-seg full"></i>')
+        + '</div>';
     }
-    if (ichingLines.length === 6) readHexagram();
+    return '<div class="divination-prompt-card">'
+      + '<div class="divination-prompt-card-face" style="flex-direction:column-reverse;display:flex;gap:5px;justify-content:center">'
+      + rows
+      + '</div>'
+      + '<div class="divination-prompt-card-read">'
+      + '<div class="divination-prompt-card-key">' + hex.name + '</div>'
+      + '<div class="divination-prompt-card-q">' + hex.desc + '</div>'
+      + '<div class="divination-prompt-card-q">question: ' + questionLine() + '</div>'
+      + '</div>'
+      + '</div>';
+  }
+
+  // keep: the same shelf, the same shape of record, for both games
+  function keepDraw() {
+    if (pendingCard) {
+      var card = pendingCard;
+      window.Liber.state.addArtifact('divination', {
+        name: card.name, key: card.key, n: card.n, g: card.g,
+        reading: card.key, question: question(), ts: Date.now()
+      });
+      revealCard(card);
+      play('chime');
+    } else if (pendingHex) {
+      var hex = hexagramForPattern(pendingHex.pattern);
+      window.Liber.state.addArtifact('divination', {
+        name: hex.name, desc: hex.desc, reading: hex.desc,
+        pattern: pendingHex.pattern, question: question(), ts: Date.now()
+      });
+      showHexResult(hex);
+      revealInView(resultEl());
+      play('chime');
+    }
+    pendingCard = null;
+    pendingHex = null;
+    closePrompt();
+  }
+
+  function discardDraw() {
+    if (pendingCard) {
+      // the card goes back in the stack
+      drawn.pop();
+      updateTally();
+      pendingCard = null;
+      clearReadingPlace();
+    } else if (pendingHex) {
+      pendingHex = null;
+      resetIChing();
+    }
+    closePrompt();
+  }
+
+  // ─── the reading place ──────────────────────────────────────────────
+  function clearReadingPlace() {
+    var area = areaEl();
+    if (!area) return;
+    var card = area.querySelector('.divination-card');
+    if (card) card.remove();
+    if (hintEl()) hintEl().style.display = '';
+    var eye = area.querySelector('.divination-chalk-eye');
+    if (eye) eye.style.opacity = '';
+  }
+
+  function revealCard(card) {
+    var area = areaEl();
+    if (!area) return;
+    clearReadingPlace();
+    if (hintEl()) hintEl().style.display = 'none';
+    var eye = area.querySelector('.divination-chalk-eye');
+    if (eye) eye.style.opacity = '0.16';
+    var d = document.createElement('div');
+    d.className = 'divination-card';
+    d.setAttribute('data-card-id', 'card-' + Date.now());
+    d.innerHTML = '<div class="divination-card-num">' + String(card.n).padStart(2, '0') + ' / 22</div>'
+      + '<div class="divination-card-glyph">' + card.g + '</div>'
+      + '<div class="divination-card-name">' + card.name + '</div>'
+      + '<div class="divination-card-key">' + card.key + '</div>'
+      + '<div class="divination-card-stamped">— card drawn, on the desktop —</div>';
+    area.appendChild(d);
+  }
+
+  // ─── i ching: three coins, six lines, bottom first ──────────────────
+  function castLine() {
+    if (tossing || pendingCard || pendingHex) return;
+    if (ichingLines.length >= 6) return;
+    tossing = true;
+    var dish = castBtn();
+    if (dish) dish.classList.add('tossing');
+    play('click');
+    setTimeout(function () {
+      // the three coins: odd = yang, even = yin; a 6 or an 8 in the old
+      // counting is a changing line. approximated honestly.
+      var pips = 0;
+      for (var c = 0; c < 3; c++) pips += Math.random() < 0.5 ? 2 : 3;
+      var yang = pips >= 7;          // 7, 9 yang — 6, 8 yin
+      var changing = pips === 9 || pips === 6;
+      ichingLines.push({ primary: yang ? 1 : 0, changing: changing });
+      tossing = false;
+      if (dish) dish.classList.remove('tossing');
+      renderHexagram();
+      play('tick');
+      if (castNote()) castNote().textContent = 'line ' + ichingLines.length + ' of 6 — ' + pips;
+      revealInView(hexEl());
+      if (ichingLines.length === 6) offerHexagram();
+    }, 420);
   }
 
   function renderHexagram() {
-    var h = el('divination-hexagram');
+    var h = hexEl();
     if (!h) return;
     h.innerHTML = '';
-    if (!ichingLines.length) {
-      var empty = document.createElement('div');
-      empty.className = 'divination-hexagram-empty';
-      empty.textContent = 'cast six lines to build your hexagram.';
-      h.appendChild(empty);
-      return;
-    }
-    // Lines are displayed top-down; we drew them in reading order (line 1 = bottom).
-    var rows = ichingLines.slice().reverse();
-    rows.forEach(function (ln) {
+    ichingLines.slice().reverse().forEach(function (ln) {
       var row = document.createElement('div');
       row.className = 'divination-hexagram-row' + (ln.changing ? ' changing' : '');
-      var seg1 = document.createElement('div');
-      seg1.className = 'divination-hexagram-seg';
-      var seg2 = document.createElement('div');
-      seg2.className = 'divination-hexagram-seg';
-      if (ln.primary === 0) {
-        // yin: split line with a gap between seg1 and seg2
-        seg1.classList.add('left');
-        seg2.classList.add('right');
-      } else {
-        // yang: solid bar
-        seg1.classList.add('full');
-        seg2.classList.add('full');
-      }
-      row.appendChild(seg1);
-      row.appendChild(seg2);
+      var s1 = document.createElement('i');
+      var s2 = document.createElement('i');
+      s1.className = 'divination-hexagram-seg';
+      s2.className = 'divination-hexagram-seg';
+      if (ln.primary === 0) { s1.classList.add('left'); s2.classList.add('right'); }
+      else { s1.classList.add('full'); s2.classList.add('full'); }
+      row.appendChild(s1); row.appendChild(s2);
       h.appendChild(row);
     });
   }
 
-  function readHexagram() {
-    if (ichingLines.length < 6) return;
+  function offerHexagram() {
     var pattern = ichingLines.map(function (l) { return l.primary; }).join('');
     var hex = hexagramForPattern(pattern);
     if (!hex) return;
-    if (ichingNameEl()) ichingNameEl().textContent = hex.name;
-    if (ichingDescEl()) ichingDescEl().textContent = hex.desc;
-    if (ichingResultEl()) ichingResultEl().hidden = false;
-    // Save to satchel
-    if (window.Liber && window.Liber.state && window.Liber.state.addArtifact) {
-      var q = (ichingInputEl() && ichingInputEl().value) || '';
-      window.Liber.state.addArtifact('iching', {
-        name: hex.name,
-        pattern: pattern,
-        lines: ichingLines.slice(),
-        question: q
-      });
-      if (window.Liber.sound) window.Liber.sound.play('chime');
-    }
+    pendingHex = { pattern: pattern, lines: ichingLines.slice() };
+    if (castBtn()) castBtn().disabled = true;   // the hexagram stands
+    if (castNote()) castNote().textContent = '';
+    openPrompt(renderHexPrompt(hex, pattern));
+  }
+
+  function showHexResult(hex) {
+    if (el('divination-iching-name')) el('divination-iching-name').textContent = hex.name;
+    if (el('divination-iching-desc')) el('divination-iching-desc').textContent = hex.desc;
+    if (resultEl()) resultEl().hidden = false;
+    if (castBtn()) castBtn().disabled = true;
   }
 
   function resetIChing() {
     ichingLines = [];
-    ichingCastCount = 0;
+    pendingHex = null;
     renderHexagram();
-    if (castEl()) {
-      castEl().textContent = 'cast line 1';
-      castEl().disabled = false;
-    }
-    if (ichingResultEl()) ichingResultEl().hidden = true;
+    var h = hexEl();
+    if (h) h.innerHTML = '<div class="divination-hexagram-empty">six lines, chalked bottom first.</div>';
+    if (resultEl()) resultEl().hidden = true;
+    if (castBtn()) castBtn().disabled = false;
+    if (castNote()) castNote().textContent = '';
   }
 
-  // ─── mode switching ────────────────────────────────────────────────
+  // ─── mode switching ─────────────────────────────────────────────────
   function setMode(next) {
     mode = next;
     var tarot = el('divination-tarot');
     var iching = el('divination-iching');
     if (tarot) tarot.hidden = (next !== 'tarot');
     if (iching) iching.hidden = (next !== 'iching');
-    var sub = el('divination-sub');
-    if (sub) sub.textContent = next === 'iching'
-      ? 'write your question. cast six lines.'
-      : 'Type a question & click a card for an interpretation.';
+    if (subEl()) subEl().textContent = next === 'iching'
+      ? 'three coins · six lines · bottom first'
+      : 'the deck · 22, counted three times';
     var btns = document.querySelectorAll('.divination-mode');
     for (var i = 0; i < btns.length; i++) {
-      if (btns[i].dataset.mode === next) btns[i].classList.add('active');
-      else btns[i].classList.remove('active');
+      var on = btns[i].dataset.mode === next;
+      btns[i].classList.toggle('active', on);
+      btns[i].setAttribute('aria-selected', on ? 'true' : 'false');
     }
   }
 
-  // ─── boot ──────────────────────────────────────────────────────────
+  // ─── boot ───────────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', function () {
-    buildDeck();
-    if (drawEl()) drawEl().addEventListener('click', promptTarotDraw);
-    if (inputEl()) inputEl().addEventListener('keydown', function (e) { if (e.key === 'Enter') promptTarotDraw(); });
+    var drawBtn = deckBtn();
+    if (drawBtn) drawBtn.addEventListener('click', drawFromStack);
+    if (inputEl()) inputEl().addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        if (mode === 'tarot') drawFromStack(); else castLine();
+      }
+    });
+    wireSlate();
+    updateTally();
 
     var modeBtns = document.querySelectorAll('.divination-mode');
     for (var i = 0; i < modeBtns.length; i++) {
       modeBtns[i].addEventListener('click', function () { setMode(this.dataset.mode); });
     }
 
-    if (castEl()) castEl().addEventListener('click', castLine);
-    if (ichingInputEl()) ichingInputEl().addEventListener('keydown', function (e) { if (e.key === 'Enter') castLine(); });
+    var cast = castBtn();
+    if (cast) cast.addEventListener('click', castLine);
 
     var exit = el('divination-exit');
     if (exit) exit.addEventListener('click', function () {
@@ -357,50 +458,34 @@
     });
 
     var helpBtn = el('divination-help');
-    var riason = el('divination-raison');
-    var riasonClose = el('divination-raison-close');
-    function openR() { if (riason) { riason.classList.add('open'); riason.removeAttribute('inert'); } }
-    function closeR() { if (riason) { riason.classList.remove('open'); riason.setAttribute('inert', ''); } }
+    var raison = el('divination-raison');
+    var raisonClose = el('divination-raison-close');
+    function openR() { if (raison) { raison.classList.add('open'); raison.removeAttribute('inert'); } }
+    function closeR() { if (raison) { raison.classList.remove('open'); raison.setAttribute('inert', ''); } }
     if (helpBtn) helpBtn.addEventListener('click', openR);
-    if (riasonClose) riasonClose.addEventListener('click', closeR);
-    if (riason) riason.addEventListener('click', function (e) { if (e.target === riason) closeR(); });
+    if (raisonClose) raisonClose.addEventListener('click', closeR);
+    if (raison) raison.addEventListener('click', function (e) { if (e.target === raison) closeR(); });
     if (window.LiberRoomShell) window.LiberRoomShell.bindRoomOverlays({ overlays: [
       { id: 'divination-raison', close: closeR }
     ] });
 
-    var prompt = el('divination-save-prompt');
     var keepBtn = el('divination-save-prompt-keep');
     var discardBtn = el('divination-save-prompt-discard');
     var closeBtn = el('divination-save-prompt-close');
-    function closePrompt() {
-      if (!prompt) return;
-      prompt.classList.remove('open');
-      prompt.setAttribute('inert', '');
-      pendingCard = null;
+    function cancelPrompt() {
+      if (pendingCard) { drawn.pop(); updateTally(); pendingCard = null; clearReadingPlace(); }
+      if (pendingHex) { resetIChing(); }   // escape must not strand the cast
+      pendingHex = null;
+      closePrompt();
     }
     if (window.LiberRoomShell) window.LiberRoomShell.bindRoomOverlays({ overlays: [
-      { id: 'divination-save-prompt', close: closePrompt }
+      { id: 'divination-save-prompt', close: cancelPrompt }
     ] });
     if (window.LiberRoomShell.bindConfirmKey) window.LiberRoomShell.bindConfirmKey(['divination-save-prompt']);
-    if (keepBtn) keepBtn.addEventListener('click', function () {
-      if (pendingCard) { reveal(pendingCard); writeCard(pendingCard); if (window.Liber && window.Liber.sound) window.Liber.sound.play('chime'); }
-      closePrompt();
-    });
-    if (discardBtn) discardBtn.addEventListener('click', function () {
-      if (pendingCard) {
-        drawn.pop();
-        var cards = deckEl().querySelectorAll('.divination-deck-card');
-        for (var k = 0; k < DECK.length; k++) {
-          if (DECK[k].name === pendingCard.name && cards[k]) {
-            cards[k].classList.remove('drawn');
-            break;
-          }
-        }
-        areaEl().innerHTML = '<div class="divination-card-hint">the deck is silent. ask.</div>';
-      }
-      closePrompt();
-    });
-    if (closeBtn) closeBtn.addEventListener('click', closePrompt);
-    if (prompt) prompt.addEventListener('click', function (e) { if (e.target === prompt) closePrompt(); });
+    if (keepBtn) keepBtn.addEventListener('click', keepDraw);
+    if (discardBtn) discardBtn.addEventListener('click', discardDraw);
+    if (closeBtn) closeBtn.addEventListener('click', cancelPrompt);
+    var promptEl = el('divination-save-prompt');
+    if (promptEl) promptEl.addEventListener('click', function (e) { if (e.target === promptEl) cancelPrompt(); });
   });
 })();

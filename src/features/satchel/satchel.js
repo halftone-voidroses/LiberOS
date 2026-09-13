@@ -33,7 +33,7 @@
   // artifact kinds gathered under the artifacts drawer (old shapes and
   // methods included so earlier saves still open).
   var KINDS = [
-    { kind: 'divination', label: 'cards', get: function (s) { return s.divination || []; }, name: function (a) { return a.name || 'a card'; } },
+    { kind: 'divination', label: 'cards', get: function (s) { return (s.divination || []).concat(s.iching || []); }, name: function (a) { return a.name || 'a card'; } },
     { kind: 'games', label: 'games', get: function (s) { return s.games || []; }, name: function (a) { return a.name || 'a game'; } },
     { kind: 'learn', label: 'lessons', get: function (s) { return s.learn || []; }, name: function (a) { return a.topic || 'a lesson'; } },
     { kind: 'abstract', label: 'shapes', get: function (s) { return s.abstract || []; }, name: function (a) { return a.label || 'a shape'; } },

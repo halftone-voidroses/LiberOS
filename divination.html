@@ -40,19 +40,92 @@
           <div class="screen-stage">
             <header class="divination-titlebar">
               <span class="divination-titlebar-name">Arcana's Tent</span>
-              <span class="divination-titlebar-sub">draw from the void</span>
+              <span class="divination-titlebar-sub" id="divination-sub">the deck · 22, counted three times</span>
               <button class="divination-help" type="button" id="divination-help" aria-label="how this room works">?</button>
               <button class="divination-exit" type="button" id="divination-exit" aria-label="leave">×</button>
             </header>
-            <div class="divination-app" data-state="divination">
 
+            <div class="divination-app" data-state="divination">
+              <i class="divination-lamp" aria-hidden="true"></i>
+
+              <!-- the table: tent canvas behind, felt over it, one lantern above -->
+              <div class="divination-felt">
+
+                <!-- the chalk rim: the question is written here, then turned to face the house -->
+                <div class="divination-rim">
+                  <div class="divination-slate" id="divination-slate">
+                    <input class="divination-input" id="divination-input" type="text" aria-label="speak your question" spellcheck="false" autocomplete="off" placeholder="write what you want known"/>
+                  </div>
+                  <span class="divination-rim-note" aria-hidden="true">turn to face the house</span>
+                </div>
+
+                <div class="divination-modes" id="divination-modes" role="tablist" aria-label="choose the deck or the coins">
+                  <button type="button" class="divination-mode active" data-mode="tarot" role="tab" aria-selected="true">tarot</button>
+                  <button type="button" class="divination-mode" data-mode="iching" role="tab" aria-selected="false">i ching</button>
+                </div>
+
+                <div class="divination-table">
+
+                  <!-- the deck: a stack, not a gallery. click it and one slides out -->
+                  <div class="divination-tarot" id="divination-tarot">
+                    <button class="divination-deck" id="divination-draw" type="button" aria-label="draw a card">
+                      <i class="deck-card l3" aria-hidden="true"></i>
+                      <i class="deck-card l2" aria-hidden="true"></i>
+                      <i class="deck-card l1" aria-hidden="true"></i>
+                      <i class="deck-card top" aria-hidden="true"></i>
+                      <span class="deck-band" aria-hidden="true">22 · counted 3× · ix.66<br/>do not bend</span>
+                    </button>
+                    <span class="divination-tally" id="divination-tally" aria-hidden="true"></span>
+                    <div class="divination-reading-place" id="divination-card-area">
+                      <div class="divination-card-hint" id="divination-card-hint">the deck is silent. ask.</div>
+                      <svg class="divination-chalk-eye" viewBox="0 0 120 60" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+                        <path d="M8 30 Q60 2 112 30 Q60 58 8 30 Z" fill="none" stroke="rgba(238,230,212,0.4)" stroke-width="2" stroke-linecap="round"/>
+                        <circle cx="60" cy="30" r="13" fill="none" stroke="rgba(238,230,212,0.4)" stroke-width="2"/>
+                        <circle cx="60" cy="30" r="4.5" fill="rgba(238,230,212,0.4)"/>
+                      </svg>
+                    </div>
+                    <div class="divination-grief" id="divination-grief">i drew a card for my sister once. it said <em>the drowned</em>.</div>
+                  </div>
+
+                  <!-- the coins: three to a line, six lines, click the dish -->
+                  <div class="divination-iching" id="divination-iching" hidden>
+                    <button class="divination-coin-dish" id="divination-cast" type="button" aria-label="toss the coins — cast a line">
+                      <i class="coin c1" aria-hidden="true"></i>
+                      <i class="coin c2" aria-hidden="true"></i>
+                      <i class="coin c3" aria-hidden="true"></i>
+                      <span class="dish-stain" aria-hidden="true"></span>
+                    </button>
+                    <div class="divination-hex-column">
+                      <div class="divination-hexagram" id="divination-hexagram">
+                        <div class="divination-hexagram-empty">six lines, chalked bottom first.</div>
+                      </div>
+                      <span class="divination-cast-note" id="divination-cast-note" aria-hidden="true"></span>
+                    </div>
+                    <div class="divination-iching-result" id="divination-iching-result" hidden>
+                      <div class="divination-iching-name" id="divination-iching-name"></div>
+                      <div class="divination-iching-desc" id="divination-iching-desc"></div>
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- arcana's edge of the table: cold tea, chalk stub, a card that is not hers -->
+                <div class="divination-edge" aria-hidden="true">
+                  <i class="tell teacup"><i class="stain"></i><i class="foreign-card"></i></i>
+                  <i class="tell chalk-stub"></i>
+                  <span class="tell pin-note">the drowned was not one of mine — see the blue ledger</span>
+                </div>
+
+              </div>
+
+              <!-- keep / discard: the same prompt for cards and hexagrams -->
               <div class="divination-save-prompt" id="divination-save-prompt" inert>
                 <div class="divination-save-prompt-inner">
                   <div class="divination-save-prompt-head">
                     <span class="divination-save-prompt-name">— keep it? —</span>
                     <button class="divination-save-prompt-close" type="button" id="divination-save-prompt-close" aria-label="cancel">×</button>
                   </div>
-                  <div class="divination-save-prompt-body" id="divination-save-prompt-body">card: (none). question: (none).</div>
+                  <div class="divination-save-prompt-body" id="divination-save-prompt-body"></div>
                   <div class="divination-save-prompt-actions">
                     <button class="divination-save-prompt-keep" type="button" id="divination-save-prompt-keep">keep</button>
                     <button class="divination-save-prompt-discard" type="button" id="divination-save-prompt-discard">discard</button>
@@ -60,60 +133,20 @@
                 </div>
               </div>
 
+              <!-- arcana's own note, under the ? -->
               <div class="divination-raison" id="divination-raison" inert>
                 <div class="divination-raison-inner">
                   <div class="divination-raison-head">
-                    <span class="divination-raison-name">riason</span>
+                    <span class="divination-raison-name">arcana</span>
                     <button class="divination-raison-close" type="button" id="divination-raison-close" aria-label="close">×</button>
                   </div>
                   <div class="divination-raison-body">
-                    two starting options: <strong>tarot</strong> draws one of 22 cards at random. <strong>i ching</strong> casts six lines to form a hexagram. type a question, then click a card or click cast six times. the deck arranges; you read. that is the whole transaction.
-                  </div>
-                </div>
-              </div>
-
-              <div class="divination-felt">
-                <div class="divination-header">
-                  <div class="divination-title">Divination</div>
-                  <div class="divination-sub" id="divination-sub">Type a question &amp; click a card for an interpretation.</div>
-                </div>
-
-                <div class="divination-modes" id="divination-modes">
-                  <button type="button" class="divination-mode active" data-mode="tarot">tarot</button>
-                  <button type="button" class="divination-mode" data-mode="iching">i ching</button>
-                </div>
-
-                <div class="divination-stage" id="divination-stage">
-                  <div class="divination-tarot" id="divination-tarot">
-                    <div class="divination-deck" id="divination-deck"></div>
-                    <div class="divination-question" id="divination-question">
-                      <input class="divination-input" id="divination-input" type="text" aria-label="speak your question" spellcheck="false"/>
-                      <button class="divination-draw" id="divination-draw" type="button">draw</button>
-                    </div>
-                    <div class="divination-card-area" id="divination-card-area">
-                      <svg class="divination-chalk-eye" viewBox="0 0 120 60" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
-                        <path d="M8 30 Q60 2 112 30 Q60 58 8 30 Z" fill="none" stroke="rgba(244,232,210,0.55)" stroke-width="2" stroke-linecap="round"/>
-                        <circle cx="60" cy="30" r="13" fill="none" stroke="rgba(244,232,210,0.55)" stroke-width="2"/>
-                        <circle cx="60" cy="30" r="4.5" fill="rgba(244,232,210,0.55)"/>
-                        <path d="M30 12 l3 5 M90 12 l-3 5 M30 48 l3 -5 M90 48 l-3 -5" stroke="rgba(244,232,210,0.4)" stroke-width="1.4" stroke-linecap="round"/>
-                      </svg>
-                      <div class="divination-card-hint">the deck is silent. ask.</div>
-                    </div>
-                    <div class="divination-grief" id="divination-grief">i drew a card for my sister once. it said <em>the drowned</em>.</div>
-                  </div>
-
-                  <div class="divination-iching" id="divination-iching" hidden>
-                    <div class="divination-hexagram" id="divination-hexagram">
-                      <div class="divination-hexagram-empty">cast six lines to build your hexagram.</div>
-                    </div>
-                    <div class="divination-question">
-                      <input class="divination-input" id="iching-input" type="text" aria-label="speak your question" spellcheck="false"/>
-                      <button class="divination-cast" id="divination-cast" type="button">cast line 1</button>
-                    </div>
-                    <div class="divination-iching-result" id="divination-iching-result" hidden>
-                      <div class="divination-iching-name" id="divination-iching-name"></div>
-                      <div class="divination-iching-desc" id="divination-iching-desc"></div>
-                    </div>
+                    the felt is honest, sit anywhere. write what you want known on the slate and turn it — i read better when i know the question.
+                    the deck: twenty-two, counted three times. click it and one slides out.
+                    the coins: three to a line, six lines, bottom first. click the dish.
+                    keep what lands, or let it go back in the stack.
+                    do not ask the same question twice in one sitting. the deck hates that.
+                    <span class="raison-sign">— a.</span>
                   </div>
                 </div>
               </div>
