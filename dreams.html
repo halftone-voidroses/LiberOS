@@ -115,31 +115,44 @@
                   </div>
 
                   <div class="dreams-reading" id="dreams-reading" hidden>
+                    <div class="dreams-spread" id="dreams-spread">
+                      <div class="dreams-leaf dreams-leaf-left" id="dreams-leaf-left">
+                        <div class="dreams-paper dreams-plate" id="dreams-plate">
+                          <div class="dreams-read-title" id="dreams-read-title"></div>
+                          <div class="dreams-read-date" id="dreams-read-date"></div>
+                          <div class="dreams-read-text" id="dreams-read-text"></div>
+                        </div>
+                      </div>
+                      <div class="dreams-spine">
+                        <span class="dreams-stitch" aria-hidden="true"></span><span class="dreams-stitch" aria-hidden="true"></span>
+                        <span class="dreams-stitch" aria-hidden="true"></span><span class="dreams-stitch" aria-hidden="true"></span>
+                        <span class="dreams-stitch" aria-hidden="true"></span>
+                        <div class="dreams-fittings">
+                          <button type="button" class="dreams-read-keep dreams-fitting" id="dreams-read-keep">keep to the book</button>
+                          <button type="button" class="dreams-read-keep dreams-fitting" id="dreams-read-plant">plant as a seed</button>
+                        </div>
+                      </div>
+                      <div class="dreams-paper dreams-leaf dreams-leaf-right" id="dreams-leaf-right">
+                        <div class="dreams-ornament" aria-hidden="true"><span>☿</span></div>
+                        <div class="dreams-read-body" id="dreams-read-body"></div>
+                        <div class="dreams-assoc">
+                          <div class="dreams-assoc-head">
+                            <span class="dreams-assoc-name">associations</span>
+                            <span class="dreams-assoc-hint">what the image stirs — ringed words ride along</span>
+                          </div>
+                          <div class="dreams-keep-row" id="dreams-keep-row" hidden>
+                            <button type="button" class="dreams-read-keep" id="dreams-keep-delete">remove from the book</button>
+                            <label class="dreams-keep-attach">attach to <select id="dreams-keep-attach"><option value="">— pick an artifact —</option></select></label>
+                          </div>
+                          <form class="dreams-assoc-form" id="dreams-assoc-form" autocomplete="off">
+                            <textarea id="dreams-assoc-input" rows="2"></textarea>
+                            <button type="submit" id="dreams-assoc-btn" class="dreams-assoc-btn">add association</button>
+                          </form>
+                          <div class="dreams-assoc-list" id="dreams-assoc-list"></div>
+                        </div>
+                      </div>
+                    </div>
                     <button class="dreams-back" type="button" id="dreams-back">← back to the ledger</button>
-                    <div class="dreams-paper">
-                      <div class="dreams-read-title" id="dreams-read-title"></div>
-                      <div class="dreams-read-date" id="dreams-read-date"></div>
-                      <div class="dreams-read-text" id="dreams-read-text"></div>
-                      <div class="dreams-ornament" aria-hidden="true"><span>☿</span></div>
-                      <div class="dreams-read-body" id="dreams-read-body"></div>
-                    </div>
-                    <div class="dreams-assoc">
-                      <div class="dreams-assoc-head">
-                        <span class="dreams-assoc-name">associations</span>
-                        <span class="dreams-assoc-hint">what the image stirs — ringed words ride along</span>
-                        <button type="button" class="dreams-read-keep" id="dreams-read-keep">keep to the book</button>
-                        <button type="button" class="dreams-read-keep" id="dreams-read-plant">plant as a seed</button>
-                      </div>
-                      <div class="dreams-keep-row" id="dreams-keep-row" hidden>
-                        <button type="button" class="dreams-read-keep" id="dreams-keep-delete">remove from the book</button>
-                        <label class="dreams-keep-attach">attach to <select id="dreams-keep-attach"><option value="">— pick an artifact —</option></select></label>
-                      </div>
-                      <form class="dreams-assoc-form" id="dreams-assoc-form" autocomplete="off">
-                        <textarea id="dreams-assoc-input" rows="2"></textarea>
-                        <button type="submit" id="dreams-assoc-btn" class="dreams-assoc-btn">add association</button>
-                      </form>
-                      <div class="dreams-assoc-list" id="dreams-assoc-list"></div>
-                    </div>
                   </div>
                 </section>
 

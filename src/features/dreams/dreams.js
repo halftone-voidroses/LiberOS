@@ -212,10 +212,18 @@
     deskEl.hidden = true;
     readingEl.hidden = false;
     readingEl.scrollTop = 0;
-    // develop-on-arrival (pitch: Dreams): the sheet has been in the fix bath
-    // since it was written — the reading develops it now, once, then the
-    // paper holds still. Reduced motion gets the developed sheet at once.
+    var leafL = document.getElementById('dreams-leaf-left');
+    if (leafL) leafL.scrollTop = 0;
+    // develop-on-arrival (pitch: Dreams): the spread has been in the fix
+    // bath since it was written — the dream plate develops, then the
+    // reading's ink fades in. Reduced motion gets the developed spread at once.
     var paperEl = readBodyEl.closest('.dreams-paper');
+    var plateEl = document.getElementById('dreams-plate');
+    if (plateEl) {
+      plateEl.classList.remove('develop');
+      void plateEl.offsetWidth;
+      plateEl.classList.add('develop');
+    }
     if (paperEl) {
       paperEl.classList.remove('develop');
       void paperEl.offsetWidth;
@@ -357,8 +365,9 @@
       back.id = 'dreams-marginalia';
       back.className = 'dreams-marginalia';
       back.setAttribute('aria-hidden', 'true');
-      var paper2 = readBodyEl ? readBodyEl.closest('.dreams-paper') : null;
-      if (paper2) paper2.appendChild(back);
+      var paper2 = document.getElementById('dreams-leaf-left');
+      var plate = document.getElementById('dreams-plate');
+      if (paper2 && plate) paper2.insertBefore(back, plate.nextSibling);
     }
     if (!back) return;
     var band = isPlanted(d.id) ? 'planted' : (isKept(d.id) ? 'kept' : (d.analyzed ? 'analyzed' : 'unread'));

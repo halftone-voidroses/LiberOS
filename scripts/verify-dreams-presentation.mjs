@@ -4,12 +4,16 @@
 //   1. fog-to-dusk: the room holds drifting fog while the desk is
 //      unattended, and thins to dusk when a dream is open
 //   2. develop-on-arrival: opening a reading runs the develop beat once
-//      (reduced motion: the developed sheet at once)
+//      across the spread (plate first, then the reading's ink)
+//      (reduced motion: the developed spread at once)
 //   3. association threads: one red thread per quoted association, drawn
 //      from the real associations, gone when released
-//   4. marginalia in a second hand: Inquiry's note on the polaroid's back,
-//      deterministic per dream, banded by the real keep state
-//   5. zero page errors; the reading still works at 439px
+//   4. marginalia in a second hand: Inquiry's pencil slip on the desk
+//      under the plate, deterministic per dream, banded by the real keep state
+//   5. the spread: two leaves on one brass spine — plate left, reading
+//      right, keep/plant as spine fittings, back as a foot ribbon; nothing
+//      rides the dream text
+//   6. zero page errors; the spread folds to one column at 439px
 //
 // Spawns its own server so it always tests THIS folder.
 // Run: node scripts/verify-dreams-presentation.mjs
@@ -111,13 +115,21 @@ check('the fog thins to dusk while you read', parseFloat(dusk.before) < 0.6, dus
 // ─── 2. develop-on-arrival ───────────────────────────────────────────────
 console.log('2. develop-on-arrival')
 const dev = await page.evaluate(() => {
-  const paper = document.querySelector('.dreams-paper.develop')
+  const paper = document.querySelector('.dreams-leaf-right.develop')
+  const plate = document.querySelector('.dreams-plate.develop')
   if (!paper) return null
   const body = paper.querySelector('.dreams-read-body')
-  return { cls: paper.className, anim: body ? getComputedStyle(body).animationName : '' }
+  const dreamText = plate ? plate.querySelector('.dreams-read-text') : null
+  return {
+    cls: paper.className,
+    plateCls: plate ? plate.className : '',
+    anim: body ? getComputedStyle(body).animationName : '',
+    plateAnim: dreamText ? getComputedStyle(dreamText).animationName : ''
+  }
 })
-check('the develop beat ran on arrival', !!dev && dev.cls.includes('develop'))
+check('the develop beat ran on arrival', !!dev && dev.cls.includes('develop') && dev.plateCls.includes('develop'))
 check('the reading animates up out of the bath', !!dev && dev.anim.includes('dreams-develop'), dev && dev.anim)
+check('the dream plate develops with it', !!dev && dev.plateCls.includes('develop') && dev.plateAnim.includes('dreams-develop'), dev && dev.plateAnim)
 
 // the beat is once-per-arrival: reopening re-runs it, staying does not stack
 await clickSel(page, '.dreams-back')
@@ -167,6 +179,11 @@ const marg = await page.evaluate(() => {
 })
 check('the polaroid carries Inquiry\u2019s note', !!marg && marg.text.length > 12, marg && marg.text)
 check('the note is banded by the real keep state', marg.band === 'analyzed', marg && marg.band)
+check('the note rides the desk, not the dream text', await page.evaluate(() => {
+  const marg = document.getElementById('dreams-marginalia')
+  const leaf = document.getElementById('dreams-leaf-left')
+  return !!marg && marg.parentElement === leaf
+}))
 
 // deterministic: same dream, same note — reload and compare
 const { ctx: ctx2, page: page2 } = await freshPage()
@@ -189,8 +206,55 @@ const marg3 = await page3.evaluate(() => ({
 check('a kept dream gets the kept note', marg3.band === 'kept', marg3.band)
 await ctx3.close()
 
-// ─── 5. reduced motion + 439px ──────────────────────────────────────────
-console.log('5. consent and the small screen')
+// ─── 5. the spread ──────────────────────────────────────────────────────
+console.log('5. the spread — plate left, reading right, one spine')
+const spread = await page.evaluate(() => {
+  const s = document.getElementById('dreams-spread')
+  const left = document.getElementById('dreams-leaf-left')
+  const right = document.getElementById('dreams-leaf-right')
+  const spine = document.querySelector('.dreams-spine')
+  const plate = document.getElementById('dreams-plate')
+  const keep = document.getElementById('dreams-read-keep')
+  const plant = document.getElementById('dreams-read-plant')
+  const back = document.getElementById('dreams-back')
+  const dreamText = document.getElementById('dreams-read-text')
+  if (!s || !left || !right || !spine || !plate) return null
+  const sr = s.getBoundingClientRect(), lr = left.getBoundingClientRect(),
+        rr = right.getBoundingClientRect(), kr = keep.getBoundingClientRect(),
+        tr = dreamText.getBoundingClientRect(), br = back.getBoundingClientRect()
+  const hits = (a, b) => !(a.right <= b.left || b.right <= a.left || a.bottom <= b.top || b.bottom <= a.top)
+  return {
+    cols: getComputedStyle(s).gridTemplateColumns.split(' ').length,
+    order: lr.left < spine.getBoundingClientRect().left && spine.getBoundingClientRect().right <= rr.left + 1,
+    plateInLeaf: plate.parentElement === left,
+    fittingsOnSpine: spine.contains(keep) && spine.contains(plant),
+    bothFittingsVisible: kr.height > 0 && plant.getBoundingClientRect().height > 0,
+    keepClickable: !keep.disabled,
+    noRideText: !hits(kr, tr) && !hits(plant.getBoundingClientRect(), tr),
+    backVisible: br.height > 0 && br.width > 0,
+    backClearOfText: !hits(br, tr)
+  }
+})
+check('the reading is a three-part spread', !!spread && spread.cols === 3, spread && spread.cols)
+check('plate — spine — page, in that order', !!spread && spread.order)
+check('the dream is pinned to the desk leaf', !!spread && spread.plateInLeaf)
+check('keep and plant are fittings on the spine', !!spread && spread.fittingsOnSpine && spread.bothFittingsVisible)
+check('the fittings never ride the dream text', !!spread && spread.noRideText)
+check('the back ribbon is visible and clear of the text', !!spread && spread.backVisible && spread.backClearOfText)
+check('keep is armed while unkept', !!spread && spread.keepClickable)
+
+// keeping from the spine works — the fitting writes to the satchel
+await clickSel(page, '#dreams-read-keep')
+await page.waitForTimeout(300)
+const keptFromSpine = await page.evaluate(() => {
+  const s = JSON.parse(localStorage.getItem('liber_vacui_v1__keep'))
+  const b = document.getElementById('dreams-read-keep')
+  return { inBook: (s.satchel || []).some(x => x && x.kind === 'dream'), label: b.textContent, disabled: b.disabled }
+})
+check('the spine fitting keeps to the book', keptFromSpine.inBook && keptFromSpine.disabled, keptFromSpine.label)
+
+// ─── 6. consent and the small screen ────────────────────────────────────
+console.log('6. consent and the small screen')
 const { ctx: ctx4, page: page4 } = await freshPage({ reducedMotion: 'reduce' })
 await visit(page4)
 const rm = await page4.evaluate(() => ({
@@ -210,10 +274,12 @@ await page.setViewportSize({ width: 439, height: 780 })
 await page.waitForTimeout(400)
 const small = await page.evaluate(() => ({
   overflow: document.documentElement.scrollWidth - window.innerWidth,
-  readingOpen: !document.getElementById('dreams-reading').hidden
+  readingOpen: !document.getElementById('dreams-reading').hidden,
+  cols: getComputedStyle(document.getElementById('dreams-spread')).gridTemplateColumns.split(' ').length
 }))
 check('@439: the reading survives the small screen', small.readingOpen && small.overflow <= 2,
   'overflow ' + small.overflow)
+check('@439: the spread folds to one column', small.cols === 1, small.cols + ' columns')
 
 check('zero page errors across the run', errors.length === 0, errors.slice(0, 2).join(' | '))
 

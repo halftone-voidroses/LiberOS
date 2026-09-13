@@ -1,6 +1,9 @@
 /* dreams.css — Insightful Inquiry's reading room. Paper-white folios on the
    dark screen, purple headings, cyan highlights, thin alchemical line
    ornaments, a white-gloved hand, question-mark watermarks under the paper.
+   The reading is a bound spread: the dream on a soft-edged cloud plate at
+   the left leaf, the reading in the workbook hand at the right leaf, one
+   brass spine between them carrying keep/plant as fittings.
    This file is COMPLETELY INDEPENDENT. No imports, no shared variables
    (covenant Q.1). Every magic value is a custom property, documented below. */
 
@@ -20,6 +23,13 @@
   --dreams-bar-hi: #efeaf5;                 /* titlebar paper, lit edge */
   --dreams-bar-mid: #ddd4ea;                /* titlebar paper, body */
   --dreams-bar-lo: #cfc3e2;                 /* titlebar paper, shadowed edge */
+  /* the spread's own materials */
+  --dreams-brass: #9c7a3c;                  /* the spine — cold, unpolished brass */
+  --dreams-brass-hi: #c9a35c;               /* the lamp catching the spine's edge */
+  --dreams-brass-lo: #5e4820;               /* the spine's shadowed edge */
+  --dreams-blotter: #2a2438;                /* the desk blotter under the form */
+  --dreams-cloud-hi: rgba(255, 255, 255, 0.72);  /* the cloud plate's lit face */
+  --dreams-cloud-sh: rgba(164, 138, 212, 0.16);  /* its fog-tinted underside */
   /* ── motion ── */
   --dreams-fade: 160ms;                     /* doors, modals, hovers */
   /* ── type ── */
@@ -142,18 +152,37 @@
   padding-right: 4px;
 }
 
-/* ── the journal — record form + ledger ───────────────────────────────── */
+/* ── the journal — the entry paper on its blotter, the ledger in drawers ── */
 
+.dreams-desk { position: relative; }
+
+/* the blotter: a dark desk pad under the entry paper; the form sits on it,
+   slightly askew, the way the sheet was set down */
 .dreams-record {
   background: linear-gradient(180deg, var(--dreams-paper) 0%, var(--dreams-paper-dim) 100%);
   border: 1px solid var(--dreams-purple-deep);
   border-radius: 2px;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.55);
   padding: 12px 16px 10px;
-  margin-bottom: 14px;
+  margin: 10px 0 18px;
   position: relative;
   overflow: hidden;
+  transform: rotate(-0.4deg);
 }
+.dreams-desk::before {          /* the blotter itself, corner showing under the paper */
+  content: '';
+  position: absolute;
+  left: 6px;
+  right: -8px;
+  top: 18px;
+  bottom: 6px;
+  background: var(--dreams-blotter);
+  border-radius: 3px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  transform: rotate(0.55deg);
+  pointer-events: none;
+}
+.dreams-record { z-index: 1; }
 .dreams-record::after {           /* question-mark watermark under the paper */
   content: '?';
   position: absolute;
@@ -242,9 +271,14 @@
   color: var(--dreams-ink);
 }
 
-/* the ledger */
+/* the ledger — a card drawer, one row per dream (the satchel row grammar) */
 
-.dreams-ledger { display: flex; flex-direction: column; gap: 6px; }
+.dreams-ledger {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid rgba(111, 90, 160, 0.5);
+}
 
 .dreams-ledger-empty,
 .dreams-assoc-empty,
@@ -258,29 +292,35 @@
   letter-spacing: 0.08em;
 }
 
-.dreams-entry {
+.dreams-entry-row {
   display: grid;
   grid-template-columns: 1fr auto;
-  grid-template-areas: 'title date' 'preview preview';
-  gap: 2px 12px;
+  gap: 8px;
+  align-items: stretch;
+  border-bottom: 1px dotted rgba(111, 90, 160, 0.4);
+}
+
+.dreams-entry {
+  display: block;
   text-align: left;
   cursor: pointer;
   font-family: var(--dreams-serif);
   background: linear-gradient(180deg, var(--dreams-paper) 0%, var(--dreams-paper-dim) 100%);
-  border: 1px solid rgba(111, 90, 160, 0.5);
+  border: none;
   border-left: 3px solid var(--dreams-purple);
-  border-radius: 2px;
-  padding: 8px 12px;
+  padding: 9px 12px;
+  min-height: 44px;
   color: var(--dreams-ink);
-  transition: border-color var(--dreams-fade), box-shadow var(--dreams-fade);
+  box-sizing: border-box;
+  transition: background-color var(--dreams-fade), border-color var(--dreams-fade);
 }
 .dreams-entry:hover {
   border-left-color: var(--dreams-cyan);
-  box-shadow: 0 0 8px rgba(138, 202, 255, 0.25);
+  background: rgba(255, 255, 255, 0.75);
 }
 
 .dreams-entry-title {
-  grid-area: title;
+  display: block;
   font-weight: 700;
   font-size: 1.02rem;
   overflow: hidden;
@@ -288,14 +328,15 @@
   white-space: nowrap;
 }
 .dreams-entry-date {
-  grid-area: date;
+  display: block;
   font-family: var(--dreams-mono);
   font-size: 0.85rem;
   letter-spacing: 0.08em;
   color: var(--dreams-ink-soft);
+  margin-top: 1px;
 }
 .dreams-entry-preview {
-  grid-area: preview;
+  display: block;
   font-style: italic;
   font-size: 0.9rem;
   color: var(--dreams-ink-soft);
@@ -304,11 +345,17 @@
   white-space: nowrap;
 }
 
-/* ── the reading — the dream re-read, the paper, the associations ─────── */
+/* ── the reading — the bound spread ───────────────────────────────────── */
 
+/* back to the ledger: a tab at the reading's foot-left, under the plate's
+   open air — the marker you pull to leave. Always visible, never over text. */
 .dreams-back {
-  align-self: flex-start;
-  background: none;
+  position: absolute;
+  left: 10px;
+  bottom: 6px;
+  z-index: 4;
+  background:
+    linear-gradient(180deg, rgba(13, 10, 21, 0.94), rgba(13, 10, 21, 0.88));
   border: 1px dashed rgba(138, 202, 255, 0.55);
   border-radius: 2px;
   font-family: var(--dreams-serif);
@@ -318,37 +365,157 @@
   font-size: 1rem;
   color: var(--dreams-cyan);
   cursor: pointer;
-  padding: 6px 14px;
+  padding: 6px 16px;
   min-height: 44px;
   min-width: 44px;
-  margin-bottom: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.55);
 }
-.dreams-back:hover { text-shadow: 0 0 8px rgba(138, 202, 255, 0.7); }
+.dreams-back:hover { text-shadow: 0 0 8px rgba(138, 202, 255, 0.7); border-color: var(--dreams-cyan); }
 
-.dreams-reading { display: flex; flex-direction: column; height: 100%; min-height: 0; }
+.dreams-reading { position: relative; display: flex; flex-direction: column; height: 100%; min-height: 0; }
 .dreams-reading[hidden] { display: none; } /* the hidden attribute must beat the flex above */
-/* the reading paper scrolls its own interpretation; the associations stay
-   pinned beneath — the second half of the ritual is never out of reach */
-.dreams-reading > .dreams-paper {
+
+/* the spread: two leaves on one binding, the spine between them. The dream
+   sits left on the cloud plate; the reading and the associations share the
+   right leaf — the second half of the work beside the first. */
+.dreams-spread {
   flex: 1 1 auto;
   min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 44fr) 14px minmax(0, 56fr);
+  grid-template-rows: minmax(0, 1fr);
+  gap: 0;
+  align-items: stretch;
+  /* the lamp: one cool bulb upper-centre, named — the plate catches it first */
+  background: radial-gradient(ellipse 62% 48% at 50% 0%, rgba(226, 214, 244, 0.07) 0%, rgba(0, 0, 0, 0) 62%);
+}
+
+/* the left leaf — the sage's desk in the dark. No paper: the plate is
+   pinned to the desk, and the desk's open air carries the fittings. */
+.dreams-leaf-left {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(111, 90, 160, 0.4) transparent;
+  background:
+    radial-gradient(ellipse 90% 60% at 30% 0%, rgba(226, 214, 244, 0.05) 0%, rgba(0, 0, 0, 0) 60%),
+    linear-gradient(172deg, #1a1428 0%, #14101f 55%, #0d0a15 100%);
+  border: 1px solid rgba(111, 90, 160, 0.45);
+  border-right: none;
+  border-radius: 10px 3px 3px 10px;   /* soft where the binding opens, trimmed where the page edge is */
+  box-shadow:
+    inset 0 0 30px rgba(0, 0, 0, 0.55),
+    0 10px 22px rgba(0, 0, 0, 0.55);
+  padding: 22px 96px 64px 22px;   /* the right gutter is the fittings' ground; the deep foot
+                                     clears the back ribbon — text never runs under either */
+  position: relative;
+  margin-left: 8px;
+}
+/* the desk's wood grain: two long slow streaks under the lamp */
+.dreams-leaf-left::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 8px at 30% 26%, rgba(120, 100, 150, 0.06) 0%, rgba(0, 0, 0, 0) 100%),
+    radial-gradient(ellipse 70% 6px at 60% 68%, rgba(120, 100, 150, 0.05) 0%, rgba(0, 0, 0, 0) 100%);
+  pointer-events: none;
+}
+/* the thumb-stain: the sage's gloves come off at the bench sometimes —
+   pressed into the desk's wood by the plate's lower corner */
+.dreams-leaf-left::after {
+  content: '';
+  position: absolute;
+  right: 108px;
+  bottom: 34px;
+  width: 26px;
+  height: 34px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 40% 35%, rgba(164, 138, 212, 0.12) 0%, rgba(164, 138, 212, 0.05) 55%, rgba(0, 0, 0, 0) 75%);
+  transform: rotate(-18deg);
+  pointer-events: none;
+}
+
+/* the dream plate: the polaroid pinned to the desk — deckled paper, the
+   dream written on it, one specular pass where the lamp lands, a pin hole
+   at its head. Sits on the desk with a contact shadow. */
+.dreams-plate {
+  background:
+    radial-gradient(ellipse 120% 90% at 20% 0%, var(--dreams-cloud-hi) 0%, rgba(255, 255, 255, 0) 55%),
+    radial-gradient(ellipse 140% 110% at 78% 100%, var(--dreams-cloud-sh) 0%, rgba(0, 0, 0, 0) 60%),
+    linear-gradient(174deg, #f7f5f0 0%, var(--dreams-paper) 42%, var(--dreams-paper-dim) 100%);
+  border: 1px solid rgba(111, 90, 160, 0.45);
+  border-radius: 2px;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.5),
+    0 6px 16px rgba(0, 0, 0, 0.6);
+  padding: 18px 20px 60px;   /* deep foot — the polaroid's chin carries the pencil note */
+  position: relative;
+  transform: rotate(-0.7deg);
+}
+/* the pin: a small brass head holding the plate to the desk */
+.dreams-plate::before {
+  content: '';
+  position: absolute;
+  top: 9px;
+  left: 50%;
+  width: 9px;
+  height: 9px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--dreams-brass-hi) 0%, var(--dreams-brass) 55%, var(--dreams-brass-lo) 100%);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+/* the deckled fore-edge: torn, not cut — the plate's ragged right rim */
+.dreams-plate::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  bottom: -1px;
+  right: -5px;
+  width: 5px;
+  background:
+    radial-gradient(circle 3px at 50% 6%, var(--dreams-paper) 0%, rgba(0,0,0,0) 100%),
+    radial-gradient(circle 3px at 30% 14%, var(--dreams-paper) 0%, rgba(0,0,0,0) 100%),
+    radial-gradient(circle 3px at 70% 22%, var(--dreams-paper) 0%, rgba(0,0,0,0) 100%),
+    radial-gradient(circle 3px at 45% 31%, var(--dreams-paper) 0%, rgba(0,0,0,0) 100%),
+    radial-gradient(circle 3px at 20% 40%, var(--dreams-paper) 0%, rgba(0,0,0,0) 100%),
+    radial-gradient(circle 3px at 60% 49%, var(--dreams-paper) 0%, rgba(0,0,0,0) 100%),
+    radial-gradient(circle 3px at 35% 58%, var(--dreams-paper) 0%, rgba(0,0,0,0) 100%),
+    radial-gradient(circle 3px at 72% 67%, var(--dreams-paper) 0%, rgba(0,0,0,0) 100%),
+    radial-gradient(circle 3px at 28% 76%, var(--dreams-paper) 0%, rgba(0,0,0,0) 100%),
+    radial-gradient(circle 3px at 52% 85%, var(--dreams-paper) 0%, rgba(0,0,0,0) 100%),
+    radial-gradient(circle 3px at 40% 94%, var(--dreams-paper) 0%, rgba(0,0,0,0) 100%),
+    linear-gradient(180deg, var(--dreams-paper) 0%, var(--dreams-paper-dim) 100%);
+  pointer-events: none;
+}
+
+/* the right leaf — the workbook page: ruled working paper in the reading hand */
+.dreams-leaf-right {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: rgba(111, 90, 160, 0.55) transparent;
-}
-.dreams-reading > .dreams-assoc { flex: 0 0 auto; }
-
-.dreams-paper {
-  background: linear-gradient(180deg, var(--dreams-paper) 0%, var(--dreams-paper-dim) 100%);
+  background:
+    repeating-linear-gradient(0deg, rgba(111, 90, 160, 0.045) 0px, rgba(111, 90, 160, 0.045) 1px, transparent 1px, transparent 28px),
+    linear-gradient(180deg, var(--dreams-paper) 0%, var(--dreams-paper-dim) 100%);
   border: 1px solid var(--dreams-purple-deep);
   border-top: 3px double var(--dreams-purple-deep);
-  border-radius: 2px;
-  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.55);
-  padding: 16px 22px 14px;
+  border-radius: 3px 8px 2px 2px;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.4),
+    0 10px 22px rgba(0, 0, 0, 0.55);
+  padding: 14px 20px 14px 18px;
   position: relative;
-  overflow: hidden;
+  margin-right: 8px;
 }
-.dreams-paper::after {           /* question-mark watermark under the paper */
+.dreams-leaf-right::after {       /* question-mark watermark under the workbook page */
   content: '?';
   position: absolute;
   right: -18px;
@@ -359,6 +526,82 @@
   pointer-events: none;
   font-family: var(--dreams-serif);
 }
+
+/* the spine: brass band binding the two leaves, stitched, carrying the
+   keep / plant fittings on its face. It curves — a band, not a stripe. */
+.dreams-spine {
+  position: relative;
+  min-height: 0;
+  background: linear-gradient(90deg,
+    var(--dreams-brass-lo) 0%,
+    var(--dreams-brass) 22%,
+    var(--dreams-brass-hi) 46%,
+    var(--dreams-brass) 62%,
+    var(--dreams-brass-lo) 100%);
+  border-radius: 2px;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.4),
+    0 6px 14px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0;
+  padding-top: 18px;
+  z-index: 2;
+}
+.dreams-stitch {
+  width: 5px;
+  height: 15px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #3a2c12 0%, #241a08 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  margin-bottom: 9px;
+}
+.dreams-fittings {
+  position: absolute;
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  align-items: flex-end;   /* the plates hang off the spine's left flank,
+                              over the plate's open air, never over the reading */
+}
+
+/* keep / plant as brass fittings on the spine's face — wide buttons, set
+   like escutcheons across the band (they overhang onto both leaves) */
+.dreams-fitting {
+  margin-left: 0;
+  font-family: var(--dreams-mono);
+  font-size: 0.82rem;
+  font-style: normal;
+  letter-spacing: 0.1em;
+  color: #f0e4c4;
+  background: linear-gradient(180deg, var(--dreams-brass-hi) 0%, var(--dreams-brass) 55%, var(--dreams-brass-lo) 100%);
+  border: 1px solid var(--dreams-brass-lo);
+  border-radius: 3px;
+  padding: 6px 10px;
+  min-height: 44px;
+  min-width: 44px;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 2px 5px rgba(0, 0, 0, 0.55);
+  transition: filter var(--dreams-fade), transform var(--dreams-fade);
+}
+.dreams-fitting:hover { filter: brightness(1.14); }
+.dreams-fitting:active { transform: translateY(1px); }
+.dreams-fitting:disabled {
+  color: rgba(240, 228, 196, 0.55);
+  filter: saturate(0.55) brightness(0.9);
+  cursor: default;
+}
+
+/* the left leaf's text — the dream as written */
 
 .dreams-read-title {
   font-variant: small-caps;
@@ -380,18 +623,17 @@
 
 .dreams-read-text {
   font-size: 1.075rem;
-  line-height: 1.5;
+  line-height: 1.55;
   color: var(--dreams-ink);
   font-style: normal;
-  max-height: 5.2em;
-  overflow-y: auto;
 }
 
-.dreams-ornament {                /* thin alchemical line, ☿ at the middle */
+/* the ornament rules the spread's centre — the ☿ sits on the spine's crown */
+.dreams-ornament {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin: 10px 0;
+  margin: 0 0 10px;
   color: var(--dreams-purple);
 }
 .dreams-ornament::before,
@@ -431,16 +673,13 @@
   border-radius: 2px;
 }
 
-/* associations */
+/* associations — they live on the right leaf, below the reading, joined to
+   it by the red threads */
 
 .dreams-assoc {
-  background: linear-gradient(180deg, var(--dreams-paper) 0%, var(--dreams-paper-dim) 100%);
-  border: 1px solid rgba(111, 90, 160, 0.5);
+  margin-top: 14px;
   border-top: 3px double var(--dreams-purple-deep);
-  border-radius: 2px;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.5);
-  padding: 10px 16px 12px;
-  margin-top: 12px;
+  padding-top: 8px;
 }
 
 .dreams-assoc-head {
@@ -750,6 +989,7 @@
 .dreams-door:focus-visible,
 .dreams-record-btn:focus-visible,
 .dreams-assoc-btn:focus-visible,
+.dreams-fitting:focus-visible,
 .dreams-back:focus-visible,
 .dreams-entry:focus-visible,
 .dreams-drawer:focus-visible,
@@ -903,6 +1143,7 @@
   .dreams-door,
   .dreams-record-btn,
   .dreams-assoc-btn,
+  .dreams-fitting,
   .dreams-raison,
   .dreams-cite,
   .dreams-entry,
@@ -911,10 +1152,9 @@
   }
 }
 
-/* keeping to the book — the deliberate satchel mirror, offered once the
-   reading has had its say. dashed in the sage's register; done = settled */
-.dreams-read-keep {
-  margin-left: auto;
+/* keeping to the book — the non-fitting variants: inside the keep-row and
+   on the ledger rows. The spine carries the fittings themselves. */
+.dreams-read-keep:not(.dreams-fitting) {
   font-family: var(--dreams-mono, 'Courier New', monospace);
   font-size: 1rem;
   font-style: normal;
@@ -929,8 +1169,8 @@
   cursor: pointer;
   white-space: nowrap;
 }
-.dreams-read-keep:hover { border-style: solid; border-color: var(--dreams-cyan, #8acaff); }
-.dreams-read-keep:disabled {
+.dreams-read-keep:not(.dreams-fitting):hover { border-style: solid; border-color: var(--dreams-cyan, #8acaff); }
+.dreams-read-keep:not(.dreams-fitting):disabled {
   color: var(--dreams-ink-soft, #6a5f52);
   border-color: rgba(111, 90, 160, 0.25);
   cursor: default;
@@ -939,7 +1179,7 @@
   display: flex;
   gap: 8px;
   align-items: center;
-  margin-top: 6px;
+  margin: 6px 0;
   flex-wrap: wrap;
 }
 .dreams-keep-row[hidden] { display: none; }
@@ -962,12 +1202,6 @@
   min-height: 44px;
 }
 
-.dreams-entry-row {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 8px;
-  align-items: stretch;
-}
 .dreams-entry-keep {
   font-family: var(--dreams-mono, 'Courier New', monospace);
   font-size: 1rem;
@@ -992,7 +1226,54 @@
 .dreams-app, .dreams-app * { scrollbar-width: thin; scrollbar-color: #a48ad4 rgba(0, 0, 0, 0.35); }
 
 /* narrow screens — the two doors stack, the folios shelve above the card,
-   and the record/association rows fold so nothing runs off the glass */
+   and the spread folds leaf on leaf: dream plate, then the workbook page,
+   one column, nothing running off the glass */
+@media (max-width: 980px) {
+  .dreams-spread {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto;
+  }
+  .dreams-spine {
+    flex-direction: row;
+    justify-content: center;
+    padding-top: 0;
+    height: 14px;
+    min-height: 14px;
+    background: linear-gradient(180deg,
+      var(--dreams-brass-lo) 0%,
+      var(--dreams-brass) 30%,
+      var(--dreams-brass-hi) 55%,
+      var(--dreams-brass) 70%,
+      var(--dreams-brass-lo) 100%);
+    border-radius: 2px;
+  }
+  .dreams-stitch {
+    width: 15px;
+    height: 5px;
+    margin: 0 5px;
+    align-self: center;
+  }
+  .dreams-fittings {
+    top: 0;
+    bottom: auto;
+    transform: translate(-50%, -46%);
+    flex-direction: row;
+    gap: 8px;
+    width: auto;
+    left: 50%;
+  }
+  .dreams-fitting { font-size: 0.78rem; padding: 6px 9px; }
+  .dreams-leaf-left {
+    margin: 0 0 0 4px;
+    border-right: 1px solid rgba(111, 90, 160, 0.45);
+    border-radius: 8px 8px 3px 3px;
+    max-height: 44vh;
+    padding: 14px 16px 12px;   /* the gutter folds with the spine — text takes the full width */
+  }
+  .dreams-leaf-left::before { display: none; }
+  .dreams-plate { padding: 14px 16px 30px; }
+  .dreams-leaf-right { margin: 0 4px 0 0; border-radius: 3px 3px 8px 8px; }
+}
 @media (max-width: 439px) {
   .dreams-room { padding: 10px 12px 12px; }
   .dreams-head { flex-wrap: wrap; }
@@ -1004,6 +1285,9 @@
   .dreams-assoc-head { flex-direction: column; align-items: flex-start; }
   .dreams-assoc-form { flex-direction: column; align-items: stretch; }
   .dreams-entry-row { grid-template-columns: 1fr; }
+  .dreams-leaf-left { max-height: 38vh; padding: 12px 12px 12px; }
+  .dreams-plate { padding: 12px 12px 26px; }
+  .dreams-fittings { flex-wrap: wrap; justify-content: center; }
 }
 
 /* Rainy Day (s.shadowOn) - the sage's study, rained on.
@@ -1025,6 +1309,12 @@
   --dreams-bar-hi: #e4eaf2;
   --dreams-bar-mid: #d2dae6;
   --dreams-bar-lo: #c0cad8;
+  --dreams-brass: #7a8290;
+  --dreams-brass-hi: #a8b0bc;
+  --dreams-brass-lo: #46506a;
+  --dreams-blotter: #1c2434;
+  --dreams-cloud-hi: rgba(255, 255, 255, 0.66);
+  --dreams-cloud-sh: rgba(138, 154, 212, 0.18);
 }
 
 /* ── the room as a place (pitch: Dreams — SYSTEM 05) ─────────────────────
@@ -1065,7 +1355,6 @@
   to   { transform: translateX(3%) translateY(1.5%); }
 }
 /* dusk arrives when a dream is open: the fog thins, the desk light warms */
-.dreams-app .dreams-reading:not([hidden]) ~ * {}
 .dreams-app:has(.dreams-reading:not([hidden]))::before,
 .dreams-app:has(.dreams-reading:not([hidden]))::after {
   opacity: 0.35;
@@ -1085,9 +1374,12 @@
   background: conic-gradient(from 168deg at 50% 0%, rgba(0,0,0,0) 0%, rgba(226, 214, 244, 0.05) 12%, rgba(226, 214, 244, 0.045) 26%, rgba(0,0,0,0) 40%);
 }
 
-/* develop-on-arrival: the paper comes up out of the fix bath — the image
-   (the reading) fades in from the fog it was written in. One beat, on
-   arrival only; reduced motion gets the developed sheet at once. */
+/* develop-on-arrival: the spread comes up out of the fix bath — the dream
+   plate develops first, then the reading's ink fades in. One beat, on
+   arrival only; reduced motion gets the developed spread at once. */
+.dreams-plate.develop .dreams-read-text {
+  animation: dreams-develop 2.2s ease-out;
+}
 .dreams-paper.develop .dreams-read-body {
   animation: dreams-develop 2.6s ease-out;
 }
@@ -1098,7 +1390,8 @@
 }
 
 /* association threads: red thread from the reading's citation anchor to
-   each quoted association card. Drawn in an SVG pinned over the paper. */
+   each quoted association card. Drawn in an SVG pinned over the right leaf —
+   the threads join the reading to the work done in its margin. */
 .dreams-threads {
   position: absolute;
   inset: 0;
@@ -1114,20 +1407,26 @@
   stroke-dasharray: 5 3;
 }
 
-/* marginalia in a second hand: Inquiry's note on the polaroid's back —
-   pencil, not ink; the reading's own quiet afterword */
+/* marginalia in a second hand: Inquiry's pencil slip lying on the desk
+   below the pinned plate — her note on what the reading did, in the leaf's
+   own flow where nothing can ride the dream text */
 .dreams-marginalia {
-  position: absolute;
-  right: 14px;
-  bottom: 8px;
+  margin: 14px 12px 0 auto;
+  width: fit-content;
+  max-width: 100%;
+  background: linear-gradient(178deg, rgba(46, 38, 66, 0.85) 0%, rgba(38, 31, 54, 0.85) 100%);
+  border: 1px solid rgba(164, 138, 212, 0.22);
+  border-radius: 2px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+  padding: 6px 12px 5px;
+  transform: rotate(-0.6deg);
   z-index: 2;
   font-family: 'Comic Sans MS', 'Segoe Print', var(--dreams-serif);
   font-style: italic;
-  font-size: 0.86rem;
-  line-height: 1.3;
-  color: rgba(78, 68, 96, 0.78);
+  font-size: 0.84rem;
+  line-height: 1.25;
+  color: rgba(196, 184, 222, 0.82);
   text-align: right;
-  max-width: 46%;
   pointer-events: none;
 }
 .dreams-marginalia[data-band="kept"] { color: rgba(96, 74, 60, 0.82); }
@@ -1137,5 +1436,6 @@
 @media (prefers-reduced-motion: reduce) {
   .dreams-app::before,
   .dreams-app::after { animation: none; }
+  .dreams-plate.develop .dreams-read-text,
   .dreams-paper.develop .dreams-read-body { animation: none; }
 }
