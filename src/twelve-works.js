@@ -182,7 +182,21 @@
   var prevLit = null; // null until the first render — the baseline never fires
   var bound = false;
 
-  function persona(id) { return PERSONAS[id] || {}; }
+  // lane C: three of the twelve works (the transmission, the method, the
+  // link) belong to travellers who keep no app of their own, so the persona
+  // register has no entry under the work's id — and every name this module
+  // rendered for them was the string "undefined", spoken in the aria-labels
+  // and the tips. The works file names its own traveller; when the register
+  // is silent, that is the name the carving carries.
+  function persona(id) {
+    var w = WORK_BY_ID[id];
+    var p = PERSONAS[id] || {};
+    if (p.name || !w || !w.traveller) return p;
+    var merged = {};
+    for (var k in p) merged[k] = p[k];
+    merged.name = w.traveller;
+    return merged;
+  }
 
   function ariaFor(id, lit) {
     var w = WORK_BY_ID[id];

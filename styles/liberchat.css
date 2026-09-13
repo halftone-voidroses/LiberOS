@@ -284,3 +284,48 @@
 .liberchat-lamp, .liberchat-panel { z-index: 9400; }
 body:has(.hijack) .liberchat-lamp { z-index: 50; }
 body:has(.hijack) .liberchat-panel { z-index: 50; }
+
+/* ─── the bench: a line the room hands the lamp while you work ──────────
+   With the panel open the line reads as a reply (lc-bench). With the panel
+   shut the lamp takes it anyway — it pulses once, and the line whispers on
+   the glass beside it, so commentary is never invisible. */
+.lc-line.lc-bench {
+  border-color: rgba(212, 175, 55, 0.45);
+  background: rgba(44, 31, 14, 0.9);
+  color: #f0dfb4;
+}
+
+.liberchat-lamp.nudge {
+  animation: lc-nudge 1.5s ease-in-out 2;
+}
+@keyframes lc-nudge {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.2); }
+}
+
+.lc-whisper {
+  position: fixed;
+  z-index: 9400;
+  right: 48px;
+  bottom: 16px;
+  max-width: min(340px, calc(100vw - 96px));
+  padding: 8px 11px;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 14px;
+  line-height: 1.45;
+  color: #f0dfb4;
+  background: linear-gradient(180deg, rgba(22, 15, 9, 0.96), rgba(10, 7, 4, 0.97));
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  border-radius: 8px 8px 2px 8px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  transform: translateY(6px);
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.lc-whisper.show { opacity: 1; transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .lc-whisper { transition: none; }
+  .liberchat-lamp.nudge { animation: none; }
+}

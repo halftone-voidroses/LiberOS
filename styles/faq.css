@@ -196,6 +196,9 @@
     transform: none;
     width: 44px;
     height: 44px;
+    /* lane C: the lamp lives at right 14px in every room; docked here the
+       question mark sat under it and died. One lamp-width to the left. */
+    right: 52px;
   }
   .faq-toggle svg {
     width: 28px;

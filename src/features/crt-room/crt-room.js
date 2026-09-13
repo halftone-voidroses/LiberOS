@@ -4,7 +4,8 @@
 // decorative:
 //
 //   shelf    one ledger volume per satchel keep (s.satchel)
-//   pool     rises with every sea release and graveyard burial (s.sea, s.graveyard)
+//   pool     rises with every sea release and graveyard burial (s.sea,
+//            s.graveyard, and ROOM 06's finer seaTide memory — whichever is higher)
 //   candle   session arc — melts across the visit, relit on return
 //            (s.sessionStart; the same owner gamification.js writes, never here)
 //   board    one pinned card + red string per relation (s.relations)
@@ -83,7 +84,10 @@
   function poolLevel(s) {
     var sea = Array.isArray(s.sea) ? s.sea.length : 0;
     var grave = Array.isArray(s.graveyard) ? s.graveyard.length : 0;
-    return Math.min(1, (sea + grave) / 12);
+    // the sea's own tide clock keeps a finer memory (ROOM 06, state.seaTide);
+    // the pool mirrors whichever is higher so the two never disagree.
+    var tide = (s.seaTide && typeof s.seaTide.level === 'number') ? s.seaTide.level : 0;
+    return Math.min(1, Math.max((sea + grave) / 12, tide));
   }
 
   // candle: melts across the sitting, relit on return (sitting = gamification's)
@@ -237,6 +241,7 @@
 
     ui = {
       scene: scene, toggle: toggle,
+      windowSky: sky, boardEl: board, floorEl: floor,
       poolBody: pbody, shelfRows: shelfRows, bsvgPath: bsvg.querySelector('.crt-strings'),
       trophies: tro.children, candle: candle, stick: stick,
       fruit: svg.querySelector('.crt-wb-fruit'),
@@ -294,6 +299,68 @@
 
   // ── render: state → the room ───────────────────────────────────────────
 
+  // ── the weather's window (Rainy Day) ───────────────────────────────────
+  // Rainy Day falls in THIS room's window and nowhere else — not across the
+  // room, and not in a second window at the desk. It is in the house, and
+  // the house has one window (see liberdev/room-hooks.md: one object, never
+  // two).
+  //
+  // The drops are scattered here rather than in CSS, because a repeating
+  // gradient can only ever make a grid, and a grid reads as texture instead
+  // of weather. Each drop gets its own column, length, speed, opacity, tilt
+  // and phase, so no two frames repeat.
+  var rainDrops = 0;
+  function rnd(a, b) { return a + Math.random() * (b - a); }
+
+  function buildRain() {
+    if (!ui || !ui.windowSky) return;
+    if (rainDrops && ui.windowSky.querySelector('.crt-drop')) return;
+    var sky = ui.windowSky;
+    var frag = document.createDocumentFragment();
+    // fine drops the height of a pane, and a few heavier ones running the
+    // whole glass. Restrained on purpose: a window this size saturates fast,
+    // and saturated rain stops being weather and becomes a texture again.
+    // One column per drop, jittered inside its own slot: pure
+    // random lefts collide (two drops sharing a column read as one fat
+    // streak), and an even spread reads as a grid — a slot with jitter is
+    // neither. The slot index is global, so the heavy band cannot land on a
+    // column the fine band already took.
+    var bands = [
+      { n: 16, len: [9, 24], dur: [1.1, 2.4], op: [0.14, 0.3], tilt: [4, 10] },
+      { n: 5, len: [30, 66], dur: [0.9, 1.7], op: [0.18, 0.32], tilt: [5, 12] }
+    ];
+    var total = bands[0].n + bands[1].n, slot = 0;
+    for (var b = 0; b < bands.length; b++) {
+      var cfg = bands[b];
+      for (var i = 0; i < cfg.n; i++, slot++) {
+        var d = el('i', 'crt-drop');
+        d.style.left = (((slot + rnd(0.12, 0.88)) / total) * 104 - 2).toFixed(2) + '%';
+        d.style.setProperty('--len', rnd(cfg.len[0], cfg.len[1]).toFixed(0) + 'px');
+        d.style.setProperty('--dur', rnd(cfg.dur[0], cfg.dur[1]).toFixed(2) + 's');
+        // a negative delay scatters the drops mid-flight instead of starting
+        // them all at the ceiling on the same frame
+        d.style.setProperty('--delay', (-rnd(0, cfg.dur[1] * 1.4)).toFixed(2) + 's');
+        d.style.setProperty('--op', rnd(cfg.op[0], cfg.op[1]).toFixed(3));
+        d.style.setProperty('--tilt', rnd(cfg.tilt[0], cfg.tilt[1]).toFixed(2) + 'deg');
+        // where a drop hangs when motion is off: the weather still happens,
+        // it just holds still — rain suspended in the pane
+        d.style.setProperty('--y', rnd(4, 92).toFixed(1) + '%');
+        frag.appendChild(d);
+        rainDrops++;
+      }
+    }
+    sky.appendChild(frag);
+  }
+
+  function clearRain() {
+    if (!ui || !ui.windowSky) return;
+    var drops = ui.windowSky.querySelectorAll('.crt-drop');
+    for (var i = 0; i < drops.length; i++) {
+      if (drops[i].parentNode) drops[i].parentNode.removeChild(drops[i]);
+    }
+    rainDrops = 0;
+  }
+
   var lastSig = '';
 
   function renderAll() {
@@ -303,10 +370,22 @@
     var s = lib.get() || {};
 
     // signature: re-render only when a feed changed
+    var keptDreamCount = 0;
+    var sd = Array.isArray(s.dreams) ? s.dreams : [];
+    if (sd.length) {
+      var refs = {};
+      var sat = Array.isArray(s.satchel) ? s.satchel : [];
+      for (var si = 0; si < sat.length; si++) {
+        if (sat[si] && sat[si].kind === 'dream' && sat[si].ref) refs[sat[si].ref] = 1;
+      }
+      for (var di = 0; di < sd.length; di++) if (sd[di] && refs[sd[di].id]) keptDreamCount++;
+    }
     var sig = [
       (s.satchel || []).length, (s.sea || []).length, (s.graveyard || []).length,
       (s.relations || []).length, s.shadowOn ? 1 : 0, s.sessionStart || 0,
-      s.tree ? (s.tree.stageAt || 0) + '-' + (s.tree.grown || 0) + '-' + (s.tree.seen || 0) : 'x'
+      s.tree ? (s.tree.stageAt || 0) + '-' + (s.tree.grown || 0) + '-' + (s.tree.seen || 0) : 'x',
+      keptDreamCount,
+      (s.games || []).length
     ].join('|');
     var open = isInitedOpen();
     if (sig === lastSig && document.querySelector('.crt-room-scene[data-tier]')) {
@@ -326,6 +405,7 @@
     // Rainy Day — the same owner as the machine's shadow-on class
     var rainy = !!s.shadowOn;
     ui.scene.classList.toggle('crt-room-rainy', rainy);
+    if (rainy !== !!rainDrops) { if (rainy) buildRain(); else clearRain(); }
 
     // shelf: one volume per satchel keep — six to a board, four boards,
     // and the shelf fills the way a shelf fills: bottom board first
@@ -395,6 +475,59 @@
     ui.bsvgPath.setAttribute('d', d || 'M0 0');
     ui.bsvgPath.style.display = pins.length ? 'block' : 'none';
 
+    // dreams: the developed sheet on its own pin, lower-left of the board
+    var sheet = dreamSheet(s);
+    var oldSheet = ui.scene.querySelector('.crt-dream-sheet');
+    if (sheet) {
+      if (!oldSheet) {
+        oldSheet = el('div', 'crt-dream-sheet');
+        oldSheet.setAttribute('aria-hidden', 'true');
+        oldSheet.innerHTML = '<i class="crt-dream-pin"></i><span class="crt-dream-face"></span><span class="crt-dream-caption"></span>';
+        ui.boardEl.appendChild(oldSheet);
+      }
+      oldSheet.style.setProperty('--tilt', sheet.tilt + 'deg');
+      oldSheet.querySelector('.crt-dream-caption').textContent = sheet.title;
+    } else if (oldSheet) oldSheet.remove();
+
+    // games: twisted tickets on the board's corner pin
+    var tickets = ticketsOf(s);
+    var tWrap = ui.scene.querySelector('.crt-tickets');
+    if (tickets.length) {
+      if (!tWrap) {
+        tWrap = el('div', 'crt-tickets');
+        tWrap.setAttribute('aria-hidden', 'true');
+        ui.boardEl.appendChild(tWrap);
+      }
+      if (tWrap.children.length !== tickets.length) {
+        tWrap.innerHTML = '';
+        for (var ti = 0; ti < tickets.length; ti++) {
+          var tk = el('i', 'crt-ticket');
+          tk.innerHTML = '<b class="crt-ticket-glyph"></b><i class="crt-ticket-edge"></i>';
+          tWrap.appendChild(tk);
+        }
+      }
+      for (var tv = 0; tv < tickets.length; tv++) {
+        var tEl = tWrap.children[tv];
+        tEl.style.setProperty('--tilt', tickets[tv].tilt + 'deg');
+        tEl.style.setProperty('--z', String(tv));
+        tEl.title = tickets[tv].name;
+        tEl.querySelector('.crt-ticket-glyph').textContent = tickets[tv].glyph;
+      }
+    } else if (tWrap) tWrap.remove();
+
+    // toybox: the sand worked into the boards, fed by toybox keeps
+    var spill = spillOf(s);
+    var spillEl = ui.scene.querySelector('.crt-spill');
+    if (spill.keeps) {
+      if (!spillEl) {
+        spillEl = el('i', 'crt-spill');
+        spillEl.setAttribute('aria-hidden', 'true');
+        ui.floorEl.appendChild(spillEl);
+      }
+      // more sittings, more sand worked in — capped, it is a spill not a dune
+      spillEl.style.setProperty('--spill', String(Math.min(1, 0.28 + spill.keeps * 0.14)));
+    } else if (spillEl) spillEl.remove();
+
     // window box: the glasshouse tree, stage for stage with the garden
     var stage = treeStageOf(s);
     drawTree(stage);
@@ -457,6 +590,78 @@
     if (nowOn && isInitedOpen()) setOpen(false); // hidden mid-gaze closes
   }
 
+  // ── the hook register (covenant rule 4: THE ROOM REMEMBERS) ────────────
+  // What this room actually keeps, in the room's own materials. It is
+  // exported so the register in liberdev/room-hooks.md can be checked
+  // against the live page rather than trusted — a feature that forgets to
+  // leave something here should fail the gate, not go unnoticed.
+  //
+  // `reads` names the state keys the hook is fed by; each has exactly one
+  // owning feature, and this room never writes any of them.
+  // ── the three late hooks: dreams (a second sheet), toybox (the floor's
+  // spill), games (the midway's ticket). Covenant rule 4: every feature
+  // leaves something here, in the room's own material — see
+  // liberdev/room-hooks.md for each one's empty condition.
+
+  // dreams: a second sheet pinned on the corkboard, developed on arrival.
+  // The most recent dream KEPT TO THE BOOK shows as a small dusk polaroid:
+  // the fog the dream was written in has dried into paper. Kept-ness lives
+  // in the satchel (kind 'dream', ref = dream id) — that is the owner; the
+  // room reads both arrays and derives.
+  function dreamSheet(s) {
+    var dreams = Array.isArray(s.dreams) ? s.dreams : [];
+    var keptRefs = {};
+    var satchel = Array.isArray(s.satchel) ? s.satchel : [];
+    for (var i = 0; i < satchel.length; i++) {
+      if (satchel[i] && satchel[i].kind === 'dream' && satchel[i].ref) keptRefs[satchel[i].ref] = true;
+    }
+    var kept = dreams.filter(function (d) { return d && keptRefs[d.id]; });
+    if (!kept.length) return null;
+    var d = kept[kept.length - 1];
+    // a deterministic tilt from the id, so the same dream always hangs the
+    // same way — the pin was pushed in once, by a hand
+    var tilt = (parseInt(String(d.id || '').replace(/\D/g, '').slice(-2), 10) || 7) % 9 - 4;
+    return { id: d.id, title: d.title || 'an unnamed dream', tilt: tilt };
+  }
+
+  // toybox: the spill the floor never quite gets clean. The powder sim is a
+  // visit-scoped toy (deliberately not persisted — the tray empties when
+  // Pip turns it out), so what reaches the room is the EVIDENCE of play:
+  // sand ground into the boards beside the desk, in a patch whose size is
+  // fed by the toybox keeps (each keep is a sitting at the tray).
+  function spillOf(s) {
+    var keeps = (Array.isArray(s.games) ? s.games : []).filter(function (g) {
+      return g && g.kind === 'toybox';
+    }).length;
+    return { keeps: keeps };
+  }
+
+  // games: the midway's own prize — a paper ticket twisted on the board's
+  // corner pin, one per game artifact, up to five. The most recent booth's
+  // glyph is inked on the newest ticket.
+  function ticketsOf(s) {
+    var games = (Array.isArray(s.games) ? s.games : []).filter(function (g) {
+      return g && g.kind && g.kind !== 'toybox';
+    });
+    return games.slice(-5).map(function (g, i) {
+      return { glyph: g.glyph || '◈', name: g.name || 'the booth', tilt: ((i * 37) % 11) - 5 };
+    });
+  }
+
+  var HOOKS = [
+    { id: 'shelf', material: 'shelf', reads: ['satchel'], empty: 'one empty board, bottom shelf, no volumes' },
+    { id: 'pool', material: 'pool', reads: ['sea', 'seaTide', 'graveyard'], empty: 'damp stone, the waterline below the rim' },
+    { id: 'candle', material: 'candle', reads: ['sessionStart'], empty: 'a full fresh stick, unlit until the visit starts' },
+    { id: 'board', material: 'board', reads: ['relations', 'buddy'], empty: 'a bare cork, four empty pin holes' },
+    { id: 'trophies', material: 'trophies', reads: ['visited'], empty: 'no tin on the CRT\u2019s top' },
+    { id: 'window', material: 'window', reads: ['tree'], empty: 'an empty pot on wet newspaper' },
+    { id: 'weather', material: 'weather', reads: ['shadowOn'], empty: 'clear weather, the tube at its default bloom' },
+    { id: 'patina', material: 'patina', reads: ['visited'], empty: 'new dust, unworn floor, furniture as bought' },
+    { id: 'dream-sheet', material: 'board', reads: ['dreams', 'satchel'], empty: 'a second bare pin, no sheet — a dream kept to the book is what hangs one' },
+    { id: 'spill', material: 'floor', reads: ['games'], empty: 'swept boards — the tray has not been turned out here yet' },
+    { id: 'tickets', material: 'board', reads: ['games'], empty: 'no twisted tickets on the corner pin — the midway keeps what the barker keeps' }
+  ];
+
   // exported for settings.js and the acceptance script
   window.Liber = window.Liber || {};
   window.Liber.crtRoom = {
@@ -465,6 +670,8 @@
     isOpen: isInitedOpen,
     toggleSettings: settingsToggle,
     render: renderAll,
+    // covenant rule 4: the register, so it can be verified against
+    hooks: function () { return HOOKS.slice(); },
     facts: function () {
       var s = (st() && st().get()) || {};
       return {

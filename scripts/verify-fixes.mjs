@@ -83,7 +83,20 @@ const labels = await page.evaluate(() => ({
   discard: document.getElementById('trash-save-prompt-discard').textContent.trim(),
 }));
 check('confirm labels are bury it / not yet', labels.keep === 'bury it' && labels.discard === 'not yet', JSON.stringify(labels));
+// bury-all is a two-step interlock (arm, then confirm) — same "armed twice"
+// pattern as the settings wipe. The first click must only arm.
 await page.click('#trash-bury-all');
+await page.waitForTimeout(150);
+const armed = await page.evaluate(() => ({
+  armed: document.getElementById('trash-bury-all').classList.contains('armed'),
+  label: document.getElementById('trash-bury-all').textContent.trim(),
+  open: document.getElementById('trash-save-prompt').classList.contains('open'),
+}));
+check('bury-all arms before burying', armed.armed && !armed.open && /again to bury/.test(armed.label), JSON.stringify(armed));
+await page.click('#trash-bury-all');
+await page.waitForTimeout(200);
+const promptOpen = await page.evaluate(() => document.getElementById('trash-save-prompt').classList.contains('open'));
+check('bury-all opens the prompt on the second click', promptOpen);
 await page.click('#trash-save-prompt-keep');
 await page.waitForTimeout(200);
 const buried = await page.evaluate(() => ({

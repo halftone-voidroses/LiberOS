@@ -180,6 +180,8 @@
    halo falling on the plastic below, and a wax mound that builds in
    the recess under it as presence deepens (patina tiers). */
 .led {
+  /* furniture, never a hit target (see .monitor-base note) */
+  pointer-events: none;
   position: absolute;
   top: 24px;
   right: 28px;
@@ -233,6 +235,9 @@
 
 /* The "LIBER" plate — small metal-looking text on the lower bezel. */
 .liber-plate {
+  /* furniture, never a hit target: at 439px this plate rides over the
+     bottom strip of the screen and was eating the room's own buttons */
+  pointer-events: none;
   position: absolute;
   bottom: 14px;
   left: 50%;
@@ -251,6 +256,10 @@
 
 /* The base — a yellow/cream block under the monitor. */
 .monitor-base {
+  /* furniture, never a hit target: at 439px the scaled machine lets the
+     base ride over the bottom of the screen and it was eating the room's
+     own controls (sigil, divination, dreams, learn, garden) */
+  pointer-events: none;
   position: relative;
   width: 38%;
   height: 30px;
@@ -294,6 +303,8 @@
 /* Power button — small circular recess on the bottom-right of the
    bezel, decorative. */
 .power-button {
+  /* furniture, never a hit target (see .monitor-base note) */
+  pointer-events: none;
   position: absolute;
   bottom: 16px;
   right: 24px;
@@ -309,6 +320,8 @@
 
 /* A small recessed screw on the bottom-left of the bezel. */
 .screw {
+  /* furniture, never a hit target (see .monitor-base note) */
+  pointer-events: none;
   position: absolute;
   bottom: 16px;
   left: 24px;
@@ -336,6 +349,17 @@
 @media (prefers-reduced-motion: reduce) {
   .led { animation: none; opacity: 0.8; }
   .screen::after { animation: none; opacity: 0; }
+}
+
+/* lane C: on the small screens the machine fills more of the room. The
+   default 72vw hands rooms ~286×208 of glass at 439px — less than a
+   postcard — and fixed furniture piles up on it. 96vw keeps the same
+   proportions but gives every room a workable stage (the shell's half of
+   the 439px contract: the shell sizes the glass; the room survives on it). */
+@media (max-width: 600px) {
+  .machine {
+    width: min(96vw, calc((100dvh - 96px) * 4 / 3));
+  }
 }
 
 /* ============================================================================

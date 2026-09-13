@@ -119,6 +119,7 @@
     var parts = document.querySelectorAll('.sigil-part');
     for (var j = 0; j < parts.length; j++) parts[j].classList.remove('armed');
     if (wrap) wrap.classList.remove('armed');
+    benchMaterial('material_tool', { tool: t }, t.length);
   }
 
   function setInk(idx) {
@@ -132,6 +133,7 @@
     var name = document.getElementById('sigil-ink-name');
     if (name) name.textContent = ink.name.toLowerCase();
     if (cursor) cursor.style.color = ink.hex;
+    benchMaterial('material_ink', { ink: ink.name.toLowerCase() }, idx);
   }
 
   function buildPalette() {
@@ -360,12 +362,16 @@
       for (var i = 0; i < parts.length; i++) parts[i].classList.remove('armed');
       if (wrap) wrap.classList.remove('armed');
       if (window.Liber && window.Liber.sound) window.Liber.sound.play('thunk');
+      shedDust(3);
+      stillWatch();
       return;
     }
     if (activeTool === 'bucket') {
       pushUndo();
       floodFill(p.x, p.y, activeInk);
       if (window.Liber && window.Liber.sound) window.Liber.sound.play('thunk');
+      shedDust(3);
+      stillWatch();
       return;
     }
     if (activeTool === 'triangle' || activeTool === 'circle' || activeTool === 'spiral' || activeTool === 'square') {
@@ -377,6 +383,7 @@
     pushUndo();
     drawing = true;
     last = p;
+    stillWatch();
   }
 
   function move(e) {
@@ -387,6 +394,7 @@
     var p = pos(e);
     cursor.style.left = p.x + 'px';
     cursor.style.top = p.y + 'px';
+    stillWatch();
 
     if (!drawing || !ctx) return;
     if (shapeAnchor && shapeSnap) {
@@ -426,8 +434,11 @@
       shapeAnchor = null;
       shapeSnap = null;
     }
+    var drew = drawing;
     drawing = false;
     last = null;
+    if (drew) shedDust(2);
+    stillWatch();
   }
 
   function leave() {
@@ -439,6 +450,105 @@
     drawing = false;
     shapeAnchor = null;
     shapeSnap = null;
+    stillWatch();
+  }
+
+  // ── the bench · ROOM 01's four wired contexts ─────────────────────────
+  // While you work, the lamp comments: the typed intention, the material
+  // you change, a hand that has stopped moving, and the save. All four go
+  // through liberchat's bench surface, so every line lives in the persona
+  // register (data/personas.data.js) and none of it is prose in this file.
+  var benchArmed = false;     // no commentary before the room is live
+  var HESITATE_MS = 6000;
+  var MATERIAL_GAP_MS = 4200; // material picks come in bursts; one voice
+  var lastMaterialAt = 0;
+  var stillTimer = null;
+  var stillSpoken = false;
+
+  function lamp() { return window.LiberLiberchat || null; }
+
+  function benchSay(key, vars, seed) {
+    if (!benchArmed) return false;
+    var lc = lamp();
+    if (!lc || !lc.benchSay) return false;
+    return lc.benchSay(key, vars, seed);
+  }
+
+  function benchMaterial(key, vars, seed) {
+    var now = Date.now();
+    if (now - lastMaterialAt < MATERIAL_GAP_MS) return false;
+    var said = benchSay(key, vars, seed);
+    if (said) lastMaterialAt = now;
+    return said;
+  }
+
+  // a hand that stops moving over the stone gets one line — not a nag
+  function stillWatch() {
+    if (stillTimer) { clearTimeout(stillTimer); stillTimer = null; }
+    stillSpoken = false;
+    if (!benchArmed || !cursorVisible) return;
+    stillTimer = setTimeout(function () {
+      stillTimer = null;
+      if (stillSpoken || !cursorVisible || drawing) return;
+      stillSpoken = true;
+      benchSay('hesitation', null, (Date.now() / 1000) | 0);
+    }, HESITATE_MS);
+  }
+
+  function armIntentionBench() {
+    var input = document.querySelector('.sigil-input');
+    if (!input) return;
+    var timer = null;
+    var lastSaid = '';
+    function settle() {
+      var text = String(input.innerText == null ? '' : input.innerText).replace(/\s+/g, ' ').trim();
+      if (text.length < 3 || text === lastSaid) return;
+      lastSaid = text;
+      var clip = text.length > 58 ? text.slice(0, 55).replace(/\s+\S*$/, '') + '…' : text;
+      var seed = 0;
+      for (var i = 0; i < text.length; i++) seed = (seed * 31 + text.charCodeAt(i)) >>> 0;
+      benchSay('intention', { text: clip }, seed);
+    }
+    input.addEventListener('input', function () {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(settle, 1400);
+    });
+    input.addEventListener('blur', function () {
+      if (timer) { clearTimeout(timer); timer = null; }
+      settle();
+    });
+  }
+
+  // ── the dust tray ─────────────────────────────────────────────────────
+  // Every mark leaves grit. It gathers in the tray for the length of the
+  // sitting and is deliberately not persisted — the tray is swept when
+  // you leave the bench. `--grit` is the tray's own gauge: the room's CSS
+  // reads it for the baseline density, hover reveals the grains.
+  var DUST_MAX = 64;
+  var dustCount = 0;
+
+  function shedDust(n) {
+    var tray = document.querySelector('.sigil-dust');
+    if (!tray) return;
+    if (!tray.getAttribute('data-tray')) {
+      tray.setAttribute('data-tray', '1');
+      tray.setAttribute('aria-hidden', 'true');
+    }
+    for (var i = 0; i < n; i++) {
+      if (dustCount >= DUST_MAX) break;
+      var g = document.createElement('span');
+      g.className = 'sigil-dust-grain';
+      var a = Math.random() * Math.PI * 2;
+      var r = 16 + Math.random() * 44;
+      g.style.left = (50 + Math.cos(a) * r).toFixed(1) + '%';
+      g.style.top = (50 + Math.sin(a) * r * 0.6).toFixed(1) + '%';
+      g.style.setProperty('--grain', (0.6 + Math.random() * 1.4).toFixed(2));
+      g.style.setProperty('--tilt', (Math.random() * 180).toFixed(0) + 'deg');
+      tray.appendChild(g);
+      dustCount++;
+    }
+    tray.style.setProperty('--grit', (dustCount / DUST_MAX).toFixed(3));
+    tray.setAttribute('data-grains', String(dustCount));
   }
 
   var savePromptEl = null;
@@ -605,6 +715,7 @@ function loadGhost(bitmapDataUrl) {
             setStone(arr);
             signedUI();
             advanceStoneStage();
+            benchSay('save', null, 1);
             return;
           }
         }
@@ -630,6 +741,7 @@ function loadGhost(bitmapDataUrl) {
       } catch (e0) {}
       signedUI();
       advanceStoneStage();
+      benchSay('save', null, 1);
     }
   }
 
@@ -715,6 +827,7 @@ function loadGhost(bitmapDataUrl) {
             b.classList.add('armed');
             armedPart = b.getAttribute('data-part');
             if (wrap) wrap.classList.add('armed');
+            benchMaterial('material_part', { part: armedPart }, armedPart.length);
           }
         };
       })(partBtns[pi]));
@@ -773,6 +886,8 @@ function loadGhost(bitmapDataUrl) {
         ctx.fill();
       }
       if (window.Liber && window.Liber.sound) window.Liber.sound.play('thunk');
+      shedDust(3);
+      stillWatch();
     }
     if (wrap) {
       wrap.addEventListener('focus', kShow);
@@ -1012,6 +1127,11 @@ function loadGhost(bitmapDataUrl) {
       { id: 'sigil-save-prompt', close: closeSavePrompt }
     ] });
     if (window.LiberRoomShell.bindConfirmKey) window.LiberRoomShell.bindConfirmKey(['sigil-save-prompt']);
+
+    // the bench goes live only now: no commentary may fire off boot-time
+    // defaults (setInk(0), the initial brush) as though you had chosen them.
+    armIntentionBench();
+    benchArmed = true;
   });
 
   function describeWork() {

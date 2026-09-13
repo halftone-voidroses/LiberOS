@@ -6,6 +6,8 @@
 
 (function () {
   // Per-booth play modules — one file per attraction under booths/.
+  // (The thimble booth retired to the Glasshouse — see tree.js, which
+  // migrated its legacy visits. The midway is a promenade of active games.)
   var BOOTH_PLAY = {
     tipp: LiberBooths.tipp,
     wheel: LiberBooths.wheel,
@@ -14,8 +16,7 @@
     circles: LiberBooths.paint,
     sand: LiberBooths.sand,
     tidepool: LiberBooths.tide,
-    inkstorm: LiberBooths.storm,
-    thimble: LiberBooths.thimble
+    inkstorm: LiberBooths.storm
   };
   var boothCtx = null; // built once the shell vars resolve
   var grid = document.getElementById('games-grid');
@@ -31,10 +32,20 @@
     saveToDesktopAndSatchel: saveToDesktopAndSatchel,
     thumb: thumb, esc: esc, thunk: thunk, setView: setView
   });
-  var CAMERA_ORDER = ['mask', 'wheel', 'shield', 'circles', 'sand', 'tidepool', 'inkstorm', 'thimble', 'tipp'];
+  var CAMERA_ORDER = ['mask', 'wheel', 'shield', 'circles', 'sand', 'tidepool', 'inkstorm', 'tipp'];
 
+  // camera parity for the barker: opening a booth hushes him; stepping back
+  // out re-barks the centered booth only when the camera itself moved
   function setView(view) {
     if (app) app.setAttribute('data-view', view);
+    if (view !== 'facade') {
+      var voice = document.getElementById('games-bark');
+      if (voice) voice.classList.remove('speak');
+    } else {
+      var c = grid ? grid.querySelector('.games-booth[data-camera-position="center"]') : null;
+      if (c) lastBarkBooth = null; // re-arm: the walk is being looked at again
+      if (c) barkFor(c.getAttribute('data-game'));
+    }
   }
 
   function esc(s) {
@@ -65,10 +76,6 @@
       material: 'phosphor glass · sealed words',
       pitch: 'Entity404’s terminal. Glyphs rain; type the word to execute it. Missed words simply dissolve — no failing here. The storm slows when you struggle, and tells you so, kindly.',
       hint: '??? — static gathers where words are sealed.' },
-    { id: 'thimble', name: 'thimble garden', glyph: '❀', unlock: 'thimble',
-      material: 'stitched canvas · patient growth',
-      pitch: 'Ruby’s thimble pot. It grows while you are elsewhere in the OS — visit rooms, come back, find leaves. Harvest grants a petal for every paint box and a pressed flower for the book.',
-      hint: '??? — ruby watches patient gardeners.' },
     { id: 'tipp', name: 'the quiet floor', glyph: '❄', featured: true,
       material: 'cold water · four skills',
       pitch: 'The floor of the room, the floor of the wave. TIPP — temperature, intense exercise, paced breathing, paired relaxation — the distress-tolerance skills the hard-nights page keeps by the door. Walk them one at a time, rate what each did for you, keep the record for the next storm.',
@@ -98,12 +105,58 @@
 
   var current = null;
 
+  // ── the promenade camera (pitch: The Full Promenade) ──────────────────
+  // Whimsy barks ONLY when his booth is camera-centered — the pitch's rule:
+  // the voice is tied to the center of the walk, not to the room. The line
+  // lives in the barker's voice-box (games-side, one per booth), arrives
+  // through the lamp persona's register, and never repeats until the camera
+  // comes back around.
+  var BARKS = {
+    mask: 'two truths, ONE FACE! paint the inside on the left, the outside on the right. nobody has to know which is which. except you.',
+    wheel: 'the wheel knows TWELVE feelings and your arm knows the truth. three darts, three honest answers, one pretty keep!',
+    shield: 'four walls, FOUR QUARTERS! body, heart, clock, mind. colour them how strong they really are — the barker will not look. much.',
+    circles: 'an honest SEATING CHART! closest, friends, distant — write them where they ARE, not where they wish they were!',
+    sand: 'LIBER POWDER! pour, splash, strike — it falls and flows like the real stuff. build a world, keep the picture!',
+    tidepool: 'vanir’s pool, down in the DEEP. high tide your feelings float. low tide they wait. the pool decides the pacing, friend.',
+    inkstorm: 'glyphs RAIN at entity404’s terminal. type the word to execute it. misses dissolve here — no failing, only weather!',
+    tipp: 'the QUIET FLOOR. no barking past this sign. tipp sits with you and the wave cools. that is the whole attraction. it is enough.'
+  };
+  var lastBarkBooth = null;
+
+  function barkFor(boothId) {
+    if (!boothId || boothId === lastBarkBooth) return;
+    lastBarkBooth = boothId;
+    var line = BARKS[boothId];
+    if (!line) return;
+    var voice = document.getElementById('games-bark');
+    if (!voice) {
+      voice = document.createElement('div');
+      voice.id = 'games-bark';
+      voice.className = 'games-bark';
+      voice.setAttribute('role', 'status');
+      voice.setAttribute('aria-live', 'polite');
+      var side = document.querySelector('.games-side');
+      (side || document.body).appendChild(voice);
+    }
+    // re-trigger the arrival beat even when the line is unchanged
+    voice.classList.remove('speak');
+    void voice.offsetWidth;
+    voice.textContent = line;
+    voice.classList.add('speak');
+    if (window.Liber && window.Liber.sound) { try { window.Liber.sound.play('tink'); } catch (e) {} }
+  }
+
   function applyCamera() {
     if (!grid) return;
     grid.setAttribute('data-camera-index', String(cameraIndex));
+    // the parallax driver: the three ground layers slide against the walk.
+    // Set on .games-app so every layer inherits it (the near dirt lives on
+    // .games-shell, which is not inside .games-side).
+    if (app) app.style.setProperty('--walk', String(cameraIndex));
     if (panLeft) panLeft.disabled = cameraIndex === 0;
     if (panRight) panRight.disabled = cameraIndex === CAMERA_ORDER.length - 1;
     var buttons = grid.querySelectorAll('.games-booth');
+    var centered = null;
     for (var i = 0; i < buttons.length; i++) {
       var boothIndex = CAMERA_ORDER.indexOf(buttons[i].getAttribute('data-game'));
       var delta = boothIndex - cameraIndex;
@@ -111,7 +164,10 @@
       buttons[i].setAttribute('data-camera-position', position);
       buttons[i].setAttribute('aria-hidden', position === 'off' ? 'true' : 'false');
       buttons[i].tabIndex = position === 'off' ? -1 : 0;
+      if (position === 'center') centered = buttons[i].getAttribute('data-game');
     }
+    // the walk has a voice: the barker lines arrive with the booth he fronts
+    if (centered && app && app.getAttribute('data-view') === 'facade') barkFor(centered);
   }
 
   function moveCamera(amount) {
@@ -336,10 +392,8 @@
   // words dissolve — zero fail state. The storm slows when you struggle
   // and tells you so, kindly.
 
-  // ── thimble garden: Ruby's idle game ────────────────────────────────
-  // A thimble pot grows while you are elsewhere: one leaf per three rooms
-  // visited, capped at five. Harvest presses a flower and grants a petal
-  // to every paint box. Zero interaction required — pure ambient reward.
+  // (The thimble garden section retired with the booth: the pot is the
+  // Glasshouse tree now, and its legacy visits live in garden/tree.js.)
 
   // ── first-visit demo: the tutorial passes through games on its way to
   // the bind. Open the wheel, throw one dart through the Cursor's hands,
@@ -347,6 +401,17 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     buildPicker();
+
+    // Deep link: #<booth id> pans the midway to that booth and opens it.
+    // The Learn shelf's TIPP card cross-links here as #tipp.
+    var deepId = (location.hash || '').replace(/^#/, '').toLowerCase();
+    var deepGame = deepId ? byId(deepId) : null;
+    if (deepGame) {
+      var deepIdx = CAMERA_ORDER.indexOf(deepGame.id);
+      if (deepIdx >= 0) cameraIndex = deepIdx;
+      selectGame(deepGame);
+    }
+
     if (panLeft) panLeft.addEventListener('click', function () { moveCamera(-1); });
     if (panRight) panRight.addEventListener('click', function () { moveCamera(1); });
     Array.prototype.forEach.call(document.querySelectorAll('.games-gate-path'), function (el) {

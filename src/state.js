@@ -24,14 +24,17 @@
     learn: [],               // promoted lessons
     abstract: [],            // abstract creations
     sea: [],                 // sea artifacts
+    seaTide: { releases: 0, level: 0 },    // ROOM 06 brass tide clock: the waterline memory across visits
     graveyard: [],          // buried artifacts, awaiting the dig
     satchel: [],            // satchel items
     methodology: [],        // methodology artifacts
-    council: [],            // council artifacts
-    garden: [],             // ruby's garden — planted seeds / flowers in bloom
+    council: [],            // council artifacts    garden: [],              // ruby's garden — planted seeds / flowers in bloom
+    tree: null,              // ruby's glasshouse tree — one plant, grown between visits (garden/tree.js)
+                             //   read-only here: the room and the window box mirror it, never write it
     dreams: [],             // recorded dreams, kept for interpretation
     daily: null,            // the day's small works { date: 'YYYY-MM-DD', done: [ids] }
     theme: 'corrupted',      // current skin of the machine
+    crt: { intensity: 0.4, off: false },   // the tube's bloom; per-room material reads it (see liberdev/crt-decision.md)
     shadowUnlocked: false,   // has the user entered the extc password
     shadowOn: false,         // is shadow overdrive active
     sounds: true,            // synthesized UI sounds (WS4, src/sound.js)

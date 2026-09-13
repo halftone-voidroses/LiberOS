@@ -191,7 +191,80 @@ window.LIBER_DATA.personas = {
       'sealed. the wax copies what the stone keeps. two memories are safer than one.',
       'into the wax it goes. riason will index it. i will remember it anyway.'
     ],
-    unlock: 'the stone cuts deeper for a known hand. take the long chisel.'
+    unlock: 'the stone cuts deeper for a known hand. take the long chisel.',
+    // ROOM 01 bench register — the four wired contexts sounded while you
+    // work (redesign pitch: intention text, material choice, hesitation,
+    // save). Flat: every key is a list, picked deterministically. The
+    // `intentionWhen` map routes an intention line to a sharper register
+    // when the words name something. {text} is the reader's own words.
+    bench: {
+      intention: [
+        '“{text}” — written down. the hand has heard it now.',
+        '“{text}”. the mouth said it; the chisel says the rest.',
+        'the stone took “{text}” without blinking. it has held heavier.',
+        'one line: “{text}”. begin where it stings.',
+        '“{text}”. keep it to one line and it stays carvable.'
+      ],
+      intentionWhen: [
+        { k: ['heavy', 'weight', 'weigh', 'carry', 'burden', 'load', 'pressure'], key: 'intention_weight' },
+        { k: ['afraid', 'fear', 'scared', 'anxious', 'anxiety', 'panic', 'dread'], key: 'intention_fear' },
+        { k: ['angry', 'anger', 'rage', 'furious', 'hate', 'resent'], key: 'intention_anger' },
+        { k: ['tired', 'exhausted', 'weary', 'sleep', 'insomnia', 'burnt', 'burned', 'numb'], key: 'intention_tired' },
+        { k: ['sorry', 'guilt', 'guilty', 'shame', 'ashamed', 'fault', 'apolog'], key: 'intention_shame' }
+      ],
+      intention_weight: [
+        'carry what is heavy — that is a lot to ask of one stone. good. it can hold it.',
+        'heavy is a unit the stone understands. it was pressed under a mountain once.',
+        'set the weight on the bench first. then carve its outline, not its mass.'
+      ],
+      intention_fear: [
+        'fear carves deep and crooked. both are useful. depth is not neatness.',
+        'afraid is not a reason to wait. it is the material. chip it.',
+        'the hand shakes over fear. the stone records the shake faithfully.'
+      ],
+      intention_anger: [
+        'anger cuts fast and shallow. shallow is a shape. keep it.',
+        'rage is a chisel that does not ask. hold it in the hand, not the arm.',
+        'put the heat into the copper. that is what the copper is for.'
+      ],
+      intention_tired: [
+        'tired hands carve small marks. small marks are still marks.',
+        'exhaustion makes the line thin. thin is honest. do not thicken it.',
+        'if tonight is one cut, then one cut is the whole of tonight.'
+      ],
+      intention_shame: [
+        'guilt is a well-worn groove. you are not the first hand to reach for it.',
+        'shame carves inward. turn the stone — there is an outside to this.',
+        'the apology you are carrying belongs somewhere. the stone will wait for the name.'
+      ],
+      material_ink: [
+        'this ink marks where the stone has been, not where it was told to go.',
+        'a change of ink changes the temperature of the whole face.',
+        'the copper inks cool slow. watch the vein settle.',
+        'name the colour to yourself. the hand is already agreeing.'
+      ],
+      material_tool: [
+        'a different instrument asks a different question of the same surface.',
+        'change the tool and the stone answers in a different accent.',
+        'the instrument does not decide. it narrows.'
+      ],
+      material_part: [
+        'a part placed by hand is a part remembered. keep placing them.',
+        'that shape has been carved before. not on this stone.',
+        'placing is a way of asking the stone to finish the sentence.'
+      ],
+      hesitation: [
+        'the chisel is still. the stone does not mind. i do, a little.',
+        'you have stopped moving. is the line wrong, or right and frightening?',
+        'hesitation is a shape too. carve the hesitation if the line will not come.',
+        'six seconds is long enough for the stone to have noticed. take longer if you need.'
+      ],
+      save: [
+        'the cut is made. the shape is the testimony now, not the intention.',
+        'saved. what the hand confessed, the stone keeps.',
+        'closing the door with the stone inside it. that is the whole ceremony.'
+      ]
+    }
   };
 
   P.satchel.chat = {

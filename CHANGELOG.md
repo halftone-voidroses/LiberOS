@@ -1,6 +1,37 @@
 # LiberOS changelog
 
 ## Unreleased
+### Three lanes, one tree (the pitch's remaining systems, built side by side)
+- Room hooks close the contract: a kept dream hangs its developed sheet on
+  the corkboard (reads the satchel, the true keep), the midway leaves its
+  paper tickets on the board's corner pin (one per game artifact, newest
+  booth's glyph inked on top), and Pip's sand spill grounds into the
+  floorboards beside the desk (fed by toybox keeps). The `floor` material
+  is claimed — `liberdev/room-hooks.md` and its verifier hold the rows.
+- The Full Promenade: the camera walk gains a world — three-layer parallax
+  (far sky, mid booths, near ground), sagging string lights, a visitor
+  shadow, and per-booth barkers that speak only when a booth is centered,
+  in Whimsy's own voice, motion-gated. The thimble booth retires to the
+  Glasshouse (legacy migration and affinity unlock intact).
+- Dreams presentation (SYSTEM 05): fog-to-dusk keyed to attention, the
+  develop-on-arrival beat, association threads drawn from the real
+  quoted associations (and taken down when released — the thread is the
+  association), and marginalia in Inquiry's second hand on the polaroid's
+  back, banded by the real keep state.
+- SYSTEM 04, the evolving constellation: procedural icon renders cut from
+  real state — keep-marks, relation orbits, patina tiers, live morphs and
+  ghost lines — plus the Learn workbook desk and the Satchel ledger chrome.
+- Rainy Day's room material: plaster damp, floor tone, furniture cold,
+  all inside the CRT room behind the glass, never a desk-side copy.
+- The 439px contract passes end to end (94 checks): the midway's gate
+  boards compact to the tent's top rope so the pans keep the floor, the
+  titlebar name clears the pills, every room's exit is a full 44px
+  target, the learn tour holds the floor while it speaks, and the boot
+  warning's corner button steps out of its own letter's way.
+- The covenant gains THE DRAWN PROP: weight tiers, two radius families,
+  named methods, true baselines, contact shadows, two named lights, use
+  not damage, detail budgets, and the maker's hand on every label.
+
 ### The room behind the CRT (SYSTEM 02 contract, built)
 - The physical room the CRT sits in, reachable from a `look behind`
   affordance on the desktop. The screen shows the OS; the room behind it

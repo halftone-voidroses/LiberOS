@@ -74,6 +74,132 @@
     return gy.kind + (nm ? ' — ' + nm : '');
   }
 
+  // ── the plots — graves that weather and sprout (Stage 2e) ────────────
+  // Weathering and sprouting are keyed to the patina tier shadow.js owns
+  // (visits + artifacts), read straight off .machine so the yard can never
+  // disagree with the rest of the machine by recomputing the math here.
+  function patinaTier() {
+    var m = document.querySelector('.machine');
+    if (!m) return 0;
+    for (var i = 3; i >= 1; i--) if (m.classList.contains('patina-' + i)) return i;
+    return 0;
+  }
+
+  function ageBucket(ts) {
+    if (!ts) return 0;
+    var d = Date.now() - ts;
+    if (d > 7 * 864e5) return 2;
+    if (d > 864e5) return 1;
+    return 0;
+  }
+
+  function agoLabel(ts) {
+    if (!ts) return 'recently';
+    var d = Date.now() - ts, day = 864e5;
+    if (d < 36e5) return 'just now';
+    if (d < day) return Math.max(1, Math.round(d / 36e5)) + 'h ago';
+    if (d < 30 * day) return Math.max(1, Math.round(d / day)) + 'd ago';
+    return Math.max(1, Math.round(d / (30 * day))) + 'mo ago';
+  }
+
+  function kindWord(kind) {
+    if (kind === 'sigils') return 'a cast buddy';
+    if (kind === 'buddy') return 'one you carried';
+    if (kind === 'tour') return 'a whole tour';
+    if (kind === 'relations') return 'a bound knot';
+    return kind || 'something';
+  }
+
+  function cardDefault() {
+    var card = document.getElementById('trash-grave-card');
+    if (card) card.textContent = 'hover a plot — every grave reads.';
+  }
+
+  function readGrave(idx) {
+    var card = document.getElementById('trash-grave-card');
+    if (!card || !st()) return;
+    var gy = (st().get().graveyard || [])[idx];
+    if (!gy) { cardDefault(); return; }
+    var name = document.createElement('b');
+    name.className = 'trash-grave-name';
+    name.textContent = labelFor(gy);
+    var meta = document.createElement('span');
+    meta.className = 'trash-grave-meta';
+    meta.textContent = kindWord(gy.kind) + ' · buried ' + agoLabel(gy.buriedAt);
+    card.innerHTML = '';
+    card.appendChild(name);
+    card.appendChild(meta);
+  }
+
+  function renderPlots() {
+    var bed = document.getElementById('trash-plots');
+    if (!bed || !st()) return;
+    var graveyard = st().get().graveyard || [];
+    bed.innerHTML = '';
+    bed.setAttribute('data-patina', String(patinaTier()));
+    if (!graveyard.length) {
+      var empty = document.createElement('div');
+      empty.className = 'trash-plots-empty';
+      empty.textContent = 'no plots turned yet — bury something and it takes root.';
+      bed.appendChild(empty);
+      cardDefault();
+      return;
+    }
+    for (var i = 0; i < graveyard.length; i++) {
+      (function (idx) {
+        var gy = graveyard[idx];
+        var plot = document.createElement('button');
+        plot.type = 'button';
+        plot.className = 'trash-plot';
+        plot.setAttribute('data-index', String(idx));
+        plot.setAttribute('data-kind', gy.kind || 'other');
+        plot.setAttribute('data-age', String(ageBucket(gy.buriedAt)));
+        plot.setAttribute('aria-label', labelFor(gy) + ' — ' + kindWord(gy.kind) + ', buried ' + agoLabel(gy.buriedAt));
+        var mark = document.createElement('i'); mark.className = 'trash-plot-mark'; mark.setAttribute('aria-hidden', 'true');
+        var sprout = document.createElement('i'); sprout.className = 'trash-plot-sprout'; sprout.setAttribute('aria-hidden', 'true');
+        var mound = document.createElement('i'); mound.className = 'trash-plot-mound'; mound.setAttribute('aria-hidden', 'true');
+        plot.appendChild(mark);
+        plot.appendChild(sprout);
+        plot.appendChild(mound);
+        plot.addEventListener('mouseenter', function () { readGrave(idx); });
+        plot.addEventListener('focus', function () { readGrave(idx); });
+        plot.addEventListener('mouseleave', cardDefault);
+        plot.addEventListener('blur', cardDefault);
+        // a grave is where its dig starts: the click goes to that row's reason.
+        plot.addEventListener('click', function () { focusRow(idx); });
+        bed.appendChild(plot);
+      })(i);
+    }
+  }
+
+  function focusRow(idx) {
+    var row = document.querySelector('.trash-dig-row[data-index="' + idx + '"]');
+    if (!row) return;
+    var why = row.querySelector('.trash-why');
+    if (why) { why.focus(); if (why.scrollIntoView) why.scrollIntoView({ block: 'nearest' }); }
+    row.classList.add('trash-dig-row-active');
+    setTimeout(function () { row.classList.remove('trash-dig-row-active'); }, 1200);
+  }
+
+  // The reason-marker: re-adding lifts the why out of the grave and lets it
+  // settle as the satellite that becomes the relation edge. Purely visual —
+  // the relation itself is bound synchronously, so nothing waits on motion.
+  function markReasonFlight(idx, why) {
+    var app = document.querySelector('.trash-app');
+    var plot = document.querySelector('.trash-plot[data-index="' + idx + '"]');
+    if (!app || !plot) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var pr = plot.getBoundingClientRect(), ar = app.getBoundingClientRect();
+    var fly = document.createElement('i');
+    fly.className = 'trash-reason-flight';
+    fly.setAttribute('aria-hidden', 'true');
+    fly.textContent = why.length > 30 ? why.slice(0, 29) + '…' : why;
+    fly.style.left = Math.round(pr.left - ar.left + pr.width / 2) + 'px';
+    fly.style.top = Math.round(pr.top - ar.top + pr.height / 2) + 'px';
+    app.appendChild(fly);
+    setTimeout(function () { if (fly.parentNode) fly.parentNode.removeChild(fly); }, 1500);
+  }
+
   function readdToState(gy) {
     var s = st().get();
     if (gy.kind === 'sigils') {
@@ -109,6 +235,7 @@
         var gy = graveyard[idx];
         var row = document.createElement('div');
         row.className = 'trash-dig-row';
+        row.setAttribute('data-index', String(idx));
         var label = document.createElement('span');
         label.className = 'trash-dig-label';
         label.textContent = labelFor(gy);
@@ -149,6 +276,7 @@
     var cur = st().get().graveyard || [];
     if (idx >= cur.length) return;
     var gy = cur[idx];
+    markReasonFlight(idx, why);
     readdToState(gy);
     st().set({ graveyard: cur.filter(function (_, n) { return n !== idx; }) });
     if (gy.kind !== 'tour' && gy.entry && gy.entry.id) {
@@ -170,6 +298,16 @@
   // again to open the soil. it times out back to safe. per-item whys
   // are never bypassed — each buried thing still needs its own reason
   // to return (renderDigList enforces one why per row).
+  // Confirmations slow: while it rains, the interlock waits longer before
+  // it takes your silence as an answer. src/rainy.js owns the multiplier;
+  // the room just asks. The helper is absent on non-desktop pages.
+  function paceMs(base) {
+    if (window.Liber && window.Liber.rainy && window.Liber.rainy.slowConfirmMs) {
+      return window.Liber.rainy.slowConfirmMs(base);
+    }
+    return base;
+  }
+
   var buryArmed = false, buryTimer = null;
   function disarmBury() {
     buryArmed = false;
@@ -182,7 +320,7 @@
     var b = document.getElementById('trash-bury-all');
     if (b) { b.classList.add('armed'); b.textContent = 'bury everything — again to bury'; b.setAttribute('aria-pressed', 'true'); }
     if (buryTimer) clearTimeout(buryTimer);
-    buryTimer = setTimeout(disarmBury, 6000);
+    buryTimer = setTimeout(disarmBury, paceMs(6000));
   }
   function openBuryPrompt() {
     var prompt = document.getElementById('trash-save-prompt');
@@ -271,8 +409,11 @@
       prompt.setAttribute('inert', '');
     }
 
+    cardDefault();
     renderDigList();
+    renderPlots();
     if (st()) st().on('change', renderDigList);
+    if (st()) st().on('change', renderPlots);
 
     var helpBtn = document.getElementById('trash-help');
     var raison = document.getElementById('trash-raison');

@@ -94,9 +94,9 @@
 .garden-help { right: 50px; }
 .garden-exit { right: 12px; }
 .garden-help, .garden-exit {
-  width: 40px;
-  height: 40px;
-  line-height: 38px;
+  width: 44px;
+  height: 44px;
+  line-height: 42px;
   text-align: center;
   font-size: 1.15rem;
   top: 50%;
@@ -952,3 +952,25 @@
 .garden-app ::-webkit-scrollbar-thumb, .garden-app::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #d88a4a 0%, #33200e 100%); border-radius: 6px; border: 2px solid rgba(0, 0, 0, 0.45); }
 .garden-app ::-webkit-scrollbar-thumb:hover { filter: brightness(1.25); }
 .garden-app, .garden-app * { scrollbar-width: thin; scrollbar-color: #d88a4a rgba(0, 0, 0, 0.35); }
+
+/* Rainy Day (s.shadowOn) - the glasshouse's own weather.
+   Watered, not merely darkened: the canvas goes to wet slate, the graph
+   paper to rain-lit white, the terracotta cools, and the sage greens come
+   up because that is what rain does. A real palette shift that reads from
+   the room's own tokens, never an opacity wash. */
+.machine.shadow-on .garden-app {
+  --garden-bg: #101820;
+  --garden-bg-2: #17222c;
+  --garden-cream: #dfe8ee;
+  --garden-cream-dim: #9aacba;
+  --garden-ink: #161d24;
+  --garden-terracotta: #8a6f7a;
+  --garden-terracotta-deep: #5e4a56;
+  --garden-sage: #6b8a7a;
+  --garden-plum: #5a4a66;
+  --garden-gold: #a8b8a0;
+  --garden-teal: #2a5a66;
+  --garden-thread: rgba(138, 111, 122, 0.55);
+  --garden-thread-faint: rgba(138, 111, 122, 0.28);
+  --garden-paper: #e6ecf0;
+}

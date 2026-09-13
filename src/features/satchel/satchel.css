@@ -582,9 +582,9 @@
   top: 50%;
   bottom: auto;
   transform: translateY(-50%);
-  width: 40px;
-  height: 40px;
-  line-height: 38px;
+  width: 44px;
+  height: 44px;
+  line-height: 42px;
   text-align: center;
   font-size: 1.15rem;
   filter: brightness(1.4);
@@ -796,3 +796,32 @@
   }
   .satchel-tools { right: 12px; }
 }
+
+/* Rainy Day (s.shadowOn) - the satchel's own weather.
+   Rain on the leather: the oiled brown goes to a cold blue-black hide and
+   the drawer light goes dim and even. A real palette shift, not an opacity
+   wash (the dimming lives in styles/shadow.css). */
+.machine.shadow-on .satchel-app {
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(58, 82, 108, 0.3) 0%, rgba(0, 0, 0, 0) 60%),
+    linear-gradient(180deg, #141c26 0%, #0a0e14 100%);
+}
+
+/* ── lane B: the unread tally on the spine — the ribbons in the
+   drawers, counted on the shelf. Sits under the stamped tally number
+   in the scribe's graphite hand; hides itself when nothing is unread. */
+
+.satchel-spine::after {
+  content: attr(data-unread);
+  display: block;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: 'Segoe Script', 'Bradley Hand', 'Comic Sans MS', cursive, serif;
+  font-size: 0.72rem;
+  color: #d8b890;
+  opacity: 0.75;
+  margin-top: 4px;
+  min-height: 1em;
+}
+
+.satchel-spine[data-unread="0"]::after { content: none; }

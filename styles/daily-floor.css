@@ -81,3 +81,18 @@
 @media (max-height: 720px) {
   .daily-floor { top: 96px; width: 208px; }
 }
+
+/* lane C: co-layout on narrow screens — the day's list takes the top-right
+   corner, notes the top-left. The cog owns the right edge below it, so the
+   list keeps to its one-row contract here (the head's own words: do one);
+   the rest of the list is a scroll away on any wider screen. */
+@media (max-width: 600px) {
+  .daily-floor {
+    top: 4px;
+    right: 8px;
+    left: auto;
+    width: 45%;
+  }
+  .daily-floor-row:nth-of-type(n+2),
+  .daily-floor-foot { display: none; }
+}

@@ -205,11 +205,22 @@
     readTextEl.textContent = d.text || '';
     readBodyEl.innerHTML = interpret(d.text);
     renderAssoc();
+    renderMarginalia(d);
+    drawAssocThreads();
     syncKeepLabel(d.id);
     syncPlantLabel(d.id);
     deskEl.hidden = true;
     readingEl.hidden = false;
     readingEl.scrollTop = 0;
+    // develop-on-arrival (pitch: Dreams): the sheet has been in the fix bath
+    // since it was written — the reading develops it now, once, then the
+    // paper holds still. Reduced motion gets the developed sheet at once.
+    var paperEl = readBodyEl.closest('.dreams-paper');
+    if (paperEl) {
+      paperEl.classList.remove('develop');
+      void paperEl.offsetWidth;
+      paperEl.classList.add('develop');
+    }
     // the reading is the point — land the interpretation in view, the
     // dream text recap stays one scroll up
     var paper = readBodyEl.closest('.dreams-paper');
@@ -281,6 +292,82 @@
     if (idx < 0 || idx >= list.length) return;
     list.splice(idx, 1);
     state().updateArtifact('dreams', currentId, { associations: list });
+  }
+
+  // ── association threads (pitch: Dreams) ───────────────────────────────
+  // Each association is pinned to the words it came from: a red thread runs
+  // from the quoted words in the reading margin to the association card.
+  // Pure SVG in the paper's margin, derived from the real associations —
+  // nothing decorative, and gone when the association is released.
+  function drawAssocThreads() {
+    if (!readBodyEl) return;
+    var paperEl = readBodyEl.closest('.dreams-paper');
+    if (!paperEl) return;
+    var old = paperEl.querySelector('.dreams-threads');
+    if (old) old.remove();
+    var d = currentId ? findDream(currentId) : null;
+    var list = (d && d.associations) || [];
+    var quoted = list.filter(function (a) { return a && a.quote; });
+    if (!quoted.length) return;
+    var NS = 'http://www.w3.org/2000/svg';
+    var svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('class', 'dreams-threads');
+    svg.setAttribute('aria-hidden', 'true');
+    var w = paperEl.clientWidth || 300, h = paperEl.scrollHeight || 400;
+    svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+    svg.setAttribute('preserveAspectRatio', 'none');
+    var markers = paperEl.querySelectorAll('.dreams-fn');
+    var anchor = markers.length ? markers[markers.length - 1] : readTextEl;
+    if (!anchor) return;
+    var ar = anchor.getBoundingClientRect();
+    var pr = paperEl.getBoundingClientRect();
+    var ax = ar.left - pr.left + 4, ay = ar.top - pr.top + ar.height / 2;
+    var cards = assocListEl ? assocListEl.querySelectorAll('.dreams-assoc-item') : [];
+    var qi = 0;
+    for (var i = 0; i < list.length; i++) {
+      if (!list[i] || !list[i].quote || qi >= cards.length) continue;
+      var cr = cards[qi].getBoundingClientRect();
+      qi++;
+      var by = cr.top - pr.top + 10;
+      var p = document.createElementNS(NS, 'path');
+      p.setAttribute('d', 'M' + ax.toFixed(1) + ' ' + ay.toFixed(1)
+        + ' C' + (ax - 26).toFixed(1) + ' ' + (ay + 24).toFixed(1)
+        + ', ' + (ax - 20).toFixed(1) + ' ' + (by - 18).toFixed(1)
+        + ', ' + 8 + ' ' + (by + 4).toFixed(1));
+      p.setAttribute('class', 'dreams-thread');
+      svg.appendChild(p);
+    }
+    paperEl.appendChild(svg);
+  }
+
+  // ── marginalia in a second hand (pitch: Dreams) ───────────────────────
+  // The reading's polaroid has a back. Inquiry reads the dream once and
+  // leaves her note there — derived from the real reading state, never a
+  // random flourish.
+  var MARGINS = {
+    unread: ['not yet read. the paper still holds its fog.', 'the bath is ready when you are.'],
+    analyzed: ['read once. the fog held more than the words did.', 'this one gave up its reading slowly. keep it near.'],
+    kept: ['kept in the book. the fog has dried into paper.', 'it survived the bath. they are not all so lucky.'],
+    planted: ['planted as a seed. what the garden grows from it is not up to me.']
+  };
+  function renderMarginalia(d) {
+    var back = document.getElementById('dreams-marginalia');
+    if (!back && readingEl) {
+      back = document.createElement('div');
+      back.id = 'dreams-marginalia';
+      back.className = 'dreams-marginalia';
+      back.setAttribute('aria-hidden', 'true');
+      var paper2 = readBodyEl ? readBodyEl.closest('.dreams-paper') : null;
+      if (paper2) paper2.appendChild(back);
+    }
+    if (!back) return;
+    var band = isPlanted(d.id) ? 'planted' : (isKept(d.id) ? 'kept' : (d.analyzed ? 'analyzed' : 'unread'));
+    var arr = MARGINS[band] || MARGINS.analyzed;
+    // deterministic hand: same dream, same note — no noise, a chosen line
+    var seed = 0, idStr = String(d.id || '');
+    for (var i = 0; i < idStr.length; i++) seed = (seed * 31 + idStr.charCodeAt(i)) >>> 0;
+    back.textContent = '— ' + arr[seed % arr.length];
+    back.setAttribute('data-band', band);
   }
 
   // ── recording — the ledger holds the dream; the book gets it later ────
@@ -584,7 +671,7 @@
       renderLedger();
       if (currentId) {
         if (!findDream(currentId)) closeReading();
-        else { renderAssoc(); syncKeepLabel(currentId); syncPlantLabel(currentId); }
+        else { renderAssoc(); syncKeepLabel(currentId); syncPlantLabel(currentId); drawAssocThreads(); }
       }
     });
   });

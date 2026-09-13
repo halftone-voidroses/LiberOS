@@ -30,7 +30,8 @@ const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } })
 const page = await ctx.newPage()
 const errors = []
 function sassert(cond, msg) { if (!cond) { errors.push('assert: ' + msg); console.log('Assertion failed: ' + msg) } }
-page.on('pageerror', e => errors.push('pageerror: ' + e.message))
+page.on('pageerror', e => errors.push('pageerror: ' + e.message +
+  (e.stack ? '\n      ' + e.stack.split('\n').slice(1, 4).join('\n      ') : '')))
 page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text()) })
 
 async function clearState() {

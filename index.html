@@ -93,6 +93,10 @@
         if (!overlay) return;
         overlay.classList.add('open');
         overlay.removeAttribute('inert');
+        // the letter holds the floor: its own corner button steps out
+        // of the way (the card paints over it — it is not a second target)
+        var help = document.getElementById('boot-help');
+        if (help) help.style.visibility = 'hidden';
         var close = document.getElementById('boot-warning-close');
         if (close) close.focus();
       }
@@ -101,7 +105,7 @@
         overlay.classList.remove('open');
         overlay.setAttribute('inert', '');
         var help = document.getElementById('boot-help');
-        if (help) help.focus();
+        if (help) { help.style.visibility = ''; help.focus(); }
       }
       try {
         if (box && localStorage.getItem(KEY)) { box.checked = true; }

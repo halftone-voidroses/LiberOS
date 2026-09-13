@@ -13,7 +13,26 @@
   var UNINTERRUPTIBLE_MS = 800;
   var DISSOLVE_MS = 2600;
 
+  // Motion with consent (covenant + affordance contract 8). The draught is
+  // flourish, so under reduced motion the layers hold their resting depth
+  // and the frame loop does not schedule itself again.
+  var REDUCE = false;
+  try { REDUCE = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); } catch (e) { REDUCE = false; }
+
+  // The deep lets you in once the room knows you. Shared by the ritual's
+  // high-weight dots and the tide clock's deep tone — one rule, one owner.
+  function deepOpen() {
+    if (!window.Liber || !window.Liber.state) return true;
+    var s = window.Liber.state.get() || {};
+    return ((s.relations || []).length >= 5) && (Object.keys(s.visited || {}).length >= 3);
+  }
+
   function loop() {
+    if (REDUCE) {
+      if (farLayer) farLayer.style.transform = '';
+      if (nearLayer) { nearLayer.style.transform = ''; nearLayer.style.opacity = '0.45'; }
+      return;
+    }
     var sinceMove = Date.now() - lastMove;
     if (sinceMove < 4000) {
       target = Math.min(target + 0.0008, 1.0);
@@ -61,6 +80,13 @@
 
     bindExtcListener();
     bindRitual();
+    bindTide();
+    bindNarrowPrompt();
+    if (window.Liber && window.Liber.state && window.Liber.state.on) {
+      // the waterline and the clock's tone are read from state, so they
+      // follow every write — including ones made from another room.
+      window.Liber.state.on('change', function () { paintTide(readTide(), false); });
+    }
   });
 
   function bindRitual() {
@@ -81,11 +107,6 @@
       return dot ? parseInt(dot.getAttribute('data-value'), 10) : NaN;
     }
 
-    function deepOpen() {
-      if (!window.Liber || !window.Liber.state) return true;
-      var s = window.Liber.state.get() || {};
-      return ((s.relations || []).length >= 5) && (Object.keys(s.visited || {}).length >= 3);
-    }
     function gateNote() {
       var ritual = document.getElementById('sea-ritual');
       if (!ritual || ritual.querySelector('.sea-gate-note')) return;
@@ -200,6 +221,10 @@
       if (window.Liber && window.Liber.state && window.Liber.state.addArtifact) {
         window.Liber.state.addArtifact('sea', { text: text, intensity: intensity });
       }
+      // the clock keeps the release: one engraved mark, one hair of waterline.
+      // Recorded on the click, not on a timer — walking away mid-dissolve must
+      // not lose the memory — and the hand travels the dissolve window.
+      advanceTide();
       if (window.Liber && window.Liber.sound) window.Liber.sound.play('thunk');
       if (window.Liber && window.Liber.soundscape) {
         try { window.Liber.soundscape.motif('vanir'); } catch (e) {}
@@ -226,6 +251,113 @@
       }, FADE_MS + DISSOLVE_MS);
     });
     paintIntensity();
+  }
+
+  // 439px has no room for the floating question line (the glass is 260×149),
+  // so the instruction rides in the field's own placeholder — the same words,
+  // already 16px, upright, and 8.7:1 against the water.
+  function bindNarrowPrompt() {
+    var input = document.getElementById('sea-input');
+    if (!input) return;
+    var base = input.getAttribute('placeholder') || 'name it, plain';
+    var question = document.getElementById('sea-question');
+    var q = question ? String(question.textContent || '').replace(/\s+/g, ' ').trim() : base;
+    var mq = null;
+    try { mq = window.matchMedia ? window.matchMedia('(max-width: 439px)') : null; } catch (e) { mq = null; }
+    function paint() {
+      var narrow = !!(mq && mq.matches);
+      input.setAttribute('placeholder', narrow && q ? q : base);
+    }
+    paint();
+    try {
+      if (mq && mq.addEventListener) mq.addEventListener('change', paint);
+      else if (mq && mq.addListener) mq.addListener(paint);
+    } catch (e) {}
+    window.addEventListener('resize', paint);
+  }
+
+  // ── ROOM 06 · the brass tide clock ────────────────────────────────────
+  // One owner: state.seaTide {releases, level}. The hand advances one of
+  // sixteen engraved marks per release; the waterline rises a hair. Both
+  // persist, so the room remembers the level across visits. Completion is
+  // the slow hand itself — this file never throws confetti.
+
+  var TIDE_MARKS = 16;
+  var TIDE_RISE = 0.06;
+
+  function clamp01(v) { return v < 0 ? 0 : (v > 1 ? 1 : v); }
+
+  function rawTide() {
+    var s = (window.Liber && window.Liber.state && window.Liber.state.get()) || {};
+    var t = s.seaTide;
+    if (t && typeof t.level === 'number') return t;
+    return null;
+  }
+
+  function readTide() {
+    var stored = rawTide();
+    if (stored) {
+      return {
+        releases: Math.max(0, parseInt(stored.releases, 10) || 0),
+        level: clamp01(Number(stored.level) || 0)
+      };
+    }
+    // first read on a save older than the clock: seed from the water table
+    // the machine already keeps (sea + graveyard over 12 — the same sum the
+    // room behind the CRT draws), so nobody's tide starts at zero.
+    var s = (window.Liber && window.Liber.state && window.Liber.state.get()) || {};
+    var known = (Array.isArray(s.sea) ? s.sea.length : 0) + (Array.isArray(s.graveyard) ? s.graveyard.length : 0);
+    return { releases: known, level: clamp01(known / 12) };
+  }
+
+  function writeTide(t) {
+    if (window.Liber && window.Liber.state) {
+      window.Liber.state.set({ seaTide: { releases: t.releases, level: t.level } });
+    }
+  }
+
+  function tideRead(t) {
+    var marks = t.releases % TIDE_MARKS;
+    if (t.releases > 0 && marks === 0) return 'high water · ' + t.releases + ' released';
+    return 'mark ' + marks + ' / ' + TIDE_MARKS + ' · ' + t.releases + ' released';
+  }
+
+  function paintTide(t, instant) {
+    var hand = document.getElementById('sea-clock-hand');
+    var read = document.getElementById('sea-clock-read');
+    var clock = document.getElementById('sea-clock');
+    var deep = document.querySelector('.sea-deep');
+    if (hand) {
+      var angle = -90 + (t.releases % TIDE_MARKS) * (360 / TIDE_MARKS);
+      if (instant) {
+        // arriving on the page is not a turn of the hand
+        hand.style.transition = 'none';
+        hand.style.setProperty('--tide-angle', angle + 'deg');
+        void hand.offsetWidth;
+        hand.style.transition = '';
+      } else {
+        hand.style.setProperty('--tide-angle', angle + 'deg');
+      }
+    }
+    if (deep) deep.style.setProperty('--sea-level', t.level.toFixed(3));
+    if (read) read.textContent = tideRead(t);
+    if (clock) clock.classList.toggle('deep', deepOpen());
+  }
+
+  function advanceTide() {
+    var t = readTide();
+    t.releases += 1;
+    t.level = clamp01(t.level + TIDE_RISE);
+    // the write emits `change`, which repaints the clock with its travel on
+    // — one path for the beat, whether it was this page or another that wrote.
+    writeTide(t);
+    paintTide(t, false);
+  }
+
+  function bindTide() {
+    var t = readTide();
+    paintTide(t, true);
+    if (!rawTide()) writeTide(t);      // establish the memory, no visible turn
   }
 
   // Phase 8: secret "extc" listener is scoped to sea.html only.

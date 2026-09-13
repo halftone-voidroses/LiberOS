@@ -562,9 +562,9 @@
 .trash-titlebar .trash-help { right: 36px; }
 .trash-titlebar .trash-exit { right: 8px; }
 .trash-titlebar .trash-help, .trash-titlebar .trash-exit {
-  width: 40px;
-  height: 40px;
-  line-height: 38px;
+  width: 44px;
+  height: 44px;
+  line-height: 42px;
   text-align: center;
   font-size: 1.15rem;
   top: 50%;
@@ -759,3 +759,242 @@
 .trash-why:focus { outline: none; border-color: #e8c890; }
 
 .trash-readd-btn { white-space: nowrap; }
+
+/* ─── the plots — graves that weather and sprout (Stage 2e).
+   Weathering/sprouting is keyed to the machine's patina tier, which
+   shadow.js owns (visits + artifacts); the yard reads that class rather
+   than recomputing it. The headstone weathers with the grave's own age.
+   Every grave reads in the one card slot below, so a card can never be
+   clipped by the window's die-cut edge at any width. ─── */
+.trash-plots {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 2px 8px;
+  padding: 12px 4px 2px;
+  min-height: 52px;
+  border-top: 1px dashed #6a4a28;
+  margin-top: 8px;
+}
+
+.trash-plots-empty {
+  font-style: italic;
+  font-size: 1rem;
+  color: #4a2810;
+  letter-spacing: 0.12em;
+  text-align: center;
+  padding: 8px 0;
+}
+
+.trash-plot {
+  position: relative;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: inherit;
+  font: inherit;
+  color: inherit;
+}
+.trash-plot:focus-visible { outline: 2px solid #c8a880; outline-offset: 3px; }
+
+.trash-plot-mound {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  margin-left: -13px;
+  width: 26px;
+  height: 13px;
+  border-radius: 50% 50% 26% 26% / 92% 92% 34% 34%;
+  background: linear-gradient(180deg, #8a6840 0%, #4a3420 100%);
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.5);
+  transition: filter 0.4s;
+}
+
+.trash-plot-mark {
+  position: absolute;
+  left: 50%;
+  bottom: 8px;
+  margin-left: -4px;
+  width: 8px;
+  height: 22px;
+  border-radius: 3px 3px 0 0;
+  background: linear-gradient(180deg, #ece0be 0%, #c0a880 42%, #6a4a28 100%);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.6), inset 1px 0 0 rgba(255, 250, 235, 0.55), inset -1px 0 0 rgba(90, 60, 30, 0.45);
+}
+
+.trash-plot-sprout {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  margin-left: 3px;
+  width: 2px;
+  height: 0;
+  border-radius: 1px;
+  background: #5f7040;
+  opacity: 0;
+  transition: height 0.5s ease, opacity 0.5s ease;
+}
+.trash-plot-sprout::after {
+  content: '';
+  position: absolute;
+  left: 1px;
+  top: 1px;
+  width: 6px;
+  height: 4px;
+  border-radius: 0 60% 0 60%;
+  background: #7d8f54;
+}
+
+/* weathering — the mound darkens as the machine gathers patina */
+.machine.patina-1 .trash-plot-mound { filter: brightness(0.95) saturate(0.94); }
+.machine.patina-2 .trash-plot-mound { filter: brightness(0.89) saturate(0.86) contrast(1.04); }
+.machine.patina-3 .trash-plot-mound { filter: brightness(0.82) saturate(0.78) contrast(1.08); }
+
+/* sprouting — a shoot rises out of the grave, one stage per tier */
+.machine.patina-1 .trash-plot-sprout { opacity: 0.5; height: 6px; }
+.machine.patina-2 .trash-plot-sprout { opacity: 0.8; height: 11px; }
+.machine.patina-3 .trash-plot-sprout { opacity: 1; height: 16px; }
+
+/* the headstone weathers with the grave's own age, independent of tier */
+.trash-plot[data-age="1"] .trash-plot-mark {
+  background: linear-gradient(180deg, #ac9880 0%, #64472a 100%);
+}
+.trash-plot[data-age="2"] .trash-plot-mark {
+  background: linear-gradient(180deg, #9a8a6c 0%, #523a20 100%);
+}
+.trash-plot[data-age="2"] .trash-plot-mark::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 7px;
+  background: linear-gradient(180deg, rgba(111, 127, 74, 0) 0%, rgba(111, 127, 74, 0.55) 100%);
+}
+
+/* the mark reads the grave's kind — a tour is a round stone, a knot a stake */
+.trash-plot[data-kind="tour"] .trash-plot-mark {
+  width: 14px;
+  height: 17px;
+  margin-left: -7px;
+  border-radius: 50% 50% 0 0;
+}
+.trash-plot[data-kind="relations"] .trash-plot-mark {
+  width: 5px;
+  height: 25px;
+  margin-left: -2.5px;
+}
+
+/* the grave card — one readable slot under the row */
+.trash-grave-card {
+  min-height: 38px;
+  box-sizing: border-box;
+  margin-top: 2px;
+  padding: 5px 9px;
+  background: rgba(255, 245, 220, 0.35);
+  border: 1px solid rgba(106, 74, 40, 0.55);
+  font-style: italic;
+  font-size: 1rem;
+  line-height: 1.3;
+  letter-spacing: 0.05em;
+  color: #4a2810;
+  text-align: center;
+}
+.trash-grave-name {
+  display: block;
+  font-style: normal;
+  font-variant: small-caps;
+  letter-spacing: 0.1em;
+  color: #2a1810;
+}
+.trash-grave-meta {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.875rem;
+  color: #6a4028;
+}
+
+/* the row a grave's click hands you to */
+.trash-dig-row-active {
+  background: rgba(255, 245, 220, 0.4);
+  outline: 1px dashed #6a4a28;
+  outline-offset: 2px;
+}
+
+/* ─── the reason-marker: re-adding lifts the why out of the grave and
+   lets it settle as the satellite that becomes the relation edge. The
+   relation is bound synchronously; this is only the visible thread. ─── */
+.trash-reason-flight {
+  position: absolute;
+  z-index: 30;
+  max-width: 190px;
+  padding: 4px 9px;
+  background: linear-gradient(180deg, #f4e8c8 0%, #d8c8a0 100%);
+  border: 1px solid #6a4a28;
+  box-shadow: 0 3px 10px rgba(20, 10, 4, 0.55);
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  color: #2a1810;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  animation: trash-reason-lift 1.5s ease-out forwards;
+}
+.trash-reason-flight::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  width: 1px;
+  height: 0;
+  background: linear-gradient(180deg, rgba(200, 168, 128, 0.9), rgba(200, 168, 128, 0));
+  animation: trash-reason-thread 1.5s ease-out forwards;
+}
+@keyframes trash-reason-lift {
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+  18%  { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  70%  { opacity: 1; transform: translate(-50%, -160%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -260%) scale(0.9); }
+}
+@keyframes trash-reason-thread {
+  0%, 20% { height: 0; opacity: 0; }
+  40%     { height: 22px; opacity: 0.9; }
+  100%    { height: 44px; opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .trash-plot-mound, .trash-plot-sprout, .trash-plot-mark { transition: none; }
+  .trash-reason-flight { animation: none; opacity: 0; }
+}
+
+/* Rainy Day (s.shadowOn) - the yard's own weather.
+   Wet loam: the soil goes cold and dark, the rubble loses its warmth, the
+   torn note goes damp grey, and the graves read harder against it. A real
+   palette shift, never an opacity wash (the glass dims in
+   styles/shadow.css). */
+.machine.shadow-on .trash-app { background: #0e1218; }
+.machine.shadow-on .trash-pile {
+  background:
+    radial-gradient(ellipse at 20% 90%, #2a3038 0%, #191e26 38%, #04060a 82%),
+    linear-gradient(180deg, #191e26 0%, #10141a 52%, #04060a 100%);
+}
+.machine.shadow-on .trash-window {
+  background:
+    repeating-linear-gradient(0deg,
+      rgba(0, 0, 0, 0.04) 0px, rgba(0, 0, 0, 0.04) 1px,
+      transparent 1px, transparent 4px),
+    linear-gradient(180deg, #cfd8de 0%, #b8c4cc 50%, #98a6b0 100%);
+}
+.machine.shadow-on .trash-action {
+  background: linear-gradient(180deg, #dde6ec 0%, #c2ced8 60%, #a2b0bc 100%);
+}
+.machine.shadow-on .trash-action-hard {
+  background: linear-gradient(180deg, #8a92a2 0%, #616a7c 60%, #3e4658 100%);
+}

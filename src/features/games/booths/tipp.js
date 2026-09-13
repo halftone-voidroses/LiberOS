@@ -21,6 +21,7 @@ function playTipp(ctx, b, body) {
   }
   html += '</div>'
     + '<div class="games-actions">'
+    + '<button type="button" class="games-action" id="tipp-card">read the scribe\u2019s card</button>'
     + '<button type="button" class="games-action" id="tipp-again" hidden>start over</button>'
     + '<button type="button" class="games-action" id="tipp-keep" disabled>keep the record</button>'
     + '</div>'
@@ -31,6 +32,10 @@ function playTipp(ctx, b, body) {
   var keep = document.getElementById('tipp-keep');
   var again = document.getElementById('tipp-again');
   var result = document.getElementById('tipp-result');
+  var cardBtn = document.getElementById('tipp-card');
+
+  // Cross-link: the four skills have a card of their own on the shelf.
+  if (cardBtn) cardBtn.addEventListener('click', function () { location.href = 'learn.html#tipp'; });
   var done = [false, false, false, false];
   var ratings = [3, 3, 3, 3];
 

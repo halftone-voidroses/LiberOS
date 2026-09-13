@@ -197,19 +197,47 @@ body.crt-room-open .room {
   from { transform: translateX(0); }
   to   { transform: translateX(-6%); }
 }
-/* rain — Rainy Day only (JS adds .crt-room-rainy on the scene) */
-.crt-window::after {
-  content: '';
+/* rain — Rainy Day only. Rainy Day is IN the house: it falls in this window
+   and nowhere else, and the drops are hung here by crt-room.js, each with its
+   own column, length, speed, opacity, tilt and phase. Deliberately not a
+   repeating gradient — a gradient can only ever make a grid, and a grid reads
+   as texture rather than weather. The pane is small, so the count is small: a
+   saturated window stops being weather too. */
+.crt-drop {
   position: absolute;
-  inset: -10%;
+  top: -18%;
+  width: 1px;
+  height: var(--len, 18px);
   z-index: 4;
-  background: repeating-linear-gradient(104deg, rgba(150, 180, 210, 0.0) 0 7px, rgba(150, 180, 210, 0.16) 7px 8px, rgba(0, 0, 0, 0) 8px 13px);
-  opacity: 0;
-  transition: opacity 0.9s ease;
+  border-radius: 1px;
   pointer-events: none;
+  /* tapered at both ends, so a drop has no hard cut */
+  background: linear-gradient(to bottom,
+    rgba(208, 232, 250, 0) 0%,
+    rgba(190, 220, 246, var(--op, 0.26)) 46%,
+    rgba(208, 232, 250, 0) 100%);
+  transform: rotate(var(--tilt, 8deg));
+  transform-origin: 50% 0;
+  animation: crt-drop-fall var(--dur, 1.6s) linear var(--delay, 0s) infinite;
 }
-.crt-room-rainy .crt-window::after { opacity: 1; }
-.crt-room-rainy .crt-window .crt-wb-sky { animation-duration: 50s; }
+/* -18% -> 120% of the PANE, so one keyframe serves every window size the
+   clamps can produce; the window clips the overshoot */
+@keyframes crt-drop-fall {
+  from { top: -18%; }
+  to   { top: 120%; }
+}
+
+/* the weather in the glass: the sky loses its stars to cloud, and the frame
+   goes cold the way the rest of the room does */
+.crt-room-rainy .crt-window {
+  background: linear-gradient(180deg, #0c141d 0%, #080e15 70%, #05090d 100%);
+  box-shadow:
+    inset 0 0 22px rgba(0, 0, 0, 0.7),
+    0 0 0 1px #22180e,
+    0 6px 18px rgba(0, 0, 0, 0.5),
+    0 0 26px rgba(90, 134, 176, 0.14);
+}
+.crt-room-rainy .crt-window .crt-wb-sky { animation-duration: 50s; opacity: 0.35; }
 
 /* the sill + window box: the Glasshouse tree lives here too. A sibling of
    the window (the window clips its overflow), hung just beneath it. */
@@ -537,6 +565,11 @@ body.crt-room-open .room {
   .crt-candle-flame,
   .crt-pool-line,
   .crt-window .crt-wb-sky { animation: none; }
+  /* the rain still falls; it just holds still in the pane */
+  .crt-drop {
+    animation: none;
+    top: var(--y, 40%);
+  }
 }
 
 /* ── 439px: the room survives the small screen — fewer walls, same truth ── */
@@ -568,4 +601,214 @@ body.crt-room-open .room {
   }
   .crt-candle { left: 8%; bottom: 8%; }
   body.crt-room-open .room { transform: scale(0.92); }
+}
+
+/* ── rainy material (lane C) ──────────────────────────────────────────────
+
+   The room's own answer to the weather. Rainy Day is one object in one
+   place — it falls in this window (built above, by the room's own logic) —
+   and the desk side carries only what the machine does about it: palette,
+   light, the ticker. What follows is the HOUSE responding in its own
+   material, keyed off .crt-room-rainy (the class this room already sets
+   from s.shadowOn). No desk-side layer, no second window: plaster drinks
+   damp, the floor goes cold, the sill wood darkens where water has sat.
+
+   Everything here is background and light on the room's own furniture —
+   nothing moves, nothing is added to the layout, and no pane is filmed
+   over. */
+
+/* damp plaster: moisture blooming on the wall around the cold pane, the
+   way a windowless wall breathes when the glass has been weeping for hours.
+   Sits on the wall's own pseudo-element, so it cannot touch the furniture's
+   layout; it breathes once, slowly, like the wall itself. */
+.crt-room-rainy .crt-room-wall::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 46% 60% at 85% 24%, rgba(96, 128, 156, 0.13) 0%, rgba(60, 84, 104, 0.07) 46%, rgba(0, 0, 0, 0) 72%),
+    radial-gradient(ellipse 30% 44% at 70% 52%, rgba(72, 98, 120, 0.08) 0%, rgba(0, 0, 0, 0) 70%),
+    linear-gradient(180deg, rgba(24, 38, 52, 0.1) 0%, rgba(10, 16, 24, 0.14) 100%);
+  animation: crt-damp-breathe 14s ease-in-out infinite;
+}
+@keyframes crt-damp-breathe {
+  0%, 100% { opacity: 0.82; }
+  50%      { opacity: 1; }
+}
+
+/* the floor drinks too: the boards near the window lose their warm grain
+   and take a cold sheen — not a puddle, just wood that has gone damp and
+   will not dry before morning. Static on purpose: water on a floor does
+   not shimmer. */
+.crt-room-rainy .crt-room-floor::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 42% 70% at 82% 18%, rgba(88, 118, 148, 0.1) 0%, rgba(0, 0, 0, 0) 62%),
+    linear-gradient(200deg, rgba(16, 28, 40, 0.18) 0%, rgba(6, 10, 16, 0.06) 55%, rgba(0, 0, 0, 0) 100%);
+}
+
+/* the sill wood darkens where water has sat under the glass — a ring the
+   weather has left on the furniture, the same ring every wet sill grows.
+   The tree's pot stands in it. */
+.crt-room-rainy .crt-windowbox::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: 1px;
+  box-shadow: inset 0 0 12px rgba(58, 82, 104, 0.42), inset 0 3px 5px rgba(40, 60, 80, 0.3);
+  background: linear-gradient(180deg, rgba(46, 66, 86, 0.16) 0%, rgba(0, 0, 0, 0) 60%);
+}
+
+/* the candle draws lower in the damp air: same flame, less reach. The wax
+   is the room's own; only its light is told the weather changed. */
+.crt-room-rainy .crt-candle-stick { filter: saturate(0.88) brightness(0.95); }
+
+/* at 439px the room is a small sash of glass: the damp washes pull in
+   with it, so the wall keeps its plaster and the window keeps its frame */
+@media (max-width: 600px) {
+  .crt-room-rainy .crt-room-wall::before { opacity: 0.7; animation: none; }
+  .crt-room-rainy .crt-room-floor::before { opacity: 0.75; }
+}
+
+/* consent: the wall's slow breath is the one new motion here, and it holds
+   still like everything else when motion is not wanted */
+@media (prefers-reduced-motion: reduce) {
+  .crt-room-rainy .crt-room-wall::before { animation: none; opacity: 0.9; }
+}
+/* ── end rainy material (lane C) ── */
+
+/* ── the three late hooks (covenant rule 4) ──────────────────────────────
+   Drawn by THE DRAWN PROP: one warm lamp (upper-left, the bench), one cool
+   source (the tube, lower-right, the machine itself, faced away from you).
+   Silhouette ≥ 2.4 at full size, form = half, detail = a third. Every prop
+   rests on the baseline and carries its contact shadow. */
+
+/* DREAMS — the developed sheet, pinned under the relations on the board.
+   A dusk polaroid: the fog the dream was written in has dried into paper.
+   Empty condition: a bare second pin, no sheet. */
+.crt-dream-sheet {
+  position: absolute;
+  left: 6%;
+  bottom: 8%;
+  width: 34%;
+  aspect-ratio: 1 / 1.18;
+  transform: rotate(var(--tilt, -2deg));
+  transform-origin: 50% 12%;
+  background:
+    linear-gradient(160deg, rgba(238, 226, 198, 0.92) 0%, rgba(216, 198, 168, 0.88) 58%, rgba(178, 156, 128, 0.9) 100%);
+  border: 2.4px solid #0e0a06;
+  box-shadow:
+    0 1.2px 0 rgba(255, 244, 214, 0.14) inset,
+    0 2.5px 5px rgba(0, 0, 0, 0.55);
+}
+/* the developed image: fog holding a faint horizon — the dream, not shown */
+.crt-dream-sheet .crt-dream-face {
+  position: absolute;
+  inset: 8% 8% 30% 8%;
+  background:
+    radial-gradient(ellipse at 38% 34%, rgba(122, 96, 140, 0.5) 0%, rgba(0, 0, 0, 0) 62%),
+    linear-gradient(180deg, rgba(46, 38, 64, 0.85) 0%, rgba(24, 20, 36, 0.92) 100%);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.55);
+}
+/* the caption in a second hand — the room annotates, the dream speaks */
+.crt-dream-sheet .crt-dream-caption {
+  position: absolute;
+  left: 9%;
+  right: 9%;
+  bottom: 6%;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  font-size: 7px;
+  line-height: 1.25;
+  color: rgba(38, 28, 18, 0.85);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.crt-dream-sheet .crt-dream-pin {
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  margin-left: -3px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, #d8b46a 0%, #8a6428 56%, #3a2a10 100%);
+  box-shadow: 0 1.5px 2.5px rgba(0, 0, 0, 0.6);
+}
+
+/* GAMES — the midway's tickets, twisted on the board's corner pin. One per
+   game artifact, five at most. Empty condition: no tickets on the pin. */
+.crt-tickets {
+  position: absolute;
+  top: -7px;
+  right: -6px;
+  width: 26px;
+  height: 40px;
+}
+.crt-ticket {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 38px;
+  transform: rotate(var(--tilt, 0deg));
+  transform-origin: 50% 84%;
+  background: linear-gradient(170deg, #e2d4ae 0%, #cdbd94 62%, #a8966c 100%);
+  border: 2.4px solid #241a0e;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.55);
+  z-index: var(--z, 0);
+}
+/* the torn edge the barker tears — perforation as a form line */
+.crt-ticket .crt-ticket-edge {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 8px;
+  border-top: 1.2px dashed rgba(36, 26, 14, 0.75);
+}
+.crt-ticket .crt-ticket-glyph {
+  position: absolute;
+  top: 5px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1;
+  color: #3c2c14;
+  font-weight: bold;
+}
+
+/* TOYBOX — the spill the floor never quite gets clean. Sand ground into the
+   boards beside the desk; --spill is fed by toybox keeps (a sitting at the
+   tray). Empty condition: swept boards. */
+.crt-spill {
+  position: absolute;
+  left: 13%;
+  bottom: 12%;
+  width: 22vw;
+  height: 9vh;
+  background:
+    radial-gradient(ellipse at 32% 60%, rgba(214, 186, 138, calc(var(--spill, 0.3) * 0.5)) 0%, rgba(0, 0, 0, 0) 58%),
+    radial-gradient(ellipse at 58% 44%, rgba(186, 156, 112, calc(var(--spill, 0.3) * 0.36)) 0%, rgba(0, 0, 0, 0) 48%),
+    radial-gradient(ellipse at 44% 72%, rgba(150, 124, 88, calc(var(--spill, 0.3) * 0.3)) 0%, rgba(0, 0, 0, 0) 52%);
+  /* worked INTO the boards, not pooled on them: mix-blend keeps the plank
+     lines reading through the sand */
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+/* reduced motion: these props are static by nature; the sheet's develop
+   beat is the only motion and it lives in the room's transitions above */
+@media (prefers-reduced-motion: reduce) {
+  .crt-dream-sheet,
+  .crt-ticket { transition: none; }
 }

@@ -634,3 +634,22 @@
   .divination-edge { display: none; }
   .divination-titlebar-sub { display: none; }
 }
+
+/* Rainy Day (s.shadowOn) - the felt table's own weather.
+   The lantern goes cold: the felt blues and deepens, the brass takes the
+   light of a wet window instead of a flame, the rim wood goes black. The
+   cards still turn. A real palette shift, not an opacity wash; the machine
+   layer that dims the glass lives in styles/shadow.css. */
+.machine.shadow-on .divination-app {
+  --felt-hi: #48203a;
+  --felt: #2b0f22;
+  --felt-lo: #150612;
+  --canvas: #0b0510;
+  --chalk: #dde6ef;
+  --chalk-dim: rgba(221, 230, 239, 0.55);
+  --chalk-faint: rgba(221, 230, 239, 0.28);
+  --brass: #97aec2;
+  --brass-lo: #4e6070;
+  --wood: #120f10;
+  --wood-hi: #242022;
+}

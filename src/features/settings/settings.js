@@ -18,12 +18,55 @@
     var sb = document.getElementById('settings-shadow');
     if (sb) {
       var on = machine && machine.classList.contains('shadow-on');
-      sb.textContent = on ? '— step back from shadow —' : '— step into shadow —';
+      sb.textContent = on ? '— clear the weather —' : '— let it rain —';
     }
 
     renderSound();
     renderScape();
     renderCrtRoom();
+    renderCrt();
+  }
+
+  // ── the tube's bloom: one owner (s.crt) for the whole machine. Every room
+  //    that authors a CRT layer reads it in its own stylesheet; this panel is
+  //    the canonical control (liberdev/crt-decision.md).
+  var CRT_DEFAULT_INTENSITY = 0.4;
+  var CRT_STEPS = { dim: 0.15, low: 0.4, full: 0.8 };
+  function crtState() {
+    var s = (window.Liber && window.Liber.state && window.Liber.state.get()) || {};
+    var c = (s && typeof s.crt === 'object' && s.crt) ? s.crt : {};
+    var v = typeof c.intensity === 'number' ? c.intensity : CRT_DEFAULT_INTENSITY;
+    return { off: !!c.off, intensity: Math.max(0, Math.min(1, isFinite(v) ? v : CRT_DEFAULT_INTENSITY)) };
+  }
+  function crtStepName(c) {
+    if (c.off) return 'off';
+    if (c.intensity <= 0.2) return 'dim';
+    if (c.intensity >= 0.6) return 'full';
+    return 'low';
+  }
+  function renderCrt() {
+    var name = crtStepName(crtState());
+    var btns = document.querySelectorAll('[data-crt-step]');
+    for (var i = 0; i < btns.length; i++) {
+      var on = btns[i].getAttribute('data-crt-step') === name;
+      btns[i].setAttribute('aria-pressed', on ? 'true' : 'false');
+      if (on) btns[i].classList.add('on'); else btns[i].classList.remove('on');
+    }
+  }
+  function setCrtStep(step) {
+    var st = window.Liber && window.Liber.state;
+    if (!st) return;
+    var cur = crtState();
+    if (step === 'off') {
+      // off keeps the intensity it had, so off -> on restores it instead of
+      // snapping back to the default
+      st.set({ crt: { intensity: cur.intensity, off: true } });
+    } else {
+      var v = CRT_STEPS[step];
+      st.set({ crt: { intensity: typeof v === 'number' ? v : cur.intensity, off: false } });
+    }
+    renderCrt();
+    if (window.Liber && window.Liber.sound) { try { window.Liber.sound.play('tick'); } catch (e) {} }
   }
 
   // the room behind the CRT — the same state the scene reads, one owner
@@ -229,6 +272,12 @@
     if (s) s.addEventListener('click', toggleShadow);
     if (sd) sd.addEventListener('click', toggleSound);
     if (cr) cr.addEventListener('click', toggleCrtRoom);
+    var crtBtns = document.querySelectorAll('[data-crt-step]');
+    for (var ci = 0; ci < crtBtns.length; ci++) {
+      (function (btn) {
+        btn.addEventListener('click', function () { setCrtStep(btn.getAttribute('data-crt-step')); });
+      })(crtBtns[ci]);
+    }
     var slider = document.getElementById('settings-music');
     if (slider) {
       slider.addEventListener('input', function () { setMusic(slider.value); });

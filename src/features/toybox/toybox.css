@@ -17,6 +17,7 @@
   --bulb: #ffd98a;
   --wire: #6a6f72;
   --basin-half: 110px;   /* half the basin width, set by fitBasin() */
+  --tool-row: 68px;      /* the tool row's height; the soap line clears it */
   position: absolute; inset: 0;
   color: #cfd8c8;
   font-family: 'Segoe Print', 'Bradley Hand', 'Chalkboard SE', cursive;
@@ -161,7 +162,7 @@
   background: linear-gradient(180deg, #2a352f, #17211c);
   border: 1px solid #3e4c44; color: #b8c8bc;
   border-radius: 50%; cursor: pointer; padding: 0;
-  min-width: 30px; min-height: 30px; line-height: 28px; font-size: 0.95rem;
+  min-width: 44px; min-height: 44px; line-height: 42px; font-size: 0.95rem;
   font-family: inherit;
   box-shadow: inset 0 1px 0 rgba(207, 216, 200, 0.2), 0 2px 4px rgba(0, 0, 0, 0.6);
 }
@@ -290,9 +291,15 @@
 /* ── the flank boards: one labelled shelf per traveller, the objects
    themselves on them — no labels on the things, names on the boards ── */
 .toybox-flank {
-  position: absolute; top: 114px; bottom: 44px; width: 178px; z-index: 2;
+  position: absolute; top: 114px; bottom: 44px; width: 210px; z-index: 2;
   overflow-y: auto; overflow-x: hidden; scrollbar-width: none;
-  padding: 7px 10px 22px; display: flex; flex-direction: column; gap: 6px;
+  /* seven boards have to stand in this column with all of the thirteen
+     traveller shelves on them — at 178px the widest shelf (four objects at
+     their 44px hit areas) wrapped to a second row, which pushed every left
+     shelf out of register with the right and ran the last two off the
+     bottom. 210px holds four objects on one row; the paddings below are
+     trimmed to the board's own shadow doing the separating. */
+  padding: 6px 10px 8px; display: flex; flex-direction: column; gap: 0;
 }
 /* the fade says: the board keeps going past its edge */
 .toybox-flank::after {
@@ -315,12 +322,14 @@
     linear-gradient(180deg, #3a4840, #26322b);
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(207, 216, 200, 0.16);
 }
-.shelf-group { padding-bottom: 10px; }
+.shelf-group { padding-bottom: 0; }
 
 /* the shelf itself: a board jutting from the wall — faux 3d, front face
    carrying the brass plaque, top face catching the bulb light */
 .shelf-board {
-  position: relative; height: 13px; margin: -4px 1px 0; border-radius: 0 0 2px 2px;
+  /* tall enough to carry the plaque at its 16px instruction size — the
+     board must grow with its label, never spill it over the objects */
+  position: relative; height: 22px; margin: -3px 1px 0; border-radius: 0 0 2px 2px;
   background:
     linear-gradient(180deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.15) 30%, rgba(0, 0, 0, 0.5)),
     linear-gradient(180deg, #4a3c2c, #332a1e 60%, #211a12);
@@ -344,18 +353,18 @@
 /* brass plaque screwed to the shelf's front face */
 .shelf-plate {
   position: absolute; left: 7px; bottom: 2px; z-index: 1;
-  display: inline-block; font-size: 1rem; letter-spacing: 0.14em; line-height: 1.5;
+  display: inline-block; font-size: 1rem; letter-spacing: 0.14em; line-height: 1.1;
+  white-space: nowrap;   /* a two-line name would spill the board again */
   color: #f0e8d0; background: linear-gradient(180deg, #8a7a50, #5a4e30);
   border-radius: 2px; padding: 0 6px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 240, 200, 0.3);
 }
 /* the objects: one pixel sprite apiece, sitting on the board above */
-.shelf-row { display: flex; flex-wrap: wrap; gap: 2px 3px; align-items: flex-end; padding: 2px 2px 5px; }
-.shelf-row { display: flex; flex-wrap: wrap; gap: 2px; }
+.shelf-row { display: flex; flex-wrap: wrap; gap: 1px 2px; align-items: flex-end; padding: 0 0 2px; }
 .shelf-obj {
   display: flex; flex-direction: column; align-items: center; gap: 1px;
   background: transparent; border: 1px solid transparent; border-radius: 5px;
-  padding: 4px 5px 3px; cursor: pointer; min-width: 44px; min-height: 44px;
+  padding: 2px 3px; cursor: pointer; min-width: 44px; min-height: 44px;
   justify-content: flex-end;
   font-family: inherit; color: inherit;
 }
@@ -370,7 +379,11 @@
   box-shadow: 0 0 12px -3px var(--jc), inset 0 0 8px -4px var(--jc);
 }
 .obj-label { display: none; }   /* aria-label carries the name */
-.obj-art { display: block; width: 34px; height: 24px; position: relative; }
+/* pixel sprites drawn at their authored scale — never stretched to a box,
+   never smoothed. keeps the room's register: the basin and the crew are
+   pixelated, so the objects are too. (the .obj-* rules below style the
+   fallback <i> art for any shelf item without a PIX sprite) */
+.obj-art { display: block; position: relative; width: auto; height: auto; image-rendering: pixelated; }
 
 /* ── the objects: each drawn as the thing itself ── */
 .obj-sandbag {
@@ -457,13 +470,48 @@
 /* narrow screens: the boards become two horizontal strips */
 .toybox-app.compact .toybox-flank {
   flex-direction: row; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden;
-  width: auto; left: 8px; right: 8px; bottom: auto; height: 78px;
-  padding: 4px 8px 14px; gap: 8px; align-items: flex-start;
+  width: auto; left: 8px; right: 8px; bottom: auto; height: 84px;
+  padding: 4px 8px 11px; gap: 8px; align-items: flex-start;
 }
 .toybox-app.compact .flank-left, .toybox-app.compact .flank-right { transform: none; }
 .toybox-app.compact .flank-left { top: 104px; }
-.toybox-app.compact .flank-right { top: 188px; }
-.toybox-app.compact .shelf-group { border-bottom: none; padding-bottom: 0; padding-right: 10px; border-right: 1px solid rgba(0, 0, 0, 0.42); flex: 0 0 auto; }
+.toybox-app.compact .flank-right { top: 192px; }
+
+/* lane C: compact glass repair. The strips spanned the whole glass, so at
+   the small stage the pause valve died under the left strip's box and the
+   crew bar and towel rail died under the right one. The strips keep to the
+   left 56% of the glass now; the valve moves to the free right margin on
+   its pipe, and the bottom band belongs to the crew and the rail alone.
+   The right strip still crosses the basin's left shoulder — the boards are
+   wall shelves, the basin is under them; the drain and the pour-heart of
+   the world stay clear. */
+.toybox-app.compact .toybox-flank { width: 56%; right: auto; height: 72px; }
+/* under the titlebar sign, one 70px band per strip (plaque + one object
+   row); the bottom band — crew bar, plug, towel rail — starts app-rel 189
+   and nothing stands under anything. The pit's left shoulder sits under
+   the strips' lane: wall boards over the basin, its pour-face and drain
+   in the clear. */
+.toybox-app.compact .flank-left { top: 36px; }
+.toybox-app.compact .flank-right { top: 112px; }
+/* the valve rides its own right margin: same 52px drop from wheel to pipe
+   art as the wide layout, just off the strip's lane */
+.toybox-app.compact .toybox-action.tap-handle { left: auto; right: 12px; top: 8px; }
+.toybox-app.compact .tap-assembly { left: auto; right: 20px; top: 60px; }
+.toybox-app.compact .toybox-crewbar { gap: 5px; padding: 4px 7px 6px; }
+.toybox-app.compact .toybox-crew-btn { padding: 4px 5px; }
+.toybox-app.compact .toybox-actions { gap: 6px; }
+.toybox-app.compact .toybox-action { padding: 4px 5px; }
+/* A plaque is 16px instruction text and often wider than the objects it
+   labels. Absolutely positioned it cannot widen its own group, so on the
+   strip layout every long name — e-lizabeth, the scribe, wanderlust — ran
+   over its neighbour. Sized to max-content and lifted into flow, the board
+   grows to whichever is wider: its shelf of objects or its name. */
+.toybox-app.compact .shelf-group {
+  border-bottom: none; padding-bottom: 0; padding-right: 10px;
+  border-right: 1px solid rgba(0, 0, 0, 0.42); flex: 0 0 auto; width: max-content;
+}
+.toybox-app.compact .shelf-board { display: flex; align-items: center; }
+.toybox-app.compact .shelf-plate { position: static; }
 .toybox-app.compact .shelf-row { flex-wrap: nowrap; }
 
 /* ── the basin: wide as the world it holds ── */
@@ -587,6 +635,7 @@
 .toybox-actions {
   position: absolute; right: 10px; bottom: 4px; z-index: 3;
   display: flex; gap: 10px; align-items: flex-end;
+  min-height: var(--tool-row);
 }
 .toybox-action {
   position: relative;
@@ -630,8 +679,10 @@
 
 /* ── result: scrawled in soap on the tiles, on the right flank ── */
 .toybox-result {
-  position: absolute; bottom: 54px; right: 12px; z-index: 2;
-  width: 30%; text-align: right;
+  /* sits above the tool row, measured from the row's own height so the two
+     can never collide again */
+  position: absolute; bottom: calc(var(--tool-row) + 8px); right: 12px; z-index: 2;
+  width: 26%; text-align: right;
   color: rgba(228, 240, 216, 0.9); font-style: normal;
   font-size: 1rem; line-height: 1.35; min-height: 1.2em;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.85);
@@ -719,4 +770,20 @@
   }
   .tap-handle:active .tool-art,
   .tap-handle[aria-pressed="true"] .tool-art { transform: rotate(90deg); }
+}
+
+/* Rainy Day (s.shadowOn) - the shelf's own weather.
+   Wet porcelain: the green-glaze tiles go cold, the lime goes pale blue,
+   the bulb light stops being golden. A real palette shift read from the
+   room's own tokens, not an opacity wash. */
+.machine.shadow-on .toybox-app {
+  --porc-hi: #9fb4c2;
+  --porc: #4e6672;
+  --porc-lo: #1c2830;
+  --tile: #243038;
+  --grout: #121c22;
+  --rust: #6a4a52;
+  --lime: #c2d0d8;
+  --bulb: #cfe0ee;
+  --wire: #5c666c;
 }

@@ -724,9 +724,9 @@
 .dreams-help { right: 50px; }
 .dreams-exit { right: 12px; }
 .dreams-help, .dreams-exit {
-  width: 40px;
-  height: 40px;
-  line-height: 38px;
+  width: 44px;
+  height: 44px;
+  line-height: 42px;
   text-align: center;
   font-size: 1.15rem;
   top: 50%;
@@ -1004,4 +1004,138 @@
   .dreams-assoc-head { flex-direction: column; align-items: flex-start; }
   .dreams-assoc-form { flex-direction: column; align-items: stretch; }
   .dreams-entry-row { grid-template-columns: 1fr; }
+}
+
+/* Rainy Day (s.shadowOn) - the sage's study, rained on.
+   The paper stays paper but goes cold and damp-edged, the ink to a deeper
+   blue-violet, the persona accent to rain-light; the dark behind the sheet
+   deepens. A real palette shift, not an opacity wash. */
+.machine.shadow-on .dreams-app {
+  --dreams-paper: #e8eef4;
+  --dreams-paper-dim: #d8e0e8;
+  --dreams-ink: #232a38;
+  --dreams-ink-soft: #5a6478;
+  --dreams-purple: #8a9ad4;
+  --dreams-purple-deep: #5666a0;
+  --dreams-cyan: #7ec4ff;
+  --dreams-screen: #0e121c;
+  --dreams-screen-deep: #080a12;
+  --dreams-line: rgba(138, 154, 212, 0.4);
+  --dreams-wm: rgba(138, 154, 212, 0.05);
+  --dreams-bar-hi: #e4eaf2;
+  --dreams-bar-mid: #d2dae6;
+  --dreams-bar-lo: #c0cad8;
+}
+
+/* ── the room as a place (pitch: Dreams — SYSTEM 05) ─────────────────────
+   Declared light: one cool bulb behind the reading desk, upper-centre, the
+   colour of the paper itself. The dark of the room is not a backdrop; it is
+   the dark a reading desk stands in. Fog-to-dusk: the room keys itself to
+   how long you have been reading — fog while the desk is unattended, dusk
+   once you are in a dream. Weight ladder: silhouette 2.4, form 1.2, detail
+   0.8 (this room's register). */
+
+/* the fog: two drifting planes behind the paper, visible while nobody is
+   reading, thinning to dusk once a dream is open */
+.dreams-app::before {
+  content: '';
+  position: absolute;
+  inset: -20%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 42% 30% at 30% 40%, rgba(164, 138, 212, 0.07) 0%, rgba(0, 0, 0, 0) 70%),
+    radial-gradient(ellipse 36% 26% at 72% 58%, rgba(138, 202, 255, 0.05) 0%, rgba(0, 0, 0, 0) 70%),
+    radial-gradient(ellipse 60% 40% at 50% 100%, rgba(20, 16, 31, 0.6) 0%, rgba(0, 0, 0, 0) 80%);
+  animation: dreams-fog-drift 46s ease-in-out infinite alternate;
+}
+.dreams-app::after {
+  content: '';
+  position: absolute;
+  inset: -20%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 50% 34% at 62% 30%, rgba(200, 184, 226, 0.05) 0%, rgba(0, 0, 0, 0) 66%),
+    radial-gradient(ellipse 30% 22% at 22% 66%, rgba(164, 138, 212, 0.06) 0%, rgba(0, 0, 0, 0) 70%);
+  animation: dreams-fog-drift 34s ease-in-out infinite alternate-reverse;
+}
+@keyframes dreams-fog-drift {
+  from { transform: translateX(-3%) translateY(-1%); }
+  to   { transform: translateX(3%) translateY(1.5%); }
+}
+/* dusk arrives when a dream is open: the fog thins, the desk light warms */
+.dreams-app .dreams-reading:not([hidden]) ~ * {}
+.dreams-app:has(.dreams-reading:not([hidden]))::before,
+.dreams-app:has(.dreams-reading:not([hidden]))::after {
+  opacity: 0.35;
+  transition: opacity 3.5s ease;
+}
+/* the desk lamp cone: barely there, and missed when absent */
+.dreams-app .dreams-reading::before {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  top: -4%;
+  width: 130%;
+  height: 52%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  background: conic-gradient(from 168deg at 50% 0%, rgba(0,0,0,0) 0%, rgba(226, 214, 244, 0.05) 12%, rgba(226, 214, 244, 0.045) 26%, rgba(0,0,0,0) 40%);
+}
+
+/* develop-on-arrival: the paper comes up out of the fix bath — the image
+   (the reading) fades in from the fog it was written in. One beat, on
+   arrival only; reduced motion gets the developed sheet at once. */
+.dreams-paper.develop .dreams-read-body {
+  animation: dreams-develop 2.6s ease-out;
+}
+@keyframes dreams-develop {
+  0%   { opacity: 0; filter: blur(2.5px) brightness(1.35) sepia(0.35); }
+  45%  { opacity: 0.75; filter: blur(1px) brightness(1.12) sepia(0.14); }
+  100% { opacity: 1; filter: none; }
+}
+
+/* association threads: red thread from the reading's citation anchor to
+   each quoted association card. Drawn in an SVG pinned over the paper. */
+.dreams-threads {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 3;
+}
+.dreams-thread {
+  fill: none;
+  stroke: rgba(170, 48, 48, 0.65);
+  stroke-width: 1.2;
+  stroke-dasharray: 5 3;
+}
+
+/* marginalia in a second hand: Inquiry's note on the polaroid's back —
+   pencil, not ink; the reading's own quiet afterword */
+.dreams-marginalia {
+  position: absolute;
+  right: 14px;
+  bottom: 8px;
+  z-index: 2;
+  font-family: 'Comic Sans MS', 'Segoe Print', var(--dreams-serif);
+  font-style: italic;
+  font-size: 0.86rem;
+  line-height: 1.3;
+  color: rgba(78, 68, 96, 0.78);
+  text-align: right;
+  max-width: 46%;
+  pointer-events: none;
+}
+.dreams-marginalia[data-band="kept"] { color: rgba(96, 74, 60, 0.82); }
+.dreams-marginalia[data-band="planted"] { color: rgba(84, 96, 60, 0.82); }
+
+/* reduced motion: fog holds still, the develop beat is an instant state */
+@media (prefers-reduced-motion: reduce) {
+  .dreams-app::before,
+  .dreams-app::after { animation: none; }
+  .dreams-paper.develop .dreams-read-body { animation: none; }
 }

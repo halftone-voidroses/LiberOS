@@ -133,7 +133,9 @@
     return { unread: n, total: total };
   }
 
-  // the spine thickens with keeps; the caps brighten with knots
+  // the spine thickens with keeps; the caps brighten with knots;
+  // the spine carries the unread tally — the ribbons in the drawers,
+  // counted on the shelf (lane B ledger chrome).
   function updateSpine() {
     var c = unreadCount();
     if (bindingEl) {
@@ -142,8 +144,9 @@
     }
     if (spineEl) {
       spineEl.style.width = (22 + Math.min(c.total, 40) * 0.45) + 'px';
+      spineEl.setAttribute('data-unread', String(c.unread));
       var tally = spineEl.querySelector('.satchel-spine-tally');
-      if (tally) tally.textContent = c.total > 0 ? String(c.total) : '—';
+      if (tally) tally.textContent = c.total > 0 ? (c.unread > 0 ? c.total + ' · ' + c.unread + ' unopened' : String(c.total)) : '—';
     }
   }
 

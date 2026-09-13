@@ -42,6 +42,29 @@
     setTierClass(m, 'buddy-', tierLevel(artifacts + relations, BUDDY_TIERS));
   }
 
+  // Rainy Day (s.shadowOn) — one owner, mirrored everywhere. This is the
+  // single place the machine's weather class is applied, on load and on
+  // every change, so the desktop icon, the settings panel, and the sea
+  // room's secret key all land on the same machine without any of them
+  // touching the class themselves.
+  //
+  // It sets classes and nothing else. The weather is IN the house: it falls
+  // in the room behind the CRT's own window (`src/features/crt-room/`), put
+  // there by that room, in that room's material — the machine's desk side
+  // carries the cool palette, the wet tube, and the ticker, and no window
+  // of its own. A second window at the desk would put the weather in two
+  // places (covenant rule 4: one object, never two).
+  function applyShadow(s) {
+    var m = document.querySelector('.machine');
+    if (!m || !s) return;
+    var on = !!s.shadowOn;
+    m.classList.toggle('shadow-on', on);
+    // The weather is the whole SCENE, not just the tube: the body carries
+    // the class so the room itself can cool and every room's own skin can
+    // key off it.
+    if (document.body) document.body.classList.toggle('rainy-on', on);
+  }
+
   function applyTutorialDone(s) {
     var stage = document.getElementById('desktop');
     if (!stage) return;
@@ -70,8 +93,8 @@
     if (window.Liber && window.Liber.state) {
       var s = window.Liber.state.get() || {};
       var m = document.querySelector('.machine');
+      applyShadow(s);
       if (m) {
-        if (s.shadowOn) m.classList.add('shadow-on');
         var n = Object.keys(s.visited || {}).length;
         if (n >= 12) m.classList.add('visited-12');
         else if (n >= 9) m.classList.add('visited-9');
@@ -86,6 +109,7 @@
         window.Liber.state.on('change', applyTutorialDone);
         window.Liber.state.on('change', applyTheme);
         window.Liber.state.on('change', applyPresence);
+        window.Liber.state.on('change', applyShadow);
       }
     }
   });

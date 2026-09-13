@@ -221,7 +221,7 @@
     app.style.setProperty('--basin-half', '160px');
     app.classList.toggle('compact', aw < 700);
     var availH = ah - topPad - botPad;
-    var availW = aw - 376;   /* the two flank boards, with their margins */
+    var availW = aw - 460;   /* the two flank boards (210 each) + a margin apiece */
     if (availH < 120 || availW < 220) {
       var fw = Math.max(140, Math.min(240, aw - 268));
       var fh = Math.round(fw * 0.8);
@@ -229,7 +229,9 @@
       pit.style.width = fw + 'px';
       pit.style.height = fh + 'px';
       pit.style.left = Math.round((aw - fw) / 2) + 'px';
-      var ft = ah - fh - 44;   /* above the crew bar and the tools */
+      // lane C: compact stage — the crew bar stands ~52px tall on the bottom
+      // band; 44 left its art under the basin's rim. 64 clears it.
+      var ft = ah - fh - 64;   /* above the crew bar and the tools */
       if (ft < 120) ft = Math.max(96, Math.round((ah - fh) * 0.45));
       pit.style.top = ft + 'px';
       pit.style.transform = 'none';
@@ -496,6 +498,24 @@
     wireCrew();
     fitBasin();
     window.addEventListener('resize', fitBasin);
+    // The machine's width follows the viewport, but the app's own box can also
+    // change with no window resize at all — devtools docking, browser zoom, an
+    // embedded panel. Listening only to `resize` left the compact/strip
+    // decision stale: the boards stayed horizontal strips (with their plaques
+    // over each other) on a screen wide enough for the columns.
+    if (window.ResizeObserver) {
+      var basinApp = document.querySelector('.toybox-app');
+      if (basinApp && !basinApp.__basinRO) {
+        var lastW = -1, lastH = -1;
+        basinApp.__basinRO = new ResizeObserver(function () {
+          var w = basinApp.clientWidth, h = basinApp.clientHeight;
+          if (w === lastW && h === lastH) return;   // no oscillation: fitBasin resizes children only
+          lastW = w; lastH = h;
+          fitBasin();
+        });
+        basinApp.__basinRO.observe(basinApp);
+      }
+    }
 
     // probe hooks (acceptance passes read these; harmless in production)
     window.__sinkSim = sim;

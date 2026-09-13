@@ -520,9 +520,12 @@
       for (var i = 0; i < grid.length; i++) if (grid[i] === v) n++;
       return n;
     }
+    // y0..y1 inclusive: callers ask for a band ending on the floor row, and
+    // the floor row is exactly where settled powder lands.
     function countInRows(v, y0, y1) {
       var n = 0;
-      for (var y = y0; y < Math.min(y1, H); y++)
+      var lo = y0 < 0 ? 0 : y0, hi = y1 > H - 1 ? H - 1 : y1;
+      for (var y = lo; y <= hi; y++)
         for (var x = 0; x < W; x++)
           if (grid[idx(x, y)] === v) n++;
       return n;

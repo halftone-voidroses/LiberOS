@@ -78,7 +78,11 @@
   }
   function pick(arr, seed) {
     if (!arr || !arr.length) return '';
-    return arr[seed % arr.length];
+    // a caller's seed may be negative or fractional (a bench line keyed on a
+    // signed hash, say) — a bare `%` would hand back arr[-3] and the line
+    // would arrive undefined.
+    var i = Math.abs(Math.floor(Number(seed) || 0)) % arr.length;
+    return arr[i];
   }
 
   // ── state plumbing ───────────────────────────────────────────────────
@@ -344,6 +348,83 @@
     }
   }
 
+  // ── the bench ────────────────────────────────────────────────────────
+  // Rooms that keep company while you work (ROOM 01 sigil, and any room
+  // that wants it) hand the lamp a prepared line. It always lands in the
+  // transcript; with the panel shut the lamp takes it anyway — it lights,
+  // and the line whispers on the glass under it — so commentary from the
+  // bench is never something you had to have the chat open to see.
+  var whisperEl = null;
+  var whisperTimer = null;
+
+  function whisper(text) {
+    build();
+    if (!whisperEl) {
+      whisperEl = el('div', 'lc-whisper', doc.body);
+      whisperEl.id = 'liberchat-whisper';
+      whisperEl.setAttribute('role', 'status');
+      whisperEl.setAttribute('aria-live', 'polite');
+    }
+    whisperEl.textContent = text;
+    whisperEl.classList.add('show');
+    ui.lamp.classList.add('nudge');
+    if (whisperTimer) global.clearTimeout(whisperTimer);
+    whisperTimer = global.setTimeout(function () {
+      if (whisperEl) whisperEl.classList.remove('show');
+      if (ui) ui.lamp.classList.remove('nudge');
+    }, reduced ? 4200 : 5600);
+  }
+
+  // Deliver one line as the room's traveller. Returns the text it spoke,
+  // or false when there was nothing to say.
+  function bench(text) {
+    var t = String(text == null ? '' : text).replace(/\s+/g, ' ').trim();
+    if (!t) return false;
+    build();
+    if (!persona) persona = activePersona();
+    if (!ui.panel.hidden) line('them', t, 'lc-bench');
+    else {
+      turns.push({ who: 'them', text: t });
+      whisper(t);
+    }
+    return t;
+  }
+
+  // Read a register off the active persona's chat.bench, route it, fill
+  // {vars}, and speak it.
+  //   key   'intention' | 'material_ink' | 'material_tool' | 'material_part'
+  //         | 'hesitation' | 'save'
+  //   vars  e.g. { text: 'carry what is heavy' } — clipped by the caller
+  //   seed  a number (a stroke count, an exchange) for deterministic picks
+  function benchSay(key, vars, seed) {
+    var p = persona || activePersona();
+    var reg = (p && p.chat && p.chat.bench) || null;
+    if (!reg || !key) return false;
+    // an intention is routed to the sharper register when its words name
+    // something the stone has an opinion about
+    if (key === 'intention' && vars && vars.text && reg.intentionWhen) {
+      var low = String(vars.text).toLowerCase();
+      for (var w = 0; w < reg.intentionWhen.length; w++) {
+        var when = reg.intentionWhen[w];
+        if (!when || !when.key) continue;
+        for (var q = 0; q < when.k.length; q++) {
+          if (low.indexOf(when.k[q]) >= 0 && reg[when.key]) { key = when.key; break; }
+        }
+        if (key !== 'intention') break;
+      }
+    }
+    var lines = reg[key];
+    if (!lines || !lines.length) return false;
+    var s = typeof seed === 'number' ? seed : hash(String(key) + '::' + turns.length);
+    var text = pick(lines, s);
+    if (vars) {
+      Object.keys(vars).forEach(function (k) {
+        text = text.split('{' + k + '}').join(String(vars[k] == null ? '' : vars[k]));
+      });
+    }
+    return bench(text);
+  }
+
   // ── public surface (acceptance tests drive this) ─────────────────────
   global.LiberLiberchat = {
     open: openPanel,
@@ -356,7 +437,18 @@
     },
     transcript: function () { return turns.slice(); },
     persona: function () { return persona ? persona.id : pageKey(); },
-    exchanges: exchangesFor
+    exchanges: exchangesFor,
+    // the bench (see above)
+    bench: bench,
+    benchSay: benchSay,
+    hasBench: function (key) {
+      var p = persona || activePersona();
+      var reg = (p && p.chat && p.chat.bench) || null;
+      return !!(reg && Array.isArray(reg[key]) && reg[key].length);
+    },
+    whispered: function () {
+      return (whisperEl && whisperEl.classList.contains('show')) ? whisperEl.textContent : null;
+    }
   };
 
   // Mount the lamp once the DOM (and data/state) exist.

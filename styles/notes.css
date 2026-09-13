@@ -121,3 +121,17 @@
   font-size: 12.5px;
   max-width: 150px;
 }
+
+/* lane C: co-layout on narrow screens. The glass is ~236px tall there and
+   the cog and the dial hold the middle, so both columns live in the top
+   band: notes left, the day's list right (see daily-floor.css), each
+   clear of the cog's corner. */
+@media (max-width: 600px) {
+  .notes {
+    top: 4px;
+    left: 8px;
+    width: 45%;
+    max-width: none;
+  }
+  .notes-pad { min-height: 36px; }
+}

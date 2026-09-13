@@ -1,8 +1,12 @@
-// constellation.js — the desktop as a relational graph
-// The buddy stone is the hub. Every artifact ever created orbits it
-// (regardless of whether a relation exists). Clicking an artifact
-// opens a tiny mini-menu with a free-form verb input to bind it to
-// the buddy. Clicking the stone itself opens the sigil app.
+// constellation.js — SYSTEM 04 · the evolving constellation
+// Every desktop icon is a procedural render of real state, drawn in
+// layers: base form → material → earned complexity. Zero fixed image
+// assets; no Math.random anywhere — every scintilla is seeded from
+// state, so the same state draws the same pixels. Release is not
+// erasure even optically: unbinding leaves a ghost line.
+//
+// Owns: desktop only (src/constellation.js). Reads s.* (relations,
+// buddy, visited, artifact arrays) and never writes state.
 
 (function () {
   var svg = document.getElementById('constellation-svg');
@@ -15,26 +19,29 @@
   var miniRelease = document.getElementById('constellation-mini-release');
   if (!svg) return;
 
-  var ARTIFACT_PALETTE = [
-    { color: '#ff69b4', glow: 'rgba(255,105,180,0.5)' },
-    { color: '#d4af6a', glow: 'rgba(212,175,106,0.5)' },
-    { color: '#5a8aaa', glow: 'rgba(90,138,170,0.5)' },
-    { color: '#7a9a4a', glow: 'rgba(122,154,74,0.5)' },
-    { color: '#cc6020', glow: 'rgba(204,96,32,0.5)' },
-    { color: '#a07ac0', glow: 'rgba(160,122,192,0.5)' },
-    { color: '#aa3030', glow: 'rgba(170,48,48,0.5)' },
-    { color: '#4a6068', glow: 'rgba(74,96,104,0.5)' },
-    { color: '#d8c040', glow: 'rgba(216,192,64,0.5)' },
-    { color: '#8a4a8a', glow: 'rgba(138,74,138,0.5)' },
-    { color: '#5a7a4a', glow: 'rgba(90,122,74,0.5)' },
-    { color: '#c89060', glow: 'rgba(200,144,96,0.5)' }
-  ];
+  // ── material constants (patina thresholds mirror src/shadow.js) ────
+  var PATINA_TIERS = [2, 6, 12];
+  var W = 600, H = 400;
+  var CX = W / 2, CY = H / 2;
+
+  // ── deterministic hash: the renderer's only source of surprise ────
+  // (state → same pixels; two artifacts that differ only in id still
+  // get distinct grain without a random call anywhere)
+  function hash32(str) {
+    var h = 2166136261 >>> 0;
+    var s = String(str == null ? '' : str);
+    for (var i = 0; i < s.length; i++) {
+      h ^= s.charCodeAt(i);
+      h = (h * 16777619) >>> 0;
+    }
+    return h >>> 0;
+  }
+  function seededPick(str, mod) { return hash32(str) % mod; }
+  function f2(n) { return Math.round(n * 100) / 100; }
 
   function getState() {
     return (window.Liber && window.Liber.state && window.Liber.state.get()) || {};
   }
-  // Escape kept names into SVG text/title nodes — names are user-written
-  // and interpolated raw below; this keeps a < in a name from eating the web.
   function esc(s) {
     return (s == null ? '' : String(s)).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
@@ -45,7 +52,12 @@
     var s = getState();
     var all = [];
     var c = s.buddy || [];
-    for (var q = 0; q < c.length; q++) all.push({ kind: 'buddy', label: c[q].name || c[q].intention || 'sealed words', data: c[q] });
+    for (var q = 0; q < c.length; q++) {
+      // the stone itself is the carved centre, not an orbit — it is
+      // drawn once, by stoneRender, with everything it has earned.
+      if (c[q] && c[q].kind === 'stone') continue;
+      all.push({ kind: 'buddy', label: c[q].name || c[q].intention || 'sealed words', data: c[q] });
+    }
     var d = s.divination || [];
     for (var i = 0; i < d.length; i++) all.push({ kind: 'divination', label: d[i].name, data: d[i] });
     var g = s.games || [];
@@ -90,6 +102,77 @@
     return { x: cx + Math.cos(a) * rx, y: cy + Math.sin(a) * ry };
   }
 
+  // ── earned state ───────────────────────────────────────────────────
+  // The marks the stone has earned: one per kept artifact type (five
+  // in the pitch's ledger, eleven drawn — every kind that exists).
+  var KIND_MARKS = ['games', 'sea', 'divination', 'garden', 'dreams', 'learn', 'abstract', 'methodology', 'satchel', 'council', 'iching'];
+
+  function keptKinds(s) {
+    var kept = [];
+    for (var i = 0; i < KIND_MARKS.length; i++) {
+      var arr = s[KIND_MARKS[i]];
+      if (Array.isArray(arr) && arr.length > 0) kept.push(KIND_MARKS[i]);
+    }
+    return kept;
+  }
+
+  function patinaTier(s) {
+    var visits = Object.keys(s.visited || {}).length;
+    var artifacts = 0;
+    var kinds = ['divination', 'iching', 'games', 'sea', 'buddy', 'learn', 'council', 'garden', 'dreams', 'abstract', 'methodology', 'satchel'];
+    for (var i = 0; i < kinds.length; i++) {
+      if (Array.isArray(s[kinds[i]])) artifacts += s[kinds[i]].length;
+    }
+    var n = visits + artifacts;
+    var level = 0;
+    for (var t = 0; t < PATINA_TIERS.length; t++) { if (n >= PATINA_TIERS[t]) level = t + 1; }
+    return level;
+  }
+
+  // A relation is annotated when the satchel wrote a margin note on it,
+  // two-way when the far endpoint has tied a knot back.
+  function relNote(rel) {
+    return rel && typeof rel.note === 'string' && rel.note.length > 0;
+  }
+  function relTwoWay(rel) {
+    if (!rel || !rel.from || !rel.to || rel.to === 'buddy') return false;
+    var rels = (getState().relations || []);
+    for (var i = 0; i < rels.length; i++) {
+      if (rels[i].from === rel.to && (rels[i].to || 'buddy') === rel.from) return true;
+    }
+    return false;
+  }
+  // Three edge textures: a fresh relation is rope, an annotated one a
+  // brace, a long-lived one a filament. Age is earned, not wall-clock:
+  // the edge matured when three more keeps arrived after it was tied.
+  function edgeClass(rel, s) {
+    var keptAt = rel.ts || 0;
+    var later = 0;
+    var kinds = ['divination', 'iching', 'games', 'sea', 'buddy', 'learn', 'council', 'garden', 'dreams', 'abstract', 'methodology', 'satchel'];
+    for (var k = 0; k < kinds.length; k++) {
+      var arr = s[kinds[k]];
+      if (!Array.isArray(arr)) continue;
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i] && (arr[i].ts || 0) > keptAt) later++;
+      }
+    }
+    if (later >= 6) return 'filament';
+    if (relNote(rel) || relTwoWay(rel)) return 'brace';
+    return 'rope';
+  }
+
+  // Ghosts: relations that once were. releaseArtifact/ unbind drop the
+  // edge, but the graveyard keeps the body — the stone remembers.
+  function ghostVerbs(s) {
+    var out = [];
+    var gy = s.graveyard || [];
+    for (var i = 0; i < gy.length; i++) {
+      var g = gy[i];
+      if (g && g.entry && g.entry.id) out.push(g.entry.id);
+    }
+    return out;
+  }
+
   var selectedArtifact = null;
   var lastSig = null;
 
@@ -105,17 +188,192 @@
   // The orbit is a CSS animation on the rendered <g> — rebuilding the SVG
   // restarts it from zero. Cycling the dial writes `visited` on every press,
   // which reset the orbit each time (user report). Skip the rebuild unless
-  // something the drawing actually depends on changed.
+  // something the drawing actually depends on changed. The morph beat is
+  // exempt: while it plays, redraws are held so both endpoints morph in
+  // place instead of being replaced mid-beat.
   function drawSig(s) {
     return [stoneOf(s.buddy).length, sealedOf(s.buddy).length, (s.divination || []).length, (s.games || []).length,
       (s.learn || []).length, (s.abstract || []).length, (s.sea || []).length, (s.garden || []).length, (s.dreams || []).length,
       (s.methodology || []).length, (s.satchel || []).length,
       s.relations.length, s.tutorialDone ? 1 : 0].join('|')
-      + ':' + (s.relations || []).map(function (r) { return r.from + '>' + (r.to || 'buddy') + '>' + r.verb; }).join(',')
-      + ':' + JSON.stringify(s.unlocks || {}) + ':' + (s.unlocksSeen || []).join(',');
+      + ':' + (s.relations || []).map(function (r) { return r.from + '>' + (r.to || 'buddy') + '>' + r.verb + '>' + (r.note ? 'n' : ''); }).join(',')
+      + ':' + JSON.stringify(s.unlocks || {}) + ':' + (s.unlocksSeen || []).join(',')
+      + ':' + (s.graveyard || []).length
+      // patina tier is drawn (tint, grain, precession) — its inputs
+      // (visits + artifact counts) must sit in the signature or a tier
+      // change short-circuits and the stone keeps yesterday's weather.
+      + ':' + patinaTier(s);
+  }
+
+  // ── mark library — carve-paths in a 24×24 box, centered ────────────
+  // Each kept artifact type carves its own mark into the stone.
+  var STONE_MARKS = {
+    games:       '<path d="M12 4 A8 8 0 1 1 11.9 4 M12 4 l0 0.01 M12 20 l0 0.01 M4 12 l0 0.01 M20 12 l0 0.01 M7 7 l0 0.01 M17 17 l0 0.01 M7 17 l0 0.01 M17 7 l0 0.01" />',
+    sea:         '<path d="M4 9 q4 -3 8 0 t8 0 M4 15 q4 -3 8 0 t8 0" />',
+    divination:  '<path d="M12 3 l2.2 6.2 L20 12 l-5.8 2.8 L12 21 l-2.2 -6.2 L4 12 l5.8 -2.8 Z" />',
+    garden:      '<path d="M12 20 V8 M12 8 q-4 -1 -5 -5 q5 0 5 5 M12 10 q4 -1 5 -5 q-5 0 -5 5" />',
+    dreams:      '<path d="M5 17 q7 4 14 -6 M5 17 q5 1 9 -3 M19 11 q1 -4 -2 -7" />',
+    learn:       '<path d="M4 6 h9 v13 h-9 z M13 8 h7 v11 h-7 M4 6 l3 -2 h9 l-3 2" />',
+    abstract:    '<path d="M5 12 a3.4 3.4 0 1 1 0.01 0 M14 7 l6 4 -6 4 z" />',
+    methodology: '<path d="M6 4 v16 M6 4 h8 a3 3 0 0 1 0 8 h-8 M14 12 a3 3 0 0 1 0 8 h-8" />',
+    satchel:     '<path d="M7 8 v-2 a3 3 0 0 1 6 0 v2 M4 8 h12 v11 h-12 z M4 12 h12" />',
+    council:     '<path d="M12 4 v5 M12 15 v5 M4 12 h5 M15 12 h5 M6.5 6.5 l3 3 M14.5 14.5 l3 3 M17.5 6.5 l-3 3 M9.5 14.5 l-3 3" />',
+    iching:      '<path d="M6 5 h12 M6 8 h12 M6 12 l0 0.01 M10 12 l0 0.01 M14 12 l0 0.01 M18 12 l0 0.01 M6 16 h12 M6 19 h12" />'
+  };
+
+  var MARK_FALLBACK = STONE_MARKS.abstract;
+
+  function stoneMarkPaths(kinds) {
+    var html = '';
+    for (var i = 0; i < kinds.length; i++) {
+      var d = STONE_MARKS[kinds[i]] || MARK_FALLBACK;
+      html += '<g class="constellation-stone-mark" data-mark-kind="' + kinds[i] + '">' + d + '</g>';
+    }
+    return html;
+  }
+
+  // Deterministic grain: N short nicks seeded from the stone's id —
+  // a thumbmark, not noise. Two stones never share the same field.
+  function grainPaths(seed, count, r) {
+    var h = hash32(seed);
+    var html = '';
+    for (var i = 0; i < count; i++) {
+      h = (h * 1103515245 + 12345) >>> 0;
+      var a = ((h >>> 8) % 628) / 100;
+      h = (h * 1103515245 + 12345) >>> 0;
+      var rr = r * (0.35 + ((h >>> 8) % 100) / 220);
+      var x1 = Math.cos(a) * rr, y1 = Math.sin(a) * rr;
+      h = (h * 1103515245 + 12345) >>> 0;
+      var a2 = a + 0.25 + ((h >>> 9) % 40) / 100;
+      var x2 = Math.cos(a2) * (rr + 1.4), y2 = Math.sin(a2) * (rr + 1.4);
+      html += '<path d="M' + f2(12 + x1) + ' ' + f2(12 + y1) + ' L' + f2(12 + x2) + ' ' + f2(12 + y2) + '" />';
+    }
+    return html;
+  }
+
+  function facetPaths(k, seed) {
+    var h = hash32(seed);
+    var html = '';
+    for (var i = 0; i < k; i++) {
+      h = (h * 1103515245 + 12345) >>> 0;
+      var a1 = ((h >>> 8) % 628) / 100;
+      h = (h * 1103515245 + 12345) >>> 0;
+      var a2 = a1 + 0.9 + ((h >>> 9) % 50) / 100;
+      var r1 = 12, r2 = 5.5;
+      html += '<path d="M' + f2(12 + Math.cos(a1) * r1) + ' ' + f2(12 + Math.sin(a1) * r1)
+        + ' L' + f2(12 + Math.cos(a1) * r2) + ' ' + f2(12 + Math.sin(a1) * r2)
+        + ' L' + f2(12 + Math.cos(a2) * r2) + ' ' + f2(12 + Math.sin(a2) * r2)
+        + ' L' + f2(12 + Math.cos(a2) * r1) + ' ' + f2(12 + Math.sin(a2) * r1) + ' Z" />';
+    }
+    return html;
+  }
+
+  // ── the buddy stone: born smooth ───────────────────────────────────
+  // base form (smooth disc) → material (carves + grain, warmed per
+  // patina tier) → earned complexity (facets from relations, rings
+  // from bonds, ghosts from releases).
+  function stoneRender(s) {
+    var stones = stoneOf(s.buddy);
+    var stone = stones[0] || {};
+    var tier = patinaTier(s);
+    var kinds = keptKinds(s);
+    var rels = s.relations || [];
+    var toBuddy = rels.filter(function (r) { return (r.to || 'buddy') === 'buddy'; });
+    var ghosts = ghostVerbs(s);
+    var seed = stone.id || 'stone';
+
+    // patina deepens the carving and warms the tint (0..3)
+    var tint = ['#c8a868', '#cf9d52', '#d49044', '#d88438'][tier];
+    var carveOp = [0.55, 0.7, 0.82, 0.95][tier];
+    var grainN = [0, 3, 6, 9][tier];
+
+    var r = 24;
+    var html = '';
+    html += '<g class="constellation-stone" data-patina-tier="' + tier + '">';
+    html += '<circle cx="300" cy="200" r="' + r + '" fill="' + tint + '" fill-opacity="0.92" stroke="#f0e0c0" stroke-width="1.1"/>';
+    html += '<g class="constellation-stone-grain" stroke="rgba(30,12,4,' + carveOp * 0.5 + ')" stroke-width="0.7" fill="none">' + grainPaths('grain:' + seed, grainN, r) + '</g>';
+    html += '<g class="constellation-stone-carves" fill="none" stroke="rgba(40,16,6,' + carveOp + ')" stroke-width="1.25" stroke-linecap="round">';
+    html += stoneMarkPaths(kinds);
+    html += '</g>';
+    html += '<g class="constellation-stone-facets" fill="rgba(255,220,160,' + (0.10 + tier * 0.05) + ')" stroke="rgba(60,30,10,' + (carveOp * 0.6) + ')" stroke-width="0.6">'
+      + facetPaths(Math.min(toBuddy.length, 8), 'facets:' + seed) + '</g>';
+    // one ring per bound relation, satellites for two-way/annotated
+    for (var i = 0; i < toBuddy.length; i++) {
+      var ringR = 30 + i * 4.5;
+      var rel = toBuddy[i];
+      var fancy = relTwoWay(rel) || relNote(rel);
+      html += '<circle class="constellation-stone-ring" data-rel-from="' + esc(rel.from) + '" cx="300" cy="200" r="' + ringR
+        + '" fill="none" stroke="rgba(255,220,170,' + (fancy ? 0.75 : 0.5) + ')" stroke-width="' + (fancy ? 1.2 : 0.8)
+        + '" stroke-dasharray="' + (fancy ? '3 2' : '5 4') + '"/>';
+    }
+    for (var g2 = 0; g2 < ghosts.length; g2++) {
+      var gr = 30 + g2 * 4.5 + toBuddy.length * 4.5;
+      html += '<path class="constellation-ghost-line" data-ghost-of="' + esc(ghosts[g2]) + '" d="M' + (300 - gr) + ' 200 A' + gr + ' ' + gr + ' 0 0 1 ' + (300 + gr) + ' 200" fill="none" stroke="rgba(220,200,170,0.28)" stroke-width="0.7" stroke-dasharray="2 5"/>';
+    }
+    html += '<text x="300" y="207" text-anchor="middle" fill="#2a1408" font-size="20" font-weight="700" style="pointer-events:none;">★</text>';
+    html += '</g>';
+    return html;
+  }
+
+  // ── artifact glyph: layered, seeded, orbiting ──────────────────────
+  var GLYPH_BASE = {
+    buddy:      '<circle cx="12" cy="12" r="7" />',
+    divination: '<path d="M12 3 l7 5 -2.6 9 h-8.8 L5 8 Z M12 3 v9" />',
+    games:      '<path d="M6 9 a3.2 3.2 0 1 1 0.01 0 M18 9 a3.2 3.2 0 1 1 0.01 0 M8 16 h8" />',
+    learn:      '<path d="M5 5 h10 v13 h-10 z M15 7 h4 v11 h-4" />',
+    abstract:   '<path d="M5 14 a4 4 0 1 1 0.01 0 M12 5 l7 3 -7 3 z" />',
+    sea:        '<path d="M4 10 q4 -3.4 8 0 t8 0 M4 15 q4 -3.4 8 0 t8 0" />',
+    garden:     '<path d="M12 20 V9 M12 9 q-4.5 -1 -5.5 -6 q5.5 0 5.5 6 M12 11 q4.5 -1 5.5 -6 q-5.5 0 -5.5 6" />',
+    dreams:     '<path d="M6 16 q6 4 12 -5 M6 16 q4.4 0.6 8 -3 M18 11 q1.4 -4 -2 -7" />',
+    methodology: '<path d="M6 4 v16 M6 4 h9 a3.4 3.4 0 0 1 0 8 h-9 M15 12 a3.4 3.4 0 0 1 0 8 h-9" />',
+    satchel:    '<path d="M8 8 v-2 a4 4 0 0 1 8 0 v2 M4 8 h16 v12 h-16 z M4 13 h16" />',
+    council:    '<path d="M12 3 v6 M12 15 v6 M3 12 h6 M15 12 h6 M5.6 5.6 l4 4 M14.4 14.4 l4 4 M18.4 5.6 l-4 4 M9.6 14.4 l-4 4" />',
+    iching:     '<path d="M5 4 h14 M5 7 h14 M5 11 l0 0.01 M9.6 11 l0 0.01 M14.3 11 l0 0.01 M19 11 l0 0.01 M5 15 h14 M5 18 h14" />'
+  };
+
+  function glyphFor(kind, seed) {
+    var d = GLYPH_BASE[kind];
+    if (!d) {
+      var h = hash32('glyph:' + kind + ':' + seed);
+      var pick = [GLYPH_BASE.abstract, GLYPH_BASE.divination, GLYPH_BASE.methodology][h % 3];
+      d = pick || GLYPH_BASE.abstract;
+    }
+    return d;
+  }
+
+  function artifactRender(art, p, bound, id, orbitCount, ringDefs) {
+    var seed = id;
+    var tier = patinaTier(getState());
+    var h = hash32('rot:' + seed);
+    var rot = ((h >>> 8) % 360);
+    var body = glyphFor(art.kind, seed);
+    var html = '';
+    html += '<g class="constellation-glyph' + (bound ? ' is-bound' : '') + '" data-glyph-id="' + esc(id) + '" transform="translate(' + f2(p.x) + ' ' + f2(p.y) + ')">';
+    html += '<g transform="rotate(' + rot + ')">';
+    html += '<g class="constellation-glyph-shape" fill="none" stroke="rgba(240,224,192,0.9)" stroke-width="1.3" stroke-linejoin="round" transform="translate(-12 -12)">' + body + '</g>';
+    html += '</g>';
+    // earned orbits: one ring per relation where this glyph is the far
+    // endpoint; inner facets for notes; satellites for two-way.
+    for (var i = 0; i < ringDefs.length; i++) {
+      var rd = ringDefs[i];
+      html += '<circle class="constellation-glyph-ring" data-rel-from="' + esc(rd.from) + '" r="' + rd.r + '" fill="none" stroke="rgba(240,224,192,' + rd.op + ')" stroke-width="' + rd.w + '" stroke-dasharray="' + rd.dash + '"/>';
+    }
+    html += '</g>';
+    return html;
+  }
+
+  // ── main render ────────────────────────────────────────────────────
+  // Three edge textures, drawn as presentation on the line: a fresh
+  // relation is rope, an annotated or two-way one a brace, a long-lived
+  // one a filament.
+  function edgeStroke(ec, color, width) {
+    if (ec === 'brace') return 'stroke="' + color + '" stroke-width="' + width + '" stroke-dasharray="9 3" stroke-linecap="square"';
+    if (ec === 'filament') return 'stroke="' + color + '" stroke-width="' + (parseFloat(width) + 0.4).toFixed(2) + '" style="filter: drop-shadow(0 0 3px rgba(255,180,220,0.85));"';
+    return 'stroke="' + color + '" stroke-width="' + width + '" stroke-dasharray="4 5" stroke-linecap="round"';
   }
 
   function render() {
+    if (morphHold) return;
     var s = getState();
     var sig = drawSig(s);
     if (sig === lastSig) return;
@@ -142,8 +400,6 @@
         empty.innerHTML = '— cast the buddy first —<div class="constellation-empty-sub">open the buddy from the dial.</div>'
           + (sealedWait > 0 ? '<div class="constellation-empty-sub">' + sealedWait + ' sealed chat' + (sealedWait === 1 ? '' : 's') + ' saved.</div>' : '');
       }
-      // Threshold mark: the room acknowledges the crossing — a faint unlit ★
-      // outline at the center where the stone will land. Same void, plus a candle.
       svg.innerHTML = '<text x="300" y="216" text-anchor="middle" fill="none" stroke="rgba(255,200,100,0.28)" stroke-width="1.2" font-size="48" style="pointer-events:none;">★</text>';
       return;
     }
@@ -162,12 +418,8 @@
       }
     }
 
-    var W = 600, H = 400;
-    var cx = W / 2, cy = H / 2;
-    var sigilR = 22;
     var orbitR = Math.min(W, H) * 0.32;
-
-    var sigilPos = { x: cx, y: cy };
+    var sigilPos = { x: CX, y: CY };
     var html = '';
 
     var boundIndices = [];
@@ -181,55 +433,101 @@
     var edgeWidth = (1.6 + Math.min(relations.length, 8) * 0.45).toFixed(2);
     var edgeOpacity = Math.min(0.5 + relations.length * 0.06, 0.9).toFixed(2);
 
-    html += '<g class="constellation-orbit">';
+  // whole constellation precesses, per patina tier — styled inline (the
+  // renderer owns its own presentation; styles/constellation.css is not
+  // lane B's file). Motion users get the tier's duration; reduced-motion
+  // users get an explicit inline `animation: none`, which outranks the
+  // shared sheet's 60s run — the flourish dies, the drawn state is
+  // unchanged (covenant rule 3, motion with consent).
+    var tier = patinaTier(s);
+    var PRECESS = [180, 120, 80, 55];
+    var precessStyle = reduceMotion()
+      ? 'animation: none;'
+      : 'animation-duration: ' + PRECESS[Math.min(tier, 3)] + 's;';
+    html += '<g class="constellation-orbit constellation-precess" data-tier="' + tier + '" style="' + precessStyle + '">';
 
+    // edges mature: rope → brace → filament
     for (var rr = 0; rr < relations.length; rr++) {
       var rel = relations[rr];
-      if ((rel.to || 'buddy') !== 'buddy') continue;
-      var aIdx = artifacts.findIndex(function (a) { return a.data && a.data.id === rel.from; });
+      var toId = rel.to || 'buddy';
+      if (toId !== 'buddy') {
+        var bIdx = -1;
+        for (var bi2 = 0; bi2 < artifacts.length; bi2++) {
+          if (artifacts[bi2].data && artifacts[bi2].data.id === toId) { bIdx = bi2; break; }
+        }
+        if (bIdx < 0) continue;
+        var pB = positionFor(bIdx, artifacts.length, CX, CY, orbitR, orbitR * 0.7);
+        var aIdx2 = -1;
+        for (var bi3 = 0; bi3 < artifacts.length; bi3++) {
+          if (artifacts[bi3].data && artifacts[bi3].data.id === rel.from) { aIdx2 = bi3; break; }
+        }
+        if (aIdx2 < 0) continue;
+        var pA = positionFor(aIdx2, artifacts.length, CX, CY, orbitR, orbitR * 0.7);
+        html += '<line class="constellation-edge edge-' + edgeClass(rel, s) + '" x1="' + f2(pA.x) + '" y1="' + f2(pA.y) + '" x2="' + f2(pB.x) + '" y2="' + f2(pB.y)
+          + '" ' + edgeStroke(edgeClass(rel, s), 'rgba(255,105,180,' + edgeOpacity + ')', edgeWidth) + '/>';
+        continue;
+      }
+      var aIdx = -1;
+      for (var bi = 0; bi < artifacts.length; bi++) {
+        if (artifacts[bi].data && artifacts[bi].data.id === rel.from) { aIdx = bi; break; }
+      }
       if (aIdx < 0) continue;
-      var ap = positionFor(aIdx, artifacts.length, cx, cy, orbitR, orbitR * 0.7);
+      var ap = positionFor(aIdx, artifacts.length, CX, CY, orbitR, orbitR * 0.7);
       var verb = (rel.verb || '').toString();
       var mx = (ap.x + sigilPos.x) / 2;
       var my = (ap.y + sigilPos.y) / 2;
-      html += '<line x1="' + ap.x + '" y1="' + ap.y + '" x2="' + sigilPos.x + '" y2="' + sigilPos.y + '" stroke="rgba(255,105,180,' + edgeOpacity + ')" stroke-width="' + edgeWidth + '" stroke-dasharray="4 5"/>';
+      var ec = edgeClass(rel, s);
+      html += '<line class="constellation-edge edge-' + ec + '" data-edge-from="' + esc(rel.from) + '" data-edge-to="buddy" x1="' + f2(ap.x) + '" y1="' + f2(ap.y) + '" x2="' + f2(sigilPos.x) + '" y2="' + f2(sigilPos.y)
+        + '" ' + edgeStroke(ec, 'rgba(255,105,180,' + edgeOpacity + ')', edgeWidth) + '/>';
       if (verb && verb !== 'relates to') {
-        html += '<text x="' + mx + '" y="' + (my - 4) + '" text-anchor="middle" fill="rgba(255,205,225,0.92)" font-size="9" font-family="Georgia, serif" stroke="rgba(10,5,8,0.85)" stroke-width="2.5" paint-order="stroke" style="pointer-events: none;">' + esc(verb) + '</text>';
+        html += '<text x="' + f2(mx) + '" y="' + f2(my - 4) + '" text-anchor="middle" fill="rgba(255,205,225,0.92)" font-size="9" font-family="Georgia, serif" stroke="rgba(10,5,8,0.85)" stroke-width="2.5" paint-order="stroke" style="pointer-events: none;">' + esc(verb) + '</text>';
       }
     }
 
     if (relations.length === 0 && artifacts.length > 0) {
-      var fp0 = positionFor(0, artifacts.length, cx, cy, orbitR, orbitR * 0.7);
-      html += '<line x1="' + fp0.x + '" y1="' + fp0.y + '" x2="' + sigilPos.x + '" y2="' + sigilPos.y + '" stroke="rgba(255,105,180,0.35)" stroke-width="1.2" stroke-dasharray="3 6" style="pointer-events:none;"/>';
+      var fp0 = positionFor(0, artifacts.length, CX, CY, orbitR, orbitR * 0.7);
+      html += '<line x1="' + f2(fp0.x) + '" y1="' + f2(fp0.y) + '" x2="' + f2(sigilPos.x) + '" y2="' + f2(sigilPos.y) + '" stroke="rgba(255,105,180,0.35)" stroke-width="1.2" stroke-dasharray="3 6" style="pointer-events:none;"/>';
     }
 
-    for (var bi = 0; bi < artifacts.length; bi++) {
-      var art = artifacts[bi];
-      var p = positionFor(bi, artifacts.length, cx, cy, orbitR, orbitR * 0.7);
-      var pal = ARTIFACT_PALETTE[bi % ARTIFACT_PALETTE.length];
-      var id = art.data && art.data.id ? art.data.id : 'a' + bi;
-      var isBound = boundIndices.indexOf(bi) !== -1;
+    for (var bi4 = 0; bi4 < artifacts.length; bi4++) {
+      var art = artifacts[bi4];
+      var p = positionFor(bi4, artifacts.length, CX, CY, orbitR, orbitR * 0.7);
+      var id = art.data && art.data.id ? art.data.id : 'a' + bi4;
+      var isBound = boundIndices.indexOf(bi4) !== -1;
       var fullLbl = (art.label || '').toString();
       var lbl = fullLbl;
       if (lbl.length > 18) lbl = lbl.substring(0, 16) + '..';
       var pillW = Math.max(22, lbl.length * 5.6 + 12);
       var pillY = p.y + 13;
-      html += '<g><title>' + esc(fullLbl || ('artifact ' + (bi + 1))) + '</title>';
-      html += '<circle class="constellation-artifact" data-artifact-id="' + id + '" cx="' + p.x + '" cy="' + p.y + '" r="9" fill="' + pal.color + '" fill-opacity="' + (isBound ? '1.0' : '0.55') + '" stroke="#fff" stroke-width="0.6" style="cursor: pointer; filter: drop-shadow(0 0 5px ' + pal.glow + ');"/>';
-      html += '<text x="' + p.x + '" y="' + (p.y + 3) + '" text-anchor="middle" fill="#1a0a05" font-size="9" font-weight="700" style="pointer-events: none;">' + (bi + 1) + '</text>';
-      html += '<rect x="' + (p.x - pillW / 2).toFixed(1) + '" y="' + pillY.toFixed(1) + '" width="' + pillW.toFixed(1) + '" height="15" rx="7.5" fill="rgba(10,5,8,0.82)" stroke="rgba(200,184,144,0.25)" stroke-width="0.6" style="pointer-events: none;"/>';
-      html += '<text x="' + p.x + '" y="' + (pillY + 11).toFixed(1) + '" text-anchor="middle" fill="#e8dcc0" font-size="9" font-family="Georgia, serif" style="pointer-events: none;">' + esc(lbl) + '</text>';
-      html += '</g>';
+
+      var ringDefs = [];
       var kids = (s.relations || []).filter(function (r) { return (r.to || 'buddy') === id; });
+      var inboundBuddy = relationsFor(id).filter(function (r) { return (r.to || 'buddy') === 'buddy'; });
+      var nRings = kids.length + inboundBuddy.length;
+      for (var ri = 0; ri < nRings; ri++) {
+        var op = 0.45 + Math.min(ri, 4) * 0.09;
+        ringDefs.push({ from: ri < kids.length ? kids[ri].from : id, r: 13 + ri * 3.2, op: f2(op), w: ri === 0 ? 1 : 0.8, dash: ri % 2 ? '4 3' : '2 4' });
+      }
+
+      html += '<g><title>' + esc(fullLbl || ('artifact ' + (bi4 + 1))) + '</title>';
+      html += artifactRender(art, p, isBound, id, artifacts.length, ringDefs);
+      // the clickable body stays a circle (contract surface)
+      html += '<circle class="constellation-artifact" data-artifact-id="' + esc(id) + '" cx="' + f2(p.x) + '" cy="' + f2(p.y) + '" r="9" fill="rgba(20,8,12,0.01)" stroke="rgba(240,224,192,0.35)" stroke-width="' + (isBound ? 1.1 : 0.6) + '" style="cursor: pointer;" />';
+      if (isBound) {
+        html += '<circle cx="' + f2(p.x) + '" cy="' + f2(p.y) + '" r="9" fill="none" stroke="rgba(255,105,180,0.55)" stroke-width="1.4" style="pointer-events:none;"/>';
+      }
+      html += '<rect x="' + (p.x - pillW / 2).toFixed(1) + '" y="' + pillY.toFixed(1) + '" width="' + pillW.toFixed(1) + '" height="15" rx="7.5" fill="rgba(10,5,8,0.82)" stroke="rgba(200,184,144,0.25)" stroke-width="0.6" style="pointer-events: none;"/>';
+      html += '<text x="' + f2(p.x) + '" y="' + (pillY + 11).toFixed(1) + '" text-anchor="middle" fill="#e8dcc0" font-size="9" font-family="Georgia, serif" style="pointer-events: none;">' + esc(lbl) + '</text>';
+      html += '</g>';
       if (kids.length) {
-        html += '<circle cx="' + p.x + '" cy="' + p.y + '" r="16" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="0.7" stroke-dasharray="2 3" style="pointer-events:none;"/>';
+        html += '<circle cx="' + f2(p.x) + '" cy="' + f2(p.y) + '" r="16" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="0.7" stroke-dasharray="2 3" style="pointer-events:none;"/>';
         for (var ki = 0; ki < kids.length; ki++) {
           var ka = (ki / Math.max(kids.length, 1)) * Math.PI * 2 - Math.PI / 2;
           var kx = p.x + Math.cos(ka) * 16, ky = p.y + Math.sin(ka) * 16;
           var kid = findAnyById(kids[ki].from);
           var kidLabel = kid ? kid.label : 'kept';
           var kidId = kids[ki].from;
-          html += '<circle class="constellation-artifact constellation-satellite" data-artifact-id="' + kidId + '" cx="' + kx.toFixed(1) + '" cy="' + ky.toFixed(1) + '" r="4.5" fill="' + pal.color + '" fill-opacity="0.95" stroke="#fff" stroke-width="0.5" style="cursor: pointer; filter: drop-shadow(0 0 4px ' + pal.glow + ');"><title>' + esc(kidLabel) + '</title></circle>';
+          html += '<circle class="constellation-artifact constellation-satellite" data-artifact-id="' + esc(kidId) + '" cx="' + f2(kx) + '" cy="' + f2(ky) + '" r="4.5" fill="rgba(240,224,192,0.95)" stroke="#fff" stroke-width="0.5" style="cursor: pointer; filter: drop-shadow(0 0 4px rgba(240,224,192,0.5));"><title>' + esc(kidLabel) + '</title></circle>';
         }
       }
     }
@@ -237,25 +535,26 @@
     html += '</g>';
 
     if (sigils.length > 0 && relations.length === 0) {
-      html += '<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + orbitR + '" ry="' + (orbitR * 0.7) + '" fill="none" stroke="rgba(200,184,144,0.3)" stroke-width="1" stroke-dasharray="5 6" style="pointer-events:none;"/>';
+      html += '<ellipse cx="' + CX + '" cy="' + CY + '" rx="' + orbitR + '" ry="' + (orbitR * 0.7) + '" fill="none" stroke="rgba(200,184,144,0.3)" stroke-width="1" stroke-dasharray="5 6" style="pointer-events:none;"/>';
     }
 
-    html += '<circle class="constellation-sigil-halo" cx="' + sigilPos.x + '" cy="' + sigilPos.y + '" r="' + (sigilR + 14) + '" fill="none" stroke="rgba(255,200,100,0.3)" stroke-width="1.5" stroke-dasharray="2 6"/>';
-    html += '<circle class="constellation-sigil" id="constellation-sigil" cx="' + sigilPos.x + '" cy="' + sigilPos.y + '" r="' + sigilR + '" fill="rgba(255,200,100,0.95)" stroke="#fff" stroke-width="0.8" style="cursor: pointer; filter: drop-shadow(0 0 10px rgba(255,200,100,0.8));"/>';
-    html += '<text x="' + sigilPos.x + '" y="' + (sigilPos.y + 6) + '" text-anchor="middle" fill="#2a1408" font-size="22" font-weight="700" style="pointer-events: none;">★</text>';
-    html += '<text x="' + sigilPos.x + '" y="' + (sigilPos.y + sigilR + 18) + '" text-anchor="middle" fill="#c8b890" font-size="8" font-family="serif" font-style="italic" style="pointer-events: none;">buddy</text>';
+    html += '<circle class="constellation-sigil-halo" cx="' + sigilPos.x + '" cy="' + sigilPos.y + '" r="36" fill="none" stroke="rgba(255,200,100,0.3)" stroke-width="1.5" stroke-dasharray="2 6"/>';
+    html += stoneRender(s);
+    html += '<circle class="constellation-sigil" id="constellation-sigil" cx="' + sigilPos.x + '" cy="' + sigilPos.y + '" r="22" fill="rgba(20,8,12,0.01)" stroke="none" style="cursor: pointer;"/>';
+    html += '<text x="' + sigilPos.x + '" y="' + (sigilPos.y + 6) + '" text-anchor="middle" fill="rgba(20,8,12,0.01)" font-size="22" font-weight="700" style="pointer-events: none;">★</text>';
+    html += '<text x="' + sigilPos.x + '" y="' + (sigilPos.y + 40) + '" text-anchor="middle" fill="#c8b890" font-size="8" font-family="serif" font-style="italic" style="pointer-events: none;">buddy</text>';
 
     if (artifacts.length > 0) {
       var boundCount = boundIndices.length;
-      html += '<text x="' + cx + '" y="14" text-anchor="middle" fill="rgba(200,184,144,0.4)" font-size="7" font-family="serif" font-style="italic">— ' + artifacts.length + ' artifact' + (artifacts.length === 1 ? '' : 's') + ', ' + boundCount + ' bound —</text>';
+      html += '<text x="' + CX + '" y="14" text-anchor="middle" fill="rgba(200,184,144,0.4)" font-size="7" font-family="serif" font-style="italic">— ' + artifacts.length + ' artifact' + (artifacts.length === 1 ? '' : 's') + ', ' + boundCount + ' bound —</text>';
     } else {
-      html += '<text x="' + cx + '" y="14" text-anchor="middle" fill="rgba(200,184,144,0.4)" font-size="7" font-family="serif" font-style="italic">— draw a card, play a game, graduate a lesson. they will appear here. —</text>';
+      html += '<text x="' + CX + '" y="14" text-anchor="middle" fill="rgba(200,184,144,0.4)" font-size="7" font-family="serif" font-style="italic">— draw a card, play a game, graduate a lesson. they will appear here. —</text>';
     }
 
-  function svgPoint(e) {
-    var r = svg.getBoundingClientRect();
-    return { x: (e.clientX - r.left) * (600 / r.width), y: (e.clientY - r.top) * (400 / r.height) };
-  }
+    function svgPoint(e) {
+      var r = svg.getBoundingClientRect();
+      return { x: (e.clientX - r.left) * (600 / r.width), y: (e.clientY - r.top) * (400 / r.height) };
+    }
 
     svg.innerHTML = html;
 
@@ -275,17 +574,17 @@
         });
         el.addEventListener('pointermove', function (e) {
           if (!weaving || !downPos) return;
-          var p = svgPoint(e);
-          if (!dragging && Math.hypot(p.x - downPos.x, p.y - downPos.y) > 8) {
+          var p2 = svgPoint(e);
+          if (!dragging && Math.hypot(p2.x - downPos.x, p2.y - downPos.y) > 8) {
             dragging = true;
             dragLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
             dragLine.setAttribute('stroke', 'rgba(232,200,144,0.9)');
             dragLine.setAttribute('stroke-width', '1.2');
             dragLine.setAttribute('x1', downPos.x); dragLine.setAttribute('y1', downPos.y);
-            dragLine.setAttribute('x2', p.x); dragLine.setAttribute('y2', p.y);
+            dragLine.setAttribute('x2', p2.x); dragLine.setAttribute('y2', p2.y);
             svg.appendChild(dragLine);
           } else if (dragging && dragLine) {
-            dragLine.setAttribute('x2', p.x); dragLine.setAttribute('y2', p.y);
+            dragLine.setAttribute('x2', p2.x); dragLine.setAttribute('y2', p2.y);
           }
         });
         var endWeave = function (e) {
@@ -313,12 +612,12 @@
         el.addEventListener('pointercancel', endWeave);
         el.addEventListener('click', function () {
           if (weaving) return;
-          var id = el.getAttribute('data-artifact-id');
+          var id2 = el.getAttribute('data-artifact-id');
           var found = null;
           for (var q = 0; q < artifacts.length; q++) {
-            if (artifacts[q].data && artifacts[q].data.id === id) { found = artifacts[q]; break; }
+            if (artifacts[q].data && artifacts[q].data.id === id2) { found = artifacts[q]; break; }
           }
-          if (!found) found = findAnyById(id);
+          if (!found) found = findAnyById(id2);
           if (found) openMini(found);
         });
       })(artEls[ai]);
@@ -519,6 +818,82 @@
     } catch (e) {}
   }
 
+  // ── the one earned beat: bind → both endpoints morph in place ─────
+  // One motion-gated pulse per endpoint; the edge draws itself. Under
+  // prefers-reduced-motion this is an instant state change (nothing
+  // schedules at all).
+  function reduceMotion() {
+    return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
+  // One motion-gated pulse per endpoint; the edge draws itself. The
+  // render hold is owned by ConstellationMorph (not the beat), so both
+  // endpoints animate and redraws wait until the beat is spent. Under
+  // prefers-reduced-motion nothing schedules at all — instant state
+  // change, function intact.
+  var morphHold = false;
+
+  function morphBeat(selector) {
+    if (reduceMotion()) return;
+    var el = svg.querySelector(selector);
+    if (!el) return;
+    var start = null;
+    var DUR = 640;
+    var r0 = 9;
+    var step = function (t) {
+      if (!start) start = t;
+      var k = (t - start) / DUR;
+      if (k >= 1 || !el.parentNode) {
+        el.setAttribute('r', r0);
+        el.removeAttribute('filter');
+        return;
+      }
+      var e = 0.5 - Math.cos(Math.PI * Math.min(k, 1)) / 2;
+      el.setAttribute('r', r0 + 9 * e);
+      el.setAttribute('filter', 'drop-shadow(0 0 ' + f2(6 * e) + 'px rgba(255,200,120,0.9))');
+      requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  function pulseEdge(selector) {
+    if (reduceMotion()) return;
+    var el = svg.querySelector(selector);
+    if (!el) return;
+    try {
+      var len = el.getTotalLength ? el.getTotalLength() : 0;
+      if (!len) return;
+      el.setAttribute('stroke-dasharray', len);
+      el.setAttribute('stroke-dashoffset', len);
+      var start = null;
+      var step = function (t) {
+        if (!start) start = t;
+        var k = (t - start) / 620;
+        if (k >= 1 || !el.parentNode) { el.removeAttribute('stroke-dashoffset'); return; }
+        el.setAttribute('stroke-dashoffset', String(len * (1 - k)));
+        requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    } catch (e) {}
+  }
+
+  window.ConstellationMorph = function (fromId) {
+    if (reduceMotion()) { render(); return; }
+    var s = getState();
+    var rels = (s.relations || []).filter(function (r) { return r.from === fromId; });
+    var fresh = rels.length ? '.constellation-edge[data-edge-from="' + fromId + '"]' : null;
+    morphHold = true;
+    morphBeat('.constellation-artifact[data-artifact-id="' + fromId + '"]');
+    morphBeat('#constellation-sigil');
+    if (fresh) pulseEdge(fresh);
+    // while the beat plays, redraws are held; render() resumes at the end
+    setTimeout(function () {
+      morphHold = false;
+      lastSig = null;
+      render();
+    }, 700);
+  };
+
   function openMini(artifact) {
     selectedArtifact = artifact;
     if (!mini) return;
@@ -573,8 +948,10 @@
       if (miniSave) miniSave.textContent = target === 'buddy' ? 'bind to buddy' : 'bind to artifact';
     }
     if (window.Liber && window.Liber.sound) window.Liber.sound.play('chime');
+    var morphId = selectedArtifact.data.id;
     closeMini();
-    render();
+    if (window.ConstellationMorph) window.ConstellationMorph(morphId);
+    else render();
   }
 
   if (miniClose) miniClose.addEventListener('click', closeMini);

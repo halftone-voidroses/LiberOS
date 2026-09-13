@@ -59,6 +59,15 @@
   }
 }
 
+/* Just-past-mid widths (1281–1400): the center pocket is still narrow —
+   the scratch-notes panel's right edge reaches the centered hint and
+   clips its first word. Wrap in the pocket instead. */
+@media (max-width: 1400px) and (min-width: 1281px) {
+  .constellation-empty {
+    max-width: 200px;
+  }
+}
+
 /* Narrow screens: the side panels close in, so the invitation tucks
    into the clear pocket under the notes — left column, above the dial. */
 @media (max-width: 1000px) {

@@ -714,3 +714,214 @@
   .sea-app.releasing .sea-question,
   .sea-raison { transition: none; }
 }
+
+/* ─── ROOM 06 · the brass tide clock ────────────────────────────────────
+   The clock is the room's pacing, not an ornament: the hand takes one
+   engraved mark per release and the waterline rises a hair with it. Both
+   are persisted in state.seaTide, so the room remembers the level across
+   visits. Completion is the single slow hand — there is no confetti in
+   this room and this file does not add any. */
+.sea-clock {
+  position: absolute;
+  right: 16px;
+  top: 22%;
+  width: 74px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  pointer-events: none;
+  z-index: 6;
+}
+
+.sea-clock-face {
+  position: relative;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  /* sixteen brass graduation marks, cut into the glass */
+  background:
+    repeating-conic-gradient(
+      from -90deg,
+      rgba(212, 175, 55, 0.55) 0deg 0.9deg,
+      rgba(0, 0, 0, 0) 0.9deg 22.5deg
+    ),
+    radial-gradient(circle at 34% 28%, rgba(190, 220, 232, 0.14) 0%, rgba(2, 10, 16, 0.92) 62%),
+    #0a141c;
+  border: 2px solid #8a6a2a;
+  box-shadow:
+    inset 0 0 0 1px rgba(245, 215, 110, 0.35),
+    inset 0 0 14px rgba(0, 0, 0, 0.8),
+    0 2px 6px rgba(0, 0, 0, 0.6);
+}
+
+.sea-clock-face::after {
+  content: '';
+  position: absolute;
+  inset: 9px;
+  border-radius: 50%;
+  border: 1px solid rgba(212, 175, 55, 0.28);
+}
+
+.sea-clock-word {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 0.75rem;          /* 12px residue: engraved, not read */
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(212, 175, 55, 0.72);
+}
+.sea-clock-word-high { top: 4px; }
+.sea-clock-word-low { bottom: 4px; }
+
+.sea-clock-hand {
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  width: 2px;
+  height: 24px;
+  margin-left: -1px;
+  background: linear-gradient(180deg, #f5d76e 0%, #8a6a2a 100%);
+  transform-origin: 50% 100%;
+  transform: rotate(var(--tide-angle, 0deg));
+  box-shadow: 0 0 4px rgba(245, 215, 110, 0.5);
+  /* the slow hand: one mark lands over the dissolve window */
+  transition: transform 2.6s cubic-bezier(0.33, 0, 0.2, 1);
+}
+
+.sea-clock-pin {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f5e8b0 0%, #8a6a2a 70%);
+}
+
+.sea-clock-label {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(212, 175, 55, 0.6);
+}
+
+.sea-clock-read {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 0.875rem;         /* 14px secondary */
+  letter-spacing: 0.06em;
+  color: #e8c890;
+  text-align: center;
+  min-height: 1.2em;
+  white-space: nowrap;
+}
+
+/* deep-intensity tone: the clock clears once the deep lets you in */
+.sea-clock.deep .sea-clock-face {
+  border-color: #e8c890;
+  box-shadow:
+    inset 0 0 0 1px rgba(245, 215, 110, 0.6),
+    inset 0 0 16px rgba(42, 138, 138, 0.35),
+    0 0 10px rgba(212, 175, 55, 0.35);
+}
+.sea-clock.deep .sea-clock-read { color: #a0e0d8; }
+
+/* the waterline — the tide's memory of every release */
+.sea-waterline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--sea-level, 0) * 46%);
+  height: 2px;
+  background: linear-gradient(90deg,
+    rgba(212, 175, 55, 0) 0%,
+    rgba(232, 200, 144, 0.5) 18%,
+    rgba(232, 200, 144, 0.78) 50%,
+    rgba(232, 200, 144, 0.5) 82%,
+    rgba(212, 175, 55, 0) 100%);
+  box-shadow: 0 0 10px rgba(160, 224, 216, 0.28);
+  pointer-events: none;
+  z-index: 5;
+  transition: bottom 2.6s cubic-bezier(0.33, 0, 0.2, 1);
+}
+.sea-waterline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 2px;
+  height: 26px;
+  background: linear-gradient(0deg, rgba(120, 190, 200, 0.10) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
+/* reduced motion: the clock still keeps time, it just does not travel */
+@media (prefers-reduced-motion: reduce) {
+  .sea-clock-hand,
+  .sea-waterline { transition: none; }
+}
+
+/* ─── 439px · the glass is 260×149. The composition restacks into it:
+   the fathom gauge stands down (the weigh dots carry the same 1–5), the
+   tide clock keeps a one-line readout in the top-right, and the ritual
+   wraps to the bottom of the glass. Before this, the ritual was sized in
+   `vw` — 404px wide and 250px tall inside a 260px screen — so it grew up
+   through the titlebar and buried the weigh dots underneath the exit
+   button; tapping one left the room. The question moves into the input's
+   own placeholder (16px, upright, 8.7:1), which is where the reader is
+   already looking on a screen this small. */
+@media (max-width: 439px) {
+  .sea-gauge { display: none; }
+  .sea-question { display: none; }
+
+  /* the dial stands down; the readout keeps the memory visible in the
+     top band, clear of the ritual below it */
+  .sea-clock {
+    right: 2px;
+    top: 0;
+    width: 100%;
+    align-items: flex-end;
+    gap: 0;
+  }
+  .sea-clock-face { display: none; }
+  .sea-clock-label { display: none; }
+  .sea-clock-read { font-size: 0.75rem; line-height: 1.1; letter-spacing: 0.04em; }
+
+  .sea-ritual {
+    left: 0;
+    transform: none;
+    width: 100%;
+    bottom: 2px;
+    max-height: calc(100% - 4px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 4px 6px;
+    box-sizing: border-box;
+    padding: 0 4px;
+  }
+  .sea-ritual > #sea-input { flex: 1 1 100%; width: 100%; max-width: none; }
+  .sea-ritual-label { display: none; }
+  .sea-ritual > #sea-intensity { flex: 1 1 100%; }
+  .sea-release { letter-spacing: 0.12em; padding: 4px 4px; }
+  .sea-breath-toggle { letter-spacing: 0.04em; padding: 6px 8px; }
+  .sea-breath-phase:empty { display: none; }
+  .sea-gate-note { position: absolute; bottom: 100%; left: 0; right: 0; margin: 0 0 4px; }
+}
+
+/* Rainy Day (s.shadowOn) - the sea's own weather.
+   Rain on open water: the room goes a shade colder and the deep comes up
+   as a wet shadow at the edges. A real palette shift, not an opacity wash;
+   the glass itself dims in styles/shadow.css. */
+.machine.shadow-on .sea-app {
+  background:
+    radial-gradient(ellipse at 50% 6%, rgba(120, 168, 208, 0.07) 0%, rgba(0, 0, 0, 0) 58%),
+    #01040a;
+  box-shadow: inset 0 0 140px rgba(8, 26, 44, 0.75);
+}
