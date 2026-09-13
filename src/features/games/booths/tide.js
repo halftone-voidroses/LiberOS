@@ -128,7 +128,7 @@ function playTide(ctx, b, body) {
   var result2 = document.getElementById('tide-result');
   if (keepBtn) keepBtn.addEventListener('click', function () {
     if (!dropped) {
-      if (result2) result2.textContent = 'drop a feeling first — the pool is still empty.';
+      if (result2) result2.textContent = 'the pool is empty. drop a feeling and it joins the tide.';
       return;
     }
     var shot = ctx.thumb(cv);

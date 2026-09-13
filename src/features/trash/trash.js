@@ -166,12 +166,35 @@
     if (window.Liber && window.Liber.sound) { try { window.Liber.sound.play('chime'); } catch (e) {} }
   }
 
+  // bury-everything rides a visible interlock: lift once to arm, lift
+  // again to open the soil. it times out back to safe. per-item whys
+  // are never bypassed — each buried thing still needs its own reason
+  // to return (renderDigList enforces one why per row).
+  var buryArmed = false, buryTimer = null;
+  function disarmBury() {
+    buryArmed = false;
+    if (buryTimer) { clearTimeout(buryTimer); buryTimer = null; }
+    var b = document.getElementById('trash-bury-all');
+    if (b) { b.classList.remove('armed'); b.textContent = 'bury everything'; b.setAttribute('aria-pressed', 'false'); }
+  }
+  function armBury() {
+    buryArmed = true;
+    var b = document.getElementById('trash-bury-all');
+    if (b) { b.classList.add('armed'); b.textContent = 'bury everything — again to bury'; b.setAttribute('aria-pressed', 'true'); }
+    if (buryTimer) clearTimeout(buryTimer);
+    buryTimer = setTimeout(disarmBury, 6000);
+  }
   function openBuryPrompt() {
     var prompt = document.getElementById('trash-save-prompt');
     var body = document.getElementById('trash-save-prompt-body');
     if (prompt && body) {
       pendingBury = { kind: 'all' };
-        body.innerHTML = 'bury <em>everything</em>? the soil keeps it all. re-add it later, with a reason.';
+        var n = 0;
+        try {
+          var s = st() ? st().get() : {};
+          n = ((s.buddy || []).length) + Object.keys(s.visited || {}).length;
+        } catch (e) { n = 0; }
+        body.innerHTML = 'bury <em>everything</em> — ' + n + ' kept to the soil. each returns only with its own reason.';
       prompt.classList.add('open');
       prompt.removeAttribute('inert');
     } else {
@@ -182,6 +205,7 @@
   function commitFor(kind) {
     if (!st()) return;
     if (kind === 'all') {
+      disarmBury();
       commitBury(snapshotAll());
       flash('the room is clean. the soil is full.');
     }
@@ -220,7 +244,14 @@
     });
 
     var b4 = document.getElementById('trash-bury-all');
-    if (b4) b4.addEventListener('click', function () { openBuryPrompt(); });
+    if (b4) {
+      b4.setAttribute('aria-pressed', 'false');
+      b4.addEventListener('click', function () {
+        if (!buryArmed) { armBury(); return; }
+        disarmBury();
+        openBuryPrompt();
+      });
+    }
 
     var prompt = document.getElementById('trash-save-prompt');
     var buryBtn = document.getElementById('trash-save-prompt-keep');

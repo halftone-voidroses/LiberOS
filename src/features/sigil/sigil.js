@@ -731,6 +731,63 @@ function loadGhost(bitmapDataUrl) {
       wrap.addEventListener('mouseleave', leave);
     }
 
+    // the keyboard path to the same kept mark: arrows walk the chisel,
+    // enter lays it down. no mouse required to reach save.
+    var kpos = null;
+    function kEnsure() {
+      if (!canvas) return null;
+      var rect = canvas.getBoundingClientRect();
+      if (rect.width < 2 || rect.height < 2) return null;
+      if (!kpos) kpos = { x: rect.width / 2, y: rect.height / 2 };
+      kpos.x = Math.max(0, Math.min(rect.width, kpos.x));
+      kpos.y = Math.max(0, Math.min(rect.height, kpos.y));
+      return kpos;
+    }
+    function kShow() {
+      var p = kEnsure();
+      if (!p || !cursor) return;
+      cursor.style.left = p.x + 'px';
+      cursor.style.top = p.y + 'px';
+      if (!cursorVisible) {
+        cursor.classList.add('visible');
+        cursorVisible = true;
+      }
+    }
+    function kMark() {
+      if (!ctx || !canvas) return;
+      var p = kEnsure();
+      if (!p) return;
+      pushUndo();
+      if (armedPart) {
+        drawStamp(armedPart, p.x, p.y);
+        armedPart = null;
+        var parts = document.querySelectorAll('.sigil-part');
+        for (var i = 0; i < parts.length; i++) parts[i].classList.remove('armed');
+        if (wrap) wrap.classList.remove('armed');
+      } else if (activeTool === 'bucket') {
+        floodFill(p.x, p.y, activeInk);
+      } else {
+        ctx.fillStyle = activeInk;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      if (window.Liber && window.Liber.sound) window.Liber.sound.play('thunk');
+    }
+    if (wrap) {
+      wrap.addEventListener('focus', kShow);
+      wrap.addEventListener('keydown', function (e) {
+        var p = kEnsure();
+        if (!p) return;
+        var step = e.shiftKey ? 2 : 12;
+        if (e.key === 'ArrowLeft') { p.x -= step; e.preventDefault(); kShow(); }
+        else if (e.key === 'ArrowRight') { p.x += step; e.preventDefault(); kShow(); }
+        else if (e.key === 'ArrowUp') { p.y -= step; e.preventDefault(); kShow(); }
+        else if (e.key === 'ArrowDown') { p.y += step; e.preventDefault(); kShow(); }
+        else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); kMark(); }
+      });
+    }
+
     if ((window.Liber && window.Liber.state && window.Liber.state.get().tutorialStage) === 'stonedemo') runRiasonDemo();
     function runRiasonDemo() {
       var C = window.Cursor || null;

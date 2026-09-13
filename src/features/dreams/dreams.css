@@ -83,9 +83,9 @@
 }
 
 .dreams-sub {
-  font-style: italic;
-  font-size: 0.95rem;
-  color: var(--dreams-ink-soft);
+  font-style: normal;
+  font-size: 1rem;
+  color: var(--dreams-paper);
   letter-spacing: 0.06em;
 }
 
@@ -103,6 +103,9 @@
   align-items: baseline;
   gap: 10px;
   padding: 8px 26px 7px;
+  min-height: 44px;
+  min-width: 44px;
+  align-items: center;
   font-family: var(--dreams-serif);
   font-variant: small-caps;
   font-size: 1.05rem;
@@ -167,9 +170,10 @@
 .dreams-field-label {
   display: block;
   font-variant: small-caps;
+  font-style: normal;
   letter-spacing: 0.14em;
-  font-size: 0.85rem;
-  color: var(--dreams-purple-deep);
+  font-size: 1rem;
+  color: #5c4688;
   margin-bottom: 3px;
 }
 
@@ -212,6 +216,7 @@
 .dreams-assoc-btn {
   font-family: var(--dreams-serif);
   font-variant: small-caps;
+  font-style: normal;
   letter-spacing: 0.12em;
   font-size: 1rem;
   font-weight: 700;
@@ -221,6 +226,8 @@
   border: 1px solid var(--dreams-purple-deep);
   border-radius: 2px;
   padding: 6px 18px;
+  min-height: 44px;
+  min-width: 44px;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 2px 4px rgba(0, 0, 0, 0.4);
   transition: filter var(--dreams-fade), transform var(--dreams-fade);
 }
@@ -230,9 +237,9 @@
 .dreams-assoc-btn:active { transform: translateY(1px); }
 
 .dreams-record-note {
-  font-style: italic;
-  font-size: 0.85rem;
-  color: var(--dreams-ink-soft);
+  font-style: normal;
+  font-size: 1rem;
+  color: var(--dreams-ink);
 }
 
 /* the ledger */
@@ -242,10 +249,11 @@
 .dreams-ledger-empty,
 .dreams-assoc-empty,
 .dreams-folio-empty {
-  font-style: italic;
+  font-style: normal;
+  font-size: 1rem;
   text-align: center;
   color: var(--dreams-purple);
-  opacity: 0.75;
+  opacity: 0.9;
   padding: 34px 20px;
   letter-spacing: 0.08em;
 }
@@ -301,14 +309,18 @@
 .dreams-back {
   align-self: flex-start;
   background: none;
-  border: none;
+  border: 1px dashed rgba(138, 202, 255, 0.55);
+  border-radius: 2px;
   font-family: var(--dreams-serif);
   font-variant: small-caps;
+  font-style: normal;
   letter-spacing: 0.12em;
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: var(--dreams-cyan);
   cursor: pointer;
-  padding: 2px 4px;
+  padding: 6px 14px;
+  min-height: 44px;
+  min-width: 44px;
   margin-bottom: 8px;
 }
 .dreams-back:hover { text-shadow: 0 0 8px rgba(138, 202, 255, 0.7); }
@@ -367,10 +379,10 @@
 }
 
 .dreams-read-text {
-  font-size: 1rem;
+  font-size: 1.075rem;
   line-height: 1.5;
-  color: var(--dreams-ink-soft);
-  font-style: italic;
+  color: var(--dreams-ink);
+  font-style: normal;
   max-height: 5.2em;
   overflow-y: auto;
 }
@@ -446,9 +458,9 @@
   color: var(--dreams-purple-deep);
 }
 .dreams-assoc-hint {
-  font-style: italic;
-  font-size: 0.82rem;
-  color: var(--dreams-ink-soft);
+  font-style: normal;
+  font-size: 1rem;
+  color: var(--dreams-ink);
 }
 
 .dreams-assoc-form {
@@ -498,12 +510,14 @@
   background: none;
   border: none;
   font-family: var(--dreams-serif);
-  font-style: italic;
-  font-size: 0.8rem;
+  font-style: normal;
+  font-size: 1rem;
   letter-spacing: 0.06em;
   color: var(--dreams-purple-deep);
   cursor: pointer;
-  padding: 0 2px;
+  padding: 6px 12px;
+  min-height: 44px;
+  min-width: 44px;
   flex-shrink: 0;
 }
 .dreams-assoc-remove:hover { text-decoration: underline; }
@@ -795,9 +809,9 @@
   color: var(--dreams-purple);
   font-family: inherit;
   font-size: 1rem;
-  line-height: 30px;
-  width: 32px;
-  height: 32px;
+  line-height: 42px;
+  width: 44px;
+  height: 44px;
   cursor: pointer;
   padding: 0;
   border-radius: 2px;
@@ -902,13 +916,16 @@
 .dreams-read-keep {
   margin-left: auto;
   font-family: var(--dreams-mono, 'Courier New', monospace);
-  font-size: 0.82rem;
+  font-size: 1rem;
+  font-style: normal;
   letter-spacing: 0.12em;
   color: var(--dreams-purple-deep, #5a4a8a);
   background: transparent;
   border: 1px dashed rgba(111, 90, 160, 0.55);
   border-radius: 2px;
-  padding: 3px 10px;
+  padding: 6px 12px;
+  min-height: 44px;
+  min-width: 44px;
   cursor: pointer;
   white-space: nowrap;
 }
@@ -928,17 +945,21 @@
 .dreams-keep-row[hidden] { display: none; }
 .dreams-keep-attach {
   font-family: var(--dreams-mono, 'Courier New', monospace);
-  font-size: 0.78rem;
+  font-size: 1rem;
+  font-style: normal;
   letter-spacing: 0.08em;
-  color: var(--dreams-ink-soft, #6a5f52);
+  color: var(--dreams-ink, #2e2a38);
   display: flex;
   gap: 6px;
   align-items: center;
+  min-height: 44px;
 }
 .dreams-keep-attach select {
   font-family: inherit;
-  font-size: 0.78rem;
+  font-size: 1rem;
+  font-style: normal;
   max-width: 220px;
+  min-height: 44px;
 }
 
 .dreams-entry-row {
@@ -949,13 +970,16 @@
 }
 .dreams-entry-keep {
   font-family: var(--dreams-mono, 'Courier New', monospace);
-  font-size: 0.78rem;
+  font-size: 1rem;
+  font-style: normal;
   letter-spacing: 0.1em;
   color: var(--dreams-purple-deep, #5a4a8a);
   background: transparent;
   border: 1px dashed rgba(111, 90, 160, 0.45);
   border-radius: 2px;
-  padding: 4px 10px;
+  padding: 6px 12px;
+  min-height: 44px;
+  min-width: 44px;
   cursor: pointer;
   align-self: center;
   white-space: nowrap;
@@ -966,3 +990,18 @@
 .dreams-app ::-webkit-scrollbar-thumb, .dreams-app::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #a48ad4 0%, #2a2040 100%); border-radius: 6px; border: 2px solid rgba(0, 0, 0, 0.45); }
 .dreams-app ::-webkit-scrollbar-thumb:hover { filter: brightness(1.25); }
 .dreams-app, .dreams-app * { scrollbar-width: thin; scrollbar-color: #a48ad4 rgba(0, 0, 0, 0.35); }
+
+/* narrow screens — the two doors stack, the folios shelve above the card,
+   and the record/association rows fold so nothing runs off the glass */
+@media (max-width: 439px) {
+  .dreams-room { padding: 10px 12px 12px; }
+  .dreams-head { flex-wrap: wrap; }
+  .dreams-doors { flex-direction: column; align-items: stretch; }
+  .dreams-door { justify-content: center; }
+  .dreams-folios { grid-template-columns: 1fr; overflow-y: auto; }
+  .dreams-drawers { max-height: 32vh; }
+  .dreams-record-actions { flex-direction: column; align-items: stretch; }
+  .dreams-assoc-head { flex-direction: column; align-items: flex-start; }
+  .dreams-assoc-form { flex-direction: column; align-items: stretch; }
+  .dreams-entry-row { grid-template-columns: 1fr; }
+}

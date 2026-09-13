@@ -68,19 +68,21 @@
                 <div class="sea-glimmer" aria-hidden="true"></div>
 
                 <div class="sea-question" id="sea-question">what do you carry to the deep?</div>
+                <div class="sea-question-faint" aria-hidden="true">what do you carry to the deep?</div>
 
                 <div class="sea-carried" id="sea-carried" aria-hidden="true"><span id="sea-carried-text"></span></div>
 
                 <div class="sea-ritual" id="sea-ritual">
                   <input class="sea-input" id="sea-input" type="text" maxlength="140"
-                         autocomplete="off" spellcheck="false"
+                         autocomplete="off" spellcheck="false" placeholder="name it, plain"
                          aria-label="what do you carry to the deep"/>
-                  <div class="sea-intensity" id="sea-intensity" role="group" aria-label="how heavy it sits">
-                    <button class="sea-intensity-dot" type="button" data-value="1" aria-label="barely"></button>
-                    <button class="sea-intensity-dot" type="button" data-value="2" aria-label="lightly"></button>
-                    <button class="sea-intensity-dot on" type="button" data-value="3" aria-label="steady"></button>
-                    <button class="sea-intensity-dot" type="button" data-value="4" aria-label="heavy"></button>
-                    <button class="sea-intensity-dot" type="button" data-value="5" aria-label="sinking"></button>
+                  <div class="sea-ritual-label" id="sea-intensity-label">weigh it</div>
+                  <div class="sea-intensity" id="sea-intensity" role="radiogroup" aria-labelledby="sea-intensity-label">
+                    <button class="sea-intensity-dot" type="button" role="radio" aria-checked="false" tabindex="-1" data-value="1" aria-label="weigh 1">1</button>
+                    <button class="sea-intensity-dot" type="button" role="radio" aria-checked="false" tabindex="-1" data-value="2" aria-label="weigh 2">2</button>
+                    <button class="sea-intensity-dot" type="button" role="radio" aria-checked="true" tabindex="0" data-value="3" aria-label="weigh 3">3</button>
+                    <button class="sea-intensity-dot" type="button" role="radio" aria-checked="false" tabindex="-1" data-value="4" aria-label="weigh 4">4</button>
+                    <button class="sea-intensity-dot" type="button" role="radio" aria-checked="false" tabindex="-1" data-value="5" aria-label="weigh 5">5</button>
                   </div>
                   <button class="sea-release" id="sea-release" type="button" disabled>release</button>
                   <button class="sea-breath-toggle" id="sea-breath-toggle" type="button" aria-pressed="false">breathe with it</button>
@@ -88,14 +90,17 @@
                 </div>
 
                 <div class="sea-breath" id="sea-breath">
-                  <div class="sea-breath-ring sea-breath-ring-1"></div>
-                  <div class="sea-breath-ring sea-breath-ring-2"></div>
-                  <div class="sea-breath-ring sea-breath-ring-3"></div>
-                  <div class="sea-breath-core"></div>
+                  <div class="sea-breath-ring" id="sea-breath-ring"></div>
                 </div>
 
                 <div class="sea-gauge">
-                  <div class="sea-gauge-fill" id="sea-gauge-fill"></div>
+                  <div class="sea-gauge-ticks" id="sea-gauge-ticks" aria-hidden="true">
+                    <span class="sea-fathom" data-tick="5">5</span>
+                    <span class="sea-fathom" data-tick="4">4</span>
+                    <span class="sea-fathom" data-tick="3">3</span>
+                    <span class="sea-fathom" data-tick="2">2</span>
+                    <span class="sea-fathom" data-tick="1">1</span>
+                  </div>
                   <div class="sea-gauge-label">depth</div>
                 </div>
 

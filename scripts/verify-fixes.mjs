@@ -138,27 +138,24 @@ const c4 = await page.evaluate(() => ({
 }));
 check('desktop shell uses current constellation/dial surface', c4.shell && !c4.retiredTrigger, JSON.stringify(c4));
 
-// ─── M3: iching cast label + completed state ──────────────────────────
-console.log('M3 — iching cast label')
+// ─── M3: iching cast progression + completed state ──────────────────
+console.log('M3 — iching cast progression')
 await goto('/divination.html')
 await page.click('.divination-mode[data-mode="iching"]');
 await page.waitForTimeout(200);
 const m3sub = await page.textContent('#divination-sub');
-check('iching mode shows iching instruction', /cast six lines/i.test(m3sub), m3sub);
+check('iching mode shows the coins instruction', /six lines/.test(m3sub), m3sub);
 for (let i = 0; i < 6; i++) {
-  const label = await page.textContent('#divination-cast');
-  if (i < 5 && !label.includes('cast line ' + (i + 1))) {
-    check('cast label advances', false, `at cast ${i + 1} label was "${label}"`);
-    break;
-  }
   await page.click('#divination-cast');
-  await page.waitForTimeout(120);
+  await page.waitForTimeout(520);
 }
 const m3 = await page.evaluate(() => ({
-  label: document.getElementById('divination-cast').textContent,
+  note: (document.getElementById('divination-cast-note') || {}).textContent || '',
   disabled: document.getElementById('divination-cast').disabled,
+  rows: document.querySelectorAll('#divination-hexagram .divination-hexagram-row').length,
 }));
-check('after 6 casts: "the hexagram stands", disabled', m3.label === 'the hexagram stands' && m3.disabled, JSON.stringify(m3));
+check('six casts chalk six lines', m3.rows === 6, JSON.stringify(m3));
+check('after 6 casts the dish rests, locked', m3.disabled, JSON.stringify({ disabled: m3.disabled }));
 
 // ─── M2: games booths reachable ───────────────────────────────────────
 console.log('M2 — games booths')

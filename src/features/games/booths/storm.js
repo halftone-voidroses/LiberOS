@@ -6,7 +6,7 @@ function playStorm(ctx, b, body) {
     '<div class="storm-wrap">'
     + '<canvas class="storm-canvas" id="storm-canvas" width="480" height="360"></canvas>'
     + '<div class="storm-buffer" id="storm-buffer" aria-hidden="true">_</div>'
-    + '<div class="storm-hint" id="storm-hint">type the falling word to execute it.</div>'
+    + '<div class="storm-hint" id="storm-hint">falling words. the terminal executes matches.</div>'
     + '<div class="games-actions" style="justify-content:center">'
     + '<button type="button" class="games-action" id="storm-keep">keep it</button>'
     + '</div>'
@@ -118,7 +118,7 @@ function playStorm(ctx, b, body) {
   if (keepBtn) keepBtn.addEventListener('click', function () {
     var total = executed + missed;
     if (!total) {
-      if (result) result.textContent = 'let it rain a little first — the static is still gathering.';
+      if (result) result.textContent = 'the static is still gathering. let it rain a little.';
       return;
     }
     var shot = ctx.thumb(cv);

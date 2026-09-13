@@ -206,7 +206,7 @@ function playSand(ctx, b, body) {
   var result = document.getElementById('sand-result');
   if (keepBtn) keepBtn.addEventListener('click', function () {
     if (!strokes) {
-      if (result) result.textContent = 'pour something first — the tent is still empty.';
+      if (result) result.textContent = 'the tent is empty. pour sand, splash water, strike fire.';
       return;
     }
     var shot = ctx.thumb(cv);

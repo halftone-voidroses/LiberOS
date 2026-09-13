@@ -74,7 +74,7 @@ function playThimble(ctx, b, body) {
     var t = thimbleState();
     var stage = thimbleStage(t);
     if (!stage) {
-      if (result) result.textContent = 'nothing to harvest yet — go live a little, then return.';
+      if (result) result.textContent = 'no leaves yet. the pot keeps its own time — visit rooms, come back.';
       return;
     }
     var shot = ctx.thumb(cv);

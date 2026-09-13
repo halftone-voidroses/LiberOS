@@ -43,7 +43,7 @@
                 <span class="sigil-titlebar-name">the casting stone</span>
                 <span class="sigil-titlebar-sub">mistress physius keeps the ritual</span>
                 <button class="sigil-help" type="button" id="sigil-help" aria-label="how this room works">?</button>
-                <button class="sigil-back" type="button" id="sigil-back" aria-label="leave">×</button>
+                <button class="sigil-back" type="button" id="sigil-back" aria-label="leave">leave</button>
               </header>
               <div class="sigil-app" data-state="sigil">
 
@@ -91,6 +91,7 @@
 
                   <div class="sigil-stage">
                     <div class="sigil-ghost-hint">— ghost at 30%. new strokes at 100%. —</div>
+                    <div class="sigil-keys">arrows walk the chisel · ★ lays the mark</div>
 
                     <div class="sigil-tablet">
                       <div class="sigil-cracks">
@@ -101,7 +102,7 @@
                         </svg>
                       </div>
                       <div class="sigil-dust" aria-hidden="true"></div>
-                      <div class="sigil-canvas-wrap">
+                      <div class="sigil-canvas-wrap" tabindex="0" aria-label="the stone. arrow keys walk the chisel. enter lays a mark.">
                         <canvas class="sigil-canvas" width="320" height="280"></canvas>
                         <div class="sigil-cursor" id="sigil-cursor" aria-hidden="true"></div>
                       </div>

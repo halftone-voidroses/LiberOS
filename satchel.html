@@ -40,7 +40,7 @@
           <div class="screen-stage">
             <header class="satchel-titlebar">
               <span class="satchel-titlebar-name">The Satchel</span>
-              <span class="satchel-titlebar-sub">Write about your other self</span>
+              <span class="satchel-titlebar-sub">for the reader's hand</span>
               <button class="satchel-help" type="button" id="satchel-help" aria-label="how this room works">?</button>
               <button class="satchel-exit" type="button" id="satchel-exit" aria-label="leave">×</button>
             </header>
@@ -53,16 +53,21 @@
                     <button class="satchel-raison-close" type="button" id="satchel-raison-close" aria-label="close">×</button>
                   </div>
                   <div class="satchel-raison-body">
-                    three drawers on the left — buddies, artifacts, knots. click a tab, then an entry; write on the right. pens on the side.
+                    riason keeps this book. three drawers — buddies, artifacts, knots. click a tab, then an entry; write on the page. the pens are yours: highlight a passage, click the highlight, leave a note. the red ribbons are what arrived since you last opened the book.
                   </div>
-                  
                 </div>
               </div>
 
               <div class="satchel-binding">
-                <div class="satchel-spine">
+                <div class="satchel-cap tl" aria-hidden="true"></div>
+                <div class="satchel-cap tr" aria-hidden="true"></div>
+                <div class="satchel-cap bl" aria-hidden="true"></div>
+                <div class="satchel-cap br" aria-hidden="true"></div>
+
+                <div class="satchel-spine" id="satchel-spine">
                   <div class="satchel-spine-text">RIASON</div>
                   <div class="satchel-spine-text">BOUND MMXXVI</div>
+                  <div class="satchel-spine-tally" id="satchel-spine-tally">—</div>
                 </div>
 
                 <div class="satchel-cabinet" id="satchel-cabinet">
@@ -73,12 +78,14 @@
                       <button type="button" class="satchel-tab" data-tab="relations" role="tab" aria-selected="false">relations</button>
                     </div>
                     <div class="satchel-list" id="satchel-list" role="tabpanel"></div>
+                    <input class="satchel-find" id="satchel-find" type="text" autocomplete="off" spellcheck="false" placeholder="find in drawer…" aria-label="find in this drawer" />
                   </div>
 
                   <div class="satchel-note" id="satchel-note">
                     <div class="satchel-note-head">
                       <div class="satchel-note-title" id="satchel-note-title">— — —</div>
                       <div class="satchel-note-date" id="satchel-note-date">— —</div>
+                      <button type="button" class="satchel-slip" id="satchel-slip" hidden></button>
                     </div>
                     <img class="satchel-polaroid" id="satchel-polaroid" alt="kept image" hidden />
                     <div class="satchel-intention" id="satchel-intention"></div>

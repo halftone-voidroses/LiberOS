@@ -1,5 +1,95 @@
 # LiberOS changelog
 
+## Unreleased
+### The room behind the CRT (SYSTEM 02 contract, built)
+- The physical room the CRT sits in, reachable from a `look behind`
+  affordance on the desktop. The screen shows the OS; the room behind it
+  keeps what you did. Every hook is fed by real state, nothing
+  decorative (`src/features/crt-room/`):
+  - the bookshelf takes one ledger volume per satchel keep, six to a
+    board, bottom board first, spine color per keep kind;
+  - the shadow pool rises with every sea release and graveyard burial —
+    the same water table the yard leaches into;
+  - the session candle melts across the sitting and is relit on return
+    (reads `s.sessionStart`, written only by its owner);
+  - the corkboard pins one card and a run of red string per relation;
+  - tin trophies stand on the CRT's top, one per patina tier (shadow.js
+    math), and the dust, floor wear, and furniture age across three
+    different-looking tiers;
+  - the window box mirrors the Glasshouse tree stage for stage — the
+    tree module owns `s.tree`, the window reads it and folds offline
+    growth the same way, never writing;
+  - Rainy Day (`s.shadowOn`) falls in the window, cools the room, and
+    steadies the candle.
+- The gaze persists across a reload within the visit (sessionStorage,
+  view scope — kept data stays in `Liber.state`).
+- Settings' maintenance panel gains the ROOM BEHIND switch, wired to the
+  same single owner (`s.crtRoomOn`) the desktop scene reads.
+- `scripts/verify-crt-room.mjs` — the contract's acceptance pass:
+  26 checks across scene/affordance, keep→shelf, release→pool,
+  relation→pins, patina 0 vs 3, Rainy Day composition, the candle arc,
+  the window-box mirror, the one-owner toggle, the unbothered machine,
+  and 439px survival. Screenshot pairs at `crt-room-patina0/3.png`.
+- `serve.cjs` honors a `PORT` env override (parallel worktrees).
+
+### Divination: the felt table (ROOM 04 contract, built)
+- The felt table is the screen: tent canvas behind, deep red felt edge to
+  edge, one lantern cone, wooden rim at the foot. The old card-gallery
+  panel is gone.
+- The deck is a stack with weight — paper band ("22 · counted 3× · ix.66,
+  do not bend"), reversible back, misaligned settle on the draw; the deck
+  counts down and runs out honestly.
+- The question is chalked on a slate in the rim and turns to face the
+  house on blur — reversibility made literal.
+- I Ching casts from a coin dish: three brass coins toss per line, six
+  lines chalk bottom-first, changing lines carry a chalk ring; the dish
+  locks when the hexagram stands and resets on Escape/discard.
+- Unified keep language: tarot and I Ching go through the same parchment
+  prompt and land on the same shelf in the same artifact shape
+  (name/question/reading/ts). Legacy `state.iching` keeps now surface on
+  the satchel's artifacts shelf instead of vanishing.
+- Arcana's tells: cold tea with the ring stain, a card that is not hers
+  under it ("the drowned — see the blue ledger"), a chalk stub, her note
+  in her own hand under the ?.
+- Compact tables (≤700px or short CRTs) restack in flow with
+  scroll-into-view on cast/keep; 439px clean, reduced-motion kills the
+  settle/toss flourishes, keep survives.
+- Acceptance: shots/div-accept.mjs 20/20 · verify-fixes M3 rewritten for
+  the cast progression · smoke + room audit + whole-site audit clean.
+### Garden: the glasshouse tree
+### Added
+- ROOM 09's scope contract, built: the thimble pot graduates from the midway
+  to Ruby's glasshouse as a tree in its own pot. It grows in real time while
+  you are elsewhere in the OS — five stages (`s.tree`, 40 min each at full
+  rate), offline growth computed on return. Absence is fine; nothing decays.
+- One can per stage-window (6h): watering banks an extra hour of growth. The
+  can is refuseable and honours refusal — the tree grows regardless.
+- Mature trees hang five fruit. Taking the fruit presses a pressing into the
+  satchel (`tree-pressing`) and drifts a petal to every paint box — the same
+  rewards the thimble granted, from the room where they always belonged.
+- The glasshouse itself: five glass panes with condensation the cursor wipes,
+  a brick sill, a bench, one warm lamp, and a root panel under glass that
+  draws the same plant's roots by stage.
+- Legacy `s.thimble` visits migrate forward as starting growth (3 visits ≈
+  one stage); no kept data lost. The thimble booth keeps working.
+- All motion gated behind `prefers-reduced-motion`; growth stages are static
+  and distinct without it.
+- Acceptance: `scripts/verify-tree.mjs` (growth fold, offline accrual,
+  watering bonus + refusal, harvest rewards, persistence, 439px, reduced
+  motion, thimble migration).
+
+### Satchel: the reader's book
+- The binding keeps its own ledger: the spine thickens with the keep count
+  (tally on the spine), brass corner caps brighten as relations are tied
+  (bucketed, three tiers).
+- Red ribbons mark unopened keeps (`s.read` registry, written on open);
+  annotated rows confess their first note in the margin on hover/focus
+  (flyout, stacked inline under 700px), keyboard-operable rows.
+- Find-in-drawer (`/` focuses, `Escape` clears, `nothing answers to that`
+  on empty) filters label + meta + body.
+- The slip: `slip out to …` carries the open keep back to the room that
+  made it (per-kind home map; satchel-native keeps stay put, slip hidden).
+
 ## 2.11.0 — Toybox: the covenant pass
 ### Added
 - COVENANT.md — the room-design law, verbatim; referenced from README and

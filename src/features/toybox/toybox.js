@@ -426,6 +426,10 @@
     c.className = 'toybox-crew-art';
     b.textContent = '';
     b.appendChild(c);
+    var nm = document.createElement('span');
+    nm.className = 'toybox-crew-name';
+    nm.textContent = kind;
+    b.appendChild(nm);
   }
 
   // the residents live on the back rim: drag one down into the water.
