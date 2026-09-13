@@ -1,0 +1,708 @@
+/* ============================================================================
+   sidecar.css — the second tube (redesign-plan-2, job III)
+
+   A dot-matrix sidecar CRT stands on the desk, right of the main machine:
+   smaller bezel, amber-phosphor glass, visible stand and rear cable. Chat
+   prints on perforated feed paper — sprocket holes down both margins,
+   monospace matrix type, the courier's name in the feed's margin stamp.
+
+   The engine surface (src/liberchat.js) is re-parented into the glass by
+   src/liberchat-sidecar.js; the rules under "the engine in the glass"
+   re-dress it as the feed. The lamp retires on the desktop — the sidecar
+   itself is the door. styles/room.css and machine.css are untouched; the
+   desk-shift is composed from here (body.lc-sidecar-fit on .room padding).
+
+   Register (the covenant's drawn-prop rules, applied to a small object):
+     one light   the machine's screen, left of the tube. Warm on the tube's
+                 left flank, amber pooled left of the foot, shadow right.
+     radii       SOFT 12px shell, 8px recess · SHARP 2px fittings · 50% the
+                 one lamp. No third family: nothing between 2 and 8.
+     the ladder  silhouette 3.2 (the cable, the bezel's outer contour) ·
+                 form 1.6 (the cable's core, the glass frame) ·
+                 detail 1px (plate rule, perforation, seams). No hairline —
+                 this object is small and runs heavy, not fine.
+     shadow      one blurred ellipse per resting edge, the darkest shape
+                 on the desk. No drop-shadow filter anywhere: a filter
+                 shadow copies the silhouette, it does not sit under it.
+   ============================================================================ */
+
+/* ── the object on the desk ──────────────────────────────────────────── */
+
+/* Standalone: pinned to the screen's left edge (below the fit threshold).
+   In fit mode the mount script moves it into .machine and it stands on the
+   desk beside the machine's right flank. */
+.lc-sidecar {
+  position: fixed;
+  left: 14px;
+  bottom: 14px;
+  width: min(460px, 94vw);
+  z-index: 60;
+  --sc-bloom: 0.5;
+}
+body.lc-sidecar-fit .lc-sidecar {
+  position: absolute;
+  left: 100%;
+  margin-left: 10px;
+  right: auto;
+  bottom: 0.5%;
+  width: 272px;
+  z-index: 12;
+}
+
+/* The desk's sign: a paper label taped over the bezel's top edge — the
+   tube's function, stated once, by whoever wired it in. It clears the glass:
+   a tag laid across the moulding, not a sticker over the feed's first line. */
+.lc-sidecar-note {
+  position: absolute;
+  top: -16px;
+  right: -12px;
+  z-index: 5;
+  padding: 3px 8px 4px;
+  background: linear-gradient(178deg, #e9dda6 0%, #ddd093 78%, #d2c489 100%);
+  color: #4a3a14;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  transform: rotate(2.2deg);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.55),
+    inset 0 0 12px rgba(120, 90, 30, 0.14);
+  pointer-events: none;
+}
+.lc-sidecar-note::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 12%;
+  width: 58%;
+  height: 9px;
+  background: rgba(228, 218, 186, 0.5);
+  border-left: 1px solid rgba(255, 250, 230, 0.35);
+  border-right: 1px solid rgba(255, 250, 230, 0.35);
+  transform: rotate(1.6deg);
+}
+
+/* In fit mode the tube owns the desk's right flank; the ? tile slides up
+   into the black space above it instead of trading paint with the door. */
+body.lc-sidecar-fit .faq-toggle,
+body.lc-sidecar-fit .faq-panel { top: 27%; }
+
+/* Pinned stance (narrow or short): compact, tucked under the machine's
+   dial line — the room keeps its controls, the tube keeps its voice. */
+body:not(.lc-sidecar-fit) .lc-sidecar {
+  width: min(460px, 62vw);
+}
+body:not(.lc-sidecar-fit) .lc-sidecar-glass { min-height: 140px; }
+body:not(.lc-sidecar-fit) .lc-sidecar-glass-inner { min-height: 130px; }
+body:not(.lc-sidecar-fit) .lc-sidecar-neck { height: 12px; }
+body:not(.lc-sidecar-fit) .lc-sidecar-foot { height: 6px; }
+
+/* The desk makes room: the ensemble (machine + sidecar) centers as one
+   unit — the machine anchors left of the padded box, the sidecar hangs
+   off its right flank. */
+body.lc-sidecar-fit .room {
+  justify-content: flex-start;
+  padding-left: var(--sidecar-desk, 0px);
+}
+
+/* The bezel face — drawn beneath the door. The lid is a transparent
+   button laid over it (interactive content never nests: the panel is a
+   sibling that rises above the door when the tube is open). */
+.lc-sidecar-body {
+  position: relative;
+  background: linear-gradient(180deg, #4a3f30 0%, #322a20 55%, #241d15 100%);
+  border-radius: 12px 12px 8px 8px;
+  box-shadow:
+    inset 0 1px 0 rgba(232, 214, 178, 0.28),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.55),
+    inset 0 0 0 1px #191410,
+    0 3px 12px rgba(0, 0, 0, 0.65);
+}
+.lc-sidecar-lid {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  padding: 0;
+  border: 0;
+  border-radius: 12px 12px 8px 8px;
+  background: transparent;
+  cursor: pointer;
+}
+.lc-sidecar.open .lc-sidecar-lid { pointer-events: none; }
+.lc-sidecar-lid:hover,
+.lc-sidecar-lid:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(214, 160, 82, 0.35), 0 3px 12px rgba(0, 0, 0, 0.65);
+}
+.lc-sidecar-lid:focus-visible ~ .lc-sidecar-plate { color: #f0d8a8; }
+
+/* A bench line in the dark: the glass lights for a beat. */
+.lc-sidecar-glass.lc-sidecar-wake .lc-sidecar-glass-inner {
+  background:
+    radial-gradient(ellipse at 50% 38%, rgba(255, 176, 80, 0.55) 0%, rgba(160, 84, 24, 0.3) 46%, rgba(24, 10, 2, 0.05) 78%),
+    linear-gradient(180deg, #2c1604 0%, #200e02 60%, #140802 100%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .lc-sidecar-glass.lc-sidecar-wake .lc-sidecar-glass-inner {
+    background:
+      radial-gradient(ellipse at 50% 38%, rgba(214, 128, 40, 0.30) 0%, rgba(120, 62, 18, 0.16) 46%, rgba(24, 10, 2, 0.05) 78%),
+      linear-gradient(180deg, #241203 0%, #1a0c02 60%, #140802 100%);
+  }
+}
+
+.lc-sidecar-glass {
+  margin: 7px;
+  position: relative;
+  z-index: 1;
+  border-radius: 8px;
+  background: #100a04;
+  box-shadow:
+    inset 0 0 0 2px #0a0705,
+    inset 0 0 14px rgba(0, 0, 0, 0.9),
+    /* the machine's glow warms the sidecar's left flank */
+    inset 3px 0 6px -2px rgba(255, 176, 96, 0.28),
+    inset -1px 0 3px -1px rgba(255, 200, 120, 0.10);
+  padding: 6px;
+  min-height: 330px;
+}
+/* On the desk beside the machine the tube is a working screen and stands
+   tall; pinned to the screen's edge in a tight window it keeps the compact
+   stance that leaves the machine's controls clear. */
+body.lc-sidecar-fit .lc-sidecar-glass { min-height: 420px; }
+
+/* The faceplate: one curved glass over the phosphor — one specular band down
+   the left (the bench lamp's side), corner fall-off, the tube's bloom at the
+   sheet's edge. This is what makes it read as a screen and not as a card. */
+.lc-sidecar-glass::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border-radius: 8px;
+  z-index: 4;
+  pointer-events: none;
+  background:
+    linear-gradient(104deg,
+      rgba(255, 246, 220, 0.11) 0%, rgba(255, 246, 220, 0.035) 16%,
+      rgba(255, 246, 220, 0) 32%),
+    radial-gradient(126% 92% at 50% 46%,
+      rgba(0, 0, 0, 0) 54%, rgba(0, 0, 0, 0.40) 100%);
+}
+
+.lc-sidecar-glass-inner {
+  position: relative;
+  border-radius: 2px;
+  background:
+    radial-gradient(ellipse at 50% 38%, rgba(214, 128, 40, 0.30) 0%, rgba(120, 62, 18, 0.16) 46%, rgba(24, 10, 2, 0.05) 78%),
+    linear-gradient(180deg, #241203 0%, #1a0c02 60%, #140802 100%);
+  /* The phosphor the sheet lies on: the face reads lit around it, cornered
+     by fall-off — a screen showing a sheet, not a tray holding one. */
+  box-shadow:
+    inset 0 0 22px rgba(0, 0, 0, 0.85),
+    inset 0 0 0 7px rgba(255, 150, 60, calc(var(--sc-bloom) * 0.14)),
+    inset 0 0 34px rgba(255, 150, 60, calc(var(--sc-bloom) * 0.30)),
+    inset 0 0 5px rgba(255, 156, 60, calc(var(--sc-bloom) * 0.22));
+  min-height: 318px;
+  height: 100%;
+  overflow: hidden;
+}
+body.lc-sidecar-fit .lc-sidecar-glass-inner { min-height: 408px; }
+
+/* Scanline bloom on the amber field — under the paper, not through it:
+   the feed (z-index 1) paints over the lines, the way a printed sheet
+   lies ON a CRT's glow, not inside it. */
+.lc-sidecar-glass-inner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(0deg,
+      rgba(0, 0, 0, 0.16) 0px, rgba(0, 0, 0, 0.16) 1px,
+      rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 3px);
+  mix-blend-mode: multiply;
+  opacity: calc(var(--sc-bloom) * 0.9);
+  border-radius: 2px;
+}
+
+/* The feed paper sits inside the amber glass, one sheet, sprocket margins. */
+.lc-sidecar-feed {
+  position: absolute;
+  inset: 21px 16px 18px;
+  z-index: 1;
+  background:
+    radial-gradient(112% 78% at 50% 42%,
+      rgba(255, 210, 144, 0.26) 0%, rgba(255, 198, 126, 0.05) 58%, rgba(150, 96, 30, 0.16) 100%),
+    linear-gradient(180deg, #ded2ab 0%, #d5c795 70%, #c4b581 100%);
+  border-radius: 2px;
+  box-shadow:
+    0 0 0 1px rgba(20, 8, 2, 0.75),
+    inset 0 0 20px rgba(190, 130, 50, 0.28),
+    0 0 22px rgba(255, 156, 60, calc(var(--sc-bloom) * 0.5)),
+    0 2px 8px rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Sprocket holes down both margins of the feed. */
+.lc-sidecar-feed::before,
+.lc-sidecar-feed::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 9px;
+  background-image: radial-gradient(circle at 50% 50%, rgba(16, 8, 2, 0.62) 1.3px, rgba(16, 8, 2, 0) 1.9px);
+  background-size: 9px 11px;
+  background-position: 0 4px;
+  pointer-events: none;
+  z-index: 3;
+}
+.lc-sidecar-feed::before { left: 0; border-right: 1px solid rgba(90, 70, 40, 0.35); }
+.lc-sidecar-feed::after  { right: 0; border-left: 1px solid rgba(90, 70, 40, 0.35); }
+
+/* Model plate on the bezel. */
+.lc-sidecar-plate {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+  padding: 3px 9px 4px;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: #a89878;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.8);
+}
+.lc-sidecar-plate .lc-sidecar-model { opacity: 0.75; }
+
+/* Standby dot — presence. Lit while the tube is open; a slow standby
+   shimmer while it waits. */
+.lc-sidecar-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #7a4218;
+  box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.8);
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+}
+.lc-sidecar.open .lc-sidecar-dot {
+  background: #ffb45e;
+  box-shadow: 0 0 6px rgba(255, 180, 94, 0.9), 0 0 14px rgba(255, 150, 60, 0.5);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .lc-sidecar:not(.open) .lc-sidecar-dot { animation: sc-standby 3.4s ease-in-out infinite; }
+  @keyframes sc-standby {
+    0%, 100% { background: #7a4218; }
+    50%      { background: #b06a28; }
+  }
+}
+
+/* Stand: a neck and a foot, then the desk. */
+.lc-sidecar-stand {
+  position: relative;
+  width: 46%;
+  margin: 0 auto;
+}
+.lc-sidecar-neck {
+  width: 34%;
+  height: 17px;
+  margin: 0 auto;
+  background: linear-gradient(90deg, #191410 0%, #3a3126 30%, #241d15 55%, #17120d 100%);
+  box-shadow: inset 0 -2px 3px rgba(0, 0, 0, 0.8);
+}
+.lc-sidecar-foot {
+  height: 7px;
+  border-radius: 2px 2px 8px 8px;
+  background: linear-gradient(180deg, #2e261c 0%, #191410 80%);
+  box-shadow:
+    inset 0 1px 0 rgba(232, 214, 178, 0.14),
+    0 4px 9px rgba(0, 0, 0, 0.75);
+}
+
+/* Contact shadow on the desk: one blurred ellipse, thrown right of the
+   foot (opposite the warm flank), the darkest shape the sidecar makes. */
+.lc-sidecar-shadow {
+  position: absolute;
+  left: 50%;
+  bottom: -12px;
+  transform: translateX(38%);
+  width: 88%;
+  height: 12px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0) 72%);
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+/* The sidecar's own faint amber, pooled left of the foot, under the glass. */
+.lc-sidecar-spill {
+  position: absolute;
+  left: 50%;
+  bottom: -13px;
+  transform: translateX(-62%);
+  width: 104%;
+  height: 12px;
+  background: radial-gradient(ellipse at center, rgba(255, 150, 60, 0.16) 0%, rgba(0, 0, 0, 0) 62%);
+  filter: blur(3px);
+  pointer-events: none;
+}
+
+/* The rear cable: a slack curve from the bezel into the dark. */
+.lc-sidecar-cable {
+  position: absolute;
+  left: 100%;
+  bottom: 4px;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+/* The Room Behind the CRT: the sidecar goes with the traveller — it is
+   a desk object, and the desk recedes as one (the machine's 0.86 scale
+   carries it). The tube stays lit and operable while the wall is open. */
+
+/* ── the face, the sheet, and the wiring ─────────────────────────────── */
+
+/* The raster: the tube's scan runs over the sheet and under the writing, so
+   the feed stays legible while the glass still reads as a screen. */
+.lc-sidecar-raster {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(0deg,
+      rgba(52, 30, 8, 0.20) 0px, rgba(52, 30, 8, 0.20) 1px,
+      rgba(52, 30, 8, 0) 1px, rgba(52, 30, 8, 0) 3px),
+    repeating-linear-gradient(90deg,
+      rgba(150, 104, 44, 0.08) 0px, rgba(150, 104, 44, 0.08) 1px,
+      rgba(150, 104, 44, 0) 1px, rgba(150, 104, 44, 0) 3px);
+  mix-blend-mode: multiply;
+}
+
+/* The letterhead the sheet was cut for: the stamp, the form number, and the
+   circulation line. Under the raster, under whatever gets written on it. */
+.lc-sidecar-letterhead {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(92, 67, 38, 0.45);
+}
+.lc-sidecar-stamp {
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  transform: translate(-50%, -50%);
+  opacity: 0.15;
+}
+.lc-sidecar-form { position: absolute; left: 20px; top: 5px; }
+.lc-sidecar-circulate { position: absolute; left: 20px; bottom: 5px; letter-spacing: 0.14em; }
+/* The writing takes the sheet: with the tube open the prism lines step back
+   under the print and the platen, leaving the stamp showing through. */
+.lc-sidecar.open .lc-sidecar-form,
+.lc-sidecar.open .lc-sidecar-circulate {
+  opacity: 0;
+}
+.lc-sidecar-form,
+.lc-sidecar-circulate { transition: opacity 0.35s ease; }
+@media (prefers-reduced-motion: reduce) {
+  .lc-sidecar-form,
+  .lc-sidecar-circulate { transition: none; }
+}
+
+/* The loom: two leads into the machine's screen frame, one spliced with tape,
+   one that never found a socket. The repair nobody came back to finish. */
+.lc-sidecar-loom {
+  position: absolute;
+  left: -70px;
+  top: 26px;
+  z-index: 0;
+  pointer-events: none;
+}
+body:not(.lc-sidecar-fit) .lc-sidecar-loom {
+  left: auto;
+  right: -38px;
+  top: 16px;
+  transform: scaleX(-1);
+}
+
+/* Wax down the top edge and the scorch it was set on: the case has been used
+   at hours a tube should not be used at. */
+.lc-sidecar-wax {
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* Thirteen strokes scratched into the plate. Nobody wrote down what for.
+   It sits on the plate's line without adding one of its own. */
+.lc-sidecar-tallies { display: block; line-height: 0; opacity: 0.7; }
+.lc-sidecar-tallies svg { display: block; }
+
+/* The lamp retires on the desktop; the sidecar is the one door. */
+body.lc-has-sidecar .liberchat-lamp { display: none !important; }
+
+/* The bench's line is kept, not silenced. The engine builds the whisper on
+   the body; the sidecar gives it a home where a printed slip would land —
+   on the desk below the foot on a wide desk, standing above the tube's top
+   edge when the tube is pinned to the screen edge. Same node, same
+   role=status, and it never crosses the feed or the platen. */
+.lc-sidecar .lc-whisper {
+  position: absolute;
+  left: 50%;
+  bottom: -20px;
+  z-index: 6;
+  width: max-content;
+  max-width: min(272px, 92vw);
+  padding: 2px 7px 3px 8px;
+  border: 0;
+  border-left: 2px solid rgba(122, 52, 30, 0.8);
+  border-radius: 0;
+  background: linear-gradient(180deg, #eaddab 0%, #ded294 80%, #d3c58c 100%);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.28;
+  color: #4a3418;
+  opacity: 0;
+  transform: translateX(-50%) translateY(-4px) rotate(-1.1deg);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  pointer-events: none;
+}
+.lc-sidecar .lc-whisper.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0) rotate(-1.1deg);
+}
+
+/* Pinned to the screen edge there is no desk below the foot — and the room
+   above the tube belongs to the machine — so the slip lands across the
+   tube's own foot band, inside its own width. It cannot reach the machine
+   because the tube cannot; the line is still there to read. */
+body:not(.lc-sidecar-fit) .lc-sidecar .lc-whisper {
+  left: 8px;
+  right: 8px;
+  width: auto;
+  max-width: none;
+  bottom: 2px;
+  transform: translateY(4px) rotate(-1.1deg);
+}
+body:not(.lc-sidecar-fit) .lc-sidecar .lc-whisper.show {
+  transform: translateY(0) rotate(-1.1deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lc-sidecar .lc-whisper { transition: none; }
+}
+
+/* ── the engine in the glass ─────────────────────────────────────────── */
+/* The mount script re-parents #liberchat-panel into .lc-sidecar-glass-inner;
+   these rules re-dress it as feed paper. Only scoped under .lc-sidecar —
+   every other page keeps the lamp panel untouched. */
+
+.lc-sidecar .liberchat-panel {
+  position: absolute;
+  inset: 0 10px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: hidden;
+}
+.lc-sidecar .liberchat-panel[hidden] { display: none; }
+
+/* The head becomes the feed's margin stamp. */
+.lc-sidecar .lc-head {
+  gap: 6px;
+  padding: 4px 12px 3px;
+  border-bottom: 1px dashed rgba(90, 70, 40, 0.55);
+  background: transparent;
+}
+.lc-sidecar .lc-dot {
+  width: 5px;
+  height: 5px;
+  background: #8a5a24;
+  box-shadow: none;
+}
+.lc-sidecar .lc-name {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #5c4326;
+  text-shadow: 0 1px 0 rgba(255, 244, 214, 0.5);
+}
+.lc-sidecar .lc-who,
+.lc-sidecar .lc-close {
+  width: 18px;
+  height: 18px;
+  border-radius: 2px;
+  border: 1px solid rgba(92, 67, 38, 0.55);
+  background: transparent;
+  color: #5c4326;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 13px;
+  box-shadow: 0 1px 0 rgba(255, 244, 214, 0.4);
+}
+.lc-sidecar .lc-who:hover,
+.lc-sidecar .lc-close:hover {
+  background: rgba(92, 67, 38, 0.14);
+}
+.lc-sidecar .lc-menu {
+  position: absolute;
+  top: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: calc(100% - 24px);
+  max-height: calc(100% - 32px);
+  overflow-y: auto;
+  background: #efe6cc;
+  border: 1px solid rgba(92, 67, 38, 0.6);
+  border-radius: 2px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+  z-index: 4;
+}
+.lc-sidecar .lc-who-item {
+  display: block;
+  width: 100%;
+  padding: 3px 10px;
+  border: 0;
+  background: transparent;
+  color: #4a3418;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-align: left;
+  cursor: pointer;
+}
+.lc-sidecar .lc-who-item.on,
+.lc-sidecar .lc-who-item:hover { background: rgba(92, 67, 38, 0.16); }
+
+/* The log is the printed feed: matrix type, no bubbles, in order. */
+.lc-sidecar .lc-log {
+  flex: 1;
+  min-height: 0;
+  margin: 0 8px;
+  padding: 7px 8px 5px;
+  overflow-y: auto;
+  display: block;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(92, 67, 38, 0.5) transparent;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 17.5px;
+  line-height: 1.35;
+  color: #241708;
+}
+.lc-sidecar .lc-line {
+  max-width: none;
+  margin: 0 0 6px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #241708;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+.lc-sidecar .lc-line.me {
+  color: #6b4a1e;
+}
+.lc-sidecar .lc-line.me::before {
+  content: '> ';
+  color: #8a5a24;
+}
+.lc-sidecar .lc-line.lc-typing {
+  color: #8a5a24;
+}
+.lc-sidecar .lc-line.lc-unlock { color: #7a3410; }
+.lc-sidecar .lc-line.lc-bench { color: #4a3418; font-style: normal; }
+.lc-sidecar .lc-line.lc-guest { color: #4a5a6a; }
+
+/* The form is the platen: type lands on the paper, the tear edge below. */
+.lc-sidecar .lc-form {
+  margin: 0 9px;
+  padding: 3px 4px 5px;
+  border-top: 1px dashed rgba(90, 70, 40, 0.55);
+  display: flex;
+  gap: 5px;
+  align-items: stretch;
+}
+.lc-sidecar .lc-input {
+  flex: 1;
+  min-width: 0;
+  padding: 3px 5px;
+  border: 1px solid rgba(92, 67, 38, 0.5);
+  border-radius: 2px;
+  background: rgba(255, 248, 224, 0.6);
+  color: #2e2008;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 16px;
+  letter-spacing: 0.03em;
+  box-shadow: inset 0 1px 2px rgba(60, 40, 16, 0.25);
+}
+.lc-sidecar .lc-input:focus {
+  outline: none;
+  border-color: #8a5a24;
+  background: #fff8e0;
+  box-shadow: inset 0 1px 2px rgba(60, 40, 16, 0.2), 0 0 5px rgba(255, 156, 60, 0.35);
+}
+.lc-sidecar .lc-input::placeholder { color: rgba(92, 67, 38, 0.55); }
+.lc-sidecar .lc-send {
+  padding: 2px 9px;
+  border: 1px solid rgba(92, 67, 38, 0.55);
+  border-radius: 2px;
+  background: rgba(92, 67, 38, 0.12);
+  color: #4a3418;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  box-shadow: 0 1px 0 rgba(255, 244, 214, 0.4);
+}
+.lc-sidecar .lc-send:hover { background: rgba(92, 67, 38, 0.22); }
+
+/* The seal becomes a wax-red stamp fitting on the feed's foot. */
+.lc-sidecar .lc-seal {
+  margin: 0 9px 7px;
+  padding: 2px 8px;
+  align-self: flex-end;
+  border: 1px solid rgba(122, 52, 30, 0.6);
+  border-radius: 2px;
+  background: transparent;
+  color: #7a3410;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+}
+.lc-sidecar .lc-seal:hover { background: rgba(122, 52, 30, 0.1); }
+.lc-sidecar .lc-seal.armed {
+  background: #7a3410;
+  color: #f4e8cc;
+}
+
+/* Motion with consent: the tube is instant under reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  .lc-sidecar-dot,
+  .lc-sidecar .lc-seal,
+  body.crt-room-open .lc-sidecar { transition: none; }
+  .lc-sidecar:not(.open) .lc-sidecar-dot { animation: none; }
+}

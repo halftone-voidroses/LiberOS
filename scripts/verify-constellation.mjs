@@ -249,11 +249,11 @@ check('reduced motion: bind morph is an instant state change', reduced.rAfter ==
 console.log('patina — stages 0–3 are visibly different states');
 const stages = [];
 for (let v of [0, 2, 6, 12]) {
-  const info = await page.evaluate(vn => {
+  const info = await page.evaluate(([vn, tier]) => {
     const vs = {};
     for (let i = 0; i < vn; i++) vs['v' + i] = Date.now() - 10 * 24 * 3600 * 1000;
     window.Liber.state.reset();
-    window.Liber.state.set({ ...window.__TIER, visited: vs });
+    window.Liber.state.set({ ...tier, visited: vs });
     window.ConstellationRefresh();
     const stone = document.querySelector('.constellation-stone circle');
     return {
@@ -261,25 +261,42 @@ for (let v of [0, 2, 6, 12]) {
       fill: stone.getAttribute('fill'),
       grain: document.querySelectorAll('.constellation-stone-grain path').length,
     };
-  }, v);
+  }, [v, TIER_STATE]);
   stages.push(info);
 }
 check('patina tiers 0..3 stamped on the stone', stages.map(s => s.tier).join(',') === '0,1,2,3', JSON.stringify(stages));
 check('the tint warms per tier', new Set(stages.map(s => s.fill)).size === 4, stages.map(s => s.fill).join(' '));
 check('the carving deepens per tier (grain 0/3/6/9)', stages[0].grain === 0 && stages[1].grain === 3 && stages[2].grain === 6 && stages[3].grain === 9, stages.map(s => s.grain).join('/'));
 // the pitch's acceptance: screenshots of stages 0–3 differ (motion-free context)
+// One fresh page per tier: under reduced motion the compositor reuses the
+// svg's layer texture across in-place refreshes, so same-page shots served
+// stale pixels (historically 0==1 or 2==3 by one drifting pair — the
+// assertion passed on render noise). Seeded before reload, each tier
+// paints at first paint on its own compositor. (sidecar lane, 2026-09-13)
 const shotBufs = [];
 for (let v of [0, 2, 6, 12]) {
-  await pageR.evaluate(vn => {
+  const shotPage = await ctxR.newPage();
+  await shotPage.goto(BASE + '/desktop.html', { waitUntil: 'networkidle' });
+  await shotPage.evaluate(([vn, tier]) => {
+    try { localStorage.clear() } catch (e) {}
     const vs = {};
     for (let i = 0; i < vn; i++) vs['v' + i] = Date.now() - 10 * 24 * 3600 * 1000;
-    window.Liber.state.reset();
-    window.Liber.state.set({ ...window.__TIER, visited: vs });
-    window.ConstellationRefresh();
-  }, v);
-  await pageR.waitForTimeout(150);
-  const el = await pageR.$('#constellation-svg');
+    // cutscene keys included: a fresh page replays the boot cutscene over
+    // the constellation and the shot captures the void (they do not count
+    // toward patina — visits + artifacts do)
+    localStorage.setItem('liber_vacui_v1__keep', JSON.stringify({
+      ...tier,
+      cutsceneBuild: 'riasondemo2',
+      tutorialStage: 'done',
+      visited: vs,
+      sessionStart: Date.now() - Math.max(vn, 1) * 10 * 24 * 3600 * 1000
+    }));
+  }, [v, TIER_STATE]);
+  await shotPage.reload({ waitUntil: 'networkidle' });
+  await shotPage.waitForTimeout(500);
+  const el = await shotPage.$('#constellation-svg');
   shotBufs.push(await el.screenshot({ path: 'screenshots/verify-constellation-patina' + shotBufs.length + '.png' }));
+  await shotPage.close();
 }
 const differ = shotBufs[0].equals(shotBufs[1]) === false
   && shotBufs[1].equals(shotBufs[2]) === false
