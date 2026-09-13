@@ -1,5 +1,26 @@
 # LiberOS changelog
 
+## 2.11.0 — Toybox: the covenant pass
+### Added
+- COVENANT.md — the room-design law, verbatim; referenced from README and
+  CONTRIBUTING so every future room author reads it first.
+- Twelve traveller-gift powders in the sink: wood (ruby), stone (physius),
+  magma (vanir), ice (inquiry), metal (riason), gunpowder (pete),
+  superball (whimsy), fireworks (e-lizabeth), thunder (arcana), gas (the
+  mad scribe), clone (wanderlust), soapy water (the house). Full reaction
+  web: ice↔water/snow, magma↔water/stone, lightning grounds into stone
+  and metal, fireworks carry payloads, clones remember what first touched
+  them, superballs bounce and can set nitro off.
+- Per-traveller shelf boards, faux-3D, brass plaques, objects as pixel
+  art — the materials themselves are the labels.
+### Changed
+- The brass plug is seated on the drain hollow, ripples concentric to it,
+  chain visible while it lifts. The pull slumps settled fluid into the
+  hole (nearest cells first) and runs even while the tap is off.
+- The two basin pendant toys are retired: their verbs (erase, stamp
+  terrain) were already covered by the residents and the eraser.
+- Gift labels removed from objects; only the shelf plaques carry names.
+
 ## 2.10.1 — Toybox: the sink-world
 ### Changed
 - Pip's room is no longer an app inside the CRT — it is the world. Pip was
