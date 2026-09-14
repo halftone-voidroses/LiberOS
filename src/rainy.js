@@ -15,8 +15,41 @@
 (function () {
   'use strict';
 
-  var TICKER = 'the machine dims itself for you. everything still works. nothing expires.';
+  var TICKER = 'the machine dims itself for you. the record stays readable. nothing expires.';
   var HELP_HREF = 'learn.html#hard-nights';
+
+  // The night's questions — asked once a sitting, rotating by the sitting
+  // itself, never twice. Each is answerable twice or not at all; every
+  // answer gates nothing and is forgotten by morning. Flavored by the
+  // shadow list (avoidance, the loud voice, the carried thing) but never
+  // quoting it: the machine asks in its own register or not at all.
+  var ASKS = [
+    { q: 'is tonight a keeping night, or a releasing one?',
+      btns: [
+        { label: 'a keeping night', night: 'keeping', echo: ' — tonight you are keeping.' },
+        { label: 'a releasing one', night: 'releasing', echo: ' — tonight you are releasing.' }
+      ] },
+    { q: 'what are you not feeling tonight?',
+      btns: [
+        { label: 'i will name it', night: 'naming', echo: ' — tonight you name it.' },
+        { label: 'not tonight', night: 'carrying', echo: ' — tonight you carry it.' }
+      ] },
+    { q: 'whose voice was loudest in you today?',
+      btns: [
+        { label: 'mine', night: 'mine', echo: ' — tonight the loud voice is yours.' },
+        { label: 'someone else\u2019s', night: 'theirs', echo: ' — tonight the loud voice is theirs.' }
+      ] },
+    { q: 'what are you still carrying that was never yours?',
+      btns: [
+        { label: 'setting it down', night: 'setting-down', echo: ' — tonight you set it down.' },
+        { label: 'holding it', night: 'holding', echo: ' — tonight you hold it.' }
+      ] }
+  ];
+
+  function askFor(sitting) {
+    var n = typeof sitting === 'number' ? sitting : 0;
+    return ASKS[Math.abs(n) % ASKS.length];
+  }
 
   function st() { return (window.Liber && window.Liber.state) || null; }
   function on() { var s = st() ? st().get() : null; return !!(s && s.shadowOn); }
@@ -73,16 +106,17 @@
     w.className = 'rainy-ask';
     w.setAttribute('role', 'dialog');
     w.setAttribute('aria-label', 'one question');
-    w.innerHTML =
-      '<div class="rainy-ask-q">is tonight a keeping night, or a releasing one?</div>' +
-      '<div class="rainy-ask-row">' +
-        '<button type="button" class="rainy-ask-btn" data-night="keeping">a keeping night</button>' +
-        '<button type="button" class="rainy-ask-btn" data-night="releasing">a releasing one</button>' +
-      '</div>' +
-      '<button type="button" class="rainy-ask-else" data-night="null">i would rather not say</button>';
+    var s = (st() && st().get()) || {};
+    w.setAttribute('data-sitting', String((s.sessionStart || 0)));
+    var ask = askFor(s.sessionStart);
+    var html = '<div class="rainy-ask-q">' + ask.q + '</div><div class="rainy-ask-row">';    for (var i = 0; i < ask.btns.length; i++) {
+      html += '<button type="button" class="rainy-ask-btn" data-night="' + ask.btns[i].night + '">' + ask.btns[i].label + '</button>';
+    }
+    html += '</div><button type="button" class="rainy-ask-else" data-night="null">i would rather not say</button>';
+    w.innerHTML = html;
     var btns = w.querySelectorAll('[data-night]');
-    for (var i = 0; i < btns.length; i++) {
-      btns[i].addEventListener('click', function (e) {
+    for (var j = 0; j < btns.length; j++) {
+      btns[j].addEventListener('click', function (e) {
         var raw = e.currentTarget.getAttribute('data-night');
         answer(raw === 'null' ? null : raw);
       });
@@ -107,10 +141,15 @@
   }
 
   // ─── render (mirrors the key; owns nothing) ──────────────────────────
-  var NIGHT_COPY = {
-    keeping: ' — tonight you are keeping.',
-    releasing: ' — tonight you are releasing.'
-  };
+  function echoFor(night) {
+    if (night === null || night === undefined) return '';
+    for (var i = 0; i < ASKS.length; i++) {
+      for (var j = 0; j < ASKS[i].btns.length; j++) {
+        if (ASKS[i].btns[j].night === night) return ASKS[i].btns[j].echo;
+      }
+    }
+    return '';
+  }
 
   function renderTicker() {
     var ans = document.getElementById('rainy-ticker-answer');
@@ -119,7 +158,7 @@
     // a stale answer from an earlier sitting is not shown: the question is
     // asked once a night, so it is also forgotten once a night.
     var fresh = s.rainyAsked && s.sessionStart && s.rainyAsked === s.sessionStart;
-    ans.textContent = (fresh && NIGHT_COPY[s.rainyNight]) || '';
+    ans.textContent = (fresh && echoFor(s.rainyNight)) || '';
   }
 
   function render() {
@@ -134,8 +173,14 @@
     renderTicker();
     // Ask once a night — on the night you turn it on, and on the night you
     // come back to find it still on. Answered or declined, that is the
-    // last of it until the next sitting.
+    // last of it until the next sitting. A new sitting gets its own
+    // question: rebuild the panel if it was built for another night.
     var s = (st() && st().get()) || {};
+    var w = document.getElementById('rainy-ask');
+    if (w && w.getAttribute('data-sitting') !== String(s.sessionStart || 0)) {
+      var fresh = buildAsk();
+      w.parentNode.replaceChild(fresh, w);
+    }
     if (isOn && s.rainyAsked !== s.sessionStart) openAsk();
     else closeAsk();
   }

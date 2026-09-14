@@ -216,6 +216,76 @@
     input.addEventListener('focus', function () { slate.classList.remove('turned'); });
   }
 
+  // ─── rainy nights: Arcana catches the rephrase ─────────────────────
+  // Sitting-local only (this array dies with the page — nothing stored,
+  // nothing written): if tonight's slate shares its bones with an earlier
+  // question asked sideways, the rim says so in chalk and the draw still
+  // proceeds. She refuses to pretend with you, not to read for you.
+  var askedQs = [];
+  var STOPWORDS = ['what', 'should', 'with', 'about', 'does', 'will', 'when',
+    'they', 'them', 'this', 'that', 'from', 'your', 'like', 'feel', 'feeling',
+    'tonight', 'today', 'there', 'have', 'been', 'were', 'would', 'could',
+    'the', 'and', 'for', 'are', 'you', 'she', 'him', 'her', 'his', 'was',
+    'over', 'under', 'into'];
+  function sigWords(q) {
+    return String(q || '').toLowerCase().replace(/[^a-z0-9\s']/g, ' ').split(/\s+/)
+      .filter(function (w) { return w.length > 2 && STOPWORDS.indexOf(w) < 0; });
+  }
+  function stem(w) {
+    var s = String(w || '');
+    if (s.length > 5 && s.slice(-3) === 'ing') s = s.slice(0, -3);
+    else if (s.length > 4 && s.slice(-2) === 'ed') s = s.slice(0, -2);
+    else if (s.length > 4 && s.slice(-2) === 'es') s = s.slice(0, -2);
+    else if (s.length > 3 && s.slice(-1) === 's') s = s.slice(0, -1);
+    if (s.length > 3 && s.slice(-1) === 'e') s = s.slice(0, -1);
+    s = s.replace(/(.)\1$/, '$1');
+    return s;
+  }
+  function sameBone(a, b) {
+    if (a === b) return true;
+    var sa = stem(a), sb = stem(b);
+    if (sa.length > 2 && sa === sb) return true;
+    if (a.length >= 4 && b.indexOf(a) === 0) return true;
+    if (b.length >= 4 && a.indexOf(b) === 0) return true;
+    return false;
+  }
+  function isSideways(cur, prior) {
+    if (!cur || !prior || cur === prior) return false;
+    var a = sigWords(cur), b = sigWords(prior);
+    if (!a.length || !b.length) return false;
+    var shared = 0, i, j;
+    for (i = 0; i < a.length; i++) {
+      for (j = 0; j < b.length; j++) {
+        if (sameBone(a[i], b[j])) { shared++; break; }
+      }
+    }
+    return shared >= 2;
+  }
+  function rainySideways() {
+    var sh = false;
+    try { sh = !!((window.Liber && window.Liber.state && window.Liber.state.get() || {}).shadowOn); } catch (e) {}
+    if (!sh) return;
+    var cur = question();
+    var note = el('divination-rim-sideways');
+    if (note) note.classList.remove('shown');
+    if (cur) {
+      for (var i = 0; i < askedQs.length; i++) {
+        if (isSideways(cur, askedQs[i])) {
+          var note = el('divination-rim-sideways');
+          if (note) {
+            var prior = askedQs[i].length > 30 ? askedQs[i].slice(0, 29) + '…' : askedQs[i];
+            note.textContent = 'sideways — asked as \u201c' + prior + '\u201d';
+            note.classList.add('shown');
+            setTimeout(function () { note.classList.remove('shown'); }, 6000);
+          }
+          break;
+        }
+      }
+      askedQs.push(cur);
+      if (askedQs.length > 12) askedQs.shift();
+    }
+  }
+
   // ─── tarot: a stack with weight ─────────────────────────────────────
   function updateTally() {
     if (!tallyEl()) return;
@@ -240,6 +310,7 @@
     }
     var card = pickCard();
     play('thunk');
+    rainySideways();
     var deck = deckBtn();
     if (deck) {
       deck.classList.add('drawing');

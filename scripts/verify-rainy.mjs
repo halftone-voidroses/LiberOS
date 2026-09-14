@@ -138,16 +138,28 @@ await seed({ shadowOn: false })
 await page.click('#rainy-toggle')
 await page.waitForTimeout(300)
 check('turning it on asks once', await page.evaluate(() => document.getElementById('rainy-ask').classList.contains('open')))
-check('the question is the keeping/releasing one',
-  /keeping night, or a releasing one/.test(await page.textContent('.rainy-ask-q')),
-  await page.textContent('.rainy-ask-q'))
-await page.click('.rainy-ask-btn[data-night="keeping"]')
+// the night's question rotates by sitting (harsh layer): accept any of them
+const ECHOES = {
+  'keeping': 'tonight you are keeping', 'releasing': 'tonight you are releasing',
+  'naming': 'tonight you name it', 'carrying': 'tonight you carry it',
+  'mine': 'tonight the loud voice is yours', 'theirs': 'tonight the loud voice is theirs',
+  'setting-down': 'tonight you set it down', 'holding': 'tonight you hold it'
+}
+const askQ = await page.textContent('.rainy-ask-q')
+check('the question is one of the night rotation', Object.values({
+  a: 'is tonight a keeping night, or a releasing one?',
+  b: 'what are you not feeling tonight?',
+  c: 'whose voice was loudest in you today?',
+  d: 'what are you still carrying that was never yours?'
+}).includes(askQ.trim()), askQ)
+const firstKey = await page.getAttribute('.rainy-ask-btn', 'data-night')
+await page.click('.rainy-ask-btn')
 await page.waitForTimeout(200)
 const answered = await page.evaluate(k => JSON.parse(localStorage.getItem(k)), KEY)
-check('the answer is recorded', answered.rainyNight === 'keeping', String(answered.rainyNight))
+check('the answer is recorded', answered.rainyNight === firstKey, String(answered.rainyNight))
 check('it is pinned to this sitting', answered.rainyAsked === answered.sessionStart, answered.rainyAsked + ' vs ' + answered.sessionStart)
 check('the panel closes on answer', !(await page.evaluate(() => document.getElementById('rainy-ask').classList.contains('open'))))
-check('the ticker keeps the answer', /tonight you are keeping/.test(await page.textContent('#rainy-ticker-answer')), await page.textContent('#rainy-ticker-answer'))
+check('the ticker keeps the answer', new RegExp(ECHOES[firstKey]).test(await page.textContent('#rainy-ticker-answer')), await page.textContent('#rainy-ticker-answer'))
 // same sitting: off then on again must NOT re-ask
 await page.click('#rainy-toggle')
 await page.waitForTimeout(200)
