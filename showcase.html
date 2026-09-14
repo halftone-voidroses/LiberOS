@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Liber Vacui — Showcase Deck: every room, every feature, read five ways</title>
+<style>
+:root{--void:#070403;--panel:#160b08;--panel2:#21100b;--line:#5a301b;--cream:#eadfc6;--muted:#b19a78;--gold:#d4af65;--pink:#ff9ec6;--cyan:#7ac0d8;--green:#9ad49a;--ice:#8fd8e8;--red:#ff8585;--serif:Georgia,'Times New Roman',serif;--mono:'Courier New',monospace}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 50% 0,#22100a 0,#070403 60rem);color:var(--cream);font-family:var(--serif);line-height:1.55}
+.wrap{max-width:1460px;margin:auto;padding:28px 22px 120px}
+.kicker{font-family:var(--mono);color:var(--gold);font-size:12px;letter-spacing:.28em;text-transform:lowercase}
+h1{font-weight:400;font-size:clamp(30px,4.6vw,52px);line-height:1.05;margin:14px 0}
+h1 em{color:var(--pink);font-style:italic}
+.lede{color:var(--muted);max-width:90ch;font-size:16px}
+.meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;font-family:var(--mono);font-size:11px;color:#9e8463}
+.meta span{border:1px solid var(--line);border-radius:99px;padding:4px 12px}
+nav{position:sticky;top:0;z-index:6;background:#0c0504f2;border:1px solid var(--line);border-radius:0 0 10px 10px;padding:10px 14px;margin-top:24px;font-family:var(--mono);font-size:12px;line-height:2}
+nav a{color:var(--gold);text-decoration:none;margin-right:12px;white-space:nowrap}
+h2{font-weight:400;font-size:26px;margin:64px 0 4px;border-bottom:1px solid var(--line);padding-bottom:8px}
+h2 small{font-family:var(--mono);font-size:12px;color:var(--gold);margin-right:10px}
+.actlede{color:var(--muted);font-style:italic;margin:6px 0 20px}
+.card{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;margin:0 0 22px;background:linear-gradient(180deg,var(--panel2),var(--panel))}
+.card img{width:100%;display:block;align-self:start;background:#000}
+.side{padding:16px 18px;border-left:1px solid var(--line)}
+.side h3{margin:0 0 2px;font-weight:400;font-size:19px}
+.side h3 .n{font-family:var(--mono);color:var(--gold);font-size:12px;margin-right:8px}
+.does{color:var(--cream);font-size:14.5px;margin:6px 0 10px}
+.lens{margin:9px 0 0;padding:0;list-style:none;font-size:13px}
+.lens li{margin:5px 0;color:#cbb894;padding-left:4px}
+.lens b{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:lowercase;font-weight:400;border:1px solid currentColor;border-radius:99px;padding:1px 8px;margin-right:8px;white-space:nowrap}
+.l-covenant b{color:var(--green)}.l-voice b{color:var(--pink)}.l-diegetic b{color:var(--gold)}.l-afford b{color:var(--cyan)}.l-shadow b{color:var(--ice)}
+.flag{margin-top:10px;border:1px solid #6a2a20;border-left:4px solid var(--red);border-radius:0 8px 8px 0;background:#160806;padding:8px 12px;font-size:12.5px;color:#e0b0a0}
+.flag b{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--red);display:block;margin-bottom:4px}
+table.verdict{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+table.verdict th,table.verdict td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+table.verdict th{font-family:var(--mono);font-size:11px;color:var(--gold);font-weight:400}
+.pass{color:var(--green)}.warn{color:var(--gold)}.fail{color:var(--red)}
+footer{margin-top:70px;border-top:1px solid var(--line);padding-top:18px;color:var(--muted);font-size:13px;font-style:italic}
+@media (max-width:900px){.card{grid-template-columns:1fr}.side{border-left:none;border-top:1px solid var(--line)}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="kicker">liber vacui &middot; full-viewport capture &middot; 1280&times;800 &middot; zero page errors</div>
+<h1>Showcase Deck: <em>every room, read five ways</em></h1>
+<p class="lede">Twenty-six captures, one per surface and state: the boot gate, the eclipse ritual, both tutorial demos, the populated desktop and its mini-menu, all ten primary rooms, the retired cohort, the map, and the harsh rainy layer. Every card is the same split — the frame on the left, the reading on the right — through five lenses: covenant, voice, diegetic, affordance, shadow. Flags mark what is imperfect, whose it is, and whether it blocks.</p>
+<div class="meta"><span>26 frames</span><span>5 lenses per frame</span><span>smoke 21/21 &middot; verify-fixes &middot; verify-rainy 121/121</span><span>push blocked: 4 tokens rejected, commits local</span></div>
+<nav><a href="#arrival">arrival</a><a href="#tutorial">tutorial</a><a href="#desktop">desktop</a><a href="#rooms">rooms</a><a href="#retired">retired</a><a href="#rain">rain</a><a href="#verdict">verdict table</a></nav>
+
+<h2 id="arrival"><small>I</small>Arrival</h2>
+<p class="actlede">Consent first, then fire. The machine introduces its terms before its wonders.</p>
+
+<div class="card"><img src="showcase/01-boot.png" alt="boot consent gate with warning panel"><div class="side"><h3><span class="n">01</span>Boot gate</h3><p class="does">The warning panel states the risks (student-made, not therapy, crisis lines, IFS/amplification contraindications) and the enter button stays disabled until consent is checked.</p><ul class="lens"><li class="l-covenant"><b>covenant</b>Power named up front; refusal is the default state. Pass.</li><li class="l-voice"><b>voice</b>RAT plainly, no myth. Correct — safety copy is the one place the maker speaks as maker.</li><li class="l-diegetic"><b>diegetic</b>N/A — chrome, not a room. Correctly outside any traveller's walls.</li><li class="l-afford"><b>affordance</b>Disabled-until-consent enforced and gated in smoke; ×, Esc-equivalent close present.</li></ul><div class="flag"><b>flag · not ours · blocks narrow</b>At 439px the sidecar tube overlaps the consent checkbox (verify-rainy gate fails 7×, all one cause). Sidecar lane must fix before it ships.</div></div></div>
+
+<div class="card"><img src="showcase/02-ritual-ring.png" alt="summoning ritual with fire ring behind the monitor"><div class="side"><h3><span class="n">02</span>The eclipse ritual</h3><p class="does">Four summoning lines light four arcs of turbulence-filtered fire that fully eclipses the monitor from behind — never clipped by bezel or screen, re-anchoring if the desk re-seats.</p><ul class="lens"><li class="l-covenant"><b>covenant</b>Motion with consent (reduced-motion path is static arcs); two true motions (fire, letter-rain). Pass.</li><li class="l-voice"><b>voice</b>Wanderlust's pink summoning register, matching her theme and lines. Pass.</li><li class="l-diegetic"><b>diegetic</b>Ritual fire in a room that holds a session candle and a pilot-flame LED. Pass.</li><li class="l-afford"><b>affordance</b>Click finishes early; pointer-events none so nothing is trapped. Pass.</li></ul><div class="flag"><b>flag · ours · cosmetic</b>The top arc glares slightly white where the core gradient peaks. Noted, not blocking.</div></div></div>
+
+<div class="card"><img src="showcase/03-opening-beat.png" alt="Wanderlust names beat with tinted name"><div class="side"><h3><span class="n">03</span>Names beat</h3><p class="does">Wanderlust's names arrive one tinted line at a time, each flickering the box it lands in.</p><ul class="lens"><li class="l-covenant"><b>covenant</b>One hover-revelation discipline holds; myth voice earns its theatrics. Pass.</li><li class="l-voice"><b>voice</b>Wanderlust all-caps myth allowed; Riason will answer dryly later. Pass.</li><li class="l-afford"><b>affordance</b>Options-gated pacing, keyboard-operable buttons. Pass.</li></ul></div></div>
+
+<h2 id="tutorial"><small>II</small>Tutorial — fake twice, write nothing</h2>
+<p class="actlede">Riason demonstrates on the real rooms with fake copies. The clean slate is the proof.</p>
+
+<div class="card"><img src="showcase/04-sigil-demo.png" alt="Riason demo bar on the stone room"><div class="side"><h3><span class="n">04</span>Buddy demo, stone room</h3><p class="does">Riason types an intention, picks one ink, strokes one circle, and previews — then walks the traveller to the tent instead of the desktop.</p><ul class="lens"><li class="l-covenant"><b>covenant</b>Writes nothing (smoke asserts zero artifacts after). Veil denies with a line, never a trap. Pass.</li><li class="l-voice"><b>voice</b>Riason dry mechanics throughout. Pass.</li><li class="l-afford"><b>affordance</b>One &gt;&gt; per step; veil yields to the bar. Note: his &gt;&gt; predates the 44px bar — flagged below, fixed in the tent's copy.</li></ul></div></div>
+
+<div class="card"><img src="showcase/05-tent-intro.png" alt="Arcana tent with Riason demo bar"><div class="side"><h3><span class="n">05</span>Artifact birth, felt table</h3><p class="does">In the tent Riason asks a fake question, draws a real prompt, flashes keep without keeping, and bursts the card on the felt: birth demonstrated, nothing born.</p><ul class="lens"><li class="l-covenant"><b>covenant</b>Pending draw unwound (tally restored, no record); demo bar removed on exit. Own stylesheet, Riason register. Pass.</li><li class="l-voice"><b>voice</b>“Had I kept it, that burst is the birth” — teaching in his voice, less abstract than the old desktop overlay. Pass.</li><li class="l-diegetic"><b>diegetic</b>Deck, slate, chalk, burst — all the tent's own furniture. Pass.</li><li class="l-afford"><b>affordance</b>&gt;&gt; is 44×57 verified on screen; veil deny proven; prompt's own ×/discard untouched. Pass.</li></ul></div></div>
+
+<div class="card"><img src="showcase/06-bind-prompt.png" alt="desktop bind prompt with demo artifact"><div class="side"><h3><span class="n">06</span>Bind prompt, desktop</h3><p class="does">Back home, one fake artifact teaches the relation gesture: click it, the chain bursts, Wanderlust returns, the wipe takes it all.</p><ul class="lens"><li class="l-covenant"><b>covenant</b>Fake chain writes nothing; finale shelves nothing. Pass.</li><li class="l-shadow"><b>shadow</b>Destruction rehearsed safely before real keeps exist — the tutorial's load-bearing scare. Pass.</li></ul></div></div>
+
+<h2 id="desktop"><small>III</small>Desktop — the constellation</h2>
+<p class="actlede">Artifacts orbit the star; the dial turns the rooms; the prompt engine asks once per cycle.</p>
+
+<div class="card"><img src="showcase/07-desktop-populated.png" alt="populated desktop with orbits"><div class="side"><h3><span class="n">07</span>Populated desktop</h3><p class="does">Stone buddy, sealed chat, and a kept card orbit the hub; scratch notes keep to the satchel; today's three tasks tick in place.</p><ul class="lens"><li class="l-covenant"><b>covenant</b>Full-bleed room, no chrome competing; dial is the room's own furniture. Pass.</li><li class="l-diegetic"><b>diegetic</b>Carvings, scars, LED wax mound, plate — the machine's handled history. Pass.</li><li class="l-afford"><b>affordance</b>Dial arrows ≥44px effective; hover pauses the orrery for humans. Pass.</li></ul></div></div>
+
+<div class="card"><img src="showcase/08-minimenu.png" alt="artifact mini menu open"><div class="side"><h3><span class="n">08</span>Mini-menu</h3><p class="does">Clicking an artifact opens its verbs: bind to buddy, open in room, open in satchel, release — the whole relation grammar in one card.</p><ul class="lens"><li class="l-covenant"><b>covenant</b>Plain functional labels (bind, release) — permitted, unpoetic. Pass.</li><li class="l-afford"><b>affordance</b>Every control full-size; Esc/back closes via room shell. Pass.</li></ul></div></div>
+
+<h2 id="rooms"><small>IV</small>The ten rooms</h2>
+<p class="actlede">Each room its own stylesheet, material, and grammar. No shared components anywhere below.</p>
+
+<div class="card"><img src="showcase/09-sigil.png" alt="casting stone room"><div class="side"><h3><span class="n">09</span>Sigil — the casting stone</h3><p class="does">Intention, ink wall, instruments, save/discard: draw → interpret → save artifact, the spine's first vertebra.</p><ul class="lens"><li class="l-voice"><b>voice</b>Mistress Physius keeps the ritual; terse, copper, patient. Pass.</li><li class="l-diegetic"><b>diegetic</b>Stone, chisel cursor, dust tray, ghost preview. Pass.</li></ul></div></div>
+
+<div class="card"><img src="showcase/10-divination-keep.png" alt="keep prompt with drawn card"><div class="side"><h3><span class="n">10</span>Divination — keep prompt</h3><p class="does">One slides out; the prompt offers keep or discard with the reading, the lens, and the question quoted back.</p><ul class="lens"><li class="l-voice"><b>voice</b>Arcana reads; the lens answers slant. Pass.</li><li class="l-diegetic"><b>diegetic</b>Felt, chalk, deck counted three times, cold tea on the edge. Pass.</li><li class="l-afford"><b>affordance</b>Back-button closes the prompt instead of leaving — refusal honored. Pass.</li></ul></div></div>
+
+<div class="card"><img src="showcase/11-dreams.png" alt="dreams journal"><div class="side"><h3><span class="n">11</span>Dreams — the ledger</h3><p class="does">Name the dream, write it plain, record it; the reading comes only when asked, never as verdict.</p><ul class="lens"><li class="l-voice"><b>voice</b>Inquiry reflects, refuses certainty. Pass.</li><li class="l-diegetic"><b>diegetic</b>Fog, polaroid, second-hand marginalia. Pass.</li></ul></div></div>
+
+<div class="card"><img src="showcase/12-games-midway.png" alt="midway facade"><div class="side"><h3><span class="n">12</span>Games — the midway</h3><p class="does">Camera-aware facade, route shingles on the dirt, booths behind posters; the gate board box is off the tent.</p><ul class="lens"><li class="l-covenant"><b>covenant</b>The midway is the floor — camera, material, sound, save flow per booth. Pass.</li><li class="l-voice"><b>voice</b>Whimsy barks, TIPP does not. Both present. Pass.</li></ul></div></div>
+
+<div class="card"><img src="showcase/13-games-wheel.png" alt="emotion wheel booth"><div class="side"><h3><span class="n">13</span>Emotion wheel booth</h3><p class="does">Throw the dart, flood a color, keep the polaroid: dart + shot land in games and satchel together.</p><ul class="lens"><li class="l-diegetic"><b>diegetic</b>Tarp, bulbs, cold plate, dart, developing photo. Pass.</li><li class="l-afford"><b>affordance</b>Eight colors after the throw, all full targets; keep is explicit. Pass.</li></ul></div></div>
+
+<div class="card"><img src="showcase/14-garden.png" alt="gem garden"><div class="side"><h3><span class="n">14</span>Garden — the gem bed</h3><p class="does">Fill seventeen facets from the wells; the gem holds the emotion the wheel only named.</p><ul class="lens"><li class="l-voice"><b>voice</b>Ruby tends, impatient and fond. Pass.</li><li class="l-diegetic"><b>diegetic</b>Wells, slots, pour — glasshouse grammar. Pass.</li></ul><div class="flag"><b>flag · room's · cosmetic</b>Tab row wraps at 1280 (“the draft so far” drops a line). Readable, slightly cramped. Not blocking.</div></div></div>
+
+<div class="card"><img src="showcase/15-sea.png" alt="sea release room"><div class="side"><h3><span class="n">15</span>Sea — the water</h3><p class="does">Name it plain, weigh it 1–5, give it over; the brass tide clock remembers the waterline across visits.</p><ul class="lens"><li class="l-voice"><b>voice</b>Vanir instruments; one voice for the water. Pass.</li><li class="l-shadow"><b>shadow</b>Release is a practice with intensity dots, not an event with fireworks. Pass.</li></ul></div></div>
+
+<div class="card"><img src="showcase/16-toybox.png" alt="toybox sink world"><div class="side"><h3><span class="n">16</span>Toybox — the sink-world</h3><p class="does">Traveller-gift powders on labelled shelves, small creatures with opinions, a real drain that takes what you pour.</p><ul class="lens"><li class="l-covenant"><b>covenant</b>Covenant pass shipped: labelled shelves, real drain. Pass.</li><li class="l-voice"><b>voice</b>Pip's room; the crew argues first. Pass.</li></ul></div></div>
+
+<div class="card"><img src="showcase/17-learn.png" alt="learn workbook with tour"><div class="side"><h3><span class="n">17</span>Learn — workbook no. 1</h3><p class="does">Numbered drawers, stamped footnotes, typed vs. handwritten; the tour walks four steps and skips cleanly.</p><ul class="lens"><li class="l-diegetic"><b>diegetic</b>Index cards, drawer wall, revision marks. Pass.</li><li class="l-afford"><b>affordance</b>Skip-the-tour button present; first-visit hijack dismisses. Pass.</li></ul></div></div>
+
+<div class="card"><img src="showcase/18-satchel.png" alt="satchel book"><div class="side"><h3><span class="n">18</span>Satchel — the book</h3><p class="does">Leather, ribbon markers, brass corners; the spine thickens as notes, keeps, and relations file in.</p><ul class="lens"><li class="l-diegetic"><b>diegetic</b>Ex libris plate, highlighter set, find-in-drawer. Pass.</li></ul><div class="flag"><b>flag · known · recorded</b>Find input centre hit-tests the binding SVG at 439 (verify-439 baseline dead=1, lane B's room). Reported, not fixed here.</div></div></div>
+
+<div class="card"><img src="showcase/19-themes.png" alt="pigment locker"><div class="side"><h3><span class="n">19</span>Themes — pigment locker</h3><p class="does">Twelve tins, hover-preview wears the skin for real without writing state, click commits through a pigment wash.</p><ul class="lens"><li class="l-covenant"><b>covenant</b>Machine-only classes; grade veil is blend-only so fixed overlays keep working. All 8 sampled skins verified applied. Pass.</li><li class="l-voice"><b>voice</b>Each tin carries its traveller's opinion — pigment, not preference. Pass.</li></ul></div></div>
+
+<div class="card"><img src="showcase/20-settings.png" alt="settings maintenance panel"><div class="side"><h3><span class="n">20</span>Settings — maintenance panel</h3><p class="does">VFD slot display, two-switch wipe interlock, save slots, weather switch mirroring the same single owner.</p><ul class="lens"><li class="l-covenant"><b>covenant</b>Diegetic frame that genuinely instructs (a form may instruct in-world). Native confirm dead in Tauri → two-step in-app. Pass.</li></ul></div></div>
+
+<div class="card"><img src="showcase/21-trash.png" alt="artifact graveyard"><div class="side"><h3><span class="n">21</span>Trash — the graveyard</h3><p class="does">Say why, and it returns with a reason riding alongside; bury everything is armed, never casual; dig restores.</p><ul class="lens"><li class="l-voice"><b>voice</b>Ravaging Pete keeps what you bury — and grows it. Pass.</li><li class="l-shadow"><b>shadow</b>Graves that grow things: the discard pile, thriving. Pass.</li></ul></div></div>
+
+<h2 id="retired"><small>V</small>Retired &amp; mapped</h2>
+<p class="actlede">Retired rooms leave forwarding addresses, not holes.</p>
+
+<div class="card"><img src="showcase/22-cohort.png" alt="cohort archive note"><div class="side"><h3><span class="n">22</span>Cohort — now the lamp</h3><p class="does">The cohort moved into liberchat: the small lamp in every corner. Conversations still seal in wax. The page says so and steps aside.</p><ul class="lens"><li class="l-covenant"><b>covenant</b>Retirement note, no dead door. Pass with the note below.</li></ul><div class="flag"><b>flag · presentation · weak frame</b>The page renders very dark — honest (it is a note, not a room) but it photographs like an error. Candidate: give the note a candle.</div></div></div>
+
+<div class="card"><img src="showcase/23-about.png" alt="iris mappa map"><div class="side"><h3><span class="n">23</span>About — Iris Mappa's map</h3><p class="does">Where you are, how to move, what persists, who Iris was — a cartographer's residue, dated local, epoch now.</p><ul class="lens"><li class="l-diegetic"><b>diegetic</b>Scale, datum, cross-references to rooms; a document that genuinely instructs. Pass.</li></ul></div></div>
+
+<h2 id="rain"><small>VI</small>Rain — the harsh layer</h2>
+<p class="actlede">Weather, not sentence. The storm is invited, dismissible, and gated — and now it asks harder.</p>
+
+<div class="card"><img src="showcase/24-rainy-ask.png" alt="nightly question panel"><div class="side"><h3><span class="n">24</span>The night's question</h3><p class="does">One question per sitting, rotating by the sitting itself — keeping/releasing, the un-felt thing, the loud voice, the carried thing. Two answers or none; nothing gated; forgotten by morning.</p><ul class="lens"><li class="l-shadow"><b>shadow</b>Avoidance, inner critic, mask, and burden — flavored, never quoted. Harsher, still kind in structure. Pass.</li><li class="l-covenant"><b>covenant</b>Once a night, never twice; decline is a real answer, not a nag (gated). Pass.</li><li class="l-afford"><b>affordance</b>All three buttons full targets; helplines one click away in the ticker. Pass.</li></ul></div></div>
+
+<div class="card"><img src="showcase/25-rainy-desktop.png" alt="rainy desktop with ticker echo"><div class="side"><h3><span class="n">25</span>Rainy desktop + echo</h3><p class="does">The machine cools to grey, the ticker keeps the night's answer, the record stays readable, nothing expires.</p><ul class="lens"><li class="l-covenant"><b>covenant</b>Real palette shift per room in its own stylesheet, never an opacity wash (121/121). Turning it off restores byte-identical. Pass.</li></ul></div></div>
+
+<div class="card"><img src="showcase/26-sideways.png" alt="sideways chalk note on the rim"><div class="side"><h3><span class="n">26</span>Sideways catch, rainy tent</h3><p class="does">Ask it sideways on a rainy night and the rim chalks the earlier wording — then reads for you anyway. Sitting-local, six seconds, zero writes.</p><ul class="lens"><li class="l-shadow"><b>shadow</b>Caught rewording, by felt and chalk — anger at being seen through, with the draw intact. Pass.</li><li class="l-covenant"><b>covenant</b>Refuses to pretend, never refuses to read; wipe the slate and it dies with it. Pass.</li><li class="l-afford"><b>affordance</b>Chalk note only, no new controls, no timing pressure. Pass.</li></ul></div></div>
+
+<h2 id="verdict"><small>VII</small>Verdict table</h2>
+<p class="actlede">Every lens, one line. The deck's claims in one place.</p>
+<table class="verdict">
+<tr><th>surface</th><th>covenant</th><th>voice</th><th>diegetic</th><th>affordance</th><th>shadow</th></tr>
+<tr><td>boot</td><td class="pass">pass</td><td class="pass">pass</td><td>chrome</td><td class="pass">pass</td><td>—</td></tr>
+<tr><td>ritual ring</td><td class="pass">pass</td><td class="pass">pass</td><td class="pass">pass</td><td class="pass">pass</td><td>—</td></tr>
+<tr><td>tutorial demos</td><td class="pass">fake, zero writes</td><td class="pass">pass</td><td class="pass">pass</td><td class="pass">44px tent bar</td><td class="pass">safe scare</td></tr>
+<tr><td>desktop</td><td class="pass">pass</td><td>—</td><td class="pass">pass</td><td class="pass">pass</td><td>—</td></tr>
+<tr><td>10 rooms</td><td class="pass">own stylesheets</td><td class="pass">pass</td><td class="pass">pass</td><td class="warn">2 known 439 notes</td><td>—</td></tr>
+<tr><td>rainy layer</td><td class="pass">gates nothing</td><td class="pass">pass</td><td class="pass">chalk, not lecture</td><td class="pass">pass</td><td class="pass">harsher, exits kept</td></tr>
+<tr><td>sidecar @439</td><td class="fail">blocks 7 controls</td><td>—</td><td>—</td><td class="fail">consent at risk</td><td>—</td></tr>
+</table>
+
+<footer>Deck ends. Captured live from this tree over its own server — no mocks, no staging. The storm stays optional: light it from the locker, the settings panel, or the room behind the CRT — or let it lift. Nothing expires.</footer>
+</div>
+</body>
+</html>
