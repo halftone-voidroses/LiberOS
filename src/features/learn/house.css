@@ -1,0 +1,169 @@
+/* ============================================================================
+   learn/house.css — the stacks.
+
+   The Mad Scribe's room of the house: the aisle the workbook was filed in.
+   Oak rod, sepia card, brass drawer-pull, red stamp ink. The catalogue is
+   the only furniture with weight, because the catalogue is the room's whole
+   argument: everything in here is kept, dated, and findable again.
+
+   COMPOSITION. Band above the tube, boards below the machine, machine units.
+   The reading desk and the chair are not built — they live on the screen.
+   What is left is what the aisle actually shows: the drawer left open on
+   the row that was in use, the run of filed cards with one standing proud,
+   the stamp pad gone dry at the edges, and the returns trolley nobody has
+   wheeled back yet.
+
+   SUBSTRATE  oak rod, sepia card, brass drawer-pull, red stamp ink
+   LIGHT      one clerk's lamp over the catalogue, warm; the aisle dark
+              behind the rods
+   TELLS      the drawer left open on the row that was in use; a card
+              standing proud of the rest, drawn and never refiled; the stamp
+              pad gone dry at the edges and wet in the middle
+   ============================================================================ */
+
+.house-scene[data-house="learn"] {
+  --house-wall-hi: #46382a;
+  --house-wall: #2f261c;
+  --house-wall-lo: #16110c;
+  --house-wall-pattern:
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0 1px, rgba(255, 236, 200, 0.016) 1px 2px, rgba(0, 0, 0, 0) 2px 34px),
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.22) 0 1px, rgba(0, 0, 0, 0) 1px 46px),
+    radial-gradient(ellipse 42% 36% at 46% 6%, rgba(228, 176, 112, 0.10) 0%, rgba(0, 0, 0, 0) 68%);
+  --house-wall-sheen: linear-gradient(180deg, rgba(255, 236, 200, 0.05) 0%, rgba(0, 0, 0, 0) 44%);
+
+  --house-floor-lit: #4e3a26;
+  --house-floor: #241a11;
+  --house-floor-pattern: repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.34) 0 2px, rgba(255, 236, 200, 0.014) 2px 3px, rgba(0, 0, 0, 0) 3px 52px);
+
+  --house-frame: #4c3a26;
+  --house-glass: #0d0f12;
+  --house-door: #2a2016;
+  --house-door-frame: #14100b;
+  --house-brass: #b08a3c;
+
+  /* the clerk's lamp: a brass stem and a shade, hung over the catalogue.
+     It hangs between the shelf and the corkboard, the way the other rooms
+     hang theirs in the gap rather than over the furniture. */
+  --house-lamp-x: 9;
+  --house-lamp-y: 1.4;
+  --house-lamp-cord: 3.2;
+  --house-lamp-core: #ffd89a;
+  --house-lamp-wash: rgba(232, 186, 112, 0.24);
+  --house-accent: #c8402c;
+
+  /* the shelf: the same ledger as everywhere else, in this room's oak */
+  --house-shelf-x: 1.2;
+  --house-shelf-y: 1.2;
+  --house-shelf-w: 5;
+  --house-shelf-h: 5;
+  --house-shelf-wood: #503a24;
+  --house-shelf-lit: #8a6a3c;
+
+  /* the corkboard: one filed card per relation, pinned where it was filed */
+  --house-pins-x: 13;
+  --house-pins-y: 1.2;
+  --house-pins-w: 5;
+  --house-pins-h: 5;
+
+  --house-window-h: 21;
+  --house-window-t: 2;
+}
+
+/* ── the glass: the aisle behind the rods, dark, with one lamp burning ──── */
+.house-scene[data-house="learn"] .house-window {
+  background-image:
+    radial-gradient(circle at 24% 30%, rgba(255, 214, 150, 0.34) 0%, rgba(0, 0, 0, 0) 22%),
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.5) 0 3px, rgba(255, 228, 180, 0.05) 3px 5px, rgba(0, 0, 0, 0) 5px 22px),
+    linear-gradient(180deg, #1c1710 0%, #120e09 64%, #070504 100%);
+  box-shadow:
+    inset 0 0 44px rgba(0, 0, 0, 0.85),
+    inset 0 0 0 1px rgba(216, 200, 160, 0.08),
+    0 0 0 1px var(--house-line);
+}
+
+/* the clerk's lamp: brass bell over a warm bulb, throwing down on the oak */
+.house-scene[data-house="learn"] .house-lamp-body {
+  border-radius: 40% 40% 46% 46% / 60% 60% 26% 26%;
+  background: linear-gradient(180deg, #b08a3c 0%, #6a4f22 46%, var(--house-lamp-core) 100%);
+  box-shadow:
+    inset 0 -4px 8px rgba(0, 0, 0, 0.45),
+    0 0 12px 3px color-mix(in srgb, var(--house-lamp-core) 52%, transparent),
+    0 0 42px 15px var(--house-lamp-wash);
+}
+
+/* ── the corkboard: filed cards, one per relation ──────────────────────── */
+.house-scene[data-house="learn"] .house-pins {
+  background:
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.08) 0 1px, rgba(0, 0, 0, 0) 1px 9px),
+    linear-gradient(180deg, #a8875a 0%, #6f5636 100%);
+  box-shadow: inset 0 0 0 2px #4c3a26, inset 0 0 22px rgba(0, 0, 0, 0.5), 0 3px 8px rgba(0, 0, 0, 0.6);
+}
+.house-scene[data-house="learn"] .house-pin {
+  background: linear-gradient(180deg, #ece2c8 0%, #c0b498 100%);
+  border-radius: 1px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7), inset 0 0 0 1px rgba(0, 0, 0, 0.25);
+}
+
+/* ── the drawer, left open on the row that was in use ──────────────────── */
+.house-scene[data-house="learn"] .house-prop[data-prop="drawer"] {
+  --x: 8.4; --y: 7.2; --w: 5; --h: 2.2;
+  border-radius: 1px;
+  background:
+    linear-gradient(180deg, rgba(255, 236, 200, 0.1) 0 18%, rgba(0, 0, 0, 0) 18%),
+    linear-gradient(180deg, #6a4c2c 0%, #3e2a16 100%);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.45), 0 3px 7px rgba(0, 0, 0, 0.65);
+}
+
+/* ── the run of filed cards, one standing proud of the rest ────────────── */
+.house-scene[data-house="learn"] .house-prop[data-prop="cards"] {
+  --x: 14.2; --y: 7.2; --w: 5; --h: 4.2;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0) 0 6%, rgba(240, 232, 208, 0.9) 6% 9%, rgba(0, 0, 0, 0) 9%),
+    repeating-linear-gradient(90deg,
+      rgba(0, 0, 0, 0) 0 6%,
+      rgba(214, 200, 168, 0.5) 6% 7.4%,
+      rgba(0, 0, 0, 0) 7.4% 13%,
+      rgba(190, 176, 146, 0.4) 13% 14.4%,
+      rgba(0, 0, 0, 0) 14.4% 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0) 0 82%, #4c3a26 82% 100%);
+  opacity: 0.95;
+}
+
+/* ── the stamp pad, dried at the edges and wet in the middle ───────────── */
+.house-scene[data-house="learn"] .house-prop[data-prop="stamp"] {
+  --x: 1.2; --y: 7.6; --w: 3.6; --h: 2.4;
+  border-radius: 2px;
+  background:
+    radial-gradient(ellipse at 50% 56%, rgba(200, 64, 44, 0.92) 0 42%, rgba(120, 40, 28, 0.55) 68%, rgba(0, 0, 0, 0) 72%),
+    linear-gradient(180deg, #4a3420 0%, #241a11 100%);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.5), 0 2px 5px rgba(0, 0, 0, 0.6);
+}
+
+/* ── the catalogue: the room's only weight, on the boards ──────────────── */
+.house-scene[data-house="learn"] .house-prop[data-prop="catalogue"] {
+  --x: 1; --y: 0; --w: 6.4; --h: 6;
+  border-radius: 2px 2px 1px 1px;
+  background:
+    repeating-linear-gradient(0deg,
+      rgba(0, 0, 0, 0) 0 12%,
+      rgba(255, 236, 200, 0.14) 12% 13.4%,
+      rgba(0, 0, 0, 0) 13.4% 16.4%),
+    repeating-linear-gradient(90deg,
+      rgba(0, 0, 0, 0) 0 46%,
+      rgba(0, 0, 0, 0.6) 46% 47%,
+      rgba(0, 0, 0, 0) 47% 100%),
+    linear-gradient(180deg, #6a4c2c 0%, #402c18 62%, #241a11 100%);
+  box-shadow: inset 0 0 28px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(0, 0, 0, 0.4);
+}
+
+/* ── the returns trolley, nobody has wheeled it back yet ──────────────── */
+.house-scene[data-house="learn"] .house-prop[data-prop="trolley"] {
+  --x: 8.6; --y: 0; --w: 4.4; --h: 3.6;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0) 0 68%, rgba(216, 200, 160, 0.16) 68% 70%, rgba(0, 0, 0, 0) 70%),
+    radial-gradient(circle at 18% 92%, #14100b 0 9%, rgba(0, 0, 0, 0) 11%),
+    radial-gradient(circle at 82% 92%, #14100b 0 9%, rgba(0, 0, 0, 0) 11%),
+    linear-gradient(180deg, #4c3a26 0%, #2a1f13 100%);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.45);
+  opacity: 0.92;
+}

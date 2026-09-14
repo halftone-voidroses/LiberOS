@@ -1,12 +1,14 @@
 // smoke.mjs — smoke test for the Riason-demo tutorial + desktop flow
-// Flow: boot -> loading -> desktop, cutscene auto-opens (ritual flames,
+// Flow: boot -> loading -> desktop, cutscene auto-opens (summoning lines,
 // Wanderlust beats, intruder flare, Riason beats) -> Riason demos the
 // buddy himself (user watches; the chain is fake, nothing is written) ->
-// bind prompt (two beats) -> user clicks the artifact -> fake explosion
-// chain -> Wanderlust returns -> pink wipe -> "I arise the same but
-// different" -> clean desktop, tutorialDone, zero artifacts (clean slate)
-// -> manual sigil cast in the stone room -> divination draw -> orbit,
-// mini-menu, verb, relation -> settings wipe exists.
+// the curtain hands the traveller to Arcana's tent -> Riason births the
+// card on the felt -> desktop: the card is KEPT and its relation is SET
+// (it <verb> your buddy) -> the relation lands and Wanderlust
+// re-intervenes -> fake explosion chain -> pink wipe -> "I arise the same
+// but different" -> clean desktop, tutorialDone, zero artifacts (clean
+// slate) -> manual sigil cast in the stone room -> divination draw ->
+// orbit, mini-menu, verb, relation -> settings wipe exists.
 
 import { chromium } from 'playwright'
 import { spawn } from 'node:child_process'
@@ -152,7 +154,7 @@ for (let d = 0; d < 18; d++) {
 await page.waitForURL('**/desktop.html', { timeout: 30000 })
 await page.waitForFunction(() => {
   var l = document.querySelector('#cutscene .cutscene-line')
-  return !!(l && /arrow keys/.test(l.textContent))
+  return !!(l && /came out of Arcana/.test(l.textContent))
 }, { timeout: 30000 })
 const afterDemo = await stateCounts()
 sassert(afterDemo.stone === 0 && afterDemo.sealed === 0 && afterDemo.relations === 0 && afterDemo.games === 0,
@@ -160,12 +162,16 @@ sassert(afterDemo.stone === 0 && afterDemo.sealed === 0 && afterDemo.relations =
 sassert(afterDemo.stage === 'bind', 'stage should be bind after demo, got ' + afterDemo.stage)
 console.log(`   after demo: ${JSON.stringify(afterDemo)}`)
 
-console.log('7. Two prompt beats, then click the artifact -> fake chain')
+console.log('7. Two prompt beats, then keep the card and set its relation -> fake chain')
 await clickBeat()
 await clickBeat()
-await page.waitForSelector('#demo-artifact', { timeout: 15000 })
+await page.waitForSelector('#demo-keep', { timeout: 15000 })
 await shot('smoke-03-artifact')
-await page.click('#demo-artifact')
+await page.click('#demo-keep')
+await page.waitForSelector('#demo-relate-verb:not([hidden])', { timeout: 10000 })
+await page.fill('#demo-relate-verb', 'protects')
+await shot('smoke-03b-relation')
+await page.click('#demo-bind')
 await page.waitForTimeout(600)
 
 console.log('8. Finale: return beats, wipe, clean desktop — still zero writes')

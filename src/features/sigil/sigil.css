@@ -1228,3 +1228,19 @@ body[data-crt="sigil"] .crt-weave::after {
 .machine.shadow-on .sigil-app::before {
   filter: saturate(0.5) brightness(0.8);
 }
+
+/* the tutorial's curtain to the tent (2.13.0): the stone's demo closes
+   over the room, and divination.html opens the same layer from black */
+.sigil-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+.sigil-curtain.go { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .sigil-curtain { transition: none; }
+}

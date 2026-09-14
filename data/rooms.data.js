@@ -132,6 +132,23 @@ window.LiberRooms = {
     floor: ['hopscotch', 'balls', 'horse'],
     memory: ['lamp', 'shelf', 'board'],
     weather: true
+  },
+
+  learn: {
+    id: 'learn',
+    place: 'the stacks',
+    traveller: 'the mad scribe',
+    substrate: 'oak rod, sepia card, brass drawer-pull, red stamp ink',
+    light: 'one clerk\u2019s lamp over the catalogue, warm; the aisle dark behind the rods',
+    tells: [
+      'the drawer left open on the row that was in use',
+      'a card standing proud of the rest, drawn and never refiled',
+      'the stamp pad gone dry at the edges and wet in the middle'
+    ],
+    props: ['drawer', 'cards', 'stamp', 'catalogue', 'trolley'],
+    floor: ['catalogue', 'trolley'],
+    memory: ['lamp', 'shelf', 'board'],
+    weather: true
   }
 
 };

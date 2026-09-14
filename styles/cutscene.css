@@ -1,8 +1,10 @@
 /* cutscene.css — flow fork cinematic tutorial (desktop only).
-   Ritual (pink flames, black-flame glow, shakes), chat window beats,
-   intruder flash, Riason wireframe box, bind overlay, finale (flash,
-   shake, hub burst), pink wipe, black arise window. Reduced-motion
-   gates everything. */
+   Ritual (summon lines, glow, shakes, black-flame close), chat window
+   beats, intruder flash, Riason wireframe box, the artifact dock and the
+   relation step, finale (flash, shake, hub burst), pink wipe, black
+   arise window. Reduced-motion gates everything.
+   2.13.0: the eclipse flame ring is removed — its rules (.crt-flames,
+   .inferno-*) are gone with the element. Nothing replaces it. */
 
 .cutscene {
   position: absolute;
@@ -184,7 +186,7 @@
   text-shadow: 0 0 18px rgba(255, 255, 255, 0.9), 0 0 34px rgba(255, 150, 200, 0.8);
 }
 
-.cutscene.ritual .ritual-line.is-flames {
+.cutscene.ritual .ritual-line.is-ember {
   color: #ffd86a;
   text-shadow: 0 0 20px rgba(255, 200, 90, 0.95), 0 0 44px rgba(255, 120, 60, 0.8);
 }
@@ -499,6 +501,75 @@
   100% { filter: none; transform: translateX(0); }
 }
 .cutscene.artifactdock { flex-direction: column; gap: 16px; }
+
+/* ── the curtain: the tutorial's hand-off between rooms (2.13.0) ────────
+   The tent hands the traveller to the desktop behind this layer, and the
+   next room opens the same curtain from black. One movement, two pages. */
+.cutscene-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 120;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+/* ── the relation step ──────────────────────────────────────────────────
+   The card is kept, then bound: the artifact, a verb, the buddy — the
+   desktop's own relation grammar (.constellation-mini), rehearsed at the
+   size of a cutscene box. Plain labels, one action per row. */
+.demo-keep-row { margin-top: 12px; }
+.demo-keep,
+.demo-bind {
+  font-family: inherit;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  color: #f0d8a8;
+  background: linear-gradient(180deg, #3a2410 0%, #1c1108 100%);
+  border: 1px solid #8a6a20;
+  padding: 6px 14px;
+  cursor: pointer;
+}
+.demo-keep { display: block; margin: 0 auto; }
+.demo-keep:hover, .demo-keep:focus-visible,
+.demo-bind:hover:not(:disabled), .demo-bind:focus-visible {
+  border-color: #e8c890;
+  outline: none;
+}
+.demo-bind:disabled { opacity: 0.55; cursor: default; }
+.demo-artifact.kept {
+  border-color: #e8c890;
+  box-shadow: 0 0 30px rgba(232, 200, 144, 0.55);
+}
+.demo-relate {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.demo-relate[hidden] { display: none; }
+.demo-relate-me,
+.demo-relate-target {
+  font-size: 1rem;
+  letter-spacing: 0.06em;
+  color: #c8a878;
+}
+.demo-relate-verb {
+  width: 9.5em;
+  font-family: inherit;
+  font-size: 1rem;
+  font-style: italic;
+  color: #f0d8a8;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  border-bottom: 1px solid #8a6a20;
+  padding: 4px 6px;
+}
+.demo-relate-verb:focus-visible { outline: none; border-bottom-color: #e8c890; }
+.demo-relate-sigil { color: #e8c890; }
+.demo-relate.bound .demo-relate-sigil { text-shadow: 0 0 10px rgba(232, 200, 144, 0.9); }
 .demo-artifact {
   width: 120px;
   height: 150px;
@@ -642,39 +713,6 @@
 .cutscene.ritual {
   background: #000;
 }
-.crt-flames {
-  /* Body-level fixed layer re-homed INSIDE .room (first child): .room's
-     own filter makes it a stacking context, so body-level z-indexes all
-     paint above the whole room. As a room child the ring sits below the
-     machine (z10) and the sidecar flank (z12) — behind the monitor, where
-     lavish fire can eclipse the background without clipping anything. */
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  overflow: visible;
-}
-.inferno-svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-  overflow: visible;
-}
-.inferno-arc {
-  opacity: 0;
-  transition: opacity 0.9s ease;
-}
-.inferno-arc path {
-  fill: none;
-  stroke-linecap: round;
-}
-.inferno-arc.lit { opacity: 1; }
-.inferno-arc.ember { opacity: 0.32; filter: saturate(0.55) brightness(0.75); }
-.crt-flames.flare { filter: hue-rotate(-28deg) saturate(1.5); }
-.machine.flame-live {
-  position: relative;
-  z-index: 10;
-}
 .machine.flame-glow {
   filter: drop-shadow(0 0 34px rgba(255, 80, 140, 0.45));
 }
@@ -702,19 +740,12 @@
   text-shadow: 0 0 16px rgba(255, 105, 180, 0.9), 0 0 60px rgba(170, 50, 100, 0.6);
   animation: summon-flicker 1.0s ease-in-out infinite alternate;
 }
-.crt-flames { transition: transform 0.3s ease, filter 0.3s ease; }
-.crt-flames.lean {
-  transform: translateX(-7px) skewX(-2deg);
-}
-.crt-flames.flare-up {
-  filter: brightness(1.35) saturate(1.2);
-}
 @media (prefers-reduced-motion: reduce) {
   .cutscene.ritual .ritual-line { animation: none; }
   .ritual-line.ritual-fall { animation: none; }
   .ritual-line .rl { animation: none; opacity: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .inferno-arc { transition: none; }
   .machine-break, .machine-break-hard { animation: none; }
+  .cutscene-veil { transition: none; }
 }

@@ -1,9 +1,11 @@
 // cutscene.js — flow fork first-run cinematic (desktop only).
-// Ritual (flames light one by one, black-flame glow, shakes) → chat
-// window (Wanderlust, options) → names → intruder flash → Riason box
-// (options) → stage 'stone', route sigil.html. Later, stage 'bind'
-// shows the bind overlay here; on bind, the finale plays: explosions,
-// Wanderlust returns, pink wipe, arise text, clean desktop.
+// Ritual (summon lines, glow, shakes; no fire — 2.13.0) → chat window
+// (Wanderlust, options) → names → intruder flash → Riason box (options)
+// → stage 'stone', route sigil.html. The curtain then hands the traveller
+// to Arcana's tent (divination.html) and back: stage 'bind' shows the
+// card dock here — keep it, set its relation to the buddy — and on that
+// relation the finale plays: explosions, Wanderlust returns, pink wipe,
+// arise text, clean desktop.
 // Skip any time (marks done, stays). Never twice. No voice: removed.
 
 (function () {
@@ -11,7 +13,7 @@
 
   var SUMMON = [
     { line: 'I summon you from somewhere else', fx: 'glow' },
-    { line: 'To find the pieces of ourselves', fx: 'flames' },
+    { line: 'To find the pieces of ourselves', fx: 'ember' },
     { line: 'With violet eyes and sun like skin', fx: 'shake' },
     { line: 'Come to the void and sing again', fx: 'shake-more' }
   ];
@@ -67,6 +69,26 @@
   var REDUCED = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
   function el(id) { return document.getElementById(id); }
+
+  // ── the curtain — the tutorial moves from room to room ──
+  // 2.13.0: the hand-off between the casting stone and Arcana's tent used
+  // to be a jump cut — the demo bar vanished and the next page appeared
+  // mid-gesture. Now the room's own screen is covered in black, the hand
+  // off happens behind it, and the next room opens the same curtain from
+  // black. Reduced motion gets an instant cut, as everywhere else.
+  function curtainIn() {
+    var stage = document.querySelector('.screen-stage');
+    if (!stage || REDUCED) return null;
+    var veil = document.createElement('div');
+    veil.className = 'cutscene-veil';
+    veil.setAttribute('aria-hidden', 'true');
+    veil.style.opacity = '1';
+    stage.appendChild(veil);
+    void veil.offsetWidth; // black is painted before the fade starts
+    requestAnimationFrame(function () { veil.style.opacity = '0'; });
+    setTimeout(function () { if (veil.parentNode) veil.parentNode.removeChild(veil); }, 900);
+    return veil;
+  }
 
   function clearBox() {
     var old = el('cutscene');
@@ -158,83 +180,18 @@
   }
 
   // ── act 1: the summoning ritual ──
+  // 2.13.0: the flame ring is gone. The eclipse inferno was an SVG
+  // feTurbulence + feDisplacementMap filter over the whole viewport,
+  // re-anchored and re-rendered as the machine moved and the lines fell —
+  // more frames than the summoning is worth. The ritual keeps its lines,
+  // its shakes, its glow and its black-flame close; the fire is removed,
+  // not replaced. Its CSS went with it (styles/cutscene.css).
 
   function playRitual(done) {
     var stage = document.querySelector('.screen-stage');
     if (!stage) { done(); return; }
     clearBox();
-    var oldRing = document.getElementById('crt-flames');
-    if (oldRing && oldRing.parentNode) oldRing.parentNode.removeChild(oldRing);
     var machine = document.querySelector('.machine');
-    var ring = document.createElement('div');
-    ring.className = 'crt-flames';
-    ring.id = 'crt-flames';
-    ring.setAttribute('aria-hidden', 'true');
-    var flameEls = [];
-    var litCount = 0;
-    var lastRect = null;
-    function buildInferno() {
-      while (ring.firstChild) ring.removeChild(ring.firstChild);
-      flameEls = [];
-      var vw = window.innerWidth || 1280, vh = window.innerHeight || 800;
-      var mr = machine ? machine.getBoundingClientRect() : null;
-      if (!mr || !(mr.width > 0)) return;
-      var reduced = false;
-      try { reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); } catch (e) {}
-      var NS = 'http://www.w3.org/2000/svg';
-      var svg = document.createElementNS(NS, 'svg');
-      svg.setAttribute('viewBox', '0 0 ' + vw + ' ' + vh);
-      svg.setAttribute('class', 'inferno-svg');
-      // Eclipse the background frame: the ring rides just outside the
-      // monitor body so lavish fire never clips against bezel or screen.
-      // The glass nearly fills the viewport, so top/bottom sit tight
-      // (half the stroke still clears the bezel) while the sides run wide.
-      var PADX = 44, PADY = 14;
-      var x0 = Math.max(mr.left - PADX, -20), y0 = Math.max(mr.top - PADY, -10);
-      var x1 = Math.min(mr.left + mr.width + PADX, vw + 20), y1 = Math.min(mr.top + mr.height + PADY, vh + 10);
-      // The sidecar flank stands right of the machine — run the ring past
-      // it so the right side reads instead of hiding behind the tube.
-      try {
-        var sc = document.getElementById('liberchat-sidecar');
-        if (sc) {
-          var sr = sc.getBoundingClientRect();
-          if (sr && sr.width > 0 && sr.bottom > y0 && sr.top < y1) {
-            x1 = Math.min(sr.right + 26, vw + 20);
-          }
-        }
-      } catch (e) {}
-      var anim = reduced ? '' : '<animate attributeName="baseFrequency" values="0.009 0.035;0.013 0.07;0.009 0.035" dur="1.6s" repeatCount="indefinite"/>';
-      svg.innerHTML = '<defs>'
-        + '<linearGradient id="fireOut" gradientUnits="userSpaceOnUse" x1="0" y1="' + y1 + '" x2="0" y2="' + y0 + '">'
-        + '<stop offset="0" stop-color="#fff3da"/><stop offset=".2" stop-color="#ff6aa8"/><stop offset=".5" stop-color="#c02050"/><stop offset=".8" stop-color="#ff6aa8"/><stop offset="1" stop-color="#fff3da"/></linearGradient>'
-        + '<linearGradient id="fireCore" gradientUnits="userSpaceOnUse" x1="0" y1="' + y1 + '" x2="0" y2="' + y0 + '">'
-        + '<stop offset="0" stop-color="#ffffff"/><stop offset=".25" stop-color="#ffd9a8"/><stop offset=".5" stop-color="#ffb080"/><stop offset=".75" stop-color="#ffd9a8"/><stop offset="1" stop-color="#ffffff"/></linearGradient>'
-        + '<filter id="fireTurb" x="-20%" y="-20%" width="140%" height="140%">'
-        + '<feTurbulence type="fractalNoise" baseFrequency="0.009 0.035" numOctaves="2" seed="7" result="n">' + anim + '</feTurbulence>'
-        + '<feDisplacementMap in="SourceGraphic" in2="n" scale="64"/><feGaussianBlur stdDeviation="7"/>'
-        + '</filter></defs>'
-        + '<g filter="url(#fireTurb)">'
-        + '<g class="inferno-arc"><path d="M ' + (x0 + 60) + ' ' + y1 + ' L ' + (x1 - 60) + ' ' + y1 + '" stroke="url(#fireOut)" stroke-width="72"/><path d="M ' + (x0 + 60) + ' ' + y1 + ' L ' + (x1 - 60) + ' ' + y1 + '" stroke="url(#fireCore)" stroke-width="24"/></g>'
-        + '<g class="inferno-arc"><path d="M ' + x0 + ' ' + (y0 + 60) + ' L ' + x0 + ' ' + (y1 - 60) + '" stroke="url(#fireOut)" stroke-width="72"/><path d="M ' + x0 + ' ' + (y0 + 60) + ' L ' + x0 + ' ' + (y1 - 60) + '" stroke="url(#fireCore)" stroke-width="24"/></g>'
-        + '<g class="inferno-arc"><path d="M ' + x1 + ' ' + (y0 + 60) + ' L ' + x1 + ' ' + (y1 - 60) + '" stroke="url(#fireOut)" stroke-width="72"/><path d="M ' + x1 + ' ' + (y0 + 60) + ' L ' + x1 + ' ' + (y1 - 60) + '" stroke="url(#fireCore)" stroke-width="24"/></g>'
-        + '<g class="inferno-arc"><path d="M ' + (x0 + 60) + ' ' + y0 + ' L ' + (x1 - 60) + ' ' + y0 + '" stroke="url(#fireOut)" stroke-width="72"/><path d="M ' + (x0 + 60) + ' ' + y0 + ' L ' + (x1 - 60) + ' ' + y0 + '" stroke="url(#fireCore)" stroke-width="24"/></g>'
-        + '</g>';
-      ring.appendChild(svg);
-      lastRect = { x: mr.left, y: mr.top, w: mr.width, h: mr.height, x1: x1 };
-      var arcs = svg.querySelectorAll('.inferno-arc');
-      for (var ai = 0; ai < arcs.length; ai++) {
-        flameEls.push(arcs[ai]);
-        if (ai < litCount) arcs[ai].classList.add('lit');
-      }
-    }
-    buildInferno();
-    var roomEl = document.querySelector('.room');
-    if (roomEl) roomEl.insertBefore(ring, roomEl.firstChild);
-    else document.body.appendChild(ring);
-    function onRingResize() { if (document.body.contains(ring)) buildInferno(); }
-    window._crtRingResize = onRingResize;
-    window.addEventListener('resize', onRingResize);
-    if (machine) machine.classList.add('flame-live');
     function setGlow(on) { if (machine) machine.classList.toggle('flame-glow', !!on); }
     function breakHard(ms) {
       if (!machine) return;
@@ -267,9 +224,6 @@
       dead = true;
       box.classList.add('blackflame');
       setGlow(false);
-      flameEls.forEach(function (f) { f.classList.remove('lit'); f.classList.add('ember'); });
-      window.removeEventListener('resize', onRingResize);
-      window._crtRingResize = null;
       setTimeout(function () { done(); }, 1600);
     }
     box.addEventListener('click', function () { finish(); });
@@ -277,32 +231,7 @@
     function step() {
       if (!alive()) return;
       if (i >= SUMMON.length) { finish(); return; }
-      // The desk can re-seat the machine mid-ritual (sidecar fit); if the
-      // body moved, re-anchor the ring so the eclipse stays registered.
-      try {
-        var mrNow = machine ? machine.getBoundingClientRect() : null;
-        var vwNow = window.innerWidth || 1280;
-        var x1Now = null;
-        if (mrNow && mrNow.width > 0) {
-          x1Now = Math.min(mrNow.left + mrNow.width + 44, vwNow + 20);
-          try {
-            var scNow = document.getElementById('liberchat-sidecar');
-            if (scNow) {
-              var srNow = scNow.getBoundingClientRect();
-              if (srNow && srNow.width > 0) x1Now = Math.min(srNow.right + 26, vwNow + 20);
-            }
-          } catch (e2) {}
-        }
-        if (mrNow && mrNow.width > 0 && lastRect &&
-            (Math.abs(mrNow.left - lastRect.x) > 8 || Math.abs(mrNow.top - lastRect.y) > 8 ||
-             Math.abs(mrNow.width - lastRect.w) > 8 || Math.abs(mrNow.height - lastRect.h) > 8 ||
-             (x1Now !== null && Math.abs(x1Now - lastRect.x1) > 8))) {
-          buildInferno();
-        }
-      } catch (e) {}
       var s = SUMMON[i];
-      var g = flameEls[i];
-      if (g) { g.classList.add('lit'); litCount = Math.max(litCount, i + 1); }
       if (stackEl) {
         var fallen = document.createElement('div');
         fallen.className = 'cutscene-line ritual-line ritual-fall is-' + s.fx;
@@ -327,11 +256,7 @@
         box.classList.remove('do-shake', 'do-shake-more');
         void box.offsetWidth;
         box.classList.add(s.fx === 'shake' ? 'do-shake' : 'do-shake-more');
-        ring.classList.remove('lean', 'flare-up');
-        void ring.offsetWidth;
-        ring.classList.add('lean');
-        if (s.fx === 'shake-more') { ring.classList.add('flare-up'); breakHard(1400); } else breakOnce();
-        setTimeout(function () { ring.classList.remove('lean', 'flare-up'); }, s.fx === 'shake-more' ? 2100 : 1100);
+        if (s.fx === 'shake-more') breakHard(1400); else breakOnce();
         thunk();
       }
       i++;
@@ -435,31 +360,95 @@
   // ── act 3: Riason's demos — performed live in sigil.html (buddy) and
   // divination.html (artifact birth on the felt). Both fake: write nothing.
 
-  // ── act 4: the artifact — the user clicks, the chain is fake ──
+  // ── act 4: the card comes home — kept, then bound ──
+  // 2.13.0: the ruby-room beat is gone. Riason used to send the traveller
+  // off to the midway ("navigate to games, and save one as an artifact…
+  // maybe ruby's gem garden…") and then have them click a floating glyph.
+  // The tent already drew a card, so the tutorial picks that up instead:
+  // the card is KEPT here, then its RELATION is set — it <verb> your buddy
+  // — and the moment the relation lands, Wanderlust re-intervenes. The
+  // gesture Riason is teaching is the one the whole machine turns on, and
+  // it is now the gesture the tutorial actually performs. Both gestures
+  // are the demo's: the tutorial still writes nothing (smoke's slate).
 
   function playBindPrompt() {
+    curtainIn();
     playBeats([
-      { voice: 'riason', line: 'From here you can use the arrow keys or buttons to navigate to games, and save one as an artifact.', options: ['>>'] },
-      { voice: 'riason', line: 'To use my example, maybe ruby\u2019s gem garden makes me feel a strong emotion that challenges my buddy.', options: ['>>'] }
-    ], function () {
-      var stage = document.querySelector('.screen-stage');
-      if (!stage) { playFinale(); return; }
-      clearBox();
-      var box = document.createElement('div');
-      box.className = 'cutscene artifactdock';
-      box.id = 'cutscene';
-      box.innerHTML = '<div class="demo-artifact" id="demo-artifact" role="button" tabindex="0" aria-label="artifact"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="34" fill="none" stroke="#e8c890" stroke-width="2.5"/><circle cx="50" cy="50" r="26" fill="none" stroke="#4a8aaa" stroke-width="1.2" stroke-dasharray="4 3"/><path d="M50 24l7.5 16.5 17.5 2-12.8 12 3.3 17.5-15.5-8.7-15.5 8.7 3.3-17.5-12.8-12 17.5-2z" fill="none" stroke="#e8c890" stroke-width="2" stroke-linejoin="round"/></svg></div>' +
-        '<div class="cutscene-box riason"><div class="cutscene-voice">riason</div>' +
-        '<div class="cutscene-line">You click the artifact to set its relation to the buddy.</div></div>';
-      stage.appendChild(box);
-      var art = document.getElementById('demo-artifact');
-      function go() { playFakeChain(); }
-      if (art) {
-        art.addEventListener('click', go);
-        art.addEventListener('keydown', function (e) {
-          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); }
-        });
-      }
+      { voice: 'riason', line: 'That card came out of Arcana\u2019s tent with you. Keep it, and it belongs on this desktop as an artifact.', options: ['>>'] },
+      { voice: 'riason', line: 'Then you say what it means. A relation \u2014 it protects your buddy, it hides from your buddy. One verb, and the card joins the web.', options: ['>>'] }
+    ], dockArtifact);
+  }
+
+  // The artifact dock: the tent's card, a keep, and the relation row. The
+  // relation is written the way the real desktop writes one — the artifact,
+  // a verb, the buddy it points at — so the act rehearses the actual UI.
+  function dockArtifact() {
+    var stage = document.querySelector('.screen-stage');
+    if (!stage) { playFinale(); return; }
+    clearBox();
+    var box = document.createElement('div');
+    box.className = 'cutscene artifactdock';
+    box.id = 'cutscene';
+    box.innerHTML =
+      '<div class="demo-artifact" id="demo-artifact" role="img" aria-label="the card from Arcana\u2019s tent">' +
+        '<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="34" fill="none" stroke="#e8c890" stroke-width="2.5"/><circle cx="50" cy="50" r="26" fill="none" stroke="#4a8aaa" stroke-width="1.2" stroke-dasharray="4 3"/><path d="M50 24l7.5 16.5 17.5 2-12.8 12 3.3 17.5-15.5-8.7-15.5 8.7 3.3-17.5-12.8-12 17.5-2z" fill="none" stroke="#e8c890" stroke-width="2" stroke-linejoin="round"/></svg>' +
+      '</div>' +
+      '<div class="cutscene-box riason">' +
+        '<div class="cutscene-voice">riason</div>' +
+        '<div class="cutscene-line" id="demo-line">Your card. Keep it \u2014 it belongs on this desktop.</div>' +
+        '<div class="demo-keep-row" id="demo-keep-row"><button type="button" class="demo-keep" id="demo-keep">keep it</button></div>' +
+        '<div class="demo-relate" id="demo-relate" hidden>' +
+          '<span class="demo-relate-me">it</span>' +
+          '<input class="demo-relate-verb" id="demo-relate-verb" type="text" maxlength="40" spellcheck="false" list="verb-families" placeholder="protects" aria-label="what the artifact does to your buddy"/>' +
+          '<span class="demo-relate-sigil" aria-hidden="true">\u2605</span>' +
+          '<span class="demo-relate-target">your buddy</span>' +
+          '<button type="button" class="demo-bind" id="demo-bind">bind to buddy</button>' +
+        '</div>' +
+      '</div>';
+    stage.appendChild(box);
+
+    var dock = document.getElementById('demo-artifact');
+    var lineEl = document.getElementById('demo-line');
+    var keepRow = document.getElementById('demo-keep-row');
+    var keepBtn = document.getElementById('demo-keep');
+    var relate = document.getElementById('demo-relate');
+    var verbEl = document.getElementById('demo-relate-verb');
+    var bindBtn = document.getElementById('demo-bind');
+    var bound = false;
+
+    function say(t) { if (lineEl) lineEl.textContent = t; }
+
+    function keep() {
+      if (bound) return;
+      if (dock) dock.classList.add('kept');
+      flash('rgba(255, 240, 220, 0.5)', 360);
+      chime();
+      if (keepRow) keepRow.hidden = true;
+      if (relate) relate.hidden = false;
+      say('Now the relation. Tell it what it does to your buddy \u2014 the verb is yours.');
+      if (verbEl) verbEl.focus();
+    }
+
+    function bind() {
+      if (bound) return;
+      bound = true;
+      var verb = (verbEl && verbEl.value.trim()) ? verbEl.value.trim() : 'protects';
+      if (verbEl) verbEl.value = verb;
+      say('it ' + verb + ' your buddy. \u2014 and there is the web, one thread wider.');
+      if (relate) relate.classList.add('bound');
+      if (bindBtn) bindBtn.disabled = true;
+      thunk();
+      // the relation is the last thing Riason teaches: the moment it lands,
+      // the room's other voice comes back for him (playFakeChain → finale)
+      setTimeout(function () {
+        if (document.body.contains(box)) playFakeChain(); else playFinale();
+      }, 1100);
+    }
+
+    if (keepBtn) keepBtn.addEventListener('click', keep);
+    if (bindBtn) bindBtn.addEventListener('click', bind);
+    if (verbEl) verbEl.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); bind(); }
     });
   }
 
@@ -505,8 +494,6 @@
     o.className = 'flare-overlay';
     o.innerHTML = '<div class="flare-alert">intruder detected</div><div class="flare-sub">…documenting.</div>';
     stage.appendChild(o);
-    var ring = document.getElementById('crt-flames');
-    if (ring) ring.classList.add('flare');
     var machine = document.querySelector('.machine');
     if (machine) {
       machine.classList.add('flame-glow', 'machine-break-hard');
@@ -514,8 +501,6 @@
     }
     setTimeout(function () {
       if (o.parentNode) o.parentNode.removeChild(o);
-      var r2 = document.getElementById('crt-flames');
-      if (r2) r2.classList.remove('flare');
     }, 4200);
   }
 
@@ -540,12 +525,6 @@
     if (window.Cursor) { try { window.Cursor.burst(); } catch (e) {} }
     var hub = document.getElementById('constellation-sigil');
     if (hub) hub.classList.add('hub-burst');
-    var ring = document.getElementById('crt-flames');
-    if (ring) {
-      ring.classList.remove('flare');
-      var fl = ring.querySelectorAll('.inferno-arc');
-      for (var fi = 0; fi < fl.length; fi++) { fl[fi].classList.remove('ember'); fl[fi].classList.add('lit'); }
-    }
     var machine = document.querySelector('.machine');
     if (machine) {
       machine.classList.add('flame-glow', 'machine-break-hard');
@@ -591,12 +570,8 @@
 
   function endClean() {
     clearBox();
-    try { if (window._crtRingResize) window.removeEventListener('resize', window._crtRingResize); } catch (e) {}
-    window._crtRingResize = null;
-    var ring = document.getElementById('crt-flames');
-    if (ring && ring.parentNode) ring.parentNode.removeChild(ring);
     var machine = document.querySelector('.machine');
-    if (machine) machine.classList.remove('flame-live', 'flame-glow', 'machine-break', 'machine-break-hard');
+    if (machine) machine.classList.remove('flame-glow', 'machine-break', 'machine-break-hard');
     var s = st();
     if (s) s.set({ tutorialDone: true, tutorialStage: 'done' });
     chime();
@@ -615,7 +590,7 @@
     var g = s ? s.get() : {};
     if (g.tutorialDone) return;
     if (g.tutorialStage && g.tutorialStage !== 'done') {
-      if (g.tutorialStage === 'bind') playBindPrompt();
+      if (g.tutorialStage === 'bind') playBindPrompt(); // curtainIn() covers the arrival
       else if (g.tutorialStage === 'divdemo') window.location.href = 'divination.html';
       else if (g.tutorialStage === 'stonedemo') window.location.href = 'sigil.html';
       return;

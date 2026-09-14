@@ -1,5 +1,8 @@
 // settings.js — The room's room. Tutorial replay, shadow toggle, wipe.
 // No shared imports (covenant Q.1).
+// 2.13.0: the music panel is gone — the OST is removed for now, so the
+// volume slider, the level reads and the "now playing" line went with it.
+// The sound-fx switch stays; the machine's own clicks are still its voice.
 
 (function () {
   function renderState() {
@@ -22,7 +25,6 @@
     }
 
     renderSound();
-    renderScape();
     renderCrtRoom();
     renderCrt();
   }
@@ -121,59 +123,6 @@
     if (nowOn && window.Liber && window.Liber.sound) {
       try { window.Liber.sound.play('chime'); } catch (e) {}
     }
-  }
-
-  function scapeLevels() {
-    var st = (window.Liber && window.Liber.state) || null;
-    var g = st ? st.get() || {} : {};
-    var c = g.scape || {};
-    var music = (c.music == null ? 80 : +c.music);
-    if (isNaN(music)) music = 80;
-    return {
-      on: c.on !== false,
-      bed: c.bed == null ? 2 : Math.max(0, Math.min(3, c.bed | 0)),
-      motif: c.motif == null ? 2 : Math.max(0, Math.min(3, c.motif | 0)),
-      music: Math.max(0, Math.min(100, music))
-    };
-  }
-
-  function setScape(patch) {
-    var st = (window.Liber && window.Liber.state) || null;
-    if (!st) return;
-    var g = st.get() || {};
-    st.set({ scape: Object.assign({}, g.scape, patch) });
-    renderScape();
-    if (window.Liber && window.Liber.soundscape) {
-      try { window.Liber.soundscape.refresh(); } catch (e) {}
-    }
-  }
-
-  var TRACK_LABELS = {
-    main: 'main theme'
-  };
-
-  function renderScape() {
-    var c = scapeLevels();
-    var slider = document.getElementById('settings-music');
-    var val = document.getElementById('settings-music-val');
-    if (slider && document.activeElement !== slider) slider.value = String(c.music);
-    if (val) val.textContent = String(c.music);
-    var now = document.getElementById('settings-now');
-    if (now) {
-      var track = null;
-      try { track = (window.Liber && window.Liber.soundscape && window.Liber.soundscape.track) ? window.Liber.soundscape.track() : null; } catch (e) { track = null; }
-      now.textContent = 'now playing: ' + (track && TRACK_LABELS[track] ? TRACK_LABELS[track] : '—');
-    }
-  }
-
-  function setMusic(v) {
-    if (window.Liber && window.Liber.soundscape && window.Liber.soundscape.setMusic) {
-      try { window.Liber.soundscape.setMusic(v); } catch (e) {}
-    } else {
-      setScape({ music: Math.max(0, Math.min(100, Math.round(+v))) });
-      return;
-    }
-    renderScape();
   }
 
   function replay() {
@@ -307,19 +256,10 @@
         btn.addEventListener('click', function () { setRes(btn.getAttribute('data-res')); });
       })(resBtns[ri]);
     }
-    var slider = document.getElementById('settings-music');
-    if (slider) {
-      slider.addEventListener('input', function () { setMusic(slider.value); });
-      slider.addEventListener('change', function () { setMusic(slider.value); });
-    }
     if (wcover) wcover.addEventListener('click', wipeCover);
     if (w1) w1.addEventListener('click', wipePull1);
     if (w) w.addEventListener('click', wipePull2);
     if (b) b.addEventListener('click', back);
-    // The OST starts on first gesture; refresh the "now playing" line then.
-    document.addEventListener('pointerdown', function () { setTimeout(renderScape, 600); });
-    document.addEventListener('keydown', function () { setTimeout(renderScape, 600); });
-    setTimeout(renderScape, 1500);
     var slotBtns = document.querySelectorAll('[data-slot]');
     for (var si = 0; si < slotBtns.length; si++) {
       (function (btn) {

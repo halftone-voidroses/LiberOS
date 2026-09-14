@@ -927,10 +927,26 @@ function loadGhost(bitmapDataUrl) {
       veil.addEventListener('pointerdown', deny);
       function alive() { return document.body.contains(bar); }
       function after(ms, fn) { setTimeout(function () { if (alive() && fn) fn(); }, ms); }
+      // 2.13.0: the hand-off to the tent is a curtain, not a jump cut.
+      // The room's own screen goes black, the page changes behind it, and
+      // divination.html opens from black on its side (same layer, same
+      // duration). Reduced motion cuts instantly, as everywhere else.
+      function curtainOut(done) {
+        var reduced = false;
+        try { reduced = !!window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+        if (reduced) { done(); return; }
+        var veil = document.createElement('div');
+        veil.className = 'sigil-curtain';
+        veil.setAttribute('aria-hidden', 'true');
+        document.body.appendChild(veil);
+        void veil.offsetWidth;
+        veil.classList.add('go');
+        setTimeout(done, 620);
+      }
       function goDesktop() {
         var st = (window.Liber && window.Liber.state) || null;
         if (st) st.set({ tutorialStage: 'divdemo' });
-        window.location.href = 'divination.html';
+        curtainOut(function () { window.location.href = 'divination.html'; });
       }
       function showNext() { if (nextBtn && alive()) nextBtn.hidden = false; }
       function hideNext() { if (nextBtn) nextBtn.hidden = true; }
@@ -992,6 +1008,11 @@ function loadGhost(bitmapDataUrl) {
           }
           if (sv && C && C.clickEl) { try { C.clickEl(sv, 1200).then(flashed, flashed); } catch (e) { sv.click(); flashed(); } }
           else { if (sv) sv.click(); flashed(); }
+        } else if (stepIdx === 5) {
+          // the last thing said on the stone is where the hand-off happens:
+          // the curtain closes, and goDesktop() carries the stage to the tent
+          say('Good. Leave the stone \u2014 Arcana keeps the tent, and she has a card waiting for you.');
+          after(2400, goDesktop);
         } else {
           goDesktop();
         }

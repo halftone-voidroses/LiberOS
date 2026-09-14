@@ -706,7 +706,37 @@
       var tut = (window.Liber && window.Liber.state && window.Liber.state.get().tutorialStage) || null;
       if (tut === 'divdemo') runDivDemo();
     } catch (e) {}
+    // 2.13.0: the tutorial's hand-off. The tent opens from black on the
+    // side the stone's curtain closed (same layer, same duration), so the
+    // step from the buddy demo to Arcana reads as one movement through the
+    // house rather than two page loads.
+    function curtainIn() {
+      var reduced = false;
+      try { reduced = !!window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+      if (reduced) return;
+      var veil = document.createElement('div');
+      veil.className = 'div-curtain';
+      veil.setAttribute('aria-hidden', 'true');
+      veil.style.opacity = '1';
+      document.body.appendChild(veil);
+      void veil.offsetWidth;
+      requestAnimationFrame(function () { veil.style.opacity = '0'; });
+      setTimeout(function () { if (veil.parentNode) veil.parentNode.removeChild(veil); }, 900);
+    }
+    function curtainOut(done) {
+      var reduced = false;
+      try { reduced = !!window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+      if (reduced) { done(); return; }
+      var veil = document.createElement('div');
+      veil.className = 'div-curtain';
+      veil.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(veil);
+      void veil.offsetWidth;
+      veil.classList.add('go');
+      setTimeout(done, 620);
+    }
     function runDivDemo() {
+      curtainIn();
       var bar = document.createElement('div');
       bar.className = 'divination-demo';
       bar.innerHTML = '<div class="divination-demo-voice">riason</div><div class="divination-demo-line"></div><button type="button" class="divination-demo-next" hidden>&gt;&gt;</button>';
@@ -731,11 +761,16 @@
       function showNext() { if (nextBtn && alive()) nextBtn.hidden = false; }
       function hideNext() { if (nextBtn) nextBtn.hidden = true; }
       function goBind() {
-        if (bar.parentNode) bar.parentNode.removeChild(bar);
-        if (veil.parentNode) veil.parentNode.removeChild(veil);
         var st = (window.Liber && window.Liber.state) || null;
         if (st) st.set({ tutorialStage: 'bind' });
-        window.location.href = 'desktop.html';
+        say('Take the card with you. The desktop is next \u2014 keep it there, and bind it to your buddy.');
+        after(2000, function () {
+          curtainOut(function () {
+            if (bar.parentNode) bar.parentNode.removeChild(bar);
+            if (veil.parentNode) veil.parentNode.removeChild(veil);
+            window.location.href = 'desktop.html';
+          });
+        });
       }
       function burstOnFelt() {
         var felt = feltEl();
@@ -785,7 +820,7 @@
           if (deck) { try { deck.click(); } catch (e) {} }
           after(900, showNext);
         } else if (stepIdx === 3) {
-          say('Had I kept it, that burst is the birth. Yours will land on the desktop, and you will tell it what it means to your buddy.');
+          say('Had I kept it, that burst is the birth. Yours goes with you: on the desktop you keep it, and you tell it what it means to your buddy.');
           var keep = el('divination-save-prompt-keep');
           if (keep) keep.classList.add('demo-hit');
           after(700, function () {
