@@ -1,6 +1,6 @@
 # LiberOS changelog
 
-## Unreleased
+## v2.12.0 — the house stands furnished
 ### Three lanes, one tree (the pitch's remaining systems, built side by side)
 - Room hooks close the contract: a kept dream hangs its developed sheet on
   the corkboard (reads the satchel, the true keep), the midway leaves its
@@ -120,6 +120,40 @@
   on empty) filters label + meta + body.
 - The slip: `slip out to …` carries the open keep back to the room that
   made it (per-kind home map; satchel-native keeps stay put, slip hidden).
+
+### Liberchat: the second tube everywhere, and the tube's paper
+- The dot-matrix sidecar CRT stands on every room page — same object, same
+  engine — and the lamp retires everywhere the tube arrives. Off the desk
+  the shut tube folds to a door tab at 439px; Esc shuts it.
+- Seal-in-wax files the conversation to the book stamped with persona and
+  exchange count, and the room behind the CRT lays one torn strip per
+  unkept persona on the boards beside the desk (four at most). The seal
+  is the broom: sealing sweeps the strip as the volume arrives on the
+  shelf (`liberdev/room-hooks.md` § the tube's paper).
+
+### The house stands furnished (every room behind its machine)
+- Six traveller rooms stand behind their machines instead of the void —
+  the sleeping nook (dreams), the bathroom (toybox/Pip), the study
+  (satchel/Riason), the basement (sea/Vanir), the observatory
+  (divination/Arcana), the play room (games/Whimsy). Same building,
+  different rooms: shared architecture (`styles/house.css`), per-room
+  finish, memory hooks (lamp/shelf/pool/board) re-made in each room's
+  own material (`src/house.js`, `data/rooms.data.js`).
+- The machine holds a stepped width on every page (`src/stage.js`,
+  `s.resolution`), pinned from the settings RESOLUTION group; the
+  shell's reduced-motion gesture is structural (`styles/room.css`).
+- Gates: `verify-house` 194/194, `verify-scaling`, `verify-covenant-css`,
+  `verify-themes` join the suite.
+
+### The glass gets its picture
+- Every traveller repainted the tube: `styles/wallpaper.css` hangs the
+  picture in the glass behind the desktop, and the locker shows the
+  tin's chip and pins the whole plate at the room's edge — preview
+  pins without writing state.
+
+### Showcase, rainy hardening, intro eclipse
+- 26-frame verdict deck (five lenses each), harsher rainy layer, intro
+  eclipse behind the glass with artifact birth in Arcana's tent.
 
 ## 2.11.0 — Toybox: the covenant pass
 ### Added
