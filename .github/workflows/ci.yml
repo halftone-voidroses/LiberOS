@@ -24,14 +24,21 @@ jobs:
       - name: Install frontend deps
         run: npm ci
 
+      # Only verifiers that do NOT launch a browser belong in this step.
+      # verify-gamification drives Chromium and lives below, after the
+      # browser is installed — putting it here made every run red with
+      # "Executable doesn't exist ... chrome-headless-shell".
       - name: Data verifiers (no browser)
         run: |
           node scripts/verify-data.mjs
           node scripts/verify-prompt-engine.mjs
-          node scripts/verify-gamification.mjs
 
       - name: Install Playwright chromium
         run: npx playwright install --with-deps chromium
+
+      - name: Gamification verifier (blocks)
+        run: node scripts/verify-gamification.mjs
+        timeout-minutes: 15
 
       # Full tutorial smoke is timing-sensitive (see CHANGELOG 2.7.0:
       # pre-existing environment stall trips pristine 2.6.1 too), so it
