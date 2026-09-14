@@ -126,12 +126,26 @@ await shot('smoke-02-demo')
 
 console.log('6. Demo plays slowly on the real stone, one >> per step; chain is fake so NOTHING is written')
 for (let d = 0; d < 18; d++) {
-  if (await page.evaluate(() => location.href.includes('desktop.html'))) break
+  if (await page.evaluate(() => location.href.includes('divination.html'))) break
   const hasNext = await page.evaluate(() => {
     const b = document.querySelector('.sigil-demo-next')
     return !!(b && !b.hidden)
   })
   if (hasNext) await page.click('.sigil-demo-next')
+  else await page.waitForTimeout(2500)
+  await page.waitForTimeout(800)
+}
+await page.waitForURL('**/divination.html', { timeout: 30000 })
+console.log('   stone room done, Arcana tent reached')
+
+console.log('6b. Riason births a fake artifact on the felt, then it bursts; still NOTHING written')
+for (let d = 0; d < 18; d++) {
+  if (await page.evaluate(() => location.href.includes('desktop.html'))) break
+  const hasNext = await page.evaluate(() => {
+    const b = document.querySelector('.divination-demo-next')
+    return !!(b && !b.hidden)
+  })
+  if (hasNext) await page.click('.divination-demo-next')
   else await page.waitForTimeout(2500)
   await page.waitForTimeout(800)
 }

@@ -643,14 +643,37 @@
   background: #000;
 }
 .crt-flames {
+  /* Body-level fixed layer re-homed INSIDE .room (first child): .room's
+     own filter makes it a stacking context, so body-level z-indexes all
+     paint above the whole room. As a room child the ring sits below the
+     machine (z10) and the sidecar flank (z12) — behind the monitor, where
+     lavish fire can eclipse the background without clipping anything. */
   position: fixed;
   inset: 0;
-  z-index: 80;
+  z-index: 0;
   pointer-events: none;
+  overflow: visible;
 }
+.inferno-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+.inferno-arc {
+  opacity: 0;
+  transition: opacity 0.9s ease;
+}
+.inferno-arc path {
+  fill: none;
+  stroke-linecap: round;
+}
+.inferno-arc.lit { opacity: 1; }
+.inferno-arc.ember { opacity: 0.32; filter: saturate(0.55) brightness(0.75); }
+.crt-flames.flare { filter: hue-rotate(-28deg) saturate(1.5); }
 .machine.flame-live {
   position: relative;
-  z-index: 2;
+  z-index: 10;
 }
 .machine.flame-glow {
   filter: drop-shadow(0 0 34px rgba(255, 80, 140, 0.45));

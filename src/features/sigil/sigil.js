@@ -929,8 +929,8 @@ function loadGhost(bitmapDataUrl) {
       function after(ms, fn) { setTimeout(function () { if (alive() && fn) fn(); }, ms); }
       function goDesktop() {
         var st = (window.Liber && window.Liber.state) || null;
-        if (st) st.set({ tutorialStage: 'bind' });
-        window.location.href = 'desktop.html';
+        if (st) st.set({ tutorialStage: 'divdemo' });
+        window.location.href = 'divination.html';
       }
       function showNext() { if (nextBtn && alive()) nextBtn.hidden = false; }
       function hideNext() { if (nextBtn) nextBtn.hidden = true; }

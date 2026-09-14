@@ -171,7 +171,69 @@
     ring.id = 'crt-flames';
     ring.setAttribute('aria-hidden', 'true');
     var flameEls = [];
-    document.body.appendChild(ring);
+    var litCount = 0;
+    var lastRect = null;
+    function buildInferno() {
+      while (ring.firstChild) ring.removeChild(ring.firstChild);
+      flameEls = [];
+      var vw = window.innerWidth || 1280, vh = window.innerHeight || 800;
+      var mr = machine ? machine.getBoundingClientRect() : null;
+      if (!mr || !(mr.width > 0)) return;
+      var reduced = false;
+      try { reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); } catch (e) {}
+      var NS = 'http://www.w3.org/2000/svg';
+      var svg = document.createElementNS(NS, 'svg');
+      svg.setAttribute('viewBox', '0 0 ' + vw + ' ' + vh);
+      svg.setAttribute('class', 'inferno-svg');
+      // Eclipse the background frame: the ring rides just outside the
+      // monitor body so lavish fire never clips against bezel or screen.
+      // The glass nearly fills the viewport, so top/bottom sit tight
+      // (half the stroke still clears the bezel) while the sides run wide.
+      var PADX = 44, PADY = 14;
+      var x0 = Math.max(mr.left - PADX, -20), y0 = Math.max(mr.top - PADY, -10);
+      var x1 = Math.min(mr.left + mr.width + PADX, vw + 20), y1 = Math.min(mr.top + mr.height + PADY, vh + 10);
+      // The sidecar flank stands right of the machine — run the ring past
+      // it so the right side reads instead of hiding behind the tube.
+      try {
+        var sc = document.getElementById('liberchat-sidecar');
+        if (sc) {
+          var sr = sc.getBoundingClientRect();
+          if (sr && sr.width > 0 && sr.bottom > y0 && sr.top < y1) {
+            x1 = Math.min(sr.right + 26, vw + 20);
+          }
+        }
+      } catch (e) {}
+      var anim = reduced ? '' : '<animate attributeName="baseFrequency" values="0.009 0.035;0.013 0.07;0.009 0.035" dur="1.6s" repeatCount="indefinite"/>';
+      svg.innerHTML = '<defs>'
+        + '<linearGradient id="fireOut" gradientUnits="userSpaceOnUse" x1="0" y1="' + y1 + '" x2="0" y2="' + y0 + '">'
+        + '<stop offset="0" stop-color="#fff3da"/><stop offset=".2" stop-color="#ff6aa8"/><stop offset=".5" stop-color="#c02050"/><stop offset=".8" stop-color="#ff6aa8"/><stop offset="1" stop-color="#fff3da"/></linearGradient>'
+        + '<linearGradient id="fireCore" gradientUnits="userSpaceOnUse" x1="0" y1="' + y1 + '" x2="0" y2="' + y0 + '">'
+        + '<stop offset="0" stop-color="#ffffff"/><stop offset=".25" stop-color="#ffd9a8"/><stop offset=".5" stop-color="#ffb080"/><stop offset=".75" stop-color="#ffd9a8"/><stop offset="1" stop-color="#ffffff"/></linearGradient>'
+        + '<filter id="fireTurb" x="-20%" y="-20%" width="140%" height="140%">'
+        + '<feTurbulence type="fractalNoise" baseFrequency="0.009 0.035" numOctaves="2" seed="7" result="n">' + anim + '</feTurbulence>'
+        + '<feDisplacementMap in="SourceGraphic" in2="n" scale="64"/><feGaussianBlur stdDeviation="7"/>'
+        + '</filter></defs>'
+        + '<g filter="url(#fireTurb)">'
+        + '<g class="inferno-arc"><path d="M ' + (x0 + 60) + ' ' + y1 + ' L ' + (x1 - 60) + ' ' + y1 + '" stroke="url(#fireOut)" stroke-width="72"/><path d="M ' + (x0 + 60) + ' ' + y1 + ' L ' + (x1 - 60) + ' ' + y1 + '" stroke="url(#fireCore)" stroke-width="24"/></g>'
+        + '<g class="inferno-arc"><path d="M ' + x0 + ' ' + (y0 + 60) + ' L ' + x0 + ' ' + (y1 - 60) + '" stroke="url(#fireOut)" stroke-width="72"/><path d="M ' + x0 + ' ' + (y0 + 60) + ' L ' + x0 + ' ' + (y1 - 60) + '" stroke="url(#fireCore)" stroke-width="24"/></g>'
+        + '<g class="inferno-arc"><path d="M ' + x1 + ' ' + (y0 + 60) + ' L ' + x1 + ' ' + (y1 - 60) + '" stroke="url(#fireOut)" stroke-width="72"/><path d="M ' + x1 + ' ' + (y0 + 60) + ' L ' + x1 + ' ' + (y1 - 60) + '" stroke="url(#fireCore)" stroke-width="24"/></g>'
+        + '<g class="inferno-arc"><path d="M ' + (x0 + 60) + ' ' + y0 + ' L ' + (x1 - 60) + ' ' + y0 + '" stroke="url(#fireOut)" stroke-width="72"/><path d="M ' + (x0 + 60) + ' ' + y0 + ' L ' + (x1 - 60) + ' ' + y0 + '" stroke="url(#fireCore)" stroke-width="24"/></g>'
+        + '</g>';
+      ring.appendChild(svg);
+      lastRect = { x: mr.left, y: mr.top, w: mr.width, h: mr.height, x1: x1 };
+      var arcs = svg.querySelectorAll('.inferno-arc');
+      for (var ai = 0; ai < arcs.length; ai++) {
+        flameEls.push(arcs[ai]);
+        if (ai < litCount) arcs[ai].classList.add('lit');
+      }
+    }
+    buildInferno();
+    var roomEl = document.querySelector('.room');
+    if (roomEl) roomEl.insertBefore(ring, roomEl.firstChild);
+    else document.body.appendChild(ring);
+    function onRingResize() { if (document.body.contains(ring)) buildInferno(); }
+    window._crtRingResize = onRingResize;
+    window.addEventListener('resize', onRingResize);
     if (machine) machine.classList.add('flame-live');
     function setGlow(on) { if (machine) machine.classList.toggle('flame-glow', !!on); }
     function breakHard(ms) {
@@ -206,6 +268,8 @@
       box.classList.add('blackflame');
       setGlow(false);
       flameEls.forEach(function (f) { f.classList.remove('lit'); f.classList.add('ember'); });
+      window.removeEventListener('resize', onRingResize);
+      window._crtRingResize = null;
       setTimeout(function () { done(); }, 1600);
     }
     box.addEventListener('click', function () { finish(); });
@@ -213,9 +277,32 @@
     function step() {
       if (!alive()) return;
       if (i >= SUMMON.length) { finish(); return; }
+      // The desk can re-seat the machine mid-ritual (sidecar fit); if the
+      // body moved, re-anchor the ring so the eclipse stays registered.
+      try {
+        var mrNow = machine ? machine.getBoundingClientRect() : null;
+        var vwNow = window.innerWidth || 1280;
+        var x1Now = null;
+        if (mrNow && mrNow.width > 0) {
+          x1Now = Math.min(mrNow.left + mrNow.width + 44, vwNow + 20);
+          try {
+            var scNow = document.getElementById('liberchat-sidecar');
+            if (scNow) {
+              var srNow = scNow.getBoundingClientRect();
+              if (srNow && srNow.width > 0) x1Now = Math.min(srNow.right + 26, vwNow + 20);
+            }
+          } catch (e2) {}
+        }
+        if (mrNow && mrNow.width > 0 && lastRect &&
+            (Math.abs(mrNow.left - lastRect.x) > 8 || Math.abs(mrNow.top - lastRect.y) > 8 ||
+             Math.abs(mrNow.width - lastRect.w) > 8 || Math.abs(mrNow.height - lastRect.h) > 8 ||
+             (x1Now !== null && Math.abs(x1Now - lastRect.x1) > 8))) {
+          buildInferno();
+        }
+      } catch (e) {}
       var s = SUMMON[i];
       var g = flameEls[i];
-      if (g) g.classList.add('lit');
+      if (g) { g.classList.add('lit'); litCount = Math.max(litCount, i + 1); }
       if (stackEl) {
         var fallen = document.createElement('div');
         fallen.className = 'cutscene-line ritual-line ritual-fall is-' + s.fx;
@@ -345,8 +432,8 @@
     });
   }
 
-  // ── act 3: Riason's demo — performed live in sigil.html on the real
-  // stone room (own code there). Fake throughout: writes nothing.
+  // ── act 3: Riason's demos — performed live in sigil.html (buddy) and
+  // divination.html (artifact birth on the felt). Both fake: write nothing.
 
   // ── act 4: the artifact — the user clicks, the chain is fake ──
 
@@ -504,6 +591,8 @@
 
   function endClean() {
     clearBox();
+    try { if (window._crtRingResize) window.removeEventListener('resize', window._crtRingResize); } catch (e) {}
+    window._crtRingResize = null;
     var ring = document.getElementById('crt-flames');
     if (ring && ring.parentNode) ring.parentNode.removeChild(ring);
     var machine = document.querySelector('.machine');
@@ -527,6 +616,7 @@
     if (g.tutorialDone) return;
     if (g.tutorialStage && g.tutorialStage !== 'done') {
       if (g.tutorialStage === 'bind') playBindPrompt();
+      else if (g.tutorialStage === 'divdemo') window.location.href = 'divination.html';
       else if (g.tutorialStage === 'stonedemo') window.location.href = 'sigil.html';
       return;
     }

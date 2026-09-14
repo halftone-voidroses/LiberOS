@@ -653,3 +653,90 @@
   --wood: #120f10;
   --wood-hi: #242022;
 }
+
+/* ── Riason's artifact-birth demo (tutorial stage 'divdemo') ──
+   Fake copy of the tent, same contract as the buddy demo in sigil.css:
+   a veil that denies, a blue wireframe bar, a burst on the felt. Writes
+   nothing; the kept prompt is unwound, not kept. */
+.divination-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: transparent;
+}
+.divination-veil.deny { background: rgba(192, 30, 30, 0.1); }
+.divination-demo {
+  position: fixed;
+  left: 50%;
+  bottom: 4%;
+  transform: translateX(-50%);
+  width: min(82%, 480px);
+  z-index: 61;
+  background: linear-gradient(180deg, #0a1420 0%, #060a10 100%);
+  border: 2px solid #4a8aaa;
+  border-radius: 4px;
+  box-shadow: 0 0 0 2px rgba(74, 138, 170, 0.2), 0 0 22px rgba(74, 138, 170, 0.3);
+  padding: 12px 16px;
+}
+.divination-demo-voice {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 0.9rem;
+  letter-spacing: 0.25em;
+  color: #4a8aaa;
+  margin-bottom: 4px;
+}
+.divination-demo-line {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 1.05rem;
+  color: #cfe2f5;
+  line-height: 1.5;
+}
+.divination-demo-next {
+  margin-top: 10px;
+  background: none;
+  border: 1px solid #4a8aaa;
+  color: #cfe2f5;
+  font-family: 'VT323', monospace;
+  font-size: 1.1rem;
+  letter-spacing: 0.15em;
+  padding: 3px 18px;
+  min-height: 44px;
+  min-width: 44px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.divination-demo-next:hover { background: rgba(74, 138, 170, 0.18); }
+.divination-demo-next:focus-visible { outline: 2px solid #cfe2f5; outline-offset: 2px; }
+#divination-save-prompt-keep.demo-hit {
+  border-color: #e8c890;
+  color: #e8c890;
+  box-shadow: 0 0 14px rgba(232, 200, 144, 0.6);
+}
+/* the birth burst: chalk bits thrown off the felt, transform + opacity only */
+.div-demo-burst {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 30;
+}
+.div-demo-bit {
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff3da 0%, #ff6aa8 55%, transparent 75%);
+  box-shadow: 0 0 12px rgba(255, 106, 168, 0.9);
+  animation: div-demo-fly 0.95s ease-out forwards;
+}
+@keyframes div-demo-fly {
+  from { opacity: 1; transform: translate(0, 0) scale(1); }
+  to { opacity: 0; transform: translate(calc(var(--dx, 0) * 135px), calc(var(--dy, 0) * 135px)) scale(0.4); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .div-demo-bit { animation: none; opacity: 0; }
+}

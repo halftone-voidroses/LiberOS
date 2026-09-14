@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LiberOS — Rainy Day Pitch: ten rooms, no shelter</title>
+<style>
+:root{--void:#070403;--panel:#160b08;--panel2:#21100b;--line:#5a301b;--cream:#eadfc6;--muted:#b19a78;--gold:#d4af65;--pink:#ff9ec6;--cyan:#7ac0d8;--green:#9ad49a;--ice:#8fd8e8;--red:#ff8585;--serif:Georgia,'Times New Roman',serif;--mono:'Courier New',monospace}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 50% 0,#1a1216 0,#070403 52rem);color:var(--cream);font-family:var(--serif);line-height:1.6}
+.wrap{max-width:1080px;margin:auto;padding:30px 24px 110px}
+.kicker{font-family:var(--mono);color:var(--ice);font-size:12px;letter-spacing:.28em;text-transform:lowercase}
+h1{font-weight:400;font-size:clamp(30px,5vw,54px);line-height:1.05;margin:16px 0 14px}
+h1 em{color:var(--pink);font-style:italic}
+.lede{color:var(--muted);font-size:17px;max-width:76ch}
+.meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;font-family:var(--mono);font-size:11px;color:#9e8463}
+.meta span{border:1px solid var(--line);border-radius:99px;padding:4px 12px}
+nav{position:sticky;top:0;z-index:6;background:#0a070cee;border:1px solid var(--line);border-radius:0 0 10px 10px;padding:10px 14px;margin-top:26px;font-family:var(--mono);font-size:12px;line-height:1.9}
+nav a{color:var(--ice);text-decoration:none;margin-right:12px;white-space:nowrap}
+h2{font-weight:400;font-size:26px;margin:60px 0 6px;border-bottom:1px solid var(--line);padding-bottom:8px}
+h2 small{font-family:var(--mono);font-size:12px;color:var(--ice);margin-right:10px}
+.roomlede{color:var(--muted);font-style:italic;margin:6px 0 18px}
+.card{border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,var(--panel2),var(--panel));padding:16px 18px;margin:0 0 16px}
+.card h3{margin:0 0 4px;font-weight:400;font-size:18px;color:var(--cream)}
+.card h3 .roman{font-family:var(--mono);color:var(--ice);font-size:12px;margin-right:8px}
+.card .feel{font-style:italic;color:var(--pink);margin:2px 0 10px}
+.card p{margin:8px 0;color:#d9c9a8;font-size:14.5px}
+.card .mech{font-family:var(--mono);font-size:12px;color:var(--gold)}
+.card ul{margin:8px 0 0;padding-left:18px;color:var(--muted);font-size:13.5px}
+.covenant{margin:0 0 16px;border:1px solid #3a5a2a;border-left:4px solid var(--green);border-radius:0 10px 10px 0;background:#0d1408;padding:12px 16px}
+.covenant b{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:lowercase;color:var(--green);margin-bottom:6px}
+.covenant ul{margin:0;padding-left:18px;font-size:13px;color:#c9d8b0}
+footer{margin-top:70px;border-top:1px solid var(--line);padding-top:18px;color:var(--muted);font-size:13px;font-style:italic}
+code{font-family:var(--mono);font-size:12px;color:var(--gold);background:#2a130b;padding:2px 5px;border-radius:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="kicker">liber vacui &middot; weather, not sentence &middot; rev. a</div>
+<h1>Rainy Day: <em>ten rooms, no shelter</em></h1>
+<p class="lede">Rainy Day already exists as weather: one toggle owned three ways (the locker tile, the settings switch, the room behind the CRT), a real palette shift per room, one question asked once a night that gates nothing. This pitch does not change any of that machinery. It changes what the rain <em>does</em> in each room: the storm stops being lighting and starts being a confrontation. Each room below gets one rainy escalation — challenging, evocative, shadow-work first — aimed at the feelings the dry rooms let you walk around: embarrassment, anger, upset. Nothing here removes an exit. Nothing here punishes refusal. The heaviness is the point; the cage is still forbidden.</p>
+<div class="meta"><span>status: pitch, unbuilt</span><span>scope: 10 primary rooms</span><span>spine kept: draw &rarr; interpret &rarr; save &rarr; relate</span><span>weather rule: nothing expires</span></div>
+<nav><a href="#law">the law</a><a href="#sigil">sigil</a><a href="#divination">divination</a><a href="#dreams">dreams</a><a href="#games">games</a><a href="#garden">garden</a><a href="#sea">sea</a><a href="#toybox">toybox</a><a href="#learn">learn</a><a href="#satchel">satchel</a><a href="#trash">trash</a></nav>
+
+<h2 id="law"><small>00</small>The law the rain obeys</h2>
+<div class="covenant"><b>the storm is invited, dismissible, and gated</b><ul>
+<li>Rain stays a toggle. Tile, switch, and CRT room keep agreeing on the one owner (<code>state.shadowOn</code>). Any of them lifts the weather at any hour.</li>
+<li>The one nightly question still gates nothing. It asks once, accepts silence, never repeats itself the same night.</li>
+<li>Every escalation below has a real exit on screen at all times, and refusal is honored without sulking — no locked drawers that stay locked, no stamp that blocks saving, no creature that follows you out.</li>
+<li>All challenge text is diegetic: stamps, tallies, chalk, wires, ledgers. The rooms never explain themselves and never moralize a symbol. Embarrassment comes from the record, not from a lecture about the record.</li>
+<li>Nothing expires and everything restores: trash digs back, slots switch, discards return to the stack. A rainy visit can never strand a traveller.</li>
+</ul></div>
+
+<h2 id="sigil"><small>01</small>Sigil — the stone reads your handwriting back</h2>
+<p class="roomlede">The bench keeps everything you ever decided, and tonight it recites.</p>
+<div class="card"><h3><span class="roman">I</span>Three intentions, verbatim, before the pen lifts</h3>
+<p class="feel">reading your own diary out loud to someone you respect</p>
+<p>On rainy nights the tablet opens with your last three kept intentions chalked across the stone in your own ink, oldest first. Not summarized — verbatim, misspellings and all. You cast beneath them or you don't; the pen works either way, discard still returns nothing to anyone.</p>
+<p><span class="mech">mechanism:</span> read-only recall strip above the input (already-kept records, no new state). Save path untouched. The strip burns off when the weather lifts.</p>
+<ul><li>Embarrassment is the material: the gap between who you were three casts ago and who is holding the pen.</li><li>Refusal: cover it — one tap chalks the strip over until next visit. The intentions stay kept; only the recital stops.</li></ul></div>
+
+<h2 id="divination"><small>02</small>Divination — Arcana catches the rephrase</h2>
+<p class="roomlede">You cannot ask the same question twice, and tonight she proves it.</p>
+<div class="card"><h3><span class="roman">II</span>The sideways question, named</h3>
+<p class="feel">being caught rewording a question you swore was different</p>
+<p>Rainy Arcana compares tonight's slate against this sitting's prior questions and, when you rephrase instead of re-asking, turns the slate herself with the chalk note: <em>sideways — asked at 21:04 as “should I”</em>. The draw still proceeds. She is not refusing you; she is refusing to pretend with you. And the deck deals first the card you discarded last dry visit — it was counted three times, it keeps count of you too.</p>
+<p><span class="mech">mechanism:</span> sitting-local string comparison (no storage, no cloud, dies with the visit). Keep/discard untouched.</p>
+<ul><li>Anger is the material: being seen through by felt and chalk.</li><li>Refusal: wipe the slate and the comparison dies with it. Ask clean, or ask nothing.</li></ul></div>
+
+<h2 id="dreams"><small>03</small>Dreams — the entry you flinched from</h2>
+<p class="roomlede">The ledger opens itself to the page with the least ink in the margins.</p>
+<div class="card"><h3><span class="roman">III</span>One question about the quietest entry</h3>
+<p class="feel">someone gently touching the one bruise you didn't mention</p>
+<p>On rainy nights the journal opens to the kept dream with the fewest associations — the one you lodged and never returned to — and the second hand writes a single question beneath it, once per night, in pencil. Answering is optional. Closing the drawer ends it. The question never repeats and never follows you to another room.</p>
+<p><span class="mech">mechanism:</span> min-association lookup over kept dreams; pencil note is session-local, never saved unless you ink it yourself.</p>
+<ul><li>Upset is the material: the dream you hurried past, waiting patiently.</li><li>Refusal: shut the drawer. No sulk, no re-ask, no mark left behind.</li></ul></div>
+
+<h2 id="games"><small>04</small>Games — the barker remembers your aim</h2>
+<p class="roomlede">The midway keeps score even when you don't.</p>
+<div class="card"><h3><span class="roman">IV</span>Last throw, quoted, before the next</h3>
+<p class="feel">hearing your own miss announced to a crowd of nobody</p>
+<p>Rainy Whimsy chalks your last kept wheel result on the booth shingle before you throw: <em>last visit: aimed at anger, landed numbness — 3 darts</em>. The dart flies the same. The polaroid develops the same. Only the walk-up stings — your own record, in his handwriting, which is worse than yours.</p>
+<p><span class="mech">mechanism:</span> read-only recall of the latest kept wheel artifact. Throw/keep flow untouched.</p>
+<ul><li>Embarrassment is the material: the archive of your own misses, run by a man with a microphone.</li><li>Refusal: walk the midway instead — every other booth works without the shingle.</li></ul></div>
+
+<h2 id="garden"><small>05</small>Garden — the glass won't wipe</h2>
+<p class="roomlede">Condensation where your finger hesitates, and it stays.</p>
+<div class="card"><h3><span class="roman">V</span>What you avoid tending grows leggy</h3>
+<p class="feel">watching something lean toward light you won't give it</p>
+<p>Rainy condensation resists wiping over exactly one pane — the plant you have tended least (fewest visits logged). It grows leggy toward the seam, pale and reaching, while its neighbors hold. Tending it works normally; ignoring it changes nothing but the shape. No penalty, no timer. Just a visible lean you made by absence.</p>
+<p><span class="mech">mechanism:</span> least-visited pot flags one pane un-wipeable; growth bias is cosmetic, saved as ordinary visits.</p>
+<ul><li>Upset is the material: neglect with a stem and leaves.</li><li>Refusal: tend anything else. The leggy one keeps reaching; the room keeps letting it.</li></ul></div>
+
+<h2 id="sea"><small>06</small>Sea — letting go doesn't take</h2>
+<p class="roomlede">The tide clock runs backward and the water gives back.</p>
+<div class="card"><h3><span class="roman">VI</span>Releases float back once, quoted verbatim</h3>
+<p class="feel">saying goodbye and hearing it echo back in your own voice</p>
+<p>Releases made on rainy nights take two visits to sink: the next night the buoy returns the exact text, grey and swollen, with the tide-table note <em>not yet — one more night</em>. Releasing again sinks it for good; the ledger holds both dates. The ritual is honest about what it always was: letting go is a practice, not an event, and the sea does not grade your first attempt.</p>
+<p><span class="mech">mechanism:</span> sea artifact carries a second timestamp; release ledger shows both. Intensity dots and input untouched.</p>
+<ul><li>Upset is the material: the thing you set down, back in your hands.</li><li>Refusal: leave it floating. The sea keeps it without comment until you decide.</li></ul></div>
+
+<h2 id="toybox"><small>07</small>Toybox — small refusals from small beings</h2>
+<p class="roomlede">The creatures have opinions, and tonight they say them slower.</p>
+<div class="card"><h3><span class="roman">VII</span>One powder refused, one drain slowed</h3>
+<p class="feel">being told no by something knee-high that is completely sure</p>
+<p>Rainy Pip's crew refuses a single powder for the night — not yours to choose which; the smallest one stamps a foot and says <em>not that one tonight</em> — and the drain runs slow, so washes pool and mix. Everything still works. Everything just takes longer and argues first. Pouring anyway is impossible (the shelf is labelled, the lid stays shut); pouring anything else is welcome.</p>
+<p><span class="mech">mechanism:</span> seeded nightly refusal (deterministic per date, no storage); drain timing constant lengthened under weather.</p>
+<ul><li>Anger is the material: thwarted by the tiny and the certain.</li><li>Refusal: play with the rest, or leave the sink full. Nothing spoils overnight.</li></ul></div>
+
+<h2 id="learn"><small>08</small>Learn — the gap, stamped</h2>
+<p class="roomlede">The scribe files your weakest citation on top.</p>
+<div class="card"><h3><span class="roman">VIII</span>One footnote, from memory, no penalty</h3>
+<p class="feel">being asked to cite the one page you skimmed</p>
+<p>On rainy nights the drawer wall opens with your least-drawn citation stamped across the top card and one question beneath it, answerable from memory or not at all. Answering files the card back pleased; skipping files it back unchanged. The stamp is the whole confrontation — a gap you knew about, dated and initialed.</p>
+<p><span class="mech">mechanism:</span> least-drawn citation lookup; quiz is session-local, writes nothing unless answered into the register normally.</p>
+<ul><li>Embarrassment is the material: the skim, given a date stamp.</li><li>Refusal: shut the drawer. The card waits without comment.</li></ul></div>
+
+<h2 id="satchel"><small>09</small>Satchel — your past self knots a drawer</h2>
+<p class="roomlede">A ribbon you tied, holding against you.</p>
+<div class="card"><h3><span class="roman">IX</span>One drawer knotted shut — one pull opens it</h3>
+<p class="feel">finding a note in your own hand that says <em>not yet</em></p>
+<p>Rainy satchel finds one ribbon marker tied in a knot (the drawer you have opened least since the weather turned) with a tag in your own keeps: <em>not tonight — r.</em> It is a knot, not a lock: one pull opens it, deliberately, and the tag stays as a record that you overruled yourself. Your past self gets a vote, never a veto.</p>
+<p><span class="mech">mechanism:</span> least-opened drawer flagged; single deliberate gesture unknots (no confirm trap, no second step).</p>
+<ul><li>Upset is the material: you, withholding from you, politely.</li><li>Refusal: leave the knot. It holds without tightening.</li></ul></div>
+
+<h2 id="trash"><small>10</small>Trash — the rubble shows your profile</h2>
+<p class="roomlede">What you buried on rainy nights grows fastest.</p>
+<div class="card"><h3><span class="roman">X</span>Graves that grow what you threw away</h3>
+<p class="feel">weeding a garden and recognizing everything in it</p>
+<p>Rainy weathering accelerates over graves dug on rainy nights, and the rubble sorts itself into legible shapes: your shelved artifacts surface as shoots with their names on stakes. Digging restores anything, as always — the trash loop does not change. The confrontation is purely visual: the things you threw away, growing well without you.</p>
+<p><span class="mech">mechanism:</span> weathering weight keyed to burial weather (already stored); dig/restore paths untouched.</p>
+<ul><li>Embarrassment and upset braided: the discard pile, thriving.</li><li>Refusal: let it grow. Graves are gardens here; neglect is also tending.</li></ul></div>
+
+<footer>Pitch ends. The storm stays optional: light it from the locker, the settings panel, or the room behind the CRT — or let it lift. Nothing expires. — filed for the next dry spell.</footer>
+</div>
+</body>
+</html>

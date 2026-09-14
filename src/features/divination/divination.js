@@ -626,5 +626,114 @@
       if (h !== '#keep' && prompt && prompt.classList.contains('open')) cancelPrompt();
       if (h !== '#note' && raisonEl && raisonEl.classList.contains('open')) closeR();
     });
+
+    // ── Riason's artifact-birth demo (tutorial stage 'divdemo') ─────────
+    // A fake copy of the tent, like the buddy demo in sigil.js: Riason
+    // asks, draws, and bursts the card on the felt. Writes nothing — the
+    // pending draw is unwound, the closed prompt leaves no record.
+    try {
+      var tut = (window.Liber && window.Liber.state && window.Liber.state.get().tutorialStage) || null;
+      if (tut === 'divdemo') runDivDemo();
+    } catch (e) {}
+    function runDivDemo() {
+      var bar = document.createElement('div');
+      bar.className = 'divination-demo';
+      bar.innerHTML = '<div class="divination-demo-voice">riason</div><div class="divination-demo-line"></div><button type="button" class="divination-demo-next" hidden>&gt;&gt;</button>';
+      document.body.appendChild(bar);
+      var veil = document.createElement('div');
+      veil.className = 'divination-veil';
+      document.body.appendChild(veil);
+      var lineEl = bar.querySelector('.divination-demo-line');
+      var nextBtn = bar.querySelector('.divination-demo-next');
+      function say(t) { if (lineEl) lineEl.textContent = t; }
+      function deny() {
+        say('Not yet. Let me finish this.');
+        veil.classList.remove('deny');
+        void veil.offsetWidth;
+        veil.classList.add('deny');
+        play('thunk');
+        setTimeout(function () { veil.classList.remove('deny'); }, 600);
+      }
+      veil.addEventListener('pointerdown', deny);
+      function alive() { return document.body.contains(bar); }
+      function after(ms, fn) { setTimeout(function () { if (alive() && fn) fn(); }, ms); }
+      function showNext() { if (nextBtn && alive()) nextBtn.hidden = false; }
+      function hideNext() { if (nextBtn) nextBtn.hidden = true; }
+      function goBind() {
+        if (bar.parentNode) bar.parentNode.removeChild(bar);
+        if (veil.parentNode) veil.parentNode.removeChild(veil);
+        var st = (window.Liber && window.Liber.state) || null;
+        if (st) st.set({ tutorialStage: 'bind' });
+        window.location.href = 'desktop.html';
+      }
+      function burstOnFelt() {
+        var felt = feltEl();
+        if (!felt) return;
+        var reduced = false;
+        try { reduced = !!window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+        var b = document.createElement('div');
+        b.className = 'div-demo-burst';
+        b.setAttribute('aria-hidden', 'true');
+        if (!reduced) {
+          for (var i = 0; i < 18; i++) {
+            var a = (i * 137.5) * Math.PI / 180;
+            var s = document.createElement('span');
+            s.className = 'div-demo-bit';
+            s.style.setProperty('--dx', Math.cos(a).toFixed(2));
+            s.style.setProperty('--dy', Math.sin(a).toFixed(2));
+            b.appendChild(s);
+          }
+          felt.appendChild(b);
+          play('chime');
+          setTimeout(function () { if (b.parentNode) b.parentNode.removeChild(b); }, 1100);
+        }
+      }
+      var stepIdx = 0;
+      if (nextBtn) nextBtn.addEventListener('click', function () {
+        hideNext();
+        stepIdx++;
+        runStep();
+      });
+      function runStep() {
+        if (!alive()) return;
+        if (stepIdx === 0) {
+          say('This is Arcana\u2019s tent. Everything here becomes an artifact if you keep it \u2014 watch the felt.');
+          showNext();
+        } else if (stepIdx === 1) {
+          say('First she needs a question. Mine, not yours \u2014 yours comes later.');
+          var input = inputEl();
+          if (input) {
+            input.value = 'what does the new traveller need?';
+            var slate = slateEl();
+            if (slate) slate.classList.add('turned');
+          }
+          after(1200, showNext);
+        } else if (stepIdx === 2) {
+          say('One slides out. That prompt is the artifact asking to be born.');
+          var deck = deckBtn();
+          if (deck) { try { deck.click(); } catch (e) {} }
+          after(900, showNext);
+        } else if (stepIdx === 3) {
+          say('Had I kept it, that burst is the birth. Yours will land on the desktop, and you will tell it what it means to your buddy.');
+          var keep = el('divination-save-prompt-keep');
+          if (keep) keep.classList.add('demo-hit');
+          after(700, function () {
+            if (keep) keep.classList.remove('demo-hit');
+            // unwind the real draw: no record, no tally, no reading place.
+            if (pendingCard && drawn.length) drawn.pop();
+            pendingCard = null;
+            pendingHex = null;
+            try { updateTally(); } catch (e) {}
+            try { clearReadingPlace(); } catch (e) {}
+            try { closePrompt(); } catch (e) {}
+            burstOnFelt();
+            after(1400, showNext);
+          });
+        } else {
+          goBind();
+        }
+      }
+      runStep();
+    }
   });
 })();
