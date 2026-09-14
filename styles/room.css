@@ -169,6 +169,34 @@ body::before {
   z-index: -1;
 }
 
+/* ── MOTION WITH CONSENT (covenant, rule 3) ────────────────────────────────
+   The shell's authoritative gesture, and the reason it lives here rather
+   than in each room: every page loads room.css, so consent is structural
+   instead of a per-room selector list. A list is a thing that silently
+   stops covering the next animation someone adds in a room nobody
+   revisited; this cannot fall behind.
+
+   0.01ms rather than `animation: none` on purpose. An animation that ends
+   in a state the room needs — a fade held by `forwards`, a wipe that sets
+   the transform that gets it out of the way — still lands on that state
+   instead of snapping back to its 0% and leaving the thing invisible or
+   on top of the room. The journey is gone; the arrival is not.
+
+   Rooms that need a different resolution keep their own blocks: they load
+   after this file, and a later !important at equal specificity wins. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* Respect reduced motion — kill dust animation, keep state still. */
 @media (prefers-reduced-motion: reduce) {
   body::before { animation: none !important; }

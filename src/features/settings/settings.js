@@ -69,6 +69,28 @@
     if (window.Liber && window.Liber.sound) { try { window.Liber.sound.play('tick'); } catch (e) {} }
   }
 
+  // ── resolution: the machine's held width (s.resolution). One owner
+  //    (src/stage.js) actually sizes the machine; this panel is its control,
+  //    the same shape as the CRT steps above. See liberdev/scaling-checklist.md.
+  function resValue() {
+    var s = (window.Liber && window.Liber.state && window.Liber.state.get()) || {};
+    return s.resolution || 'auto';
+  }
+  function renderRes() {
+    var want = String(resValue());
+    var btns = document.querySelectorAll('[data-res]');
+    for (var i = 0; i < btns.length; i++) {
+      var on = btns[i].getAttribute('data-res') === want;
+      btns[i].setAttribute('aria-pressed', on ? 'true' : 'false');
+      if (on) btns[i].classList.add('on'); else btns[i].classList.remove('on');
+    }
+  }
+  function setRes(v) {
+    if (window.Liber && window.Liber.stage) window.Liber.stage.set(v);
+    renderRes();
+    if (window.Liber && window.Liber.sound) { try { window.Liber.sound.play('tick'); } catch (e) {} }
+  }
+
   // the room behind the CRT — the same state the scene reads, one owner
   // (s.crtRoomOn), mirrored here and on the desktop
   function renderCrtRoom() {
@@ -259,6 +281,7 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     renderState();
+    renderRes();
     paintSlots();
     var r = document.getElementById('settings-replay');
     var s = document.getElementById('settings-shadow');
@@ -277,6 +300,12 @@
       (function (btn) {
         btn.addEventListener('click', function () { setCrtStep(btn.getAttribute('data-crt-step')); });
       })(crtBtns[ci]);
+    }
+    var resBtns = document.querySelectorAll('[data-res]');
+    for (var ri = 0; ri < resBtns.length; ri++) {
+      (function (btn) {
+        btn.addEventListener('click', function () { setRes(btn.getAttribute('data-res')); });
+      })(resBtns[ri]);
     }
     var slider = document.getElementById('settings-music');
     if (slider) {

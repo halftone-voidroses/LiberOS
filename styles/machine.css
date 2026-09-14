@@ -14,8 +14,13 @@
      screen, bezel and base — inside short windows instead of clipping
      top and bottom (96px reserves the monitor base and breathing room). */
   position: relative;
-  width: min(72vw, 1100px, calc((100vh - 96px) * 4 / 3));
-  width: min(72vw, 1100px, calc((100dvh - 96px) * 4 / 3));
+  /* src/stage.js holds the machine at one of a ladder of sizes and writes
+     --stage-w, so dragging a window edge lands on a step instead of sliding
+     the whole room pixel by pixel. The fluid rule below is the fallback, and
+     it is the rule that still runs below the smallest step — see
+     liberdev/scaling-checklist.md. */
+  width: var(--stage-w, min(72vw, 1100px, calc((100vh - 96px) * 4 / 3)));
+  width: var(--stage-w, min(72vw, 1100px, calc((100dvh - 96px) * 4 / 3)));
   aspect-ratio: 4 / 3;
   display: flex;
   flex-direction: column;

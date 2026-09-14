@@ -35,6 +35,7 @@
     daily: null,            // the day's small works { date: 'YYYY-MM-DD', done: [ids] }
     theme: 'corrupted',      // current skin of the machine
     crt: { intensity: 0.4, off: false },   // the tube's bloom; per-room material reads it (see liberdev/crt-decision.md)
+    resolution: 'auto',      // the machine's held width, one of src/stage.js's steps ('auto' = largest that fits)
     shadowUnlocked: false,   // has the user entered the extc password
     shadowOn: false,         // is shadow overdrive active
     sounds: true,            // synthesized UI sounds (WS4, src/sound.js)

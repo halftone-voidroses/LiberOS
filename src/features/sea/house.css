@@ -1,0 +1,134 @@
+/* ============================================================================
+   sea/house.css — the basement.
+
+   Vanir's room of the house. Wet slate and mortar, iron pipe, salt bloom; no
+   daylight at all, one caged bulb, and the sump. The house keeps its water
+   table down here, which is why this is the one room of the house with a pool
+   in it.
+
+   COMPOSITION. Band above the tube, boards below the machine, machine units.
+   The crates and the rope are not built — the crate was a stencil and a
+   drip standing on a floor this room does not have. What is left is the
+   basement's own evidence: the pipe run, the valve, the tide marks chalked
+   on the stone, the web nobody has swept, and the water.
+
+   SUBSTRATE  wet slate, mortar, iron pipe, salt bloom
+   LIGHT      one caged bulb on a cord, cold yellow; no daylight, only the sump
+   TELLS      chalk tide marks, eleven of them, none level; the valve turned
+              the way a hand last left it; a web in the corner nobody reached
+   ============================================================================ */
+
+.house-scene[data-house="sea"] {
+  --house-wall-hi: #26333a;
+  --house-wall: #17222a;
+  --house-wall-lo: #0a1014;
+  --house-wall-pattern:
+    repeating-linear-gradient(0deg,
+      rgba(0, 0, 0, 0.4) 0 1px, rgba(0, 0, 0, 0) 1px 38px,
+      rgba(255, 255, 255, 0.02) 38px 39px, rgba(0, 0, 0, 0) 39px 74px),
+    repeating-linear-gradient(90deg,
+      rgba(0, 0, 0, 0.3) 0 1px, rgba(0, 0, 0, 0) 1px 62px),
+    radial-gradient(ellipse 40% 50% at 16% 84%, rgba(58, 120, 122, 0.12) 0%, rgba(0, 0, 0, 0) 74%);
+  --house-wall-sheen: linear-gradient(180deg, rgba(196, 226, 232, 0.05) 0%, rgba(0, 0, 0, 0) 40%);
+
+  --house-floor-lit: #22302f;
+  --house-floor: #101a1a;
+  --house-floor-pattern: repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.4) 0 2px, rgba(255, 255, 255, 0.014) 2px 3px, rgba(0, 0, 0, 0) 3px 58px);
+
+  --house-frame: #3a3226;
+  --house-glass: #101a20;
+  --house-door: #1c2a2c;
+  --house-door-frame: #0d1517;
+  --house-brass: #7a6a3a;
+
+  --house-lamp-x: 8.2;
+  --house-lamp-y: 1.2;
+  --house-lamp-cord: 8;
+  --house-lamp-core: #f0d68a;
+  --house-lamp-wash: rgba(214, 196, 120, 0.20);
+  --house-accent: #2a8a8a;
+
+  --house-shelf-x: 1.2;
+  --house-shelf-y: 1.2;
+  --house-shelf-w: 5;
+  --house-shelf-h: 5;
+  --house-shelf-wood: #2e3a34;
+  --house-shelf-lit: #55645a;
+
+  /* the water table, on the boards, seen through the gap under the machine */
+  --house-pool-x: 1;
+  --house-pool-y: 0.4;
+  --house-pool-w: 15;
+  --house-pool-h: 4;
+}
+
+/* ── the glass: no daylight, just the dark and one wet pane ─────────────── */
+.house-scene[data-house="sea"] .house-window {
+  background-image:
+    linear-gradient(180deg, rgba(46, 92, 98, 0.28) 0%, rgba(0, 0, 0, 0) 60%),
+    linear-gradient(180deg, #131d22 0%, #0c1418 60%, #070c0e 100%);
+  box-shadow:
+    inset 0 0 40px rgba(0, 0, 0, 0.75),
+    inset 0 0 0 1px rgba(120, 170, 174, 0.07),
+    0 0 0 1px var(--house-line);
+}
+
+/* the bulb is caged — a wire guard over a low filament, and it hangs low */
+.house-scene[data-house="sea"] .house-lamp-body {
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 34%, #fff4c8 0%, var(--house-lamp-core) 40%, #6a5a20 100%);
+  box-shadow:
+    inset 0 0 0 2px rgba(20, 26, 24, 0.55),
+    0 0 10px 2px color-mix(in srgb, var(--house-lamp-core) 55%, transparent),
+    0 0 40px 12px var(--house-lamp-wash);
+}
+
+/* ── the pipe run, and the valve turned the way a hand last left it ─────── */
+.house-scene[data-house="sea"] .house-prop[data-prop="pipe"] {
+  --x: 0.1; --y: 0; --w: 0.9; --h: 12;
+  border-radius: 1px;
+  background: linear-gradient(90deg, #2a3634 0%, #4e5c58 40%, #1e2826 100%);
+  box-shadow: 1px 0 4px rgba(0, 0, 0, 0.6);
+}
+
+.house-scene[data-house="sea"] .house-prop[data-prop="valve"] {
+  --x: 12.4; --y: 1.2; --w: 4.4; --h: 4.4;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0) 0 26%, #6a5a30 27% 34%, rgba(0, 0, 0, 0) 35%),
+    conic-gradient(from 22deg, #9a8a4a 0 8%, rgba(0, 0, 0, 0) 8% 25%, #9a8a4a 25% 33%, rgba(0, 0, 0, 0) 33% 50%, #9a8a4a 50% 58%, rgba(0, 0, 0, 0) 58% 75%, #9a8a4a 75% 83%, rgba(0, 0, 0, 0) 83% 100%),
+    radial-gradient(circle at 50% 50%, #7a6a3a 0 22%, rgba(0, 0, 0, 0) 23%);
+  opacity: 0.85;
+}
+
+/* ── the tide marks: eleven chalk lines, none of them level ─────────────── */
+.house-scene[data-house="sea"] .house-prop[data-prop="chalkmarks"] {
+  --x: 1.2; --y: 6.8; --w: 5; --h: 5;
+  background:
+    linear-gradient(178.6deg, rgba(0, 0, 0, 0) 0 6%, rgba(228, 236, 226, 0.5) 6% 9%, rgba(0, 0, 0, 0) 9% 30%),
+    linear-gradient(181.4deg, rgba(0, 0, 0, 0) 0 30%, rgba(228, 236, 226, 0.42) 30% 33%, rgba(0, 0, 0, 0) 33% 55%),
+    linear-gradient(179.2deg, rgba(0, 0, 0, 0) 0 55%, rgba(228, 236, 226, 0.36) 55% 58%, rgba(0, 0, 0, 0) 58% 78%),
+    linear-gradient(180.6deg, rgba(0, 0, 0, 0) 0 78%, rgba(228, 236, 226, 0.3) 78% 82%, rgba(0, 0, 0, 0) 82%);
+  opacity: 0.8;
+}
+
+.house-scene[data-house="sea"] .house-prop[data-prop="cobweb"] {
+  --x: 6.8; --y: 6.8; --w: 3.6; --h: 3.6;
+  background:
+    conic-gradient(from 200deg at 0% 0%, rgba(0, 0, 0, 0) 0 6%, rgba(226, 232, 224, 0.2) 6% 7%, rgba(0, 0, 0, 0) 7% 26%, rgba(226, 232, 224, 0.18) 26% 27%, rgba(0, 0, 0, 0) 27% 46%, rgba(226, 232, 224, 0.16) 46% 47%, rgba(0, 0, 0, 0) 47% 100%),
+    radial-gradient(circle at 0% 0%, rgba(226, 232, 224, 0.12) 0 4%, rgba(0, 0, 0, 0) 46%);
+}
+
+/* ── the boards: the sump, and the bucket that lives in it ─────────────── */
+.house-scene[data-house="sea"] .house-pool {
+  border-radius: 3px;
+  background: linear-gradient(180deg, #16211f 0%, #0b1210 100%);
+  box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.8), inset 0 0 0 1px rgba(120, 170, 174, 0.12);
+}
+
+.house-scene[data-house="sea"] .house-prop[data-prop="bucket"] {
+  --x: 12.6; --y: 0.5; --w: 2.6; --h: 3;
+  border-radius: 2px 2px 5px 5px;
+  background: linear-gradient(180deg, #4e5a56 0%, #2a3431 60%, #1a2220 100%);
+  box-shadow: inset -3px 0 0 rgba(0, 0, 0, 0.35), inset 0 2px 0 rgba(220, 232, 228, 0.1);
+}
