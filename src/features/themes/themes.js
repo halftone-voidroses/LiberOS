@@ -2,10 +2,18 @@
 // swapped onto .machine. The covenant keeps these classes off the
 // body of any traveler app.
 //
+// The locker shows two things, because a pigment has two truths: a chip of
+// the tin at true size (the tile), and the whole plate painted pinned at the
+// room's edge (the figure). Neither is redrawn for display — styles/
+// wallpaper.css paints the real wallpaper and this file only says which one,
+// so the hand that previews and the machine that commits look at the same
+// picture.
+//
 // Three behaviours live here:
 //   preview  hovering / focusing a tile wears that skin for real — same
-//            class swap, same grade, same carving light — without writing
-//            state, so what you see is exactly what you commit.
+//            class swap, same grade, same carving light — and pins that
+//            traveller's plate at the room's edge, without writing state, so
+//            what you see is exactly what you commit.
 //   commit   click writes state.theme, then washes the screen through the
 //            pigment (instant under prefers-reduced-motion).
 //   rainy    a weather, not a skin: the tile toggles state.shadowOn, the
@@ -61,9 +69,20 @@
     if (window.Liber && window.Liber.carvings) window.Liber.carvings.setActive(theme);
   }
 
+  // the plate: the whole picture at the room's edge. Same painter as the
+  // glass — the room pins the picture, it does not paint its own version.
+  function pinPlate(theme) {
+    var paper = document.getElementById('themes-plate-paper');
+    var label = document.getElementById('themes-plate-label');
+    var t = themeById(theme);
+    if (paper) paper.setAttribute('data-wt', t ? t.id : 'corrupted');
+    if (label) label.textContent = 'tin · ' + (t ? t.name : 'corrupted');
+  }
+
   function paintCommitted() {
     var label = document.getElementById('themes-current-value');
     if (label) label.textContent = committed;
+    if (!previewing) pinPlate(committed);
     var btns = document.querySelectorAll('.themes-tile');
     for (var j = 0; j < btns.length; j++) {
       var id = btns[j].getAttribute('data-theme');
@@ -76,6 +95,7 @@
     if (!id || id === committed) { endPreview(); return; }
     previewing = id;
     setSkin(id);
+    pinPlate(id);
     var label = document.getElementById('themes-current-value');
     if (label) label.textContent = id + ' · not yet worn';
   }
@@ -157,7 +177,9 @@
         btn.className = 'themes-tile';
         btn.setAttribute('data-theme', t.id);
         btn.innerHTML =
-          '<div class="themes-swatch themes-swatch-' + t.id + '"></div>' +
+          '<div class="themes-swatch wp-thumb" data-sample="' + t.id + '">' +
+            '<div class="wallpaper" data-wt="' + t.id + '"></div>' +
+          '</div>' +
           '<div class="themes-tile-name">' + t.name + '</div>' +
           '<div class="themes-tile-blurb">' + t.blurb + '</div>' +
           '<div class="themes-tile-opinion">— ' + t.opinion + '</div>';
@@ -193,6 +215,7 @@
     committed = current();
     build();
     setSkin(committed);
+    pinPlate(committed);
     paintCommitted();
     paintRainy();
 

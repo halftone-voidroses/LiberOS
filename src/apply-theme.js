@@ -33,6 +33,17 @@
       grade.setAttribute('aria-hidden', 'true');
       screen.appendChild(grade);
     }
+    // The picture in the glass. The skin is copied onto the wallpaper element
+    // rather than scoped from the body, so any surface can show any
+    // traveller's tube (the atlas previews a tin before you commit it).
+    // styles/wallpaper.css owns the painting; this only names it.
+    var paper = document.querySelectorAll('.wallpaper');
+    for (var w = 0; w < paper.length; w++) {
+      // a mounted sample (the atlas's drawer) keeps its own maker's picture
+      if (paper[w].parentNode && paper[w].parentNode.classList &&
+          paper[w].parentNode.classList.contains('wp-thumb')) continue;
+      paper[w].setAttribute('data-wt', theme);
+    }
   }
 
   // ── the tube's bloom ────────────────────────────────────────────────
