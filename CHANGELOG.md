@@ -1,5 +1,53 @@
 # LiberOS changelog
 
+## v2.13.0 — the fire goes out, the card comes home
+### The opening loses what it could not afford
+- **The eclipse flame ring is removed.** The summoning's inferno was an SVG
+  `feTurbulence` + `feDisplacementMap` filter stretched over the whole
+  viewport, re-anchored and re-rendered whenever the machine moved and as
+  each line fell — the heaviest thing the opening did, and the reason it
+  stuttered. The ritual keeps its lines, its shakes, its glow and its
+  black-flame close. Nothing replaces the fire; `styles/cutscene.css` lost
+  the `.crt-flames` / `.inferno-*` rules with the element.
+- **No music, for now.** The one looped song (`assets/music/main-theme.ogg`)
+  no longer plays, and it is not replaced with anything. `src/soundscape.js`
+  keeps its public surface and becomes silent — the motif/duck calls the
+  rooms make still work and still do nothing — so reinstating the OST is a
+  rewrite of that one file rather than a hunt through the house. Settings'
+  music slider and "now playing" line came out with it; the sound-fx switch
+  stays.
+- **The pink chat tile is off the dial.** The `chat` app pointed at
+  `buddy.html`, which retired to an archive note two releases ago — a door
+  onto a dead page. The visit list is ten rooms now, and the tile's phosphor
+  and motes went with it.
+
+### The tutorial's last act is the relation
+- **The ruby-room beat is replaced by Arcana's table.** Riason used to send
+  the traveller off to the midway ("navigate to games, and save one as an
+  artifact… maybe ruby's gem garden…") and then have them click a floating
+  glyph. The tent has already drawn a card, so the desktop beat now takes
+  that up: the card is **kept**, then its **relation** is set — it *verb*
+  your buddy — and the moment the relation lands, Wanderlust re-intervenes
+  and the finale plays. The gesture Riason teaches is the one the machine
+  turns on, and the tutorial now performs it instead of describing it. Both
+  gestures stay the demo's: the tutorial still writes nothing.
+- **The hand-off is a curtain, not a jump cut.** The stone's demo closes
+  over the room, the page changes behind the black, and the tent opens from
+  the same black (and closes that way for the desktop). One movement through
+  the house across three pages; reduced motion still cuts instantly.
+- `smoke.mjs` drives the new act (keep → verb → bind) and asserts the same
+  clean slate: `tutorialDone`, zero artifacts, zero relations.
+
+### The stacks: the learn room gets its room
+- `learn.html` was the one page in the house standing in the spare room —
+  no register entry, no backdrop, no hooks. It is now `learn` in
+  `data/rooms.data.js` (the stacks, the mad scribe) with its own
+  `src/features/learn/house.css`: oak rod, sepia card, brass drawer-pull,
+  red stamp ink, and the room's tells — the drawer left open on the row in
+  use, a card standing proud of the rest, the stamp pad dry at the edges.
+  It carries the same two-sided hooks as every other room (lamp, shelf,
+  board) and satisfies `verify-house.mjs` at both window shapes.
+
 ## v2.12.0 — the house stands furnished
 ### Three lanes, one tree (the pitch's remaining systems, built side by side)
 - Room hooks close the contract: a kept dream hangs its developed sheet on
