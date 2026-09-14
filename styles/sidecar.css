@@ -98,9 +98,63 @@ body:not(.lc-sidecar-fit) .lc-sidecar-glass-inner { min-height: 130px; }
 body:not(.lc-sidecar-fit) .lc-sidecar-neck { height: 12px; }
 body:not(.lc-sidecar-fit) .lc-sidecar-foot { height: 6px; }
 
+/* ── away pages, narrow screens: the door tab ─────────────────────────
+   Off the desk (every page but desktop) the closed tube would sit on the
+   room's own controls at 439px — and a room cannot afford that. So while
+   shut, the tube folds to its door: a 64px tab, lid and standby dot only,
+   bottom-right where no room keeps a control centre. Tapping the lid opens
+   the full tube (summoned covering is consented covering); Esc shuts it
+   back to the tab. Desktop keeps its full tube at every width. */
+@media (max-width: 600px) {
+  body.lc-sidecar-away .lc-sidecar:not(.open) {
+    left: auto;
+    right: 12px;
+    bottom: 12px;
+    top: auto;
+    width: 64px;
+  }
+  body.lc-sidecar-away .lc-sidecar:not(.open) .lc-sidecar-glass,
+  body.lc-sidecar-away .lc-sidecar:not(.open) .lc-sidecar-stand,
+  body.lc-sidecar-away .lc-sidecar:not(.open) .lc-sidecar-shadow,
+  body.lc-sidecar-away .lc-sidecar:not(.open) .lc-sidecar-spill,
+  body.lc-sidecar-away .lc-sidecar:not(.open) .lc-sidecar-loom,
+  body.lc-sidecar-away .lc-sidecar:not(.open) .lc-sidecar-cable,
+  body.lc-sidecar-away .lc-sidecar:not(.open) .lc-sidecar-note,
+  body.lc-sidecar-away .lc-sidecar:not(.open) .lc-sidecar-wax { display: none; }
+  body.lc-sidecar-away .lc-sidecar:not(.open) .lc-sidecar-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 64px;
+  }
+  body.lc-sidecar-away .lc-sidecar:not(.open) .lc-sidecar-plate {
+    padding: 0;
+  }
+  body.lc-sidecar-away .lc-sidecar:not(.open) .lc-sidecar-model { display: none; }
+}/* ── the rooms ────────────────────────────────────────────────────────
+   In a room there is no desk to stand on, so the tube takes the corner the
+   lamp used to hold — the one spot every room already tolerates — and stands
+   a little larger than the lamp did, because it is the machine's whole voice
+   there. Its wiring trails off left, into the room's dark. */
+body.lc-sidecar-room .lc-sidecar {
+  position: fixed;
+  left: auto;
+  right: 14px;
+  bottom: 14px;
+  width: min(352px, 88vw);
+  z-index: 9400;
+}
+body.lc-sidecar-room .lc-sidecar-loom {
+  left: -70px;
+  right: auto;
+  transform: none;
+}
+body.lc-sidecar-room .lc-sidecar-glass { min-height: 196px; }
+body.lc-sidecar-room .lc-sidecar-glass-inner { min-height: 184px; }
+
 /* The desk makes room: the ensemble (machine + sidecar) centers as one
    unit — the machine anchors left of the padded box, the sidecar hangs
-   off its right flank. */
+off its right flank. */
 body.lc-sidecar-fit .room {
   justify-content: flex-start;
   padding-left: var(--sidecar-desk, 0px);

@@ -806,6 +806,69 @@ body.crt-room-open .room {
   pointer-events: none;
 }
 
+/* LIBERCHAT — the paper the tube printed and nobody kept. Torn strips of the
+   feed paper lying on the boards beside the desk, one per persona whose
+   exchanges are still unkept; sealing the conversation sweeps the strip, and
+   the volume arrives on the shelf. Two numbers the feature owns feed it:
+   state.chat and the count each sealed keep was stamped with. Empty
+   condition: swept boards beside the desk. */
+.crt-slips {
+  position: absolute;
+  left: 27%;
+  bottom: 5%;
+  width: 15vw;
+  height: 11vh;
+  pointer-events: none;
+}
+.crt-slip {
+  position: absolute;
+  left: calc(4% + var(--z, 0) * 15%);
+  bottom: calc(3% + var(--z, 0) * 8%);
+  width: 44%;
+  height: 30%;
+  transform: rotate(var(--tilt, 0deg));
+  z-index: calc(10 + var(--z, 0));
+  /* torn off the roll, not cut: the top edge is ragged, and the perforation
+     runs down the left margin — the same paper the second tube prints on */
+  clip-path: polygon(0 7%, 9% 2%, 18% 9%, 27% 1%, 37% 8%, 46% 2%, 55% 10%,
+    64% 3%, 73% 9%, 82% 2%, 92% 8%, 100% 4%, 100% 100%, 0 100%);
+  background: linear-gradient(180deg, #bcae85 0%, #a3956b 100%);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.55);
+  opacity: 0.82;
+}
+.crt-slip::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-image: radial-gradient(circle at 50% 50%, rgba(20, 10, 4, 0.4) 0.8px, rgba(0, 0, 0, 0) 1.3px);
+  background-size: 4px 8px;
+}
+/* the line that got printed and never read: it fades out where the strip
+   was torn away */
+.crt-slip-ink {
+  position: absolute;
+  left: 8px;
+  right: 5px;
+  top: 40%;
+  height: 28%;
+  background: repeating-linear-gradient(180deg,
+    rgba(58, 40, 18, 0.55) 0 1px, rgba(0, 0, 0, 0) 1px 4px);
+  -webkit-mask-image: linear-gradient(90deg, #000 58%, rgba(0, 0, 0, 0) 100%);
+  mask-image: linear-gradient(90deg, #000 58%, rgba(0, 0, 0, 0) 100%);
+}
+/* the fibres along the tear */
+.crt-slip-tear {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 5px;
+  background: linear-gradient(180deg, rgba(255, 246, 220, 0.45) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
 /* reduced motion: these props are static by nature; the sheet's develop
    beat is the only motion and it lives in the room's transitions above */
 @media (prefers-reduced-motion: reduce) {

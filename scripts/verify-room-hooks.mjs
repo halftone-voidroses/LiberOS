@@ -191,6 +191,86 @@ if (Array.isArray(live)) {
 }
 check('zero page errors', errs.length === 0, errs.slice(0, 2).join(' | '))
 
+// ─── 7. the tube's paper: the hook has two sides ────────────────────────
+// A register row and a rendered id are not a hook. The floor has to gain a
+// strip when a conversation is left unkept, and lose it when that
+// conversation is sealed to the book — the reversal rule, tested rather
+// than asserted. The state is driven through the same set() everything else
+// uses, so this measures the room, not the seed.
+console.log('7. the tube\u2019s paper gains and loses with the talking')
+async function slips(shape) {
+  return page.evaluate(async (patch) => {
+    window.Liber.state.set({ chat: null, buddy: [] });
+    window.Liber.state.set(patch);
+    window.Liber.crtRoom.render();
+    await new Promise(r => setTimeout(r, 60));
+    return document.querySelectorAll('.crt-slip').length;
+  }, shape)
+}
+check('a quiet machine leaves no paper on the boards', await slips({}) === 0)
+check('an unkept conversation leaves a strip, one per persona',
+  await slips({ chat: { sigil: 3, games: 6 } }) === 2)
+check('sealing a conversation sweeps its strip',
+  await slips({ chat: { sigil: 3, games: 6 },
+    buddy: [{ id: 'b1', kind: 'sealed', lamp: true, persona: 'sigil', exchanges: 3 }] }) === 1)
+check('talking on after a seal leaves new paper',
+  await slips({ chat: { sigil: 5 },
+    buddy: [{ id: 'b1', kind: 'sealed', lamp: true, persona: 'sigil', exchanges: 3 }] }) === 1)
+check('sealing the last conversation sweeps the floor',
+  await slips({ chat: { sigil: 3 },
+    buddy: [{ id: 'b1', kind: 'sealed', lamp: true, persona: 'sigil', exchanges: 3 }] }) === 0)
+check('a chat sealed away from the lamp is not the tube\u2019s paper',
+  await slips({ chat: { sigil: 3 },
+    buddy: [{ id: 'b1', kind: 'sealed', lamp: false, persona: 'sigil', exchanges: 3 }] }) === 1)
+check('the floor holds a floor, not a pile',
+  await slips({ chat: { a: 1, b: 2, c: 3, d: 4, e: 5 } }) === 4)
+
+// ─── 8. the ceremony, end to end ────────────────────────────────────────
+// The derivation above is fed by hand. This runs the machine's own paths:
+// talk through the real engine, seal in wax, and watch the paper leave the
+// floor because the conversation reached the book.
+console.log('8. the seal is the broom')
+const sealed = await page.evaluate(async () => {
+  const chat = window.LiberLiberchat;
+  chat.open();
+  await new Promise(r => setTimeout(r, 250));
+  // the persona the desk actually talks to — not a persona id assumed here
+  const p = chat.persona();
+  const seed = {};
+  seed[p] = 4;
+  window.Liber.state.set({ chat: seed, buddy: [] });
+  window.Liber.crtRoom.render();
+  await new Promise(r => setTimeout(r, 60));
+  const before = document.querySelectorAll('.crt-slip').length;
+  chat.say('a line that will end up on the boards');
+  await new Promise(r => setTimeout(r, 900));
+  const seal = document.querySelector('.liberchat-panel .lc-seal');
+  seal.click();
+  await new Promise(r => setTimeout(r, 140));
+  seal.click();
+  await new Promise(r => setTimeout(r, 400));
+  window.Liber.crtRoom.render();
+  await new Promise(r => setTimeout(r, 120));
+  const s = window.Liber.state.get();
+  const keeps = (s.buddy || []).filter(k => k && k.kind === 'sealed' && k.lamp);
+  return {
+    persona: p,
+    before: before,
+    after: document.querySelectorAll('.crt-slip').length,
+    kept: keeps.length,
+    keepPersona: keeps.length ? keeps[0].persona : null,
+    keepExchanges: keeps.length ? keeps[0].exchanges : null,
+    chatNow: (s.chat || {})[p] || 0
+  };
+});
+check('a conversation left unkept is paper on the floor', sealed.before === 1, String(sealed.before));
+check('sealing files the conversation to the book', sealed.kept === 1, JSON.stringify(sealed));
+check('the keep names the persona that was talking', sealed.keepPersona === sealed.persona,
+  sealed.keepPersona + ' vs ' + sealed.persona);
+check('the keep records the count it was sealed at, so nothing is left over',
+  sealed.keepExchanges === sealed.chatNow, sealed.keepExchanges + ' vs ' + sealed.chatNow);
+check('and so the strip leaves the floor', sealed.after === 0, String(sealed.after));
+
 console.log('\n' + pass + ' passed, ' + fail + ' failed')
 await browser.close()
 server.kill()

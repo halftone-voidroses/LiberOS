@@ -179,16 +179,26 @@ const s6 = await page.evaluate(async () => {
 });
 check('a bench line lights the glass', s6);
 
-// ─── 7. every other page keeps the lamp ──────────────────────────────
-console.log('7. one machine, many rooms');
+// ─── 7. one door, in every room ──────────────────────────────────────
+// The lamp was chat's presence on every page; the tube is that presence now,
+// so a room grows the tube and loses the lamp in the same breath. §12 walks
+// the rest of them.
+console.log('7. one door, everywhere');
 await page.goto(BASE + '/index.html', { waitUntil: 'networkidle' });
-await page.waitForTimeout(600);
-const s7 = await page.evaluate(() => ({
-  lamp: !!document.getElementById('liberchat-lamp'),
-  sidecar: !!document.getElementById('liberchat-sidecar')
-}));
-check('index keeps the lamp', s7.lamp);
-check('index never grows a sidecar', !s7.sidecar);
+await page.waitForTimeout(700);
+const s7 = await page.evaluate(() => {
+  const lamp = document.getElementById('liberchat-lamp');
+  const sc = document.getElementById('liberchat-sidecar');
+  return {
+    lampDisplay: lamp ? getComputedStyle(lamp).display : 'absent',
+    sidecar: !!sc,
+    engineInGlass: !!(sc && document.getElementById('liberchat-panel').closest('.lc-sidecar')),
+    engineLive: !!(window.LiberLiberchat && typeof window.LiberLiberchat.open === 'function')
+  };
+});
+check('a room grows the tube', s7.sidecar && s7.engineInGlass);
+check('and loses the lamp', s7.lampDisplay === 'none');
+check('the tube is wired to the real engine, not a copy', s7.engineLive);
 
 // ─── 8. desk-fit geometry ────────────────────────────────────────────
 console.log('8. the desk composition');
@@ -433,6 +443,71 @@ check('the case carries its wax and its tally', s11.wax && s11.tallies === 13,
   `tallies=${s11.tallies}`);
 check('the tall tube clears the ? tile', s11.tile.tubeTop > s11.tile.bottom,
   `tubeTop=${s11.tile.tubeTop} tileBottom=${s11.tile.bottom}`);
+
+// ─── 12. one machine, many rooms ─────────────────────────────────────
+// Every room is the same machine shell with that room's content on its
+// screen, so the tube stands on the desk in all of them — same object, same
+// place — and the lamp retires everywhere the tube arrives. The one thing a
+// room cannot afford is the tube sitting on its own controls.
+console.log('12. the tube in every room');
+const ROOMS = ['index', 'games', 'sea', 'divination', 'dreams', 'sigil', 'satchel',
+  'garden', 'learn', 'themes', 'toybox', 'trash', 'settings', 'about'];
+for (const room of ROOMS) {
+  await page.goto(`${BASE}/${room}.html`, { waitUntil: 'networkidle' });
+  await page.waitForTimeout(650);
+  const r = await page.evaluate(() => {
+    const sc = document.getElementById('liberchat-sidecar');
+    const lamp = document.getElementById('liberchat-lamp');
+    const box = sc ? sc.getBoundingClientRect() : null;
+    const hits = [];
+    if (box) {
+      document.querySelectorAll('a, button, [role="button"], input, select, textarea').forEach(el => {
+        if (sc.contains(el) || el === lamp) return;
+        const cs = getComputedStyle(el);
+        if (cs.display === 'none' || cs.visibility === 'hidden' || Number(cs.opacity) === 0) return;
+        const b = el.getBoundingClientRect();
+        if (!b.width || !b.height) return;
+        const cx = b.left + b.width / 2, cy = b.top + b.height / 2;
+        if (cx > box.left && cx < box.right && cy > box.top && cy < box.bottom) {
+          hits.push((el.textContent || el.className || el.tagName).trim().slice(0, 24));
+        }
+      });
+    }
+    return {
+      tube: !!sc,
+      inGlass: !!(sc && document.getElementById('liberchat-panel').closest('.lc-sidecar')),
+      lampGone: !lamp || getComputedStyle(lamp).display === 'none',
+      onScreen: box ? (box.left >= -1 && box.right <= innerWidth + 1 &&
+        box.top >= -1 && box.bottom <= innerHeight + 1) : false,
+      ofx: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      hits: hits
+    };
+  });
+  check(`${room}: the tube stands in the room`, r.tube && r.inGlass);
+  check(`${room}: the lamp has gone`, r.lampGone);
+  check(`${room}: the tube is on the screen`, r.onScreen);
+  check(`${room}: no horizontal overflow`, r.ofx <= 1, 'ofx=' + r.ofx);
+  check(`${room}: no room control is under the tube`, r.hits.length === 0, r.hits.join(', '));
+}
+
+// the other direction: a line the room hands the machine prints on the tube
+// it stands beside, on the room's own page.
+console.log('12b. a room speaks through the tube');
+await page.goto(`${BASE}/sigil.html`, { waitUntil: 'networkidle' });
+await page.waitForTimeout(650);
+const s12 = await page.evaluate(async () => {
+  const spoke = window.LiberLiberchat.bench('the bench is warm where you left it');
+  await new Promise(r => setTimeout(r, 600));
+  const w = document.getElementById('liberchat-whisper');
+  return {
+    spoke: spoke,
+    atHome: !!w && w.parentNode === document.getElementById('liberchat-sidecar'),
+    visible: !!w && parseFloat(getComputedStyle(w).opacity) > 0.9,
+    text: w ? w.textContent : null
+  };
+});
+check('a room\u2019s line reaches the tube', s12.atHome && s12.visible && s12.text === s12.spoke,
+  `atHome=${s12.atHome} text=${s12.text}`);
 
 // ─── verdict ─────────────────────────────────────────────────────────
 await browser.close();

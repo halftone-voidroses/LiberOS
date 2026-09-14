@@ -323,7 +323,14 @@
     if (s && s.addArtifact) {
       var name = 'lamp chat · ' + persona.name;
       if (name.length > 30) name = name.substring(0, 30) + '…';
-      s.addArtifact('buddy', { kind: 'sealed', name: name, confession: confession, lamp: true });
+      // the persona and the count it was sealed at: the room reads them
+      // against state.chat, so the paper still lying about is the difference
+      // between what was said and what was kept to the book (room-hooks §slips)
+      s.addArtifact('buddy', {
+        kind: 'sealed', name: name, confession: confession, lamp: true,
+        persona: persona.id,
+        exchanges: exchangesFor(persona.id)
+      });
       if (global.Liber && global.Liber.sound) { try { global.Liber.sound.play('chime'); } catch (e) {} }
       ui.panel.classList.add('lc-sealing');
       global.setTimeout(function () { ui.panel.classList.remove('lc-sealing'); }, reduced ? 0 : 900);

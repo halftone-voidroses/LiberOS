@@ -26,7 +26,20 @@
     document.body.appendChild(note);
   }
 
+  // The lamp's replacement: the second tube is the door on every page, so the
+  // mount that puts chat in a room is the same one that loads the engine.
+  function sidecar() {
+    if (document.getElementById('liberchat-sidecar')) return;
+    if (document.querySelector('script[data-liberchat-sidecar]')) return;
+    var sc = document.createElement('script');
+    sc.src = 'src/liberchat-sidecar.js';
+    sc.setAttribute('data-liberchat', '1');
+    sc.setAttribute('data-liberchat-sidecar', '1');
+    document.body.appendChild(sc);
+  }
+
   function mount() {
+    sidecar();
     if (window.LiberLiberchat) return;
     // Only desktop.html ships the persona register; every other page needs
     // it before the engine can resolve travellers.

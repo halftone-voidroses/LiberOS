@@ -1,11 +1,11 @@
 // liberchat-sidecar.js — the second tube (redesign-plan-2, job III).
-// Stands a dot-matrix sidecar CRT on the desk, right of the main machine,
-// and re-parents the existing liberchat engine surface into its glass.
-// The engine (src/liberchat.js) is untouched: same transport, same state,
-// same seal. Only the surface changes — the lamp retires on the desktop;
-// the sidecar itself is the door.
+// Stands a dot-matrix sidecar CRT and re-parents the existing liberchat
+// engine surface into its glass. The engine (src/liberchat.js) is untouched:
+// same transport, same state, same seal. Only the surface changes — the lamp
+// retires, and the sidecar itself is the door.
 //
-//   - desktop.html only; every other page keeps the lamp
+//   - every page: the tube stands where the lamp stood, in the room's corner
+//   - the desk: where a machine is on the page the tube is wired into it
 //   - the lid is the door: real button, aria-named, keyboard-reachable
 //   - the feed mirrors the engine's hidden state (MutationObserver)
 //   - a bench line with the tube shut prints on the feed paper (no line lost)
@@ -16,7 +16,12 @@
 
   var doc = document;
   var page = (location.pathname.split('/').pop() || '').replace(/\.html$/, '');
-  if (page !== 'desktop') return; // the sidecar is the desktop's object
+  // Loaded from src/liberchat-mount.js on every page, so it may arrive twice
+  // (a page that also names it directly). One tube per room, always.
+  if (doc.getElementById('liberchat-sidecar')) return;
+  // Off the desk the tube is a guest: mark away pages so narrow screens
+  // may fold the shut tube to its door tab instead of sitting on controls.
+  if (page && page !== 'desktop') doc.body.classList.add('lc-sidecar-away');
 
   var reduced = false;
   try { reduced = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
@@ -240,11 +245,17 @@
     if (!sidecar) return;
     var vw = doc.documentElement.clientWidth;
     var vh = doc.documentElement.clientHeight;
-    var wantFit = vw >= 900 && vh >= 560;
+    // One machine, many rooms: every room page is the same machine shell with
+    // that room's content on its screen, so the tube stands beside it there
+    // too — the same object in the same place on all of them. Only a document
+    // with no machine at all (the pitch and plan pages) falls back to the
+    // corner stance.
+    var machine = doc.querySelector('.machine');
+    var wantFit = !!machine && vw >= 900 && vh >= 560;
+    doc.body.classList.toggle('lc-sidecar-room', !machine);
     if (wantFit !== fit) {
       fit = wantFit;
       doc.body.classList.toggle('lc-sidecar-fit', fit);
-      var machine = doc.querySelector('.machine');
       if (fit && machine && sidecar.root.parentNode !== machine) {
         machine.appendChild(sidecar.root);
       } else if (!fit && sidecar.root.parentNode !== doc.body) {
@@ -253,7 +264,6 @@
     }
     var desk = 0;
     if (fit) {
-      var machine = doc.querySelector('.machine');
       var mw = machine ? machine.getBoundingClientRect().width : 0;
       var sw = sidecar.root.getBoundingClientRect().width || 238;
       desk = Math.max((vw - mw - sw - 34) / 2, 12);

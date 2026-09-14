@@ -27,7 +27,7 @@ paragraph saying what it is made of. There are no unnamed materials.
 | `window` | the glasshouse tree, mirrored read-only | the window box |
 | `weather` | Rainy Day, the room's own weather | the window in the back wall |
 | `patina` | visits + keeps; the room ages | dust, floor wear, furniture |
-| `floor` | the boards the room stands on, and what is spilled on them | the sand worked into the boards beside the desk (toybox) |
+| `floor` | the boards the room stands on, and what is spilled on them | the sand worked into the boards beside the desk (toybox), and the torn slips nobody kept (liberchat) |
 | `none` | deliberately no hook | nothing — the reason is in the row |
 
 ## The hooks
@@ -53,6 +53,7 @@ paragraph saying what it is made of. There are no unnamed materials.
 | `(machine)` | `candle` | `candle` | `sessionStart` | gamification.js | a full fresh stick, unlit until the visit starts |
 | `(machine)` | `patina` | `patina` | `visited` | shadow.js | new dust, unworn floor, furniture as bought |
 | `(machine)` | `weather` | `weather` | `shadowOn` | rainy.js | clear weather, the tube at its default bloom |
+| `(machine)` | `slips` | `floor` | `chat`, `buddy` | liberchat.js | swept boards beside the desk — nothing printed and left unkept |
 
 ## The three gaps, closed
 
@@ -75,6 +76,28 @@ The reversibility rule holds for all three: release the keep, bury the dream
 back into fog, turn out the tray — and the material leaves the room, because
 every one of them derives from the same arrays their features own.
 
+## The tube's paper
+
+The last gap was not a room at all. Liberchat is a `src/` module rather than
+a feature folder, so no gate looked at it — but it keeps `chat`, one exchange
+count per persona, and the room behind the CRT was blind to it. It is not
+blind now: **the paper the tube printed and nobody kept**.
+
+An exchange is written by `liberchat.js` into `chat[persona]` and never
+cleared, deliberately: `affinity.js` reads those counts as cumulative
+vouching, so clearing one would quietly take an unlock back. Sealing a
+conversation is the machine's own ceremony — `seal in wax` files it to the
+book as a `buddy` keep stamped `lamp: true`, and that keep records the count
+it was sealed at. So the room reads two numbers and takes the difference: an
+exchange past a persona's last seal is paper still lying about. One torn
+strip per persona, on the boards beside the desk, four at most.
+
+The reversal is the seal itself, and it runs both ways: keep talking and the
+strip appears while the conversation is unkept; seal it and the strip leaves
+the floor as the volume arrives on the shelf. Nothing accumulates here that
+cannot leave. The desk side keeps the tube — the one thing the machine does
+about it — and must never carry a second copy of the floor.
+
 ## One object, never two
 
 A room may be entered (`look behind`, `src/features/crt-room/`), and the desk
@@ -93,6 +116,7 @@ light, the ticker — never a second copy of the room's furniture.
 | hook | renders in | owner | the desk side must carry none of |
 | --- | --- | --- | --- |
 | `weather` | the CRT room's own window (`.crt-window .crt-wb-sky`) | `src/features/crt-room/crt-room.css` | `.rainy-window`, `.rainy-sky`, `.rainy-sill`, `.rainy-drop` |
+| `slips` | the boards beside the desk (`.crt-slips`) | `src/features/crt-room/crt-room.css` | `.lc-slip`, `.lc-slips` |
 
 `scripts/verify-room-hooks.mjs` checks every row: the owning stylesheet
 exists, the pane it names is really in it, the hook is one the room renders,

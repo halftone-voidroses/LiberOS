@@ -385,7 +385,9 @@
       (s.relations || []).length, s.shadowOn ? 1 : 0, s.sessionStart || 0,
       s.tree ? (s.tree.stageAt || 0) + '-' + (s.tree.grown || 0) + '-' + (s.tree.seen || 0) : 'x',
       keptDreamCount,
-      (s.games || []).length
+      (s.games || []).length,
+      // liberchat's paper: both numbers, so talking and sealing each redraw
+      slipsOf(s).map(function (x) { return x.persona + ':' + x.unkept; }).join(',')
     ].join('|');
     var open = isInitedOpen();
     if (sig === lastSig && document.querySelector('.crt-room-scene[data-tier]')) {
@@ -528,6 +530,35 @@
       spillEl.style.setProperty('--spill', String(Math.min(1, 0.28 + spill.keeps * 0.14)));
     } else if (spillEl) spillEl.remove();
 
+    // liberchat: the torn strips the tube printed and nobody kept, lying on
+    // the boards beside the desk. They leave when the conversation is sealed
+    // to the book — the seal is the broom (room-hooks: slips).
+    var slips = slipsOf(s);
+    var slipWrap = ui.scene.querySelector('.crt-slips');
+    if (slips.length) {
+      if (!slipWrap) {
+        slipWrap = el('div', 'crt-slips');
+        slipWrap.setAttribute('aria-hidden', 'true');
+        ui.floorEl.appendChild(slipWrap);
+      }
+      if (slipWrap.children.length !== slips.length) {
+        slipWrap.innerHTML = '';
+        for (var si = 0; si < slips.length; si++) {
+          var strip = el('i', 'crt-slip');
+          strip.innerHTML = '<b class="crt-slip-ink"></b><b class="crt-slip-tear"></b>';
+          slipWrap.appendChild(strip);
+        }
+      }
+      for (var sv = 0; sv < slips.length; sv++) {
+        var sEl = slipWrap.children[sv];
+        // a deterministic tilt and lie per strip, so the same floor always
+        // looks like the same floor — a hand dropped these, not a script
+        var tilt = ((slips[sv].persona.length * 7 + slips[sv].unkept * 11) % 15) - 7;
+        sEl.style.setProperty('--tilt', tilt + 'deg');
+        sEl.style.setProperty('--z', String(sv));
+      }
+    } else if (slipWrap) slipWrap.remove();
+
     // window box: the glasshouse tree, stage for stage with the garden
     var stage = treeStageOf(s);
     drawTree(stage);
@@ -636,6 +667,30 @@
     return { keeps: keeps };
   }
 
+  // liberchat: the paper the tube printed and nobody kept. Two numbers, both
+  // owned by the feature: chat[persona] counts the exchanges and is never
+  // cleared (affinity reads it cumulatively), and each sealed conversation is
+  // a 'buddy' keep stamped lamp:true that records the count it was sealed at.
+  // An exchange past a persona's last seal is a strip still lying about; the
+  // seal is what sweeps it, so the floor gains and loses with the talking.
+  function slipsOf(s) {
+    var chats = (s.chat && typeof s.chat === 'object') ? s.chat : {};
+    var sealed = {};
+    (Array.isArray(s.buddy) ? s.buddy : []).forEach(function (k) {
+      if (!k || k.kind !== 'sealed' || !k.lamp || !k.persona) return;
+      var at = typeof k.exchanges === 'number' ? k.exchanges : 0;
+      sealed[k.persona] = Math.max(sealed[k.persona] || 0, at);
+    });
+    var out = [];
+    Object.keys(chats).forEach(function (p) {
+      var unkept = (chats[p] || 0) - (sealed[p] || 0);
+      if (unkept > 0) out.push({ persona: p, unkept: unkept });
+    });
+    // the loudest conversation first, and four strips is a floor, not a pile
+    out.sort(function (a, b) { return b.unkept - a.unkept; });
+    return out.slice(0, 4);
+  }
+
   // games: the midway's own prize — a paper ticket twisted on the board's
   // corner pin, one per game artifact, up to five. The most recent booth's
   // glyph is inked on the newest ticket.
@@ -659,7 +714,8 @@
     { id: 'patina', material: 'patina', reads: ['visited'], empty: 'new dust, unworn floor, furniture as bought' },
     { id: 'dream-sheet', material: 'board', reads: ['dreams', 'satchel'], empty: 'a second bare pin, no sheet — a dream kept to the book is what hangs one' },
     { id: 'spill', material: 'floor', reads: ['games'], empty: 'swept boards — the tray has not been turned out here yet' },
-    { id: 'tickets', material: 'board', reads: ['games'], empty: 'no twisted tickets on the corner pin — the midway keeps what the barker keeps' }
+    { id: 'tickets', material: 'board', reads: ['games'], empty: 'no twisted tickets on the corner pin — the midway keeps what the barker keeps' },
+    { id: 'slips', material: 'floor', reads: ['chat', 'buddy'], empty: 'swept boards beside the desk — nothing printed and left unkept' }
   ];
 
   // exported for settings.js and the acceptance script

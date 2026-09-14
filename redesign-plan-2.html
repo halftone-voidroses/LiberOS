@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Second Sweeping — a plan for LiberOS</title>
+<style>
+  :root {
+    --paper: #efe6d2;
+    --paper-dim: #e3d7bd;
+    --ink: #241a10;
+    --ink-dim: #5c4c38;
+    --maroon: #3a1020;
+    --maroon-2: #571e2e;
+    --gold: #b98c3a;
+    --gold-pale: #d9b86a;
+    --cream: #f4ecd8;
+    --green: #4a5a3a;
+    --red: #8a3038;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: #0c0806 radial-gradient(ellipse at 50% -10%, rgba(90, 60, 30, 0.25), rgba(0,0,0,0) 55%);
+    color: var(--paper);
+    font-family: Georgia, 'Times New Roman', serif;
+    line-height: 1.55;
+    padding: 0 0 80px;
+  }
+  .mantle {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 48px 28px 0;
+  }
+  header.masthead {
+    text-align: center;
+    padding: 34px 20px 30px;
+    border: 2.4px solid var(--gold);
+    border-radius: 14px;
+    background: linear-gradient(180deg, rgba(58, 16, 32, 0.85), rgba(26, 6, 14, 0.92));
+    box-shadow: 0 0 0 6px rgba(185, 140, 58, 0.12), 0 18px 50px rgba(0,0,0,0.6);
+  }
+  .kicker {
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.4em;
+    color: var(--gold-pale);
+    text-transform: uppercase;
+    margin: 0 0 10px;
+  }
+  h1 {
+    margin: 0;
+    font-size: clamp(1.8rem, 4.5vw, 2.9rem);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--cream);
+    text-shadow: 0 2px 0 rgba(0,0,0,0.7), 0 0 24px rgba(217, 184, 106, 0.25);
+  }
+  .standfirst {
+    max-width: 640px;
+    margin: 14px auto 0;
+    font-style: italic;
+    color: var(--paper-dim);
+    font-size: 1.02rem;
+  }
+  .law {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 7px 18px;
+    border: 1.4px solid var(--gold);
+    border-radius: 999px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: var(--gold-pale);
+    background: rgba(0,0,0,0.35);
+  }
+  nav.toc {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    margin: 30px 0 8px;
+  }
+  nav.toc a {
+    display: block;
+    padding: 10px 14px;
+    border: 1px solid rgba(185, 140, 58, 0.5);
+    border-radius: 8px;
+    color: var(--paper);
+    text-decoration: none;
+    font-size: 0.92rem;
+    background: rgba(20, 8, 12, 0.6);
+    transition: border-color 0.2s, transform 0.15s;
+  }
+  nav.toc a:hover, nav.toc a:focus-visible {
+    border-color: var(--gold-pale);
+    transform: translateY(-1px);
+    outline: none;
+  }
+  nav.toc a .no {
+    font-family: 'Courier New', monospace;
+    color: var(--gold-pale);
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    display: block;
+    margin-bottom: 2px;
+  }
+  main { margin-top: 26px; }
+  section.job {
+    border: 2px solid rgba(185, 140, 58, 0.65);
+    border-radius: 12px;
+    background: linear-gradient(180deg, rgba(30, 12, 18, 0.88), rgba(16, 7, 10, 0.94));
+    margin: 0 0 26px;
+    overflow: hidden;
+    box-shadow: 0 10px 34px rgba(0,0,0,0.45);
+    scroll-margin-top: 20px;
+  }
+  .job-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding: 18px 22px 14px;
+    border-bottom: 1.2px solid rgba(185, 140, 58, 0.35);
+    background: linear-gradient(180deg, rgba(87, 30, 46, 0.55), rgba(0,0,0,0));
+    cursor: pointer;
+  }
+  .job-head h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--cream);
+    letter-spacing: 0.02em;
+    flex: 1;
+  }
+  .job-no {
+    font-family: 'Courier New', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.22em;
+    color: var(--gold-pale);
+    white-space: nowrap;
+  }
+  .chev {
+    font-family: 'Courier New', monospace;
+    color: var(--gold-pale);
+    transition: transform 0.25s;
+    font-size: 0.9rem;
+  }
+  section.job.open .chev { transform: rotate(90deg); }
+  .job-body { display: none; padding: 6px 22px 22px; }
+  section.job.open .job-body { display: block; }
+  .now {
+    font-size: 0.92rem;
+    color: var(--paper-dim);
+    border-left: 3px solid var(--maroon-2);
+    padding: 4px 14px;
+    margin: 14px 0 6px;
+    font-style: italic;
+  }
+  .then {
+    margin: 14px 0 6px;
+    padding: 4px 0 4px 17px;
+    border-left: 3px solid var(--green);
+  }
+  .then-title, .now-title {
+    font-family: 'Courier New', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .now-title { color: #c47a86; }
+  .then-title { color: #9ab07e; }
+  ul.acts { margin: 6px 0 0; padding-left: 20px; }
+  ul.acts li { margin: 7px 0; }
+  ul.acts li b { color: var(--gold-pale); font-weight: 700; }
+  .files {
+    margin-top: 14px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.78rem;
+    color: var(--ink-dim);
+    color: #a89070;
+    line-height: 1.7;
+  }
+  .files code {
+    background: rgba(0,0,0,0.45);
+    border: 1px solid rgba(185, 140, 58, 0.3);
+    border-radius: 4px;
+    padding: 1px 6px;
+    color: #d8c294;
+  }
+  .gate {
+    margin-top: 14px;
+    padding: 10px 14px;
+    border: 1px dashed rgba(154, 176, 126, 0.55);
+    border-radius: 8px;
+    font-size: 0.88rem;
+    color: #b8c8a4;
+    background: rgba(30, 40, 22, 0.25);
+  }
+  .gate b { color: #9ab07e; letter-spacing: 0.08em; }
+  .props {
+    margin: 12px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .prop {
+    font-family: 'Courier New', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    padding: 4px 10px;
+    border: 1px solid rgba(217, 184, 106, 0.4);
+    border-radius: 999px;
+    color: var(--gold-pale);
+    background: rgba(185, 140, 58, 0.08);
+  }
+  footer.colophon {
+    max-width: 980px;
+    margin: 40px auto 0;
+    padding: 18px 28px 0;
+    text-align: center;
+    color: #7a6850;
+    font-size: 0.82rem;
+    font-style: italic;
+  }
+  footer.colophon .rule { letter-spacing: 0.3em; color: var(--gold); font-style: normal; }
+  @media (max-width: 640px) {
+    .mantle { padding: 26px 14px 0; }
+    .job-head { padding: 14px 14px 10px; gap: 8px; }
+    .job-body { padding: 4px 14px 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="mantle">
+  <header class="masthead">
+    <p class="kicker">LiberOS · plan No. 2</p>
+    <h1>The Second Sweeping</h1>
+    <p class="standfirst">Eight rooms and two shell jobs, revisited from inside the covenant — every
+    surface read as its traveller would have made it, not as a screen that holds features.
+    The plan keeps what works, retires what decorates, and gives each room one honest material.</p>
+    <span class="law">weight is how the machine says · this is a thing</span>
+  </header>
+
+  <nav class="toc" aria-label="the ten jobs">
+    <a href="#j1"><span class="no">I</span>Dreams — the reading desk, rebuilt</a>
+    <a href="#j2"><span class="no">II</span>Games — the facade, uncluttered</a>
+    <a href="#j3"><span class="no">III</span>Liberchat — the second tube</a>
+    <a href="#j4"><span class="no">IV</span>Sea — one voice for the water</a>
+    <a href="#j5"><span class="no">V</span>Desktop — the chat lamp comes down</a>
+    <a href="#j6"><span class="no">VI</span>Arcana — the felt table, swept</a>
+    <a href="#j7"><span class="no">VII</span>Learn — the workbook, swept</a>
+    <a href="#j8"><span class="no">VIII</span>Garden — one glasshouse, no tabs</a>
+    <a href="#j9"><span class="no">IX</span>Trash — the yard, composed</a>
+    <a href="#j10"><span class="no">X</span>Buddy — the stone that speaks in carvings</a>
+  </nav>
+
+  <main>
+
+    <section class="job open" id="j1">
+      <div class="job-head" data-toggle>
+        <span class="job-no">I</span>
+        <h2>Dreams — the reading desk, rebuilt</h2>
+        <span class="chev">›</span>
+      </div>
+      <div class="job-body">
+        <div class="now"><span class="now-title">what sits there now</span>
+          A journal form, a ledger list, and a reading that slides over everything — the
+          interpretation is one wide paper sheet, visually separate from the dream it reads,
+          with associations and actions stacked below.
+        </div>
+        <div class="then"><span class="then-title">what gets built</span>
+          <ul class="acts">
+            <li><b>The desk becomes a spread.</b> Dream on the left as written text set in a
+            soft-edged "cloud" plate (paper with deckled edge, the fog behind it); the reading
+            on the right in the workbook hand, the two joined by one red thread per quoted
+            association — the threads already exist, they just gain a two-column reason to.</li>
+            <li><b>The develop beat stays</b> and plays across the spread: the left sheet
+            develops, then the right page's ink fades in — one motion, gated by
+            <code>prefers-reduced-motion</code>.</li>
+            <li><b>Marginalia keeps its place</b> on the dream sheet's back; keep / plant /
+            attach become brass fittings on the spread's spine, not buttons floating under.</li>
+            <li><b>The journal form gets covenant material:</b> the entry paper sits on the
+            desk's blotter; the ledger below becomes a card drawer, one row per dream, the
+            same row grammar the satchel ledger uses.</li>
+            <li><b>Toy-box level finish:</b> named light (the reading lamp upper-left), contact
+            shadows under both sheets, one specular pass on the cloud plate, silhouette-first
+            at 64px, detail budget held — the fog is the room's air, not a texture.</li>
+          </ul>
+        </div>
+        <div class="props"><span class="prop">cloud-plate paper</span><span class="prop">red threads</span><span class="prop">spine fittings</span><span class="prop">card-drawer ledger</span></div>
+        <div class="files">Owns: <code>src/features/dreams/**</code>, <code>dreams.html</code> · Shared: none — dreams is self-contained.</div>
+        <div class="gate"><b>Gate:</b> extend <code>verify-dreams-presentation.mjs</code> — spread
+        columns present, threads still live-bound, develop still gated, 439px stacks to one
+        column with no overflow. Full suite green.</div>
+      </div>
+    </section>
+
+    <section class="job" id="j2">
+      <div class="job-head" data-toggle>
+        <span class="job-no">II</span>
+        <h2>Games — the facade, uncluttered</h2>
+        <span class="chev">›</span>
+      </div>
+      <div class="job-body">
+        <div class="now"><span class="now-title">what sits there now</span>
+          The midway reads well at a glance, but the facade carries two boxes above the
+          booths — the gate board and the barker's pick — and they crowd the tent line the
+          string lights already draw.
+        </div>
+        <div class="then"><span class="then-title">what gets built</span>
+          <ul class="acts">
+            <li><b>The gate board comes off the tent.</b> Its two paths become painted route
+            signs ON the midway ground (leaning shingles by the path, the way a real midway
+            routes you), tappable, keyboard-reachable, same destinations.</li>
+            <li><b>The barker's pick line folds into the bark bubble</b> — the voice already
+            speaks when a booth centers; the pick becomes that voice's first line on arrival,
+            not a separate plaque.</li>
+            <li><b>The "gate board Nº 7" diegetic plaque retires</b> with the box; its text
+            moves into the marquee's rotation where it belongs.</li>
+            <li><b>Nothing else moves.</b> The till card, the bulbs, the posters, the walk
+            all stay exactly as shipped.</li>
+          </ul>
+        </div>
+        <div class="props"><span class="prop">leaning route shingles</span><span class="prop">voice-first pick</span></div>
+        <div class="files">Owns: <code>src/features/games/**</code>, <code>games.html</code> · Shared: none.</div>
+        <div class="gate"><b>Gate:</b> <code>verify-promenade.mjs</code> extended — no facade box
+        elements above the booths; route signs reachable; pick still voiced. 439 contract
+        stays 94/0 (the compact-gate rules retire with the box).</div>
+      </div>
+    </section>
+
+    <section class="job" id="j3">
+      <div class="job-head" data-toggle>
+        <span class="job-no">III</span>
+        <h2>Liberchat — the second tube</h2>
+        <span class="chev">›</span>
+      </div>
+      <div class="job-body">
+        <div class="now"><span class="now-title">what sits there now</span>
+          Chat lives behind a small lamp button in the room's corner; the panel opens as a
+          floating card. The desktop also carries a separate chat entry — two doors to one room.
+        </div>
+        <div class="then"><span class="then-title">what gets built</span>
+          <ul class="acts">
+            <li><b>A dot-matrix sidecar CRT</b> on the desk, right of the main machine: smaller
+            bezel, amber-phosphor panel, scanline bloom at the machine's <code>--crt-intensity</code>,
+            visible stand and rear cable into the dark — a real object on the desk, not a card.</li>
+            <li><b>The dot-matrix grammar:</b> messages print as perforated feed paper — sprocket
+            holes down both margins, monospace matrix type, the courier's name in the feed's
+            margin stamp. New lines feed upward; the tearing edge is where you type.</li>
+            <li><b>Wired to the same chat engine</b> — liberchat's transport, presence and
+            history are untouched; only the surface changes. The lamp button retires; the sidecar
+            itself is the door (toggle, keyboard shortcut, one aria name).</li>
+            <li><b>The main CRT shifts right</b> a measured amount to make desk room; the room
+            behind (corkboard, shelf, window) re-balances its composition to keep the spread
+            honest at 1280 and at 439.</li>
+            <li><b>Covenant:</b> two named lights now — the lamp and the two tubes; the sidecar
+            catches the lamp warm on its left flank and throws its own faint amber onto the
+            desk it stands on. Contact shadow mandatory.</li>
+          </ul>
+        </div>
+        <div class="props"><span class="prop">dot-matrix feed</span><span class="prop">sprocket margins</span><span class="prop">amber bloom</span><span class="prop">sidecar shadow</span></div>
+        <div class="files">Owns: <code>src/liberchat.js</code>, <code>styles/liberchat.css</code>, <code>styles/room.css</code> (composition), <code>desktop.html</code> · Shared: <code>styles/machine.css</code> (append-only shell math).</div>
+        <div class="gate"><b>Gate:</b> new <code>verify-sidecar.mjs</code> — sidecar renders, opens,
+        sends and receives via the real engine, feeds print in order, reduced-motion holds the
+        feed, 439px stacks the sidecar below or docks it without overlap. Room-hooks verifier
+        stays green.</div>
+      </div>
+    </section>
+
+    <section class="job" id="j4">
+      <div class="job-head" data-toggle>
+        <span class="job-no">IV</span>
+        <h2>Sea — one voice for the water</h2>
+        <span class="chev">›</span>
+      </div>
+      <div class="job-body">
+        <div class="now"><span class="now-title">what sits there now</span>
+          The room mixes registers: instrument labels ("weigh", counters, "breath phase: in/out")
+          speak in UI, while the pitch's sea speaks in weather. The two voices argue and the
+          water loses.
+        </div>
+        <div class="then"><span class="then-title">what gets built</span>
+          <ul class="acts">
+            <li><b>One diegetic voice pass:</b> every control and label re-set as the
+            instrumentary of a shore station — brass plates, stamped words, no UI verbs. "weigh"
+            becomes the scale's own engraving; the breath toggle becomes a small brass valve
+            with an engraved IN · OUT arc.</li>
+            <li><b>Copy sweep:</b> the tour, the help, the placeholders and the empty states
+            rewritten in the sea's weather-voice; nothing becomes poetic mush — the covenant's
+            anti-prose rule holds: the maker stamps the plate, the sea moves the water.</li>
+            <li><b>Visual congruence:</b> panel edges adopt the brass-and-water material the
+            tide clock already owns; the waterline ledger and the release rite inherit it, so
+            every element sits in one material family.</li>
+          </ul>
+        </div>
+        <div class="props"><span class="prop">brass plates</span><span class="prop">engraved valve</span><span class="prop">stamped words</span></div>
+        <div class="files">Owns: <code>src/features/sea/**</code>, <code>sea.html</code>.</div>
+        <div class="gate"><b>Gate:</b> copy sweep audited against the anti-prose rule; no UI verbs
+        survive on brass; 439 and rainy verifiers green.</div>
+      </div>
+    </section>
+
+    <section class="job" id="j5">
+      <div class="job-head" data-toggle>
+        <span class="job-no">V</span>
+        <h2>Desktop — the chat lamp comes down</h2>
+        <span class="chev">›</span>
+      </div>
+      <div class="job-body">
+        <div class="now"><span class="now-title">what sits there now</span>
+          The desktop keeps a floating "open liberchat" affordance — a second door to a room
+          that will have its own tube after job III.
+        </div>
+        <div class="then"><span class="then-title">what gets built</span>
+          <ul class="acts">
+            <li><b>The desktop chat entry retires</b> once the sidecar exists — one object,
+            never two (the covenant's own clause, applied to doors).</li>
+            <li><b>Presence stays visible:</b> the sidecar's standby dot carries the "someone
+            is there" signal the lamp held, so retiring the lamp loses nothing.</li>
+            <li><b>The freed corner returns to the room's composition</b> (shelf light, wall
+            scar) rather than filling with a replacement widget.</li>
+          </ul>
+        </div>
+        <div class="files">Owns: <code>src/liberchat.js</code> (lamp removal), <code>desktop.html</code> · Depends on: job III.</div>
+        <div class="gate"><b>Gate:</b> no second chat door on the desktop; presence still
+        announced; room-hooks and rainy verifiers green.</div>
+      </div>
+    </section>
+
+    <section class="job" id="j6">
+      <div class="job-head" data-toggle>
+        <span class="job-no">VI</span>
+        <h2>Arcana — the felt table, swept</h2>
+        <span class="chev">›</span>
+      </div>
+      <div class="job-body">
+        <div class="now"><span class="now-title">what sits there now</span>
+          The felt table is the room and it carries the rainy weather well, but the covenant
+          pass (THE DRAWN PROP) hasn't audited its drawn furniture: card backs, the draw
+          stack, fittings and marks.
+        </div>
+        <div class="then"><span class="then-title">what gets built</span>
+          <ul class="acts">
+            <li><b>Weight audit:</b> every stroke on the table lands in one of the four tiers —
+            card silhouettes, one form line per back pattern, detail lines for pips, hairlines
+            only on inspection marks.</li>
+            <li><b>Two radius families only:</b> felt + brass (soft) and the deck's machine-cut
+            edges (sharp); any r=5 in-betweens get cut.</li>
+            <li><b>Named light declared</b> in the room's material register entry (the lamp over
+            the table, warm), specular on card edges from that side, contact shadows under the
+            stack and every dealt card.</li>
+            <li><b>Use-history:</b> the table's felt keeps a faint ring where the deck sits; the
+            stack's edges soften with draw count — use, not damage.</li>
+          </ul>
+        </div>
+        <div class="props"><span class="prop">four-tier strokes</span><span class="prop">felt ring</span><span class="prop">softening stack</span></div>
+        <div class="files">Owns: <code>src/features/divination/**</code>, <code>divination.html</code>.</div>
+        <div class="gate"><b>Gate:</b> SELF-CHECK 14–17 pass on every drawn prop; rainy palette
+        verifier green; no layout drift at 439.</div>
+      </div>
+    </section>
+
+    <section class="job" id="j7">
+      <div class="job-head" data-toggle>
+        <span class="job-no">VII</span>
+        <h2>Learn — the workbook, swept</h2>
+        <span class="chev">›</span>
+      </div>
+      <div class="job-body">
+        <div class="now"><span class="now-title">what sits there now</span>
+          The desk chrome landed (marginalia hand, index-card shelf, register trim), but the
+          covenant pass hasn't walked the page end to end: the lesson card, the cross-links,
+          the tour's staging, the empty states.
+        </div>
+        <div class="then"><span class="then-title">what gets built</span>
+          <ul class="acts">
+            <li><b>The lesson card becomes a workbook spread:</b> left page the practice, right
+            page the margin — the marginalia hand graduates from decoration to structure.</li>
+            <li><b>Cross-links become pasted labels</b> on the page edge (tape, not buttons),
+            same destinations, diegetic: the workbook's maker referenced the Quiet Floor.</li>
+            <li><b>Prop audit</b> of the card shelf: weight tiers on the card edges, true
+            baselines across the shelf, contact shadows, one warm lamp declared.</li>
+            <li><b>Tour staging</b> re-checked against the modal rule fixed this session.</li>
+          </ul>
+        </div>
+        <div class="props"><span class="prop">workbook spread</span><span class="prop">taped labels</span></div>
+        <div class="files">Owns: <code>src/features/learn/**</code>, <code>learn.html</code>.</div>
+        <div class="gate"><b>Gate:</b> SELF-CHECK pass; tour-modal still inert-correct; 439 green.</div>
+      </div>
+    </section>
+
+    <section class="job" id="j8">
+      <div class="job-head" data-toggle>
+        <span class="job-no">VIII</span>
+        <h2>Garden — one glasshouse, no tabs</h2>
+        <span class="chev">›</span>
+      </div>
+      <div class="job-body">
+        <div class="now"><span class="now-title">what sits there now</span>
+          Three tabs split the room — bed, tree, plantings — as if the glasshouse were a
+          settings page. The traveller walks one glasshouse; the tabs stand between them and it.
+        </div>
+        <div class="then"><span class="then-title">what gets built</span>
+          <ul class="acts">
+            <li><b>One composed scene:</b> the glasshouse drawn as a single deep view — planting
+            bed in the foreground, the tree at center depth, plantings trailing along the
+            right bench; every feature present at once, arranged by the room's own logic.</li>
+            <li><b>The tabs retire.</b> Navigation becomes looking: the scene pans/gently
+            reframes toward what you attend (click a region to draw focus), keyboard-reachable
+            equivalents, reduced-motion holds the frame.</li>
+            <li><b>Material:</b> glass panes with one form line each (the covenant's tier
+            ladder), condensation as use-history, the bench and bed share one true baseline,
+            the tree catches the lamp warm on one flank — the single-light rule.</li>
+            <li><b>State stays exactly as wired</b> — bed, tree, plantings keep their modules
+            and keys; only the stage changes.</li>
+          </ul>
+        </div>
+        <div class="props"><span class="prop">deep single view</span><span class="prop">attention pan</span><span class="prop">glass tier-lines</span></div>
+        <div class="files">Owns: <code>src/features/garden/**</code>, <code>garden.html</code> · Shared: none (tree module untouched).</div>
+        <div class="gate"><b>Gate:</b> verify-tree and verify-affinity green (state untouched);
+        new assertions — no tab elements, all three features visible in DOM at once, 439
+        composes without overlap.</div>
+      </div>
+    </section>
+
+    <section class="job" id="j9">
+      <div class="job-head" data-toggle>
+        <span class="job-no">IX</span>
+        <h2>Trash — the yard, composed</h2>
+        <span class="chev">›</span>
+      </div>
+      <div class="job-body">
+        <div class="now"><span class="now-title">what sits there now</span>
+          The yard holds its plots and cards but spends its space poorly: wide empty stretches,
+          the burial rite and the plot grid floating without a ground line, cards repeating
+          one grammar at different scales.
+        </div>
+        <div class="then"><span class="then-title">what gets built</span>
+          <ul class="acts">
+            <li><b>Compose the yard:</b> one ground line the plots share; the burial rite as a
+            dug bed at the left of that line, the plots marching right; the ledger card docked
+            to the rite, not floating. Empty space becomes the yard's dusk air, intentional.</li>
+            <li><b>Material:</b> headstones take the tier ladder (silhouette, one form line,
+            inscription as detail), weathering is use-history; the card drawer inherits the
+            plots' paper-and-earth family; one lamp over the yard, shadows opposite.</li>
+            <li><b>Trim the repeat:</b> merge the card slot's redundant meta lines so a grave
+            reads once — stone, name, date, what was buried.</li>
+          </ul>
+        </div>
+        <div class="props"><span class="prop">one ground line</span><span class="prop">dug-bed rite</span><span class="prop">tiered headstones</span></div>
+        <div class="files">Owns: <code>src/features/trash/**</code>, <code>trash.html</code>.</div>
+        <div class="gate"><b>Gate:</b> verify-trash extended — plots share baseline, card docks,
+        empty-state composes; 439 green.</div>
+      </div>
+    </section>
+
+    <section class="job" id="j10">
+      <div class="job-head" data-toggle>
+        <span class="job-no">X</span>
+        <h2>Buddy — the stone that speaks in carvings</h2>
+        <span class="chev">›</span>
+      </div>
+      <div class="job-body">
+        <div class="now"><span class="now-title">what sits there now</span>
+          The buddy answers in chat-styled transcript lines inside the room — the voice of a
+          messenger app bolted to a standing stone.
+        </div>
+        <div class="then"><span class="then-title">what gets built</span>
+          <ul class="acts">
+            <li><b>Inscriptions, not messages.</b> The buddy's replies are cut into the stone's
+            face: a line of carving that surfaces glyph by glyph, holds while read, then
+            weathers back into the rock. Nothing accumulates — the stone was never a log.</li>
+            <li><b>Little signs accompany speech:</b> the stone's kept-marks (the carved
+            symbols SYSTEM 04 already renders) glow softly in turn as emphasis — the stone
+            gestures with its own history.</li>
+            <li><b>Your input stays a quiet offering:</b> the text field becomes a shallow
+            brass dish at the stone's base; what you send appears briefly as an embossed line
+            on the stone's flank, then settles.</li>
+            <li><b>History keeps its door:</b> the full transcript remains available through
+            the satchel/book where it already persists — the room shows the moment, the book
+            keeps the record.</li>
+            <li><b>Accessibility:</b> carved lines are real text (aria-live), the fading is
+            visual only, reduced-motion shows the line and holds it until dismiss.</li>
+          </ul>
+        </div>
+        <div class="props"><span class="prop">glyph-fade carving</span><span class="prop">glowing kept-marks</span><span class="prop">brass offering dish</span></div>
+        <div class="files">Owns: <code>src/features/buddy/**</code>, <code>buddy.html</code>.</div>
+        <div class="gate"><b>Gate:</b> aiml verifiers green (engine untouched); new assertions —
+        reply surfaces as carving, fades, aria-live text matches; reduced-motion holds.</div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="colophon">
+    <p><span class="rule">· · ·</span></p>
+    <p>Sequenced I → X with no shared files between jobs except the shell pieces named on
+    each card. Every job ends green: its own gate, then the full 18-verifier suite.
+    THE DRAWN PROP and SELF-CHECK 14–17 are the pass criteria throughout.</p>
+  </footer>
+</div>
+
+<script>
+  document.querySelectorAll('[data-toggle]').forEach(function (head) {
+    head.addEventListener('click', function () {
+      head.closest('section.job').classList.toggle('open');
+    });
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      var head = e.target.closest && e.target.closest('[data-toggle]');
+      if (head) { e.preventDefault(); head.closest('section.job').classList.toggle('open'); }
+    }
+  });
+</script>
+</body>
+</html>
