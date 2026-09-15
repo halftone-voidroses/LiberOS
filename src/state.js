@@ -17,6 +17,9 @@
     cutsceneBuild: CUTSCENE_BUILD,
     state: 'boot',           // boot | loading | desktop
     tutorialDone: false,
+    tutorialStage: null,
+    keysNamed: false,      // Wanderlust named the keybank in the opening;
+                           // the case stays quiet until then (keybank.js)
     buddy: [],              // buddy artifacts: stone casts (kind stone) + sealed chats (kind sealed)
     relations: [],           // sigil <- artifact edges
     divination: [],          // cards drawn from arcana

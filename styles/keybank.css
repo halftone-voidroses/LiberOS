@@ -6,10 +6,14 @@
    legends, room-phosphor lamps. Depth is the address, light is the room. */
 
 .keybank {
+  /* case furniture, not glass content: a detached block floating just
+     above the lower bezel, left-aligned under the tube. It straddles the
+     chin — bezel below, glass above — so it reads as one instrument sitting
+     in front of the tube rather than a toolbar inside it. */
   position: absolute;
-  left: 18px;
-  bottom: 12px;
-  z-index: 10;
+  left: 10cqi;
+  bottom: 8px;
+  z-index: 16;
   pointer-events: auto;
 }
 
@@ -182,6 +186,14 @@
   box-shadow: 0 0 9px 3px var(--glow);
 }
 
+/* not yet named: Wanderlust has not introduced the keys, so they sit
+   dark and quiet. Caps still focusable, lamps stay out. */
+.keybank-grid.inert .keybank-key { cursor: default; }
+.keybank-grid.inert .keybank-key:hover,
+.keybank-grid.inert .keybank-key:focus-visible { filter: none; }
+.keybank-grid.inert .keybank-lamp { background: #2e2518; box-shadow: inset 0 1px 1px #14100a; }
+.keybank-grid.inert .keybank-key.home-key .keybank-lamp { background: #2e2518; box-shadow: inset 0 1px 1px #14100a; }
+
 /* sigil locked after the first stone: struck but still viewable */
 .keybank-key.crossed .keybank-label { text-decoration: line-through; }
 .keybank-key.crossed::after {
@@ -199,23 +211,30 @@
 
 .keybank-status {
   position: absolute;
-  left: 0;
+  left: auto;
   right: 0;
-  bottom: -18px;
+  top: -18px;
+  bottom: auto;
   font-family: 'Courier New', Courier, monospace;
   font-size: 9px;
   letter-spacing: 0.1em;
   color: rgba(200, 184, 144, 0.6);
-  text-align: left;
+  text-align: right;
   pointer-events: none;
+  max-width: 60%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 @media (max-width: 600px) {
-  /* lifted clear of the bottom-center bezel carvings (compass/grate/hook
-     ride at bezel bottom:44px and overlay the glass down here). */
-  .keybank { left: 8px; bottom: 52px; }
+  /* the narrow bezel has no chin to spare and its bottom-center carvings
+     ride over the glass: the block shrinks, loses its stagger, and lifts
+     clear of them — still in front of the tube, still left-aligned. */
+  .keybank { left: 10cqi; bottom: 80px; }
   .keybank-grid {
-    width: min(208px, calc(100vw - 130px));
+    /* narrow enough to leave the buddy stone (glass centre) uncovered */
+    width: min(160px, calc(100vw - 170px));
     gap: 3px;
     padding: 7px 7px 9px;
   }

@@ -157,8 +157,8 @@
     if (headBtn) headBtn.addEventListener('click', function () {
       setOpen(box.classList.contains('closed'));
     });
-    // the margin sheet is dismissible; on the small glass it starts shut
-    // so the keybank below stays hittable (verify-439 dead=0).
+    // the margin sheet is dismissible by tap; on the small glass it starts
+    // shut so the keybank rising from the chin stays hittable (verify-439).
     try {
       if (window.innerWidth <= 600) setOpen(false);
     } catch (e) {}

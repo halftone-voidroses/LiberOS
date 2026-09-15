@@ -231,6 +231,34 @@ const promptText = await page.evaluate(() => {
 });
 check('emergent prompt renders on desktop', !!promptText && promptText.length > 0, promptText);
 
+// ─── keybank: quiet until Wanderlust names the keys ──────────────────
+console.log('keybank inert pre-tutorial')
+await goto('/desktop.html', 900)
+const inert = await page.evaluate(() => {
+  const grid = document.getElementById('keybank');
+  const sea = document.getElementById('keybank-sea');
+  const before = (window.Liber.state.get().visited || {}).sea;
+  if (sea) sea.click();
+  const after = (window.Liber.state.get().visited || {}).sea;
+  return {
+    grid: !!grid && grid.classList.contains('inert'),
+    disabled: sea && sea.getAttribute('aria-disabled') === 'true',
+    stayed: location.href.includes('desktop.html'),
+    unwritten: before === undefined && after === undefined,
+    status: (document.getElementById('keybank-status') || {}).textContent
+  };
+});
+check('keys sit dark before the naming', inert.grid && inert.disabled, JSON.stringify({ grid: inert.grid, disabled: inert.disabled }));
+check('an unnamed key neither walks nor writes', inert.stayed && inert.unwritten, JSON.stringify({ stayed: inert.stayed, unwritten: inert.unwritten, status: inert.status }));
+await page.evaluate(() => window.Liber.state.set({ keysNamed: true }));
+await page.waitForTimeout(300);
+const named = await page.evaluate(() => {
+  const grid = document.getElementById('keybank');
+  const sea = document.getElementById('keybank-sea');
+  return { grid: !!grid && !grid.classList.contains('inert'), disabled: sea && sea.getAttribute('aria-disabled') };
+});
+check('the naming wakes the case', named.grid && named.disabled !== 'true', JSON.stringify(named));
+
 // ─── favicon ──────────────────────────────────────────────────────────
 console.log('favicon')
 const favicon = await page.evaluate(() => !!document.querySelector('link[rel="icon"]'));

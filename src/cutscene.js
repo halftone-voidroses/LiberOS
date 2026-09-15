@@ -281,6 +281,10 @@
     function show() {
       if (idx >= beats.length) { done(); return; }
       var b = beats[idx];
+      // Wanderlust naming the keys wakes the case: the keybank reads this
+      // flag and stays quiet until then (skips land here too — every road
+      // through the opening passes a beat with keys, or marks done).
+      if (b.keys && st()) st().set({ keysNamed: true });
       var box = mountBox('chatbeat', b.voice, '');
       if (!box) { done(); return; }
       var riasonInner = box.querySelector('.cutscene-box');
@@ -344,7 +348,8 @@
         { voice: 'wanderlust', line: 'I have been called many things over the years', names: NAMES, options: ['I think I get it..'] },
         { voice: 'wanderlust', line: 'You, though, may call me Wanderlust, for what fate truly does is push you to see the world.', options: ['>>'] },
         { voice: 'wanderlust', line: 'Through destruction breeds creation.', options: ['(What is this place?)'], settle: 600 },
-        { voice: 'wanderlust', line: 'This is the liber vacui, many have been here before you, they have left their mark and will continue to whisper aid.', options: ['Like who?'], settle: 600 },
+        { voice: 'wanderlust', line: 'This is the liber vacui, many have been here before you, they have left their mark and will continue to whisper aid.', options: ['>>'], settle: 600 },
+        { voice: 'wanderlust', line: 'Below the glass, the keys on the case. Press one and its lamp burns; the room you left keeps its ember.', keys: true, options: ['Like who?'], settle: 600 },
         { voice: 'wanderlust', line: 'You RAT!', burst: true, flare: true, shatterNext: true, hold: 4000, options: [] },
         { voice: 'riason', line: 'My god what a pristine UI box!', glitchIn: true, options: ['Hello?'] },
         { voice: 'riason', line: 'Ah! You must be the new traveller, I have forced my way into the tutorial sequence in order to teach you how to use this software.', options: ["Where's Wanderlust?"] },

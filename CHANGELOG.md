@@ -1,5 +1,17 @@
 # LiberOS changelog
 
+## v2.15.0 — the case sits in front of the tube
+- **The keybank moves onto the bezel.** It no longer lives inside the glass:
+  it straddles the lower chin as a detached block, left-aligned under the
+  tube, brass ring passing behind it — the mockup's placement. Shrinks and
+  lifts clear of the bottom-center carvings on the small glass.
+- **The keys stay quiet until Wanderlust names them.** New opening beat:
+  "Below the glass, the keys on the case." Pre-naming the grid sits dark
+  (`keysNamed`, inert, no walk, no write); the naming sets the flag and the
+  case wakes. Skip roads all land on done, so no road leaves dead keys.
+- **Verified:** 439 / fixes (new inert assertions) / smoke green, screenshots
+  at both sizes, stone uncovered at 439.
+
 ## v2.14.0 — the keyboard sits beneath the sky
 - **The radial dial is replaced by the 3 × 4 keybank.** The desktop's
   three-position carousel, popup index and long-press are gone (REV D §04

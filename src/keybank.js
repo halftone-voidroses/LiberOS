@@ -33,6 +33,11 @@
     return (window.Liber && window.Liber.state && window.Liber.state.get()) || {};
   }
 
+  function alive() {
+    var s = getState();
+    return !!(s.tutorialDone || s.keysNamed);
+  }
+
   function isSigilLocked() {
     var s = getState();
     return ((s.buddy || []).some(function (e) { return e && e.kind === 'stone'; }));
@@ -63,6 +68,11 @@
   function press(idx, focus) {
     var key = KEYS[idx];
     if (!key) return;
+    if (!alive()) {
+      say('keys quiet · not yet named');
+      render();
+      return;
+    }
     selectedIdx = idx;
     if (key.blank) {
       say('socket 12 / reserved · no destination');
@@ -85,6 +95,9 @@
   function render() {
     if (!grid) return;
     grid.innerHTML = '';
+    var isAlive = alive();
+    grid.classList.toggle('inert', !isAlive);
+    if (!isAlive) say('keys quiet · not yet named');
     var locked = isSigilLocked();
     var visitedMap = getState().visited || {};
     KEYS.forEach(function (key, i) {
@@ -99,7 +112,8 @@
       b.style.setProperty('--accent', key.acc);
       b.style.setProperty('--glow', hexGlow(key.acc));
       b.setAttribute('aria-label', key.home ? 'return home' : key.blank ? 'reserved room socket' : 'switch to ' + key.label);
-      if (key.blank) b.setAttribute('aria-disabled', 'true');
+      if (!isAlive) b.setAttribute('aria-disabled', 'true');
+      else if (key.blank) b.setAttribute('aria-disabled', 'true');
       var lamp = document.createElement('span');
       lamp.className = 'keybank-lamp';
       lamp.setAttribute('aria-hidden', 'true');
