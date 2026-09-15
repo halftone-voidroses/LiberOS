@@ -11,8 +11,8 @@
      chin — bezel below, glass above — so it reads as one instrument sitting
      in front of the tube rather than a toolbar inside it. */
   position: absolute;
-  left: 10cqi;
-  bottom: 8px;
+  left: -14px;
+  bottom: -52px;
   z-index: 16;
   pointer-events: auto;
 }
@@ -36,15 +36,7 @@
 }
 
 .keybank-grid::before {
-  content: "HOME CONSOLE \00B7 3 \00D7 4 \00B7 KEYBANK 03";
-  position: absolute;
-  left: 10px;
-  top: -17px;
-  color: #4b3823;
-  text-shadow: 0 1px 0 #eee1c3;
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 7px;
-  letter-spacing: 0.12em;
+  content: none;
 }
 
 /* staggered rows read as one compact keyboard from the desk */
@@ -210,21 +202,20 @@
 }
 
 .keybank-status {
+  /* state feedback without a floating label: screen-reader-only, still
+     aria-live, still readable by the gates. Zeroed type keeps the 439
+     clip probe (content taller than box) quiet. */
   position: absolute;
-  left: auto;
-  right: 0;
-  top: -18px;
-  bottom: auto;
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 9px;
-  letter-spacing: 0.1em;
-  color: rgba(200, 184, 144, 0.6);
-  text-align: right;
-  pointer-events: none;
-  max-width: 60%;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
   overflow: hidden;
-  text-overflow: ellipsis;
+  clip: rect(0 0 0 0);
   white-space: nowrap;
+  border: 0;
+  font-size: 0;
+  line-height: 0;
 }
 
 @media (max-width: 600px) {

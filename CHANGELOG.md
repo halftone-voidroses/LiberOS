@@ -1,5 +1,11 @@
 # LiberOS changelog
 
+## v2.15.1 — the case keeps its own counsel
+- **Keybank seating, final.** Tucked into the bottom-left corner, half off
+  the bezel below the stand. Both floating texts are gone: the plate legend
+  is cut, the readout is screen-reader-only (still aria-live, still gated).
+- **Verified:** 439 / fixes green.
+
 ## v2.15.0 — the case sits in front of the tube
 - **The keybank moves onto the bezel.** It no longer lives inside the glass:
   it straddles the lower chin as a detached block, left-aligned under the
