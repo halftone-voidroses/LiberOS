@@ -4,7 +4,7 @@
 //  2. growth fold: advance() turns stages; stage 5 holds
 //  3. offline accrual: absence grows the tree (seen timestamp math)
 //  4. watering banks an hour; refusal honoured (disabled button, wet-soil note)
-//  5. harvest: pressing lands in satchel, petal lands in palette, gaps remain
+//  5. harvest: pressing lands in journal, petal lands in palette, gaps remain
 //  6. persistence across reload; legacy thimble migration on fresh state
 //  7. reduced-motion renders static stages; 439px keeps it operable
 // Exit 0 = pass, 1 = fail.
@@ -136,12 +136,12 @@ ok(boughCount >= 6, `mature tree draws a crown (got ${boughCount} boughs)`);
 
 // ─── 5. harvest ───
 ok(await page.isEnabled('#tree-harvest'), 'harvest enabled with fruit hanging');
-const satchelBefore = await page.evaluate(() => (window.Liber.state.get().satchel || []).length);
+const journalBefore = await page.evaluate(() => (window.Liber.state.get().journal || []).length);
 const paletteBefore = await page.evaluate(() => (window.Liber.state.get().palette || []).length);
 await page.click('#tree-harvest');
-const satchelAfter = await page.evaluate(() => (window.Liber.state.get().satchel || []).length);
+const journalAfter = await page.evaluate(() => (window.Liber.state.get().journal || []).length);
 const paletteAfter = await page.evaluate(() => (window.Liber.state.get().palette || []).length);
-ok(satchelAfter === satchelBefore + 1, 'pressing lands in the satchel');
+ok(journalAfter === journalBefore + 1, 'pressing lands in the journal');
 ok(paletteAfter > paletteBefore, 'a petal drifts to the paint boxes');
 const hanging = await page.evaluate(() => window.Liber.tree.model().hanging);
 ok(hanging === 4, `picked fruit leaves a gap (hanging ${hanging}/5)`);

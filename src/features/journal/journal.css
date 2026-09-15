@@ -1,10 +1,10 @@
-/* satchel.css — Riason's filing cabinet. Aged paper, leather, brass.
+/* journal.css — Riason's filing cabinet. Aged paper, leather, brass.
    Left third: three overlapping card-note tabs (buddy / artifacts /
    relations) with their lists. Right two thirds: the note page with a
    large persistent editor and a dock of pens. No imports, no shared
    variables (covenant Q.1). */
 
-.satchel-app {
+.journal-app {
   position: absolute;
   inset: 0;
   background:
@@ -18,7 +18,7 @@
   overflow: hidden;
 }
 
-.satchel-binding {
+.journal-binding {
   width: 92%;
   height: 90%;
   position: relative;
@@ -32,7 +32,7 @@
   padding: 6px;
 }
 
-.satchel-spine {
+.journal-spine {
   width: 22px;
   flex-shrink: 0;
   background:
@@ -51,7 +51,7 @@
   position: relative;
 }
 
-.satchel-spine-text {
+.journal-spine-text {
   writing-mode: vertical-rl;
   transform: rotate(180deg);
   font-size: 0.5rem;
@@ -64,7 +64,7 @@
 
 /* ── the cabinet: drawers left third, note right two thirds ── */
 
-.satchel-cabinet {
+.journal-cabinet {
   flex: 1;
   display: flex;
   min-width: 0;
@@ -72,7 +72,7 @@
     linear-gradient(180deg, #e8d8b8 0%, #d8c8a0 60%, #c8b890 100%);
 }
 
-.satchel-drawers {
+.journal-drawers {
   width: 33%;
   min-width: 170px;
   flex-shrink: 0;
@@ -86,13 +86,13 @@
 }
 
 /* Overlapping card-note tabs: the active card sits on top. */
-.satchel-tabcards {
+.journal-tabcards {
   display: flex;
   flex-direction: column;
   margin-bottom: -2px;
 }
 
-.satchel-tab {
+.journal-tab {
   font-family: inherit;
   font-size: 1rem;
   font-variant: small-caps;
@@ -112,9 +112,9 @@
   position: relative;
 }
 
-.satchel-tab:first-child { margin-top: 0; }
+.journal-tab:first-child { margin-top: 0; }
 
-.satchel-tab[aria-selected="true"] {
+.journal-tab[aria-selected="true"] {
   background: linear-gradient(180deg, #f0e2c0 0%, #e2d0a8 100%);
   color: #2a1004;
   font-weight: 700;
@@ -123,14 +123,14 @@
   box-shadow: 0 -3px 8px rgba(0, 0, 0, 0.2);
 }
 
-.satchel-tab:nth-child(1) { z-index: 1; }
-.satchel-tab:nth-child(2) { z-index: 2; }
-.satchel-tab:nth-child(3) { z-index: 1; }
-.satchel-tab[aria-selected="true"] { z-index: 4; }
+.journal-tab:nth-child(1) { z-index: 1; }
+.journal-tab:nth-child(2) { z-index: 2; }
+.journal-tab:nth-child(3) { z-index: 1; }
+.journal-tab[aria-selected="true"] { z-index: 4; }
 
-.satchel-tab:hover { color: #2a1004; }
+.journal-tab:hover { color: #2a1004; }
 
-.satchel-list {
+.journal-list {
   flex: 1;
   overflow-y: auto;
   background: linear-gradient(180deg, #f0e2c0 0%, #e2d0a8 100%);
@@ -140,7 +140,7 @@
   z-index: 2;
 }
 
-.satchel-list-item {
+.journal-list-item {
   padding: 10px 4px;
   margin: 4px 0;
   min-height: 44px;
@@ -152,14 +152,14 @@
   color: #3a1a08;
 }
 
-.satchel-list-item:hover { background: rgba(120, 80, 40, 0.12); }
+.journal-list-item:hover { background: rgba(120, 80, 40, 0.12); }
 
-.satchel-list-item.current {
+.journal-list-item.current {
   background: rgba(120, 80, 40, 0.2);
   font-weight: 700;
 }
 
-.satchel-list-item .meta {
+.journal-list-item .meta {
   font-size: 0.875rem;
   color: #6a4a20;
   font-style: normal;
@@ -167,7 +167,7 @@
   margin-top: 1px;
 }
 
-.satchel-empty {
+.journal-empty {
   font-size: 1rem;
   font-style: italic;
   color: #6a4a20;
@@ -176,7 +176,7 @@
   line-height: 1.6;
 }
 
-.satchel-netline {
+.journal-netline {
   font-size: 0.875rem;
   font-style: italic;
   color: #6a4a20;
@@ -187,11 +187,11 @@
   margin-bottom: 6px;
 }
 
-.satchel-ann-dot { color: #6a3010; margin-right: 4px; }
+.journal-ann-dot { color: #6a3010; margin-right: 4px; }
 
 /* ── the note page ── */
 
-.satchel-note {
+.journal-note {
   flex: 1;
   min-width: 0;
   position: relative;
@@ -205,14 +205,14 @@
   overflow: hidden;
 }
 
-.satchel-note-head {
+.journal-note-head {
   border-bottom: 1px solid rgba(80, 50, 20, 0.3);
   padding-bottom: 6px;
   margin-bottom: 8px;
   text-align: center;
 }
 
-.satchel-note-title {
+.journal-note-title {
   font-size: 1.1rem;
   font-variant: small-caps;
   letter-spacing: 0.15em;
@@ -220,13 +220,13 @@
   font-weight: 700;
 }
 
-.satchel-note-date {
+.journal-note-date {
   font-size: 0.875rem;
   font-style: italic;
   color: #6a4a20;
 }
 
-.satchel-polaroid {
+.journal-polaroid {
   align-self: center;
   max-width: 150px;
   max-height: 150px;
@@ -238,7 +238,7 @@
   border: 1px solid rgba(80, 50, 20, 0.3);
 }
 
-.satchel-intention {
+.journal-intention {
   font-size: 1rem;
   font-style: italic;
   line-height: 1.5;
@@ -247,12 +247,12 @@
   quotes: """ """;
 }
 
-.satchel-intention::before { content: open-quote; }
-.satchel-intention::after { content: close-quote; }
-.satchel-intention:empty { display: none; }
+.journal-intention::before { content: open-quote; }
+.journal-intention::after { content: close-quote; }
+.journal-intention:empty { display: none; }
 
 /* The large persistent editor. */
-.satchel-editor {
+.journal-editor {
   flex: 1;
   overflow-y: auto;
   font-size: 1.05rem;
@@ -263,19 +263,19 @@
   caret-color: #6a3010;
 }
 
-.satchel-editor:empty::before {
+.journal-editor:empty::before {
   content: 'write here. the book keeps it.';
   color: rgba(106, 48, 16, 0.7);
   font-style: italic;
 }
 
-.satchel-editor .smark { border-radius: 2px; padding: 0 1px; }
-.satchel-editor .smark-hl { background: rgba(240, 220, 90, 0.55); cursor: pointer; }
-.satchel-editor .smark-hl:hover { background: rgba(240, 220, 90, 0.85); }
+.journal-editor .smark { border-radius: 2px; padding: 0 1px; }
+.journal-editor .smark-hl { background: rgba(240, 220, 90, 0.55); cursor: pointer; }
+.journal-editor .smark-hl:hover { background: rgba(240, 220, 90, 0.85); }
 
 /* ── the pen dock: highlighter + coloured pencils, bottom-right ── */
 
-.satchel-tools {
+.journal-tools {
   position: absolute;
   right: 34px;
   bottom: 12px;
@@ -285,7 +285,7 @@
   z-index: 5;
 }
 
-.satchel-pen {
+.journal-pen {
   font-family: inherit;
   background: none;
   border: none;
@@ -301,22 +301,22 @@
   opacity: 0.85;
   transition: transform 0.12s ease, opacity 0.12s ease;
 }
-.satchel-pen:focus-visible {
+.journal-pen:focus-visible {
   outline: 2px solid #6a3010;
   outline-offset: 2px;
 }
 
-.satchel-pen:hover { opacity: 1; }
+.journal-pen:hover { opacity: 1; }
 
-.satchel-pen.active {
+.journal-pen.active {
   opacity: 1;
   transform: translateY(-4px);
   filter: drop-shadow(0 0 5px rgba(255, 240, 200, 0.9));
 }
 
-.satchel-pen svg { display: block; }
+.journal-pen svg { display: block; }
 
-.satchel-pen-name {
+.journal-pen-name {
   font-size: 1rem;
   font-style: normal;
   color: #3a1a08;
@@ -324,7 +324,7 @@
 
 /* ── highlight popover ── */
 
-.satchel-pop {
+.journal-pop {
   position: absolute;
   z-index: 60;
   width: 220px;
@@ -335,9 +335,9 @@
   padding: 8px 10px;
 }
 
-.satchel-pop[hidden] { display: none; }
+.journal-pop[hidden] { display: none; }
 
-.satchel-pop-text {
+.journal-pop-text {
   font-size: 0.95rem;
   font-style: italic;
   color: #3a1a08;
@@ -348,7 +348,7 @@
   overflow: hidden;
 }
 
-.satchel-pop-note {
+.journal-pop-note {
   width: 100%;
   box-sizing: border-box;
   font-family: inherit;
@@ -361,9 +361,9 @@
   resize: vertical;
 }
 
-.satchel-pop-actions { display: flex; gap: 6px; margin-top: 6px; }
+.journal-pop-actions { display: flex; gap: 6px; margin-top: 6px; }
 
-.satchel-pop-actions button {
+.journal-pop-actions button {
   font-family: inherit;
   font-size: 0.9rem;
   font-style: italic;
@@ -375,11 +375,11 @@
   cursor: pointer;
 }
 
-.satchel-pop-actions button:hover { background: rgba(120, 80, 40, 0.15); }
+.journal-pop-actions button:hover { background: rgba(120, 80, 40, 0.15); }
 
 /* ── stamp, raison, titlebar, cursor, scrollbars (house kept) ── */
 
-.satchel-stamp {
+.journal-stamp {
   position: absolute;
   bottom: 40px;
   left: 50%;
@@ -395,9 +395,9 @@
   transition: opacity 0.8s ease;
 }
 
-.satchel-note:hover .satchel-stamp { opacity: 0.9; }
+.journal-note:hover .journal-stamp { opacity: 0.9; }
 
-.satchel-help {
+.journal-help {
   position: absolute;
   top: 14px;
   right: 50px;
@@ -422,13 +422,13 @@
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
 }
 
-.satchel-help:hover {
+.journal-help:hover {
   background: rgba(120, 80, 40, 0.12);
   color: #3a1a08;
   border-color: #3a1a08;
 }
 
-.satchel-exit {
+.journal-exit {
   position: absolute;
   top: 14px;
   right: 12px;
@@ -453,13 +453,13 @@
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
 }
 
-.satchel-exit:hover {
+.journal-exit:hover {
   background: rgba(120, 80, 40, 0.12);
   color: #3a1a08;
   border-color: #3a1a08;
 }
 
-.satchel-raison {
+.journal-raison {
   position: absolute;
   inset: 0;
   background: rgba(42, 26, 10, 0.85);
@@ -472,12 +472,12 @@
   transition: opacity 0.2s;
 }
 
-.satchel-raison.open {
+.journal-raison.open {
   opacity: 1;
   pointer-events: auto;
 }
 
-.satchel-raison-inner {
+.journal-raison-inner {
   width: 78%;
   max-width: 420px;
   background:
@@ -494,7 +494,7 @@
   letter-spacing: 0.03em;
 }
 
-.satchel-raison-head {
+.journal-raison-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -503,7 +503,7 @@
   margin-bottom: 10px;
 }
 
-.satchel-raison-name {
+.journal-raison-name {
   font-size: 0.875rem;
   color: #6a3010;
   text-transform: lowercase;
@@ -511,7 +511,7 @@
   font-weight: 700;
 }
 
-.satchel-raison-close {
+.journal-raison-close {
   background: none;
   border: 1px solid #6a4a20;
   color: #6a4a20;
@@ -525,17 +525,17 @@
   border-radius: 2px;
 }
 
-.satchel-raison-close:hover {
+.journal-raison-close:hover {
   background: rgba(120, 80, 40, 0.12);
   color: #3a1a08;
 }
 
-.satchel-raison-body {
+.journal-raison-body {
   font-size: 1rem;
   line-height: 1.55;
 }
 
-.satchel-titlebar {
+.journal-titlebar {
   position: absolute;
   top: 0;
   left: 0;
@@ -559,7 +559,7 @@
   color: #3a2010;
 }
 
-.satchel-titlebar-name {
+.journal-titlebar-name {
   flex-shrink: 0;
   font-size: 1.05rem;
   font-variant: small-caps;
@@ -568,7 +568,7 @@
   color: #3a1a08;
 }
 
-.satchel-titlebar-sub {
+.journal-titlebar-sub {
   font-size: 1rem;
   font-style: italic;
   color: #6a4a20;
@@ -577,8 +577,8 @@
   text-overflow: ellipsis;
 }
 
-.satchel-titlebar .satchel-help,
-.satchel-titlebar .satchel-exit {
+.journal-titlebar .journal-help,
+.journal-titlebar .journal-exit {
   top: 50%;
   bottom: auto;
   transform: translateY(-50%);
@@ -590,36 +590,36 @@
   filter: brightness(1.4);
 }
 
-.satchel-titlebar .satchel-help { right: 56px; }
-.satchel-titlebar .satchel-exit { right: 8px; }
-.satchel-help:focus-visible, .satchel-exit:focus-visible, .satchel-raison-close:focus-visible {
+.journal-titlebar .journal-help { right: 56px; }
+.journal-titlebar .journal-exit { right: 8px; }
+.journal-help:focus-visible, .journal-exit:focus-visible, .journal-raison-close:focus-visible {
   outline: 2px solid #e8c890;
   outline-offset: 2px;
 }
-.satchel-titlebar .satchel-help:active,
-.satchel-titlebar .satchel-exit:active {
+.journal-titlebar .journal-help:active,
+.journal-titlebar .journal-exit:active {
   transform: translateY(calc(-50% + 1px));
 }
 
-.satchel-app { top: 36px; }
+.journal-app { top: 36px; }
 
-.satchel-app,
-.satchel-titlebar {
+.journal-app,
+.journal-titlebar {
   cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M2 22l3-7 12-12 4 4-12 12z' fill='%23d8b890' stroke='%236a3a18'/><path d='M2 22l3-7 4 4z' fill='%23e8dcc0' stroke='%236a3a18'/><path d='M17 3l4 4 2-2-4-4z' fill='%23aa7838' stroke='%236a3a18'/></svg>") 2 22, auto;
 }
 
-.satchel-app button,
-.satchel-titlebar button { cursor: inherit; }
+.journal-app button,
+.journal-titlebar button { cursor: inherit; }
 
-.satchel-app ::-webkit-scrollbar, .satchel-app::-webkit-scrollbar { width: 10px; height: 10px; }
-.satchel-app ::-webkit-scrollbar-track, .satchel-app::-webkit-scrollbar-track { background: rgba(58, 26, 8, 0.4); border-radius: 6px; }
-.satchel-app ::-webkit-scrollbar-thumb, .satchel-app::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #aa7838 0%, #4a2a10 100%); border-radius: 6px; border: 2px solid rgba(26, 10, 5, 0.6); }
-.satchel-app ::-webkit-scrollbar-thumb:hover { filter: brightness(1.25); }
-.satchel-app, .satchel-app * { scrollbar-width: thin; scrollbar-color: #aa7838 rgba(58, 26, 8, 0.4); }
+.journal-app ::-webkit-scrollbar, .journal-app::-webkit-scrollbar { width: 10px; height: 10px; }
+.journal-app ::-webkit-scrollbar-track, .journal-app::-webkit-scrollbar-track { background: rgba(58, 26, 8, 0.4); border-radius: 6px; }
+.journal-app ::-webkit-scrollbar-thumb, .journal-app::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #aa7838 0%, #4a2a10 100%); border-radius: 6px; border: 2px solid rgba(26, 10, 5, 0.6); }
+.journal-app ::-webkit-scrollbar-thumb:hover { filter: brightness(1.25); }
+.journal-app, .journal-app * { scrollbar-width: thin; scrollbar-color: #aa7838 rgba(58, 26, 8, 0.4); }
 
 /* ── brass corner caps — brighten as knots are tied (bucketed) ── */
 
-.satchel-cap {
+.journal-cap {
   position: absolute;
   width: 26px;
   height: 26px;
@@ -636,14 +636,14 @@
     0 1px 3px rgba(0, 0, 0, 0.6);
   transition: filter 0.6s ease, box-shadow 0.6s ease;
 }
-.satchel-cap.tl { top: 2px; left: 2px; }
-.satchel-cap.tr { top: 2px; right: 2px; }
-.satchel-cap.bl { bottom: 2px; left: 2px; }
-.satchel-cap.br { bottom: 2px; right: 2px; }
+.journal-cap.tl { top: 2px; left: 2px; }
+.journal-cap.tr { top: 2px; right: 2px; }
+.journal-cap.bl { bottom: 2px; left: 2px; }
+.journal-cap.br { bottom: 2px; right: 2px; }
 
-.satchel-binding[data-relations="1"] .satchel-cap { filter: brightness(1.3) saturate(1.15); }
-.satchel-binding[data-relations="2"] .satchel-cap { filter: brightness(1.6) saturate(1.3); }
-.satchel-binding[data-relations="3"] .satchel-cap {
+.journal-binding[data-relations="1"] .journal-cap { filter: brightness(1.3) saturate(1.15); }
+.journal-binding[data-relations="2"] .journal-cap { filter: brightness(1.6) saturate(1.3); }
+.journal-binding[data-relations="3"] .journal-cap {
   filter: brightness(1.95) saturate(1.45);
   box-shadow:
     inset 0 1px 0 rgba(255, 248, 225, 0.55),
@@ -652,15 +652,15 @@
     0 0 10px rgba(232, 200, 130, 0.35);
 }
 
-/* ── the spine: width is set by satchel.js from the keep count ── */
+/* ── the spine: width is set by journal.js from the keep count ── */
 
-.satchel-spine {
+.journal-spine {
   width: 22px;
   min-width: 22px;
   flex-shrink: 0;
 }
 
-.satchel-spine-tally {
+.journal-spine-tally {
   writing-mode: vertical-rl;
   transform: rotate(180deg);
   font-size: 0.75rem;
@@ -672,7 +672,7 @@
 
 /* ── ribbon markers: red silk on every unopened entry ── */
 
-.satchel-ribbon {
+.journal-ribbon {
   display: inline-block;
   width: 4px;
   height: 15px;
@@ -682,10 +682,10 @@
   box-shadow: inset 0 1px 0 rgba(255, 220, 220, 0.4), 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
-.satchel-list-item { position: relative; }
+.journal-list-item { position: relative; }
 
 /* hover marginalia: an annotated row confesses its first note in the margin */
-.satchel-list-item[data-marginal]::after {
+.journal-list-item[data-marginal]::after {
   content: attr(data-marginal);
   position: absolute;
   left: calc(100% + 10px);
@@ -705,15 +705,15 @@
   transform: translateX(-4px);
   transition: opacity 0.15s ease, transform 0.15s ease;
 }
-.satchel-list-item[data-marginal]:hover::after,
-.satchel-list-item[data-marginal]:focus-visible::after {
+.journal-list-item[data-marginal]:hover::after,
+.journal-list-item[data-marginal]:focus-visible::after {
   opacity: 1;
   transform: translateX(0);
 }
 
 /* compact tables: the margin is too thin for a flyout; drop it in place */
 @media (max-width: 700px) {
-  .satchel-list-item[data-marginal]::after {
+  .journal-list-item[data-marginal]::after {
     left: 10px;
     right: auto;
     top: calc(100% - 2px);
@@ -721,7 +721,7 @@
   }
 }
 
-.satchel-list-item:focus-visible {
+.journal-list-item:focus-visible {
   outline: 2px solid #6a3010;
   outline-offset: -2px;
   background: rgba(120, 80, 40, 0.14);
@@ -729,7 +729,7 @@
 
 /* ── find-in-drawer ── */
 
-.satchel-find {
+.journal-find {
   font-family: inherit;
   font-size: 1rem;
   font-style: normal;
@@ -744,12 +744,12 @@
   box-sizing: border-box;
 }
 
-.satchel-find::placeholder { color: rgba(106, 48, 16, 0.75); font-style: normal; }
-.satchel-find:focus { outline: 2px solid #6a3010; outline-offset: 1px; background: rgba(255, 250, 235, 0.8); }
+.journal-find::placeholder { color: rgba(106, 48, 16, 0.75); font-style: normal; }
+.journal-find:focus { outline: 2px solid #6a3010; outline-offset: 1px; background: rgba(255, 250, 235, 0.8); }
 
 /* ── the slip: out of the book, back to the room that made the thing ── */
 
-.satchel-slip {
+.journal-slip {
   position: absolute;
   top: 6px;
   right: 8px;
@@ -767,41 +767,41 @@
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.satchel-slip:hover {
+.journal-slip:hover {
   transform: translateY(-2px) rotate(-0.5deg);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 252, 235, 0.7);
 }
 
-.satchel-slip:active { transform: translateY(0); }
-.satchel-slip:focus-visible { outline: 2px solid #6a3010; outline-offset: 2px; }
-.satchel-slip[hidden] { display: none; }
+.journal-slip:active { transform: translateY(0); }
+.journal-slip:focus-visible { outline: 2px solid #6a3010; outline-offset: 2px; }
+.journal-slip[hidden] { display: none; }
 
 @media (prefers-reduced-motion: reduce) {
-  .satchel-stamp { transition: none; }
-  .satchel-pen { transition: none; }
-  .satchel-cap { transition: none; }
-  .satchel-slip { transition: none; }
+  .journal-stamp { transition: none; }
+  .journal-pen { transition: none; }
+  .journal-cap { transition: none; }
+  .journal-slip { transition: none; }
 }
 
 /* ── narrow book: drawers stack above the note at 439px ── */
 @media (max-width: 560px) {
-  .satchel-binding { width: 96%; height: 94%; }
-  .satchel-cabinet { flex-direction: column; }
-  .satchel-drawers {
+  .journal-binding { width: 96%; height: 94%; }
+  .journal-cabinet { flex-direction: column; }
+  .journal-drawers {
     width: auto;
     min-width: 0;
     max-height: 38%;
     border-right: none;
     border-bottom: 2px solid rgba(80, 50, 20, 0.4);
   }
-  .satchel-tools { right: 12px; }
+  .journal-tools { right: 12px; }
 }
 
-/* Rainy Day (s.shadowOn) - the satchel's own weather.
+/* Rainy Day (s.shadowOn) - the journal's own weather.
    Rain on the leather: the oiled brown goes to a cold blue-black hide and
    the drawer light goes dim and even. A real palette shift, not an opacity
    wash (the dimming lives in styles/shadow.css). */
-.machine.shadow-on .satchel-app {
+.machine.shadow-on .journal-app {
   background:
     radial-gradient(ellipse at 50% 30%, rgba(58, 82, 108, 0.3) 0%, rgba(0, 0, 0, 0) 60%),
     linear-gradient(180deg, #141c26 0%, #0a0e14 100%);
@@ -811,7 +811,7 @@
    drawers, counted on the shelf. Sits under the stamped tally number
    in the scribe's graphite hand; hides itself when nothing is unread. */
 
-.satchel-spine::after {
+.journal-spine::after {
   content: attr(data-unread);
   display: block;
   writing-mode: vertical-rl;
@@ -824,4 +824,4 @@
   min-height: 1em;
 }
 
-.satchel-spine[data-unread="0"]::after { content: none; }
+.journal-spine[data-unread="0"]::after { content: none; }

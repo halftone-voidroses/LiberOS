@@ -143,11 +143,11 @@ window.LiberAIML.buddy = {
     { p: 'HOW DOES THIS WORK', srai: 'HELP' },
     { p: 'STONE', t: ['The stone is where buddies are drawn — intention first, then color, then the hand.', 'Have you cast a stone yet? The desktop waits for its first orbit.'] },
     // ── rooms ──
-    { p: 'SATCHEL', t: ['The satchel is Riason\u2019s book — everything you keep lands there, with margins for notes.', 'Kept things live in the satchel. Open it when you want to re-read yourself.'] },
+    { p: 'SATCHEL', t: ['The journal is Riason\u2019s book — everything you keep lands there, with margins for notes.', 'Kept things live in the journal. Open it when you want to re-read yourself.'] },
     { p: 'SEA', t: ['The sea takes what you type and does not keep it. Good for the things too hot to hold.', 'Carrying something heavy? The sea will take one line of it.'] },
     { p: 'DREAM *', t: ['Bring the dream to the dreams room before noon — write it raw, strange parts included.', 'Dreams tell the inner truth. What image from it will not leave?'] },
     { p: 'DREAMS', t: ['The dreams room reads symbols the old way. Record first, interpret slowly.', 'What did you dream? Even a fragment counts.'] },
-    { p: 'GAMES', t: ['Whimsy\u2019s booths teach skills disguised as play. Results keep to the satchel.', 'Play one booth honestly and keep the result. The satchel remembers.'] },
+    { p: 'GAMES', t: ['Whimsy\u2019s booths teach skills disguised as play. Results keep to the journal.', 'Play one booth honestly and keep the result. The journal remembers.'] },
     { p: 'GARDEN', t: ['Ruby\u2019s garden is slow work — settle facets, plant drafts, watch them bloom.', 'Grow slow. What wants tending in you the way a garden wants water?'] },
     { p: 'DIVINATION|TAROT|CARD|CARDS', t: ['Ask one question, draw one card. The deck answers the situation around the question.', 'What is the one question you keep circling? Ask the deck that.'] },
     { p: 'LEARN', t: ['Learn holds the theories under the machine — Jung, art therapy, a little DBT — with citations.', 'Curious about the machinery? The Learn room shows its work.'] },

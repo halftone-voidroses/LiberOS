@@ -129,7 +129,7 @@ function playStorm(ctx, b, body) {
         ? 'steady drizzle, ' + executed + ' lightning words'
         : 'a heavy storm, ' + executed + ' lightning words. nothing lost.';
     ctx.promptSave(b, 'result: ' + weather + '.', function () {
-      ctx.saveToDesktopAndSatchel(b, { executed: executed, missed: missed, weather: weather }, shot);
+      ctx.saveToDesktopAndJournal(b, { executed: executed, missed: missed, weather: weather }, shot);
       if (result) result.textContent = 'kept. the tent remembers.';
     }, null);
   });

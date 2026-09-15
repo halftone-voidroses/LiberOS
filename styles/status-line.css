@@ -6,15 +6,14 @@
    through 4 phrasings every 12 seconds. Lowercase. Readable, not in
    your face.
 
-   Position: just above the dial band (dial owns the bottom 26%), so the
-   plate never collides with the dial options (audit minor 3, kept from
-   WS1). The plate top stays below the settings cog's bottom edge
-   (cog bottom = 26% + 40px; plate top ≈ 26% + 36px).
+   Position: lower-right plate, clear of the left-aligned keybank block
+   (keybank owns left 18px + 296px; the plate holds the right corner).
+   The plate top stays below the settings cog's bottom edge.
    ============================================================================ */
 
 .status-line {
   position: absolute;
-  bottom: calc(26% + 6px);
+  bottom: 10px;
   right: 14px;
   z-index: 30;
   padding: 7px 18px 8px 16px;

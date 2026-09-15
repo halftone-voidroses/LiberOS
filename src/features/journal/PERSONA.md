@@ -1,4 +1,4 @@
-# Persona — Satchel · The Librarian
+# Persona — Journal · The Librarian
 
 ## archetype
 archivist. keeper of the index. writes in pencil, stamps in red.

@@ -34,7 +34,7 @@ paragraph saying what it is made of. There are no unnamed materials.
 
 | feature folder | hook id | material | reads (state key) | owned by | empty condition |
 | --- | --- | --- | --- | --- | --- |
-| `satchel` | `shelf` | `shelf` | `satchel` | satchel.js | one bare board, bottom shelf, no volumes standing |
+| `journal` | `shelf` | `shelf` | `journal` | journal.js | one bare board, bottom shelf, no volumes standing |
 | `sea` | `pool` | `pool` | `sea`, `seaTide` | sea.js | damp stone, the waterline below the rim |
 | `trash` | `pool` | `pool` | `graveyard` | trash.js | the same basin drawn down; the yard and the pool share one water table |
 | `divination` | `board` | `board` | `relations` | sigil.js | a bare cork, four empty pin holes |
@@ -47,7 +47,7 @@ paragraph saying what it is made of. There are no unnamed materials.
 | `learn` | `—` | `none` | — | — | the card shelf already stands on the desk in the room's own register; a second copy on the bookshelf would be a duplicate prop, not evidence |
 | `about` | `—` | `none` | — | — | a colophon. It keeps nothing, so it leaves nothing. |
 | `cohort` | `—` | `none` | — | — | a retired surface; nothing it ever held is still reachable |
-| `dreams` | `dream-sheet` | `board` | `dreams`, `satchel` | crt-room.js (dreamSheet) | a second bare pin, no sheet — a dream kept to the book is what hangs one |
+| `dreams` | `dream-sheet` | `board` | `dreams`, `journal` | crt-room.js (dreamSheet) | a second bare pin, no sheet — a dream kept to the book is what hangs one |
 | `toybox` | `spill` | `floor` | `games` | crt-room.js (spillOf) | swept boards — the tray has not been turned out here yet |
 | `games` | `tickets` | `board` | `games` | crt-room.js (ticketsOf) | no twisted tickets on the corner pin — the midway keeps what the barker keeps |
 | `(machine)` | `candle` | `candle` | `sessionStart` | gamification.js | a full fresh stick, unlit until the visit starts |
@@ -63,7 +63,7 @@ now, each in the room's own material:
 
 - **Dreams** — a second sheet on the board: the most recent dream kept to the
   book, developed on arrival as a small dusk polaroid. Kept-ness is owned by
-  the satchel (`kind: 'dream'`, `ref` = dream id); the room reads both arrays
+  the journal (`kind: 'dream'`, `ref` = dream id); the room reads both arrays
   and derives — it never writes either.
 - **Toybox** — the spill the floor never quite gets clean: sand worked into
   the boards beside the desk, its depth fed by toybox keeps (each keep is a

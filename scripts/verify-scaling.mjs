@@ -35,7 +35,7 @@ function check(name, cond, detail) {
 
 // every real page: the reference size and the mobile end are the covenant's,
 // the rest are there because a window is dragged through them
-const PAGES = ['desktop', 'dreams', 'toybox', 'satchel', 'sea', 'divination', 'games',
+const PAGES = ['desktop', 'dreams', 'toybox', 'journal', 'sea', 'divination', 'games',
   'learn', 'garden', 'trash', 'buddy', 'sigil', 'themes', 'settings', 'about']
 const SHAPES = [[1920, 1080], [1440, 900], [1280, 800], [1100, 720], [1024, 700],
   [900, 640], [760, 560], [439, 800]]
@@ -194,7 +194,7 @@ console.log(`  · ${marks.size} plate mark(s) under ${FLOOR}px, kept as objects:
 console.log('5. the house degrades at 439px rather than piling up')
 const mob = await browser.newContext({ viewport: { width: 439, height: 800 } })
 const mp = await mob.newPage()
-for (const id of ['dreams', 'toybox', 'satchel', 'sea', 'divination', 'games']) {
+for (const id of ['dreams', 'toybox', 'journal', 'sea', 'divination', 'games']) {
   await mp.goto(`http://127.0.0.1:${PORT}/${id}.html`, { waitUntil: 'networkidle' })
   await mp.waitForTimeout(360)
   const r = await mp.evaluate(() => {

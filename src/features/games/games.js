@@ -29,7 +29,7 @@
   boothCtx = LiberBooths.makeBoothContext({
     app: app, stage: stage,
     promptSave: promptSave,
-    saveToDesktopAndSatchel: saveToDesktopAndSatchel,
+    saveToDesktopAndJournal: saveToDesktopAndJournal,
     thumb: thumb, esc: esc, thunk: thunk, setView: setView
   });
   var CAMERA_ORDER = ['mask', 'wheel', 'shield', 'circles', 'sand', 'tidepool', 'inkstorm', 'tipp'];
@@ -280,7 +280,7 @@
     } catch (e) { return null; }
   }
 
-  function saveToDesktopAndSatchel(b, result, shot) {
+  function saveToDesktopAndJournal(b, result, shot) {
     if (!window.Liber || !window.Liber.state) return;
     var payload = { kind: b.id, name: b.name, glyph: b.glyph, result: result, ts: Date.now() };
     if (shot) payload.shot = shot;
@@ -290,7 +290,7 @@
     if (window.Liber.state.addArtifact) {
       var mirror = { kind: 'game', ref: b.id, name: b.name, result: result, ts: Date.now() };
       if (shot) mirror.shot = shot;
-      window.Liber.state.addArtifact('satchel', mirror);
+      window.Liber.state.addArtifact('journal', mirror);
     }
     if (window.Liber.sound) { try { window.Liber.sound.play('chime'); } catch (e) {} }
   }

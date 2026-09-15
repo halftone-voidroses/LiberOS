@@ -1,0 +1,238 @@
+/* keybank.css — HOME CONSOLE · 3 × 4 · KEYBANK 03
+   Replacement for the radial dial strip (styles/dial.css retired on desktop).
+   Compact detached block, left-aligned beneath an almost-square tube. The lower
+   bezel stays open space; the keys float above it as one instrument.
+   No imports (covenant Q.1). Beige ABS plate, black phenolic stems, dark enamel
+   legends, room-phosphor lamps. Depth is the address, light is the room. */
+
+.keybank {
+  position: absolute;
+  left: 18px;
+  bottom: 12px;
+  z-index: 10;
+  pointer-events: auto;
+}
+
+.keybank-grid {
+  position: relative;
+  width: 296px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  padding: 9px 9px 11px;
+  background: linear-gradient(180deg, #e9ddc1 0, #c8b589 68%, #8e7650 100%);
+  border: 2px solid #786545;
+  border-radius: 5px 5px 12px 12px;
+  box-shadow:
+    inset 0 2px #fff9e7,
+    inset 0 -7px 11px rgba(78, 60, 39, 0.4),
+    0 4px 0 #4b3823,
+    0 10px 15px rgba(0, 0, 0, 0.6);
+}
+
+.keybank-grid::before {
+  content: "HOME CONSOLE \00B7 3 \00D7 4 \00B7 KEYBANK 03";
+  position: absolute;
+  left: 10px;
+  top: -17px;
+  color: #4b3823;
+  text-shadow: 0 1px 0 #eee1c3;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 7px;
+  letter-spacing: 0.12em;
+}
+
+/* staggered rows read as one compact keyboard from the desk */
+.keybank-key:nth-child(n+5) { transform: translateY(-7px); }
+.keybank-key:nth-child(n+9) { transform: translateY(-14px); }
+
+.keybank-key {
+  --accent: #c8a878;
+  --glow: rgba(200, 168, 120, 0.42);
+  position: relative;
+  min-width: 0;
+  min-height: 64px;
+  padding: 0 2px;
+  border: 1px solid #6b593d;
+  border-radius: 4px 4px 3px 3px;
+  background: linear-gradient(180deg, #fff8e7 0 8%, #d4c39d 8% 12%, #efdfb8 12% 73%, #bba777 73% 100%);
+  box-shadow:
+    inset 0 1px #fff,
+    0 3px 0 #635037,
+    0 5px 7px rgba(0, 0, 0, 0.4);
+  color: #21150b;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 8px;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s, filter 0.12s;
+}
+
+/* sloped cap top */
+.keybank-key::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  left: 4px;
+  right: 4px;
+  top: 4px;
+  height: 37%;
+  border-radius: 3px 3px 4px 4px;
+  clip-path: polygon(7% 0, 93% 0, 100% 100%, 0 100%);
+  background: linear-gradient(180deg, #fffbed 0, #e4d7b8 55%, #b39d70 100%);
+  box-shadow: inset 0 1px #fff, 0 2px 2px rgba(90, 71, 47, 0.4);
+}
+
+/* front edge */
+.keybank-key::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  left: 4px;
+  right: 4px;
+  bottom: 0;
+  height: 28%;
+  border-top: 1px solid #a38b5d;
+  background: linear-gradient(180deg, #dbc99f, #b39b6b);
+  border-radius: 0 0 2px 2px;
+  opacity: 0.84;
+}
+
+.keybank-label {
+  position: absolute;
+  z-index: 2;
+  left: 4px;
+  right: 4px;
+  top: 51%;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+  font-size: 7px;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  color: #21150b;
+  font-weight: 700;
+  text-shadow: 0 1px 0 #fff9df;
+}
+
+.keybank-lamp {
+  position: absolute;
+  z-index: 3;
+  top: 12%;
+  left: 50%;
+  width: 8px;
+  height: 4px;
+  border-radius: 2px;
+  transform: translateX(-50%);
+  background: #52422d;
+  box-shadow: inset 0 1px 1px #21160e;
+}
+
+.keybank-key:hover,
+.keybank-key:focus-visible {
+  filter: brightness(1.1);
+  outline: 2px solid #f8d995;
+  outline-offset: 2px;
+}
+
+/* HOME gets the dark brass cap + maker's mark */
+.keybank-key.home-key {
+  background: linear-gradient(180deg, #dbbb78 0 8%, #a68048 8% 12%, #caa35f 12% 73%, #76532d 73% 100%);
+  border-color: #bc914d;
+  box-shadow: inset 0 1px #fff2c5, 0 3px 0 #49351e, 0 5px 7px rgba(0, 0, 0, 0.45);
+}
+.keybank-key.home-key::before {
+  background: linear-gradient(180deg, #f0d18b, #b78943 58%, #755129);
+  box-shadow: inset 0 1px #fff2c5, 0 2px 2px rgba(57, 35, 14, 0.4);
+}
+.keybank-key.home-key::after {
+  background: linear-gradient(180deg, #bd914d, #6d4a27);
+  border-color: #d9b66f;
+}
+.keybank-key.home-key .keybank-label { color: #160d06; text-shadow: 0 1px 0 #e8ca83; }
+.keybank-key.home-key .keybank-lamp { background: #f4d487; box-shadow: 0 0 9px 3px rgba(244, 212, 135, 0.6); }
+
+/* struck blanking plug: visible, named, part of the map */
+.keybank-key.blank-key {
+  background: linear-gradient(180deg, #aaa087 0 8%, #766b55 8% 12%, #81765f 12% 73%, #4c4032 73% 100%);
+  cursor: default;
+}
+.keybank-key.blank-key::before {
+  background: linear-gradient(180deg, #c1b99e, #827860 58%, #5c5140);
+}
+.keybank-key.blank-key .keybank-label { color: #17110b; text-shadow: 0 1px 0 #b8aa88; }
+
+/* current: the key sits down. visited: a spent ember stays warm. */
+.keybank-key:active,
+.keybank-key.active {
+  transform: translateY(4px);
+  box-shadow: inset 0 1px #fff, 0 1px 0 #6b5638, 0 0 15px var(--glow);
+}
+.keybank-key:nth-child(n+5):active,
+.keybank-key:nth-child(n+5).active { transform: translateY(-3px); }
+.keybank-key:nth-child(n+9):active,
+.keybank-key:nth-child(n+9).active { transform: translateY(-10px); }
+
+.keybank-key.active .keybank-lamp,
+.keybank-key.visited .keybank-lamp {
+  background: var(--accent);
+  box-shadow: 0 0 9px 3px var(--glow);
+}
+
+/* sigil locked after the first stone: struck but still viewable */
+.keybank-key.crossed .keybank-label { text-decoration: line-through; }
+.keybank-key.crossed::after {
+  content: "";
+  position: absolute;
+  z-index: 4;
+  left: 8%;
+  right: 8%;
+  top: 62%;
+  height: 1px;
+  background: #2a0a05;
+  box-shadow: 0 1px 0 #c8a878;
+  transform: rotate(-8deg);
+}
+
+.keybank-status {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -18px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: rgba(200, 184, 144, 0.6);
+  text-align: left;
+  pointer-events: none;
+}
+
+@media (max-width: 600px) {
+  /* lifted clear of the bottom-center bezel carvings (compass/grate/hook
+     ride at bezel bottom:44px and overlay the glass down here). */
+  .keybank { left: 8px; bottom: 52px; }
+  .keybank-grid {
+    width: min(208px, calc(100vw - 130px));
+    gap: 3px;
+    padding: 7px 7px 9px;
+  }
+  .keybank-key { min-height: 46px; }
+  /* no row stagger on the small glass: overlapped caps fail hit-testing */
+  .keybank-key:nth-child(n+5) { transform: none; }
+  .keybank-key:nth-child(n+9) { transform: none; }
+  .keybank-key:nth-child(n+5):active,
+  .keybank-key:nth-child(n+5).active,
+  .keybank-key:nth-child(n+9):active,
+  .keybank-key:nth-child(n+9).active { transform: translateY(4px); }
+  .keybank-label { font-size: 6px; letter-spacing: 0.04em; }
+  .keybank-lamp { width: 7px; }
+  .keybank-key::before { left: 3px; right: 3px; top: 3px; }
+  .keybank-key::after { left: 3px; right: 3px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .keybank-key { transition: none; }
+}

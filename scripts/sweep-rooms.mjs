@@ -25,7 +25,7 @@ const OUT = process.env.SWEEP_OUT || '.sweep'
 const ROOMS = process.argv.slice(2).length
   ? process.argv.slice(2).map(r => (r.endsWith('.html') ? r : r + '.html'))
   : ['desktop.html', 'sigil.html', 'divination.html', 'dreams.html', 'games.html',
-     'garden.html', 'sea.html', 'satchel.html', 'learn.html', 'themes.html',
+     'garden.html', 'sea.html', 'journal.html', 'learn.html', 'themes.html',
      'settings.html', 'trash.html', 'toybox.html', 'about.html', 'index.html',
      'loading.html']
 

@@ -117,7 +117,7 @@ async function seed(tier, opts = {}) {
       cutsceneBuild: 'riasondemo2',
       tutorialDone: true, tutorialStage: 'done',
       visited,
-      satchel: [{ id: 's1', kind: 'note', text: 'first', ts: now }],
+      journal: [{ id: 's1', kind: 'note', text: 'first', ts: now }],
       sea: opts.sea || [],
       graveyard: opts.grave || [],
       relations: opts.rels || [],
@@ -145,7 +145,7 @@ await page.waitForTimeout(300);
 await page.evaluate(() => {
   const L = window.Liber;
   const s = L.state.get();
-  L.state.set({ satchel: (s.satchel || []).concat([{ id: 's2', kind: 'dream', name: 'kept two', ts: Date.now() }]) });
+  L.state.set({ journal: (s.journal || []).concat([{ id: 's2', kind: 'dream', name: 'kept two', ts: Date.now() }]) });
 });
 await page.waitForTimeout(400);
 const s3 = await page.evaluate(() => window.Liber.crtRoom.facts());
@@ -276,15 +276,15 @@ await page.reload({ waitUntil: 'networkidle' });
 await page.waitForTimeout(600);
 const s11 = await page.evaluate(() => {
   const toggle = document.getElementById('crt-room-toggle');
-  const dial = document.getElementById('dial-row');
+  const keys = document.getElementById('keybank');
   return {
     toggleHidden: getComputedStyle(toggle).display === 'none',
-    dialAlive: dial && dial.children.length > 0,
+    dialAlive: keys && keys.children.length === 12,
     sceneThere: !!document.getElementById('crt-room')
   };
 });
 check('affordance hidden when the room is hidden', s11.toggleHidden);
-check('the dial still turns', s11.dialAlive);
+check('the keybank still answers', s11.dialAlive);
 check('scene built but sleeping', s11.sceneThere);
 
 // ─── 12. 439px: the room survives the small screen ────────────────────

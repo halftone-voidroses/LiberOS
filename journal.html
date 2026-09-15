@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="icon" href="data:,">
+  <title>Journal — Riason</title>
+  <link rel="stylesheet" href="styles/room.css"/>
+  <link rel="stylesheet" href="styles/machine.css"/>
+  <link rel="stylesheet" href="styles/bezel.css"/>
+  <link rel="stylesheet" href="styles/scars.css"/>
+  <link rel="stylesheet" href="styles/house.css"/>
+  <link rel="stylesheet" href="src/features/journal/journal.css"/>
+  <link rel="stylesheet" href="src/features/journal/house.css"/>
+  <link rel="stylesheet" href="styles/shadow.css"/>
+  <link rel="stylesheet" href="styles/fate.css"/>
+  <link rel="stylesheet" href="styles/hijack.css"/>
+</head>
+<body>
+  <canvas class="dust-canvas" aria-hidden="true"></canvas>
+  <canvas class="static-canvas" aria-hidden="true"></canvas>
+
+  <div class="room">
+    <div class="machine">
+      <div class="bezel">
+        <div class="carvings" id="carvings"></div>
+        <div class="vent-slits" aria-hidden="true"></div>
+        <div class="corruption-scars" aria-hidden="true">
+          <div class="scar scar-1"></div>
+          <div class="scar scar-2"></div>
+          <div class="scar scar-3"></div>
+          <div class="scar scar-4"></div>
+          <div class="scar scar-5"></div>
+          <div class="scar scar-6"></div>
+        </div>
+        <div class="led" aria-hidden="true"></div>
+        <div class="liber-plate">LIBER · VACUI</div>
+        <div class="power-button" aria-hidden="true"></div>
+        <div class="screw" aria-hidden="true"></div>
+
+        <div class="screen">
+          <div class="screen-stage">
+            <header class="journal-titlebar">
+              <span class="journal-titlebar-name">The Journal</span>
+              <span class="journal-titlebar-sub">for the reader's hand</span>
+              <button class="journal-help" type="button" id="journal-help" aria-label="how this room works">?</button>
+              <button class="journal-exit" type="button" id="journal-exit" aria-label="leave">×</button>
+            </header>
+            <div class="journal-app" data-state="journal">
+
+              <div class="journal-raison" id="journal-raison" inert>
+                <div class="journal-raison-inner">
+                  <div class="journal-raison-head">
+                    <span class="journal-raison-name">riason</span>
+                    <button class="journal-raison-close" type="button" id="journal-raison-close" aria-label="close">×</button>
+                  </div>
+                  <div class="journal-raison-body">
+                    riason keeps this book. three drawers — buddies, artifacts, knots. click a tab, then an entry; write on the page. the pens are yours: highlight a passage, click the highlight, leave a note. the red ribbons are what arrived since you last opened the book.
+                  </div>
+                </div>
+              </div>
+
+              <div class="journal-binding">
+                <div class="journal-cap tl" aria-hidden="true"></div>
+                <div class="journal-cap tr" aria-hidden="true"></div>
+                <div class="journal-cap bl" aria-hidden="true"></div>
+                <div class="journal-cap br" aria-hidden="true"></div>
+
+                <div class="journal-spine" id="journal-spine">
+                  <div class="journal-spine-text">RIASON</div>
+                  <div class="journal-spine-text">BOUND MMXXVI</div>
+                  <div class="journal-spine-tally" id="journal-spine-tally">—</div>
+                </div>
+
+                <div class="journal-cabinet" id="journal-cabinet">
+                  <div class="journal-drawers" id="journal-drawers">
+                    <div class="journal-tabcards" role="tablist" aria-label="journal drawers">
+                      <button type="button" class="journal-tab" data-tab="buddy" role="tab" aria-selected="true">buddy</button>
+                      <button type="button" class="journal-tab" data-tab="artifacts" role="tab" aria-selected="false">artifacts</button>
+                      <button type="button" class="journal-tab" data-tab="relations" role="tab" aria-selected="false">relations</button>
+                    </div>
+                    <div class="journal-list" id="journal-list" role="tabpanel"></div>
+                    <input class="journal-find" id="journal-find" type="text" autocomplete="off" spellcheck="false" placeholder="find in drawer…" aria-label="find in this drawer" />
+                  </div>
+
+                  <div class="journal-note" id="journal-note">
+                    <div class="journal-note-head">
+                      <div class="journal-note-title" id="journal-note-title">— — —</div>
+                      <div class="journal-note-date" id="journal-note-date">— —</div>
+                      <button type="button" class="journal-slip" id="journal-slip" hidden></button>
+                    </div>
+                    <img class="journal-polaroid" id="journal-polaroid" alt="kept image" hidden />
+                    <div class="journal-intention" id="journal-intention"></div>
+                    <div class="journal-editor" id="journal-editor" contenteditable="true" spellcheck="false" aria-label="note"></div>
+                    <div class="journal-tools" id="journal-tools" role="toolbar" aria-label="pens"></div>
+                    <div class="journal-stamp" aria-hidden="true">ex libris · liber vacui</div>
+                  </div>
+                </div>
+
+                <div class="journal-pop" id="journal-pop" hidden>
+                  <div class="journal-pop-text" id="journal-pop-text"></div>
+                  <textarea class="journal-pop-note" id="journal-pop-note" rows="3" aria-label="note on this passage"></textarea>
+                  <div class="journal-pop-actions">
+                    <button type="button" id="journal-pop-save">keep</button>
+                    <button type="button" id="journal-pop-clear">unmark</button>
+                    <button type="button" id="journal-pop-close" aria-label="close">×</button>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="monitor-base" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <script src="src/state.js"></script>
+  <script src="src/stage.js"></script>
+  <script src="src/room-shell.js"></script>
+  <script src="data/rooms.data.js"></script>
+  <script src="src/house.js"></script>
+  <script src="src/sound.js"></script>
+  <script src="src/soundscape.js"></script>
+  <script src="src/dust.js"></script>
+  <script src="src/static.js"></script>
+  <script src="src/shadow.js"></script>
+  <script src="src/apply-theme.js"></script>
+  <script src="src/carvings.js"></script>
+  <script src="data/fate.data.js"></script>
+  <script src="src/fate.js"></script>
+  <script src="data/hijack.data.js"></script>
+  <script src="src/hijack.js"></script>
+  <script src="src/features/journal/journal.js"></script>
+  <script src="src/liberchat-mount.js"></script>
+</body>
+</html>

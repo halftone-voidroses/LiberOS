@@ -216,7 +216,7 @@ function playSand(ctx, b, body) {
     if (used[SAND_FIRE]) names.push('fire');
     if (used[SAND_WALL]) names.push('wall');
     ctx.promptSave(b, 'result: a powder world of ' + (names.join(', ') || 'dust') + '.', function () {
-      ctx.saveToDesktopAndSatchel(b, { strokes: strokes, elements: names }, shot);
+      ctx.saveToDesktopAndJournal(b, { strokes: strokes, elements: names }, shot);
       if (result) result.textContent = 'kept. the tent remembers.';
     }, null);
   });

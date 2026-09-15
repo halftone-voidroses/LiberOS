@@ -262,11 +262,11 @@ window.LIBER_DATA.citations = {
       "category": "accessible-practical",
       "source": "Winnicott, D. W. (1953). Transitional objects and transitional phenomena. International Journal of Psycho-Analysis, 34, 89-97.",
       "claimedFor": [
-        "the satchel as a keeping-place — artifacts as transitional objects",
+        "the journal as a keeping-place — artifacts as transitional objects",
         "the garden's seeds and the gem drafts as things held between inner and outer",
         "the alchemy of the games' paint-by-number drafts"
       ],
-      "note": "Winnicott: the blanket, the teddy, the first 'not-me possession'. The satchel's kept things live in the same territory — between the inner world and the outer one."
+      "note": "Winnicott: the blanket, the teddy, the first 'not-me possession'. The journal's kept things live in the same territory — between the inner world and the outer one."
     },
     {
       "id": "klein-1932",

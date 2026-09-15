@@ -283,7 +283,7 @@
       var sid = 'sat-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
       var short = why.length > 60 ? why.substring(0, 60) + '...' : why;
       if (st().addArtifact) {
-        st().addArtifact('satchel', { id: sid, kind: 'kept-reason', name: short, text: why, ts: Date.now() });
+        st().addArtifact('journal', { id: sid, kind: 'kept-reason', name: short, text: why, ts: Date.now() });
       }
       if (st().bindRelation) {
         try { st().bindRelation(sid, short, gy.entry.id); } catch (e) {}

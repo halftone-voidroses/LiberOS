@@ -6,7 +6,7 @@
   left: 0;
   right: 0;
   top: 0;
-  bottom: 26%;
+  bottom: 8px;
   z-index: 6;
   pointer-events: none;
 }
@@ -283,7 +283,7 @@
   border-radius: 2px;
 }
 .constellation-mini-open:hover { background: rgba(74, 138, 170, 0.15); }
-.constellation-mini-satchel {
+.constellation-mini-journal {
   background: transparent;
   border: 1px solid #aa7838;
   color: #d8c090;
@@ -293,7 +293,7 @@
   cursor: pointer;
   border-radius: 2px;
 }
-.constellation-mini-satchel:hover { background: rgba(170, 120, 56, 0.15); }
+.constellation-mini-journal:hover { background: rgba(170, 120, 56, 0.15); }
 .constellation-mini-bind-label {
   font-family: 'VT323', monospace;
   font-size: 0.85rem;

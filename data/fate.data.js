@@ -7,7 +7,7 @@ window.LIBER_DATA.fate = {
   desktop:     { voice: 'wanderlust', lines: ['the town fills window by window. begin with the stone.', 'the floor suggests. nothing is owed.'] },
   sigil:       { voice: 'mistress physius', lines: ['the stone remembers what the hand confesses.', 'say it like a chisel. intention, never volume.'] },
   buddy:      { voice: 'e-lizabeth', lines: ['speak, and it is kept.', 'two exchanges, then the wax can hold them.'] },
-  satchel:     { voice: 'riason', lines: ['kept once, kept well. the margins take notes.', 'everything kept is kept once. index it well.'] },
+  journal:     { voice: 'riason', lines: ['kept once, kept well. the margins take notes.', 'everything kept is kept once. index it well.'] },
   sea:         { voice: 'vanir', lines: ['the water takes. it does not keep.', 'come down anyway. the breath is slow.'] },
   garden:      { voice: 'ruby', lines: ['grow slow. fill the stone, plant it below.', 'what is tended in patience flowers in its own colour.'] },
   dreams:      { voice: 'insightful inquiry', lines: ['i am not certain. bring the dream anyway.', 'a symbol, a weight, a question. never a verdict.'] },

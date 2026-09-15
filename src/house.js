@@ -12,7 +12,7 @@
 // the same two hooks, re-made in this room's own material, exactly as
 // liberdev/room-hooks.md names them —
 //   lamp   the session light, burning down as you sit (state.sessionStart)
-//   shelf  one volume per satchel keep, standing on this room's shelf
+//   shelf  one volume per journal keep, standing on this room's shelf
 //   pool   the water table, in the one room of the house that has one
 //   board  one pinned card per relation
 // A page shows one room, so nothing here is rendered twice.
@@ -31,7 +31,7 @@
   // patina thresholds mirror src/shadow.js PATINA_TIERS (visits + keeps)
   var PATINA_TIERS = [2, 6, 12];
   var KEEP_KINDS = ['buddy', 'divination', 'games', 'learn', 'abstract', 'sea',
-    'garden', 'dreams', 'satchel', 'methodology', 'council'];
+    'garden', 'dreams', 'journal', 'methodology', 'council'];
 
   // the session light: a fresh wick each sitting, spent over the hour
   var CANDLE_MS = 60 * 60 * 1000;
@@ -176,7 +176,7 @@
       scene.appendChild(lamp);
     }
 
-    // the shelf: one volume per satchel keep, bottom board first
+    // the shelf: one volume per journal keep, bottom board first
     var shelf = null, rows = null;
     if (has(ROOM.memory, 'shelf')) {
       shelf = el('div', 'house-shelf');
@@ -228,7 +228,7 @@
 
     // re-render when a feed changed, or once a minute so the light burns
     var sig = [
-      (s.satchel || []).length,
+      (s.journal || []).length,
       (s.sea || []).length,
       (s.graveyard || []).length,
       (s.relations || []).length,
@@ -253,7 +253,7 @@
     // the shelf: one volume per keep, bottom board first, capped — a shelf
     // gets filled, it does not get stacked to the ceiling
     if (ui.rows) {
-      var keeps = Array.isArray(s.satchel) ? s.satchel : [];
+      var keeps = Array.isArray(s.journal) ? s.journal : [];
       var want = Math.min(keeps.length, PER_ROW * SHELF_ROWS);
       var vols = ui.shelf.querySelectorAll('.house-volume');
       var have = vols.length;

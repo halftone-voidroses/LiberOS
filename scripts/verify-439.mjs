@@ -21,14 +21,14 @@
 // Baselines are RECORDED ARTIFACTS, not allowances to grow. Each one names
 // what it is:
 //
-//   desktop  clip=2  the dial arrows' ::after hit-area extenders inflate
-//                    their scrollHeight past the 32px box on every
-//                    viewport; pre-existing, cosmetic, not lane C's.
+//   desktop  clip=0  keybank has no hit-area extender pseudo-elements;
+//                    the retired dial arrows' ::after extenders are gone
+//                    with the radial strip.
 //   toybox   dead=3  shelf objects scrolled out of a horizontal strip's
 //                    visible 70px (the strip scrolls them into reach —
 //                    lane C's compact layout). The probe counts the
 //                    out-of-view objects' centres; they are reachable.
-//   satchel  dead=1  the find input's centre hit-test resolves to the
+//   journal  dead=1  the find input's centre hit-test resolves to the
 //                    binding's decorative SVG — lane B's room, reported,
 //                    not fixed here (SHARED-RULES §4).
 //
@@ -60,22 +60,22 @@ const SEED = { cutsceneBuild: 'riasondemo2', tutorialDone: true, tutorialStage: 
 
 // room → its exit control (the × that walks out to the desktop). Rooms
 // without an entry are home or machine pages; their exit contract is the
-// dial, checked on the desktop row below.
+// keybank, checked on the desktop row below.
 const EXIT = {
   divination: 'divination-exit', learn: 'learn-exit', games: 'games-exit',
-  satchel: 'satchel-exit', themes: 'themes-exit', garden: 'garden-exit',
+  journal: 'journal-exit', themes: 'themes-exit', garden: 'garden-exit',
   toybox: 'toybox-exit', trash: 'trash-exit', sea: 'sea-exit',
   dreams: 'dreams-exit', buddy: 'buddy-exit',
 }
 
 const BASELINE = {
-  desktop: { dead: 0, clip: 2 },
+  desktop: { dead: 0, clip: 0 },
   toybox: { dead: 3, clip: 0 },
-  satchel: { dead: 1, clip: 0 },
+  journal: { dead: 1, clip: 0 },
 }
 const baselineFor = r => BASELINE[r] || { dead: 0, clip: 0 }
 
-const ROOMS = ['desktop', 'sigil', 'divination', 'learn', 'games', 'satchel',
+const ROOMS = ['desktop', 'sigil', 'divination', 'learn', 'games', 'journal',
   'sea', 'garden', 'dreams', 'themes', 'settings', 'trash', 'toybox',
   'about', 'index', 'loading']
 
@@ -184,21 +184,21 @@ for (const room of ROOMS) {
   }
 }
 
-// the desktop's own way out is the dial: it turns and its arrows answer
+// the desktop's own way out is the keybank: twelve sockets answer
 await loadClean('desktop')
 const dial = await page.evaluate(() => {
-  const row = document.getElementById('dial-row')
-  const l = document.getElementById('dial-left'), r = document.getElementById('dial-right')
+  const grid = document.getElementById('keybank')
   const hit = el => {
     if (!el) return false
     const b = el.getBoundingClientRect()
     const t = document.elementFromPoint(Math.round(b.left + b.width / 2), Math.round(b.top + b.height / 2))
     return !!t && (t === el || el.contains(t) || t.contains(el))
   }
-  return { options: row ? row.children.length : 0, left: hit(l), right: hit(r) }
+  const keys = grid ? Array.from(grid.children) : []
+  return { options: keys.length, first: hit(keys[0]), last: hit(keys[keys.length - 1]) }
 })
-check('the dial turns at 439px', dial.options >= 3, dial.options + ' options')
-check('the dial arrows answer', dial.left && dial.right)
+check('the keybank answers at 439px', dial.options === 12, dial.options + ' keys')
+check('the keybank ends answer', dial.first && dial.last)
 
 // and the room behind the CRT still opens on the small glass
 await loadClean('desktop')

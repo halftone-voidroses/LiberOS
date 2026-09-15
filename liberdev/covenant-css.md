@@ -120,7 +120,7 @@ so the prose cannot drift.
 | --- | --- | --- | --- | --- |
 | `dreams` | the sleeping nook | insightful inquiry | damp plaster, wool, alkaline paper | lamp on a cord, warm; the moon, cold |
 | `toybox` | the bathroom | pip | glazed tile, chipped enamel, wet grout, brass | bare bulb on a cord; a frosted fanlight |
-| `satchel` | the study | riason | indexed vellum, brass clasps, oak, ink | a green-glass banker's lamp; the window dark behind its curtain |
+| `journal` | the study | riason | indexed vellum, brass clasps, oak, ink | a green-glass banker's lamp; the window dark behind its curtain |
 | `sea` | the basement | vanir | wet slate, mortar, iron pipe, salt bloom | a caged bulb, cold yellow; no daylight, only the sump |
 | `divination` | the observatory | arcana | plaster, chalk, felt, brass, night air | a red darkroom lamp, low; the dome slit on the cold |
 | `games` | the play room | whimsy wow | painted floorboards, cream wallpaper, tin, festoon bulbs | a festoon run; daylight through the pane |

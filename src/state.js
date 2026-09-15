@@ -26,9 +26,10 @@
     sea: [],                 // sea artifacts
     seaTide: { releases: 0, level: 0 },    // ROOM 06 brass tide clock: the waterline memory across visits
     graveyard: [],          // buried artifacts, awaiting the dig
-    satchel: [],            // satchel items
+    journal: [],            // journal items
     methodology: [],        // methodology artifacts
-    council: [],            // council artifacts    garden: [],              // ruby's garden — planted seeds / flowers in bloom
+    council: [],            // council artifacts
+    garden: [],             // ruby's garden — planted seeds / flowers in bloom
     tree: null,              // ruby's glasshouse tree — one plant, grown between visits (garden/tree.js)
                              //   read-only here: the room and the window box mirror it, never write it
     dreams: [],             // recorded dreams, kept for interpretation
@@ -73,9 +74,17 @@
       if (Array.isArray(parsed.relations)) {
         parsed.relations = parsed.relations.map(function (r) { return (r && r.to === 'sigil') ? Object.assign({}, r, { to: 'buddy' }) : r; });
       }
+      // The book was called the satchel. The name changed; what was filed in it
+      // did not — the shelf behind the CRT counts these, and a rename that
+      // empties the shelf is a rename that ate someone's keeps.
+      if (Array.isArray(parsed.satchel) && parsed.satchel.length &&
+          (!Array.isArray(parsed.journal) || parsed.journal.length === 0)) {
+        parsed.journal = parsed.satchel;
+      }
+      delete parsed.satchel;
       if (parsed.cutsceneBuild !== CUTSCENE_BUILD) {
         parsed.cutsceneBuild = CUTSCENE_BUILD;
-        var retours = ['walkSatchel', 'walkSea', 'walkAbstract', 'walkDivination', 'walkDreams', 'walkGarden', 'walkGames', 'walkMethod', 'walkThemes', 'walkRelation', 'walkTrash', 'walkSigil', 'walkLearn'];
+        var retours = ['walkJournal', 'walkSea', 'walkAbstract', 'walkDivination', 'walkDreams', 'walkGarden', 'walkGames', 'walkMethod', 'walkThemes', 'walkRelation', 'walkTrash', 'walkSigil', 'walkLearn'];
         for (var ri = 0; ri < retours.length; ri++) delete parsed[retours[ri]];
         var shelve = ['buddy', 'relations', 'divination', 'games', 'learn', 'abstract', 'sea', 'garden', 'dreams'];
         var grave = Array.isArray(parsed.graveyard) ? parsed.graveyard.slice() : [];
@@ -211,7 +220,7 @@
     emit('change', state);
   }
 
-  // Relation margin notes — the satchel writes here; the ledger reads here.
+  // Relation margin notes — the journal writes here; the ledger reads here.
   function setRelationNote(fromId, note) {
     var relations = (state.relations || []).slice();
     var touched = false;

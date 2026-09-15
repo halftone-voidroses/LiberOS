@@ -199,7 +199,7 @@
       if (!raw && id === 'keep') raw = localStorage.getItem('liber_vacui_v1');
       if (!raw) return 'empty';
       var s = JSON.parse(raw);
-      var kinds = ['buddy', 'divination', 'games', 'learn', 'abstract', 'sea', 'garden', 'dreams', 'satchel', 'methodology'];
+      var kinds = ['buddy', 'divination', 'games', 'learn', 'abstract', 'sea', 'garden', 'dreams', 'journal', 'methodology'];
       var n = 0, i;
       for (i = 0; i < kinds.length; i++) if (Array.isArray(s[kinds[i]])) n += s[kinds[i]].length;
       return (n ? n + ' kept' : 'empty') + (s.tutorialDone ? '' : ' · new');

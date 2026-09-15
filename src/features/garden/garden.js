@@ -1,6 +1,6 @@
 // garden.js — Ruby. Two connected games. The jumbled gem is a paint-by-numbers
 // stone: pour colour from the wells, settle every facet, and the click ledger
-// becomes an svg draft — kept in the satchel or planted in the garden bed as a
+// becomes an svg draft — kept in the journal or planted in the garden bed as a
 // seed. Planted seeds bloom into black-and-white paint-by-number flowers that
 // learn their colours from what is painted onto them. No shared imports.
 // PRNG mirrors src/prompt-engine.js (xmur3 + mulberry32); features never
@@ -310,7 +310,7 @@
     return n;
   }
 
-  // saving plants: the draft is kept in the satchel with its picture,
+  // saving plants: the draft is kept in the journal with its picture,
   // and the seed goes straight into the bed. One button, no fork.
   function saveDraft() {
     if (!window.Liber || !window.Liber.state) return;
@@ -319,7 +319,7 @@
     var svg = draftSvg();
     var shot = null;
     try { shot = 'data:image/svg+xml;utf8,' + encodeURIComponent(svg); } catch (e) {}
-    window.Liber.state.addArtifact('satchel', {
+    window.Liber.state.addArtifact('journal', {
       kind: 'gem-draft',
       name: given || 'a draft of colouring',
       svg: svg,

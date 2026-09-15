@@ -21,7 +21,7 @@
 // `memory` names which of the machine's hooks (liberdev/room-hooks.md) this
 // room re-makes in its own material:
 //   lamp  — the session light, burning down with state.sessionStart
-//   shelf — one volume per satchel keep, on this room's shelf
+//   shelf — one volume per journal keep, on this room's shelf
 //   pool  — the water table, where the room keeps one (state.sea, .graveyard)
 //   board — one pinned card per relation (state.relations)
 //
@@ -66,8 +66,8 @@ window.LiberRooms = {
     weather: true
   },
 
-  satchel: {
-    id: 'satchel',
+  journal: {
+    id: 'journal',
     place: 'the study',
     traveller: 'riason',
     substrate: 'indexed vellum, brass clasps, oak, ink',

@@ -150,7 +150,7 @@ function playWheel(ctx, b, body) {
     var last = darts[darts.length - 1];
     var shot = wheelShot(last);
     ctx.promptSave(b, 'result: ' + darts.length + ' dart' + (darts.length === 1 ? '' : 's') + ', last landed ' + last.emotion + ' in ' + last.color + '.', function () {
-      ctx.saveToDesktopAndSatchel(b, { darts: darts }, shot);
+      ctx.saveToDesktopAndJournal(b, { darts: darts }, shot);
       if (result) result.textContent = 'kept. the tent remembers.';
     }, null);
   });

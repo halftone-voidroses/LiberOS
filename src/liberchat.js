@@ -39,7 +39,7 @@
   }
   function personaList() {
     var reg = personas();
-    var order = ['index', 'buddy', 'sigil', 'satchel', 'sea', 'games', 'divination', 'garden', 'dreams', 'learn', 'themes', 'trash', 'toybox'];
+    var order = ['index', 'buddy', 'sigil', 'journal', 'sea', 'games', 'divination', 'garden', 'dreams', 'learn', 'themes', 'trash', 'toybox'];
     var list = [];
     order.forEach(function (id) { if (reg[id]) list.push(reg[id]); });
     Object.keys(reg).forEach(function (id) { if (order.indexOf(id) < 0) list.push(reg[id]); });
@@ -102,7 +102,7 @@
 
   // affinity key per persona (affinity.js thresholds are keyed by traveller)
   var WHO = {
-    sigil: 'physius', satchel: 'riason', sea: 'vanir', buddy: 'elizabeth',
+    sigil: 'physius', journal: 'riason', sea: 'vanir', buddy: 'elizabeth',
     games: 'whimsy', divination: 'arcana', garden: 'ruby', dreams: 'inquiry'
   };
 
@@ -144,7 +144,7 @@
     var chat = p.chat || {};
     if (!chat.context) return null;
     var s = readState();
-    var KEPT = ['buddy', 'divination', 'games', 'sea', 'satchel', 'garden', 'dreams', 'iching', 'methodology', 'council'];
+    var KEPT = ['buddy', 'divination', 'games', 'sea', 'journal', 'garden', 'dreams', 'iching', 'methodology', 'council'];
     var n = 0;
     KEPT.forEach(function (k) { if (Array.isArray(s[k])) n += s[k].length; });
     var line = chat.context[key];

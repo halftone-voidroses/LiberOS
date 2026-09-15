@@ -1,5 +1,5 @@
 /* ============================================================================
-   satchel/house.css — the study.
+   journal/house.css — the study.
 
    Riason's room of the house. Oak panelling with a dado rail across it, a
    bookcase that has stopped being shelving and become a wall, vellum and ink,
@@ -19,7 +19,7 @@
               set to a day that is not today, papers left where they fell
    ============================================================================ */
 
-.house-scene[data-house="satchel"] {
+.house-scene[data-house="journal"] {
   --house-wall-hi: #4a3620;
   --house-wall: #33240f;
   --house-wall-lo: #1a1207;
@@ -75,13 +75,13 @@
 }
 
 /* ── the glass: night, and a curtain that is drawn ──────────────────────── */
-.house-scene[data-house="satchel"] .house-window {
+.house-scene[data-house="journal"] .house-window {
   background-image: linear-gradient(180deg, #1b2334 0%, #131a28 60%, #0b0f18 100%);
 }
 
 /* the lamp is a banker's lamp: a green glass half-dome with the light under
    it, which is why the wall behind it is the brightest thing in the room */
-.house-scene[data-house="satchel"] .house-lamp-body {
+.house-scene[data-house="journal"] .house-lamp-body {
   border-radius: 50% 50% 10% 10% / 90% 90% 14% 14%;
   background: linear-gradient(180deg, #2f6a44 0%, #1d4a2e 58%, #0e2417 100%);
   box-shadow:
@@ -91,17 +91,17 @@
 }
 
 /* ── the index board: a card per relation ───────────────────────────────── */
-.house-scene[data-house="satchel"] .house-pins {
+.house-scene[data-house="journal"] .house-pins {
   background: linear-gradient(180deg, #6a5232 0%, #4a381c 100%);
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.5), 0 3px 8px rgba(0, 0, 0, 0.5);
 }
-.house-scene[data-house="satchel"] .house-pin {
+.house-scene[data-house="journal"] .house-pin {
   background: linear-gradient(180deg, #ece2c8 0%, #c8bca0 100%);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
 }
 
 /* ── the bookcase, below the ledger: a wall that stopped being shelving ─── */
-.house-scene[data-house="satchel"] .house-prop[data-prop="bookcase"] {
+.house-scene[data-house="journal"] .house-prop[data-prop="bookcase"] {
   --x: 1.2; --y: 6.8; --w: 5; --h: 5;
   border-radius: 2px;
   background:
@@ -114,7 +114,7 @@
   box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6);
 }
 
-.house-scene[data-house="satchel"] .house-prop[data-prop="curtain"] {
+.house-scene[data-house="journal"] .house-prop[data-prop="curtain"] {
   /* hangs at the near edge of the glass, wherever the glass is */
   --y: 0; --h: 9;
   left: calc(var(--house-band-x) + var(--house-glass-x) - 1.4 * var(--house-unit) / 100);
@@ -127,7 +127,7 @@
 }
 
 /* ── below the machine: the drawer unit, and the papers on the boards ──── */
-.house-scene[data-house="satchel"] .house-prop[data-prop="cabinet"] {
+.house-scene[data-house="journal"] .house-prop[data-prop="cabinet"] {
   --x: 1; --y: 0; --w: 4.6; --h: 3.6;
   border-radius: 2px 2px 1px 1px;
   background:
@@ -141,14 +141,14 @@
 }
 
 /* one card left proud of the drawer, because it was pulled out and not back */
-.house-scene[data-house="satchel"] .house-prop[data-prop="card"] {
+.house-scene[data-house="journal"] .house-prop[data-prop="card"] {
   --x: 5.6; --y: 0.4; --w: 1.4; --h: 2.2;
   background: linear-gradient(180deg, #ece2c8 0%, #c0b498 100%);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.65);
   transform: rotate(-6deg);
 }
 
-.house-scene[data-house="satchel"] .house-prop[data-prop="papers"] {
+.house-scene[data-house="journal"] .house-prop[data-prop="papers"] {
   --x: 8; --y: 0.3; --w: 8; --h: 1.5;
   background:
     linear-gradient(102deg, rgba(0, 0, 0, 0) 0 46%, #d8ccb0 46% 100%),

@@ -58,7 +58,7 @@
   --house-pins-h: 5;
 
   /* in machine units, like every other measure in the house — see
-     src/features/satchel/house.css for why a percentage is wrong here */
+     src/features/journal/house.css for why a percentage is wrong here */
   --house-window-h: 17;
   --house-window-t: 2;
 }

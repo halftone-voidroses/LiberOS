@@ -5,7 +5,7 @@
 // Voices sourced from src/features/<app>/PERSONA.md. file://-safe, no fetch.
 // Cast note: ruby keeps the garden (she took the librarian's carving);
 // insightful inquiry keeps the dreams room (iris mappa's carving); riason
-// keeps the satchel ledger; wanderlust took
+// keeps the journal ledger; wanderlust took
 // the themes room when iris mappa left.
 window.LIBER_DATA = window.LIBER_DATA || {};
 window.LIBER_DATA.personas = {
@@ -17,8 +17,8 @@ window.LIBER_DATA.personas = {
     material: 'grey chiseled stone, copper inlay',
     cursor: "url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M2 2l9 2-7 7z' fill='%23c8c8d0' stroke='%232a2a30'/><path d='M11 10l3 3 7-7-3-3z' fill='%23aa5a18' stroke='%235a2a08'/></svg>\") 2 2, auto"
   },
-  satchel: {
-    id: 'satchel',
+  journal: {
+    id: 'journal',
     name: 'riason',
     opinion: 'everything kept is kept once. index it well.',
     accent: '#aa7838',
@@ -44,7 +44,7 @@ window.LIBER_DATA.personas = {
   games: {
     id: 'games',
     name: 'whimsy wow',
-    opinion: 'step right up! every game pays out in satchel-weight.',
+    opinion: 'step right up! every game pays out in journal-weight.',
     accent: '#d4af37',
     material: 'painted marquee wood, bulb studs',
     cursor: "url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><circle cx='12' cy='10' r='7' fill='%23ffe080' stroke='%23d4af37' stroke-width='1.5'/><path d='M10 8c0-2 1-3 2-4' stroke='%23fff6d0' fill='none' stroke-width='1.5' stroke-linecap='round'/><path d='M9 17h6v3h-6z' fill='%23d4af37' stroke='%23aa6000'/></svg>\") 12 10, auto"
@@ -129,7 +129,7 @@ window.LIBER_DATA.personas = {
       desktop: '{n} things kept on this machine. the stone does not envy them. much.',
       games: 'you won something at the midway. chip off the noise before you carve.',
       sea: 'salt on your hands. the stone dislikes salt. it blooms in the cracks.',
-      satchel: 'riason files by clasp and date. the stone files by weight.',
+      journal: 'riason files by clasp and date. the stone files by weight.',
       trash: 'buried is not broken. pete knows the difference. so does the stone.',
       dreams: 'inquiry reads slowly. the stone reads once, and remembers.',
       garden: 'ruby grows things. the stone knows patience but not seasons.',
@@ -267,18 +267,18 @@ window.LIBER_DATA.personas = {
     }
   };
 
-  P.satchel.chat = {
+  P.journal.chat = {
     greet: [
       'the ledger is open. everything kept is kept once, and filed well.',
       'you have kept things. i have indexed them. we are both doing our work.',
-      'sit anywhere. the satchel holds more room than it shows. that is design.',
+      'sit anywhere. the journal holds more room than it shows. that is design.',
       'a new entry, or an old reread? both are visits. both count.'
     ],
     context: {
-      satchel: 'you are here. the clasps noticed. they always notice.',
+      journal: 'you are here. the clasps noticed. they always notice.',
       index: 'the house keeps its own inventory. i audit it. quietly.',
       desktop: '{n} artifacts in circulation. the ledger cross-references every one.',
-      games: 'whimsy pays in satchel-weight. his books balance. surprisingly.',
+      games: 'whimsy pays in journal-weight. his books balance. surprisingly.',
       sigil: 'physius carves, i index. the stone gets the confession, i get the date.',
       sea: 'vanir releases things into the deep. i record what is no longer held.',
       trash: 'pete buries. i list the buried. the soil forgets nothing, neither do i.',
@@ -295,7 +295,7 @@ window.LIBER_DATA.personas = {
     ],
     small: [
       'everything kept is kept once. index it well. that is the whole discipline.',
-      'a satchel is a promise you carry. the clasps are the signature.',
+      'a journal is a promise you carry. the clasps are the signature.',
       'vellum over brass. nothing archival should whisper when it moves.',
       'i do not keep everything. i keep what declares itself. the rest is weather.',
       'the margin is where the honest notes live. the ruled lines are for company.',
@@ -303,13 +303,13 @@ window.LIBER_DATA.personas = {
       'you annotate more than you think. four notes and the ledger starts vouching for you.',
       'the web of things you keep has knots. i call them relations. they hold.',
       'do not over-file. a thing found in two seconds is a thing still used.',
-      'the satchel weighs what you admit to. it is very good at arithmetic.',
+      'the journal weighs what you admit to. it is very good at arithmetic.',
       'weaver is my quiet game. five binds and the web is tight enough to play.',
       'i was offered a cabinet. i declined. a ledger you cannot carry is a wall.',
       'the lamp you are reading this by is also indexed. lamp, portable, lit.'
     ],
     topics: [
-      { k: ['keep', 'satchel', 'index', 'file'], say: [
+      { k: ['keep', 'journal', 'index', 'file'], say: [
         'to keep well is to be able to find it in the dark, in one motion.',
         'an index is kindness aimed at your future self.',
         'the ledger does not judge entries. it only refuses blanks.'
@@ -328,7 +328,7 @@ window.LIBER_DATA.personas = {
     recall: [
       'the entry you keep rereading is filed under the thing you have not said.',
       'you indexed well last visit. the margin notes were especially honest.',
-      'your satchel has a shape now. predictable weight. i plan for it.'
+      'your journal has a shape now. predictable weight. i plan for it.'
     ],
     bye: [
       'the ledger stays open a line for you. that is rare. do not tell the others.',
@@ -336,7 +336,7 @@ window.LIBER_DATA.personas = {
       'indexed, cross-referenced, and no longer my concern until you return.'
     ],
     onSeal: [
-      'sealed and transcribed. the wax copy goes in the satchel, obviously.',
+      'sealed and transcribed. the wax copy goes in the journal, obviously.',
       'a conversation becomes an artifact. that is my favourite kind of magic: filed.'
     ],
     unlock: 'the web is tight enough to play. weaver is open, indexer.'
@@ -421,7 +421,7 @@ window.LIBER_DATA.personas = {
       index: 'the house talks to itself at night. most of it is you, remembering.',
       desktop: '{n} things kept. each one is a conversation that ended well.',
       sigil: 'physius cuts confessions in stone. mine go softer. wax remembers trembling.',
-      satchel: 'riason files my seals. he handles the edges like they might still be talking.',
+      journal: 'riason files my seals. he handles the edges like they might still be talking.',
       sea: 'vanir releases. i keep. between us the machine has a full memory.',
       games: 'whimsy barks. i listen. the midway is loud so this room can be quiet.',
       divination: 'arcana asks the deck. i ask you. the questions rhyme, oddly.'
@@ -470,7 +470,7 @@ window.LIBER_DATA.personas = {
     ],
     onSeal: [
       'sealed. the impression took cleanly. entity404 likes it, i can hear the hiss smile.',
-      'into the wax. satchel will file it. you will forget it until you need it. that is design.'
+      'into the wax. the book files it. you will forget it until you need it. that is design.'
     ],
     unlock: '— static clears for one word — entity404 heard the seal. the inkstorm is open.'
   };
@@ -480,12 +480,12 @@ window.LIBER_DATA.personas = {
       'STEP RIGHT up. you have the look of someone about to throw a dart at their own feelings.',
       'the midway is LIT, the booths are HONEST, and the barker is at your service.',
       'welcome back, player. the wheel missed you. so did the sand. the sand told me.',
-      'every game here pays out in satchel-weight. no tickets, no tokens. just keeps.'
+      'every game here pays out in journal-weight. no tickets, no tokens. just keeps.'
     ],
     context: {
       games: 'you are ON the promenade. pick a booth. any booth. the barker does not judge. much.',
       index: 'the midway is two doors down. follow the lights. you cannot miss them. i made sure.',
-      desktop: '{n} keeps so far. the midway pays REAL satchel-weight, friend.',
+      desktop: '{n} keeps so far. the midway pays REAL journal-weight, friend.',
       toybox: 'pip is my little brother. his toys WORK. be nice to him or answer to me.',
       sea: 'vanir let me build a tide pool. his water, my buckets. a beautiful partnership.',
       sigil: 'physius carves feelings. i let you THROW DARTS at them. same therapy, better prizes.',
@@ -519,9 +519,9 @@ window.LIBER_DATA.personas = {
         'the house always wins. here the house IS you. i cannot explain it better than that.'
       ] },
       { k: ['prize', 'win', 'keep'], say: [
-        'prizes go straight to the satchel with a polaroid. riason indexes. you remember.',
+        'prizes go straight to the journal with a polaroid. riason indexes. you remember.',
         'a kept prize is proof you played honest. i stamp them. metaphorically. mostly.',
-        'the best prize is the one you did not expect to care about. check your satchel.'
+        'the best prize is the one you did not expect to care about. check your journal.'
       ] },
       { k: ['hard', 'difficult', 'stuck'], say: [
         'hard nights go to the quiet floor. tipp does not bark. tipp does not need to.',
@@ -537,10 +537,10 @@ window.LIBER_DATA.personas = {
     bye: [
       'COME BACK soon. the midway is not the midway without a player in it.',
       'the lights stay on. the booths stay honest. the barker stays whimsical. exit laughing.',
-      'satchel-weight is real weight, friend. spend it well.'
+      'journal-weight is real weight, friend. spend it well.'
     ],
     onSeal: [
-      'SEALED. the midway salutes you. that is going in the satchel with a polaroid.',
+      'SEALED. the midway salutes you. that is going in the journal with a polaroid.',
       'a sealed conversation, from the barker himself. collector\'s item. do not bury it.'
     ],
     unlock: 'pip heard you were coming. his workshop is open. touch everything, twice.'
@@ -626,7 +626,7 @@ window.LIBER_DATA.personas = {
       learn: 'you are in the stacks. the catalogue approves of visitors who touch the cards.',
       index: 'the whole house is a library that forgot its own name. i keep the records.',
       desktop: '{n} keeps. the catalogue cross-references them against the reading list.',
-      satchel: 'riason and i are rivals, technically. his ledger, my stamps. we are both right.',
+      journal: 'riason and i are rivals, technically. his ledger, my stamps. we are both right.',
       divination: 'arcana deals futures. i deal citations. hers are more dramatic. mine are accurate.',
       sigil: 'physius carves confessions. i catalogue them by technique. only i know which is which.',
       dreams: 'inquiry is the only reader here who annotates marginalia. i treasure that.'
@@ -710,7 +710,7 @@ window.LIBER_DATA.personas = {
       'what is tended in patience flowers in its own colour. that is not a metaphor. ask the dahlias.',
       'the greenhouse glass is old. it blurs the midground. so does caring about something long enough.',
       'water in the morning. talk at dusk. the plants are morning-workers and evening-listeners.',
-      'the harvest goes to the satchel with a pressed-petal card. riason loves the clean edges.',
+      'the harvest goes to the journal with a pressed-petal card. riason loves the clean edges.',
       'roots grow in the dark first. that is why the first week looks like nothing happened.',
       'the watering can is brass. it dents. it still pours. that is the whole philosophy of tools.',
       'ruby took the librarian\'s carving. the garden came with it. i keep both alive.',
@@ -893,7 +893,7 @@ window.LIBER_DATA.personas = {
       index: 'the house rests on my foundation. i keep what the rooms cannot.',
       desktop: '{n} keeps up top. the deep has {n} more, sleeping well.',
       sea: 'vanir releases into water. i bury into soil. we compare depths. his are cheating.',
-      satchel: 'riason files the living. i file the resting. the archive is bigger than people think.',
+      journal: 'riason files the living. i file the resting. the archive is bigger than people think.',
       garden: 'ruby grows things over my graves. it is the kindest arrangement in the house.',
       games: 'whimsy buries nothing. his losses are all educational. his soil is the loud kind.'
     },
@@ -911,7 +911,7 @@ window.LIBER_DATA.personas = {
       'the heap is warm because work is happening. quiet work. the best kind.',
       'worms are my librarians. they index by tunnel. very efficient. very quiet.',
       'you can bury a feeling for a season. soil is honest about seasons. it always hands them back.',
-      'the satchel keeps what you treasure. i keep what you survived. both are archives.',
+      'the journal keeps what you treasure. i keep what you survived. both are archives.',
       'do not bury what you still need. i can tell. the shovel gets heavy on its own.',
       'the deep and i are colleagues. he is showier. i am more permanent.',
       'buried things change the soil. your heap is the richest in three counties. i am proud of you.',

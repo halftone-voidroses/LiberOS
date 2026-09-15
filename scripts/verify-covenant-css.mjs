@@ -222,7 +222,7 @@ check('no stylesheet anywhere declares an electric blue-violet',
   electricAnywhere.length === 0, electricAnywhere.join(' | '))
 
 console.log('5. every room declares the material it is painted with')
-const ROOMS = ['dreams', 'toybox', 'satchel', 'sea', 'divination', 'games']
+const ROOMS = ['dreams', 'toybox', 'journal', 'sea', 'divination', 'games']
 for (const id of ROOMS) {
   const css = read(`src/features/${id}/house.css`)
   const declared = /SUBSTRATE/.test(css) && /LIGHT/.test(css) && /TELLS/.test(css)

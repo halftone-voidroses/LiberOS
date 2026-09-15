@@ -468,7 +468,7 @@
     linear-gradient(180deg, #241a12 0%, #120c06 100%);
   border-color: #6a4a30;
 }
-.dial-option[data-id="satchel"] {
+.dial-option[data-id="journal"] {
   background:
     linear-gradient(180deg, rgba(232, 220, 192, 0.08) 0%, rgba(0, 0, 0, 0) 30%),
     linear-gradient(180deg, #221408 0%, #100a04 100%);

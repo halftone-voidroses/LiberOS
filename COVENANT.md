@@ -122,7 +122,7 @@ Permitted material deviations by room — each is a traveller's material, not a 
 - Toybox: powder, sand, water, fire, small creatures with opinions
 - Garden: glasshouse, condensation you can wipe, roots under glass, tree in a pot
 - Sea: brass tide clock, black water, small light, buoy, bubbles
-- Satchel: leather, ribbon markers, brass corners, spine that thickens
+- Journal: leather, ribbon markers, brass corners, spine that thickens
 - Learn: index cards, stamped footnotes, drawer wall, typed vs. handwritten
 - Themes: pigment tiles, mapmaker's locker, hover preview at the room's edge
 - Settings: maintenance panel, VFD slot display, two-switch interlock

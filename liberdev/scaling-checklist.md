@@ -74,7 +74,7 @@ Measured, at the reference size (1280×800, machine 920 wide at x 27):
 | floor slot, below the machine | y 763 → 800 | the level sightline |
 
 **A prop that could not fit was not built.** Dreams went from eleven props to
-six, satchel from ten to five, games from six to five. A bed, a bath, a
+six, journal from ten to five, games from six to five. A bed, a bath, a
 telescope and a desk are all floor's worth of object, and this room's floor is
 a strip 37px tall. Two or three telling things on a wall beat eleven standing
 behind a monitor.
@@ -102,7 +102,7 @@ Those are legible and are left alone. The floor is a floor, not a preference.
 ### Plate marks: objects, not sentences
 
 Nine rendered strings sit below the floor deliberately, and are named in the
-verifier so a tenth has to be added on purpose: the satchel spine plates
+verifier so a tenth has to be added on purpose: the journal spine plates
 (`RIASON`, `BOUND MMXXVI`), the games shingles (`OVERWHELMED`, `CURIOUS`), the
 `about` chart's coordinates (`42°N`, `71°W`) and its legend (`scale: 1:1`,
 `datum: local`, `epoch: now`). A stamped mark is an object in the room; a

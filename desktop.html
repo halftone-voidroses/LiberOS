@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="styles/wallpaper.css"/>
   <link rel="stylesheet" href="styles/bezel.css"/>
   <link rel="stylesheet" href="styles/scars.css"/>
-  <link rel="stylesheet" href="styles/dial.css"/>
+  <link rel="stylesheet" href="styles/keybank.css"/>
   <link rel="stylesheet" href="styles/status-line.css"/>
   <link rel="stylesheet" href="styles/twelve-works.css"/>
   <link rel="stylesheet" href="styles/daily-floor.css"/>
@@ -59,7 +59,7 @@
                 <svg class="constellation-svg" id="constellation-svg" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet"></svg>
                 <div class="constellation-empty" id="constellation-empty">
                   — the desktop is empty —
-                  <div class="constellation-empty-sub">open the buddy from the dial.</div>
+                  <div class="constellation-empty-sub">press buddy on the case.</div>
                 </div>
               </div>
 
@@ -84,13 +84,9 @@
                 <span class="settings-cog-label">settings</span>
               </button>
 
-              <div class="dial">
-                <div class="dial-inner">
-                  <div class="dial-track" aria-hidden="true"></div>
-                  <div class="dial-row" id="dial-row"></div>
-                  <button class="dial-arrow left"  id="dial-left"  type="button" aria-label="previous">&lt;</button>
-                  <button class="dial-arrow right" id="dial-right" type="button" aria-label="next">&gt;</button>
-                </div>
+              <div class="keybank" role="group" aria-label="home console keybank">
+                <div class="keybank-grid" id="keybank"></div>
+                <div class="keybank-status" id="keybank-status" aria-live="polite">home / ready</div>
               </div>
 
               <div class="constellation-mini" id="constellation-mini" inert>
@@ -124,7 +120,7 @@
                   <div class="constellation-mini-actions">
                     <button type="button" class="constellation-mini-save" id="constellation-mini-save">bind to buddy</button>
                     <button type="button" class="constellation-mini-open" id="constellation-mini-open">open in room</button>
-                    <button type="button" class="constellation-mini-satchel" id="constellation-mini-satchel">open in satchel</button>
+                    <button type="button" class="constellation-mini-journal" id="constellation-mini-journal">open in journal</button>
                     <button type="button" class="constellation-mini-release" id="constellation-mini-release">release</button>
                   </div>
                 </div>
@@ -165,7 +161,7 @@
   <script src="data/personas.data.js"></script>
   <script src="data/citations.data.js"></script>
   <script src="data/twelve-works.data.js"></script>
-  <script src="src/dial.js"></script>
+  <script src="src/keybank.js"></script>
   <script src="src/affinity.js"></script>
   <script src="src/constellation.js"></script>
   <script src="src/twelve-works.js"></script>

@@ -450,7 +450,7 @@ check('the tall tube clears the ? tile', s11.tile.tubeTop > s11.tile.bottom,
 // place — and the lamp retires everywhere the tube arrives. The one thing a
 // room cannot afford is the tube sitting on its own controls.
 console.log('12. the tube in every room');
-const ROOMS = ['index', 'games', 'sea', 'divination', 'dreams', 'sigil', 'satchel',
+const ROOMS = ['index', 'games', 'sea', 'divination', 'dreams', 'sigil', 'journal',
   'garden', 'learn', 'themes', 'toybox', 'trash', 'settings', 'about'];
 for (const room of ROOMS) {
   await page.goto(`${BASE}/${room}.html`, { waitUntil: 'networkidle' });

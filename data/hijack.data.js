@@ -10,11 +10,11 @@ window.LIBER_DATA.hijack = {
   buddy: { flag: 'walkBuddy', steps: [
     { voice: 'riason', line: 'The wax room retired. e-lizabeth lives in the lamp now — the small light in the corner of every page. Talk to her there; the wax still seals.', target: null },
     { voice: 'riason', line: 'This page stays as an archive note. The conversation has not been lost, only moved.', target: null }
-  ] },  satchel: { flag: 'walkSatchel', steps: [
-    { voice: 'riason', line: 'Welcome to the satchel, my handiwork. Hem hem.', target: 'satchel-drawers' },
-    { voice: 'riason', line: 'Anyway, when you save relations, buddies, or set relations they get logged in the satchel, and you are able to write notes about them.', target: 'satchel-list' },
-    { voice: 'riason', line: 'Clicking on a category brings up the list you created, you can take notes on the right.', target: 'satchel-note' },
-    { voice: 'riason', line: 'On the bottom right there are highlighters and pens, give them a shot!', target: 'satchel-tools' },
+  ] },  journal: { flag: 'walkJournal', steps: [
+    { voice: 'riason', line: 'Welcome to the journal, my handiwork. Hem hem.', target: 'journal-drawers' },
+    { voice: 'riason', line: 'Anyway, when you save relations, buddies, or set relations they get logged in the journal, and you are able to write notes about them.', target: 'journal-list' },
+    { voice: 'riason', line: 'Clicking on a category brings up the list you created, you can take notes on the right.', target: 'journal-note' },
+    { voice: 'riason', line: 'On the bottom right there are highlighters and pens, give them a shot!', target: 'journal-tools' },
     { voice: 'riason', line: 'That is the whole of it. Three drawers, one page, pens in the corner. The rest you will figure out by using it.', target: null, glow: true }
   ] },
   sea: { flag: 'walkSea', steps: [
@@ -44,7 +44,7 @@ window.LIBER_DATA.hijack = {
     { voice: 'riason', line: 'Eight booths, every one keeps. Pick one on the left.', target: 'games-grid' },
     { voice: 'riason', line: 'The pitch tells you what it does. Read it first.', target: 'games-desc' },
     { voice: 'riason', line: 'Play it on the right. Keep what you made.', target: 'games-stage' },
-    { voice: 'riason', line: 'This is Whimsy\u2019s tent. Everything kept lands in the satchel.', target: 'games-grid', glow: true }
+    { voice: 'riason', line: 'This is Whimsy\u2019s tent. Everything kept lands in the journal.', target: 'games-grid', glow: true }
   ] },
   trash: { flag: 'walkTrash', steps: [
     { voice: 'riason', line: 'What you bury lands here. Nothing is gone, only underground.', target: 'trash-dig-list' },

@@ -12,7 +12,7 @@
 
   const VISITORS = [
     { id: 'sigil',       name: 'buddy'       },
-    { id: 'satchel',     name: 'satchel'     },
+    { id: 'journal',     name: 'journal'     },
     { id: 'sea',         name: 'sea'         },
     { id: 'games',       name: 'games'       },
     { id: 'toybox',      name: 'toybox'      },
@@ -169,7 +169,7 @@
   const BITMAPS = {
     sigil:       { acc: '#aa5a18', glow: 'rgba(170,90,24,0.42)',  svg: '<path d="M4 1h4v1H4zM5 2h3v1H5zM6 3h2v1H6zM7 4h1v1H7zM2 7h8v1H2zM3 8h6v1H3z"/>',
                    mark: '<path d="M2 9.6 q4 0.9 8 0.1" shape-rendering="geometricPrecision" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.4"/>' },
-    satchel:     { acc: '#aa7838', glow: 'rgba(170,120,56,0.42)', svg: '<path d="M2 2h8v1H2zM2 9h8v1H2zM2 3h1v6H2zM9 3h1v6H9zM4 3h1v6H4zM10 5h1v3h-1z"/>',
+    journal:     { acc: '#aa7838', glow: 'rgba(170,120,56,0.42)', svg: '<path d="M2 2h8v1H2zM2 9h8v1H2zM2 3h1v6H2zM9 3h1v6H9zM4 3h1v6H4zM10 5h1v3h-1z"/>',
                    mark: '<path d="M1.2 1.6 h1.2 M1.2 1.6 v1.2 M10.8 10.4 h-1.2 M10.8 10.4 v-1.2" shape-rendering="geometricPrecision" fill="none" stroke="currentColor" stroke-width="0.45" opacity="0.4"/>' },
     sea:         { acc: '#2a8a8a', glow: 'rgba(42,138,138,0.42)', svg: '<path d="M5 1h2v1H5zM4 2h4v2H4zM5 4h2v1H5zM1 8h2v1H1zM5 8h2v1H5zM9 8h2v1H9zM3 9h2v1H3zM7 9h2v1H7zM11 9h1v1h-1z"/>',
                    mark: '<path d="M1.4 11 q2.6 -1.2 5 0 q2.4 1.2 4.6 0" shape-rendering="geometricPrecision" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.4"/>' },
@@ -195,7 +195,7 @@
   // selected one.
   const MOTES = {
     sigil:       { color: '#c87838', round: '0%' },
-    satchel:     { color: '#d8c8a0', round: '0%' },
+    journal:     { color: '#d8c8a0', round: '0%' },
     sea:         { color: '#7ac0c8', round: '50%' },
     games:       { color: '#ffd86a', round: '0%' },
     toybox:      { color: '#e8a05a', round: '0%' },

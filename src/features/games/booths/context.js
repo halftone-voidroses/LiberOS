@@ -7,7 +7,7 @@ function makeBoothContext(tools) {
     app: tools.app,
     stage: tools.stage,
     promptSave: tools.promptSave,
-    saveToDesktopAndSatchel: tools.saveToDesktopAndSatchel,
+    saveToDesktopAndJournal: tools.saveToDesktopAndJournal,
     thumb: tools.thumb,
     esc: tools.esc,
     thunk: tools.thunk,

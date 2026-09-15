@@ -57,12 +57,12 @@ body.lc-sidecar-fit .lc-sidecar {
   top: -16px;
   right: -12px;
   z-index: 5;
-  padding: 3px 8px 4px;
+  padding: 3px 8px 5px;
   background: linear-gradient(178deg, #e9dda6 0%, #ddd093 78%, #d2c489 100%);
   color: #4a3a14;
   font-family: 'VT323', 'Courier New', monospace;
-  font-size: 11px;
-  letter-spacing: 0.16em;
+  font-size: 12px;
+  letter-spacing: 0.14em;
   line-height: 1;
   transform: rotate(2.2deg);
   box-shadow:
@@ -325,12 +325,13 @@ body.lc-sidecar-fit .lc-sidecar-glass-inner { min-height: 408px; }
   z-index: 1;
   padding: 3px 9px 4px;
   font-family: 'VT323', 'Courier New', monospace;
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.22em;
-  color: #a89878;
+  /* the plate is information, not texture: 6.14:1 on the bezel's own brass */
+  color: #d8c9a6;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.8);
 }
-.lc-sidecar-plate .lc-sidecar-model { opacity: 0.75; }
+.lc-sidecar-plate .lc-sidecar-model { opacity: 1; }
 
 /* Standby dot — presence. Lit while the tube is open; a slow standby
    shimmer while it waits. */
@@ -436,24 +437,32 @@ body.lc-sidecar-fit .lc-sidecar-glass-inner { min-height: 408px; }
 }
 
 /* The letterhead the sheet was cut for: the stamp, the form number, and the
-   circulation line. Under the raster, under whatever gets written on it. */
+   circulation line. Under the raster, under whatever gets written on it.
+
+   THE PRINT LIFT (aesthetic sweep §3). This component stands in sixteen
+   rooms, and its printed lines — `TX-80/3 · second tube`, `for internal
+   circulation only` — were rendering at 8px and ≈1.6:1: ink on paper
+   that was there to be a texture rather than to be read. A form number
+   nobody can read is not diegetic, it is decoration. The print is now
+   10.5px on the same sheet at 0.72 ink (≈5.9:1), so the sheet still reads
+   as a printer's slip and the slip can be read. */
 .lc-sidecar-letterhead {
   position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
   font-family: 'VT323', 'Courier New', monospace;
-  font-size: 8px;
-  letter-spacing: 0.2em;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(92, 67, 38, 0.45);
+  color: rgba(74, 52, 24, 0.72);
 }
 .lc-sidecar-stamp {
   position: absolute;
   left: 50%;
   top: 44%;
   transform: translate(-50%, -50%);
-  opacity: 0.15;
+  opacity: 0.3;
 }
 .lc-sidecar-form { position: absolute; left: 20px; top: 5px; }
 .lc-sidecar-circulate { position: absolute; left: 20px; bottom: 5px; letter-spacing: 0.14em; }

@@ -3,7 +3,7 @@
 // machine keeps what you did. Every hook is fed by real state — nothing
 // decorative:
 //
-//   shelf    one ledger volume per satchel keep (s.satchel)
+//   shelf    one ledger volume per journal keep (s.journal)
 //   pool     rises with every sea release and graveyard burial (s.sea,
 //            s.graveyard, and ROOM 06's finer seaTide memory — whichever is higher)
 //   candle   session arc — melts across the visit, relit on return
@@ -23,7 +23,7 @@
   // Patina thresholds mirror src/shadow.js PATINA_TIERS (visits + keeps).
   var PATINA_TIERS = [2, 6, 12];
   var KEEP_KINDS = ['buddy', 'divination', 'games', 'learn', 'abstract',
-    'sea', 'garden', 'dreams', 'satchel', 'methodology', 'council'];
+    'sea', 'garden', 'dreams', 'journal', 'methodology', 'council'];
 
   // The glasshouse tree's stage math, mirrored read-only from
   // src/features/garden/tree.js (which owns s.tree). 40 min per stage,
@@ -67,13 +67,13 @@
     return t;
   }
 
-  // shelf: one volume per satchel keep; each keep kind stains its spine
+  // shelf: one volume per journal keep; each keep kind stains its spine
   var SPINES = {
     note: '#7a6a8a', kept: '#8a5a3a', dream: '#5a6a8a', game: '#8a6a2a',
     'tree-pressing': '#5a7a4a', 'kept-reason': '#7a4a4a'
   };
   function shelfKeeps(s) {
-    var arr = Array.isArray(s.satchel) ? s.satchel : [];
+    var arr = Array.isArray(s.journal) ? s.journal : [];
     return arr.slice(-24).map(function (e, i) {
       var h = 30 + ((i * 7 + arr.length * 3) % 22);
       return { kind: (e && e.kind) || 'kept', h: h, w: 6 + ((i * 5) % 5), i: i };
@@ -374,14 +374,14 @@
     var sd = Array.isArray(s.dreams) ? s.dreams : [];
     if (sd.length) {
       var refs = {};
-      var sat = Array.isArray(s.satchel) ? s.satchel : [];
+      var sat = Array.isArray(s.journal) ? s.journal : [];
       for (var si = 0; si < sat.length; si++) {
         if (sat[si] && sat[si].kind === 'dream' && sat[si].ref) refs[sat[si].ref] = 1;
       }
       for (var di = 0; di < sd.length; di++) if (sd[di] && refs[sd[di].id]) keptDreamCount++;
     }
     var sig = [
-      (s.satchel || []).length, (s.sea || []).length, (s.graveyard || []).length,
+      (s.journal || []).length, (s.sea || []).length, (s.graveyard || []).length,
       (s.relations || []).length, s.shadowOn ? 1 : 0, s.sessionStart || 0,
       s.tree ? (s.tree.stageAt || 0) + '-' + (s.tree.grown || 0) + '-' + (s.tree.seen || 0) : 'x',
       keptDreamCount,
@@ -409,7 +409,7 @@
     ui.scene.classList.toggle('crt-room-rainy', rainy);
     if (rainy !== !!rainDrops) { if (rainy) buildRain(); else clearRain(); }
 
-    // shelf: one volume per satchel keep — six to a board, four boards,
+    // shelf: one volume per journal keep — six to a board, four boards,
     // and the shelf fills the way a shelf fills: bottom board first
     var PER_ROW = 6;
     var ROWS = ui.shelfRows.length;
@@ -441,7 +441,7 @@
     } else {
       filled = have;
     }
-    var total = (s.satchel || []).length;
+    var total = (s.journal || []).length;
     if (total > PER_ROW * ui.shelfRows.length && !ui.scene.querySelector('.crt-shelf-more')) {
       var m = el('span', 'crt-shelf-more');
       m.textContent = '+' + (total - PER_ROW * ui.shelfRows.length) + ' on the lower shelves';
@@ -637,14 +637,14 @@
   // dreams: a second sheet pinned on the corkboard, developed on arrival.
   // The most recent dream KEPT TO THE BOOK shows as a small dusk polaroid:
   // the fog the dream was written in has dried into paper. Kept-ness lives
-  // in the satchel (kind 'dream', ref = dream id) — that is the owner; the
+  // in the journal (kind 'dream', ref = dream id) — that is the owner; the
   // room reads both arrays and derives.
   function dreamSheet(s) {
     var dreams = Array.isArray(s.dreams) ? s.dreams : [];
     var keptRefs = {};
-    var satchel = Array.isArray(s.satchel) ? s.satchel : [];
-    for (var i = 0; i < satchel.length; i++) {
-      if (satchel[i] && satchel[i].kind === 'dream' && satchel[i].ref) keptRefs[satchel[i].ref] = true;
+    var journal = Array.isArray(s.journal) ? s.journal : [];
+    for (var i = 0; i < journal.length; i++) {
+      if (journal[i] && journal[i].kind === 'dream' && journal[i].ref) keptRefs[journal[i].ref] = true;
     }
     var kept = dreams.filter(function (d) { return d && keptRefs[d.id]; });
     if (!kept.length) return null;
@@ -704,7 +704,7 @@
   }
 
   var HOOKS = [
-    { id: 'shelf', material: 'shelf', reads: ['satchel'], empty: 'one empty board, bottom shelf, no volumes' },
+    { id: 'shelf', material: 'shelf', reads: ['journal'], empty: 'one empty board, bottom shelf, no volumes' },
     { id: 'pool', material: 'pool', reads: ['sea', 'seaTide', 'graveyard'], empty: 'damp stone, the waterline below the rim' },
     { id: 'candle', material: 'candle', reads: ['sessionStart'], empty: 'a full fresh stick, unlit until the visit starts' },
     { id: 'board', material: 'board', reads: ['relations', 'buddy'], empty: 'a bare cork, four empty pin holes' },
@@ -712,7 +712,7 @@
     { id: 'window', material: 'window', reads: ['tree'], empty: 'an empty pot on wet newspaper' },
     { id: 'weather', material: 'weather', reads: ['shadowOn'], empty: 'clear weather, the tube at its default bloom' },
     { id: 'patina', material: 'patina', reads: ['visited'], empty: 'new dust, unworn floor, furniture as bought' },
-    { id: 'dream-sheet', material: 'board', reads: ['dreams', 'satchel'], empty: 'a second bare pin, no sheet — a dream kept to the book is what hangs one' },
+    { id: 'dream-sheet', material: 'board', reads: ['dreams', 'journal'], empty: 'a second bare pin, no sheet — a dream kept to the book is what hangs one' },
     { id: 'spill', material: 'floor', reads: ['games'], empty: 'swept boards — the tray has not been turned out here yet' },
     { id: 'tickets', material: 'board', reads: ['games'], empty: 'no twisted tickets on the corner pin — the midway keeps what the barker keeps' },
     { id: 'slips', material: 'floor', reads: ['chat', 'buddy'], empty: 'swept boards beside the desk — nothing printed and left unkept' }
@@ -732,7 +732,7 @@
       var s = (st() && st().get()) || {};
       return {
         tier: tierOf(s),
-        keeps: (s.satchel || []).length,
+        keeps: (s.journal || []).length,
         pool: poolLevel(s),
         candle: candleH(s),
         relations: (s.relations || []).length,

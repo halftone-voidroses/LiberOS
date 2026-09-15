@@ -1,6 +1,6 @@
 // verify-desks.mjs — lane B desk-chrome acceptance (redesign-pitch.html,
-// sections "ROOM 10 · Satchel — the book" and "ROOM 11 · Learn"):
-//   satchel: spine state from artifact counts · ribbons from unreads ·
+// sections "ROOM 10 · Journal — the book" and "ROOM 11 · Learn"):
+//   journal: spine state from artifact counts · ribbons from unreads ·
 //     hover marginalia · corner caps from relations · slip out intact ·
 //     notes and highlights unchanged
 //   learn: dated marginalia hand · index-card shelf · citation stamps
@@ -42,9 +42,9 @@ async function goto(path, wait = 500) {
   await page.waitForTimeout(wait);
 }
 
-// ── satchel: the reading desk ──────────────────────────────────────
-console.log('satchel — spine, ribbons, marginalia, caps');
-await goto('/satchel.html');
+// ── journal: the reading desk ──────────────────────────────────────
+console.log('journal — spine, ribbons, marginalia, caps');
+await goto('/journal.html');
 await page.evaluate(() => {
   window.Liber.state.set({
     divination: [
@@ -59,19 +59,19 @@ await page.waitForTimeout(400);
 // the first-visit walkthrough overlays the room until skipped
 try { await page.click('.hijack-skip', { timeout: 2000 }); } catch (e) {}
 await page.waitForTimeout(200);
-await page.click('.satchel-tab[data-tab="artifacts"]');
+await page.click('.journal-tab[data-tab="artifacts"]');
 await page.waitForTimeout(200);
 const desk = await page.evaluate(() => {
-  const spine = document.getElementById('satchel-spine');
-  const binding = document.querySelector('.satchel-binding');
+  const spine = document.getElementById('journal-spine');
+  const binding = document.querySelector('.journal-binding');
   return {
-    caps: document.querySelectorAll('.satchel-cap').length,
+    caps: document.querySelectorAll('.journal-cap').length,
     relBucket: binding ? binding.getAttribute('data-relations') : null,
     spineW: spine ? parseFloat(spine.style.width) : null,
     unreadAttr: spine ? spine.getAttribute('data-unread') : null,
-    ribbons: document.querySelectorAll('.satchel-ribbon').length,
-    rows: document.querySelectorAll('.satchel-list-item').length,
-    marginalText: (document.querySelector('.satchel-list-item[data-marginal]') || { getAttribute: () => null }).getAttribute('data-marginal'),
+    ribbons: document.querySelectorAll('.journal-ribbon').length,
+    rows: document.querySelectorAll('.journal-list-item').length,
+    marginalText: (document.querySelector('.journal-list-item[data-marginal]') || { getAttribute: () => null }).getAttribute('data-marginal'),
   };
 });
 check('four brass caps crown the binding', desk.caps === 4, String(desk.caps));
@@ -85,25 +85,25 @@ const hoverRule = await page.evaluate(() => {
   for (const sheet of document.styleSheets) {
     let rules; try { rules = sheet.cssRules; } catch (e) { continue; }
     for (const r of rules) {
-      if (r.selectorText && r.selectorText.indexOf('.satchel-list-item[data-marginal]:hover::after') >= 0) return true;
+      if (r.selectorText && r.selectorText.indexOf('.journal-list-item[data-marginal]:hover::after') >= 0) return true;
     }
   }
   return false;
 });
-check('hover marginalia rule ships in the satchel sheet', hoverRule, '');
+check('hover marginalia rule ships in the journal sheet', hoverRule, '');
 
 // the slip out of the book — open-in-originating-room preserved
-await page.click('.satchel-list-item');
+await page.click('.journal-list-item');
 await page.waitForTimeout(200);
 const slip = await page.evaluate(() => {
-  const s = document.getElementById('satchel-slip');
+  const s = document.getElementById('journal-slip');
   return { visible: !!s && !s.hidden, text: s ? s.textContent : '' };
 });
 check('the slip out of the book is offered', slip.visible && /slip out to/.test(slip.text), slip.text);
 
 // notes and highlights unchanged: write, blur, persists
 await page.evaluate(() => {
-  const ed = document.getElementById('satchel-editor');
+  const ed = document.getElementById('journal-editor');
   ed.textContent = 'a fresh margin note';
   ed.dispatchEvent(new Event('input', { bubbles: true }));
   ed.dispatchEvent(new Event('blur'));
@@ -179,7 +179,7 @@ console.log('439px — both desks keep their composure');
 const ctxN = await browser.newContext({ viewport: { width: 439, height: 800 } });
 const pageN = await ctxN.newPage();
 pageN.on('pageerror', e => errors.push('narrow pageerror: ' + e.message));
-await pageN.goto(BASE + '/satchel.html', { waitUntil: 'networkidle' });
+await pageN.goto(BASE + '/journal.html', { waitUntil: 'networkidle' });
 await pageN.evaluate(() => { try { localStorage.clear() } catch (e) {} });
 await pageN.reload({ waitUntil: 'networkidle' });
 await pageN.waitForTimeout(400);
@@ -194,11 +194,11 @@ await pageN.evaluate(() => {
   });
 });
 await pageN.waitForTimeout(200);
-await pageN.click('.satchel-tab[data-tab="artifacts"]');
+await pageN.click('.journal-tab[data-tab="artifacts"]');
 await pageN.waitForTimeout(200);
 const satNarrow = await pageN.evaluate(() => ({
   ofx: document.documentElement.scrollWidth - document.documentElement.clientWidth,
-  rows: document.querySelectorAll('.satchel-list-item').length,
+  rows: document.querySelectorAll('.journal-list-item').length,
 }));
 await pageN.goto(BASE + '/learn.html', { waitUntil: 'networkidle' });
 await pageN.evaluate(() => { try { localStorage.clear() } catch (e) {} });
@@ -208,7 +208,7 @@ const learnNarrow = await pageN.evaluate(() => ({
   ofx: document.documentElement.scrollWidth - document.documentElement.clientWidth,
   drawers: document.querySelectorAll('.learn-drawer').length,
 }));
-check('439px satchel: no horizontal overflow, rows render', satNarrow.ofx <= 0 && satNarrow.rows >= 1, JSON.stringify(satNarrow));
+check('439px journal: no horizontal overflow, rows render', satNarrow.ofx <= 0 && satNarrow.rows >= 1, JSON.stringify(satNarrow));
 check('439px learn: no horizontal overflow, drawers render', learnNarrow.ofx <= 0 && learnNarrow.drawers >= 20, JSON.stringify(learnNarrow));
 
 // ── done ───────────────────────────────────────────────────────────

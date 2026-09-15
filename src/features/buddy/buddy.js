@@ -2,7 +2,7 @@
 // the left, the conversation on the right. Chat users are data: register
 // more through window.LiberChat.registerUser (Vanir arrives this way).
 // Sealing still writes the classic sealed buddy artifact, so the
-// constellation, satchel and twelve works read it exactly as before.
+// constellation, journal and twelve works read it exactly as before.
 // No shared imports (covenant Q.1).
 
 (function () {
@@ -220,7 +220,7 @@
   }
 
   // export: the whole transcript, sealed as one artifact — what was said
-  // here, verbatim, for the satchel to keep.
+  // here, verbatim, for the journal to keep.
   function exportTranscript() {
     var u = active();
     if (!u || !u.turns.length) return;
@@ -260,7 +260,7 @@
   }
 
   // the sealed artifact keeps the old buddy shape — name + confession —
-  // so the constellation, the satchel and the twelve works read it
+  // so the constellation, the journal and the twelve works read it
   // exactly as they read the older entries.
   function seal() {
     var u = active();
@@ -299,7 +299,7 @@
 
   function artifactCount() {
     var s = (st() && st().get()) || {};
-    var kinds = ['buddy', 'divination', 'games', 'sea', 'learn', 'garden', 'dreams', 'satchel'];
+    var kinds = ['buddy', 'divination', 'games', 'sea', 'learn', 'garden', 'dreams', 'journal'];
     var n = 0;
     for (var i = 0; i < kinds.length; i++) {
       if (Array.isArray(s[kinds[i]])) n += s[kinds[i]].length;

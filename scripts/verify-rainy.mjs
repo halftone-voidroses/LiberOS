@@ -216,7 +216,7 @@ console.log('6. the ten per-room skins')
 const ROOMS = [
   ['sigil', '.sigil-app'], ['divination', '.divination-app'], ['sea', '.sea-app'],
   ['games', '.games-app'], ['garden', '.garden-app'], ['dreams', '.dreams-app'],
-  ['learn', '.learn-app'], ['satchel', '.satchel-app'], ['toybox', '.toybox-app'],
+  ['learn', '.learn-app'], ['journal', '.journal-app'], ['toybox', '.toybox-app'],
   ['trash', '.trash-app'],
 ]
 const GRAB = sel => {

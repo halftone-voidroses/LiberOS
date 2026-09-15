@@ -13,6 +13,24 @@
 
 :root {
   --scan-vignette: 0.7;      /* corner darkening, 0..1 */
+
+  /* THE SHELL'S TWO VOICES (aesthetic sweep §1).
+     This used to be an accident: `html, body` set `'Times New Roman', Times,
+     serif` — one blanket browser default under every room in the machine, so
+     the baseline voice of the whole OS was whatever serif the traveller's
+     operating system happened to own. Each room then declared richer faces on
+     select elements, which meant the *floor* of every room's grammar was the
+     stock serif and drifted per platform.
+     The shell now names its two voices and says which is which. A room keeps
+     its own register; the shell stops pretending to have one.
+       --face-machine  the tube speaking — the one face the machine ships
+       --face-paper    the traveller's prose — the shell's declared default,
+                       which a room overrides in its own stylesheet
+     Remaining risk, stated rather than hidden: Georgia is a platform font and
+     is not shipped. Self-hosting a prose face beside vt323-latin.woff2 is the
+     next step; until then this is a decision instead of an accident. */
+  --face-machine: 'VT323', 'Courier New', Courier, monospace;
+  --face-paper: Georgia, 'Iowan Old Style', 'Times New Roman', Times, serif;
 }
 
 /* VT323 self-hosted (audit minor / plan WS7). Shell infrastructure —
@@ -27,12 +45,30 @@
   font-display: swap;
 }
 
+/* ── THE NARROW TITLEBAR (aesthetic sweep §4) ──────────────────────────
+   Every room's titlebar carries a name and a subtitle in one fixed-height
+   bar. Below 560px the pair plus the room's own help and exit fittings stop
+   fitting, and the subtitle was being squeezed into a sliver inside
+   `overflow:hidden`: 10px wide on learn, 19px on trash, 52px on cohort — a
+   single orphan letter — while sea, garden and buddy kept their whole line.
+   Same breakage, different treatment, room to room.
+   Now it is one rule for the whole machine. Past the threshold the subtitle
+   steps out of the bar instead of being crushed, and the name keeps the
+   room. The subtitle is the room's aside; the name is its label, and the
+   label is what has to survive.
+   Keyed to the naming convention every room already follows, so a room
+   that invents its own titlebar simply does not opt in. */
+@media (max-width: 560px) {
+  [class$="-titlebar-sub"] { display: none; }
+  [class$="-titlebar-name"] { letter-spacing: 0.12em; }
+}
+
 html, body {
   width: 100%;
   height: 100%;
   background: #000000;
   color: #c0b090;
-  font-family: 'Times New Roman', Times, serif;
+  font-family: var(--face-paper);
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;

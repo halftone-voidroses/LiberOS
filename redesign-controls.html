@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Liber Vacui — Chrome Pitch: six fittings for the machine's hand</title>
+<style>
+:root{
+  --void:#070403;--panel:#160b08;--panel2:#21100b;--line:#5a301b;--line2:#3a2013;
+  --cream:#eadfc6;--muted:#b19a78;--gold:#d4af65;
+  --pink:#ff9ec6;--cyan:#7ac0d8;--green:#9ad49a;--ice:#8fd8e8;--red:#ff8585;
+  --serif:Georgia,'Times New Roman',serif;--mono:'Courier New',Courier,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 50% 0,#22100a 0,#070403 60rem);color:var(--cream);font-family:var(--serif);line-height:1.6}
+.wrap{max-width:1180px;margin:auto;padding:30px 22px 120px}
+.kicker{font-family:var(--mono);color:var(--gold);font-size:12px;letter-spacing:.28em;text-transform:lowercase}
+h1{font-weight:400;font-size:clamp(30px,4.6vw,52px);line-height:1.05;margin:14px 0}
+h1 em{color:var(--pink);font-style:italic}
+.lede{color:var(--muted);max-width:82ch;font-size:16px}
+.meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;font-family:var(--mono);font-size:11px;color:#9e8463}
+.meta span{border:1px solid var(--line);border-radius:99px;padding:4px 12px}
+nav{position:sticky;top:0;z-index:9;background:#0c0504f2;border:1px solid var(--line);border-radius:0 0 10px 10px;padding:10px 14px;margin-top:24px;font-family:var(--mono);font-size:12px;line-height:2}
+nav a{color:var(--gold);text-decoration:none;margin-right:14px;white-space:nowrap}
+nav a:hover{color:var(--cream)}
+h2{font-weight:400;font-size:27px;margin:64px 0 4px;border-bottom:1px solid var(--line);padding-bottom:8px}
+h2 small{font-family:var(--mono);font-size:12px;color:var(--gold);margin-right:10px}
+h3{font-weight:400;font-size:19px;margin:0 0 6px}
+p{margin:10px 0}
+.actlede{color:var(--muted);font-style:italic;margin:6px 0 22px;max-width:82ch}
+table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+th,td{border:1px solid var(--line2);padding:8px 10px;text-align:left;vertical-align:top}
+th{font-family:var(--mono);font-size:11px;color:var(--gold);font-weight:400;letter-spacing:.06em}
+td.n{font-family:var(--mono);font-size:12px;white-space:nowrap}
+.pass{color:var(--green)}.warn{color:var(--gold)}.fail{color:var(--red)}
+code{font-family:var(--mono);font-size:12.5px;color:var(--ice);background:#120907;border:1px solid var(--line2);border-radius:3px;padding:0 4px}
+.pitch{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin:22px 0;background:linear-gradient(180deg,var(--panel2),var(--panel))}
+.pitch-head{display:flex;align-items:baseline;gap:12px;padding:14px 18px 10px;border-bottom:1px solid var(--line2)}
+.pitch-head .no{font-family:var(--mono);font-size:12px;color:var(--gold);letter-spacing:.16em}
+.pitch-head h3{flex:1}
+.tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:lowercase;border:1px solid currentColor;border-radius:99px;padding:1px 8px;white-space:nowrap}
+.t-leg{color:var(--cyan)}.t-die{color:var(--gold)}.t-mind{color:var(--pink)}
+.stage{padding:26px 18px;background:radial-gradient(ellipse at 50% 0%,rgba(70,38,18,.35),rgba(7,4,3,.9) 70%)}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:24px;align-items:end;justify-items:center}
+.cell{display:flex;flex-direction:column;gap:7px;align-items:center;min-width:0;width:100%}
+.cap{font-family:var(--mono);font-size:10.5px;color:#9e8463;letter-spacing:.08em;text-align:center;max-width:190px}
+.body{padding:4px 18px 18px}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0}
+.two>div{padding:4px 18px 18px}
+.two>div:first-child{border-right:1px solid var(--line2)}
+@media (max-width:760px){.two{grid-template-columns:1fr}.two>div:first-child{border-right:none;border-bottom:1px solid var(--line2)}}
+ul{margin:8px 0;padding-left:18px}
+li{margin:6px 0;color:#cbb894;font-size:14px}
+li b{color:var(--cream);font-weight:400}
+.ratio{font-family:var(--mono);font-size:11.5px}
+.note{margin-top:12px;border:1px solid #6a2a20;border-left:4px solid var(--red);border-radius:0 8px 8px 0;background:#160806;padding:9px 13px;font-size:12.5px;color:#e0b0a0}
+.note b{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--red);display:block;margin-bottom:3px}
+.good{border-color:#2a5a32;border-left-color:var(--green);background:#08140a;color:#a8d0aa}
+.good b{color:var(--green)}
+footer{margin-top:80px;border-top:1px solid var(--line);padding-top:18px;color:var(--muted);font-size:13px;font-style:italic}
+
+/* ── mock props ────────────────────────────────────────────────────────
+   Live CSS, not pictures. Everything here is the pitch's own drawing:
+   same weight ladder thinking the covenant asks of a drawn prop. */
+
+/* P1 · the fitting */
+.fitting{width:100%;max-width:104px;height:52px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;font-family:var(--mono)}
+.fitting .label{font-size:12px;letter-spacing:.22em;position:relative;z-index:2;white-space:nowrap}
+.fitting.brass{border-radius:3px;background:linear-gradient(178deg,#5e4a24,#4c3d1b);box-shadow:inset 0 1px 0 rgba(240,220,170,.42),inset 0 -2px 4px rgba(0,0,0,.6),0 2px 8px rgba(0,0,0,.7);color:#fdf0cd}
+.fitting.brass .label{color:#fdf0cd;text-shadow:0 1px 0 rgba(0,0,0,.85),0 0 1px rgba(0,0,0,.9)}
+.fitting.stone{border-radius:4px;background:linear-gradient(178deg,#4e4b45,#38352f);box-shadow:inset 0 1px 0 rgba(230,230,225,.3),inset 0 -2px 5px rgba(0,0,0,.65),0 2px 8px rgba(0,0,0,.7);color:#f4f1e8}
+.fitting.stone .label{color:#f4f1e8;text-shadow:0 1px 0 rgba(0,0,0,.9)}
+.fitting.felt{border-radius:6px;background:linear-gradient(178deg,#5e2320,#411715 60%,#301110);box-shadow:inset 0 1px 0 rgba(255,190,180,.22),inset 0 -2px 5px rgba(0,0,0,.7),0 2px 8px rgba(0,0,0,.7);color:#f6dfd4}
+.fitting.felt .label{color:#f6dfd4;text-shadow:0 1px 0 rgba(0,0,0,.9)}
+.fitting.tile{border-radius:3px;background:linear-gradient(178deg,#cfe0e2,#a9c2c6);box-shadow:inset 0 1px 0 rgba(255,255,255,.7),inset 0 -2px 4px rgba(30,60,64,.35),0 2px 8px rgba(0,0,0,.7);color:#06181b}
+.fitting.tile .label{color:#06181b;text-shadow:0 1px 0 rgba(255,255,255,.45)}
+.fitting:focus-visible,.fitting.on{outline:0}
+.fitting.brass:focus-visible,.fitting.brass.on{box-shadow:inset 0 0 0 1px #ffd88a,inset 0 1px 0 rgba(240,220,170,.5),0 0 0 3px rgba(212,175,101,.55),0 0 16px rgba(255,200,110,.5),0 2px 8px rgba(0,0,0,.7)}
+.fitting.stone:focus-visible,.fitting.stone.on{box-shadow:inset 0 0 0 1px #fffdf4,0 0 0 3px rgba(236,232,220,.5),0 0 14px rgba(255,247,225,.34),0 2px 8px rgba(0,0,0,.7)}
+.fitting.felt:focus-visible,.fitting.felt.on{box-shadow:inset 0 0 0 1px #ffd6c8,0 0 0 3px rgba(255,158,198,.45),0 0 14px rgba(255,150,180,.36),0 2px 8px rgba(0,0,0,.7)}
+.fitting.tile:focus-visible,.fitting.tile.on{box-shadow:inset 0 0 0 2px #06181b,0 0 0 3px rgba(143,216,232,.9),0 0 16px rgba(160,230,245,.5),0 2px 8px rgba(0,0,0,.7)}
+/* the guard: a hairline seam that proves the plate was cut, not printed */
+.fitting::after{content:'';position:absolute;left:6px;right:6px;top:6px;bottom:6px;border-radius:2px;border:1px solid rgba(0,0,0,.28);pointer-events:none}
+.fitting.tile::after{border-color:rgba(6,24,27,.22)}
+
+/* P2 · the legend */
+.legend{width:100%;max-width:322px;background:linear-gradient(180deg,#382e22,#241d15);border-radius:3px;padding:7px 10px;font-family:var(--mono);display:flex;gap:14px;align-items:center;box-shadow:inset 0 1px 0 rgba(232,214,178,.3),inset 0 0 0 1px #191410,0 2px 8px rgba(0,0,0,.7)}
+.legend .scr{flex:1;font-size:12px;letter-spacing:.14em;color:#e8d9b4;text-shadow:0 1px 0 rgba(0,0,0,.85)}
+.legend .rev{font-size:10.5px;letter-spacing:.1em;color:#d3c096}
+.legend .slip{border:1px solid rgba(232,217,180,.55);border-radius:2px;background:transparent;color:#e8d9b4;font-family:inherit;font-size:11.5px;letter-spacing:.12em;padding:5px 9px}
+.legend .slip:focus-visible{outline:0;background:#e8d9b4;color:#241d15}
+
+/* P3 · the tab */
+.tab{width:100%;max-width:172px;min-height:44px;display:flex;align-items:center;gap:9px;padding:8px 12px 8px 9px;font-family:var(--mono);font-size:12.5px;letter-spacing:.1em;cursor:pointer;position:relative;border:0}
+.tab .hole{width:7px;height:7px;border-radius:50%;background:#0a0604;box-shadow:inset 0 1px 2px rgba(0,0,0,.9);flex:0 0 auto}
+.tab.paper{border-radius:2px 8px 8px 2px;background:linear-gradient(180deg,#ded0a6,#c9b98a);color:#2a1c0a;box-shadow:0 2px 0 rgba(0,0,0,.5),inset 0 1px 0 rgba(255,252,232,.6)}
+.tab.paper .label{color:#2a1c0a}
+.tab.slate{border-radius:2px 8px 8px 2px;background:linear-gradient(180deg,#414b50,#2a3236);color:#e9f0f2;box-shadow:0 2px 0 rgba(0,0,0,.55),inset 0 1px 0 rgba(220,240,250,.34)}
+.tab.slate .label{color:#e9f0f2}
+.tab.powder{border-radius:2px 10px 10px 2px;background:linear-gradient(180deg,#e8dff0,#cbbcdc);color:#241733;box-shadow:0 2px 0 rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.65)}
+.tab.powder .label{color:#241733}
+.tab .label{display:block;letter-spacing:.08em;transition:transform .1s ease}
+@media (prefers-reduced-motion:reduce){.tab .label{transition:none}}
+/* press impression: the seam deepens and the label sinks — a cut, not a glow */
+.tab:focus-visible,.tab.armed{outline:0}
+.tab.paper:focus-visible{box-shadow:inset 0 2px 5px rgba(60,40,10,.5),0 0 0 3px rgba(234,223,198,.6),0 0 14px rgba(255,240,200,.28)}
+.tab.slate:focus-visible{box-shadow:inset 0 2px 5px rgba(0,0,0,.6),0 0 0 3px rgba(143,216,232,.6),0 0 14px rgba(160,230,245,.3)}
+.tab.powder:focus-visible{box-shadow:inset 0 2px 5px rgba(80,60,110,.45),0 0 0 3px rgba(255,158,198,.6),0 0 14px rgba(255,170,205,.3)}
+.tab:focus-visible .label{transform:translateY(.5px)}
+
+/* P4 · the interlock */
+.ilk{width:100%;max-width:212px;background:linear-gradient(180deg,#3a3126,#1d1710);border-radius:5px;padding:9px 10px 10px;box-shadow:inset 0 1px 0 rgba(232,214,178,.24),inset 0 0 0 1px #100c08,0 2px 9px rgba(0,0,0,.7)}
+.ilk .word{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:#e2cca0;margin-bottom:7px}
+.ilk .sw{display:block;width:100%;min-height:44px;border-radius:3px;font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;cursor:pointer;position:relative;border:0}
+.ilk .sw.guard{background:linear-gradient(180deg,#4a4030,#2f2819);color:#f4ebd6;box-shadow:inset 0 1px 0 rgba(240,228,195,.34),inset 0 -2px 4px rgba(0,0,0,.55)}
+.ilk .sw.armed{background:linear-gradient(180deg,#7a2418,#4e140d);color:#ffe6da;box-shadow:inset 0 1px 0 rgba(255,210,190,.35),0 0 14px rgba(255,110,80,.4)}
+.ilk .sw.guard:focus-visible,.ilk .sw.armed:focus-visible{outline:0;box-shadow:inset 0 0 0 2px #ffd88a,0 0 0 3px rgba(212,175,101,.5),0 0 16px rgba(255,200,110,.45)}
+.ilk .hinge{height:3px;margin:0 4px;background:repeating-linear-gradient(90deg,#2a2318 0 4px,#171208 4px 8px);border-radius:2px}
+.ilk .fall{font-family:var(--mono);font-size:10.5px;color:#9e8463;margin-top:6px;letter-spacing:.08em}
+
+/* P5 · the platen */
+.platen{width:100%;max-width:330px;background:linear-gradient(180deg,#ded0a6,#cbbd90);border-radius:3px;padding:5px 6px;box-shadow:0 0 0 1px rgba(20,8,2,.75),0 2px 8px rgba(0,0,0,.7);display:flex;gap:5px;align-items:center}
+.platen .rail{flex:1;min-width:0;min-height:44px;display:flex;align-items:center;background:#f6efd8;border:1px solid rgba(92,67,38,.45);border-radius:2px;box-shadow:inset 0 1px 2px rgba(60,40,16,.25);padding:0 8px;font-family:var(--mono);font-size:14px;color:#2e2008;position:relative;overflow:hidden}
+.platen .rail .rule{position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(92,67,38,.16) 0 1px,rgba(92,67,38,0) 1px 11px);pointer-events:none}
+.platen .rail .txt{position:relative}
+.platen .rail .caret{display:inline-block;width:8px;height:17px;background:#2e2008;vertical-align:-3px;margin-left:1px}
+@media (prefers-reduced-motion:no-preference){.platen .rail .caret{animation:blink 1.1s steps(1) infinite}}
+@keyframes blink{0%,50%{opacity:1}50.01%,100%{opacity:0}}
+.platen .send{min-height:44px;padding:0 13px;border-radius:2px;border:1px solid rgba(122,52,30,.65);background:#7a3410;color:#f6e8cc;font-family:var(--mono);font-size:12px;letter-spacing:.14em;cursor:pointer}
+.platen .send:focus-visible{outline:0;box-shadow:0 0 0 3px rgba(212,175,101,.6),0 0 16px rgba(255,200,110,.4)}
+.platen .wax{width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 36% 32%,#a63a26,#6b1f12);box-shadow:inset 0 -1px 2px rgba(0,0,0,.5),0 1px 2px rgba(0,0,0,.6);flex:0 0 auto}
+
+/* P6 · the haunt */
+.haunt{width:100%;max-width:262px;display:flex;flex-direction:column;gap:9px}
+.haunt .ghost{position:relative;min-height:44px;border-radius:3px;background:linear-gradient(180deg,#382f24,#201a11);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;letter-spacing:.16em;color:#dfc9a2;box-shadow:inset 0 1px 0 rgba(232,214,178,.2),inset 0 0 0 1px #100c08}
+.haunt .ghost.awake{color:#f4e8c6;box-shadow:inset 0 1px 0 rgba(232,214,178,.26),inset 0 0 0 1px #100c08,0 0 0 3px rgba(212,175,101,.5),0 0 18px rgba(255,200,110,.34)}
+.haunt .ghost .after{position:absolute;inset:0;border-radius:3px;box-shadow:0 0 0 3px rgba(212,175,101,.5),0 0 18px rgba(255,200,110,.34);opacity:0}
+.haunt .ghost.linger .after{opacity:.55}
+@media (prefers-reduced-motion:no-preference){.haunt .ghost.linger .after{animation:linger .8s ease-out both}}
+@keyframes linger{0%{opacity:.55;transform:scale(1)}100%{opacity:0;transform:scale(1.06)}}
+.haunt .whisper{font-family:var(--mono);font-size:12px;line-height:1.4;color:#e8d6a8;border-left:2px solid rgba(212,175,101,.6);padding:3px 0 3px 9px;background:linear-gradient(90deg,rgba(212,175,101,.09),rgba(212,175,101,0))}
+.haunt .print{font-family:var(--mono);font-size:10.5px;color:#9e8463;letter-spacing:.08em}
+.thumb{position:relative}
+.thumb::before{content:'';position:absolute;left:14px;top:12px;width:22px;height:14px;border-radius:50%;background:radial-gradient(ellipse at 40% 40%,rgba(255,240,205,.22),rgba(255,240,205,0) 70%);pointer-events:none}
+
+/* assembled strip */
+.assembled{border:1px solid var(--line);border-radius:14px;padding:0;overflow:hidden;margin:20px 0;background:#0a0503}
+.assembled .bezel{background:linear-gradient(180deg,#4a3f30,#241d15);padding:12px 14px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;border-bottom:1px solid #100c08}
+.assembled .screen{background:linear-gradient(180deg,#160b08,#0b0504);padding:24px 18px 30px}
+.assembled .screen .head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid rgba(212,175,101,.22);padding-bottom:9px;margin-bottom:16px}
+.assembled .screen .nm{font-size:19px;color:#eadfc6}
+.assembled .screen .sb{font-family:var(--mono);font-size:11px;color:#b19a78;letter-spacing:.08em}
+.assembled .tabs{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+.inkrow{font-family:var(--mono);font-size:11px;color:#9e8463;display:flex;flex-wrap:wrap;gap:16px;margin-top:14px}
+.inkrow b{color:var(--cream);font-weight:400}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="kicker">liber vacui · chrome pitch · rev. c · 2026-09-14</div>
+<h1>Six fittings for the machine's hand — <em>legible chrome, made of the room</em></h1>
+<p class="lede">The sweep found the same three failures in every room's furniture: controls too small to hit, ink too faint to read, and shapes too generic to belong to whoever wired them. This is a pitch for the machine's chrome — every control a <b>fitting</b>, cut in the room's own material, carrying a word instead of a glyph, and never smaller or fainter than a floor the whole machine can be held to. Nothing here is a component library: anatomy is shared the way a door is a door; the making stays the room's.</p>
+<div class="meta">
+  <span>six pitches</span><span>one floor</span><span>live mockups, no images</span>
+  <span>contrast measured from rendered pixels</span><span>covenant §personality through material</span>
+</div>
+
+<nav>
+  <a href="#floor">the floor</a><a href="#p1">i · the fitting</a><a href="#p2">ii · the legend</a><a href="#p3">iii · the tab</a>
+  <a href="#p4">iv · the interlock</a><a href="#p5">v · the platen</a><a href="#p6">vi · the haunt</a>
+  <a href="#assembled">in one room</a><a href="#cost">what it costs</a>
+</nav>
+
+<h2 id="floor"><small>§1</small>The floor — what every control owes the hand</h2>
+<p class="actlede">One contract, six pitches, no exceptions. These are the numbers the audit measured against; the pitches are judged by them, live, on this page.</p>
+<table>
+  <tr><th>rule</th><th>the floor</th><th>why this number</th></tr>
+  <tr><td class="n">F1 · ink</td><td>label ink ≥ <b>7:1</b>; body ink ≥ <b>4.5:1</b>; disabled may drop to 3:1 and must still read</td><td>the sweep's worst offender, the sidecar's printed line, renders at ≈1.6:1; the boot CTA at 2.55:1. A control you cannot read is not a control.</td></tr>
+  <tr><td class="n">F2 · size</td><td>no text under <b>11px</b>; every target ≥ <b>44×44</b> CSS px with ≥8px clear</td><td>22px desktop carvings, a 10×17 dagger, a 20px-tall input and a 16px checkbox are all in the tree today.</td></tr>
+  <tr><td class="n">F3 · focus</td><td>every focusable thing shows a <b>room-owned</b> focus mark; no browser default, no naked control</td><td>dreams, games, toybox and garden ship <code>?</code>/<code>×</code> with no visible focus change at all.</td></tr>
+  <tr><td class="n">F4 · a word</td><td>no control is <b>legible only as a glyph</b>. Every one carries a word — <code>leave</code>, <code>legend</code>, <code>keep</code>, <code>release</code>.</td><td>the machine is a haunted <i>mind</i>: it speaks. A bare <code>×</code> is the least diegetic thing in the app.</td></tr>
+  <tr><td class="n">F5 · both widths</td><td>the floor holds at <b>439</b> and at <b>1280</b> identically</td><td>learn's subtitle collapses to a 10px sliver at 439 while sea keeps its line. Same breakage, different treatment, per room.</td></tr>
+  <tr><td class="n">F6 · consent</td><td>under <code>prefers-reduced-motion</code> every state change survives as an <b>instant</b> change</td><td>the machine already honours this everywhere. The chrome must not be the first thing to break it.</td></tr>
+  <tr><td class="n">F7 · not a library</td><td>size, word, ink, focus are shared. <b>Material, radius family, and weight are not.</b></td><td>covenant §2 and the drawn-prop rules: two radius families per room, weights are ratios of that room's silhouette, one declared light.</td></tr>
+</table>
+
+<h2><small>§2</small>Six pitches</h2>
+
+<!-- ── PITCH I ───────────────────────────────────────────────────────── -->
+<div class="pitch" id="p1">
+  <div class="pitch-head"><span class="no">PITCH I</span><h3>The fitting — the door, as a piece of hardware</h3><span class="tag t-leg">legible</span><span class="tag t-die">diegetic</span></div>
+  <div class="stage"><div class="row" id="stage-p1">
+    <div class="cell"><button class="fitting brass" data-ink=".label" data-ground="self" data-name="brass plate"><span class="label">SHUT</span></button><span class="cap">riason's study · brass, cut and stamped</span></div>
+    <div class="cell"><button class="fitting stone" data-ink=".label" data-ground="self" data-name="stone chisel"><span class="label">STEP OUT</span></button><span class="cap">sigil · the bench · chiselled, chipped at the edge</span></div>
+    <div class="cell"><button class="fitting felt" data-ink=".label" data-ground="self" data-name="felt" style="max-width:168px"><span class="label">LEAVE THE TABLE</span></button><span class="cap">divination · felt, worn where the thumb goes</span></div>
+    <div class="cell"><button class="fitting tile" data-ink=".label" data-ground="self" data-name="glazed tile"><span class="label">OUT</span></button><span class="cap">toybox · glazed tile, grout gone soft</span></div>
+  </div></div>
+  <div class="two">
+    <div>
+      <h3 style="margin-top:14px">the pitch</h3>
+      <p>The exit stops being a glyph in a corner and becomes a fitting the maker installed: a plate of the room's substrate, cut to the room's sharp radius family, with the word physically in it — stamped into the brass, chiselled into the stone, cut into the tile. Not hoverable metaphor: a real <code>&lt;button&gt;</code>, 44px tall, whose <b>label is the room's own verb</b> (<code>shut</code>, <code>step out</code>, <code>leave the table</code>, <code>out</code>).</p>
+      <p>The focus mark is the fitting lighting from the room's declared lamp — a bevelled inner edge plus the plate's own key, never a generic ring. Hover and focus are the same lighting; the difference is only that focus is unmissable from across the room.</p>
+    </div>
+    <div>
+      <h3 style="margin-top:14px">why it clears the floor, and the covenant</h3>
+      <ul>
+        <li><b>F1 ink</b> — light letterform on dark metal in brass/stone/felt; dark letterform on pale glaze in the bathroom. <span class="ratio" data-for="p1"></span></li>
+        <li><b>F2–F4</b> — 104×52; a word, always. The <i>glyph</i> is demoted to the fitting's own stamped mark, if a room wants one at all.</li>
+        <li><b>F7 not a library</b> — the plate changes material, radius, edge damage and light per room. What is shared is only that it is a fitting on the machine.</li>
+        <li><b>the tells</b> — the chipped edge on sigil's plate, the worn thumb dish on the felt, the soft grout line on the tile: each is that traveller handling their own door.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ── PITCH II ──────────────────────────────────────────────────────── -->
+<div class="pitch" id="p2">
+  <div class="pitch-head"><span class="no">PITCH II</span><h3>The legend — help as a plate on the moulding</h3><span class="tag t-leg">legible</span><span class="tag t-die">diegetic</span></div>
+  <div class="stage"><div class="row" id="stage-p2">
+    <div class="cell"><div class="legend" data-ink=".scr" data-ground="self" data-name="legend"><span class="scr">LEGEND · RIASON'S BOOK</span><span class="rev">REV. C</span><button class="slip" data-ink=".slip" data-ground="self" data-name="slip">READ THE SLIP</button></div><span class="cap">riason states it flatly, on a part number</span></div>
+    <div class="cell"><div class="legend" data-ink=".scr" data-ground="self" data-name="legend" style="max-width:400px"><span class="scr">LEGEND · THE STONE REMEMBERS BEING TOUCHED</span><span class="rev">REV. A</span><button class="slip" data-ink=".slip" data-ground="self" data-name="slip">READ THE SLIP</button></div><span class="cap">sigil writes it like an inscription</span></div>
+  </div></div>
+  <div class="two">
+    <div>
+      <h3 style="margin-top:14px">the pitch</h3>
+      <p>The <code>?</code> moves off the screen's air and onto the machine's body. A screen-printed legend strip on the bezel moulding, worded by the room's own maker, set at a legible ink, opening the room's argument as a <b>paper slip</b> the traveller could have left in there. The help text stops being a modal about the UI and becomes the note the maker taped inside the case — which is what the covenant's anti-prose rule actually wants: text that is already in the world.</p>
+      <p>Wording stays in register: <code>LEGEND · RIASON'S BOOK</code> is a plate. <code>How this works</code> is a designer.</p>
+    </div>
+    <div>
+      <h3 style="margin-top:14px">why it clears the floor</h3>
+      <ul>
+        <li><b>F1</b> — printed legend ink on the moulding clears body contrast; the slip button inverts to its own ink so it reads as a stamped control. <span class="ratio" data-for="p2"></span></li>
+        <li><b>F2–F3</b> — the slip control is a 44px target with an inverted focus state, not a naked glyph.</li>
+        <li><b>F7</b> — the moulding exists on every machine, but its legend is cut in that room's material: brass-etched in the study, painted in the glasshouse, chalked in the observatory.</li>
+        <li><b>why the bezel</b> — the audit's real complaint was that help/exit float <i>over the room's art</i>, at the room's expense. The moulding is the one surface that belongs to the machine everywhere without covering anyone's work.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ── PITCH III ─────────────────────────────────────────────────────── -->
+<div class="pitch" id="p3">
+  <div class="pitch-head"><span class="no">PITCH III</span><h3>The tab — one anatomy, every action</h3><span class="tag t-leg">legible</span><span class="tag t-die">diegetic</span></div>
+  <div class="stage"><div class="row" id="stage-p3">
+    <div class="cell"><button class="tab paper" data-ink=".label" data-ground="self" data-name="paper tab"><span class="hole"></span><span class="label">keep to the book</span></button><span class="cap">paper · cut, typed, hole punched</span></div>
+    <div class="cell"><button class="tab slate" data-ink=".label" data-ground="self" data-name="slate tab"><span class="hole"></span><span class="label">let the water take it</span></button><span class="cap">slate · engraved, salt-bloomed</span></div>
+    <div class="cell"><button class="tab powder" data-ink=".label" data-ground="self" data-name="powder tab"><span class="hole"></span><span class="label">pour</span></button><span class="cap">powder · pressed, soft edges</span></div>
+  </div></div>
+  <div class="two">
+    <div>
+      <h3 style="margin-top:14px">the pitch</h3>
+      <p>Today the de-facto button everywhere is a 50px pill — 4 to 20 per room — which is exactly the shared component the covenant bans. The tab is the replacement, and it is deliberately <b>the oldest control in the machine</b>: a cut index tab, a punched hole, the label typed or written by the maker, the action stated in a verb phrase the room would actually use.</p>
+      <p>What is shared is only <b>anatomy</b>: a ≥44px tab, a hole that shows it was threaded, a hole that proves it was made by a hand, and a focus state that reads as a <b>press impression</b> — the surface dips and the label sinks half a pixel, because that is what happens when you press something real. No glow, no ring, no pill.</p>
+      <p>The tab is also where F4 earns its keep: <code>keep to the book</code>, <code>let the water take it</code>, <code>pour</code> — a pill saying "Save" tells you nothing about where you are.</p>
+    </div>
+    <div>
+      <h3 style="margin-top:14px">why it clears the floor</h3>
+      <ul>
+        <li><b>F1</b> — every tab is a dark-ink-on-pale or pale-on-dark pairing chosen for ≥7:1, never a mid-tone on a mid-tone. <span class="ratio" data-for="p3"></span></li>
+        <li><b>F2</b> — 44px minimum height by construction; the tab's own cut edge gives it a clear neighbour gap.</li>
+        <li><b>F5</b> — tabs wrap at 439 instead of squeezing; the label never truncates to a sliver, because the tab is sized to its label.</li>
+        <li><b>F7</b> — three tabs above: paper, slate, powder. Same anatomy, three makings, no shared radius.</li>
+        <li><b>the drawn-prop ladder</b> — silhouette (the tab's cut edge), form (the punched hole), detail (the seam where it was typed). Two radius families per room, one used here.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ── PITCH IV ──────────────────────────────────────────────────────── -->
+<div class="pitch" id="p4">
+  <div class="pitch-head"><span class="no">PITCH IV</span><h3>The interlock — for the heavy things</h3><span class="tag t-leg">legible</span><span class="tag t-die">diegetic</span><span class="tag t-mind">consent</span></div>
+  <div class="stage"><div class="row" id="stage-p4">
+    <div class="cell"><div class="ilk" data-ink=".word" data-ground="self" data-name="interlock"><div class="word">RELEASE · WATER</div><button class="sw guard" data-ink="self" data-ground="self" data-name="guard">LIFT THE GUARD</button><div class="hinge"></div><div class="fall">springs shut in 6s if you change your mind</div></div><span class="cap">rest — the guard is down</span></div>
+    <div class="cell"><div class="ilk"><div class="word">RELEASE · WATER</div><button class="sw armed" data-ink="self" data-ground="self" data-name="armed">LET IT GO</button><div class="hinge"></div><div class="fall">armed · one more press and the valve turns</div></div><span class="cap">armed — red, and it says so</span></div>
+  </div></div>
+  <div class="two">
+    <div>
+      <h3 style="margin-top:14px">the pitch</h3>
+      <p>The covenant says a room that holds something heavy keeps its heaviness — do not soften it to make the room safe. It also says the exit and every reversal must be real, and that nothing a tap can destroy should be one tap away. The interlock is how both are true at once: the heavy control wears a <b>hinged guard</b>, and the guard is the honest statement that this one costs something.</p>
+      <p>Press once and the guard lifts and turns red — armed, and <i>says</i> it is armed. Press again and the valve turns. Walk away and the guard springs back shut in six seconds without sulking. It is the machine's version of a switch you cannot bump.</p>
+    </div>
+    <div>
+      <h3 style="margin-top:14px">why it clears the floor</h3>
+      <ul>
+        <li><b>F1</b> — the guard's word is light on dark metal, the armed word lighter still. <span class="ratio" data-for="p4"></span></li>
+        <li><b>F2</b> — both the guard and the throw are 44px; the guard is the bigger target while it is down, so the dangerous state has the <i>smallest</i> hit area, not the largest.</li>
+        <li><b>F4</b> — no glyph. The button says <code>lift the guard</code> and then <code>let it go</code>: the state is in the words, so it survives a screen reader, a colour-blind traveller and a 439px window.</li>
+        <li><b>F6</b> — the six-second fallback is a state change; under reduced motion the guard snaps rather than swings.</li>
+        <li><b>covenant §power and exit</b> — the room still names its power relation, but now the naming is a piece of hardware the visitor can read before they lean on it.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ── PITCH V ───────────────────────────────────────────────────────── -->
+<div class="pitch" id="p5">
+  <div class="pitch-head"><span class="no">PITCH V</span><h3>The platen — typing as paper</h3><span class="tag t-leg">legible</span><span class="tag t-die">diegetic</span></div>
+  <div class="stage"><div class="row" id="stage-p5">
+    <div class="cell"><div class="platen" data-ink=".rail" data-ground=".rail" data-name="platen"><div class="rail"><span class="rule"></span><span class="txt">say it to the tube<span class="caret"></span></span></div><button class="send" data-ink="self" data-ground="self" data-name="send">RETURN</button><div class="wax" title="the seal"></div></div><span class="cap">the sidecar's platen · the caret is a printed tick</span></div>
+  </div></div>
+  <div class="two">
+    <div>
+      <h3 style="margin-top:14px">the pitch</h3>
+      <p>The machines you talk to have a 20px-tall input and a grey placeholder at 2.9:1. The platen makes the typing surface a <b>rail of ruled paper</b> at 44px, with the caret printed rather than a blinking system bar, the field's own rules faintly ruled through it, and <code>return</code> as a carriage return on a brass arm instead of a paper plane.</p>
+      <p>The wax disc at the right is the seal — the same ceremony the sidecar and the buddy already have. It is not a "send" button with a stamp decoration: it is the stamp, and the act of sending is pressing your seal into the page.</p>
+    </div>
+    <div>
+      <h3 style="margin-top:14px">why it clears the floor</h3>
+      <ul>
+        <li><b>F1</b> — the ink is the ink the sidecar's feed already proved legible: dark matrix on ruled cream. The weakest thing in this pitch is the carriage return's ink. <span class="ratio" data-for="p5"></span></li>
+        <li><b>F2</b> — the rail is 44px; the carriage return is 44px; the wax is 22px but is <i>decorative</i> and never the only control.</li>
+        <li><b>F5</b> — the rail is fluid and the send button wraps under it at 439 rather than crushing the line.</li>
+        <li><b>F6</b> — the printed caret stops blinking under reduced motion and simply sits there, which is a true state, not a missing one.</li>
+        <li><b>diegetic, not decorative</b> — the paper is the feed paper the sidecar already prints on. Nothing new is invented; the input is finally made of the same stuff as the output.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ── PITCH VI ──────────────────────────────────────────────────────── -->
+<div class="pitch" id="p6">
+  <div class="pitch-head"><span class="no">PITCH VI</span><h3>The haunt — the chrome remembers your hand</h3><span class="tag t-mind">haunted computer</span><span class="tag t-leg">legible</span><span class="tag t-die">diegetic</span></div>
+  <div class="stage" id="stage-p6"><div class="row">
+    <div class="cell"><div class="haunt">
+      <div class="ghost" tabindex="0" id="ghost-a" data-ink="self" data-ground="self" data-name="asleep control">ASLEEP<span class="after"></span></div>
+      <div class="print">at rest · dim to embers, not to invisibility (ink still ≥7:1)</div>
+    </div><span class="cap">nothing has your attention here</span></div>
+    <div class="cell"><div class="haunt">
+      <div class="ghost awake thumb" tabindex="0" id="ghost-b" data-ink="self" data-ground="self" data-name="awake control">AWAKE · RIAson speaks<span class="after"></span></div>
+      <div class="whisper">riason, once, politely: “the clasps noticed. they always notice.”</div>
+      <div class="print">focused · the fitting wakes, the traveller says one clause</div>
+    </div><span class="cap">focus summons the room's voice</span></div>
+    <div class="cell"><div class="haunt">
+      <div class="ghost linger" tabindex="0" id="ghost-c" data-ink="self" data-ground="self" data-name="lingering control">REMEMBERED<span class="after"></span></div>
+      <div class="print">0.8s after you leave: the afterimage fades, the thumbprint stays</div>
+    </div><span class="cap">the machine's memory, made visible</span></div>
+  </div></div>
+  <div class="two">
+    <div>
+      <h3 style="margin-top:14px">the pitch</h3>
+      <p>This is the pitch that makes the chrome <i>haunted</i> rather than merely well-made, and it is the one that answers the brief most directly — a computer that exists within the mind does not have a toolbar; it has <b>things it remembers about your attention</b>.</p>
+      <ul>
+        <li><b>Focus is possession.</b> When a control takes focus it wakes from embers to full light, and the room's own traveller says one clause — through the existing whisper channel, <code>aria-live="polite"</code>, never a hover tooltip. The machine is not labelling itself; it is noticing you.</li>
+        <li><b>Attention leaves a mark.</b> The focus outline lingers as a spectral afterimage for 0.8s after you move on, then fades — and the last thing you touched keeps a faint <b>thumbprint</b> (a lifted patina ellipse) until you next come round.</li>
+        <li><b>Rest is dim, never hidden.</b> Unfocused chrome drops to ember — but the ember ink is still ≥7:1, because a control you can't read is a control that isn't there. Legibility is not a mood.</li>
+      </ul>
+      <p>Under <code>prefers-reduced-motion</code> the afterimage does not animate: it appears at its final low opacity and holds, and the whisper prints as static text. The function survives, the flourish does not.</p>
+    </div>
+    <div>
+      <h3 style="margin-top:14px">why it clears the floor</h3>
+      <ul>
+        <li><b>F3</b> — this pitch is the fix for the four rooms that currently ship 32px bare glyphs with no focus state at all.</li>
+        <li><b>F1</b> — ember and awake are both measured on the plate, and the ember is the one worth arguing about: it is the floor, not a shade below it. <span class="ratio" data-for="p6"></span></li>
+        <li><b>F6</b> — every animation in this pitch has a named instant equivalent: linger → static low-opacity duplicate, whisper → printed line, wake → jump to lit.</li>
+        <li><b>the mind, not a theme</b> — the covenant already says the room remembers. This makes the <i>chrome</i> remember too, so the machine's memory is not only in the room behind the CRT but in the hand that keeps coming back to the same three buttons.</li>
+        <li><b>not a library</b> — the traveller's voice, the whisper's wording and the thumbprint's material are per-room. Only the mechanism is shared.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<h2 id="assembled"><small>§3</small>In one room — the six together</h2>
+<p class="actlede">Fitting, legend, tabs, platen, haunt: one bezel, one screen, floor rules in force. Hover or Tab through it; the contrast figures under it are computed from this markup.</p>
+<div class="assembled" id="assembled-demo">
+  <div class="bezel">
+    <div class="fitting brass" data-ink="label" data-ground="self" data-name="door fitting" style="max-width:96px;height:44px"><span class="label">SHUT</span></div>
+    <div class="legend" data-ink=".scr" data-ground="self" data-name="legend" style="max-width:250px"><span class="scr">LEGEND · RIASON'S BOOK</span><span class="rev">REV. C</span></div>
+    <div class="legend" data-ink=".scr" data-ground="self" data-name="legend" style="max-width:150px"><span class="scr">TX-80/3</span><span class="rev">ON</span></div>
+  </div>
+  <div class="screen">
+    <div class="head">
+      <span class="nm">The Journal</span>
+      <span class="sb">for the reader's hand · bound mmxxvi</span>
+    </div>
+    <div class="tabs">
+      <button class="tab paper" data-ink=".label" data-ground="self" data-name="tab" style="max-width:210px;padding-right:16px"><span class="hole"></span><span class="label">keep to the book</span></button>
+      <button class="tab paper" data-ink=".label" data-ground="self" data-name="tab" style="max-width:210px;padding-right:16px"><span class="hole"></span><span class="label">slip out to the fog</span></button>
+      <button class="tab slate" data-ink=".label" data-ground="self" data-name="tab" style="max-width:210px;padding-right:16px"><span class="hole"></span><span class="label">find in drawer</span></button>
+    </div>
+    <div class="platen" data-ink=".rail" data-ground=".rail" data-name="platen"><div class="rail"><span class="rule"></span><span class="txt">say it to the tube<span class="caret"></span></span></div><button class="send" data-ink="self" data-ground="self" data-name="send">RETURN</button><div class="wax"></div></div>
+    <div class="inkrow">
+      <span>measured on this page:</span>
+      <span>door <b class="ratio" data-for="assembled-demo"></b></span>
+      <span>labels <b class="ratio" data-for="p3"></b></span>
+      <span>platen <b class="ratio" data-for="p5"></b></span>
+    </div>
+  </div>
+</div>
+
+<h2 id="cost"><small>§4</small>What it costs, and the order I'd do it in</h2>
+<table>
+  <tr><th>step</th><th>change</th><th>rooms touched</th><th>risk</th></tr>
+  <tr><td class="n">1</td><td>the floor, everywhere: 11px minimum ink, 44px minimum target, a visible room-owned focus on every focusable thing</td><td>16</td><td class="warn">low — additive</td></tr>
+  <tr><td class="n">2</td><td>the door (<b>PITCH I</b>) — replace every <code>×</code> with the room's own fitting and its own word</td><td>16</td><td class="warn">medium — it is the exit; must be tested at both widths, every room</td></tr>
+  <tr><td class="n">3</td><td>the legend (<b>PITCH II</b>) — move <code>?</code> to the moulding, worded per room</td><td>16</td><td class="warn">medium — moves a familiar control</td></tr>
+  <tr><td class="n">4</td><td>the platen (<b>PITCH V</b>) — the sidecar's input, one file, sixteen rooms</td><td>1 file</td><td class="pass">low — largest legibility win per line changed</td></tr>
+  <tr><td class="n">5</td><td>the interlock (<b>PITCH IV</b>) — the release/clear/unbury flows</td><td>6</td><td class="warn">medium — touches destructive flows; deserves its own verification pass</td></tr>
+  <tr><td class="n">6</td><td>the tab (<b>PITCH III</b>) — retire the 50px pill, one room at a time</td><td>16</td><td class="warn">high — it is every room's furniture; do it room by room, never in a sweep</td></tr>
+  <tr><td class="n">7</td><td>the haunt (<b>PITCH VI</b>) — focus voice + linger + thumbprint, behind the existing whisper channel</td><td>shell</td><td class="warn">medium — reduced-motion parity is the whole test</td></tr>
+</table>
+<div class="note"><b>THE ARGUMENT I EXPECT</b>Covenant §2 says no shared component library and no consistent button style across rooms. This pitch shares <i>size, ink, word and focus</i> — and nothing else. The defence is that those four are not style: they are the difference between a fitting and a decoration. A door is a door in every house. The hinges, the timber, the paint and the wear are the room's. If a reviewer wants the machine to keep shipping a 22px unreadable carving as a "room's personality", that personality is a bug wearing a costume.</div>
+<div class="note good"><b>WHAT THIS BUYS THE COVENANT</b>Every fitting here is a chance for a tell: the chipped plate, the worn thumb dish, the punched hole, the thumbprint. The generic pill gives a traveller nothing to make. Hardware gives them edges to chip, habits to reveal, and a part number to stamp.</div>
+
+<footer>
+  Six pitches, one floor, no images — every mockup on this page is live CSS in this file, and every contrast figure is computed from the rendered colour of the mockup above it. Rev. C, 2026-09-14. Companion to the aesthetic sweep in <code>outputs/liberos-sweep/REPORT.md</code>.
+</footer>
+</div>
+
+<script>
+// Measure, do not assert. Each mockup names its ink element and its ground is
+// its painted self, so the number printed under a pitch is the number that
+// pitch actually renders at — the same test the audit used.
+(function () {
+  function rgba(c) {
+    var m = String(c).match(/rgba?\(([^)]+)\)/);
+    if (!m) return null;
+    var p = m[1].split(',').map(function (x) { return parseFloat(x); });
+    return { r: p[0], g: p[1], b: p[2], a: p.length > 3 ? p[3] : 1 };
+  }
+  function hex(c) {
+    var h = String(c).replace('#', '');
+    if (!/^[0-9a-f]{3}$|^[0-9a-f]{6}$/i.test(h)) return null;
+    if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+    return { r: parseInt(h.slice(0, 2), 16), g: parseInt(h.slice(2, 4), 16), b: parseInt(h.slice(4, 6), 16), a: 1 };
+  }
+  // every colour a surface could paint: its own fill plus every gradient stop.
+  function tokens(s) {
+    var out = [];
+    var own = rgba(s.backgroundColor);
+    if (own && own.a > 0.02) out.push(own);
+    var img = s.backgroundImage || '';
+    if (img !== 'none') {
+      (img.match(/#[0-9a-f]{3,6}|rgba?\([^)]+\)/gi) || []).forEach(function (t) {
+        var c = t.charAt(0) === '#' ? hex(t) : rgba(t);
+        if (c) out.push(c);
+      });
+    }
+    return out;
+  }
+  function lin(v) { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }
+  function lum(c) { return 0.2126 * lin(c.r) + 0.7152 * lin(c.g) + 0.0722 * lin(c.b); }
+  function over(fg, bg) {
+    var a = fg.a;
+    return { r: fg.r * a + bg.r * (1 - a), g: fg.g * a + bg.g * (1 - a), b: fg.b * a + bg.b * (1 - a), a: 1 };
+  }
+  // The grounds an ink could actually sit on. Painters' order, from the void
+  // outward: every layer is composited in front of the one behind it, and every
+  // gradient stop counts as a candidate — so a plate that fades to a colour its
+  // ink cannot hold is caught, not averaged away.
+  function grounds(el) {
+    var chain = [], n = el;
+    while (n && n !== document.documentElement) {
+      var own = tokens(getComputedStyle(n));
+      chain.push(own.length ? own : null);
+      n = n.parentElement;
+    }
+    var acc = [{ r: 7, g: 4, b: 3, a: 1 }];
+    for (var i = chain.length - 1; i >= 0; i--) {
+      if (!chain[i]) continue;
+      // Within one element, CSS paints the FIRST listed background layer on
+      // TOP, so an element's own stops fold right-to-left over whatever is
+      // behind it. Treating each stop as its own ground instead composites a
+      // translucent top layer straight onto the dark ancestor and invents a
+      // contrast failure the screen never renders.
+      var layers = chain[i];
+      for (var j = layers.length - 1; j >= 0; j--) {
+        var next = [];
+        for (var k = 0; k < acc.length; k++) {
+          if (next.length < 32) next.push(over(layers[j], acc[k]));
+        }
+        acc = next;
+      }
+    }
+    return acc;
+  }
+
+  function probes(root) {
+    var out = [];
+    root.querySelectorAll('[data-ink]').forEach(function (p) {
+      var inkEl = el(p, p.getAttribute('data-ink'));
+      var ink = rgba(getComputedStyle(inkEl).color);
+      if (!ink) return;
+      var cands = grounds(inkEl), local = null;
+      cands.forEach(function (bg) {
+        var L1 = lum(over(ink, bg)), L2 = lum(bg);
+        var r = (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05);
+        if (local === null || r < local) local = r;
+      });
+      out.push({ section: root.id || null, name: p.getAttribute('data-name') || 'control', ratio: local });
+    });
+    return out;
+  }
+  function el(root, sel) {
+    if (sel === 'self') return root;
+    return root.querySelector(sel) || root;
+  }
+  function report(root) {
+    var got = probes(root), worst = null;
+    got.forEach(function (m) {
+      if (m.ratio === null) return;
+      if (!worst || m.ratio < worst) worst = m.ratio;
+    });
+    return { worst: worst, n: got.length };
+  }
+
+  // The audit hook: every mockup's measured ratio, in one list.
+  window.LiberPitchMeasure = function () {
+    var all = [];
+    document.querySelectorAll('#p1,#p2,#p3,#p4,#p5,#p6,#assembled-demo').forEach(function (s) {
+      all = all.concat(probes(s));
+    });
+    return all;
+  };
+
+  // each pitch section reports the worst ratio among its own mockups
+  ['p1', 'p2', 'p3', 'p4', 'p5', 'p6'].forEach(function (id) {
+    var sec = document.getElementById(id);
+    if (!sec) return;
+    var got = report(sec);
+    var out = document.querySelectorAll('.ratio[data-for="' + id + '"]');
+    if (got.worst === null) return;
+    var txt = 'worst ' + got.worst.toFixed(2) + ':1' + (got.worst >= 4.5 ? ' ✓' : ' — under 4.5');
+    for (var k = 0; k < out.length; k++) out[k].textContent = txt;
+  });
+  var asm = document.getElementById('assembled-demo');
+  if (asm) {
+    var g2 = report(asm);
+    var o2 = document.querySelectorAll('.ratio[data-for="assembled-demo"]');
+    for (var m = 0; m < o2.length; m++) o2[m].textContent = g2.worst === null ? '—' : g2.worst.toFixed(2) + ':1';
+  }
+  // the haunt mockups: show the linger once when the section is reached
+  var linger = document.getElementById('ghost-c');
+  if (linger) {
+    linger.addEventListener('focus', function () { linger.classList.add('linger'); });
+  }
+  var ghostB = document.getElementById('ghost-b');
+  if (ghostB) {
+    ghostB.addEventListener('blur', function () {
+      if (getComputedStyle(ghostB).boxShadow.indexOf('rgba(212, 175, 101, 0.5)') >= 0) ghostB.classList.add('linger');
+      setTimeout(function () { ghostB.classList.remove('linger'); }, 900);
+    });
+  }
+})();
+</script>
+</body>
+</html>

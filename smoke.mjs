@@ -58,7 +58,7 @@ async function stateCounts() {
   return await page.evaluate(() => {
     var s = (window.Liber && window.Liber.state && window.Liber.state.get()) || {}
     var out = { tutorialDone: !!s.tutorialDone, stage: s.tutorialStage || null }
-    ;['buddy', 'relations', 'games', 'satchel', 'divination', 'garden', 'dreams', 'sea'].forEach(k => { out[k] = ((s[k] || []).length) })
+    ;['buddy', 'relations', 'games', 'journal', 'divination', 'garden', 'dreams', 'sea'].forEach(k => { out[k] = ((s[k] || []).length) })
     out.stone = ((s.buddy || []).filter(e => e && e.kind === 'stone')).length
     out.sealed = ((s.buddy || []).filter(e => !e || e.kind !== 'stone')).length
     return out
@@ -204,12 +204,12 @@ sassert(cleanOverlay, 'overlays should clear after wipe')
 console.log(`   final: ${JSON.stringify(finalState)}`)
 await shot('smoke-04-clean-slate')
 
-console.log('9. Desktop chrome: no summon buttons (deprecated), dial present')
+console.log('9. Desktop chrome: no summon buttons (deprecated), keybank present')
 const chatGone2 = await page.evaluate(() => !document.getElementById('flaming-q') && !document.querySelector('.flaming-q-repeat'))
 sassert(chatGone2, 'summon buttons should stay removed after tutorial')
-const dialOptionCount = await page.locator('.dial-option').count()
-sassert(dialOptionCount === 3, 'expected 3 dial options (prev/active/next)')
-console.log(`   chat deprecated ok, dial options: ${dialOptionCount}`)
+const dialOptionCount = await page.locator('.keybank-key').count()
+sassert(dialOptionCount === 12, 'expected 12 keybank keys (11 doors + blank)')
+console.log(`   chat deprecated ok, keybank keys: ${dialOptionCount}`)
 
 console.log('10. Pre-cast invitation shows (user has cast nothing yet)')
 const beatCopy = await page.evaluate(() => document.getElementById('constellation-empty').textContent)
@@ -295,10 +295,10 @@ await page.waitForTimeout(400)
 const wheelSaved = await page.evaluate(() => {
   var s = (window.Liber && window.Liber.state && window.Liber.state.get()) || {}
   const g = (s.games || []).filter(a => a.kind === 'wheel')
-  const st = (s.satchel || []).filter(a => a.ref === 'wheel')
+  const st = (s.journal || []).filter(a => a.ref === 'wheel')
   return { games: g.length, satchel: st.length, emotion: ((g[0] || {}).result || {}).darts, shot: !!((g[0] || {}).shot) }
 })
-sassert(wheelSaved.games === 1 && wheelSaved.satchel === 1, 'wheel kept to games + satchel: ' + JSON.stringify(wheelSaved))
+sassert(wheelSaved.games === 1 && wheelSaved.satchel === 1, 'wheel kept to games + journal: ' + JSON.stringify(wheelSaved))
 sassert(wheelSaved.emotion && wheelSaved.emotion.length === 1 && wheelSaved.shot, 'dart + polaroid kept: ' + JSON.stringify(wheelSaved))
 console.log(`   wheel: ${JSON.stringify({ games: wheelSaved.games, satchel: wheelSaved.satchel })}`)
 await shot('smoke-05b-wheel')
@@ -400,7 +400,7 @@ sassert(shelved.grave >= 4, 'shelved into trash: ' + JSON.stringify(shelved))
 sassert(!shelved.done && shelved.orbits === 0, 'tutorial replays on clean homescreen: ' + JSON.stringify(shelved))
 console.log(`   shelved: ${JSON.stringify(shelved)}`)
 
-console.log('20. Scratch notes keep to the satchel')
+console.log('20. Scratch notes keep to the journal')
 await page.evaluate(() => { window.Liber.state.set({ tutorialDone: true, tutorialStage: 'done' }) })
 await page.reload({ waitUntil: 'networkidle' })
 await page.waitForTimeout(800)
@@ -409,7 +409,7 @@ await page.click('#notes-save')
 await page.waitForTimeout(400)
 const noteKept = await page.evaluate(() => {
   const s = window.Liber.state.get()
-  const notes = (s.satchel || []).filter(e => e && e.kind === 'note')
+  const notes = (s.journal || []).filter(e => e && e.kind === 'note')
   return { n: notes.length, text: ((notes[0] || {}).text || '').slice(0, 30) }
 })
 sassert(noteKept.n === 1 && noteKept.text.includes('scratch line'), 'note kept: ' + JSON.stringify(noteKept))

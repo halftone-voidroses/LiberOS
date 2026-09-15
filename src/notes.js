@@ -1,5 +1,5 @@
 // notes.js — scratch notes pad on the desktop (left margin mirror of
-// the tasks window). Notes save as satchel artifacts (kind note) and
+// the tasks window). Notes save as journal artifacts (kind note) and
 // list back, newest first. Cmd/Ctrl+Enter saves from the pad.
 
 (function () {
@@ -13,7 +13,7 @@
 
   function notes() {
     var s = st() ? st().get() : {};
-    return ((s.satchel || []).filter(function (e) { return e && e.kind === 'note'; }));
+    return ((s.journal || []).filter(function (e) { return e && e.kind === 'note'; }));
   }
 
   function esc(s) {
@@ -49,7 +49,7 @@
       html += '<div class="notes-item" data-id="' + esc(nid) + '" role="button" tabindex="0" title="open note actions">' + esc(t)
             + '<div class="notes-actions" hidden>'
             + '<button type="button" data-act="delete">delete</button>'
-            + '<button type="button" data-act="satchel" disabled title="already in the satchel">in satchel ✓</button>'
+            + '<button type="button" data-act="journal" disabled title="already in the journal">in journal ✓</button>'
             + '<label>attach to <select data-act="attach"><option value="">— pick —</option></select></label>'
             + '</div>'
             + '<div class="notes-full" hidden>' + esc(full) + '</div>'
@@ -93,7 +93,7 @@
           if (!btn || !s || !nid2) return;
           var act = btn.getAttribute('data-act');
           if (act === 'delete') {
-            if (s.releaseArtifact) s.releaseArtifact('satchel', nid2);
+            if (s.releaseArtifact) s.releaseArtifact('journal', nid2);
             if (s.unbindRelation) s.unbindRelation(nid2);
             if (window.Liber && window.Liber.sound) { try { window.Liber.sound.play('thunk'); } catch (e2) {} }
           }
@@ -122,9 +122,9 @@
     var text = pad.value.trim();
     if (!text) return;
     pad.value = '';
-    if (s.addArtifact) s.addArtifact('satchel', { kind: 'note', text: text });
+    if (s.addArtifact) s.addArtifact('journal', { kind: 'note', text: text });
     if (window.Liber && window.Liber.sound) { try { window.Liber.sound.play('chime'); } catch (e) {} }
-    if (statusEl) statusEl.textContent = 'kept in the satchel.';
+    if (statusEl) statusEl.textContent = 'kept in the journal.';
     renderList();
   }
 
@@ -136,16 +136,32 @@
     box.id = 'notes';
     box.setAttribute('role', 'group');
     box.setAttribute('aria-label', 'scratch notes');
-    box.innerHTML = '<div class="notes-head">scratch notes</div>'
+    box.innerHTML = '<button type="button" class="notes-head" id="notes-head" aria-expanded="true">scratch notes</button>'
+      + '<div class="notes-body" id="notes-body">'
       + '<textarea class="notes-pad" id="notes-pad" aria-label="scratch note" rows="4"></textarea>'
       + '<button type="button" class="notes-save" id="notes-save">keep the note</button>'
       + '<div class="notes-status" id="notes-status" aria-live="polite"></div>'
-      + '<div class="notes-list" id="notes-list"></div>';
+      + '<div class="notes-list" id="notes-list"></div>'
+      + '</div>';
     stage.appendChild(box);
     pad = document.getElementById('notes-pad');
     statusEl = document.getElementById('notes-status');
     listEl = document.getElementById('notes-list');
     var saveBtn = document.getElementById('notes-save');
+    var headBtn = document.getElementById('notes-head');
+    var bodyEl = document.getElementById('notes-body');
+    function setOpen(open) {
+      box.classList.toggle('closed', !open);
+      if (headBtn) headBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    if (headBtn) headBtn.addEventListener('click', function () {
+      setOpen(box.classList.contains('closed'));
+    });
+    // the margin sheet is dismissible; on the small glass it starts shut
+    // so the keybank below stays hittable (verify-439 dead=0).
+    try {
+      if (window.innerWidth <= 600) setOpen(false);
+    } catch (e) {}
     if (saveBtn) saveBtn.addEventListener('click', save);
     if (pad) pad.addEventListener('keydown', function (e) {
       if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); save(); }

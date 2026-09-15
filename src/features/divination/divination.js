@@ -421,7 +421,7 @@
   }
 
   // keep: the same shelf, the same shape of record, for both games.
-  // The satchel opens kept divination artifacts as name + reading +
+  // The journal opens kept divination artifacts as name + reading +
   // question + seed (bodyOf joins question, reading, name), so reading
   // must carry the full text — upright[0] / interpretation.
   function keepDraw() {

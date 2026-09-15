@@ -398,10 +398,8 @@
 .settings-cog {
   position: absolute;
   right: 28px;
-  /* D0003 WS1: lifted clear of the status line below (was 26%+22px — the
-     gear's bottom teeth cut through the first characters of the status
-     text at 1280×800, reading as clipped). */
-  bottom: calc(26% + 40px);
+  /* keybank owns the lower-left; the cog holds the upper-right corner. */
+  bottom: 64px;
   width: 60px;
   height: 74px;
   z-index: 12;
@@ -616,13 +614,12 @@
 }
 
 /* emergent prompt line — shell-owned surface for the prompt engine.
-   Anchored inside the desktop stage (positioned by [data-state]), above
-   the status line's plate (status plate top ≈ 26% + 36px) and clear of
-   the dial band (dial owns the bottom 26%) — WS5 residual fix. */
+   Anchored inside the desktop stage, above the keybank block on the
+   left and clear of the status plate on the right. */
 .prompt-line {
   position: absolute;
   left: 50%;
-  bottom: calc(26% + 52px);
+  bottom: 118px;
   transform: translateX(-50%) translateY(6px);
   max-width: 72%;
   text-align: center;

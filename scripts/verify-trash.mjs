@@ -165,7 +165,7 @@ const afterReadd = await page.evaluate(k => {
   return {
     graveyard: (s.graveyard || []).length,
     relations: (s.relations || []).length,
-    satellites: (s.satchel || []).filter(x => x.kind === 'kept-reason').length,
+    satellites: (s.journal || []).filter(x => x.kind === 'kept-reason').length,
     plots: document.querySelectorAll('.trash-plot').length,
   }
 }, KEY)

@@ -3,7 +3,7 @@
 // sprouts, wall), element jars, a draggable crab that walks piles flat
 // and a shell that plows (terrain restored on lift). No tutorial, no
 // walkthrough: every prop reacts the instant it is touched. Keeps save
-// to games + satchel with a polaroid. No shared imports.
+// to games + journal with a polaroid. No shared imports.
 (function () {
   'use strict';
 
@@ -295,7 +295,7 @@
     if (window.Liber.state.addArtifact) {
       var mirror = { kind: 'game', ref: 'toybox', name: 'pip’s toybox', result: payload.result, ts: Date.now() };
       if (shot) mirror.shot = shot;
-      window.Liber.state.addArtifact('satchel', mirror);
+      window.Liber.state.addArtifact('journal', mirror);
     }
     if (window.Liber.sound) { try { window.Liber.sound.play('chime'); } catch (e) {} }
   }

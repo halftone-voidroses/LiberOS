@@ -97,7 +97,7 @@
         { text: 'who were they?', kind: 'progress',
           response: { speaker: 'wanderlust', lines: [
             'Physius, who cuts stone. Ruby, who tends what grows. Vanir, who bottles weather.',
-            'Twelve walked this floor before you, and the dial still knows their names.'
+            'Twelve walked this floor before you, and the case still knows their names.'
           ] } },
         { text: 'show me what they made.', kind: 'progress',
           response: { speaker: 'wanderlust', line: 'All in good time. Their works ring this room like coral rings a wreck. First, your own hands.' } },
@@ -171,7 +171,7 @@
         { text: 'i cannot hear it yet.', kind: 'branch',
           response: { speaker: 'wanderlust', line: 'YET. A fine word. The deep water does not perform on demand — it sends ripples when it trusts the shore.' } },
         { text: 'i hear only the static.', kind: 'branch',
-          response: { speaker: 'wanderlust', line: 'Static is the machine counting. When it finishes counting you it will speak in signals. Stay tuned to the dial.' } }
+          response: { speaker: 'wanderlust', line: 'Static is the machine counting. When it finishes counting you it will speak in signals. Stay tuned to the keys.' } }
       ]
     },
     {

@@ -1,5 +1,28 @@
 # LiberOS changelog
 
+## v2.14.0 — the keyboard sits beneath the sky
+- **The radial dial is replaced by the 3 × 4 keybank.** The desktop's
+  three-position carousel, popup index and long-press are gone (REV D §04
+  pass one). Eleven doors in a stable physical order plus one struck
+  blanking plug: HOME in dark brass, buddy through trash with room-phosphor
+  lamps, socket 12 reserved. Pressed sits low, visited keeps a spent ember,
+  the crossed stone stays viewable. Keyboard arrows + Enter, focus visible,
+  reduced-motion instant.
+- **The glass gets the room back.** The constellation expands across the
+  freed band with stable anchors; the scratch pad is a dismissible margin
+  sheet (open, edit, attach, dismiss, save to Journal); the Liberchat
+  sidecar keeps its right-hand gutter at both breakpoints.
+- **Tutorial + copy follow the case.** Cutscene stages untouched; empty-state
+  invitations, Learn 24, the about page and Wanderlust's lines name the
+  keybank, not the dial. `smoke.mjs`, `verify-439`, `verify-crt-room` and
+  `verify-fixes` check the twelve-socket contract; smoke's stale `satchel`
+  reads follow the store rename to `journal`.
+- **Verified:** 439 / room-hooks / constellation / sidecar / fixes /
+  crt-room / data / desks / dreams / gamification / house / powder /
+  promenade / prompt-engine / rainy / trash / tree / affinity / aiml green,
+  full smoke green. covenant-css, scaling and themes failures pre-date this
+  build and live in untouched files.
+
 ## v2.13.0 — the fire goes out, the card comes home
 ### The opening loses what it could not afford
 - **The eclipse flame ring is removed.** The summoning's inferno was an SVG

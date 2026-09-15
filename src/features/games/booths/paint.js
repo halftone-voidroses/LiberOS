@@ -181,7 +181,7 @@ function playPaint(ctx, b, body, kind) {
       ? 'result: ' + strokes + ' strokes; closest: ' + (names.a || '—') + ', friends: ' + (names.b || '—') + ', distant: ' + (names.c || '—') + '.'
       : 'result: ' + strokes + ' strokes of paint.';
     ctx.promptSave(b, summary, function () {
-      ctx.saveToDesktopAndSatchel(b, { strokes: strokes, names: names }, shot);
+      ctx.saveToDesktopAndJournal(b, { strokes: strokes, names: names }, shot);
       if (result) result.textContent = 'kept. the tent remembers.';
     }, null);
   });

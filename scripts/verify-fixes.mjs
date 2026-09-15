@@ -112,7 +112,7 @@ const readded = await page.evaluate(() => {
   const s = window.Liber.state.get();
   const stones = (s.buddy || []).filter(e => e && e.kind === 'stone');
   const rel = (s.relations || []).find(r => r.verb === 'it still protects me');
-  const sat = (s.satchel || []).find(a => a.kind === 'kept-reason');
+  const sat = (s.journal || []).find(a => a.kind === 'kept-reason');
   return {
     stones: stones.length, gy: s.graveyard.length,
     rel: !!rel, relTo: rel ? rel.to : null,
@@ -146,10 +146,10 @@ check('release writes a state.sea artifact at intensity 5', seaState.length === 
 console.log('C4 — current desktop shell')
 await goto('/desktop.html', 900)
 const c4 = await page.evaluate(() => ({
-  shell: !!document.querySelector('#constellation-svg') && !!document.querySelector('#dial-row'),
+  shell: !!document.querySelector('#constellation-svg') && !!document.querySelector('#keybank'),
   retiredTrigger: !!document.querySelector('#flaming-q'),
 }));
-check('desktop shell uses current constellation/dial surface', c4.shell && !c4.retiredTrigger, JSON.stringify(c4));
+check('desktop shell uses current constellation/keybank surface', c4.shell && !c4.retiredTrigger, JSON.stringify(c4));
 
 // ─── M3: iching cast progression + completed state ──────────────────
 console.log('M3 — iching cast progression')
@@ -188,7 +188,7 @@ check('booth stage is scrollable and center booth is clickable', m2.scrollable &
 
 // ─── M1: no dev-spec text in riason panels ────────────────────────────
 console.log('M1 — riason panels')
-const pages = ['about', 'cohort', 'divination', 'games', 'learn', 'satchel', 'sea', 'settings', 'sigil', 'themes', 'trash'];
+const pages = ['about', 'cohort', 'divination', 'games', 'learn', 'journal', 'sea', 'settings', 'sigil', 'themes', 'trash'];
 let devText = [];
 for (const p of pages) {
   await page.goto(BASE + '/' + p + '.html', { waitUntil: 'domcontentloaded' });

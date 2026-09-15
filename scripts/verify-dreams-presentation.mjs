@@ -64,7 +64,7 @@ async function visit(page, opts) {
     localStorage.clear()
     localStorage.setItem('liber_vacui_v1__keep', JSON.stringify(Object.assign({
       cutsceneBuild: 'riasondemo2', tutorialDone: true, sessionStart: Date.now(),
-      crtRoomOn: true, visited: {}, dreams: [seed.dream], garden: [], satchel: []
+      crtRoomOn: true, visited: {}, dreams: [seed.dream], garden: [], journal: []
     }, seed.opts || {})))
   }, { opts: opts, dream: DREAM })
   await page.reload()
@@ -218,7 +218,7 @@ await ctx2.close()
 
 // kept dreams get the kept hand
 const { ctx: ctx3, page: page3 } = await freshPage()
-await visit(page3, { satchel: [{ kind: 'dream', ref: DREAM.id, name: DREAM.title, ts: 1 }] })
+await visit(page3, { journal: [{ kind: 'dream', ref: DREAM.id, name: DREAM.title, ts: 1 }] })
 await clickSel(page3, '.dreams-entry')
 await page3.waitForTimeout(500)
 const marg3 = await page3.evaluate(() => ({
@@ -265,13 +265,13 @@ check('the fittings never ride the dream text', !!spread && spread.noRideText)
 check('the back ribbon is visible and clear of the text', !!spread && spread.backVisible && spread.backClearOfText)
 check('keep is armed while unkept', !!spread && spread.keepClickable)
 
-// keeping from the spine works — the fitting writes to the satchel
+// keeping from the spine works — the fitting writes to the journal
 await clickSel(page, '#dreams-read-keep')
 await page.waitForTimeout(300)
 const keptFromSpine = await page.evaluate(() => {
   const s = JSON.parse(localStorage.getItem('liber_vacui_v1__keep'))
   const b = document.getElementById('dreams-read-keep')
-  return { inBook: (s.satchel || []).some(x => x && x.kind === 'dream'), label: b.textContent, disabled: b.disabled }
+  return { inBook: (s.journal || []).some(x => x && x.kind === 'dream'), label: b.textContent, disabled: b.disabled }
 })
 check('the spine fitting keeps to the book', keptFromSpine.inBook && keptFromSpine.disabled, keptFromSpine.label)
 

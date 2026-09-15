@@ -5,7 +5,7 @@
    machine keeps what you did. Every hook in this scene is fed by real state
    from src/state.js — nothing here is decorative:
 
-   - the bookshelf takes one ledger volume per satchel keep
+   - the bookshelf takes one ledger volume per journal keep
    - the shadow pool rises with every sea release and graveyard burial
    - the session candle melts across the visit and is relit on return
    - the corkboard pins one card + red string per relation
@@ -274,7 +274,7 @@ body.crt-room-open .room {
   box-shadow: 0 0 10px 2px rgba(255, 176, 74, 0.5);
 }
 
-/* ── the bookshelf — one volume per satchel keep ────────────────────────── */
+/* ── the bookshelf — one volume per journal keep ────────────────────────── */
 .crt-shelf {
   position: absolute;
   top: 9%;

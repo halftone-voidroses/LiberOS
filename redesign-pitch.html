@@ -53,7 +53,7 @@ code{font-family:var(--mono);font-size:12px;color:var(--gold);background:#2a130b
 .mock.dreams-a{background:linear-gradient(180deg,#1a1030,#0b0718)}
 .mock.toybox-a{background:linear-gradient(180deg,#26220e,#121007)}
 .mock.garden-a{background:linear-gradient(180deg,#12211a,#081009)}
-.mock.satchel-a{background:linear-gradient(180deg,#241c10,#110d07)}
+.mock.journal-a{background:linear-gradient(180deg,#241c10,#110d07)}
 .mock.learn-a{background:linear-gradient(180deg,#241a0e,#100b06)}
 .mock.themes-a{background:linear-gradient(180deg,#221226,#100913)}
 .mock.settings-a{background:linear-gradient(180deg,#1c141c,#0d090d)}
@@ -178,7 +178,7 @@ footer{border-top:1px solid var(--line);margin-top:70px;padding-top:18px;color:#
 <div class="meta"><span>v3 · scope contracts bound in</span><span>mocks are live CSS</span><span>days are honest, scope is firm</span></div>
 </header>
 <nav>
-<a href="#covenant">scope covenant</a><a href="#liberchat">liberchat</a><a href="#behindcrt">room behind the crt</a><a href="#rainy">rainy day</a><a href="#constellation">evolving constellation</a><a href="#sigil">sigil</a><a href="#divination">divination</a><a href="#dreams">dreams</a><a href="#games">games</a><a href="#toybox">toybox</a><a href="#garden">garden + the tree</a><a href="#sea">sea</a><a href="#satchel">satchel</a><a href="#learn">learn</a><a href="#themes">themes</a><a href="#settings">settings</a><a href="#trash">trash</a><a href="#order">order of work</a>
+<a href="#covenant">scope covenant</a><a href="#liberchat">liberchat</a><a href="#behindcrt">room behind the crt</a><a href="#rainy">rainy day</a><a href="#constellation">evolving constellation</a><a href="#sigil">sigil</a><a href="#divination">divination</a><a href="#dreams">dreams</a><a href="#games">games</a><a href="#toybox">toybox</a><a href="#garden">garden + the tree</a><a href="#sea">sea</a><a href="#journal">journal</a><a href="#learn">learn</a><a href="#themes">themes</a><a href="#settings">settings</a><a href="#trash">trash</a><a href="#order">order of work</a>
 </nav>
 
 <section id="covenant">
@@ -224,7 +224,7 @@ footer{border-top:1px solid var(--line);margin-top:70px;padding-top:18px;color:#
 <div class="approach wide"><header><h3><span class="roman">I</span>The Dark Room That Fills</h3><span class="verdict v-costly">hefty · the memory palace</span></header>
 <div class="mock behindcrt"><div class="shelf"><i style="background:#8a6a42;width:70%"></i><i style="background:#a4855a;width:40%"></i><i style="background:#6a4a2a;width:55%"></i></div><div class="crtframe"></div><div class="pool"></div><div class="candle"></div><div class="ticker">behind the screen · the room keeps what you keep</div></div>
 <div class="body">
-<p>The physical room the CRT sits in, never shown on-screen — diegetic meta-progress. <strong>The PC never changes; the room around it accumulates you.</strong> A bookshelf that takes a ledger volume per satchel keep; a pool of shadow fluid that rises with every release, burial, and discard; a session candle that melts and is relit on return; small hooks everywhere — tarot card box, red-string corkboard for relations, tin trophies on the CRT's top, the Glasshouse tree visible in the window box. Rainy Day weather falls in this room.</p>
+<p>The physical room the CRT sits in, never shown on-screen — diegetic meta-progress. <strong>The PC never changes; the room around it accumulates you.</strong> A bookshelf that takes a ledger volume per journal keep; a pool of shadow fluid that rises with every release, burial, and discard; a session candle that melts and is relit on return; small hooks everywhere — tarot card box, red-string corkboard for relations, tin trophies on the CRT's top, the Glasshouse tree visible in the window box. Rainy Day weather falls in this room.</p>
 </div>
 <div class="scope"><b>scope contract · must ship</b><ul>
 <li>Full room scene with bookshelf, shadow pool, candle, and the four named hooks — each fed by real state, not decorative</li>
@@ -380,7 +380,7 @@ footer{border-top:1px solid var(--line);margin-top:70px;padding-top:18px;color:#
 <li>Particle sim at ≥60fps for a full tray at 1280×800 (spatial hash; pause/drain/clear), all eight base elements + four named reactions</li>
 <li>Diegetic dispensers (tap, matchbox, salt cellar, seed packet) as the element selectors — large hit targets, keyboard operable</li>
 <li>Crab, snail, duck shipped as full designs: sprite sheets or drawn canvas frames with walk/swim/flee states and concrete sim interactions each</li>
-<li>Keep-the-picture flow (snapshot of tray + crew) into desktop + satchel, unchanged save semantics</li>
+<li>Keep-the-picture flow (snapshot of tray + crew) into desktop + journal, unchanged save semantics</li>
 <li>Acceptance: pour water on fire → steam rises; seed on wet sand → sprout; crab flees fire; 60fps sustained sim; Playwright covers each reaction</li>
 </ul></div>
 <div class="cost"><b>cost</b> ~8 days · sim engine + creatures + dispensers; the single largest room build in the pitch</div>
@@ -437,11 +437,11 @@ footer{border-top:1px solid var(--line);margin-top:70px;padding-top:18px;color:#
 </div>
 </section>
 
-<section id="satchel">
-<h2><small>ROOM 10</small> Satchel — the book</h2>
+<section id="journal">
+<h2><small>ROOM 10</small> Journal — the book</h2>
 <div class="approaches">
 <div class="approach"><header><h3><span class="roman">I</span>The Reading Desk</h3><span class="verdict v-bold">bold</span></header>
-<div class="mock satchel-a"><div class="spine-desk"></div><div class="ticker">the spine thickens. the ribbons mark the unread.</div></div>
+<div class="mock journal-a"><div class="spine-desk"></div><div class="ticker">the spine thickens. the ribbons mark the unread.</div></div>
 <div class="body">Reading desk with a spine that thickens as artifacts accumulate, ribbon markers for unvisited items, hover marginalia, brass corner caps brightening with relation count. Every kept volume appears on the shelf in the room behind the CRT.</div>
 <div class="scope"><b>scope contract · must ship</b><ul>
 <li>Desk chrome: spine state from artifact counts, ribbons from unreads, marginalia on hover, corner caps from relations</li>

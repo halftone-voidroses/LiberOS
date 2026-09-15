@@ -167,7 +167,7 @@
     return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
   }
 
-  // the one-line preview / satchel excerpt — first 120 characters, collapsed
+  // the one-line preview / journal excerpt — first 120 characters, collapsed
   function excerpt(text) {
     return String(text || '').replace(/\s+/g, ' ').trim().slice(0, 120);
   }
@@ -390,7 +390,7 @@
   }
 
   // ── recording — the ledger holds the dream; the book gets it later ────
-  // The satchel mirror is a deliberate act: record here, read it, and keep
+  // The journal mirror is a deliberate act: record here, read it, and keep
   // it in the book once the reading has had its say.
 
   function record() {
@@ -408,9 +408,9 @@
 
   function isKept(id) {
     if (!state()) return false;
-    var satchel = state().get().satchel || [];
-    for (var i = 0; i < satchel.length; i++) {
-      if (satchel[i] && satchel[i].kind === 'dream' && satchel[i].ref === id) return true;
+    var journal = state().get().journal || [];
+    for (var i = 0; i < journal.length; i++) {
+      if (journal[i] && journal[i].kind === 'dream' && journal[i].ref === id) return true;
     }
     return false;
   }
@@ -419,7 +419,7 @@
     if (!state() || !id || isKept(id)) return;
     var d = findDream(id);
     if (!d) return;
-    state().addArtifact('satchel', { kind: 'dream', ref: id, name: d.title || 'an unnamed dream', excerpt: excerpt(d.text) });
+    state().addArtifact('journal', { kind: 'dream', ref: id, name: d.title || 'an unnamed dream', excerpt: excerpt(d.text) });
     if (global.Liber && global.Liber.sound) global.Liber.sound.play('chime');
   }
 
@@ -434,20 +434,20 @@
     if (kept) paintKeepAttach();
   }
 
-  function satchelIdForDream(id) {
+  function journalIdForDream(id) {
     if (!state()) return null;
-    var satchel = state().get().satchel || [];
-    for (var i = 0; i < satchel.length; i++) {
-      if (satchel[i] && satchel[i].kind === 'dream' && satchel[i].ref === id) return satchel[i].id;
+    var journal = state().get().journal || [];
+    for (var i = 0; i < journal.length; i++) {
+      if (journal[i] && journal[i].kind === 'dream' && journal[i].ref === id) return journal[i].id;
     }
     return null;
   }
 
   function removeKeep(id) {
     if (!state() || !id) return;
-    var sid = satchelIdForDream(id);
+    var sid = journalIdForDream(id);
     if (sid) {
-      state().releaseArtifact('satchel', sid);
+      state().releaseArtifact('journal', sid);
       state().unbindRelation(sid);
     }
     if (global.Liber && global.Liber.sound) global.Liber.sound.play('thunk');
@@ -628,7 +628,7 @@
     if (keepAttach) keepAttach.addEventListener('change', function () {
       var target = keepAttach.value;
       if (!target || !currentId || !state()) return;
-      var sid = satchelIdForDream(currentId) || currentId;
+      var sid = journalIdForDream(currentId) || currentId;
       try { state().unbindRelation(sid, target); } catch (e) {}
       state().bindRelation(sid, 'attached', target);
       if (global.Liber && global.Liber.sound) global.Liber.sound.play('chime');

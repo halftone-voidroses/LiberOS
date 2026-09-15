@@ -79,7 +79,7 @@
 
   function findAnyById(id) {
     var s = getState();
-    var kinds = ['buddy', 'divination', 'games', 'learn', 'abstract', 'sea', 'garden', 'dreams', 'methodology', 'council', 'satchel', 'iching'];
+    var kinds = ['buddy', 'divination', 'games', 'learn', 'abstract', 'sea', 'garden', 'dreams', 'methodology', 'council', 'journal', 'iching'];
     for (var k = 0; k < kinds.length; k++) {
       var arr = s[kinds[k]] || [];
       for (var i = 0; i < arr.length; i++) {
@@ -105,7 +105,7 @@
   // ── earned state ───────────────────────────────────────────────────
   // The marks the stone has earned: one per kept artifact type (five
   // in the pitch's ledger, eleven drawn — every kind that exists).
-  var KIND_MARKS = ['games', 'sea', 'divination', 'garden', 'dreams', 'learn', 'abstract', 'methodology', 'satchel', 'council', 'iching'];
+  var KIND_MARKS = ['games', 'sea', 'divination', 'garden', 'dreams', 'learn', 'abstract', 'methodology', 'journal', 'council', 'iching'];
 
   function keptKinds(s) {
     var kept = [];
@@ -119,7 +119,7 @@
   function patinaTier(s) {
     var visits = Object.keys(s.visited || {}).length;
     var artifacts = 0;
-    var kinds = ['divination', 'iching', 'games', 'sea', 'buddy', 'learn', 'council', 'garden', 'dreams', 'abstract', 'methodology', 'satchel'];
+    var kinds = ['divination', 'iching', 'games', 'sea', 'buddy', 'learn', 'council', 'garden', 'dreams', 'abstract', 'methodology', 'journal'];
     for (var i = 0; i < kinds.length; i++) {
       if (Array.isArray(s[kinds[i]])) artifacts += s[kinds[i]].length;
     }
@@ -129,7 +129,7 @@
     return level;
   }
 
-  // A relation is annotated when the satchel wrote a margin note on it,
+  // A relation is annotated when the journal wrote a margin note on it,
   // two-way when the far endpoint has tied a knot back.
   function relNote(rel) {
     return rel && typeof rel.note === 'string' && rel.note.length > 0;
@@ -148,7 +148,7 @@
   function edgeClass(rel, s) {
     var keptAt = rel.ts || 0;
     var later = 0;
-    var kinds = ['divination', 'iching', 'games', 'sea', 'buddy', 'learn', 'council', 'garden', 'dreams', 'abstract', 'methodology', 'satchel'];
+    var kinds = ['divination', 'iching', 'games', 'sea', 'buddy', 'learn', 'council', 'garden', 'dreams', 'abstract', 'methodology', 'journal'];
     for (var k = 0; k < kinds.length; k++) {
       var arr = s[kinds[k]];
       if (!Array.isArray(arr)) continue;
@@ -194,7 +194,7 @@
   function drawSig(s) {
     return [stoneOf(s.buddy).length, sealedOf(s.buddy).length, (s.divination || []).length, (s.games || []).length,
       (s.learn || []).length, (s.abstract || []).length, (s.sea || []).length, (s.garden || []).length, (s.dreams || []).length,
-      (s.methodology || []).length, (s.satchel || []).length,
+      (s.methodology || []).length, (s.journal || []).length,
       s.relations.length, s.tutorialDone ? 1 : 0].join('|')
       + ':' + (s.relations || []).map(function (r) { return r.from + '>' + (r.to || 'buddy') + '>' + r.verb + '>' + (r.note ? 'n' : ''); }).join(',')
       + ':' + JSON.stringify(s.unlocks || {}) + ':' + (s.unlocksSeen || []).join(',')
@@ -216,7 +216,7 @@
     learn:       '<path d="M4 6 h9 v13 h-9 z M13 8 h7 v11 h-7 M4 6 l3 -2 h9 l-3 2" />',
     abstract:    '<path d="M5 12 a3.4 3.4 0 1 1 0.01 0 M14 7 l6 4 -6 4 z" />',
     methodology: '<path d="M6 4 v16 M6 4 h8 a3 3 0 0 1 0 8 h-8 M14 12 a3 3 0 0 1 0 8 h-8" />',
-    satchel:     '<path d="M7 8 v-2 a3 3 0 0 1 6 0 v2 M4 8 h12 v11 h-12 z M4 12 h12" />',
+    journal:     '<path d="M7 8 v-2 a3 3 0 0 1 6 0 v2 M4 8 h12 v11 h-12 z M4 12 h12" />',
     council:     '<path d="M12 4 v5 M12 15 v5 M4 12 h5 M15 12 h5 M6.5 6.5 l3 3 M14.5 14.5 l3 3 M17.5 6.5 l-3 3 M9.5 14.5 l-3 3" />',
     iching:      '<path d="M6 5 h12 M6 8 h12 M6 12 l0 0.01 M10 12 l0 0.01 M14 12 l0 0.01 M18 12 l0 0.01 M6 16 h12 M6 19 h12" />'
   };
@@ -326,7 +326,7 @@
     garden:     '<path d="M12 20 V9 M12 9 q-4.5 -1 -5.5 -6 q5.5 0 5.5 6 M12 11 q4.5 -1 5.5 -6 q-5.5 0 -5.5 6" />',
     dreams:     '<path d="M6 16 q6 4 12 -5 M6 16 q4.4 0.6 8 -3 M18 11 q1.4 -4 -2 -7" />',
     methodology: '<path d="M6 4 v16 M6 4 h9 a3.4 3.4 0 0 1 0 8 h-9 M15 12 a3.4 3.4 0 0 1 0 8 h-9" />',
-    satchel:    '<path d="M8 8 v-2 a4 4 0 0 1 8 0 v2 M4 8 h16 v12 h-16 z M4 13 h16" />',
+    journal:    '<path d="M8 8 v-2 a4 4 0 0 1 8 0 v2 M4 8 h16 v12 h-16 z M4 13 h16" />',
     council:    '<path d="M12 3 v6 M12 15 v6 M3 12 h6 M15 12 h6 M5.6 5.6 l4 4 M14.4 14.4 l4 4 M18.4 5.6 l-4 4 M9.6 14.4 l-4 4" />',
     iching:     '<path d="M5 4 h14 M5 7 h14 M5 11 l0 0.01 M9.6 11 l0 0.01 M14.3 11 l0 0.01 M19 11 l0 0.01 M5 15 h14 M5 18 h14" />'
   };
@@ -387,7 +387,7 @@
       if (empty) {
         empty.style.display = '';
         empty.setAttribute('data-empty-state', 'pre');
-        empty.innerHTML = '— make a buddy first —<div class="constellation-empty-sub">open buddy on the dial.</div>';
+        empty.innerHTML = '— make a buddy first —<div class="constellation-empty-sub">press buddy on the case.</div>';
       }
       svg.innerHTML = '';
       return;
@@ -397,7 +397,7 @@
         empty.style.display = '';
         empty.setAttribute('data-empty-state', 'cast');
         var sealedWait = sealedOf(s.buddy).length;
-        empty.innerHTML = '— cast the buddy first —<div class="constellation-empty-sub">open the buddy from the dial.</div>'
+        empty.innerHTML = '— cast the buddy first —<div class="constellation-empty-sub">press buddy on the case.</div>'
           + (sealedWait > 0 ? '<div class="constellation-empty-sub">' + sealedWait + ' sealed chat' + (sealedWait === 1 ? '' : 's') + ' saved.</div>' : '');
       }
       svg.innerHTML = '<text x="300" y="216" text-anchor="middle" fill="none" stroke="rgba(255,200,100,0.28)" stroke-width="1.2" font-size="48" style="pointer-events:none;">★</text>';
@@ -633,8 +633,8 @@
 
   function roomFor(kind, data) {
     if (kind === 'buddy') return (data && data.kind === 'stone') ? 'sigil.html' : 'desktop.html#liberchat';
-    var pages = { divination: 'divination.html', games: 'games.html', learn: 'learn.html', sea: 'sea.html', garden: 'garden.html', dreams: 'dreams.html', satchel: 'satchel.html' };
-    if (kind === 'satchel') return 'satchel.html';
+    var pages = { divination: 'divination.html', games: 'games.html', learn: 'learn.html', sea: 'sea.html', garden: 'garden.html', dreams: 'dreams.html', journal: 'journal.html' };
+    if (kind === 'journal') return 'journal.html';
     return pages[kind] || 'desktop.html';
   }
 
@@ -649,7 +649,7 @@
     if (kind === 'learn') return d.topic || '';
     if (kind === 'abstract') return d.label || '';
     if (kind === 'methodology') return d.topic || d.name || '';
-    if (kind === 'satchel') return d.text || d.excerpt || d.name || '';
+    if (kind === 'journal') return d.text || d.excerpt || d.name || '';
     if (kind === 'council') return d.name || d.text || '';
     return d.name || d.title || d.text || '';
   }
@@ -900,10 +900,10 @@
     if (miniLabel) miniLabel.textContent = artifact.label || artifact.data && artifact.data.name || 'artifact';
     if (miniText) miniText.textContent = contentOf(artifact.kind, artifact.data);
     if (miniOpen) miniOpen.onclick = function () { window.location.href = roomFor(artifact.kind, artifact.data); };
-    var satBtn = document.getElementById('constellation-mini-satchel');
+    var satBtn = document.getElementById('constellation-mini-journal');
     if (satBtn) satBtn.onclick = function () {
       var aid = artifact.data && artifact.data.id ? artifact.data.id : '';
-      window.location.href = 'satchel.html' + (aid ? '#' + aid : '');
+      window.location.href = 'journal.html' + (aid ? '#' + aid : '');
     };
     var existing = relationsFor(artifact.data.id);
     var buddyRel = null;

@@ -1,0 +1,1576 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Liber Vacui — Dial Pitch: seven replacements for the desktop dial</title>
+<style>
+:root{
+  --void:#070403;--panel:#160b08;--panel2:#21100b;--line:#5a301b;--line2:#3a2013;
+  --cream:#eadfc6;--muted:#b19a78;--gold:#d4af65;
+  --pink:#ff9ec6;--cyan:#7ac0d8;--green:#9ad49a;--ice:#8fd8e8;--red:#ff8585;
+  --serif:Georgia,'Times New Roman',serif;--mono:'Courier New',Courier,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 50% 0,#22100a 0,#070403 60rem);color:var(--cream);font-family:var(--serif);line-height:1.6}
+.wrap{max-width:1180px;margin:auto;padding:30px 22px 120px}
+.kicker{font-family:var(--mono);color:var(--gold);font-size:12px;letter-spacing:.28em;text-transform:lowercase}
+h1{font-weight:400;font-size:clamp(30px,4.6vw,52px);line-height:1.05;margin:14px 0}
+h1 em{color:var(--pink);font-style:italic}
+.lede{color:var(--muted);max-width:84ch;font-size:16px}
+.meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;font-family:var(--mono);font-size:11px;color:#9e8463}
+.meta span{border:1px solid var(--line);border-radius:99px;padding:4px 12px}
+nav{position:sticky;top:0;z-index:9;background:#0c0504f2;border:1px solid var(--line);border-radius:0 0 10px 10px;padding:9px 14px;margin-top:24px;font-family:var(--mono);font-size:12px;line-height:1.9}
+nav a{color:var(--gold);text-decoration:none;margin-right:13px;white-space:nowrap}
+nav a:hover{color:var(--cream)}
+h2{font-weight:400;font-size:27px;margin:64px 0 4px;border-bottom:1px solid var(--line);padding-bottom:8px}
+h2 small{font-family:var(--mono);font-size:12px;color:var(--gold);margin-right:10px}
+h3{font-weight:400;font-size:19px;margin:0 0 6px}
+p{margin:10px 0}
+.actlede{color:var(--muted);font-style:italic;margin:6px 0 20px;max-width:84ch}
+table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+th,td{border:1px solid var(--line2);padding:8px 10px;text-align:left;vertical-align:top}
+th{font-family:var(--mono);font-size:11px;color:var(--gold);font-weight:400;letter-spacing:.06em}
+td.n{font-family:var(--mono);font-size:12px;white-space:nowrap}
+.pass{color:var(--green)}.warn{color:var(--gold)}.fail{color:var(--red)}
+code{font-family:var(--mono);font-size:12.5px;color:var(--ice);background:#120907;border:1px solid var(--line2);border-radius:3px;padding:0 4px}
+.pitch{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin:22px 0;background:linear-gradient(180deg,var(--panel2),var(--panel))}
+.pitch-head{display:flex;align-items:baseline;gap:12px;padding:14px 18px 10px;border-bottom:1px solid var(--line2);flex-wrap:wrap}
+.pitch-head .no{font-family:var(--mono);font-size:12px;color:var(--gold);letter-spacing:.16em}
+.pitch-head h3{flex:1;min-width:200px}
+.tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:lowercase;border:1px solid currentColor;border-radius:99px;padding:1px 8px;white-space:nowrap}
+.t-leg{color:var(--cyan)}.t-die{color:var(--gold)}.t-mind{color:var(--pink)}.t-cheap{color:var(--green)}
+.stage{padding:26px 18px;background:radial-gradient(ellipse at 50% 0%,rgba(70,38,18,.35),rgba(7,4,3,.9) 70%);overflow-x:auto}
+.body{padding:4px 18px 18px}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0}
+/* ══ LIVE DIAL LAB · a clicky proof, not a screenshot ═══════════════════ */
+.live-lab{margin:24px 0 10px;border:1px solid #76502b;background:linear-gradient(180deg,#24150d,#0b0604);box-shadow:0 14px 40px #0009,inset 0 0 0 1px #1d0f08;overflow:hidden}
+.live-lab-head{display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:13px 16px 11px;border-bottom:1px solid #4b2c18}
+.live-lab-head h3{margin:0;font-size:19px;font-weight:400;color:var(--cream)}
+.live-lab-head span{font:11px var(--mono);letter-spacing:.12em;color:var(--gold)}
+.live-lab-grid{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(230px,.75fr);gap:0;min-height:300px}
+.live-machine{position:relative;min-height:300px;padding:48px 24px 28px;background:radial-gradient(ellipse at 50% 34%,#312016 0,#120906 60%,#070403 100%);overflow:hidden}
+.live-machine::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,190,100,.035) 0 1px,transparent 1px 4px);pointer-events:none;mix-blend-mode:screen}
+.live-machine::after{content:'TX-80 / RELAY 04';position:absolute;left:18px;top:18px;color:#8d6b45;font:10px var(--mono);letter-spacing:.18em}
+.machine-ghost{position:absolute;left:50%;top:50%;width:min(420px,78%);height:190px;transform:translate(-50%,-44%);border:2px solid #5a412b;border-radius:12px;background:linear-gradient(180deg,#4a3b2d,#2a211a 48%,#1a120d);box-shadow:inset 0 2px #b49a6c33,inset 0 -18px 30px #0008,0 18px 30px #0008}
+.machine-glass{position:absolute;inset:26px 20px 44px;border:2px solid #070504;border-radius:7px;background:radial-gradient(ellipse at 50% 40%,#1d2230,#09090d 72%);box-shadow:inset 0 0 28px #000,inset 0 0 0 1px #88724c33;overflow:hidden}
+.machine-glass::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 62% 34%,#d4af6518 0 2px,transparent 3px),radial-gradient(circle at 28% 65%,#aa5a1820 0 1px,transparent 2px),repeating-linear-gradient(0deg,#fff0 0 3px,#c8a8780b 3px 4px)}
+.ghost-symbol{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font:68px Georgia,serif;color:#c8a87818;text-shadow:0 0 22px #d4af6540;transition:color .16s,text-shadow .16s}
+.machine-chin{position:absolute;left:20px;right:20px;bottom:12px;height:23px;display:flex;gap:4px}
+.machine-chin i{flex:1;background:linear-gradient(180deg,#e0d0a9,#b6a27b);border-radius:2px;box-shadow:inset 0 1px #fff9,0 2px #100a06}
+.live-keys{position:absolute;left:8%;right:8%;top:20px;display:grid;grid-template-columns:repeat(10,1fr);gap:4px;z-index:2}
+.live-key{min-width:0;height:40px;padding:0 2px;border:1px solid #7d5f3c;border-radius:5px 5px 3px 3px;background:linear-gradient(180deg,#eee3c8,#c5b58e 75%,#9c8a65);color:#2a1c0e;font:10px var(--mono);letter-spacing:.02em;cursor:pointer;box-shadow:inset 0 1px #fff,0 4px 0 #3d2a18,0 5px 7px #0009;transition:transform .12s,box-shadow .12s,background .15s}
+.live-key:hover,.live-key:focus-visible{background:linear-gradient(180deg,#fff4d5,#decba0 75%,#b59c6f);box-shadow:inset 0 1px #fff,0 4px 0 #3d2a18,0 0 13px var(--key-glow);outline:none}
+.live-key:active,.live-key.is-current{transform:translateY(4px);box-shadow:inset 0 1px #fff,0 1px 0 #3d2a18,0 0 18px var(--key-glow)}
+.live-key.is-visited::after{content:'·';display:block;color:var(--key-accent);font-size:14px;line-height:6px}
+.live-key.is-locked{opacity:.55;background:linear-gradient(180deg,#aaa18d,#696054);text-decoration:line-through;cursor:not-allowed}
+.live-beam{position:absolute;left:28%;right:28%;bottom:41px;height:2px;background:var(--key-accent,#d4af65);box-shadow:0 0 25px 5px var(--key-glow,#d4af6566);opacity:.45;transition:background .2s,box-shadow .2s}
+.live-lab-side{padding:23px 18px;background:#100805;border-left:1px solid #4b2c18;display:flex;flex-direction:column;justify-content:center}
+.live-lab-side .eyebrow{position:static;background:none;padding:0;margin:0 0 12px;color:#a8845a;font:10px var(--mono);letter-spacing:.16em}
+.live-lab-side h4{margin:0;color:var(--cream);font-weight:400;font-size:25px;line-height:1.05}
+.live-lab-side p{margin:10px 0;color:var(--muted);font-size:14px}
+.live-readout{margin-top:auto;border-top:1px dotted #5a301b;padding-top:12px;color:#c8a878;font:12px/1.5 var(--mono)}
+.live-readout strong{color:var(--pink);font-weight:400}
+.live-contract{padding:10px 16px;border-top:1px solid #4b2c18;color:#9e8463;font:11px/1.5 var(--mono);letter-spacing:.03em}
+.live-contract b{color:var(--green);font-weight:400}
+@media(max-width:700px){.live-lab-grid{grid-template-columns:1fr}.live-lab-side{border-left:0;border-top:1px solid #4b2c18;min-height:190px}.live-machine{min-height:280px;padding-left:10px;padding-right:10px}.machine-ghost{width:94%}.live-keys{left:3%;right:3%;gap:2px}.live-key{font-size:8px;height:34px}.live-key:nth-child(n+6){display:none}.live-key:nth-child(5)::after{content:' + 6';font-size:8px;color:#6a4a20}}
+@media(max-width:420px){.live-machine{min-height:245px}.machine-ghost{height:150px}.machine-glass{inset:22px 13px 34px}.machine-chin{left:13px;right:13px}.live-keys{top:13px}.live-key{height:32px;font-size:7px}}
+@media(prefers-reduced-motion:reduce){.live-key,.live-beam,.ghost-symbol{transition:none}}
+
+/* ══ DIEGETIC HOMESCREEN STUDIES · the glass gets the room back ═════════ */
+.home-studies{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:22px 0}
+.home-study{border:1px solid #4e2d1b;background:linear-gradient(180deg,#21120b,#100705);padding:12px;min-height:100%;box-shadow:inset 0 0 18px #0008}
+.home-study.is-recommended{border-color:#9b7139;box-shadow:inset 0 0 18px #0008,0 0 22px #d4af6520}
+.home-study-head{display:flex;justify-content:space-between;gap:8px;align-items:baseline;border-bottom:1px dotted #5a301b;padding-bottom:8px;margin-bottom:10px}
+.home-study-head strong{font:13px var(--mono);letter-spacing:.1em;color:var(--gold);font-weight:400}
+.home-study-head span{font:10px var(--mono);color:var(--green);letter-spacing:.08em}
+.home-study p{font-size:13px;color:var(--muted);margin:10px 0 0}
+.home-screen{position:relative;height:190px;background:#080506;border:6px solid #4a3c30;box-shadow:inset 0 0 0 2px #110b08,inset 0 0 28px #000;overflow:hidden}
+.home-screen::before{content:'LIBER · VACUI / HOME';position:absolute;left:8px;top:7px;color:#8b704d;font:8px var(--mono);letter-spacing:.16em;z-index:4}
+.home-screen::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,#fff0 0 3px,#c8a8780a 3px 4px);pointer-events:none;z-index:5}
+.home-wall{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 32%,#2a1820 0,#11090c 62%,#080506 100%)}
+.home-wall::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 14% 22%,#d4af6520 0 1px,transparent 2px),radial-gradient(circle at 85% 24%,#7ac0d830 0 1px,transparent 2px),radial-gradient(circle at 76% 75%,#ff9ec620 0 1px,transparent 2px)}
+.home-shelf{position:absolute;left:4%;bottom:10%;width:21%;height:55%;border:3px solid #5d4025;border-top-width:5px;background:linear-gradient(180deg,#2a190e,#120a06);box-shadow:0 5px 9px #0009}
+.home-shelf i{display:block;height:8px;margin:8px 5px 0;background:linear-gradient(90deg,#7a3d32,#a77b43,#496657);box-shadow:0 2px #090504}
+.home-note{position:absolute;left:7%;top:38%;width:18%;min-height:30px;padding:5px 4px;background:#d7c698;color:#2c1b0c;font:8px/1.25 Georgia,serif;transform:rotate(-4deg);box-shadow:2px 3px 5px #0008;z-index:3}
+.home-note::before{content:'R. 04 / 11';display:block;font:6px var(--mono);letter-spacing:.08em;color:#7b552e;margin-bottom:3px}
+.home-candle{position:absolute;right:8%;bottom:14%;width:7px;height:38px;background:linear-gradient(90deg,#b99c6c,#f0dfb5,#8c7148);box-shadow:0 0 13px #ffb04a44}
+.home-candle::before{content:'';position:absolute;left:1px;top:-11px;width:5px;height:11px;background:#ffbd64;border-radius:50% 50% 40% 40%;box-shadow:0 0 10px 4px #ff9a3a66}
+.home-constellation{position:absolute;inset:22px 22px 16px 26%;z-index:2}
+.home-constellation line{stroke:#e38bb0;stroke-width:1;stroke-dasharray:3 4;opacity:.68}
+.home-constellation .orbit{fill:none;stroke:#d4af6570;stroke-width:1;stroke-dasharray:2 5}
+.home-constellation .node{fill:#d4af65;stroke:#f6e2b1;stroke-width:1;cursor:pointer;transition:r .15s,fill .15s,filter .15s}
+.home-constellation .node:hover,.home-constellation .node:focus{fill:#ff9ec6;filter:drop-shadow(0 0 5px #ff9ec6);outline:none}
+.home-constellation text{font:7px Georgia,serif;fill:#e8dcc0;pointer-events:none}
+.home-center{fill:#bf8647;stroke:#f3d395;stroke-width:1.2}
+.home-thread{stroke:#ff9ec6!important;stroke-width:1.6!important;opacity:.9!important}
+.home-pin{position:absolute;width:5px;height:5px;border-radius:50%;background:#d04c4c;box-shadow:0 0 5px #d04c4c;z-index:3}
+.home-status{position:absolute;left:7px;right:7px;bottom:5px;border-top:1px solid #4c2c1a;padding-top:4px;color:#a98b5d;font:7px var(--mono);letter-spacing:.08em;z-index:4}
+.home-study[data-study="wall"] .home-screen{background:#0e0e0b}
+.home-study[data-study="wall"] .home-wall{background:linear-gradient(180deg,#211b12,#0b0805)}
+.home-study[data-study="wall"] .home-constellation{inset:20px 13% 24px}
+.home-study[data-study="wall"] .home-note{left:9%;top:15%;width:22%;transform:rotate(3deg)}
+.home-study[data-study="yard"] .home-screen{background:#081019}
+.home-study[data-study="yard"] .home-wall{background:radial-gradient(ellipse at 70% 24%,#21364a 0,#0b1119 58%,#05080d 100%)}
+.home-house{position:absolute;left:8%;bottom:15%;width:34%;height:60%;border:2px solid #6f5b40;background:#131b20;box-shadow:0 8px 14px #000a}
+.home-house::before{content:'';position:absolute;left:-6%;right:-6%;top:-13%;height:13%;background:#725534;clip-path:polygon(0 100%,50% 0,100% 100%)}
+.home-window{position:absolute;width:24%;height:18%;background:#d4af654d;border:1px solid #b28c4e;box-shadow:0 0 8px #d4af6522}
+.home-window:nth-child(1){left:12%;top:28%}.home-window:nth-child(2){left:48%;top:28%}.home-window:nth-child(3){left:30%;top:62%}
+.home-water{position:absolute;left:4%;right:4%;bottom:7%;height:14%;border-top:1px solid #7ac0d880;background:linear-gradient(180deg,#132f3d,#08131b);border-radius:50%}
+.home-expanded{position:relative;height:300px;background:radial-gradient(ellipse at 50% 42%,#24121b,#0a0609 70%);border:1px solid #4c2b1c;overflow:hidden;margin-top:14px}
+.home-expanded::before{content:'GLASS / 787 × 590 · CONSTELLATION FIELD / LIVE';position:absolute;top:12px;left:14px;color:#92734d;font:10px var(--mono);letter-spacing:.14em;z-index:3}
+.home-expanded::after{content:'click a kept thing · the note drawer follows the selection';position:absolute;bottom:11px;left:14px;color:#806442;font:10px var(--mono);letter-spacing:.08em;z-index:3}
+.home-graph{position:absolute;inset:30px 30% 28px 7%}
+.home-graph line{stroke:#d78eae;stroke-width:1.4;stroke-dasharray:5 5;opacity:.76;transition:stroke .15s,stroke-width .15s}
+.home-graph line.active{stroke:#ff9ec6;stroke-width:2.8;stroke-dasharray:none;filter:drop-shadow(0 0 4px #ff9ec6)}
+.home-graph ellipse{fill:none;stroke:#d4af6566;stroke-width:1;stroke-dasharray:3 5}
+.home-graph .graph-node{fill:#b87848;stroke:#ead1a0;stroke-width:1.4;cursor:pointer;transition:fill .15s,stroke .15s,filter .15s}
+.home-graph .graph-node:hover,.home-graph .graph-node.selected{fill:#ff9ec6;stroke:#fff0d0;filter:drop-shadow(0 0 8px #ff9ec6)}
+.home-graph .graph-core{fill:#d4af65;stroke:#fff0cf;stroke-width:2}
+.home-graph text{fill:#eadfc6;font:11px Georgia,serif;pointer-events:none}
+.home-note-drawer{position:absolute;right:0;top:0;bottom:0;width:27%;padding:17px 13px;background:linear-gradient(180deg,#291b14,#160b08);border-left:1px solid #6c4427;box-shadow:-10px 0 20px #0008;z-index:4}
+.home-note-drawer::before{content:'MARGIN / OPEN';display:block;color:#a8845a;font:10px var(--mono);letter-spacing:.16em;border-bottom:1px dotted #63402a;padding-bottom:8px;margin-bottom:12px}
+.home-note-drawer h4{margin:0;color:#f1dfbd;font:19px Georgia,serif;font-weight:400;line-height:1.05}
+.home-note-drawer p{font-size:12px;line-height:1.4;color:#c4a984;margin:10px 0}
+.home-note-drawer .note-meta{border-top:1px solid #55321e;padding-top:10px;color:#937049;font:10px/1.5 var(--mono)}
+.home-note-drawer .note-button{width:100%;margin-top:12px;padding:7px 5px;border:1px solid #9a6d37;background:#24140b;color:#e3c58f;font:11px var(--mono);cursor:pointer}
+.home-note-drawer .note-button:hover,.home-note-drawer .note-button:focus-visible{background:#3b2111;color:#fff0d0;outline:2px solid #d4af65;outline-offset:2px}
+.home-legend{display:flex;gap:16px;flex-wrap:wrap;margin:11px 0 0;color:#a7885b;font:11px var(--mono)}
+.home-legend b{font-weight:400}.home-legend .pink{color:#ff9ec6}.home-legend .gold{color:#d4af65}.home-legend .cream{color:#eadfc6}
+.home-brief{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;margin-top:16px}
+.home-brief>div{border-top:1px solid #4e2d1b;padding-top:12px}
+.home-brief h3{font-size:18px;color:var(--cream);font-weight:400}
+.home-brief p,.home-brief li{font-size:14px;color:#cbb894}
+.home-brief ul{padding-left:18px}
+.home-callout{border:1px solid #2d5b3b;border-left:4px solid var(--green);background:#081409;padding:12px 15px;margin-top:16px;color:#b4d3af;font-size:14px}
+.home-callout strong{color:var(--green);font:11px var(--mono);letter-spacing:.14em;font-weight:400}
+@media(max-width:900px){.home-studies{grid-template-columns:1fr}.home-study{min-height:0}.home-brief{grid-template-columns:1fr}}
+@media(max-width:560px){.home-expanded{height:360px}.home-graph{inset:38px 0 45% 4%}.home-note-drawer{top:58%;bottom:0;left:0;right:0;width:auto;border-left:0;border-top:1px solid #6c4427;box-shadow:0 -10px 20px #0008}.home-constellation{inset:22px 9px 16px 28%}.home-screen{height:180px}}
+@media(prefers-reduced-motion:reduce){.home-constellation .node,.home-graph .graph-node,.home-graph line{transition:none}}
+
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0}
+.two>div{padding:4px 18px 18px}
+.two>div:first-child{border-right:1px solid var(--line2)}
+@media (max-width:760px){.two{grid-template-columns:1fr}.two>div:first-child{border-right:none;border-bottom:1px solid var(--line2)}}
+ul{margin:8px 0;padding-left:18px}
+li{margin:6px 0;color:#cbb894;font-size:14px}
+li b{color:var(--cream);font-weight:400}
+.ratio{font-family:var(--mono);font-size:11.5px}
+.note{margin-top:12px;border:1px solid #6a2a20;border-left:4px solid var(--red);border-radius:0 8px 8px 0;background:#160806;padding:9px 13px;font-size:12.5px;color:#e0b0a0}
+.note b{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--red);display:block;margin-bottom:3px}
+.good{border-color:#2a5a32;border-left-color:var(--green);background:#08140a;color:#a8d0aa}
+.good b{color:var(--green)}
+/* note paragraphs: the label keeps the mono marker, the prose stays prose */
+.np{font-size:12.5px;margin:7px 0 0;line-height:1.55}
+.note .np b.hd,.note.good .np b.hd{display:inline;font-family:var(--serif);font-size:12.5px;letter-spacing:0;text-transform:none;font-weight:700;margin:0}
+.note .np b.hd{color:#f0c0b0}
+.note.good .np b.hd{color:#cfe8cf}
+.note i{color:var(--cream)}
+.note.good i{color:#e6f2e6}
+footer{margin-top:80px;border-top:1px solid var(--line);padding-top:18px;color:var(--muted);font-size:13px;font-style:italic}
+.cap{font-family:var(--mono);font-size:10.5px;color:#9e8463;letter-spacing:.08em;display:block;margin-top:9px}
+.center{display:flex;justify-content:center}
+
+/* ══ THE CURRENT DIAL, reproduced at its real measurements ══════════════
+   tile 116px · glyph 17/36px · label 16/20px · arrows 32px · hint 14px at
+   50% alpha. Reproduced so the numbers under it are the numbers it ships. */
+.d-track{height:1px;background:#3a2818;box-shadow:0 0 18px rgba(90,48,26,.6)}
+.d-cur{display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:4px;padding:18px 6px 8px;background:linear-gradient(180deg,transparent,rgba(20,10,5,.7));position:relative}
+.d-cur .a{position:absolute;bottom:34%;width:32px;height:32px;border-radius:50%;border:1px solid rgba(200,168,120,.55);background:rgba(20,10,5,.56);color:#c8a878;font-family:var(--mono);font-size:1.35rem;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.d-cur .a.l{left:8%}.d-cur .a.r{right:8%}
+.d-tile{width:116px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 9px 6px;border:1px solid #3a1414;border-radius:6px;color:#c8a878;cursor:pointer;position:relative;font:inherit;
+  background:radial-gradient(ellipse at 50% 22%,rgba(255,255,255,.07) 0%,rgba(0,0,0,0) 55%),linear-gradient(180deg,#17090a 0%,#0c0404 100%);
+  box-shadow:inset 0 0 12px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.05),0 2px 0 #0a0303,0 0 9px var(--glow,rgba(200,168,120,.22));
+  white-space:nowrap}
+.d-tile .phos-label{font-family:'VT323','Courier New',monospace;font-size:1rem;line-height:1;letter-spacing:.1em;text-transform:lowercase;color:var(--acc,#c8a878);text-shadow:0 0 8px var(--glow,rgba(200,168,120,.55))}
+.d-tile svg{width:17px;height:17px;color:var(--acc,#c8a878);filter:drop-shadow(0 0 3px var(--glow,rgba(200,168,120,.45)))}
+.d-tile.prev,.d-tile.next{opacity:.92;transform:translateY(12%) scale(.9);filter:saturate(.8) brightness(.95)}
+.d-tile.prev{justify-self:end}.d-tile.next{justify-self:start}
+.d-tile.active{padding:8px 16px 9px;border-color:var(--acc,#c8a878);background:radial-gradient(ellipse at 50% 18%,rgba(255,255,255,.12) 0%,rgba(0,0,0,0) 58%),linear-gradient(180deg,#241010 0%,#140606 100%);
+  box-shadow:inset 0 0 18px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.08),0 2px 0 #0a0303,0 0 26px var(--glow,rgba(200,168,120,.5));transform:translateY(-30%);z-index:2}
+.d-tile.active .phos-label{font-size:1.25rem;text-shadow:0 0 14px var(--glow,rgba(200,168,120,.9))}
+.d-tile.active svg{width:36px;height:36px}
+.d-tile.active::before,.d-tile.active::after{content:'‹';position:absolute;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:1.3rem;color:var(--acc,#c8a878);opacity:.55;left:5px}
+.d-tile.active::after{content:'›';left:auto;right:5px}
+.d-hint{display:block;margin-top:3px;font-family:'VT323','Courier New',monospace;font-size:14px;letter-spacing:.18em;color:rgba(200,168,120,.5);cursor:pointer}
+.d-opinion{font-family:'VT323','Courier New',monospace;font-size:1rem;letter-spacing:.06em;color:rgba(240,224,200,.95);text-align:center;margin:0 0 10px;text-shadow:0 1px 2px #000,0 0 8px rgba(0,0,0,.5)}
+.d-opinion .nm{color:var(--persona-accent,#c8a878);letter-spacing:.14em;margin-right:.6em;text-transform:lowercase}
+
+/* ══ PITCH I · THE INDEX DRAWER ═══════════════════════════════════════ */
+.drawer{width:100%;background:linear-gradient(180deg,#3b2d1e,#241a10 70%,#1a120a);border:1px solid #4a3826;border-radius:5px;padding:9px 10px 11px;box-shadow:inset 0 1px 0 rgba(232,214,178,.2),inset 0 -3px 8px rgba(0,0,0,.6),0 6px 18px rgba(0,0,0,.7);max-width:660px}
+.drawer .rail{height:4px;border-radius:2px;background:linear-gradient(180deg,#5a4526,#2a1e10);box-shadow:inset 0 1px 0 rgba(240,220,170,.25);margin-bottom:9px}
+.drawer .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(122px,1fr));gap:6px}
+.cardc{display:flex;align-items:center;gap:8px;min-height:46px;padding:6px 9px;border:0;border-radius:2px 7px 7px 2px;cursor:pointer;text-align:left;
+  background:linear-gradient(180deg,#ded0a6,#c9b98a);color:#2a1c0a;font-family:var(--mono);
+  box-shadow:0 2px 0 rgba(0,0,0,.55),inset 0 1px 0 rgba(255,252,232,.6);position:relative}
+.cardc::before{content:'';position:absolute;left:5px;top:6px;bottom:6px;width:2px;border-radius:1px;background:var(--roomink,#8a5a24)}
+.cardc .glyph{width:22px;height:22px;flex:0 0 auto;color:var(--roomink,#8a5a24)}
+.cardc .nm{display:block;font-size:15px;letter-spacing:.02em;color:#241608}
+.cardc .pl{display:block;font-size:11px;letter-spacing:.06em;color:#5a4423}
+.cardc:focus-visible{outline:0;box-shadow:inset 0 2px 5px rgba(60,40,10,.5),0 0 0 3px rgba(234,223,198,.7),0 0 16px rgba(255,240,200,.35)}
+.cardc.here{background:linear-gradient(180deg,#f2e8c6,#ddcfa4);box-shadow:inset 0 0 0 2px #7a3410,0 2px 0 rgba(0,0,0,.55),0 0 18px rgba(255,224,150,.3)}
+.cardc.here .tag{margin-left:auto;font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:#7a3410;border:1px solid #7a3410;border-radius:2px;padding:0 4px}
+
+/* ══ PITCH II · THE HOUSE ════════════════════════════════════════════ */
+.house{width:100%;max-width:600px;background:linear-gradient(180deg,#1a1219,#0b0709);border:1px solid #2e2030;border-radius:6px;padding:14px 14px 0;box-shadow:inset 0 0 40px rgba(0,0,0,.7)}
+.hrow{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:9px}
+.hrow.base{border-top:1px dashed #4a3a4a;padding-top:9px;margin-top:2px;position:relative}
+.eyebrow{position:absolute;top:-8px;left:0;background:#0b0709;padding-right:6px;font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;color:#8a7a92}
+.win{position:relative;min-height:52px;border:0;border-radius:2px;background:linear-gradient(180deg,#241a12,#0e0806);cursor:pointer;padding:4px;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;
+  box-shadow:inset 0 0 0 1px #3a2a1a,inset 0 0 14px rgba(0,0,0,.8)}
+.win .lit{position:absolute;inset:3px;border-radius:1px;background:radial-gradient(ellipse at 50% 40%,var(--roomink,#d4af65) 0%,rgba(0,0,0,0) 78%);opacity:.16;transition:opacity .18s ease}
+.win .nm{position:relative;font-family:var(--mono);font-size:13px;letter-spacing:.04em;color:#f4ead0;text-shadow:0 1px 2px #000;padding:1px 2px}
+.win .pl{position:relative;font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;color:rgba(244,234,208,.72);padding:0 2px 1px;opacity:0;transition:opacity .18s ease}
+.win:hover .lit,.win:focus-visible .lit{opacity:.85}
+.win:hover .pl,.win:focus-visible .pl{opacity:1}
+.win:focus-visible{outline:0;box-shadow:inset 0 0 0 2px #d4af65,0 0 0 3px rgba(212,175,101,.45)}
+.win.dark .nm{color:rgba(244,234,208,.68)}
+.roof{margin:0 0 14px;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:#8a7a92;text-align:center}
+@media (prefers-reduced-motion:reduce){.win .lit,.win .pl{transition:none}}
+
+/* ══ PITCH III · THE TUBE RACK ══════════════════════════════════════ */
+.rack{width:100%;display:grid;grid-template-columns:repeat(auto-fit,minmax(64px,1fr));gap:7px;background:linear-gradient(180deg,#241d15,#120d08);border:1px solid #3a3126;border-radius:6px;padding:12px;box-shadow:inset 0 1px 0 rgba(232,214,178,.16),inset 0 -4px 12px rgba(0,0,0,.7);max-width:640px}
+.tube{border:0;background:transparent;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px}
+.tube .glass{width:100%;height:52px;border-radius:4px 4px 2px 2px;background:linear-gradient(180deg,#0c0603,#1a0e05);box-shadow:inset 0 0 0 1px #2a1c12,inset 0 0 10px rgba(0,0,0,.9);position:relative;overflow:hidden}
+.tube .glass::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,var(--roomink,#d4af65),rgba(0,0,0,0) 72%);opacity:.14}
+.tube .glass::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.35) 0 1px,rgba(0,0,0,0) 1px 3px)}
+.tube .base{width:100%;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:#e2cca0;background:linear-gradient(180deg,#3a3126,#241d15);border:1px solid #100c08;border-radius:2px;padding:3px 2px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tube.on .glass{box-shadow:inset 0 0 0 1px #6a5530,inset 0 0 18px rgba(255,190,100,.5),0 0 16px rgba(255,190,100,.35)}
+.tube.on .glass::after{opacity:.85}
+.tube.on .base{color:#fdf0cd;background:linear-gradient(180deg,#4a4030,#2f2819)}
+.tube:focus-visible{outline:0}
+.tube:focus-visible .base{outline:2px solid #ffd88a;outline-offset:2px}
+.tube .det{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:#9e8463}
+
+/* ══ PITCH IV · THE WORN THREE ═══════════════════════════════════════ */
+.worn{width:100%;display:flex;flex-direction:column;gap:9px;max-width:430px}
+.worn .row3{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.slot{min-height:60px;border:0;border-radius:3px;cursor:pointer;padding:7px 9px;text-align:left;position:relative;font-family:var(--mono);
+  background:linear-gradient(180deg,#2a231a,#171208);color:#f4ead0;box-shadow:inset 0 1px 0 rgba(232,214,178,.22),inset 0 0 0 1px #0f0b06,0 3px 10px rgba(0,0,0,.6)}
+.slot::after{content:'';position:absolute;right:11px;bottom:9px;width:26px;height:17px;border-radius:50%;background:radial-gradient(ellipse at 42% 40%,rgba(255,240,205,.26),rgba(255,240,205,0) 72%)}
+.slot .nm{display:block;font-size:15px;letter-spacing:.04em}
+.slot .ag{display:block;font-size:10.5px;letter-spacing:.08em;color:#c9b48a;margin-top:2px}
+.slot:focus-visible{outline:0;box-shadow:inset 0 0 0 2px #ffd88a,0 0 0 3px rgba(212,175,101,.5),0 0 18px rgba(255,200,110,.4)}
+.worn .others{display:flex;align-items:center;gap:9px;min-height:44px;padding:0 11px;border-radius:3px;border:1px dashed rgba(155,130,90,.5);background:linear-gradient(180deg,#1a1409,#100c06);color:#cdbb92;font-family:var(--mono);font-size:12px;letter-spacing:.1em;cursor:pointer}
+.worn .others:focus-visible{outline:0;border-style:solid;border-color:#ffd88a;background:#221a0d}
+.worn .others .knob{width:34px;height:9px;border-radius:2px;background:linear-gradient(180deg,#6a5530,#332812);box-shadow:inset 0 1px 0 rgba(240,220,170,.4)}
+
+/* ══ PITCH V · THE RING, WHICH IS ACTUALLY RADIAL ═══════════════════ */
+.ring{position:relative;flex:0 0 auto;width:300px;height:300px;margin:0 auto}
+.ring .face{position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(circle at 50% 50%,#080403 0 38%,rgba(0,0,0,0) 39%),conic-gradient(from 0deg,#6a5530,#3a2c18 12%,#6a5530 25%,#3a2c18 37%,#6a5530 50%,#3a2c18 62%,#6a5530 75%,#3a2c18 87%,#6a5530 100%);
+  box-shadow:inset 0 0 0 1px #1a1208,inset 0 0 30px rgba(0,0,0,.85),0 8px 26px rgba(0,0,0,.75)}
+.ring .glass{position:absolute;inset:52px;border-radius:50%;background:radial-gradient(ellipse at 50% 34%,#2c1604,#140802 70%,#0a0401);box-shadow:inset 0 0 24px rgba(0,0,0,.9),inset 0 0 0 7px rgba(255,150,60,.08),0 0 26px rgba(255,156,60,.18);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;padding:12px}
+.ring .glass .rn{font-family:var(--mono);font-size:19px;letter-spacing:.06em;color:#fdf0cd;text-shadow:0 0 14px rgba(255,180,90,.5)}
+.ring .glass .rp{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;color:#e0b87a}
+.ring .glass .rt{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:#a8895c;margin-top:5px}
+.eng{position:absolute;left:50%;top:50%;width:0;height:0}
+.eng .lab{position:absolute;transform:translate(-50%,-50%) rotate(calc(-1 * var(--a,0deg)));font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:#e8d3a6;white-space:nowrap;padding:3px 7px;border-radius:2px;background:linear-gradient(180deg,#3a2c18,#241a0e);border:1px solid #100c08;cursor:pointer}
+.eng.at .lab{color:#0d0703;background:linear-gradient(180deg,#f0d9a2,#d4af65);border-color:#fdf0cd;box-shadow:0 0 18px rgba(255,200,110,.55)}
+.eng .lab:focus-visible{outline:2px solid #ffd88a;outline-offset:3px}
+.pointer{position:absolute;left:50%;top:-9px;transform:translateX(-50%);width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;border-top:16px solid #d4af65;filter:drop-shadow(0 0 8px rgba(255,200,110,.6))}
+.ring .knurl{position:absolute;left:50%;bottom:-16px;transform:translateX(-50%);font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:#b99a68}
+.floor439{max-width:439px;margin:0 auto}
+
+/* ══ THE DESKTOP AT TRUE SCALE ═══════════════════════════════════════
+   Authored in real 1280×800 coordinates and scaled for the page, so what
+   is drawn below IS the layout: machine 920px at x=27, a 67px bezel, a
+   787×567 glass, and the liberchat sidecar 272px at x=957. Every number
+   came off the live desktop.html, not from reading the stylesheet. */
+/* The stage is a container, so the mockup scales to whatever width it is
+   given: 100cqw / 1280 IS the scale factor. Nothing here is a fixed
+   downscale that breaks on a narrower page — it is the real layout at
+   whatever size it has room for, always whole. */
+.dsk-wrap{container-type:inline-size;position:relative;width:100%;max-width:794px;aspect-ratio:1280/800;margin:0 auto}
+.dsk{position:absolute;left:0;top:0;width:1280px;height:800px;transform:scale(calc(100cqw / 1280));transform-origin:top left;
+  background:radial-gradient(ellipse at 50% 112%,rgba(80,40,25,.16),rgba(0,0,0,0) 50%),radial-gradient(ellipse at 50% 96%,rgba(40,18,10,.55),rgba(0,0,0,0) 34%),radial-gradient(ellipse at 50% 55%,rgba(20,10,5,.7),rgba(0,0,0,1) 76%),#000;
+  font-family:var(--mono);overflow:hidden}
+.dsk .mach{position:absolute;left:27px;top:41px;width:920px;height:690px;border-radius:16px 16px 10px 10px;
+  background:linear-gradient(178deg,#4e443a 0%,#332c25 42%,#231e18 100%);
+  box-shadow:inset 0 3px 0 rgba(240,224,190,.28),inset 0 0 0 2px #14100c,0 20px 44px rgba(0,0,0,.75)}
+.dsk .mach .glass{position:absolute;left:67px;top:67px;right:66px;bottom:56px;border-radius:7px;
+  background:radial-gradient(ellipse at 50% 42%,#1b1526 0%,#0b0809 72%);
+  box-shadow:inset 0 0 0 3px #090705,inset 0 0 70px rgba(0,0,0,.92);overflow:hidden}
+.dsk .glass .art{position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 26% 30%,rgba(214,190,150,.55) 0 1.6px,rgba(0,0,0,0) 2.4px),
+    radial-gradient(circle at 41% 58%,rgba(214,190,150,.4) 0 1.2px,rgba(0,0,0,0) 2px),
+    radial-gradient(circle at 63% 24%,rgba(214,190,150,.45) 0 1.4px,rgba(0,0,0,0) 2.2px),
+    radial-gradient(circle at 74% 62%,rgba(214,190,150,.35) 0 1.2px,rgba(0,0,0,0) 2px),
+    radial-gradient(circle at 52% 78%,rgba(214,190,150,.3) 0 1px,rgba(0,0,0,0) 1.8px)}
+.dsk .glass .say{position:absolute;left:26px;top:22px;font-size:12px;letter-spacing:.2em;color:#a8926f;text-transform:lowercase}
+.dsk .glass .thread{position:absolute;left:26px;bottom:22px;right:26px;font-size:11px;letter-spacing:.06em;color:#8d7a5c}
+/* the chin the dial's band currently occupies, when it is freed */
+.dsk .zone{position:absolute;border:1px dashed rgba(122,216,180,.75);border-radius:5px}
+.dsk .zone .zl{position:absolute;left:6px;top:5px;font-size:11px;letter-spacing:.14em;color:#7ad8b4;background:#070403cc;padding:1px 5px;border-radius:2px}
+.dsk .zone.freed{left:94px;bottom:68px;width:787px;height:145px}
+/* the bezel chin, carrying the replacement */
+.dsk .chin{position:absolute;left:67px;right:66px;bottom:7px;height:40px;display:flex;gap:3px;align-items:center}
+.dsk .chin .k{flex:1 1 0;min-width:0;height:36px;display:flex;align-items:center;justify-content:center;border-radius:3px;
+  background:linear-gradient(180deg,#e2d4aa,#cbba8e);color:#241608;font-size:12px;letter-spacing:.02em;
+  box-shadow:0 2px 0 rgba(0,0,0,.5),inset 0 1px 0 rgba(255,252,232,.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 4px}
+.dsk .chin .k.on{background:linear-gradient(180deg,#f4e9c4,#dccfa2);box-shadow:inset 0 0 0 2px #7a3410,0 2px 0 rgba(0,0,0,.5)}
+/* the left cheek, carrying a vertical rail */
+.dsk .cheek{position:absolute;left:11px;top:110px;width:44px;height:560px;display:flex;flex-direction:column;gap:4px}
+.dsk .cheek .k{flex:1 1 0;min-height:0;display:flex;align-items:center;justify-content:center;border-radius:3px;
+  background:linear-gradient(180deg,#3a3126,#251d13);color:#e2cca0;font-size:11px;letter-spacing:.04em;
+  box-shadow:inset 0 1px 0 rgba(232,214,178,.2),0 2px 0 rgba(0,0,0,.5);writing-mode:vertical-rl;text-orientation:mixed}
+.dsk .cheek .k.on{background:linear-gradient(180deg,#4a4030,#2f2819);color:#fdf0cd;box-shadow:inset 0 0 0 2px #d4af65,0 2px 0 rgba(0,0,0,.5)}
+/* the liberchat sidecar, at its measured place and size */
+.dsk .sc{position:absolute;left:957px;top:278px;width:272px;height:477px}
+.dsk .sc .body{position:absolute;inset:0;border-radius:12px 12px 8px 8px;background:linear-gradient(180deg,#4a3f30,#322a20 55%,#241d15);
+  box-shadow:inset 0 1px 0 rgba(232,214,178,.28),inset 0 -2px 4px rgba(0,0,0,.55),inset 0 0 0 1px #191410,0 6px 22px rgba(0,0,0,.7)}
+.dsk .sc .plate{position:absolute;top:6px;left:12px;right:12px;display:flex;justify-content:space-between;font-size:11px;letter-spacing:.2em;color:#d8c9a6}
+.dsk .sc .gl{position:absolute;left:7px;right:7px;top:26px;bottom:44px;border-radius:8px;background:#100a04;
+  box-shadow:inset 0 0 0 2px #0a0705,inset 0 0 30px rgba(0,0,0,.9),inset 3px 0 8px -2px rgba(255,176,96,.3);padding:8px}
+.dsk .sc .feed{position:absolute;inset:7px 6px 6px;border-radius:2px;background:linear-gradient(180deg,#ded2ab,#c9bb8c);
+  box-shadow:0 0 0 1px rgba(20,8,2,.75),inset 0 0 22px rgba(190,130,50,.28),0 0 24px rgba(255,156,60,.35);padding:8px 10px;overflow:hidden}
+.dsk .sc .feed .fh{font-size:10.5px;letter-spacing:.16em;color:rgba(74,52,24,.72);text-transform:uppercase}
+.dsk .sc .feed .fl{font-size:14px;line-height:1.4;color:#241708;margin-top:6px}
+.dsk .sc .feed .fl.me{color:#6b4a1e}
+.dsk .sc .feed .ff{position:absolute;left:10px;right:10px;bottom:8px;display:flex;gap:5px}
+.dsk .sc .feed .ff i{flex:1;height:22px;border:1px solid rgba(92,67,38,.5);border-radius:2px;background:rgba(255,248,224,.6)}
+.dsk .sc .feed .ff b{height:22px;padding:0 8px;display:flex;align-items:center;border:1px solid rgba(92,67,38,.55);border-radius:2px;background:rgba(92,67,38,.12);color:#4a3418;font-size:11px;letter-spacing:.1em}
+.dsk .sc .note{position:absolute;top:-14px;right:-10px;background:linear-gradient(178deg,#e9dda6,#d2c489);color:#4a3a14;font-size:11px;letter-spacing:.14em;padding:3px 7px 4px;transform:rotate(2.2deg);box-shadow:0 1px 3px rgba(0,0,0,.55)}
+.dsk .sc .stand{position:absolute;left:50%;transform:translateX(-50%);bottom:-18px;width:46%;height:14px;background:linear-gradient(90deg,#191410,#3a3126 30%,#241d15 55%,#17120d);box-shadow:inset 0 -2px 3px rgba(0,0,0,.8)}
+.dsk .sc .shadow{position:absolute;left:50%;transform:translateX(38%);bottom:-26px;width:88%;height:12px;background:radial-gradient(ellipse at center,rgba(0,0,0,.85),rgba(0,0,0,0) 72%);filter:blur(2px)}
+.dsk .ruler{position:absolute;font-size:11px;letter-spacing:.12em;color:#7ad8b4}
+.dsk .gut{position:absolute;top:41px;height:690px;border-left:1px dashed rgba(255,158,198,.5);border-right:1px dashed rgba(255,158,198,.5);background:rgba(255,158,198,.05)}
+.dsk .gut.l{left:27px;width:0}
+.dsk .gut .gl2{position:absolute;top:8px;left:6px;font-size:11px;letter-spacing:.12em;color:#ff9ec6;white-space:nowrap}
+.dsk-note{font-family:var(--mono);font-size:11.5px;color:#9e8463;text-align:center;margin-top:12px;letter-spacing:.04em}
+.dsk-legend{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:10px;font-family:var(--mono);font-size:11px;letter-spacing:.08em}
+.dsk-legend b{font-weight:400}
+.lg-a{color:#7ad8b4}.lg-b{color:#ff9ec6}.lg-c{color:#d4af65}
+/* the 439 desktop, at true scale */
+.dsk439-wrap{container-type:inline-size;position:relative;width:100%;max-width:439px;aspect-ratio:439/800;margin:0 auto}
+.dsk439{position:absolute;left:0;top:0;width:439px;height:800px;transform:scale(calc(100cqw / 439));transform-origin:top left;background:radial-gradient(ellipse at 50% 55%,rgba(20,10,5,.7),rgba(0,0,0,1) 76%),#000}
+.dsk439 .mach{position:absolute;left:9px;top:228px;width:421px;height:316px;border-radius:10px;
+  background:linear-gradient(178deg,#4e443a,#2e2822 45%,#221d18);box-shadow:inset 0 2px 0 rgba(240,224,190,.24),inset 0 0 0 1px #14100c,0 12px 26px rgba(0,0,0,.7)}
+.dsk439 .mach .glass{position:absolute;left:23px;top:23px;right:22px;bottom:19px;border-radius:5px;background:radial-gradient(ellipse at 50% 42%,#1b1526,#0b0809 72%);box-shadow:inset 0 0 0 2px #090705,inset 0 0 40px rgba(0,0,0,.9)}
+.dsk439 .mach .chin{position:absolute;left:23px;right:22px;bottom:3px;height:14px;display:flex;gap:2px}
+.dsk439 .mach .chin i{flex:1;border-radius:2px;background:linear-gradient(180deg,#e2d4aa,#cbba8e)}
+.dsk439 .sc{position:absolute;left:14px;top:593px;width:272px;height:193px}
+.dsk439 .sc .body{position:absolute;inset:0;border-radius:10px 10px 6px 6px;background:linear-gradient(180deg,#4a3f30,#322a20 55%,#241d15);box-shadow:inset 0 1px 0 rgba(232,214,178,.26),inset 0 0 0 1px #191410,0 5px 18px rgba(0,0,0,.7)}
+.dsk439 .sc .gl{position:absolute;left:6px;right:6px;top:22px;bottom:8px;border-radius:6px;background:#100a04;box-shadow:inset 0 0 0 2px #0a0705,inset 0 0 20px rgba(0,0,0,.9)}
+.dsk439 .sc .feed{position:absolute;inset:6px;border-radius:2px;background:linear-gradient(180deg,#ded2ab,#c9bb8c);box-shadow:inset 0 0 16px rgba(190,130,50,.28)}
+.dsk439 .sc .plate{position:absolute;top:5px;left:10px;font-size:11px;letter-spacing:.18em;color:#d8c9a6}
+/* ══ PITCH VI · THE PHOSPHOR BANK — one nixie door, built into the CRT ═
+   One door is a component the maker soldered into the bezel:
+     the plate   dark steel, the name ENGRAVED and enamel-filled. Filled,
+                 because bare cut metal on a mid-tone panel renders at
+                 1.9:1 — the relief that makes an engraving read in your
+                 hand does not survive a flat screen, so the cut is filled
+                 with enamel the way machine nameplates always were.
+     the collar  Bakelite, two slotted screws, the room's carved mark
+                 etched in the shoulder where a thumb lands.
+     the tube    a nixie envelope: domed glass, a mica spacer, the anode
+                 mesh, one cathode wire. Cold it is dark with the cathodes
+                 faintly visible and an ember at the base; lit it burns in
+                 the room's own phosphor, with bloom and a pool on the
+                 collar. Never a door you cannot find when the power is on.
+     one knob    --ph is the room's phosphor. The GLOW is the room; the
+                 NAME is enamel. That split is the whole legibility fix. */
+.nix{--ph:#d4af65;--ph-glow:rgba(212,175,101,.5);--enamel:#f0e4c8;
+  display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:0;padding:0;
+  cursor:pointer;font-family:var(--mono);min-width:0}
+.nix .eng{width:100%;background:linear-gradient(180deg,#3a342b,#241f19);border-radius:2px;padding:3px 4px 4px;
+  box-shadow:inset 0 1px 0 rgba(240,228,200,.18),inset 0 -1px 0 rgba(0,0,0,.6),0 1px 0 rgba(0,0,0,.5)}
+.nix .eng b{display:block;font-weight:400;font-size:11px;letter-spacing:.06em;color:var(--enamel);
+  text-shadow:0 1px 0 rgba(0,0,0,.9),0 0 1px rgba(0,0,0,.95);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nix .soc{position:relative;width:100%;height:34px;background:linear-gradient(180deg,#2b2620,#1a1613);
+  border-radius:3px 3px 2px 2px;display:flex;align-items:flex-end;justify-content:center;
+  box-shadow:inset 0 1px 0 rgba(240,228,200,.14),inset 0 -2px 4px rgba(0,0,0,.7)}
+.nix .soc::before,.nix .soc::after{content:'';position:absolute;bottom:3px;width:4px;height:4px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#6a6157,#2a251f);box-shadow:0 1px 0 rgba(0,0,0,.7)}
+.nix .soc::before{left:3px}.nix .soc::after{right:3px}
+.nix .tube{position:relative;width:70%;height:100%;border-radius:6px 6px 2px 2px;overflow:hidden;
+  background:linear-gradient(180deg,rgba(60,50,40,.5),rgba(20,16,12,.92) 60%,rgba(10,8,6,.96));
+  box-shadow:inset 0 0 0 1px rgba(240,228,200,.14)}
+.nix .tube::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(96deg,rgba(255,248,224,.22) 0 8%,rgba(255,248,224,.05) 16%,rgba(0,0,0,0) 34%)}
+.nix .tube .mesh{position:absolute;inset:6px 3px 3px;
+  background:repeating-linear-gradient(90deg,rgba(240,228,200,.15) 0 1px,rgba(0,0,0,0) 1px 3px)}
+.nix .tube .mica{position:absolute;left:8%;right:8%;top:14%;height:2px;background:rgba(238,228,204,.5);border-radius:1px}
+.nix .tube .cath{position:absolute;left:50%;top:22%;bottom:14%;width:2px;transform:translateX(-50%);border-radius:1px;
+  background:linear-gradient(180deg,rgba(120,104,84,.55),rgba(90,76,58,.35))}
+.nix .tube .ember{position:absolute;left:50%;bottom:0;width:82%;height:15px;transform:translateX(-50%);
+  background:radial-gradient(ellipse at 50% 100%,rgba(255,140,40,.3),rgba(0,0,0,0) 70%)}
+.nix .tube .lit{position:absolute;inset:0;opacity:0;transition:opacity .18s ease;
+  background:radial-gradient(ellipse at 50% 52%,var(--ph) 0%,var(--ph-glow) 34%,rgba(0,0,0,0) 76%)}
+.nix .tube .halo{position:absolute;left:50%;bottom:12%;width:9px;height:9px;transform:translateX(-50%);border-radius:50%;
+  background:var(--ph);box-shadow:0 0 8px var(--ph),0 0 18px var(--ph-glow);opacity:0;transition:opacity .18s ease}
+.nix .soc .mark{position:absolute;top:2px;left:50%;transform:translateX(-50%);width:10px;height:4px;opacity:.55;
+  background:repeating-linear-gradient(90deg,rgba(240,228,200,.5) 0 1px,rgba(0,0,0,0) 1px 2px)}
+.nix.seen .tube .lit{opacity:.28}
+.nix.on .tube .lit{opacity:.94}
+.nix.on .tube .halo{opacity:1}
+.nix.on .tube .cath{background:linear-gradient(180deg,#fff6dc,var(--ph));box-shadow:0 0 6px var(--ph)}
+.nix.on .eng{background:linear-gradient(180deg,#4a4234,#2e281f);
+  box-shadow:inset 0 1px 0 rgba(240,228,200,.32),inset 0 -1px 0 rgba(0,0,0,.6),0 0 16px var(--ph-glow)}
+.nix.on .soc{box-shadow:inset 0 1px 0 rgba(240,228,200,.2),inset 0 -2px 4px rgba(0,0,0,.7),0 0 18px var(--ph-glow)}
+.nix:focus-visible{outline:0}
+.nix:focus-visible .eng{outline:2px solid #ffd88a;outline-offset:2px}
+.nix:focus-visible .tube{box-shadow:inset 0 0 0 2px #ffd88a}
+.nix.lock .eng{position:relative}
+.nix.lock .eng b{color:#b3a68e}
+.nix.lock .eng::after{content:'';position:absolute;left:6%;right:6%;top:50%;height:1px;background:#cdbb9a;opacity:.55;transform:rotate(-3deg)}
+.nix.lock .tube .lit{opacity:0}
+@media (prefers-reduced-motion:reduce){.nix .tube .lit,.nix .tube .halo{transition:none}}
+/* the study: one door at roughly 3× so the component itself can be judged */
+.study{display:flex;flex-wrap:wrap;gap:22px;align-items:flex-end;justify-content:center}
+.study .cell{display:flex;flex-direction:column;align-items:center;gap:8px;width:158px}
+.nix.big{width:136px}
+.nix.big .eng{padding:5px 6px 6px}
+.nix.big .eng b{font-size:15px;letter-spacing:.08em}
+.nix.big .soc{height:108px}
+.nix.big .tube .halo{width:15px;height:15px}
+.nix.big .tube .cath{width:3px}
+/* in the bezel chin: eleven doors across 920px */
+.dsk .bank{position:absolute;left:67px;right:66px;bottom:6px;height:46px;display:flex;gap:4px}
+.dsk .bank .nix{flex:1 1 0;min-width:0}
+.dsk .bank .nix .soc{height:25px}
+.dsk .bank .nix .soc .mark{display:none}
+/* on the left cheek: eleven doors stacked down a 67 × 690 column */
+.dsk .cheekbank{position:absolute;left:9px;top:98px;width:49px;height:566px;display:flex;flex-direction:column;gap:3px}
+.dsk .cheekbank .nix{flex:1 1 0;min-height:0}
+.dsk .cheekbank .nix .eng{padding:1px 2px 2px}
+.dsk .cheekbank .nix .eng b{font-size:10px;letter-spacing:0}
+.dsk .cheekbank .nix .soc{height:auto;flex:1 1 auto}
+.dsk .cheekbank .nix .soc .mark{display:none}
+.dsk .cheekbank .nix .soc::before,.dsk .cheekbank .nix .soc::after{display:none}
+.dsk .cheekbank .nix .tube{width:64%}
+.dsk .banklbl{position:absolute;font-size:11px;letter-spacing:.14em;color:#7ad8b4}
+
+/* ══ PITCH VII · THE LEGEND BAR — keys that stand proud, names cut in the case ═
+   Two small changes to the machine, and between them they pay for the index.
+
+   1 · THE HEAD COMES DOWN. It is 63px tall today — measured on the live
+       desktop.html at 1280×800: machine 920×718 at (27,41), glass 787×567
+       at (94,108) — and only the top 36px of it has ever held anything.
+       It comes down to 40px, which hands 23px back to the glass:
+       787 × 567 becomes 787 × 590.
+
+   2 · THE KEYS STAND UP. They are not sunk in a well. They protrude from
+       the machine's top edge the way a keyboard's caps do — a black
+       Bakelite cap on a visible stem, 22px proud of the case at rest,
+       travelling 5px down onto a detent. The case keeps its height
+       because the keys live outside it.
+
+   And what is left of the head holds the two things the door needs:
+     the legend   the room's name CUT INTO THE BEIGE CASE and filled dark.
+                  Not on the key — in the machine. Dark fill in light
+                  plastic measures 9.98:1 at its worst stop, and it cannot
+                  move when the key moves, because the key is a separate
+                  object sitting in front of it.
+     the tube     a phosphor rod in a recessed channel directly above the
+                  legend, dark-ground so that even a pale phosphor reads
+                  against it. Cold it shows its cathode wire; lit it burns
+                  in the room's own colour and spills onto the plate.
+
+   It still latches: an interlock bank, one key down at a time. So the
+   DEPTH is the address, the LIGHT is the room, and the NAME is neither.
+   Nothing you have to read depends on the key or on the lamp. */
+.key{--ph:#d4af65;--ph-glow:rgba(212,175,101,.5);--proud:30px;
+  position:relative;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-end;
+  width:100%;min-width:0;height:calc(var(--proud) + 40px);
+  background:none;border:0;padding:0;cursor:pointer;font-family:var(--mono)}
+/* the proud part of the column: cap and stem, both inside the button's box
+   so the keycap itself is a real target, not a decoration outside it */
+.key .capwrap{position:relative;flex:0 0 auto;height:var(--proud)}
+/* the post the cap rides. You can see it at rest and you cannot see it when
+   the key is down, which is how a keyboard shows you its own travel. */
+.key .stem{position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:16px;height:8px;
+  background:linear-gradient(90deg,#8d8168,#cbbd9d 30%,#a89a7c 70%,#7d7159);
+  box-shadow:0 1px 0 rgba(0,0,0,.45)}
+/* the legend — MILLED into the case, not printed on a plate and not on the
+   key. Same beige as the machine; the groove is what separates it from the
+   plastic around it, exactly as a routed legend does on a real faceplate. */
+.key .plate{position:relative;display:block;width:100%;height:17px;border-radius:1px;
+  background:linear-gradient(180deg,#e9dcc0,#ded0b1);
+  box-shadow:inset 0 1px 1px rgba(96,80,56,.5),inset 0 -1px 0 rgba(255,252,240,.65),inset 1px 0 0 rgba(96,80,56,.18),inset -1px 0 0 rgba(96,80,56,.18);
+  transition:box-shadow .16s ease}
+.key .plate b{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);padding:0 3px;
+  font-weight:400;font-size:11px;letter-spacing:.06em;text-align:center;color:#332b1e;
+  white-space:nowrap;overflow:hidden;text-shadow:0 1px 0 rgba(255,252,240,.6)}
+/* the engraver drops one size for the longest way on the panel — divination
+   measures 73px against a 76px plate, so it goes down a step. */
+.key .plate.tight b{font-size:10px;letter-spacing:0}
+/* the channel the tube lies in — a groove, so the rod always has a dark
+   ground and the light has somewhere to pool */
+.key .chan{position:relative;display:block;width:100%;height:13px;margin-bottom:2px;border-radius:3px;overflow:hidden;
+  background:linear-gradient(180deg,#241f19,#13100c 72%);
+  box-shadow:inset 0 1px 0 rgba(0,0,0,.9),inset 0 -1px 0 rgba(255,252,240,.32)}
+.key .ltube{position:absolute;left:6%;right:6%;top:2px;height:9px;border-radius:5px;overflow:hidden;
+  background:linear-gradient(180deg,rgba(88,78,66,.82),rgba(24,20,15,.96));
+  box-shadow:inset 0 0 0 1px rgba(255,252,240,.16)}
+.key .ltube .cath{position:absolute;left:12%;right:12%;top:50%;height:1px;transform:translateY(-50%);
+  background:repeating-linear-gradient(90deg,rgba(255,252,240,.6) 0 1px,rgba(0,0,0,0) 1px 3px)}
+.key .ltube .lit{position:absolute;inset:-1px;opacity:0;transition:opacity .16s ease;
+  background:radial-gradient(ellipse at 50% 60%,var(--ph),var(--ph-glow) 46%,rgba(0,0,0,0) 94%)}
+/* The keycap: the SAME beige plastic as the machine, taller than it needs to
+   be, and standing proud enough that you see over its top edge onto the
+   dished face. Faux-3D, and deliberately so — the whole point of a key you
+   can peek over is that its height is readable from across the room. */
+.key .cap{position:absolute;left:50%;transform:translateX(-50%);bottom:8px;width:52px;height:28px;
+  border-radius:7px 7px 4px 4px;
+  background:linear-gradient(180deg,#fdfaf1 0%,#f1e7cc 34%,#e0d3b2 62%,#c8b892 88%,#b8a882 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,253,.95),inset 8px 0 10px -8px rgba(120,102,74,.35),inset -8px 0 10px -8px rgba(120,102,74,.35),
+    0 2px 0 #b3a37f,0 7px 10px rgba(0,0,0,.55),0 1px 2px rgba(0,0,0,.6);
+  transition:bottom .13s cubic-bezier(.32,1.5,.5,1),box-shadow .13s ease}
+/* the flared skirt at the cap's base — where a real cap meets its stem */
+.key .cap::before{content:'';position:absolute;left:-2px;right:-2px;bottom:0;height:8px;
+  border-radius:0 0 5px 5px;background:linear-gradient(180deg,rgba(190,177,146,0),#b7a77f);
+  box-shadow:inset 0 1px 0 rgba(255,252,240,.45)}
+/* the dish: the near wall falls into shadow and the far wall catches light,
+   which is the whole trick that makes a flat pixel look scooped */
+.key .cap::after{content:'';position:absolute;left:7px;right:7px;top:4px;height:13px;border-radius:5px;
+  background:linear-gradient(180deg,rgba(118,100,72,.42),rgba(255,252,240,.6));
+  box-shadow:inset 0 2px 3px rgba(108,90,62,.42),inset 0 -1px 0 rgba(255,255,252,.9)}
+/* latched — the cap sinks 8px, swallows its own stem, and bottoms out on the
+   case. The legend's ground is a separate element and does not move. */
+.key.on .cap,.key[aria-pressed="true"] .cap{bottom:0;
+  box-shadow:inset 0 1px 0 rgba(255,255,253,.7),inset 8px 0 10px -8px rgba(120,102,74,.45),inset -8px 0 10px -8px rgba(120,102,74,.45),
+    0 1px 0 #a89a76,0 2px 3px rgba(0,0,0,.5)}
+.key.on .ltube .lit{opacity:.95}
+.key.on .chan{box-shadow:inset 0 1px 0 rgba(0,0,0,.9),inset 0 -1px 0 rgba(255,252,240,.4),0 0 14px var(--ph-glow)}
+/* the light reaches the plate without touching the letters — the letters
+   gain contrast when the door is lit, they never carry the colour */
+.key.on .plate{box-shadow:inset 0 1px 0 rgba(255,252,240,.7),inset 0 -1px 0 rgba(112,96,70,.4),0 0 11px var(--ph-glow)}
+/* spent — you have been through; the tube keeps a settled flame */
+.key.seen .ltube .lit{opacity:.32}
+/* a blanking plug — the way exists in the case, the switch behind it was
+   never wired. No keycap travels, nothing lights, and the legend is struck. */
+.key.lock .cap{display:none}
+.key.lock .stem{display:none}
+.key.lock .capwrap::after{content:'';position:absolute;left:50%;transform:translateX(-50%);bottom:0;
+  width:46px;height:7px;border-radius:2px 2px 3px 3px;
+  background:linear-gradient(180deg,#2c2620,#191512);box-shadow:inset 0 1px 0 rgba(240,228,200,.2),inset 0 0 0 1px rgba(0,0,0,.8)}
+.key.lock .plate b{position:absolute;color:#4a4034}
+.key.lock .plate b::after{content:'';position:absolute;left:3px;right:3px;top:50%;height:1px;
+  background:#5c5040;opacity:.7;transform:rotate(-2.5deg)}
+.key:focus-visible{outline:0}
+.key:focus-visible .cap{outline:2px solid #8a3c10;outline-offset:2px}
+.key:focus-visible .plate{box-shadow:inset 0 1px 0 rgba(255,252,240,.7),inset 0 0 0 2px #8a3c10}
+@media (prefers-reduced-motion:reduce){.key .cap,.key .ltube .lit,.key .plate{transition:none}}
+/* the study: one column at roughly 2.4× */
+.study .key.big{--proud:74px}
+.study .key.big .cap{width:118px;height:62px;bottom:12px;border-radius:15px 15px 9px 9px}
+.study .key.big .cap::before{left:-4px;right:-4px;height:17px;border-radius:0 0 11px 11px}
+.study .key.big .cap::after{left:15px;right:15px;top:9px;height:29px;border-radius:11px}
+.study .key.big .stem{width:34px;height:12px}
+.study .key.big .chan{height:32px;margin-bottom:5px}
+.study .key.big .ltube{height:23px;border-radius:12px;top:5px}
+.study .key.big .ltube .cath{height:2px}
+.study .key.big .plate{height:41px}
+.study .key.big .plate b{font-size:24px;letter-spacing:.1em}
+.study .key.big.lock .capwrap::after{width:112px;height:17px}
+/* the bar at true 1280 coordinates — the full width of the CASE, 892px,
+   because the keys belong to the machine and not to the glass */
+.dsk .lbar{position:absolute;left:14px;right:14px;top:-30px;height:70px;display:flex;gap:5px}
+.dsk .lbar .key{flex:1 1 0}
+/* at 439 the head goes 23 → 26px (a 1% cost to the glass), the keys stand
+   20px proud, and the legends fall to three letters because eleven names
+   do not fit across 376px. */
+.dsk439 .lbar{position:absolute;left:10px;right:10px;top:-22px;height:48px;display:flex;gap:2px}
+.dsk439 .lbar .key{flex:1 1 0;--proud:22px;height:48px}
+.dsk439 .lbar .key .cap{width:26px;height:15px;bottom:5px;border-radius:4px 4px 2px 2px}
+.dsk439 .lbar .key .cap::before{left:-1px;right:-1px;height:4px;border-radius:0 0 3px 3px}
+.dsk439 .lbar .key .cap::after{left:4px;right:4px;top:3px;height:6px;border-radius:3px}
+.dsk439 .lbar .key .stem{width:9px;height:5px}
+.dsk439 .lbar .key .stem{width:8px;height:5px}
+.dsk439 .lbar .key .chan{height:8px;margin-bottom:1px;border-radius:2px}
+.dsk439 .lbar .key .ltube{height:6px;border-radius:3px;top:1px;left:9%;right:9%}
+.dsk439 .lbar .key .plate{height:13px;border-radius:1px}
+.dsk439 .lbar .key .plate b{font-size:10px;letter-spacing:0;padding:0 1px}
+.dsk439 .lbar .key.lock .capwrap::after{width:24px;height:6px}
+.dsk439 .say{position:absolute;left:10px;top:6px;font-size:10px;letter-spacing:.16em;color:#ff9ec6}
+
+/* ══ THE CARVINGS MOVE HOME — the room behind the CRT ═══════════════════
+   The twelve carvings are not navigation. Read src/carvings.js: each one is
+   bound to a theme id and lights when that traveller's skin is live. They
+   are MARKS — evidence of who has been here — and the covenant already says
+   where evidence lives: the room behind the CRT, on its own named
+   materials, not on the machine's face as twenty-two-pixel buttons.
+   So they move to the wall, the board, the sill, the shelf, the pool and
+   the boards — each on the material it belongs to, and the bezel is freed. */
+.elev-wrap{container-type:inline-size;position:relative;width:100%;max-width:680px;aspect-ratio:680/430;margin:0 auto}
+.elev{position:absolute;left:0;top:0;width:680px;height:430px;transform:scale(calc(100cqw / 680));transform-origin:top left;
+  background:radial-gradient(ellipse at 76% 24%,rgba(255,150,60,.09),rgba(0,0,0,0) 46%),linear-gradient(180deg,#13100d,#080505);
+  border-radius:5px;overflow:hidden;font-family:var(--mono)}
+.elev .boards{position:absolute;left:0;right:0;bottom:0;height:74px;background:repeating-linear-gradient(90deg,#1b130c 0 46px,#150e09 46px 48px);border-top:1px solid #2a1c12}
+.elev .shelf{position:absolute;left:26px;top:52px;width:132px;height:250px;background:linear-gradient(180deg,#3d2c19,#241708);box-shadow:inset 0 1px 0 rgba(232,214,178,.14),0 8px 20px rgba(0,0,0,.6)}
+.elev .shelf .brd{position:absolute;left:0;right:0;height:9px;background:linear-gradient(180deg,#5e4623,#33230f);box-shadow:0 2px 5px rgba(0,0,0,.6)}
+.elev .vol{position:absolute;bottom:11px;width:16px;border-radius:1px;background:linear-gradient(180deg,#8a6a3a,#3a2a12);box-shadow:0 1px 0 rgba(0,0,0,.6)}
+.elev .vol.b{background:linear-gradient(180deg,#7a3a30,#3a1612)}
+.elev .vol.c{background:linear-gradient(180deg,#4a6a5a,#1a2a22)}
+.elev .board{position:absolute;left:196px;top:34px;width:186px;height:128px;border:3px solid #2e1c0c;background:linear-gradient(180deg,#6d4c29,#472e16);box-shadow:inset 0 0 34px rgba(0,0,0,.55),0 7px 18px rgba(0,0,0,.65)}
+.elev .board .str{position:absolute;left:22%;top:28%;right:26%;bottom:30%;border-top:1px solid rgba(210,190,150,.35);border-right:1px solid rgba(210,190,150,.35);transform:rotate(-8deg)}
+.elev .pin{position:absolute;width:7px;height:7px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#d8c090,#6a4a20);box-shadow:0 1px 2px rgba(0,0,0,.7)}
+.elev .win{position:absolute;right:30px;top:40px;width:186px;height:158px;background:linear-gradient(180deg,#0a1522,#060b12);box-shadow:inset 0 0 0 4px #2a1c12,inset 0 0 30px rgba(120,190,255,.10)}
+.elev .win .bar{position:absolute;left:0;right:0;top:50%;height:4px;background:#2a1c12}
+.elev .win .mul{position:absolute;left:50%;top:0;bottom:0;width:4px;background:#2a1c12}
+.elev .win .sky{position:absolute;inset:4px;background:radial-gradient(ellipse at 70% 20%,rgba(150,200,255,.10),rgba(0,0,0,0) 60%)}
+.elev .wbox{position:absolute;right:36px;top:208px;width:160px;height:46px;background:linear-gradient(180deg,#4d3c23,#2a1e10);box-shadow:inset 0 1px 0 rgba(232,214,178,.14),0 5px 12px rgba(0,0,0,.6)}
+.elev .wbox .pot{position:absolute;left:12px;bottom:6px;width:34px;height:26px;background:linear-gradient(180deg,#8a5a3a,#4a2a18);border-radius:2px 2px 4px 4px}
+.elev .crt{position:absolute;left:244px;bottom:64px;width:206px;height:150px;border-radius:8px;background:linear-gradient(178deg,#3d372e,#241f18);box-shadow:inset 0 2px 0 rgba(240,224,190,.22),0 12px 26px rgba(0,0,0,.75)}
+.elev .crt .glasss{position:absolute;inset:16px;border-radius:5px;background:radial-gradient(ellipse at 50% 40%,#2b2119,#0b0806);box-shadow:inset 0 0 22px rgba(0,0,0,.9)}
+.elev .tin{position:absolute;bottom:100%;width:13px;height:15px;background:linear-gradient(180deg,#c8b280,#6a5432);box-shadow:0 1px 0 rgba(0,0,0,.6)}
+.elev .cardbox{position:absolute;left:38px;bottom:142px;width:92px;height:56px;background:linear-gradient(180deg,#4d3821,#241708);box-shadow:inset 0 1px 0 rgba(232,214,178,.16),0 5px 12px rgba(0,0,0,.6)}
+.elev .candle{position:absolute;left:472px;bottom:138px;width:52px;height:74px}
+.elev .candle .stk{position:absolute;left:20px;bottom:12px;width:12px;height:44px;background:linear-gradient(180deg,#eaddc2,#c6b58c);border-radius:2px}
+.elev .candle .fire{position:absolute;left:21px;bottom:56px;width:10px;height:14px;border-radius:50% 50% 45% 45%;background:radial-gradient(ellipse at 50% 70%,#ffd48a,#ff8a20 60%,rgba(255,120,20,0));filter:blur(.4px)}
+.elev .candle .sau{position:absolute;left:0;bottom:0;width:52px;height:14px;border-radius:50%;background:linear-gradient(180deg,#5a4a2a,#2a2012);box-shadow:0 2px 6px rgba(0,0,0,.6)}
+.elev .pool{position:absolute;left:236px;bottom:8px;width:222px;height:42px;border-radius:50%;background:radial-gradient(ellipse at 50% 40%,rgba(120,180,190,.15),rgba(0,0,0,0) 72%);box-shadow:inset 0 0 0 1px rgba(140,200,210,.18)}
+/* the marks themselves — the real glyphs from src/carvings.js */
+.mk{position:absolute;width:26px;height:26px;color:#7a6a50;transition:color .2s ease}
+.mk svg{width:26px;height:26px;display:block}
+.mk.live{color:#ffca6a;filter:drop-shadow(0 0 7px rgba(255,180,90,.6))}
+.mk .tg{position:absolute;left:50%;top:26px;transform:translateX(-50%);font-family:var(--mono);font-size:9.5px;letter-spacing:.02em;color:#8d7a5c;white-space:nowrap;background:#070403cc;padding:0 3px;border-radius:2px}
+.mk.live .tg{color:#ffca6a}
+.nixrow{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+.nixrow .nix{width:96px}
+.nixrow .nix .soc{height:66px}
+.locc{font-family:var(--mono);font-size:11px;color:#9e8463}
+.locc li{font-size:13px}
+.locc b{color:#d4af65;font-weight:400}
+/* the vertical option: the same bank, stacked down a 49px cheek at true size */
+.cheekwrap{display:flex;gap:22px;align-items:flex-start;justify-content:center;flex-wrap:wrap}
+.cheekstrip{display:flex;flex-direction:column;gap:3px;width:49px;padding:5px 4px;border-radius:4px;
+  background:linear-gradient(180deg,#3f362a,#241d15);box-shadow:inset 0 1px 0 rgba(232,214,178,.16),0 6px 16px rgba(0,0,0,.7)}
+.cheekstrip .nix{width:100%}
+.cheekstrip .nix .eng{padding:1px 2px 2px}
+.cheekstrip .nix .eng b{font-size:10px;letter-spacing:0}
+.cheekstrip .nix .soc{height:auto;min-height:28px;flex:1 1 auto}
+.cheekstrip .nix .soc .mark,.cheekstrip .nix .soc::before,.cheekstrip .nix .soc::after{display:none}
+.cheekstrip .nix .tube{width:64%}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="kicker">liber vacui · dial pitch · rev. a · 2026-09-14</div>
+<h1>The dial is the last web-shaped thing in the machine — <em>seven doors that belong to the house</em></h1>
+<p class="lede">Everything else here is made of something. The room behind the CRT is a bookshelf and a shadow pool; the sea is wet slate; the journal has brass clasps and a spine that thickens. The desktop's menu, though, is a three-position web carousel with a hidden popup behind it — the one navigation control in the machine that was designed as an interface instead of built as an object. This is a pitch for its replacement: seven ways to make the door part of the building, each one measured against the dial that stands there now.</p>
+<div class="meta">
+  <span>seven replacements</span><span>the current dial reproduced at real size</span>
+  <span>contrast measured from the rendered mockups</span><span>covenant §the room wins the foreground</span>
+</div>
+
+<nav>
+  <a href="#now">what stands there now</a><a href="#floor">what a door owes</a>
+  <a href="#homescreens">homescreen studies</a>
+  <a href="#p1">i · the index drawer</a><a href="#p2">ii · the house, from the yard</a>
+  <a href="#p3">iii · the tube rack</a><a href="#p4">iv · the worn three</a>
+  <a href="#p5">v · the ring</a><a href="#p6">vi · the phosphor bank</a><a href="#p7">vii · the crest rail</a>
+  <a href="#verdict">side by side</a><a href="#cost">what it costs</a>
+</nav>
+
+<h2 id="now"><small>§0</small>What stands there now</h2>
+<p class="actlede">The tile below is the real dial, rebuilt to its shipping measurements: a 116px fixed plate, a 17px phosphor glyph, a 16px label that becomes 20px when active, wooden 32px arrows, and the <code>··· all rooms</code> hint at 14px and 50% alpha. Ten rooms live in it, three are visible, and the other seven wait behind a 600ms press.</p>
+<div class="stage center">
+  <div style="width:100%;max-width:560px">
+    <p class="d-opinion"><span class="nm">riason</span>the drawer unit is not a metaphor. it is a drawer unit.</p>
+    <div class="d-cur">
+      <button class="d-tile prev" style="--acc:#d4af37;--glow:rgba(212,175,55,.42)"><span class="phos-label">games</span><svg viewBox="0 0 12 12" fill="currentColor"><path d="M5 0h1v1H5zM5 1h2v1H5zM4 2h4v1H4zM3 3h6v2H3zM4 5h4v1H4zM5 6h2v1H5z"/></svg></button>
+      <button class="d-tile active" id="cur-active" style="--acc:#aa5a18;--glow:rgba(170,90,24,.42)" data-ink=".phos-label" data-ground="self" data-name="active tile label"><span class="phos-label">buddy</span><svg viewBox="0 0 12 12" fill="currentColor"><path d="M4 1h4v1H4zM5 2h3v1H5zM6 3h2v1H6zM7 4h1v1H7zM2 7h8v1H2zM3 8h6v1H3z"/></svg><span class="d-hint" data-ink="self" data-ground="self" data-name="the all-rooms hint">··· all rooms</span></button>
+      <button class="d-tile next" style="--acc:#aa7838;--glow:rgba(170,120,56,.42)"><span class="phos-label">journal</span><svg viewBox="0 0 12 12" fill="currentColor"><path d="M2 2h8v1H2zM2 9h8v1H2zM2 3h1v6H2zM9 3h1v6H9zM4 3h1v6H4z"/></svg></button>
+      <button class="d-cur a l" aria-hidden="true">‹</button><button class="d-cur a r" aria-hidden="true">›</button>
+    </div>
+    <div class="d-track"></div>
+    <span class="cap">the dial as shipped · the lit tile is <b>sigil</b>, whose label is printed in its own phosphor <code>#aa5a18</code></span>
+  </div>
+</div>
+<div class="body">
+<table>
+  <tr><th>what the sweep found</th><th>measured</th><th>why it is a problem, not a taste</th></tr>
+  <tr><td>the active tile's name is printed in the traveller's phosphor</td><td class="n fail" data-m="cur"><span class="ratio" data-for="now"></span></td><td>sigil's lamp is <code>#aa5a18</code> — the same warm brown as the machine's own case. The one tile you are <i>on</i> is the one you can least read. sea's teal lands at 4.54:1; the rest scrape by.</td></tr>
+  <tr><td><code>··· all rooms</code> — the only sign the other seven rooms exist</td><td class="n fail">14px at 50% alpha · ≈2.9:1</td><td>it is the single most important affordance on the desktop and it is the faintest text in it. Its own target is the width of the words (~90×20px), under the 44px floor.</td></tr>
+  <tr><td>seven of ten rooms are one long-press away</td><td class="n warn">1–9 actions</td><td>reaching <code>trash</code> from <code>buddy</code> costs nine arrow presses, or a 600ms hold that nothing announces until you are already reading the hint.</td></tr>
+  <tr><td>two mental models for one job</td><td class="n warn">carousel + popup grid</td><td>a carousel that hides a grid is a carousel with a secret. The index rises <i>over</i> the CRT — the one place the covenant says a door must not paint.</td></tr>
+  <tr><td>the tile says <code>buddy</code>, the id is <code>sigil</code>, the persona is <code>sigil</code></td><td class="n warn">three names, one room</td><td>the room is the traveller's, not the feature's. A door labelled by the thing behind it will always drift from the person who made it.</td></tr>
+  <tr><td>a chrome strip across the bottom of the screen</td><td class="n warn">26% of the height</td><td><code>.dial-track</code> is a gradient band with a hairline top border — a nav bar in wood clothing, over the traveller's own wallpaper.</td></tr>
+</table>
+<div class="note"><b>WHAT IS GENUINELY GOOD ABOUT IT</b>The dial remembers where you last were (<code>state.visited</code>) and lights the tile you entered most recently. The crossed-out casting tile is a real power statement, not a decoration. Each tile carries its traveller's own background — the sea tile is wet, the games tile has marquee bulbs. And the whole set respects <code>prefers-reduced-motion</code>. None of that should be lost. It should be kept and given a body.</div>
+</div>
+
+<div class="live-lab" id="live-lab" data-live-room="buddy">
+  <div class="live-lab-head"><h3>the recommendation, with a finger on it</h3><span>LIVE STUDY · click a key · watch the state move</span></div>
+  <div class="live-lab-grid">
+    <div class="live-machine" aria-label="interactive proposed machine face">
+      <div class="machine-ghost" aria-hidden="true"><div class="machine-glass"><span class="ghost-symbol" id="ghost-symbol">?</span></div><div class="machine-chin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+      <div class="live-keys" id="live-keys"></div>
+      <div class="live-beam" id="live-beam" aria-hidden="true"></div>
+    </div>
+    <aside class="live-lab-side">
+      <span class="eyebrow">the proposed door</span>
+      <h4 id="live-room-name">buddy</h4>
+      <p id="live-room-detail">the workshop · stone, seals, and the first mark</p>
+      <div class="live-readout" aria-live="polite"><strong id="live-state">BUDDY / COLD</strong><br><span id="live-note">the blanking plug is struck; the way still shows.</span></div>
+    </aside>
+  </div>
+  <div class="live-contract"><b>what this proves:</b> every room is present, every key is a real target, the name is steady ink on the case, the phosphor is the lamp, and the click has a physical down-state. The finished version keeps the same one-press navigation contract while replacing this study's flat labels with the machine's authored materials.</div>
+</div>
+
+<section id="homescreens">
+<h2><small>§1½</small>Homescreen studies: the glass becomes a haunted room</h2>
+<p class="actlede">Removing the radial strip returns roughly a quarter of the screen to the desktop. The opportunity is not “add more widgets.” It is to let the homepage become the machine's inhabited face: constellation, scratch notes, and the traces of past visits share one material world, with the apps becoming doors in the room rather than tiles floating over it.</p>
+<div class="home-studies">
+  <article class="home-study is-recommended" data-study="altar">
+    <div class="home-study-head"><strong>I · the inhabited altar</strong><span>recommended</span></div>
+    <div class="home-screen">
+      <div class="home-wall"></div><div class="home-shelf"><i></i><i></i><i></i></div><div class="home-note">keep the sea line under the third mark.</div><div class="home-candle"></div>
+      <svg class="home-constellation" viewBox="0 0 250 150" aria-label="constellation with a buddy stone and four artifacts">
+        <ellipse class="orbit" cx="118" cy="73" rx="67" ry="43"/><line class="home-thread" x1="118" y1="73" x2="62" y2="43"/><line x1="118" y1="73" x2="177" y2="38"/><line x1="118" y1="73" x2="184" y2="105"/><line x1="118" y1="73" x2="67" y2="110"/>
+        <circle class="node home-center" cx="118" cy="73" r="12"/><circle class="node" cx="62" cy="43" r="6"/><circle class="node" cx="177" cy="38" r="6"/><circle class="node" cx="184" cy="105" r="6"/><circle class="node" cx="67" cy="110" r="6"/>
+        <text x="104" y="97">buddy</text><text x="48" y="32">sea</text><text x="165" y="27">dream</text><text x="188" y="122">game</text><text x="40" y="128">note</text>
+      </svg><div class="home-status">4 knots · 2 margin notes · candle 00:41</div>
+    </div>
+    <p>One quiet desktop altar. The constellation owns the middle, while a shelf, a note pinned at an angle, and a low candle make the screen feel furnished without turning it into a dashboard.</p>
+  </article>
+  <article class="home-study" data-study="wall">
+    <div class="home-study-head"><strong>II · the evidence wall</strong><span>dense / archival</span></div>
+    <div class="home-screen">
+      <div class="home-wall"></div><div class="home-shelf"><i></i><i></i><i></i><i></i></div><div class="home-note">R. 04 / 11 · compare later</div><div class="home-pin" style="left:42%;top:23%"></div><div class="home-pin" style="left:63%;top:45%"></div>
+      <svg class="home-constellation" viewBox="0 0 250 150" aria-label="evidence wall with connected marks"><line x1="46" y1="28" x2="120" y2="74"/><line x1="120" y1="74" x2="205" y2="39"/><line x1="120" y1="74" x2="211" y2="113"/><circle class="node home-center" cx="120" cy="74" r="12"/><circle class="node" cx="46" cy="28" r="7"/><circle class="node" cx="205" cy="39" r="7"/><circle class="node" cx="211" cy="113" r="7"/><text x="103" y="98">stone</text><text x="32" y="18">keep</text><text x="193" y="29">card</text><text x="193" y="129">thread</text></svg><div class="home-status">board 02 · pins settle where you left them</div>
+    </div>
+    <p>Make the graph literal: pin-like nodes, red string, paper slips, and a shelf of completed work. Best for a heavily lived-in machine; too visually busy as the fresh-state default.</p>
+  </article>
+  <article class="home-study" data-study="yard">
+    <div class="home-study-head"><strong>III · the house at night</strong><span>spacious / cinematic</span></div>
+    <div class="home-screen">
+      <div class="home-wall"></div><div class="home-house"><i class="home-window"></i><i class="home-window"></i><i class="home-window"></i></div><div class="home-water"></div>
+      <svg class="home-constellation" viewBox="0 0 250 150" aria-label="night sky constellation"><ellipse class="orbit" cx="150" cy="68" rx="68" ry="44"/><line x1="96" y1="45" x2="150" y2="68"/><line x1="150" y1="68" x2="202" y2="35"/><line x1="150" y1="68" x2="211" y2="103"/><circle class="node home-center" cx="150" cy="68" r="11"/><circle class="node" cx="96" cy="45" r="6"/><circle class="node" cx="202" cy="35" r="6"/><circle class="node" cx="211" cy="103" r="6"/><text x="137" y="91">the house</text><text x="79" y="34">sea</text><text x="193" y="25">garden</text><text x="214" y="118">trash</text></svg><div class="home-status">window 03 is lit · basement tide 06.20</div>
+    </div>
+    <p>Read the machine as a house viewed from the yard: rooms are windows, the constellation is a night sky, and the basement's waterline quietly reports what has been released. Most atmospheric, least immediately legible.</p>
+  </article>
+</div>
+
+<div class="home-expanded" id="expanded-study">
+  <svg class="home-graph" viewBox="0 0 620 240" role="img" aria-label="interactive expanded constellation">
+    <ellipse cx="300" cy="120" rx="200" ry="82"/><ellipse cx="300" cy="120" rx="132" ry="52"/>
+    <line data-edge="sea" x1="300" y1="120" x2="122" y2="64"/><line data-edge="dream" x1="300" y1="120" x2="478" y2="62"/><line data-edge="game" x1="300" y1="120" x2="485" y2="177"/><line data-edge="note" x1="300" y1="120" x2="121" y2="183"/><line data-edge="garden" x1="478" y1="62" x2="485" y2="177"/>
+    <circle class="graph-node graph-core" data-note="the stone" cx="300" cy="120" r="23"/><circle class="graph-node" data-note="the sea release" cx="122" cy="64" r="13"/><circle class="graph-node" data-note="the dream page" cx="478" cy="62" r="13"/><circle class="graph-node" data-note="the midway ticket" cx="485" cy="177" r="13"/><circle class="graph-node" data-note="the scratch note" cx="121" cy="183" r="13"/>
+    <text x="277" y="157">buddy stone</text><text x="86" y="43">sea release</text><text x="445" y="42">dream page</text><text x="450" y="204">game ticket</text><text x="87" y="211">scratch note</text>
+  </svg>
+  <aside class="home-note-drawer" aria-live="polite"><h4 id="expanded-note-title">the stone</h4><p id="expanded-note-copy">The centre is not an app icon. It is the thing every room has helped make more particular.</p><div class="note-meta" id="expanded-note-meta">CORE / PATINA 02<br>4 EDGES · 2 NOTES · LAST TOUCHED 04:11</div><button class="note-button" id="expanded-note-action" type="button">open in room</button></aside>
+</div>
+<div class="home-legend"><b class="pink">— relation / live edge</b><b class="gold">— kept object / orbit</b><b class="cream">— note / residue</b></div>
+<div class="home-brief">
+  <div><h3>What gets the returned space</h3><ul><li><b>Constellation:</b> no longer trapped in a lower 26% band; it can occupy the full glass with a calm central field and generous negative space.</li><li><b>Notes:</b> scratch notes become pinned margin slips, shelf labels, or a corkboard card. The note is something the machine has left behind, not a floating textarea.</li><li><b>Cross-room residue:</b> a kept dream can become a developed polaroid at the edge; a game keep becomes a ticket; sea releases raise the basement waterline.</li><li><b>Navigation:</b> the physical bezel keys/rack stay outside the glass, so the picture never has to double as a menu.</li></ul></div>
+  <div><h3>What stays deliberately quiet</h3><ul><li>No permanent widget grid, app badges, or notification drawer.</li><li>No auto-expanding graph that shoves the stone around after every keep.</li><li>No explanatory labels on every line; hover, focus, and the selected-note drawer carry the detail.</li><li>No fake activity: empty state is a furnished room waiting for its first mark.</li></ul></div>
+</div>
+<div class="home-callout"><strong>RECOMMENDED BUILD</strong><br>Use <b>I · the inhabited altar</b> as the fresh desktop: full-height constellation, three physical residue zones, and one small notes surface. Let the visual grammar mature toward <b>II · the evidence wall</b> as the visitor accumulates work. Keep <b>III · the house at night</b> as a theme or patina-tier variation, not the default navigation model.</div>
+</section>
+
+<h2 id="floor"><small>§1</small>What a door owes you</h2>
+<p class="actlede">Six rules. Every pitch below is held to all six, and the mockups are measured against them on this page.</p>
+<table>
+  <tr><th>rule</th><th>the floor</th><th>why this number</th></tr>
+  <tr><td class="n">D1 · one action</td><td>every room is reachable in <b>one</b> action from the desktop</td><td>a menu that needs a carousel is a menu that has not decided what it is. The house has ten rooms; the desk has room for ten doors.</td></tr>
+  <tr><td class="n">D2 · all of it visible</td><td>no room is hidden behind another room, and no door is behind a hold</td><td>if a traveller has to be told a control exists, the control is a secret, and secrets are not navigation.</td></tr>
+  <tr><td class="n">D3 · lamp vs. ink</td><td>a room's <b>phosphor is the lamp</b>; its <b>name is printed in ink</b> that clears 4.5:1 — 7:1 for the lit door</td><td>this is the fix for the whole section above. Colour identifies the room; colour must not be what you read it by.</td></tr>
+  <tr><td class="n">D4 · a size you can hold</td><td>every door ≥ <b>44×44</b>, with its name at ≥ <b>13px</b></td><td>32px arrows and a 20px-tall hint belong to the pointer era. A door you cannot hit is a door with a sign on it.</td></tr>
+  <tr><td class="n">D5 · the room wins</td><td>the menu never paints over the traveller's screen; it stands on the desk, in the furniture</td><td>covenant: <i>a feature that changes the backdrop must yield while the gaze is open.</i> The dial's index currently opens upward, across the tube.</td></tr>
+  <tr><td class="n">D6 · it remembers you</td><td>the door knows where you last were, and says so without a hover</td><td>the haunted part: a computer that lives in your mind notices your habits. Today it remembers with a badge you can only see after you look.</td></tr>
+</table>
+
+<h2><small>§2</small>Seven replacements</h2>
+
+<!-- ── PITCH I ───────────────────────────────────────────────────────── -->
+<div class="pitch" id="p1">
+  <div class="pitch-head"><span class="no">PITCH I</span><h3>The index drawer — the desk gets the drawer unit it keeps talking about</h3><span class="tag t-leg">legible</span><span class="tag t-die">diegetic</span></div>
+  <div class="stage">
+    <div class="center"><div class="drawer">
+      <div class="rail" aria-hidden="true"></div>
+      <div class="cards">
+        <button class="cardc" style="--roomink:#aa5a18" data-ink=".nm" data-ground="self" data-name="card title"><svg class="glyph" viewBox="0 0 12 12" fill="currentColor"><path d="M4 1h4v1H4zM5 2h3v1H5zM6 3h2v1H6zM7 4h1v1H7zM2 7h8v1H2zM3 8h6v1H3z"/></svg><span><span class="nm">buddy</span><span class="pl">sigil · stone &amp; seals</span></span></button>
+        <button class="cardc" style="--roomink:#aa7838" data-ink=".nm" data-ground="self" data-name="card title"><svg class="glyph" viewBox="0 0 12 12" fill="currentColor"><path d="M2 2h8v1H2zM2 9h8v1H2zM2 3h1v6H2zM9 3h1v6H9zM4 3h1v6H4z"/></svg><span><span class="nm">journal</span><span class="pl">riason · the study</span></span></button>
+        <button class="cardc" style="--roomink:#2a8a8a" data-ink=".nm" data-ground="self" data-name="card title"><svg class="glyph" viewBox="0 0 12 12" fill="currentColor"><path d="M5 1h2v1H5zM4 2h4v2H4zM5 4h2v1H5zM1 8h2v1H1zM5 8h2v1H5zM9 8h2v1H9z"/></svg><span><span class="nm">sea</span><span class="pl">vanir · the basement</span></span></button>
+        <button class="cardc" style="--roomink:#d4af37" data-ink=".nm" data-ground="self" data-name="card title"><svg class="glyph" viewBox="0 0 12 12" fill="currentColor"><path d="M5 0h1v1H5zM5 1h2v1H5zM4 2h4v1H4zM3 3h6v2H3zM4 5h4v1H4zM5 6h2v1H5z"/></svg><span><span class="nm">games</span><span class="pl">whimsy wow · the play room</span></span></button>
+        <button class="cardc" style="--roomink:#d88a3c" data-ink=".nm" data-ground="self" data-name="card title"><svg class="glyph" viewBox="0 0 12 12" fill="currentColor"><path d="M1 3h10v1H1zM1 3h1v6H1zM10 3h1v6H10zM1 9h10v1H1zM4 1h4v1H4z"/></svg><span><span class="nm">toybox</span><span class="pl">pip · the bathroom</span></span></button>
+        <button class="cardc" style="--roomink:#f4e8d2" data-ink=".nm" data-ground="self" data-name="card title"><svg class="glyph" viewBox="0 0 12 12" fill="currentColor"><path d="M2 0h8v1H2zM2 2h3v1H2zM7 2h3v1H7zM2 4h8v1H2zM2 6h3v1H2zM7 6h3v1H7zM2 8h8v1H2z"/></svg><span><span class="nm">divination</span><span class="pl">arcana · the observatory</span></span></button>
+        <button class="cardc" style="--roomink:#e05a5a" data-ink=".nm" data-ground="self" data-name="card title"><svg class="glyph" viewBox="0 0 12 12" fill="currentColor"><path d="M4 1h4v1H4zM3 2h1v1H3zM5 2h2v1H5zM8 2h1v1H8zM5 3h2v1H5z"/></svg><span><span class="nm">learn</span><span class="pl">the mad scribe · the stacks</span></span></button>
+        <button class="cardc" style="--roomink:#d88a4a" data-ink=".nm" data-ground="self" data-name="card title"><svg class="glyph" viewBox="0 0 12 12" fill="currentColor"><path d="M5 1h2v1H5zM3 2h2v1H3zM7 2h2v1H7zM2 4h2v1H2zM8 4h2v1H8zM3 6h2v1H3zM7 6h2v1H7zM5 4h2v2H5z"/></svg><span><span class="nm">garden</span><span class="pl">ruby · the glasshouse</span></span></button>
+        <button class="cardc" style="--roomink:#a48ad4" data-ink=".nm" data-ground="self" data-name="card title"><svg class="glyph" viewBox="0 0 12 12" fill="currentColor"><path d="M7 1a5.5 5.5 0 1 0 4.6 8.4A5.5 5.5 0 0 1 7 1z"/></svg><span><span class="nm">dreams</span><span class="pl">inquiry · the sleeping nook</span></span></button>
+        <button class="cardc here" style="--roomink:#a88858" data-ink=".nm" data-ground="self" data-name="the lit door"><svg class="glyph" viewBox="0 0 12 12" fill="currentColor"><path d="M3 7h6v1H3zM2 8h8v1H2zM1 9h10v1H1z"/></svg><span><span class="nm">trash</span><span class="pl">the yard · buried things</span></span><span class="tag">here</span></button>
+        <button class="cardc" style="--roomink:#d4af37" data-ink=".nm" data-ground="self" data-name="card title"><svg class="glyph" viewBox="0 0 12 12" fill="currentColor"><path d="M1 1h4v4H1zM7 1h4v4H7zM1 7h4v1H1zM7 7h3v1H7z"/></svg><span><span class="nm">themes</span><span class="pl">the paint store</span></span></button>
+      </div>
+    </div></div>
+    <span class="cap">all eleven doors, one action each · the room you are standing in is marked in place, not opened in a popup</span>
+  </div>
+  <div class="two">
+    <div>
+      <h3 style="margin-top:14px">the pitch</h3>
+      <p>The journal's owner keeps an index. It has been in his dialogue since the beginning — <i>“an index is kindness aimed at your future self”</i> — while the desktop shipped a carousel. This pitch takes him at his word: the desk gets the drawer unit, a rail of hand-cut cards, one per door, with the traveller's name and the room's place printed on each.</p>
+      <p>Each card carries the room's phosphor as a <b>spine stripe and a glyph</b> — a lamp, allowed to be as chromatic as it likes — and prints the name in ink on paper. That single split is the whole fix for the contrast failure: <code>buddy</code> reads in dark ink on card stock no matter how dark sigil's lamp is.</p>
+      <p>The drawer is also the honest answer to <i>where is here.</i> The card for the room you are standing in slides up proud of the rest, the way a pulled card does. No badge, no popup, no secret.</p>
+    </div>
+    <div>
+      <h3 style="margin-top:14px">how it clears the floor</h3>
+      <ul>
+        <li><b>D1 · D2</b> — eleven cards, one press each, all visible at 1280 <i>and</i> at 439 (the cards wrap; nothing is ever behind anything).</li>
+        <li><b>D3</b> — names print in ink on card stock; the room ink only stripes the card's edge and draws the glyph. <span class="ratio" data-for="p1"></span></li>
+        <li><b>D4</b> — 46px cards, 15px names, 11px place lines, 122px minimum width.</li>
+        <li><b>D5</b> — the drawer sits on the desk below the machine. It never covers the tube; the index popup disappears from the code.</li>
+        <li><b>D6</b> — the here-card and the lit edge are the memory. Water-stained once you have been: the card for a visited room keeps a faint thumb-smudge.</li>
+        <li><b>not a library</b> — the drawer's timber, its rail, its paper and its ink are the study's, the same materials <code>rooms.data.js</code> already declares for riason: <i>indexed vellum, brass clasps, oak, ink.</i></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ── PITCH II ──────────────────────────────────────────────────────── -->
+<div class="pitch" id="p2">
+  <div class="pitch-head"><span class="no">PITCH II</span><h3>The house, from the yard — the menu is the building's own face</h3><span class="tag t-leg">legible</span><span class="tag t-die">diegetic</span><span class="tag t-mind">the mind</span></div>
+  <div class="stage">
+    <div class="center"><div class="house" id="house-demo">
+      <div class="roof">the glasshouse · the paint store · the yard</div>
+      <div class="hrow">
+        <button class="win" style="--roomink:#d88a4a" data-ink=".nm" data-ground="self" data-name="lit window name"><span class="lit"></span><span class="nm">garden</span><span class="pl">the glasshouse</span></button>
+        <button class="win" style="--roomink:#a48ad4" data-ink=".nm" data-ground="self" data-name="lit window name"><span class="lit"></span><span class="nm">dreams</span><span class="pl">the sleeping nook</span></button>
+        <button class="win" style="--roomink:#d4af37" data-ink=".nm" data-ground="self" data-name="lit window name"><span class="lit"></span><span class="nm">themes</span><span class="pl">the paint store</span></button>
+        <button class="win" style="--roomink:#e05a5a" data-ink=".nm" data-ground="self" data-name="lit window name"><span class="lit"></span><span class="nm">learn</span><span class="pl">the stacks</span></button>
+      </div>
+      <div class="hrow">
+        <button class="win" style="--roomink:#f4e8d2" data-ink=".nm" data-ground="self" data-name="lit window name"><span class="lit"></span><span class="nm">divination</span><span class="pl">the observatory</span></button>
+        <button class="win" style="--roomink:#d88a3c" data-ink=".nm" data-ground="self" data-name="lit window name"><span class="lit"></span><span class="nm">toybox</span><span class="pl">the bathroom</span></button>
+        <button class="win" style="--roomink:#aa7838" data-ink=".nm" data-ground="self" data-name="lit window name"><span class="lit"></span><span class="nm">journal</span><span class="pl">the study</span></button>
+        <button class="win dark" style="--roomink:#a88858" data-ink=".nm" data-ground="self" data-name="dark window name"><span class="lit"></span><span class="nm">trash</span><span class="pl">the yard</span></button>
+      </div>
+      <div class="hrow base">
+        <span class="eyebrow">BELOW THE BOARDS</span>
+        <button class="win" style="--roomink:#2a8a8a" data-ink=".nm" data-ground="self" data-name="lit window name"><span class="lit"></span><span class="nm">sea</span><span class="pl">the basement</span></button>
+        <button class="win" style="--roomink:#aa5a18" data-ink=".nm" data-ground="self" data-name="lit window name"><span class="lit"></span><span class="nm">buddy</span><span class="pl">the workshop</span></button>
+        <button class="win" style="--roomink:#d4af37" data-ink=".nm" data-ground="self" data-name="lit window name"><span class="lit"></span><span class="nm">games</span><span class="pl">the play room</span></button>
+      </div>
+    </div></div>
+    <span class="cap">hover or tab a window: it lights and names its room and its place · nothing covers the tube</span>
+  </div>
+  <div class="two">
+    <div>
+      <h3 style="margin-top:14px">the pitch</h3>
+      <p>The machine is a house. It has always been a house — <code>rooms.data.js</code> registers every room by its <i>place</i>: the study, the bathroom, the basement, the observatory, the sleeping nook, the stacks, the play room. The dial throws that away and shows an alphabetical list. This pitch uses it: the desktop's menu becomes the building's own face, ten lit windows arranged the way the rooms actually stand, basement below a dashed board line, glasshouse and yard under the roof.</p>
+      <p>Point at a window and it lights, naming the room and its place. The light is the traveller's phosphor — so the facade is <i>coloured</i> by the house, room by room, which no list can do. Press it and you are in.</p>
+      <p>This is the version of the pitch that answers the brief most literally. A haunted computer that exists inside your mind does not hand you a nav bar — it hands you a plan of itself, and lets you notice which windows you have left dark.</p>
+    </div>
+    <div>
+      <h3 style="margin-top:14px">how it clears the floor</h3>
+      <ul>
+        <li><b>D1 · D2</b> — ten windows, one press, all on screen. The unvisited ones read at a lower ink but never below the floor, so the house reads as a house on a fresh machine, not as a grid of zeroes (covenant rule 4's empty condition).</li>
+        <li><b>D3</b> — the name is <code>#f4ead0</code> ink on the window's own dark glass; the phosphor is the <i>light</i> behind it, at 16% when idle and 85% when lit. <span class="ratio" data-for="p2"></span></li>
+        <li><b>D4</b> — every window is a 52px-minimum target with a 13px name; the place line is 9.5px and only ever appears on the window you are on, so it never has to be readable in a crowd.</li>
+        <li><b>D5</b> — the facade replaces the 26%-height track entirely. There is no strip, no band, no border across the traveller's screen: the menu <i>is</i> the wall the machine stands against.</li>
+        <li><b>honest limit</b> — the layout is authored furniture, not a computed floor plan. If a room moves, someone redraws it; the pitch treats that as the point, not the cost.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ── PITCH III ─────────────────────────────────────────────────────── -->
+<div class="pitch" id="p3">
+  <div class="pitch-head"><span class="no">PITCH III</span><h3>The tube rack — ten phosphor slots, stamped in bakelite</h3><span class="tag t-leg">legible</span><span class="tag t-die">diegetic</span><span class="tag t-cheap">cheapest to build</span></div>
+  <div class="stage">
+    <div class="center"><div class="rack" id="rack-demo">
+      <button class="tube on" style="--roomink:#aa5a18" data-ink=".base" data-ground="self" data-name="stamped slot"><span class="glass"></span><span class="base">buddy</span><span class="det">S1</span></button>
+      <button class="tube" style="--roomink:#aa7838" data-ink=".base" data-ground="self" data-name="stamped slot"><span class="glass"></span><span class="base">journal</span><span class="det">J1</span></button>
+      <button class="tube" style="--roomink:#2a8a8a" data-ink=".base" data-ground="self" data-name="stamped slot"><span class="glass"></span><span class="base">sea</span><span class="det">B1</span></button>
+      <button class="tube" style="--roomink:#d4af37" data-ink=".base" data-ground="self" data-name="stamped slot"><span class="glass"></span><span class="base">games</span><span class="det">P1</span></button>
+      <button class="tube" style="--roomink:#d88a3c" data-ink=".base" data-ground="self" data-name="stamped slot"><span class="glass"></span><span class="base">toybox</span><span class="det">W2</span></button>
+      <button class="tube" style="--roomink:#f4e8d2" data-ink=".base" data-ground="self" data-name="stamped slot"><span class="glass"></span><span class="base">divination</span><span class="det">O3</span></button>
+      <button class="tube" style="--roomink:#e05a5a" data-ink=".base" data-ground="self" data-name="stamped slot"><span class="glass"></span><span class="base">learn</span><span class="det">K4</span></button>
+      <button class="tube" style="--roomink:#d88a4a" data-ink=".base" data-ground="self" data-name="stamped slot"><span class="glass"></span><span class="base">garden</span><span class="det">G1</span></button>
+      <button class="tube" style="--roomink:#a48ad4" data-ink=".base" data-ground="self" data-name="stamped slot"><span class="glass"></span><span class="base">dreams</span><span class="det">N2</span></button>
+      <button class="tube" style="--roomink:#a88858" data-ink=".base" data-ground="self" data-name="stamped slot"><span class="glass"></span><span class="base">trash</span><span class="det">Y5</span></button>
+      <button class="tube" style="--roomink:#d4af37" data-ink=".base" data-ground="self" data-name="stamped slot"><span class="glass"></span><span class="base">themes</span><span class="det">T9</span></button>
+    </div></div>
+    <span class="cap">the lit slot is the room you were last in · every slot is stamped with its own grid reference</span>
+  </div>
+  <div class="two">
+    <div>
+      <h3 style="margin-top:14px">the pitch</h3>
+      <p>Settings already carries a maintenance panel with a VFD slot display; the machine's own hardware register is established. This pitch extends it to the desk: a rack of eleven phosphor slots, each a tube with the room's name <b>stamped into its base</b> and a plate reference beside it — <code>S1</code>, <code>B1</code>, <code>O3</code>, <code>Y5</code>.</p>
+      <p>The names are stamped, not lit, so the label is legible whether the tube is burning or dead — which is exactly what a real rack does, and exactly what the current dial fails to do. The phosphor lives in the glass, behind the stamp. The selected slot glows and its base brightens.</p>
+      <p>The grid references are the covenant's <i>oddly precise number</i> and its <i>cross-reference to a document you will never see</i>, in one stroke: <code>Y5</code> means something to whoever wired this machine, and you are not going to find out what.</p>
+    </div>
+    <div>
+      <h3 style="margin-top:14px">how it clears the floor</h3>
+      <ul>
+        <li><b>D3</b> — the stamp is <code>#e2cca0</code> on bakelite, identical lit or dark. The phosphor never touches the text. <span class="ratio" data-for="p3"></span></li>
+        <li><b>D4</b> — slots are 52px of glass plus a 24px base, 64px minimum width; the whole rack is <code>auto-fit</code>, so it reflows from eleven columns to three without ever crushing a label (the truncation in the mockup is a <code>text-overflow</code> guard, not the design).</li>
+        <li><b>D2</b> — no carousel, no popup: the rack is the index.</li>
+        <li><b>cheapest to build</b> — this is the one that reuses the most. The tile → slot rename is mechanical, <code>state.visited</code> already drives the lit slot, and the arrow keys that cycle the dial become left/right along the rack. It could ship in a day.</li>
+        <li><b>its honest weakness</b> — a rack is a rack; it is an <i>appliance</i>, not a house. It is the least haunted of the five and the most legible. If the goal is "the machine's furniture", this is the safe door.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ── PITCH IV ──────────────────────────────────────────────────────── -->
+<div class="pitch" id="p4">
+  <div class="pitch-head"><span class="no">PITCH IV</span><h3>The worn three — a door that has noticed your hand</h3><span class="tag t-mind">haunted</span><span class="tag t-leg">legible</span><span class="tag t-die">diegetic</span></div>
+  <div class="stage">
+    <div class="center"><div class="worn">
+      <div class="row3">
+        <button class="slot" style="--roomink:#aa7838" data-ink=".nm" data-ground="self" data-name="worn slot"><span class="nm">journal</span><span class="ag">you, yesterday</span></button>
+        <button class="slot" style="--roomink:#2a8a8a" data-ink=".nm" data-ground="self" data-name="worn slot"><span class="nm">sea</span><span class="ag">three days</span></button>
+        <button class="slot" style="--roomink:#d4af37" data-ink=".nm" data-ground="self" data-name="worn slot"><span class="nm">games</span><span class="ag">a week</span></button>
+      </div>
+      <button class="others" data-ink="self" data-ground="self" data-name="the drawer"><span class="knob" aria-hidden="true"></span>the rest of the house · eight more</button>
+    </div></div>
+    <span class="cap">the three doors your hand actually wears · the order is yours, not an alphabet's</span>
+  </div>
+  <div class="two">
+    <div>
+      <h3 style="margin-top:14px">the pitch</h3>
+      <p>Every door in this machine already remembers you: the journal thickens its spine, the garden waters its pot on each visit, the trash grows graves. The one piece of furniture that <i>refuses</i> to show that is the menu — it holds a fixed order and hides its memory in a small badge.</p>
+      <p>The worn three makes the memory the menu. The desk keeps three slots for the rooms you have actually been in, most recent first, each one <b>worn where you press it</b> — a lifted patina dish, the same tell the covenant asks of a well-used prop. Under them, one handle opens the drawer with the other eight.</p>
+      <p>And because the machine lives in your mind, it is allowed to say so once, in the traveller's voice, in the register the dial's opinion line already uses: <i>“three days, vanir's room. the boards are still wet.”</i> The menu becomes a mirror rather than a list.</p>
+    </div>
+    <div>
+      <h3 style="margin-top:14px">how it clears the floor</h3>
+      <ul>
+        <li><b>D1 · D2</b> — three doors at one press, eight more at two. This is the one pitch here that does <i>not</i> meet D1 for the whole house, and it says so: its claim is that the house you actually use is three rooms, and the other eight are a drawer away by design.</li>
+        <li><b>D3</b> — 15px names in <code>#f4ead0</code> on the slot's own dark metal, phosphor only as a lamp behind. <span class="ratio" data-for="p4"></span></li>
+        <li><b>D4</b> — 60px slots, 44px drawer handle.</li>
+        <li><b>D6</b> — this pitch <i>is</i> D6. Recency is the order; the wear is the record; the drawer is where the rest of the house waits, patiently, unresentful.</li>
+        <li><b>the risk</b> — a menu that reorders itself is a menu you cannot memorise. The mitigation is the fix: the slots never move <i>while you are on the desk</i> — the order settles when you come back, the way a room looks different when you return to it.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ── PITCH V ───────────────────────────────────────────────────────── -->
+<div class="pitch" id="p5">
+  <div class="pitch-head"><span class="no">PITCH V</span><h3>The ring — a dial that is actually radial, and an instrument it can be turned</h3><span class="tag t-die">diegetic</span><span class="tag t-mind">the mind</span><span class="tag t-leg">legible at the plate</span></div>
+  <div class="stage">
+    <div class="center"><div class="ring" id="ring-demo">
+      <div class="face" aria-hidden="true"></div>
+      <div class="pointer" aria-hidden="true"></div>
+      <div class="glass">
+        <span class="rn" data-ink="self" data-ground="self" data-name="the name plate">buddy</span>
+        <span class="rp">sigil · stone &amp; seals</span>
+        <span class="rt">27 ENGRAVINGS · 36° DETENTS · REV. C</span>
+      </div>
+      <div class="eng at" style="--a:0deg;transform:rotate(0deg) translate(0,-118px)"><button class="lab">buddy</button></div>
+      <div class="eng" style="--a:36deg;transform:rotate(36deg) translate(0,-118px)"><button class="lab">journal</button></div>
+      <div class="eng" style="--a:72deg;transform:rotate(72deg) translate(0,-118px)"><button class="lab">sea</button></div>
+      <div class="eng" style="--a:108deg;transform:rotate(108deg) translate(0,-118px)"><button class="lab">games</button></div>
+      <div class="eng" style="--a:144deg;transform:rotate(144deg) translate(0,-118px)"><button class="lab">toybox</button></div>
+      <div class="eng" style="--a:180deg;transform:rotate(180deg) translate(0,-118px)"><button class="lab">divination</button></div>
+      <div class="eng" style="--a:216deg;transform:rotate(216deg) translate(0,-118px)"><button class="lab">learn</button></div>
+      <div class="eng" style="--a:252deg;transform:rotate(252deg) translate(0,-118px)"><button class="lab">garden</button></div>
+      <div class="eng" style="--a:288deg;transform:rotate(288deg) translate(0,-118px)"><button class="lab">dreams</button></div>
+      <div class="eng" style="--a:324deg;transform:rotate(324deg) translate(0,-118px)"><button class="lab">trash</button></div>
+    </div>
+    <div class="knurl">turn · click · the engraving under the pointer reads on the plate</div></div>
+    <span class="cap">ten engravings, 36° apart, one pointer · the plate below states the room, its traveller and its place</span>
+  </div>
+  <div class="two">
+    <div>
+      <h3 style="margin-top:14px">the pitch</h3>
+      <p>The file is called <code>dial.js</code>, the stylesheet says “radial-style”, and the thing that renders is a row of three plaques. Meanwhile the sea already has a brass tide clock with a knurled bezel, and the covenant's material register is full of instruments. So: make the ring.</p>
+      <p>A brass azimuth ring around the tube, ten engravings at true angles, a knurled bezel you turn with a drag or the arrow keys, detented to 36° so an engraving <b>always</b> sits under the pointer — no half-word ever comes to rest. The pointer drops a name plate: the room, the traveller, the place, all in printed ink on brass, at a size you can read from where you are sitting.</p>          <p>This is the reading that takes the word <i>dial</i> seriously and gives the desktop an object instead of a control: the machine becomes an instrument, and choosing a room becomes tuning it. It is also the pitch with the strongest claim to the brief — an instrument is exactly what a haunted machine would be.</p>
+      <p>One decision the mockup makes and the build must keep: the engravings are cut <b>upright</b>, each counter-rotated to meet the eye square. Physically dishonest by a hair, and the right call — an engraving you have to tilt your head to read is the same failure as a label printed in a dark lamp.</p>
+    </div>
+    <div>
+      <h3 style="margin-top:14px">how it clears the floor</h3>
+      <ul>
+        <li><b>D3</b> — nothing is read off the ring itself. The engravings are placeholders for the eye; the <b>name plate</b> carries the name in ink, and the plate is the only text that has to be legible. <span class="ratio" data-for="p5"></span></li>
+        <li><b>D4</b> — the plate is a 19px name on brass; each engraving's own hit target is a 44px sector at its angle, so the ring is not just turnable, it is pressable.</li>
+        <li><b>D5</b> — the ring sits <i>around</i> the tube's own bezel rather than under it, so it costs the screen nothing. It is the only pitch here that adds no new furniture at all: it is the monitor's existing edge, re-cut.</li>
+        <li><b>D2, honestly</b> — ten engravings around a ring are all present but not all equally readable; the plate is what makes it D2-compliant. A traveller should be able to Tab the ring and read the plate at each stop, and this pitch only works if that traversal is built.</li>
+        <li><b>the reduced-motion test</b> — the bezel must not ease between detents under <code>prefers-reduced-motion</code>; it snaps, the plate changes, and the function is intact. A ring that must be turned is a ring that must be snap-turnable.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="pitch" id="p6">
+  <div class="pitch-head"><span class="no">PITCH VI</span><h3>The phosphor bank — one nixie door, soldered into the CRT</h3><span class="tag t-die">diegetic</span><span class="tag t-leg">legible</span><span class="tag t-mind">the mind</span></div>
+  <div class="stage">
+    <div class="study" id="study-demo">
+      <div class="cell"><button class="nix big" data-ink=".eng b" data-ground="self" data-name="engraved name"><span class="eng"><b>journal</b></span><span class="soc"><span class="mark"></span><span class="tube"><span class="mesh"></span><span class="mica"></span><span class="ember"></span><span class="cath"></span><span class="lit"></span><span class="halo"></span></span></span></button><span class="cap">cold · the cathodes are still visible, so the door is still findable</span></div>
+      <div class="cell"><button class="nix big seen" style="--ph:#2a8a8a;--ph-glow:rgba(42,138,138,.5)" data-ink=".eng b" data-ground="self" data-name="engraved name"><span class="eng"><b>sea</b></span><span class="soc"><span class="mark"></span><span class="tube"><span class="mesh"></span><span class="mica"></span><span class="ember"></span><span class="cath"></span><span class="lit"></span><span class="halo"></span></span></span></button><span class="cap">spent · a room you have been through keeps a settled light</span></div>
+      <div class="cell"><button class="nix big on" style="--ph:#d4af37;--ph-glow:rgba(212,175,55,.5)" data-ink=".eng b" data-ground="self" data-name="engraved name"><span class="eng"><b>themes</b></span><span class="soc"><span class="mark"></span><span class="tube"><span class="mesh"></span><span class="mica"></span><span class="ember"></span><span class="cath"></span><span class="lit"></span><span class="halo"></span></span></span></button><span class="cap">burning · the door you are standing in, in its own phosphor</span></div>
+      <div class="cell"><button class="nix big lock" style="--ph:#aa5a18;--ph-glow:rgba(170,90,24,.5)" data-ink=".eng b" data-ground="self" data-name="engraved name"><span class="eng"><b>buddy</b></span><span class="soc"><span class="mark"></span><span class="tube"><span class="mesh"></span><span class="mica"></span><span class="ember"></span><span class="cath"></span><span class="lit"></span><span class="halo"></span></span></span></button><span class="cap">struck · the casting lock, cut through the plate</span></div>
+    </div>
+    <span class="cap" style="text-align:center">the component at roughly 3× · plate above, collar and envelope below · focus is a lit bezel around the plate</span>
+  </div>
+  <div class="two">
+    <div>
+      <h3 style="margin-top:14px">the pitch</h3>
+      <p>One door, one component, wired into the machine's face. An <b>enamel-filled engraved plate</b> carries the name; below it a <b>Bakelite collar</b> with two slotted screws holds a <b>nixie envelope</b> — domed glass, a mica spacer, the anode mesh, one cathode wire — and the cathode burns in that room's own phosphor.</p>
+      <p>The split is the whole point, and it is the fix for everything in §0. <b>The glow is the room; the name is enamel.</b> The plate is real steel, the letterforms are cut into it and filled, and they read identically whether the tube is cold, spent, or burning. The bulb identifies and reports state; it never carries information on its own.</p>
+      <p>And a cold tube is not a hidden door. A real nixie shows you its cathodes when it is off — you can count the numerals through the glass with the power cut. Here, cold, you see the wire and the ember, the plate reads the name, and the door is exactly as findable as it was lit. That is what the current dial's <code>··· all rooms</code> hint should have been.</p>
+      <p><b>Why enamel-filled, honestly:</b> bare engraved metal — dark cut letters on a mid-tone panel — measures <b>1.9:1</b>. The relief that makes an engraving legible in your hand is a lighting effect that a flat screen cannot reproduce. Machine nameplates have always solved this the same way: cut the letters, fill them with enamel. So the plate is dark steel and the engraving is cream, which is both truer to the object and legible.</p>
+    </div>
+    <div>
+      <h3 style="margin-top:14px">how it clears the floor</h3>
+      <ul>
+        <li><b>D3</b> — the engraved plate is enamel on steel, measured on the plate itself, and it does not move when the state changes. <span class="ratio" data-for="p6"></span></li>
+        <li><b>D4</b> — in the chin each door is 74×46 with its name at 11px; the component study above is roughly 3× that. The collar's screws are decoration and are never the target.</li>
+        <li><b>D6</b> — four states, all visible at once and none of them a hover: cold, spent, burning, struck. The bank reads as a record of your own traffic before you touch anything.</li>
+        <li><b>F6 consent</b> — under reduced motion the tube does not fade; it switches. The ember, the bloom and the halo are all present in both worlds.</li>
+        <li><b>the carving</b> — the small etched mark on the collar's shoulder is the room's own glyph (see below). It is a scratch on a fitting, not a control, and it is not in the tab order.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<h3 style="font-weight:400;font-size:20px;margin:34px 0 0">And the twelve carvings move home, which is what frees the bezel</h3>
+<p>The bank needs the machine's face, and the face is already furnished: <code>styles/bezel.css</code> places <b>twelve carvings</b> around the bezel — four along the top, two on each side, four along the bottom, twenty-two pixels each, and every one of them in the tab order. The sweep flagged those twenty-two-pixel targets. It was right to, and the fix is not to enlarge them.</p>
+<p>Read <code>src/carvings.js</code> and they are not navigation at all: each carving is bound to a <b>theme id</b> and lights when that traveller's skin is live. They are <i>marks</i> — evidence of who has been here — and the covenant already says where evidence lives. Not on the machine's face as buttons: in the room behind the CRT, on that room's own named materials. So they go to the wall, the board, the sill, the shelf, the pool and the boards — each on the material it belongs to — and the whole bezel comes free for the bank.</p>
+<div class="stage">
+  <div class="elev-wrap" id="elev-demo">
+    <div class="elev">
+      <div class="boards"></div>
+      <div class="shelf">
+        <div class="brd" style="top:58px"></div><div class="brd" style="top:126px"></div><div class="brd" style="top:194px"></div>
+        <div class="vol" style="left:10px;height:44px"></div><div class="vol b" style="left:30px;height:38px"></div><div class="vol c" style="left:50px;height:48px"></div>
+        <div class="vol" style="left:10px;top:76px;height:42px"></div><div class="vol b" style="left:30px;top:80px;height:36px"></div>
+      </div>
+      <div class="board"><div class="str"></div>
+        <span class="pin" style="left:38px;top:26px"></span><span class="pin" style="left:118px;top:38px"></span>
+        <span class="pin" style="left:64px;top:88px"></span><span class="pin" style="left:140px;top:96px"></span>
+      </div>
+      <div class="win"><div class="sky"></div><div class="bar"></div><div class="mul"></div></div>
+      <div class="wbox"><div class="pot"></div></div>
+      <div class="crt"><div class="glasss"></div>
+        <span class="tin" style="left:34px"></span><span class="tin" style="left:56px"></span><span class="tin" style="left:78px"></span><span class="tin" style="left:100px"></span>
+      </div>
+      <div class="cardbox"></div>
+      <div class="candle"><div class="sau"></div><div class="stk"></div><div class="fire"></div></div>
+      <div class="pool"></div>
+      <!-- the twelve, each on its own material -->
+      <span class="mk live" style="left:168px;top:118px"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 14 L10 3 L17 14 L10 17 Z M6 12 L10 8 L14 12 Z"/></svg><span class="tg">wall</span></span>
+      <span class="mk live" style="left:216px;top:52px"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 7 C7 4, 13 4, 17 7 M3 11 C7 8, 13 8, 17 11 M3 15 C7 12, 13 12, 17 15"/></svg><span class="tg">board · thread</span></span>
+      <span class="mk" style="left:290px;top:112px"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><path d="M10 3 L14 10 L10 17 L6 10 Z M10 10 L10 17" fill="currentColor" fill-opacity="0.25"/></svg><span class="tg">board · nib</span></span>
+      <span class="mk live" style="left:474px;top:28px"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><path d="M5 14 L15 14 L13.5 5 L6.5 5 Z M10 17 L10 14" fill="currentColor" fill-opacity="0.25"/></svg><span class="tg">sill</span></span>
+      <span class="mk" style="left:600px;top:150px"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 5 L17 5 M3 9 L17 9 M3 13 L17 13 M3 17 L17 17"/></svg><span class="tg">lower sash</span></span>
+      <span class="mk" style="left:412px;top:22px"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><path d="M10 3 a5 5 0 0 1 5 5 c0 3 -2 4 -2 7 l-6 0 c0 -3 -2 -4 -2 -7 a5 5 0 0 1 5 -5 Z M8 15 L12 15 M9 17 L11 17" fill="currentColor" fill-opacity="0.25"/></svg><span class="tg">shelf · upright</span></span>
+      <span class="mk live" style="left:66px;top:60px"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><path d="M5 17 L15 17 L13 14 L11 14 L11 8 L13 8 L11 5 L9 8 L11 8 L11 14 L9 14 Z M3 17 L17 17" fill="currentColor" fill-opacity="0.25"/></svg><span class="tg">shelf · top board</span></span>
+      <span class="mk" style="left:100px;top:300px"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M14 4 a4 4 0 0 1 -4 4 L6 12 L3 15 M6 12 L9 12"/></svg><span class="tg">shelf · side, brass</span></span>
+      <span class="mk" style="left:62px;top:230px"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M10 3 L17 10 L10 17 L3 10 Z M7 10 a3 3 0 0 0 6 0 a3 3 0 0 0 -6 0"/></svg><span class="tg">card box lid, stamped</span></span>
+      <span class="mk live" style="left:452px;top:214px"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><path d="M10 3 L10 6 M8 6 L12 6 L11.5 17 L8.5 17 Z" fill="currentColor" fill-opacity="0.25"/></svg><span class="tg">saucer rim</span></span>
+      <span class="mk live" style="left:330px;top:342px"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M10 3 L10 17 M3 10 L17 10 M5 5 L15 15 M15 5 L5 15"/></svg><span class="tg">chalked on the pool rim</span></span>
+      <span class="mk" style="left:186px;top:378px"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M10 3 a7 7 0 1 0 0.01 0 Z M10 3 L12 10 L10 17 L8 10 Z" fill="currentColor" fill-opacity="0.2"/></svg><span class="tg">scratched in the boards</span></span>
+    </div>
+  </div>
+  <div class="dsk-note">the room behind the CRT · six lit marks are six live themes · the boxes are the room's real materials: wall, cork board, window and sash, shelf, card box, candle saucer, shadow pool, floor boards</div>
+</div>
+<div class="body">
+<ul class="locc">
+  <li><b>stone</b> — the wall, carved into the plaster by the window: <i>“the stone remembers being touched.”</i></li>
+  <li><b>thread</b> — a loop of it over the board's top-left pin. <b>nib</b> — stuck in the cork, bottom right.</li>
+  <li><b>candle</b> — scratched into the saucer rim under the session candle.</li>
+  <li><b>bell</b> — hung on a nail at the sill. <b>grate</b> — the lower sash's leading.</li>
+  <li><b>bulb</b> — etched on the shelf's upright. <b>tower-rev</b> — a maker's mark on the shelf's top board. <b>hook</b> — a brass hook on the shelf's side.</li>
+  <li><b>hole-punch</b> — stamped into the card box's lid.</li>
+  <li><b>glyph</b> — chalked on the shadow pool's rim. <b>compass</b> — scratched into the floor boards.</li>
+</ul>
+<p>Twelve marks, twelve materials, no controls. What the visitor loses is a row of unlabeled 22px buttons they could not hit; what they gain is a thing to find. And the machine's face — a 67px frame, a 920×56 chin and a 920×67 head — comes back empty and ready for the bank.</p>
+</div>
+
+<!-- ── PITCH VII ──────────────────────────────────────────────────────── -->
+<div class="pitch" id="p7">
+  <div class="pitch-head"><span class="no">PITCH VII</span><h3>The legend bar — keys standing proud, the room's name cut into the case</h3><span class="tag t-die">diegetic</span><span class="tag t-leg">legible</span><span class="tag t-mind">the mind</span></div>
+  <div class="stage">
+    <div class="study">
+      <div class="cell">
+        <button class="key big" data-ink=".plate b" data-name="engraved legend, cold"><span class="capwrap"><span class="stem"></span><span class="cap"></span></span><span class="chan"><span class="ltube"><span class="cath"></span><span class="lit"></span></span></span><span class="plate"><b>journal</b></span></button>
+        <span class="cap">cold · the key stands up on its stem, the tube is dark, and the cathode wire still reads through the glass</span>
+      </div>
+      <div class="cell">
+        <button class="key big seen" style="--ph:#2a8a8a;--ph-glow:rgba(42,138,138,.5)" data-ink=".plate b" data-name="engraved legend, spent"><span class="capwrap"><span class="stem"></span><span class="cap"></span></span><span class="chan"><span class="ltube"><span class="cath"></span><span class="lit"></span></span></span><span class="plate"><b>sea</b></span></button>
+        <span class="cap">spent · you have been through, and the tube keeps a settled flame</span>
+      </div>
+      <div class="cell">
+        <button class="key big on" style="--ph:#d4af37;--ph-glow:rgba(212,175,55,.5)" aria-pressed="true" data-ink=".plate b" data-name="engraved legend, latched"><span class="capwrap"><span class="stem"></span><span class="cap"></span></span><span class="chan"><span class="ltube"><span class="cath"></span><span class="lit"></span></span></span><span class="plate"><b>themes</b></span></button>
+        <span class="cap">latched · the cap has sunk onto its detent and covered its own stem. the case has not moved and neither has the name</span>
+      </div>
+      <div class="cell">
+        <button class="key big lock" style="--ph:#aa5a18;--ph-glow:rgba(170,90,24,.5)" data-ink=".plate b" data-name="engraved legend, blanking plug"><span class="capwrap"><span class="stem"></span><span class="cap"></span></span><span class="chan"><span class="ltube"><span class="cath"></span><span class="lit"></span></span></span><span class="plate"><b>buddy</b></span></button>
+        <span class="cap">blanking plug · the way is cut into the case, the switch behind it was never wired, and the legend is struck</span>
+      </div>
+    </div>        <span class="cap" style="text-align:center">the column at roughly 2.3× · same beige plastic as the case, a dished face you can see over the top edge, and a post you can see at rest · the name is milled into the CASE, never on the key</span>
+  </div>
+  <div class="two">
+    <div>
+      <h3 style="margin-top:14px">the pitch</h3>
+      <p>The machine's forehead is <b>63px tall and has never held anything but twelve 22px carvings</b>, which is why the sweep flagged them: four along the top, in the tab order, unreadable and un-hittable. Measured off the live <code>desktop.html</code> at 1280×800: the machine runs 920×718 at (27, 41), the glass starts at y=108, so that head is 63px of case. The carvings move home (above). What is left is a strip the machine has been carrying for nothing.</p>
+      <p><b>Two moves, both small.</b> First the head comes down to <b>40px</b>. That hands 23px back to the glass — 787×567 becomes <b>787×590</b> — and pays for the whole index out of the case's own fat. Second, <b>the keys do not sit in wells; they stand up.</b> Each is a tall cap in the <b>same beige plastic as the case</b>, dished on top, flared at the skirt, standing <b>30px proud</b> of the machine's top edge with <b>8px of travel</b>. The keys live <i>outside</i> the case, so they cost the head nothing; the head only has to hold the tube and the name.</p>
+      <p><b>Why they must be tall, and why they must be the case's own colour.</b> A short key sunk in a hole is a switch; a tall one you can <i>see over</i> is furniture. Standing 30px proud with a dished face means the height itself carries the news — you can count the keys and see which one is down from the far side of the room, before you can read a single letter. And keeping them the machine's own beige is what stops them reading as a control panel bolted onto a monitor. <b>Nothing here is a new material.</b> The keys are the case, cut up and stood on end.</p>
+      <p><b>And the name is engraved in the case, not on the key.</b> A cap is a moving part, and a moving part is the worst possible home for the one thing you have to read. That is precisely how the dial fails today: the tile you are <i>on</i> is the least legible thing on the desktop, measured at <b>2.34:1</b> in §0. This is the structural version of that fix. <b>The moving part is the state; the case is the name.</b> Dark fill in light plastic measures <b>9.98:1</b> at its worst gradient stop, and it reads identically cold, latched or struck, because the letters are in the machine and the key is a separate object in front of them.</p>
+      <p>The tube lies in a recessed channel directly above the legend, dark-ground so that even a pale phosphor reads against it. Cold it shows its cathode wire. Lit it burns in that room's own colour and spills onto the plate below — so <b>the light reveals the legend instead of being the legend</b>. A lit door's name gains contrast; it never borrows the colour it is read by.</p>
+      <p>It is still an <b>interlock bank</b>: pressing a key mechanically releases the last one, so <b>the room you are standing in is the one sitting low.</b> Depth is the address, the tube is the room, and the case is the name — three channels, none of them load-bearing on another, and you can read where you are from across the room with nothing hovered.</p>
+    </div>
+    <div>
+      <h3 style="margin-top:14px">how it clears the floor</h3>
+      <ul>
+        <li><b>D1 · one action</b> — eleven keys, eleven names, one press each. Nothing is behind a hold, nothing behind an arrow.</li>
+        <li><b>D2 · all of it visible</b> — all eleven names are engraved in the case and readable at 1280 with the power off. At 439 the legends fall to three letters, and that is a real loss this pitch admits to below.</li>
+        <li><b>D3 · lamp vs. ink</b> — the name is engraved in the case and the key is a separate object; the lamp is a third thing again, sitting above the legend. Nothing moves the letters and nothing colours them. <span class="ratio" data-for="p7"></span></li>
+        <li><b>D4 · a size you can hold</b> — each key's <i>button</i> is the whole column: <b>86×63</b> at 1280, since cap, channel and legend are all inside it. That is well past 44×44 with room for a real 5px travel.</li>
+        <li><b>D5 · the room wins</b> — the bar is on the case, and the head already existed. At 1280 this pitch <b>hands the glass 23px back</b> instead of taking a band from it; the liberchat tube stands to the machine's right and never crosses the bar.</li>
+        <li><b>D6 · it remembers you</b> — the remembered room is the key sitting low, a spent room is a tube at low flame. Both read before you touch anything, without a hover. This is the pitch's whole argument in one line: <i>the dial knew where you were and hid it in a badge; the case says it in relief.</i></li>
+        <li><b>the sound</b> — <code>src/sound.js</code> already ships <code>thunk()</code>, which is exactly the noise a key landing on a detent makes. The click is never the information: the key's depth and the tube's colour both survive with the sound off.</li>
+        <li><b>the drawing prop</b> — the channel's lower lip catches a 0.3px highlight off the plastic, the legend's shadow falls one pixel down and right, and the cap is genuinely concave. Nothing floats: every part is a fitting in a hole.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 style="font-weight:400;font-size:20px;margin:36px 0 0">The bar at true size — 1280×800, machine at x=27</h3>
+  <p>Drawn in real coordinates: the head cut from 67px to <b>44px</b> so the glass becomes <b>787×590</b>, the bar running the full 892px of the case rather than the 787px of the glass, and the keys standing 30px above the top edge where they cost the case nothing. The pilot lamp stays where it already is.</p>
+  <div class="stage">
+    <div class="dsk-wrap" id="rail-1280">
+      <div class="dsk">
+        <div class="mach">
+          <div class="glass" style="top:44px">
+            <div class="art"></div>
+            <span class="say">the room behind the glass · now starts at y=85</span>
+            <span class="thread">+23px of height handed back to this · 787 × 590, was 787 × 567</span>
+          </div>
+          <div class="lbar">
+            <button class="key lock" style="--ph:#aa5a18;--ph-glow:rgba(170,90,24,.5)" data-ink=".plate b" data-name="engraved legend"><span class="capwrap"><span class="stem"></span><span class="cap"></span></span><span class="chan"><span class="ltube"><span class="cath"></span><span class="lit"></span></span></span><span class="plate"><b>buddy</b></span></button>
+            <button class="key seen" style="--ph:#aa7838;--ph-glow:rgba(170,120,56,.5)" data-ink=".plate b" data-name="engraved legend"><span class="capwrap"><span class="stem"></span><span class="cap"></span></span><span class="chan"><span class="ltube"><span class="cath"></span><span class="lit"></span></span></span><span class="plate"><b>journal</b></span></button>
+            <button class="key seen" style="--ph:#2a8a8a;--ph-glow:rgba(42,138,138,.5)" data-ink=".plate b" data-name="engraved legend"><span class="capwrap"><span class="stem"></span><span class="cap"></span></span><span class="chan"><span class="ltube"><span class="cath"></span><span class="lit"></span></span></span><span class="plate"><b>sea</b></span></button>
+            <button class="key" style="--ph:#d4af37;--ph-glow:rgba(212,175,55,.5)" data-ink=".plate b" data-name="engraved legend"><span class="capwrap"><span class="stem"></span><span class="cap"></span></span><span class="chan"><span class="ltube"><span class="cath"></span><span class="lit"></span></span></span><span class="plate"><b>games</b></span></button>
+            <button class="key" style="--ph:#d88a3c;--ph-glow:rgba(216,138,60,.5)" data-ink=".plate b" data-name="engraved legend"><span class="capwrap"><span class="stem"></span><span class="cap"></span></span><span class="chan"><span class="ltube"><span class="cath"></span><span class="lit"></span></span></span><span class="plate"><b>toybox</b></span></button>
+            <button class="key" style="--ph:#f4e8d2;--ph-glow:rgba(244,232,210,.45)" data-ink=".plate b" data-name="engraved legend"><span class="capwrap"><span class="stem"></span><span class="cap"></span></span><span class="chan"><span class="ltube"><span class="cath"></span><span class="lit"></span></span></span><span class="plate tight"><b>divination</b></span></button>
+            <button class="key" style="--ph:#e05a5a;--ph-glow:rgba(224,90,90,.5)" data-ink=".plate b" data-name="engraved legend"><span class="capwrap"><span class="stem"></span><span class="cap"></span></span><span class="chan"><span class="ltube"><span class="cath"></span><span class="lit"></span></span></span><span class="plate"><b>learn</b></span></button>
+            <button class="key" style="--ph:#d88a4a;--ph-glow:rgba(216,138,74,.5)" data-ink=".plate b" data-name="engraved legend"><span class="capwrap"><span class="stem"></span><span class="cap"></span></span><span class="chan"><span class="ltube"><span class="cath"></span><span class="lit"></span></span></span><span class="plate"><b>garden</b></span></button>
+            <button class="key" style="--ph:#a48ad4;--ph-glow:rgba(164,138,212,.5)" data-ink=".plate b" data-name="engraved legend"><span class="capwrap"><span class="stem"></span><span class="cap"></span></span><span class="chan"><span class="ltube"><span class="cath"></span><span class="lit"></span></span></span><span class="plate"><b>dreams</b></span></button>
+            <button class="key" style="--ph:#a88858;--ph-glow:rgba(168,136,88,.5)" data-ink=".plate b" data-name="engraved legend"><span class="capwrap"><span class="stem"></span><span class="cap"></span></span><span class="chan"><span class="ltube"><span class="cath"></span><span class="lit"></span></span></span><span class="plate"><b>trash</b></span></button>
+            <button class="key on" style="--ph:#d4af37;--ph-glow:rgba(212,175,55,.5)" aria-pressed="true" data-ink=".plate b" data-name="engraved legend"><span class="capwrap"><span class="stem"></span><span class="cap"></span></span><span class="chan"><span class="ltube"><span class="cath"></span><span class="lit"></span></span></span><span class="plate"><b>themes</b></span></button>
+          </div>
+          <span aria-hidden="true" style="position:absolute;right:12px;top:26px;width:8px;height:8px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ffe0a8,#8a4a12);box-shadow:0 0 7px rgba(255,150,60,.6)"></span>
+        </div>
+        <div class="sc">
+          <span class="note">communicate to travellers</span>
+          <div class="body">
+            <span class="plate"><span>TX-80 · REV. C</span><span>ON</span></span>
+            <div class="gl"><div class="feed">
+              <span class="fh">TX-80/3 · second tube</span>
+              <span class="fl">riason, at the bench: “the switch you leave down is the room you are in.”</span>
+              <span class="fl me">say it to the tube</span>
+              <span class="ff"><i></i><b>RETURN</b></span>
+            </div></div>
+          </div>
+          <div class="stand"></div><div class="shadow"></div>
+        </div>
+      </div>
+    </div>
+    <div class="dsk-note">the head is cut 67 → 44 · eleven columns at 76px pitch with 5px of frame between · each key's button is the whole 76×70 column · the cap is 52 × 28, 30px proud, travelling 8px · the ladder's 96px reserve leaves 48px above the case and the keys use 30 of it · glass 787 × 590 (y 85 → 675), <b>23px taller than before</b> · the legend's worst ink is 9.98:1, and the struck legend of the blanking plug is 7.24:1</div>
+  </div>
+
+  <h3 style="font-weight:400;font-size:20px;margin:36px 0 0">And at 439px, where the case has no head to spare</h3>
+  <p>The narrow machine is 421×316 with a <b>23px</b> head and a 376px glass — less head than a legend and a tube need. So it grows by 3px, to <b>26px</b>, and the glass gives up <b>3px</b>: 274 → <b>271</b>. That is 1% of the room's height, and it is the whole price at this width. The keys stand 22px proud here too, and the legends drop to three letters because eleven names do not fit across 376px at any size you would want to read.</p>
+  <div class="stage">
+    <div class="dsk439-wrap" id="rail-439">
+      <div class="dsk439">
+        <div class="mach">
+          <div class="glass" style="top:26px"></div>
+          <div class="lbar">
+            <button class="key lock" style="--ph:#aa5a18;--ph-glow:rgba(170,90,24,.5)" data-ink=".plate b" data-name="439 legend"><span class="capwrap"><span class="stem"></span><span class="cap"></span></span><span class="chan"><span class="ltube"><span class="cath"></span><span class="lit"></span></span></span><span class="plate"><b>BUD</b></span></button>
+            <button class="key seen" style="--ph:#aa7838;--ph-glow:rgba(170,120,56,.5)" data-ink=".plate b" data-name="439 legend"><span class="capwrap"><span class="stem"></span><span class="cap"></span></span><span class="chan"><span class="ltube"><span class="cath"></span><span class="lit"></span></span></span><span class="plate"><b>JRN</b></span></button>
+            <button class="key seen" style="--ph:#2a8a8a;--ph-glow:rgba(42,138,138,.5)" data-ink=".plate b" data-name="439 legend"><span class="capwrap"><span class="stem"></span><span class="cap"></span></span><span class="chan"><span class="ltube"><span class="cath"></span><span class="lit"></span></span></span><span class="plate"><b>SEA</b></span></button>
+            <button class="key" style="--ph:#d4af37;--ph-glow:rgba(212,175,55,.5)" data-ink=".plate b" data-name="439 legend"><span class="capwrap"><span class="stem"></span><span class="cap"></span></span><span class="chan"><span class="ltube"><span class="cath"></span><span class="lit"></span></span></span><span class="plate"><b>GMS</b></span></button>
+            <button class="key" style="--ph:#d88a3c;--ph-glow:rgba(216,138,60,.5)" data-ink=".plate b" data-name="439 legend"><span class="capwrap"><span class="stem"></span><span class="cap"></span></span><span class="chan"><span class="ltube"><span class="cath"></span><span class="lit"></span></span></span><span class="plate"><b>TYB</b></span></button>
+            <button class="key" style="--ph:#f4e8d2;--ph-glow:rgba(244,232,210,.45)" data-ink=".plate b" data-name="439 legend"><span class="capwrap"><span class="stem"></span><span class="cap"></span></span><span class="chan"><span class="ltube"><span class="cath"></span><span class="lit"></span></span></span><span class="plate"><b>DIV</b></span></button>
+            <button class="key" style="--ph:#e05a5a;--ph-glow:rgba(224,90,90,.5)" data-ink=".plate b" data-name="439 legend"><span class="capwrap"><span class="stem"></span><span class="cap"></span></span><span class="chan"><span class="ltube"><span class="cath"></span><span class="lit"></span></span></span><span class="plate"><b>LRN</b></span></button>
+            <button class="key" style="--ph:#d88a4a;--ph-glow:rgba(216,138,74,.5)" data-ink=".plate b" data-name="439 legend"><span class="capwrap"><span class="stem"></span><span class="cap"></span></span><span class="chan"><span class="ltube"><span class="cath"></span><span class="lit"></span></span></span><span class="plate"><b>GRD</b></span></button>
+            <button class="key" style="--ph:#a48ad4;--ph-glow:rgba(164,138,212,.5)" data-ink=".plate b" data-name="439 legend"><span class="capwrap"><span class="stem"></span><span class="cap"></span></span><span class="chan"><span class="ltube"><span class="cath"></span><span class="lit"></span></span></span><span class="plate"><b>DRM</b></span></button>
+            <button class="key" style="--ph:#a88858;--ph-glow:rgba(168,136,88,.5)" data-ink=".plate b" data-name="439 legend"><span class="capwrap"><span class="stem"></span><span class="cap"></span></span><span class="chan"><span class="ltube"><span class="cath"></span><span class="lit"></span></span></span><span class="plate"><b>TRS</b></span></button>
+            <button class="key on" style="--ph:#d4af37;--ph-glow:rgba(212,175,55,.5)" aria-pressed="true" data-ink=".plate b" data-name="439 legend"><span class="capwrap"><span class="stem"></span><span class="cap"></span></span><span class="chan"><span class="ltube"><span class="cath"></span><span class="lit"></span></span></span><span class="plate"><b>THM</b></span></button>
+          </div>
+        </div>
+        <div class="sc">
+          <div class="body"><span class="plate">TX-80 · REV. C</span><div class="gl"><div class="feed"></div></div></div>
+        </div>
+        <span class="say">439 × 800 · machine 421 (x 9→430) · head 23 → 26 · glass 376 × 271 (was 274) · eleven columns at 34px</span>
+      </div>
+    </div>
+    <div class="dsk-note">the legends are three letters here because eleven names do not fit across 376px — <b>11 × 44 = 484</b>, and the arithmetic does not allow it. 34px columns are 10px under the width floor, and that is the one number in this pitch that misses. In exchange the glass pays <b>3px, or 1% of its height</b>, which is the cheapest any of these mounts has been at this width. If the width floor must hold at 439, the same bar takes two rows of six at 61px columns: the head goes to 48px and the glass drops to 229px, costing 16% instead of 1%.</div>
+  </div>
+</div>
+
+<h2 id="fits"><small>§3</small>Where it actually fits — the real screen budget</h2>
+<p class="actlede">This is the question that decides the pitch, so it was measured rather than estimated: every number below came off the live <code>desktop.html</code> with the liberchat sidecar standing on the desk. The drawing underneath is authored in true 1280×800 coordinates and scaled to fit this page — machine 920px at x=27, a 67px bezel, a 787×567 glass, the sidecar 272px at x=957.</p>
+<div class="stage">
+  <div class="dsk-wrap" id="fits-1280">
+    <div class="dsk">
+      <div class="mach">
+        <div class="glass">
+          <div class="art"></div>
+          <span class="say">the room behind the glass · the traveller's own wallpaper</span>
+          <span class="thread">the constellation · 12 artifacts · 4 knots</span>
+        </div>
+        <div class="zone freed"><span class="zl">A · RETURNED TO THE ROOM — 787 × 145</span></div>
+        <div class="bank">
+          <button class="nix lock" style="--ph:#aa5a18;--ph-glow:rgba(170,90,24,.5)"><span class="eng"><b>buddy</b></span><span class="soc"><span class="tube"><span class="mesh"></span><span class="ember"></span><span class="cath"></span><span class="lit"></span><span class="halo"></span></span></span></button>
+          <button class="nix seen" style="--ph:#aa7838;--ph-glow:rgba(170,120,56,.5)"><span class="eng"><b>journal</b></span><span class="soc"><span class="tube"><span class="mesh"></span><span class="ember"></span><span class="cath"></span><span class="lit"></span><span class="halo"></span></span></span></button>
+          <button class="nix seen" style="--ph:#2a8a8a;--ph-glow:rgba(42,138,138,.5)"><span class="eng"><b>sea</b></span><span class="soc"><span class="tube"><span class="mesh"></span><span class="ember"></span><span class="cath"></span><span class="lit"></span><span class="halo"></span></span></span></button>
+          <button class="nix" style="--ph:#d4af37;--ph-glow:rgba(212,175,55,.5)"><span class="eng"><b>games</b></span><span class="soc"><span class="tube"><span class="mesh"></span><span class="ember"></span><span class="cath"></span><span class="lit"></span><span class="halo"></span></span></span></button>
+          <button class="nix" style="--ph:#d88a3c;--ph-glow:rgba(216,138,60,.5)"><span class="eng"><b>toybox</b></span><span class="soc"><span class="tube"><span class="mesh"></span><span class="ember"></span><span class="cath"></span><span class="lit"></span><span class="halo"></span></span></span></button>
+          <button class="nix" style="--ph:#f4e8d2;--ph-glow:rgba(244,232,210,.45)"><span class="eng"><b>divination</b></span><span class="soc"><span class="tube"><span class="mesh"></span><span class="ember"></span><span class="cath"></span><span class="lit"></span><span class="halo"></span></span></span></button>
+          <button class="nix" style="--ph:#e05a5a;--ph-glow:rgba(224,90,90,.5)"><span class="eng"><b>learn</b></span><span class="soc"><span class="tube"><span class="mesh"></span><span class="ember"></span><span class="cath"></span><span class="lit"></span><span class="halo"></span></span></span></button>
+          <button class="nix" style="--ph:#d88a4a;--ph-glow:rgba(216,138,74,.5)"><span class="eng"><b>garden</b></span><span class="soc"><span class="tube"><span class="mesh"></span><span class="ember"></span><span class="cath"></span><span class="lit"></span><span class="halo"></span></span></span></button>
+          <button class="nix" style="--ph:#a48ad4;--ph-glow:rgba(164,138,212,.5)"><span class="eng"><b>dreams</b></span><span class="soc"><span class="tube"><span class="mesh"></span><span class="ember"></span><span class="cath"></span><span class="lit"></span><span class="halo"></span></span></span></button>
+          <button class="nix" style="--ph:#a88858;--ph-glow:rgba(168,136,88,.5)"><span class="eng"><b>trash</b></span><span class="soc"><span class="tube"><span class="mesh"></span><span class="ember"></span><span class="cath"></span><span class="lit"></span><span class="halo"></span></span></span></button>
+          <button class="nix on" style="--ph:#d4af37;--ph-glow:rgba(212,175,55,.5)"><span class="eng"><b>themes</b></span><span class="soc"><span class="tube"><span class="mesh"></span><span class="ember"></span><span class="cath"></span><span class="lit"></span><span class="halo"></span></span></span></button>
+        </div>
+      </div>
+      <div class="sc">
+        <span class="note">communicate to travellers</span>
+        <div class="body">
+          <span class="plate"><span>TX-80 · REV. C</span><span>ON</span></span>
+          <div class="gl"><div class="feed">
+            <span class="fh">TX-80/3 · second tube</span>
+            <span class="fl">riason, at the bench: “an index is kindness aimed at your future self.”</span>
+            <span class="fl me">say it to the tube</span>
+            <span class="ff"><i></i><b>RETURN</b></span>
+          </div></div>
+        </div>
+        <div class="stand"></div><div class="shadow"></div>
+      </div>
+      <div class="gut l"><span class="gl2">← desk gutter 27px</span></div>
+    </div>
+  </div>
+  <div class="dsk-note">1280 × 800 · machine 920 (x 27→947) · bezel 67 · glass 787 × 567 (x 94→881) · sidecar 272 (x 957→1229) · right desk gutter 51px</div>
+  <div class="dsk-legend">
+    <b class="lg-a">■ A · the glass — costs the room</b>
+    <b class="lg-b">■ B · the bezel — costs nothing, always visible</b>
+    <b class="lg-c">■ C · the desk — 27px left, 51px right: no room</b>
+  </div>
+</div>
+<div class="body">
+<table>
+  <tr><th>at this window</th><th>machine</th><th>bezel frame</th><th>glass</th><th>sidecar</th><th>desk outside the machine</th><th>band the dial eats today</th></tr>
+  <tr><td class="n">1440×900</td><td class="n">1020</td><td class="n">67px all round</td><td class="n">870×627</td><td class="n">272 @ x1087 (beside)</td><td class="n">57 left / 26 right</td><td class="n">160px · 26%</td></tr>
+  <tr><td class="n">1280×800</td><td class="n">920</td><td class="n">67 / 66 / 67 / 56</td><td class="n">787×567</td><td class="n">272 @ x957 (beside)</td><td class="n">27 left / 51 right</td><td class="n">145px · 26%</td></tr>
+  <tr><td class="n">1024×768</td><td class="n">720</td><td class="n">53 / 53 / 53 / 45</td><td class="n">614×442</td><td class="n">272 @ x742 (beside)</td><td class="n">12 left / 10 right</td><td class="n">112px · 25%</td></tr>
+  <tr><td class="n">900×700</td><td class="n">620</td><td class="n">47 / 46 / 46 / 46</td><td class="n">526×379</td><td class="n">272 @ x642 (beside)</td><td class="n">12 left / 12 right</td><td class="n">96px · 25%</td></tr>
+  <tr><td class="n">760×800</td><td class="n">540</td><td class="n">40 / 38 / 39 / 39</td><td class="n">461×332</td><td class="n warn">460 @ (14, 593) — drops below</td><td class="n fail">0</td><td class="n">84px · 25%</td></tr>
+  <tr><td class="n">439×800</td><td class="n">421</td><td class="n fail">22 / 22 / 23 / 19</td><td class="n">376×274</td><td class="n warn">272 @ (14, 593) — drops below</td><td class="n fail">0</td><td class="n">69px · 25%</td></tr>
+</table>
+
+<div class="note"><b>THE THREE THINGS THIS SETTLES</b>
+<p class="np"><b class="hd">1 · the sidecar never covers the menu.</b> From 900px up the tube stands entirely to the right of the machine — at 1280 the machine ends at x=947 and the sidecar begins at x=957. Below 900px it stops fitting and drops to the bottom-left, still below the dial's band. Your right-hand worry is real, but it is not an overlap: it is that the sidecar takes the <i>desk</i>.</p>
+<p class="np"><b class="hd">2 · the desk is not a place.</b> 27px of gutter on the left and 51px on the right at 1280, 12px at 1024, nothing at all below 900. Any version of these pitches that means “a drawer standing beside the machine” is dead on arrival. “Outside the machine” has to mean <b class="hd">on the machine</b>.</p>
+<p class="np"><b class="hd">3 · the bezel is the room you were looking for.</b> A uniform 67px frame at 1280 — 67px cheeks running the full 690px, a 920×67 head, a 920×56 chin. It costs the glass nothing, it is never scrolled and never covered, and today the dial is instead eating 145px of the 567px glass — a quarter of every room's screen.</p></div>
+
+<h4 style="font-weight:400;font-size:16px;margin:26px 0 2px">How each pitch mounts, and what it gets</h4>
+<table>
+  <tr><th>pitch</th><th>mounts on</th><th>room at 1280</th><th>at 1024</th><th>at 439</th><th>glass returned</th></tr>
+  <tr><td class="n">i · index drawer</td><td class="pass">the bezel chin, as a drawer rail</td><td class="n">920×56 → 11 cards at 74×40</td><td class="n">720×45 → 11 at 56×40</td><td class="fail">14px — falls back to a 44px tab</td><td class="pass">145px</td></tr>
+  <tr><td class="n">ii · the house</td><td class="pass">the glass itself — it <i>is</i> the wallpaper</td><td class="n">787×567</td><td class="n">614×442</td><td class="n">376×274</td><td class="warn">0 — it uses the glass as the room's own face</td></tr>
+  <tr><td class="n">iii · tube rack</td><td class="pass">the bezel chin or the head rail</td><td class="n">920×56 → 11 slots at 74×56</td><td class="n">720×45</td><td class="fail">14px — falls back</td><td class="pass">145px</td></tr>
+  <tr><td class="n">iv · worn three</td><td class="pass">the bezel's left cheek</td><td class="n">67×690 → 3 slots at 44×56 + a drawer</td><td class="n">53×540</td><td class="fail">22px — falls back</td><td class="pass">145px</td></tr>
+  <tr><td class="n">v · the ring</td><td class="pass">the bezel, all four sides</td><td class="n">67px uniform ring</td><td class="n">53px</td><td class="fail">22px — too thin to engrave</td><td class="pass">145px</td></tr>
+  <tr><td class="n">vi · phosphor bank</td><td class="pass">the bezel chin, or the left cheek</td><td class="n">920×56 → 11 at 74×46</td><td class="n">720×45 → 11 at 61×45</td><td class="fail">14px chin / 22px cheek — falls back</td><td class="pass">145px</td></tr>
+  <tr><td class="n">vii · crest rail</td><td class="pass">the bezel <i>head</i> — the strip above the glass</td><td class="n">787×63 → 11 at 67×56</td><td class="n">614×53 → 11 at 51×53</td><td class="warn">head 23 → 54px; 11 at 32×44, 12px under the width floor</td><td class="pass">145px</td></tr>
+</table>
+
+<h4 style="font-weight:400;font-size:16px;margin:26px 0 2px">The same bank, if you would rather have it vertical</h4>
+<p>The chin is the mount I would choose — a full name fits at 11px and the badges live there already. But the cheek is a real option now that the carvings have moved out, and it is the taller one: a 49px column carries all eleven doors at <b>49 × 50</b> each with abbreviated plates, the way a patch bay or a breaker panel labels its ways. Two letters are all the maker needed; the full name appears on the glass when the door is lit.</p>
+<div class="stage">
+  <div class="cheekwrap">
+    <div class="cheekstrip" data-ink=".eng b" data-ground="self" data-name="cheek plate">
+      <button class="nix lock" style="--ph:#aa5a18;--ph-glow:rgba(170,90,24,.5)"><span class="eng"><b>BUD</b></span><span class="soc"><span class="tube"><span class="mesh"></span><span class="cath"></span><span class="lit"></span></span></span></button>
+      <button class="nix seen" style="--ph:#aa7838;--ph-glow:rgba(170,120,56,.5)"><span class="eng"><b>JRN</b></span><span class="soc"><span class="tube"><span class="mesh"></span><span class="cath"></span><span class="lit"></span></span></span></button>
+      <button class="nix seen" style="--ph:#2a8a8a;--ph-glow:rgba(42,138,138,.5)"><span class="eng"><b>SEA</b></span><span class="soc"><span class="tube"><span class="mesh"></span><span class="cath"></span><span class="lit"></span></span></span></button>
+      <button class="nix" style="--ph:#d4af37;--ph-glow:rgba(212,175,55,.5)"><span class="eng"><b>GM</b></span><span class="soc"><span class="tube"><span class="mesh"></span><span class="cath"></span><span class="lit"></span></span></span></button>
+      <button class="nix" style="--ph:#d88a3c;--ph-glow:rgba(216,138,60,.5)"><span class="eng"><b>TYB</b></span><span class="soc"><span class="tube"><span class="mesh"></span><span class="cath"></span><span class="lit"></span></span></span></button>
+      <button class="nix" style="--ph:#f4e8d2;--ph-glow:rgba(244,232,210,.45)"><span class="eng"><b>DIV</b></span><span class="soc"><span class="tube"><span class="mesh"></span><span class="cath"></span><span class="lit"></span></span></span></button>
+      <button class="nix" style="--ph:#e05a5a;--ph-glow:rgba(224,90,90,.5)"><span class="eng"><b>LRN</b></span><span class="soc"><span class="tube"><span class="mesh"></span><span class="cath"></span><span class="lit"></span></span></span></button>
+      <button class="nix" style="--ph:#d88a4a;--ph-glow:rgba(216,138,74,.5)"><span class="eng"><b>GRD</b></span><span class="soc"><span class="tube"><span class="mesh"></span><span class="cath"></span><span class="lit"></span></span></span></button>
+      <button class="nix" style="--ph:#a48ad4;--ph-glow:rgba(164,138,212,.5)"><span class="eng"><b>DRM</b></span><span class="soc"><span class="tube"><span class="mesh"></span><span class="cath"></span><span class="lit"></span></span></span></button>
+      <button class="nix" style="--ph:#a88858;--ph-glow:rgba(168,136,88,.5)"><span class="eng"><b>TRS</b></span><span class="soc"><span class="tube"><span class="mesh"></span><span class="cath"></span><span class="lit"></span></span></span></button>
+      <button class="nix on" style="--ph:#d4af37;--ph-glow:rgba(212,175,55,.5)"><span class="eng"><b>THM</b></span><span class="soc"><span class="tube"><span class="mesh"></span><span class="cath"></span><span class="lit"></span></span></span></button>
+    </div>
+    <div style="max-width:420px">
+      <p>The cheek strip at true size — 49px wide, eleven doors, 50px each. This is the mount that survives best between 900px and 1024px, where the chin narrows to 45px but the cheek keeps its full 690px of height. It is also the one that puts the machine's doors where a real machine's switches go, down the left frame where your hand already rests.</p>
+      <p>The abbreviated plate is the diegetic register doing real work: <code>BUD</code>, <code>JRN</code>, <code>SEA</code> are what a maker stencils on a panel, not what a designer writes in a mockup. Three characters at 10px in 41px of plate is comfortable; <code>divination</code> at 11px in the chin is just as comfortable. Both are legible; only one of them can also be read from across the room.</p>
+    </div>
+  </div>
+</div>
+
+<h4 style="font-weight:400;font-size:16px;margin:26px 0 2px">And the 439px desktop, at true scale — where the bezel stops being an option</h4>
+<p>The machine is 96vw here, the bezel is 22px, and the sidecar's fit test fails at 900px so it drops to the bottom-left <i>below</i> the machine. A bezel rail cannot hold a 44px key in 22px of frame. So at this size the answer is not a rail — it is <b>one always-visible door</b>: the chin carries a single 44px tab naming the room you are standing in, which opens the drawer over the glass. That is 44px instead of the 69px band the carousel takes now, and the current room is still named on the machine at all times.</p>
+<div class="stage">
+  <div class="dsk439-wrap">
+    <div class="dsk439">
+      <div class="mach">
+        <div class="glass"></div>
+        <div class="chin"><i></i></div>
+      </div>
+      <div class="sc">
+        <div class="body"><span class="plate">TX-80 · REV. C</span><div class="gl"><div class="feed"></div></div></div>
+      </div>
+      <span class="say">439 × 800 · machine 421 (x 9→430) · bezel 22 · glass 376 × 274 · sidecar 272 dropped to y593</span>
+    </div>
+  </div>
+  <div class="dsk-note">the liberchat tube sits below the machine here, so it still does not cross the glass — but 22px of bezel cannot hold a door</div>
+</div>
+<div class="note good"><b>THE REVISED RECOMMENDATION — MOUNT IT ON THE MACHINE</b>
+<p class="np">Take your own steer and the measurements together and the answer is not “a menu inside the screen”. It is <b class="hd">the machine's own frame carrying the machine's own doors</b>.</p>
+<p class="np"><b class="hd">the chin (920 × 56)</b> carries the drawer rail — pitch I or III: eleven doors in the strip where the maker's badge already sits.</p>
+<p class="np"><b class="hd">the left cheek (67 × 690)</b> carries the wear — pitch IV's three worn slots and their drawer, running down the frame the way a real machine keeps its switches.</p>
+<p class="np"><b class="hd">the glass (787 × 567)</b> gets all 145px back, and pitch II lives there as the desktop's wallpaper rather than as furniture at all — the house as the traveller's own backdrop, which is what a facade should be.</p>
+<p class="np">Result: a full quarter of every room's screen returned, the menu permanently visible on the body of the machine instead of stacked on the bottom of the picture, nothing competing with the tube for the desk — and one honest fallback at 439, where the bezel gives out and a single 44px tab names where you are.</p></div>
+<p class="actlede">The judgements are mine; the numbers are measurable and the mockups above are the evidence.</p>
+<table>
+  <tr><th>pitch</th><th>actions to worst room</th><th>all rooms visible</th><th>name ink</th><th>smallest target</th><th>new furniture</th><th>verdict</th></tr>
+  <tr><td class="n">the dial now</td><td class="fail">up to 9, or a 600ms hold</td><td class="fail">3 of 10</td><td class="fail">the traveller's phosphor</td><td class="fail">~90×20 hint</td><td>—</td><td class="fail">reproduced above</td></tr>
+  <tr><td class="n">i · index drawer</td><td class="pass">1</td><td class="pass">all 11</td><td class="pass">ink on card</td><td class="pass">46px card</td><td>a drawer unit on the desk</td><td class="pass"><b>my recommendation</b></td></tr>
+  <tr><td class="n">ii · the house</td><td class="pass">1</td><td class="pass">all 10</td><td class="pass">ink on glass</td><td class="pass">52px window</td><td>the facade itself</td><td class="pass">boldest; the one to want</td></tr>
+  <tr><td class="n">iii · tube rack</td><td class="pass">1</td><td class="pass">all 11</td><td class="pass">stamped base</td><td class="pass">64px slot</td><td>a rack on the desk</td><td class="warn">safest; ships first</td></tr>
+  <tr><td class="n">iv · worn three</td><td class="warn">1 then 2</td><td class="warn">3 of 11</td><td class="pass">ink on metal</td><td class="pass">44px handle</td><td>three worn slots</td><td class="warn">best idea, weakest menu</td></tr>
+  <tr><td class="n">v · the ring</td><td class="pass">1</td><td class="warn">all, but by plate</td><td class="pass">ink on brass</td><td class="pass">44px sector</td><td>none — re-cut the bezel</td><td class="warn">the most beautiful; the most work</td></tr>
+  <tr><td class="n">vi · phosphor bank</td><td class="pass">1</td><td class="pass">all 11</td><td class="pass">enamel on steel</td><td class="pass">74×46</td><td>eleven bulbs in the chin</td><td class="pass">the legible one</td></tr>
+  <tr><td class="n">vii · crest rail</td><td class="pass">1</td><td class="pass">all 11, at every width</td><td class="pass">enamel on Bakelite 10.02:1</td><td class="warn">67×56, but 32×44 at 439</td><td>none — the head was already there</td><td class="pass"><b>the one that costs the glass nothing</b></td></tr>
+</table>
+<div class="note good"><b>THE COMBINATION I WOULD ACTUALLY BUILD</b>III as the floor (a rack is a day's work and it fixes every legibility failure immediately), then II as the ambition (the facade is the pitch that makes the desktop feel like a place instead of a launcher), with IV's wear declared <i>inside</i> the facade: the windows you visit keep a lit sill, and the ones you never open go dark on their own. Three pitches, one object, no carousel, no popup, no secret.</div>
+
+<h2 id="cost"><small>§4</small>What it costs, and what it deletes</h2>
+<table>
+  <tr><th>change</th><th>files</th><th>note</th></tr>
+  <tr><td>delete the carousel</td><td class="n">dial.js, dial.css</td><td>the 600ms hold, the <code>openIndex</code> popup, the <code>··· all rooms</code> hint, the <code>.dial-track</code> band: all removed, not restyled</td></tr>
+  <tr><td>keep the state contract</td><td class="n">state.visited</td><td>the lit door, the here-card and the recency order all read the map that is already written</td></tr>
+  <tr><td>keep every glyph</td><td class="n">dial.js BITMAPS</td><td>twelve 12×12 phosphor bitmaps and their hand-marks move across unchanged — the icons were never the problem</td></tr>
+  <tr><td>fix the naming collision</td><td class="n">VISITORS</td><td>the tile labelled <code>buddy</code> with id <code>sigil</code> and persona <code>sigil</code> gets one name, whichever it is: the room is the traveller's</td></tr>
+  <tr><td>restate the floor in the gate</td><td class="n">verify-439.mjs</td><td>the 439px gate already asserts exit targets and dead controls in every room; the dial's doors should join it, so the next carousel cannot creep back in</td></tr>
+</table>
+<div class="note"><b>WHAT I AM NOT PROPOSING</b>I am not proposing a component library. The drawer, the facade and the rack share one thing only: <b>a name printed in ink, a phosphor that is only a lamp, and 44px of surface you can press.</b> The drawer is oak and card stock; the facade is a building; the rack is bakelite and glass. Nothing here could be lifted from one of these into another unchanged — which is the covenant's actual test.</div>
+
+<footer>
+  Seven replacements for one control, each built as live CSS and SVG in this file, with every contrast figure computed from the rendered mockup above it. Rev. A, 2026-09-14. Companion to the chrome pitch (<code>redesign-controls.html</code>) and the sweep in <code>outputs/liberos-sweep/REPORT.md</code>.
+</footer>
+</div>
+
+<script>
+// Measure, do not assert. Each mockup names the element that carries its ink;
+// the ground is resolved in painters' order with every gradient stop counted as
+// a candidate, so a plate that fades to a colour its ink cannot hold is caught.
+(function () {
+  function rgba(c) {
+    var m = String(c).match(/rgba?\(([^)]+)\)/);
+    if (!m) return null;
+    var p = m[1].split(',').map(function (x) { return parseFloat(x); });
+    return { r: p[0], g: p[1], b: p[2], a: p.length > 3 ? p[3] : 1 };
+  }
+  function hex(c) {
+    var h = String(c).replace('#', '');
+    if (!/^[0-9a-f]{3}$|^[0-9a-f]{6}$/i.test(h)) return null;
+    if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+    return { r: parseInt(h.slice(0, 2), 16), g: parseInt(h.slice(2, 4), 16), b: parseInt(h.slice(4, 6), 16), a: 1 };
+  }
+  function tokens(s) {
+    var out = [];
+    var own = rgba(s.backgroundColor);
+    if (own && own.a > 0.02) out.push(own);
+    var img = s.backgroundImage || '';
+    if (img !== 'none') {
+      (img.match(/#[0-9a-f]{3,6}|rgba?\([^)]+\)/gi) || []).forEach(function (t) {
+        var c = t.charAt(0) === '#' ? hex(t) : rgba(t);
+        if (c) out.push(c);
+      });
+    }
+    return out;
+  }
+  function lin(v) { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }
+  function lum(c) { return 0.2126 * lin(c.r) + 0.7152 * lin(c.g) + 0.0722 * lin(c.b); }
+  function over(fg, bg) {
+    var a = fg.a;
+    return { r: fg.r * a + bg.r * (1 - a), g: fg.g * a + bg.g * (1 - a), b: fg.b * a + bg.b * (1 - a), a: 1 };
+  }
+  function grounds(el) {
+    var chain = [], n = el;
+    while (n && n !== document.documentElement) {
+      var own = tokens(getComputedStyle(n));
+      chain.push(own.length ? own : null);
+      n = n.parentElement;
+    }
+    var acc = [{ r: 7, g: 4, b: 3, a: 1 }];
+    for (var i = chain.length - 1; i >= 0; i--) {
+      if (!chain[i]) continue;
+      // Within one element, CSS paints the FIRST listed background layer on
+      // TOP, so an element's own stops fold right-to-left over whatever is
+      // behind it. Treating each stop as its own ground instead composites a
+      // translucent top layer straight onto the dark ancestor and invents a
+      // contrast failure the screen never renders.
+      var layers = chain[i];
+      for (var j = layers.length - 1; j >= 0; j--) {
+        var next = [];
+        for (var k = 0; k < acc.length; k++) {
+          if (next.length < 32) next.push(over(layers[j], acc[k]));
+        }
+        acc = next;
+      }
+    }
+    return acc;
+  }
+  function probe(root) {
+    var out = [];
+    root.querySelectorAll('[data-ink]').forEach(function (p) {
+      var sel = p.getAttribute('data-ink');
+      var inkEl = sel === 'self' ? p : (p.querySelector(sel) || p);
+      var ink = rgba(getComputedStyle(inkEl).color);
+      if (!ink) return;
+      var local = null;
+      grounds(inkEl).forEach(function (bg) {
+        var L1 = lum(over(ink, bg)), L2 = lum(bg);
+        var r = (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05);
+        if (local === null || r < local) local = r;
+      });
+      out.push({ name: p.getAttribute('data-name') || 'control', ratio: local });
+    });
+    return out;
+  }
+  function worst(root) {
+    var w = null;
+    probe(root).forEach(function (m) { if (m.ratio !== null && (w === null || m.ratio < w)) w = m.ratio; });
+    return w;
+  }
+  function write(sectionId, label) {
+    var sec = document.getElementById(sectionId);
+    if (!sec) return;
+    var w = worst(sec);
+    var out = document.querySelectorAll('.ratio[data-for="' + label + '"]');
+    if (w === null) return;
+    for (var i = 0; i < out.length; i++) {
+      out[i].textContent = 'worst ink ' + w.toFixed(2) + ':1' + (w >= 4.5 ? ' ✓' : ' — under the floor');
+    }
+  }
+  write('p1', 'p1');
+  write('house-demo', 'p2');
+  write('rack-demo', 'p3');
+  write('p4', 'p4');
+  write('ring-demo', 'p5');
+  write('p7', 'p7');
+  // the dial that ships: report its worst label ink as the baseline
+  var curSec = document.querySelector('.d-cur');
+  if (curSec) {
+    var wc = worst(curSec);
+    var co = document.querySelectorAll('.ratio[data-for="now"]');
+    for (var c = 0; c < co.length; c++) {
+      co[c].textContent = wc === null ? '—' : 'worst ink ' + wc.toFixed(2) + ':1' + (wc >= 4.5 ? ' ✓' : ' ✗ under the floor');
+    }
+  }
+  // the ring's engravings turn a step when pressed, so the pitch is usable
+  var ring = document.getElementById('ring-demo');
+  if (ring) {
+    var step = 0;
+    ring.querySelectorAll('.eng').forEach(function (e) {
+      var b = e.querySelector('.lab');
+      if (!b) return;
+      b.addEventListener('click', function () {
+        ring.querySelectorAll('.eng').forEach(function (o) { o.classList.remove('at'); });
+        e.classList.add('at');
+        var plate = ring.querySelector('.rn');
+        if (plate) plate.textContent = b.textContent;
+      });
+    });
+    ring.addEventListener('keydown', function (ev) {
+      if (ev.key !== 'ArrowRight' && ev.key !== 'ArrowLeft') return;
+      ev.preventDefault();
+      step = (step + (ev.key === 'ArrowRight' ? 1 : -1) + 10) % 10;
+      var engs = ring.querySelectorAll('.eng');
+      engs.forEach(function (o) { o.classList.remove('at'); });
+      engs[step].classList.add('at');
+      var lab = engs[step].querySelector('.lab');
+      var plate = ring.querySelector('.rn');
+      if (plate && lab) plate.textContent = lab.textContent;
+    });
+  }
+  var lab = document.getElementById('live-lab');
+  if (lab) {
+    var rooms = [
+      ['buddy','the workshop · stone, seals, and the first mark','#aa5a18','BUDDY / COLD','the blanking plug is struck; the way still shows.','?'],
+      ['journal','the study · indexed vellum and brass clasps','#aa7838','JOURNAL / SEEN','a spent tube keeps a warm trace of the room.','▤'],
+      ['sea','the basement · black water and a brass tide clock','#2a8a8a','SEA / SEEN','the waterline is still above the first stair.','≈'],
+      ['games','the play room · marquee bulbs and a cold plate','#d4af37','GAMES / READY','the detent catches under your thumb.','✶'],
+      ['toybox','the bathroom · powder, matchbox, and small creatures','#d88a3c','TOYBOX / READY','the crab has moved under the sink.','□'],
+      ['divination','the observatory · felt, chalk, and misaligned cards','#f4e8d2','DIVINATION / READY','the deck is waiting on the felt.','⊞'],
+      ['learn','the stacks · index cards and stamped footnotes','#e05a5a','LEARN / READY','drawer K4 is still open.','¶'],
+      ['garden','the glasshouse · condensation and Ruby’s tree','#d88a4a','GARDEN / READY','the tree has one new leaf.','♧'],
+      ['dreams','the sleeping nook · fog and dusk-polaroids','#a48ad4','DREAMS / READY','the page is thinning at the edge.','☾'],
+      ['trash','the yard · rubble, graves, and wet soil','#a88858','TRASH / READY','something buried is shifting.','≡']
+    ];
+    var keys = document.getElementById('live-keys');
+    var name = document.getElementById('live-room-name');
+    var detail = document.getElementById('live-room-detail');
+    var state = document.getElementById('live-state');
+    var note = document.getElementById('live-note');
+    var symbol = document.getElementById('ghost-symbol');
+    var beam = document.getElementById('live-beam');
+    rooms.forEach(function (room, index) {
+      var key = document.createElement('button');
+      key.type = 'button'; key.className = 'live-key' + (index === 0 ? ' is-current is-locked' : '');
+      key.textContent = room[0]; key.setAttribute('aria-label','switch to ' + room[0]);
+      key.style.setProperty('--key-accent',room[2]); key.style.setProperty('--key-glow',room[2] + '80');
+      key.addEventListener('click', function () {
+        keys.querySelectorAll('.live-key').forEach(function (other) { other.classList.remove('is-current'); });
+        key.classList.add('is-current','is-visited');
+        lab.dataset.liveRoom = room[0]; name.textContent = room[0]; detail.textContent = room[1]; state.textContent = room[3]; note.textContent = room[4]; symbol.textContent = room[5]; symbol.style.color = room[2] + '55'; symbol.style.textShadow = '0 0 22px ' + room[2] + '66'; beam.style.background = room[2]; beam.style.boxShadow = '0 0 25px 5px ' + room[2] + '66';
+      });
+      keys.appendChild(key);
+    });
+  }
+  var expanded = document.getElementById('expanded-study');
+  if (expanded) {
+    var graphNotes = {
+      'the stone': ['The centre is not an app icon. It is the thing every room has helped make more particular.','CORE / PATINA 02<br>4 EDGES · 2 NOTES · LAST TOUCHED 04:11'],
+      'the sea release': ['A released line does not vanish. It leaves a cooler orbit and raises the pool behind the screen by one measured notch.','SEA / RELEASE 03<br>EDGE: RELEASES · POOL 06.20'],
+      'the dream page': ['The fog page comes back as a developed photograph. Associations stitch it to the people and rooms that were already waiting.','DREAMS / KEPT<br>EDGE: WITNESSES · MARGIN 01'],
+      'the midway ticket': ['A keep from Games is a physical ticket, not a score. It carries the booth mark and the exact night it was printed.','GAMES / KEEP 07<br>EDGE: CARRIES · STAMP 23:14'],
+      'the scratch note': ['A note is residue with a place to live. Pin it to the stone, leave it on the shelf, or let it fade when the room is cleared.','DESK / NOTE 02<br>EDGE: ANNOTATES · INK STILL WET']
+    };
+    var title = document.getElementById('expanded-note-title');
+    var copy = document.getElementById('expanded-note-copy');
+    var meta = document.getElementById('expanded-note-meta');
+    var action = document.getElementById('expanded-note-action');
+    var selected = 'the stone';
+    function selectGraphNode(node) {
+      selected = node.getAttribute('data-note') || 'the stone';
+      var data = graphNotes[selected] || graphNotes['the stone'];
+      expanded.querySelectorAll('.graph-node').forEach(function (n) { n.classList.remove('selected'); });
+      node.classList.add('selected');
+      expanded.querySelectorAll('line').forEach(function (line) { line.classList.remove('active'); });
+      var edge = node.closest ? node.closest('svg') : null;
+      if (edge) {
+        var match = selected.indexOf('sea') >= 0 ? 'sea' : selected.indexOf('dream') >= 0 ? 'dream' : selected.indexOf('ticket') >= 0 ? 'game' : selected.indexOf('scratch') >= 0 ? 'note' : null;
+        if (match) {
+          var line = edge.querySelector('line[data-edge="' + match + '"]');
+          if (line) line.classList.add('active');
+        }
+      }
+      title.textContent = selected;
+      copy.textContent = data[0];
+      meta.innerHTML = data[1];
+      action.textContent = selected === 'the stone' ? 'open sigil' : 'open source room';
+    }
+    expanded.querySelectorAll('.graph-node').forEach(function (node) {
+      node.setAttribute('tabindex','0');
+      node.setAttribute('role','button');
+      node.addEventListener('click', function () { selectGraphNode(node); });
+      node.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); selectGraphNode(node); }
+      });
+    });
+    if (action) action.addEventListener('click', function () {
+      action.textContent = selected === 'the stone' ? 'sigil is the source room' : 'source room is marked';
+    });
+  }
+  window.LiberDialPitchMeasure = function () {
+    var all = [];
+    document.querySelectorAll('#p1,#p2,#p3,#p4,#p5,#p7,#rail-1280,#rail-439,.d-cur').forEach(function (s) {
+      probe(s).forEach(function (m) { all.push({ section: s.id || 'now', name: m.name, ratio: m.ratio }); });
+    });
+    return all;
+  };
+})();
+</script>
+</body>
+</html>

@@ -2,7 +2,7 @@
 // A quiet checklist in the screen's right margin: three suggestions per day,
 // picked deterministically from the date (seeded PRNG — the same shape as
 // src/gamification.js / src/prompt-engine.js; no Math.random in anything the
-// user can perceive). One suggestion points at the book (the satchel) or the
+// user can perceive). One suggestion points at the book (the journal) or the
 // constellation; the rest point at travellers' rooms. Ticking is a private
 // ritual — no rewards, no streaks, no guilt; the room keeps no score
 // (docs/gamification.md anti-goals). Nothing fires proactively: the panel
@@ -22,12 +22,12 @@
     { id: 'toybox',      room: 'toybox.html',     text: 'touch everything. keep one picture.' },
     { id: 'learn',       room: 'learn.html',      text: 'read one page. answer it.' },
     { id: 'themes',      room: 'themes.html',     text: 'repaint one room.' },
-    { id: 'satchel',     room: 'satchel.html',     text: 'annotate one kept item.' },
+    { id: 'journal',     room: 'journal.html',     text: 'annotate one kept item.' },
     { id: 'desktop',     room: 'desktop.html',     text: 'bind one artifact. name the verb.' }
   ];
 
   // Anything in the book set drags the checklist toward the kept things.
-  var BOOK_IDS = ['satchel'];
+  var BOOK_IDS = ['journal'];
 
   var container = null;
 

@@ -58,7 +58,7 @@
         },
         {
           q: 'What is the lamp?',
-          a: '<p>That is LiberChat — the small lamp in the corner of every page. Open it and the room traveller answers in their own voice; pick any persona from the switcher to talk with someone else (e-lizabeth included). Conversations stay on this device, and any of them can be sealed in wax and kept in the satchel.</p>'
+          a: '<p>That is LiberChat — the small lamp in the corner of every page. Open it and the room traveller answers in their own voice; pick any persona from the switcher to talk with someone else (e-lizabeth included). Conversations stay on this device, and any of them can be sealed in wax and kept in the journal.</p>'
         },
         {
           q: 'What is Learn?',

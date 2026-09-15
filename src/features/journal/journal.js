@@ -1,25 +1,25 @@
-// satchel.js — Riason's filing cabinet. Three drawers (buddies, artifacts,
+// journal.js — Riason's filing cabinet. Three drawers (buddies, artifacts,
 // knots) on the left third; the note page on the right two thirds with a
 // large persistent editor and a dock of pens. Marks (ink colours,
 // highlighter + attached notes) persist per item. No shared imports.
 
 (function () {
-  var list = document.getElementById('satchel-list');
-  var drawers = document.getElementById('satchel-drawers');
-  var titleEl = document.getElementById('satchel-note-title');
-  var dateEl = document.getElementById('satchel-note-date');
-  var intentEl = document.getElementById('satchel-intention');
-  var editor = document.getElementById('satchel-editor');
-  var toolsEl = document.getElementById('satchel-tools');
-  var polaroid = document.getElementById('satchel-polaroid');
-  var pop = document.getElementById('satchel-pop');
-  var popText = document.getElementById('satchel-pop-text');
-  var popNote = document.getElementById('satchel-pop-note');
-  var exit = document.getElementById('satchel-exit');
-  var findEl = document.getElementById('satchel-find');
-  var slipEl = document.getElementById('satchel-slip');
-  var spineEl = document.getElementById('satchel-spine');
-  var bindingEl = document.querySelector('.satchel-binding');
+  var list = document.getElementById('journal-list');
+  var drawers = document.getElementById('journal-drawers');
+  var titleEl = document.getElementById('journal-note-title');
+  var dateEl = document.getElementById('journal-note-date');
+  var intentEl = document.getElementById('journal-intention');
+  var editor = document.getElementById('journal-editor');
+  var toolsEl = document.getElementById('journal-tools');
+  var polaroid = document.getElementById('journal-polaroid');
+  var pop = document.getElementById('journal-pop');
+  var popText = document.getElementById('journal-pop-text');
+  var popNote = document.getElementById('journal-pop-note');
+  var exit = document.getElementById('journal-exit');
+  var findEl = document.getElementById('journal-find');
+  var slipEl = document.getElementById('journal-slip');
+  var spineEl = document.getElementById('journal-spine');
+  var bindingEl = document.querySelector('.journal-binding');
 
   function st() { return (window.Liber && window.Liber.state) || null; }
   function getS() { return (st() && st().get()) || {}; }
@@ -45,7 +45,7 @@
     { kind: 'garden', label: 'seeds', get: function (s) { return s.garden || []; }, name: function (a) { return a.name || 'a seed'; } },
     { kind: 'dreams', label: 'dreams', get: function (s) { return s.dreams || []; }, name: function (a) { return a.title || 'a dream'; } },
     { kind: 'methodology', label: 'methods', get: function (s) { return s.methodology || []; }, name: function (a) { return a.topic || a.name || 'a method'; } },
-    { kind: 'satchel', label: 'kept in satchel', get: function (s) { return s.satchel || []; }, name: function (a) { return a.name || a.text || a.excerpt || a.kind || 'kept'; } }
+    { kind: 'journal', label: 'kept in journal', get: function (s) { return s.journal || []; }, name: function (a) { return a.name || a.text || a.excerpt || a.kind || 'kept'; } }
   ];
 
   function getSigs() {
@@ -84,7 +84,7 @@
     if (type === 'learn') return d.topic || '';
     if (type === 'abstract') return d.label || '';
     if (type === 'methodology') return d.topic || d.name || '';
-    if (type === 'satchel') return d.text || d.excerpt || d.name || d.kind || '';
+    if (type === 'journal') return d.text || d.excerpt || d.name || d.kind || '';
     if (type === 'relation') return '';
     return d.name || d.title || d.text || '';
   }
@@ -145,7 +145,7 @@
     if (spineEl) {
       spineEl.style.width = (22 + Math.min(c.total, 40) * 0.45) + 'px';
       spineEl.setAttribute('data-unread', String(c.unread));
-      var tally = spineEl.querySelector('.satchel-spine-tally');
+      var tally = spineEl.querySelector('.journal-spine-tally');
       if (tally) tally.textContent = c.total > 0 ? (c.unread > 0 ? c.total + ' · ' + c.unread + ' unopened' : String(c.total)) : '—';
     }
   }
@@ -184,10 +184,10 @@
     PENS.forEach(function (p) {
       var b = document.createElement('button');
       b.type = 'button';
-      b.className = 'satchel-pen';
+      b.className = 'journal-pen';
       b.setAttribute('aria-label', p.name);
       b.setAttribute('aria-pressed', 'false');
-      b.innerHTML = penSvg(p) + '<span class="satchel-pen-name">' + p.name + '</span>';
+      b.innerHTML = penSvg(p) + '<span class="journal-pen-name">' + p.name + '</span>';
       b.addEventListener('click', function () {
         if (activePen === p.id) { setPen(null); return; }
         setPen(p.id);
@@ -199,7 +199,7 @@
 
   function setPen(id) {
     activePen = id;
-    var btns = toolsEl ? toolsEl.querySelectorAll('.satchel-pen') : [];
+    var btns = toolsEl ? toolsEl.querySelectorAll('.journal-pen') : [];
     for (var i = 0; i < btns.length; i++) {
       var on = PENS[i] && PENS[i].id === id;
       btns[i].classList.toggle('active', !!on);
@@ -289,7 +289,7 @@
   }
 
   function hasMarks(d) {
-    return !!(d && ((d.marks && d.marks.length) || d.annotation || d.satchelNote || d.note));
+    return !!(d && ((d.marks && d.marks.length) || d.annotation || d.journalNote || d.satchelNote || d.note));
   }
 
   // the margin note a row confesses on hover: a mark's attached note,
@@ -301,14 +301,14 @@
         if (d.marks[i] && d.marks[i].note) return String(d.marks[i].note).slice(0, 60);
       }
     }
-    var t = d.annotation || d.satchelNote || d.note || '';
+    var t = d.annotation || d.journalNote || d.satchelNote || d.note || '';
     t = String(t).replace(/\s+/g, ' ').trim();
     return t.length > 46 ? t.slice(0, 46) + '…' : t;
   }
 
   function renderTabs() {
     if (!drawers) return;
-    var btns = drawers.querySelectorAll('.satchel-tab');
+    var btns = drawers.querySelectorAll('.journal-tab');
     for (var i = 0; i < btns.length; i++) {
       var on = btns[i].getAttribute('data-tab') === tab;
       btns[i].setAttribute('aria-selected', on ? 'true' : 'false');
@@ -333,21 +333,21 @@
     var html = '';
     if (!items.length) {
       var hint = tab === 'buddy' ? 'make a buddy first.' : (tab === 'relations' ? 'bind an artifact on the desktop first.' : (needle ? 'nothing answers to that.' : 'save something first.'));
-      list.innerHTML = '<div class="satchel-empty">the drawer is empty.<br/>' + hint + '</div>';
+      list.innerHTML = '<div class="journal-empty">the drawer is empty.<br/>' + hint + '</div>';
       return;
     }
     for (var i = 0; i < items.length; i++) {
       var it = items[i];
-      var ribbon = isUnread(it.type, it.id) ? '<span class="satchel-ribbon" aria-label="unopened"></span>' : '';
-      var dot = hasMarks(it.data) ? '<span class="satchel-ann-dot" aria-hidden="true">✎</span>' : '';
+      var ribbon = isUnread(it.type, it.id) ? '<span class="journal-ribbon" aria-label="unopened"></span>' : '';
+      var dot = hasMarks(it.data) ? '<span class="journal-ann-dot" aria-hidden="true">✎</span>' : '';
       var marginal = hasMarks(it.data) ? ' data-marginal="' + esc(marginalOf(it.data)) + '"' : '';
       var cur = (current && current.type === it.type && current.id === it.id) ? ' current' : '';
-      html += '<div class="satchel-list-item' + cur + '" tabindex="0" role="button"' + marginal + ' data-type="' + esc(it.type) + '" data-id="' + esc(it.id || '') + '" data-i="' + (it.idx == null ? '' : it.idx) + '">'
+      html += '<div class="journal-list-item' + cur + '" tabindex="0" role="button"' + marginal + ' data-type="' + esc(it.type) + '" data-id="' + esc(it.id || '') + '" data-i="' + (it.idx == null ? '' : it.idx) + '">'
             + ribbon + dot + esc(itemLabel(it.type, it.data))
             + '<div class="meta">' + esc(metaOf(it.type, it.data)) + '</div></div>';
     }
     list.innerHTML = html;
-    var rows = list.querySelectorAll('.satchel-list-item');
+    var rows = list.querySelectorAll('.journal-list-item');
     for (var m = 0; m < rows.length; m++) {
       rows[m].addEventListener('click', function () {
         openNote(tab, this.getAttribute('data-type'), this.getAttribute('data-id'), this.getAttribute('data-i'));
@@ -383,7 +383,8 @@
 
   function baseTextOf(item) {
     var d = item.data;
-    return (d && (d.annotation || d.satchelNote || d.note)) || '';
+    // satchelNote is the old name of the page's own note; earlier saves still open.
+    return (d && (d.annotation || d.journalNote || d.satchelNote || d.note)) || '';
   }
 
   // rebuild the editor from stored {text, marks}; marks outside the text
@@ -491,7 +492,7 @@
       }
       st().set({ relations: rels });
     } else {
-      if (st().updateArtifact) st().updateArtifact(current.type, current.id, { annotation: got.text, satchelNote: got.text, marks: got.marks });
+      if (st().updateArtifact) st().updateArtifact(current.type, current.id, { annotation: got.text, journalNote: got.text, marks: got.marks });
     }
     if (chime && window.Liber && window.Liber.sound) { try { window.Liber.sound.play('chime'); } catch (e) {} }
   }
@@ -516,7 +517,7 @@
     if (popText) popText.textContent = span.textContent;
     if (popNote) popNote.value = span.getAttribute('data-note') || '';
     pop.hidden = false;
-    var cab = document.getElementById('satchel-cabinet');
+    var cab = document.getElementById('journal-cabinet');
     var cr = cab ? cab.getBoundingClientRect() : { left: 0, top: 0 };
     pop.style.left = Math.max(8, Math.min(x - cr.left - 110, (cr.width || 300) - 230)) + 'px';
     pop.style.top = Math.max(8, (y - cr.top) + 14) + 'px';
@@ -524,9 +525,9 @@
   }
 
   function wirePop() {
-    var save = document.getElementById('satchel-pop-save');
-    var clear = document.getElementById('satchel-pop-clear');
-    var close = document.getElementById('satchel-pop-close');
+    var save = document.getElementById('journal-pop-save');
+    var clear = document.getElementById('journal-pop-clear');
+    var close = document.getElementById('journal-pop-close');
     if (save) save.addEventListener('click', function () {
       if (popMark && popNote) {
         if (popNote.value.trim()) popMark.setAttribute('data-note', popNote.value.trim());
@@ -571,7 +572,7 @@
     buildTools();
     renderList();
 
-    var tabs = drawers ? drawers.querySelectorAll('.satchel-tab') : [];
+    var tabs = drawers ? drawers.querySelectorAll('.journal-tab') : [];
     for (var t = 0; t < tabs.length; t++) {
       tabs[t].addEventListener('click', function () {
         if (current) persist(true);
@@ -628,9 +629,9 @@
       if (findEl) findEl.focus();
     });
 
-    var helpBtn = document.getElementById('satchel-help');
-    var raison = document.getElementById('satchel-raison');
-    var raisonClose = document.getElementById('satchel-raison-close');
+    var helpBtn = document.getElementById('journal-help');
+    var raison = document.getElementById('journal-raison');
+    var raisonClose = document.getElementById('journal-raison-close');
     function openRaison() {
       if (raison) { raison.classList.add('open'); raison.removeAttribute('inert'); }
     }
@@ -641,7 +642,7 @@
     if (raisonClose) raisonClose.addEventListener('click', closeRaison);
     if (raison) raison.addEventListener('click', function (e) { if (e.target === raison) closeRaison(); });
     if (window.LiberRoomShell) window.LiberRoomShell.bindRoomOverlays({ overlays: [
-      { id: 'satchel-raison', close: closeRaison }
+      { id: 'journal-raison', close: closeRaison }
     ] });
     if (st()) st().on('change', function () { renderList(); });
     window.addEventListener('hashchange', openHash);

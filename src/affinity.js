@@ -33,7 +33,7 @@
   // liberchat persona id -> traveller key (chat exchanges vouch for their
   // traveller alongside kept-work metrics).
   var PERSONA_WHO = {
-    sigil: 'physius', satchel: 'riason', sea: 'vanir', buddy: 'elizabeth',
+    sigil: 'physius', journal: 'riason', sea: 'vanir', buddy: 'elizabeth',
     games: 'whimsy', divination: 'arcana', garden: 'ruby', dreams: 'inquiry',
     learn: 'scribe', trash: 'pete', themes: 'wanderlust', toybox: 'pip'
   };
@@ -42,7 +42,7 @@
     s = s || {};
     function len(k) { return Array.isArray(s[k]) ? s[k].length : 0; }
     var notes = 0;
-    (s.satchel || []).forEach(function (e) {
+    (s.journal || []).forEach(function (e) {
       if (e && (e.note || e.annotation)) notes++;
     });
     var chats = {};

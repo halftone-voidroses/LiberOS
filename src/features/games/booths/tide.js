@@ -134,7 +134,7 @@ function playTide(ctx, b, body) {
     var shot = ctx.thumb(cv);
     var tw = tideWord();
     ctx.promptSave(b, 'result: a pool at ' + tw + ' tide, ' + released + ' released.', function () {
-      ctx.saveToDesktopAndSatchel(b, { dropped: dropped, released: released, tide: tw }, shot);
+      ctx.saveToDesktopAndJournal(b, { dropped: dropped, released: released, tide: tw }, shot);
       if (result2) result2.textContent = 'kept. the tent remembers.';
     }, null);
   });

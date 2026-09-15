@@ -18,15 +18,30 @@
 .state-desktop:not(.tutorial-done) .notes { display: none; }
 
 .notes-head {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0 0 4px;
+  font-family: inherit;
   font-size: 15px;
   letter-spacing: 0.22em;
   text-transform: lowercase;
+  text-align: left;
   color: #a89878;
   border-bottom: 1px solid rgba(200, 168, 120, 0.25);
-  padding-bottom: 4px;
   margin-bottom: 6px;
   text-shadow: 0 0 6px rgba(200, 168, 120, 0.25);
+  cursor: pointer;
 }
+.notes-head:focus-visible {
+  outline: 2px solid #e8c890;
+  outline-offset: 1px;
+}
+
+/* dismissed: the sheet folds to its head; tap to reopen. */
+.notes.closed .notes-body { display: none; }
+.notes.closed { max-width: 180px; }
 
 .notes-pad {
   width: 100%;
@@ -134,4 +149,5 @@
     max-width: none;
   }
   .notes-pad { min-height: 36px; }
+  .notes-list { max-height: 64px; overflow-y: auto; }
 }

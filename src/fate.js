@@ -1,4 +1,4 @@
-// fate.js — the fate-circle companion (shell, like dial.js).
+// fate.js — the fate-circle companion (shell, like keybank.js).
 // A small ringed avatar + one persona-voiced line, present on every
 // screen, keyed to the room. Tap for the room's second line. It
 // suggests like the floor does: never nags, never blocks, never
@@ -138,7 +138,7 @@
     var st = (window.Liber && window.Liber.state) || null;
     var s = st ? st.get() : {};
     var kept = 0;
-    var kinds = ['satchel', 'garden', 'dreams', 'divination', 'learn', 'buddy'];
+    var kinds = ['journal', 'garden', 'dreams', 'divination', 'learn', 'buddy'];
     for (var i = 0; i < kinds.length; i++) {
       if (Array.isArray(s[kinds[i]])) kept += s[kinds[i]].length;
     }

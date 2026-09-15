@@ -88,7 +88,7 @@
   }
 
   function allArtifacts(s) {
-    var kinds = ['divination', 'iching', 'games', 'sea', 'buddy', 'satchel', 'learn', 'council', 'garden', 'dreams'];
+    var kinds = ['divination', 'iching', 'games', 'sea', 'buddy', 'journal', 'learn', 'council', 'garden', 'dreams'];
     var out = [];
     for (var i = 0; i < kinds.length; i++) {
       var arr = s[kinds[i]];

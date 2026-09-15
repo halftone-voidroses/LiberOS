@@ -3,7 +3,7 @@
 // Offline growth is computed on return (absence is fine, nothing decays); a
 // can of water outside the six-hour window banks an hour of growth; mature
 // trees hang fruit, and fruit comes away as petals for the paint boxes and a
-// pressing for the satchel. Legacy thimble visits migrate forward as starting
+// pressing for the journal. Legacy thimble visits migrate forward as starting
 // growth. No shared imports; xmur3 + mulberry32 copied from
 // src/prompt-engine.js the way garden.js copies them.
 
@@ -196,7 +196,7 @@
       st().set({ palette: pal });
     } catch (e) {}
     pourArc();
-    st().addArtifact('satchel', {
+    st().addArtifact('journal', {
       kind: 'tree-pressing',
       name: 'a pressing from the glasshouse tree',
       petal: petal,

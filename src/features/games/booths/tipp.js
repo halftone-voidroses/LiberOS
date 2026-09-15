@@ -78,7 +78,7 @@ function playTipp(ctx, b, body) {
     var steps = [];
     for (var j = 0; j < TIPP_STEPS.length; j++) steps.push({ key: TIPP_STEPS[j].key, name: TIPP_STEPS[j].name, rating: ratings[j] });
     ctx.promptSave(b, 'walked the floor: ' + names.join(', ') + '.', function () {
-      ctx.saveToDesktopAndSatchel(b, { skills: steps }, tippShot(ratings));
+      ctx.saveToDesktopAndJournal(b, { skills: steps }, tippShot(ratings));
       if (result) result.textContent = 'kept. the floor remembers.';
     }, null);
   });
